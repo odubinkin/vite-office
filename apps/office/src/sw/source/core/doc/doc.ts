@@ -55,6 +55,7 @@ import { SwLineNumberInfo } from "../../../inc/lineinfo";
 import { SwNodes } from "../docnode/nodes";
 import { SwTableNode, type SwNode } from "../docnode/node";
 import { SwTextNode } from "../txtnode/ndtxt";
+import type { SwFormatRefMark } from "../txtnode/atrref";
 import { type SwTable, type SwTableBox } from "../table/swtable";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SfxGrabBagItem } from "../../../../svl/inc/grabbagitem";
@@ -942,6 +943,15 @@ export class SwDoc {
   /** Native physical direction with model fallback. @param position - Actual positioned node. @returns Original direction. */
   public GetTextDirection(position: SwPosition): SvxFrameDirection {
     return GetTextDirection(this, position);
+  }
+  /** Finds the first attached reference in native node and hint order. @param name - Reference name. @returns Owned reference item. */
+  public GetRefMark(name: string): SwFormatRefMark | undefined {
+    for (const node of this.GetNodes().entries())
+      for (const hint of node.GetTextNode()?.GetpSwpHints()?.GetReferenceMarks() ?? []) {
+        const item = hint.GetAttr();
+        if (item.GetRefName() === name) return item;
+      }
+    return undefined;
   }
   /** Borrows the original index type registered on this document. @param kind - Represented native index family. @param name - Optional source user-type identity. @returns Native type definition. */
   public GetTOXType(kind = TOXTypes.Content, name = ""): SwTOXType {

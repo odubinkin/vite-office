@@ -9,6 +9,7 @@ import { SwXAutoStyles } from "../../core/unocore/unostyle-auto";
 
 import { SwXTextField } from "../../core/unocore/unofield";
 import { SwXBookmark } from "../../core/unocore/unobkm";
+import { SwXReferenceMark } from "../../core/unocore/unorefmk";
 import type { SwDoc } from "../../core/doc/doc";
 import { SwXText } from "../../core/unocore/unotext";
 import { SwXStyleFamilies, SwXStyle, SwXPageStyle } from "../../core/unocore/unostyle";
@@ -111,7 +112,7 @@ export class SwXTextDocument {
   /** Implements the represented native createInstance operation. @param name - Native property or element name. @returns The represented native operation result. */
   createInstance(
     name: OUStringConstReference,
-  ): SwXStyle | SwXNumberingRules | SwXBookmark | SwXTextField {
+  ): SwXStyle | SwXNumberingRules | SwXBookmark | SwXReferenceMark | SwXTextField {
     const n = text(name),
       doc = this.GetDoc();
     switch (n) {
@@ -120,6 +121,8 @@ export class SwXTextDocument {
         return new SwXTextField();
       case "com.sun.star.text.Bookmark":
         return new SwXBookmark();
+      case "com.sun.star.text.ReferenceMark":
+        return new SwXReferenceMark();
       case "com.sun.star.style.CharacterStyle":
         return this.createCharacterStyle();
       case "com.sun.star.style.ParagraphStyle":

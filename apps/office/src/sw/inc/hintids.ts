@@ -132,6 +132,9 @@ export const RES_CHRATR_FONT_VARIATIONS = 48 as const;
 /** First WhichId after Writer character-format items. */
 export const RES_CHRATR_END = 49 as const;
 
+/** Reference mark attribute, `RES_TXTATR_WITHEND_BEGIN`. */
+export const RES_TXTATR_REFMARK = 49 as const;
+
 /** Original non-shareable contents, user or alphabetical index hint. */
 export const RES_TXTATR_TOXMARK = 50 as const;
 

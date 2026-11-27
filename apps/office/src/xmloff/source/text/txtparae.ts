@@ -152,6 +152,11 @@ export type XMLTextParagraphMarker =
       collapsedAroundFrame?: boolean;
     }>
   | XMLIndexMarkExportMarker
+  | Readonly<{
+      kind: "reference-mark" | "reference-mark-start" | "reference-mark-end";
+      name: string;
+      offset: number;
+    }>
   | XMLAnnotationExportMarker
   | XMLRedlineExportMarker
   | Readonly<{ kind: "frame"; frame: XMLTextFrameExportSource; offset: number }>;
@@ -619,6 +624,7 @@ function exportParagraphElement(
             (marker.kind === "frame" && marker.frame.anchor === "as-char") ||
               marker.kind === "annotation-end" ||
               marker.kind === "index-mark" ||
+              marker.kind === "reference-mark" ||
               (marker.kind === "annotation" && marker.consumesMarker),
           );
         markerIndex += 1;

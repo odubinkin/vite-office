@@ -431,14 +431,17 @@ export function compareParagraphMarkers(
       case "annotation":
         return marker.consumesMarker ? 6 : 2;
       case "index-mark-end":
+      case "reference-mark-end":
       case "change-end":
         return 3;
       case "index-mark-start":
+      case "reference-mark-start":
       case "change-start":
       case "change":
         return 4;
       case "annotation-end":
       case "index-mark":
+      case "reference-mark":
         return 6;
     }
   }

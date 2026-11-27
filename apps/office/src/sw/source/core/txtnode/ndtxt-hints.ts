@@ -1,5 +1,6 @@
 import { SwTextTOXMark } from "./atrtox";
-import { RES_TXTATR_TOXMARK } from "../../../inc/hintids";
+import { SwTextRefMark } from "./atrref";
+import { RES_TXTATR_REFMARK, RES_TXTATR_TOXMARK } from "../../../inc/hintids";
 /** @fileoverview Owns portable hint insertion, copying and projection at the native ndtxt.cxx text-node responsibility boundary. */
 import { ApplyCutTextNodeAttributes } from "./ndtxt-join";
 import { DestroyTextNodeAttribute } from "./thints-insert";
@@ -33,7 +34,7 @@ import {
   RES_TXTATR_AUTOFMT,
   RES_TXTATR_FLYCNT,
 } from "../../../inc/hintids";
-import { SwFormatAutoFormat, SwTextAttrEnd } from "./txatbase";
+import { isTextFormatHint, SwFormatAutoFormat } from "./txatbase";
 import { SfxItemSet as NativeItemSet } from "../../../../svl/source/items/itemset";
 import { WRITER_CHARACTER_WHICH_RANGES } from "../../../inc/hintids";
 
@@ -80,6 +81,7 @@ export function EraseTextNodeReplacementDummies(
       hint.HasDummyChar() &&
       !(hint instanceof SwTextField) &&
       !(hint instanceof SwTextTOXMark) &&
+      !(hint instanceof SwTextRefMark) &&
       !(hint instanceof SwTextFlyCnt && hint.GetGraphicSection())
     )
       throw new Error("Writer dummy-character replacement is not implemented.");
@@ -93,6 +95,7 @@ export function EraseTextNodeReplacementDummies(
         ? hints?.GetTextAttrForCharAt(offset)
         : marker === CH_TXTATR_INWORD
           ? (hints?.GetTextAttrForCharAt(offset, RES_TXTATR_ANNOTATION) ??
+            hints?.GetTextAttrForCharAt(offset, RES_TXTATR_REFMARK) ??
             hints?.GetTextAttrForCharAt(offset, RES_TXTATR_TOXMARK))
           : undefined;
     if (!hint) continue;
@@ -201,11 +204,7 @@ export function AppendTextNodeHints(
         hint,
         SetAttrMode.NOTXTATRCHR |
           SetAttrMode.DONTREPLACE |
-          (hint instanceof SwTextAttrEnd &&
-          !(hint instanceof SwTextTOXMark) &&
-          !originalHints.has(hint)
-            ? SetAttrMode.IS_COPY
-            : 0),
+          (isTextFormatHint(hint) && !originalHints.has(hint) ? SetAttrMode.IS_COPY : 0),
       );
     }
   } finally {

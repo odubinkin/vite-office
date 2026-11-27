@@ -1,0 +1,55 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/core/txtnode/atrref.ts",
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/txtnode/atrref.cxx",
+    "localSymbols": [
+      "SwFormatRefMark",
+      "SwTextRefMark"
+    ],
+    "upstreamSymbols": [
+      "SwFormatRefMark::SwFormatRefMark",
+      "SwTextRefMark::SwTextRefMark",
+      "SwTextRefMark::GetEnd"
+    ],
+    "preservedResponsibilities": [
+      "Owns the non-shareable named item, original text node backlink, dummy point and optional range end."
+    ],
+    "omittedResponsibilities": [
+      "LibreOfficeKit notifications and field content updates."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/atrref.ts",
+          "marker": "SwFormatRefMark"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-reference-marks.test.ts",
+          "marker": "testWhitespace"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/atrref.cxx",
+          "marker": "SwFormatRefMark::SwFormatRefMark"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/atrref.cxx",
+          "marker": "SwTextRefMark::SwTextRefMark"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/atrref.cxx",
+          "marker": "SwTextRefMark::GetEnd"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/qa/extras/odfexport/odfexport3.cxx",
+          "marker": "testWhitespace"
+        }
+      ]
+    }
+  }
+}

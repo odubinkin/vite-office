@@ -6399,3 +6399,23 @@ the original first-match behavior.
 
 - [Original table boundary query](../../vendor/libreoffice-reference/sw/source/core/unocore/unotbl.cxx#L326)
 - [Original section boundary query](../../vendor/libreoffice-reference/sw/source/core/unocore/unosect.cxx#L1121)
+
+### WRITER-772 — Reference marks can expand at a text boundary
+
+The pinned reference-mark constructor leaves the permanent no-expand and
+expansion-lock flags disabled. Its comment records that enabling them fixed
+tdf#81720 and was reverted after tdf#157287. UNO insertion supplies the original
+mutable no-expand flag, which the text update can clear. Writer preserves this
+behavior.
+
+- [Native reference-mark constructor](../../vendor/libreoffice-reference/sw/source/core/txtnode/atrref.cxx#L97)
+- [Native UNO insertion flags](../../vendor/libreoffice-reference/sw/source/core/unocore/unorefmk.cxx#L176)
+
+### WRITER-773 — Renaming an attached reference mark can remove its selected text
+
+The existing UNO rename path calls DeleteAndJoin on the reference mark's full
+range before inserting the new name at the resulting position. For a ranged
+reference this removes the selected text and reinserts a collapsed point.
+Writer preserves this path.
+
+- [Native reference-mark rename](../../vendor/libreoffice-reference/sw/source/core/unocore/unorefmk.cxx#L363)

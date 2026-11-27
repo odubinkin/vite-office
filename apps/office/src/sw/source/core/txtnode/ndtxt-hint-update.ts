@@ -1,6 +1,7 @@
 /** @fileoverview Ports owned ranged and fly point coordinate updates from pinned SwTextNode::Update and default InsertText in ndtxt.cxx. */
 import type { SwFormatRuby } from "./fmtatr2";
 import { SwTextTOXMark } from "./atrtox";
+import { SwTextRefMark } from "./atrref";
 import type { TextNodeAttribute } from "./ndhints";
 import type { SwFormatCharFormat } from "./fmtatr2";
 import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
@@ -8,7 +9,7 @@ import type { SwDoc } from "../doc/doc";
 import { RES_TXTATR_INETFMT } from "../../../inc/hintids";
 import { MakeTextAttr } from "./thints";
 import type { SwFormatINetFormat } from "./fmtatr2";
-import { type SwFormatAutoFormat, SwTextAttrEnd } from "./txatbase";
+import { isTextFormatHint, type SwFormatAutoFormat, type SwTextAttrEnd } from "./txatbase";
 
 /** Changes actual supported hint coordinates without splitting continuous values. @param doc - Owning document. @param hints - Stable start-ordered objects. @param offset - Change position. @param length - Positive change length. @param negative - Whether text is removed. @param ignoreDontExpand - Owning node state. @returns Existing objects and native end-boundary collectors. */
 export function UpdateTextHints(
@@ -42,7 +43,7 @@ export function UpdateTextHints(
       if (hint.dontExpand) {
         hint.dontExpand = false;
         if (hint.Which() === RES_TXTATR_INETFMT) noExpand = true;
-      } else if (noExpand && hint instanceof SwTextAttrEnd && !(hint instanceof SwTextTOXMark))
+      } else if (noExpand && isTextFormatHint(hint))
         collector.set(hint.Which(), MakeTextAttr(doc, hint.format, offset, offset + length));
       else hint.SetEnd(end + length);
     }
@@ -96,7 +97,10 @@ export function EraseTextHints(
     (hint) => {
       if (hint.start < offset || hint.start > end) return true;
       const endOfHint = hint.GetEnd();
-      return hint.GetAnyEnd() >= end && !(hint instanceof SwTextTOXMark && endOfHint === end);
+      return (
+        hint.GetAnyEnd() >= end &&
+        !((hint instanceof SwTextTOXMark || hint instanceof SwTextRefMark) && endOfHint === end)
+      );
     },
   );
   return UpdateTextHints(doc, retained, offset, length, true);

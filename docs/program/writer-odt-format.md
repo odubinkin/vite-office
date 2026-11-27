@@ -154,6 +154,11 @@ node area, writes them as deletion content, and restores the live text and
 registered positions. Complex deletion visibility transitions require further
 work.
 
+Writer retains named point and ranged reference marks through ODT and Worker
+transfer. A point mark owns the native in-word dummy character. Range start
+and end markers pair by name within their paragraph, and an unmatched start
+becomes a point mark.
+
 Images, fields, annotations, sections, objects, scripts,
 signatures, encryption, RDF, non-decimal numbering,
 and merged or nested tables remain unsupported. Table rows are

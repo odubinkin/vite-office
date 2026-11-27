@@ -1,0 +1,64 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/core/unocore/unorefmk.ts",
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/unocore/unorefmk.cxx",
+    "localSymbols": [
+      "SwXReferenceMark"
+    ],
+    "upstreamSymbols": [
+      "SwXReferenceMark::attach",
+      "SwXReferenceMark::Impl::InsertRefMark",
+      "SwXReferenceMark::getAnchor",
+      "SwXReferenceMark::setName",
+      "SwXReferenceMark::dispose"
+    ],
+    "preservedResponsibilities": [
+      "Creates and attaches the native ODT ReferenceMark descriptor on the text range and uses the document reference lookup and content operations."
+    ],
+    "omittedResponsibilities": [
+      "Desktop service discovery, listener and property metadata and the meta-field cursor boundary."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/unocore/unorefmk.ts",
+          "marker": "SwXReferenceMark"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-reference-marks.test.ts",
+          "marker": "testWhitespace"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/unocore/unorefmk.cxx",
+          "marker": "SwXReferenceMark::attach"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/unocore/unorefmk.cxx",
+          "marker": "SwXReferenceMark::Impl::InsertRefMark"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/unocore/unorefmk.cxx",
+          "marker": "SwXReferenceMark::getAnchor"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/unocore/unorefmk.cxx",
+          "marker": "SwXReferenceMark::setName"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/unocore/unorefmk.cxx",
+          "marker": "SwXReferenceMark::dispose"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/qa/extras/odfexport/odfexport3.cxx",
+          "marker": "testWhitespace"
+        }
+      ]
+    }
+  }
+}

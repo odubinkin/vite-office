@@ -5,6 +5,11 @@ import {
   type WriterIndexMarkRecord,
 } from "./writer-index-mark-codec";
 import {
+  decodeReferenceMarks,
+  encodeReferenceMarks,
+  type WriterReferenceMarkRecord,
+} from "./writer-reference-mark-codec";
+import {
   decodeLegacyAnnotations,
   type LegacyWriterAnnotationRecord,
 } from "./writer-annotation-codec";
@@ -70,6 +75,7 @@ export interface WriterTextNodeRecord {
   readonly formatCollId: WriterParagraphStyle;
   readonly hints: readonly WriterTextHintRecord[];
   readonly indexMarks?: readonly WriterIndexMarkRecord[];
+  readonly referenceMarks?: readonly WriterReferenceMarkRecord[];
   readonly listGeometryWins?: boolean;
   /** True only for the model's synthesized empty numbering item; absence keeps legacy explicit items distinct. */
   readonly emptyListStyle?: true;
@@ -333,8 +339,10 @@ export function* encodeWriterTableSteps(
 export function encodeTextNode(document: SwDoc, node: SwTextNode): WriterTextNodeRecord {
   const direct = node.GetpSwAttrSet();
   const indexMarks = encodeIndexMarks(node);
+  const referenceMarks = encodeReferenceMarks(node);
   return {
     ...(indexMarks.length ? { indexMarks } : {}),
+    ...(referenceMarks.length ? { referenceMarks } : {}),
     autoAttributes: direct === undefined ? [] : encodeSfxItemSet(direct),
     formatCollId: node.GetTextFormatColl().id,
     ...(node.DoesListGeometryWin() ? { listGeometryWins: true } : {}),
@@ -409,6 +417,7 @@ export function decodeTextNode(
     position.Dispose();
   }
   decodeIndexMarks(node, nodeRecord.indexMarks);
+  decodeReferenceMarks(node, nodeRecord.referenceMarks);
   if (nodeRecord.annotations) decodeLegacyAnnotations(node, nodeRecord.annotations);
   node.AddToList();
   for (const offset of nodeRecord.softPageBreaks ?? [])

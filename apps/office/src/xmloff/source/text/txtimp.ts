@@ -59,6 +59,13 @@ interface XMLPendingIndexMark {
   end?: XMLTextRange;
 }
 
+/** Pending paragraph reference with an optional matching end. */
+interface XMLPendingReferenceMark {
+  readonly name: string;
+  readonly start: XMLTextRange;
+  end?: XMLTextRange;
+}
+
 /** One native text import owner keeps processed list roots across body and every cell. */
 export class XMLTextImportHelper {
   private readonly lists = new XMLTextListsHelper();
@@ -105,7 +112,7 @@ export class XMLTextImportHelper {
   private start: XMLTextRange | undefined;
   private applyParagraph: ((cursor: XMLTextCursor) => void) | undefined;
   private hints: TextImportHint[] = [];
-  private indexMarks: XMLPendingIndexMark[] = [];
+  private paragraphMarks: (XMLPendingIndexMark | XMLPendingReferenceMark)[] = [];
   private indexMarkIds = new Map<string, XMLPendingIndexMark>();
   private annotationDepth = 0;
   private readonly annotations = new Map<string, XMLAnnotationTextContent>();
@@ -119,7 +126,7 @@ export class XMLTextImportHelper {
     start: XMLTextRange | undefined;
     applyParagraph: ((cursor: XMLTextCursor) => void) | undefined;
     hints: TextImportHint[];
-    indexMarks: XMLPendingIndexMark[];
+    paragraphMarks: (XMLPendingIndexMark | XMLPendingReferenceMark)[];
     indexMarkIds: Map<string, XMLPendingIndexMark>;
   }[] = [];
 
@@ -142,14 +149,14 @@ export class XMLTextImportHelper {
       start: this.start,
       applyParagraph: this.applyParagraph,
       hints: this.hints,
-      indexMarks: this.indexMarks,
+      paragraphMarks: this.paragraphMarks,
       indexMarkIds: this.indexMarkIds,
     });
     this.cursor = cursor;
     this.start = undefined;
     this.applyParagraph = undefined;
     this.hints = [];
-    this.indexMarks = [];
+    this.paragraphMarks = [];
     this.indexMarkIds = new Map();
     if (isolateList) this.lists.PushListContext();
   }
@@ -188,7 +195,7 @@ export class XMLTextImportHelper {
     this.start = saved.start;
     this.applyParagraph = saved.applyParagraph;
     this.hints = saved.hints;
-    this.indexMarks = saved.indexMarks;
+    this.paragraphMarks = saved.paragraphMarks;
     this.indexMarkIds = saved.indexMarkIds;
     if (saved.isolateList) this.lists.PopListContext();
   }
@@ -250,7 +257,7 @@ export class XMLTextImportHelper {
       hint.end.dispose();
     }
     this.hints.length = 0;
-    this.clearIndexMarks();
+    this.clearParagraphMarks();
   }
   /** Starts a paragraph and defers its native style application until after the break. @param style - Paragraph style. @param alignment - Direct alignment. @param left - Direct margin. @param paragraph - Paragraph properties. @param properties - Direct character map. @param list - Native list state. @param listGeometryWins - Legacy parser precedence. @param forceListRule - Explicit automatic list declaration. @param markerProperties - Direct text properties of the paragraph mark. @param applyStyle - Whether the paragraph supplies its own style. @param outlineLevel - Native text heading level or zero for a plain paragraph. @returns Nothing. */
   public BeginParagraph(
@@ -482,11 +489,12 @@ export class XMLTextImportHelper {
           range.dispose();
         }
       }
-      for (const mark of this.indexMarks) {
+      for (const mark of this.paragraphMarks) {
         const range = text.createTextCursorByRange(mark.start);
         try {
           if (mark.end) range.gotoRange(mark.end, true);
-          this.target.insertIndexMark?.(mark.properties, range);
+          if ("properties" in mark) this.target.insertIndexMark?.(mark.properties, range);
+          else this.InsertReferenceMark(mark.name, range);
         } finally {
           range.dispose();
         }
@@ -501,7 +509,7 @@ export class XMLTextImportHelper {
         hint.end.dispose();
       }
       this.hints.length = 0;
-      this.clearIndexMarks();
+      this.clearParagraphMarks();
       this.applyParagraph = undefined;
     }
   }
@@ -513,7 +521,7 @@ export class XMLTextImportHelper {
   /** Retains the native start of a point or ranged index mark. @param properties - Original descriptor. @param id - Optional source pair ID. @returns Nothing. */
   public AddIndexMark(properties: XMLIndexMarkProperties, id: string): void {
     const hint = { properties, start: this.GetCursor().getStart() };
-    this.indexMarks.push(hint);
+    this.paragraphMarks.push(hint);
     if (id && !this.indexMarkIds.has(id)) this.indexMarkIds.set(id, hint);
   }
 
@@ -525,13 +533,46 @@ export class XMLTextImportHelper {
     mark.end = this.GetCursor().getStart();
   }
 
-  /** Releases the paragraph-scoped native index positions. @returns Nothing. */
-  private clearIndexMarks(): void {
-    for (const mark of this.indexMarks) {
+  /** Records the original paragraph-local reference start. @param name - Source name. */
+  public StartReferenceMark(name: string): void {
+    this.paragraphMarks.push({ name, start: this.GetCursor().getStart() });
+  }
+
+  /** Closes the first matching start in this paragraph. @param name - Source name. */
+  public EndReferenceMark(name: string): void {
+    for (const mark of this.paragraphMarks) {
+      if (!("name" in mark) || mark.name !== name) continue;
+      mark.end?.dispose();
+      mark.end = this.GetCursor().getStart();
+      break;
+    }
+  }
+
+  /** Creates and attaches the original ReferenceMark service. @param name - Authored name. @param range - Completed range or current point. */
+  public InsertReferenceMark(name: string, range?: XMLTextRange): void {
+    if (!name) return;
+    const cursor = this.GetCursor();
+    const selected = range ?? cursor.getStart();
+    const service = xmlTextString("com.sun.star.text.ReferenceMark");
+    const key = xmlTextString(name);
+    try {
+      const mark = this.model.createInstance(service) as XMLNamedTextContent;
+      mark.setName(key);
+      cursor.getText().insertTextContent(selected, mark, true);
+    } finally {
+      service.dispose();
+      key.dispose();
+      if (!range) selected.dispose();
+    }
+  }
+
+  /** Releases the paragraph-scoped native mark positions. */
+  private clearParagraphMarks(): void {
+    for (const mark of this.paragraphMarks) {
       mark.end?.dispose();
       mark.start.dispose();
     }
-    this.indexMarks.length = 0;
+    this.paragraphMarks.length = 0;
     this.indexMarkIds.clear();
   }
 

@@ -46,6 +46,7 @@ import type { XMLIndexMarkProperties } from "../../../../xmloff/source/text/XMLI
 import type { XMLIndexMarkExportMarker } from "../../../../xmloff/source/text/XMLIndexMarkExport";
 import { compareHintsByEnd } from "../../core/txtnode/ndhints-range";
 import type { SwTextTOXMark } from "../../core/txtnode/atrtox";
+import type { SwTextRefMark } from "../../core/txtnode/atrref";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import type { SwNode } from "../../core/docnode/node";
 import type { XMLRedlineExportMarker } from "../../../../xmloff/source/text/XMLRedlineExport";
@@ -88,6 +89,7 @@ export function projectParagraphMarkers(
     ...frames,
     ...projectAnnotationMarkers(node),
     ...projectIndexMarks(node),
+    ...projectReferenceMarks(node),
     ...node
       .GetDoc()
       .GetIDocumentRedlineAccess()
@@ -197,6 +199,28 @@ function projectIndexMarks(node: SwTextNode): XMLIndexMarkExportMarker[] {
       const id = `IMark${node.GetIndex()}_${index}`;
       markers.push({ kind: "index-mark-start", offset, id, mark });
       ends.set(hint, { kind: "index-mark-end", offset: end, id, family: kind });
+    }
+  }
+  for (const hint of [...ends.keys()].sort(compareHintsByEnd)) {
+    const end = ends.get(hint);
+    if (end) markers.push(end);
+  }
+  return markers;
+}
+
+/** Projects named reference portions in native start and end order. @param node - Current paragraph. @returns Point and paired reference markers. */
+function projectReferenceMarks(node: SwTextNode): XMLTextParagraphMarker[] {
+  const hints = node.GetpSwpHints()?.GetReferenceMarks() ?? [];
+  const markers: XMLTextParagraphMarker[] = [];
+  const ends = new Map<SwTextRefMark, XMLTextParagraphMarker>();
+  for (const hint of hints) {
+    const name = hint.GetAttr().GetRefName();
+    const offset = hint.GetStart();
+    const end = hint.GetEnd();
+    if (end === undefined) markers.push({ kind: "reference-mark", name, offset });
+    else {
+      markers.push({ kind: "reference-mark-start", name, offset });
+      ends.set(hint, { kind: "reference-mark-end", name, offset: end });
     }
   }
   for (const hint of [...ends.keys()].sort(compareHintsByEnd)) {

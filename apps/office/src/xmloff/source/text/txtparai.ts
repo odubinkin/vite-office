@@ -413,11 +413,16 @@ function createInlineContext(
     );
   }
   if (
+    element === XMLToken.TEXT_REFERENCE_MARK ||
     element === XMLToken.TEXT_BOOKMARK ||
     element === XMLToken.TEXT_BOOKMARK_START ||
     element === XMLToken.TEXT_BOOKMARK_END
   )
     return annotation ? null : new XMLTextMarkImportContext(paragraph);
+  if (element === XMLToken.TEXT_REFERENCE_MARK_START)
+    return annotation ? null : new XMLStartReferenceContext(paragraph);
+  if (element === XMLToken.TEXT_REFERENCE_MARK_END)
+    return annotation ? null : new XMLEndReferenceContext(paragraph);
   if (XMLIndexMarkImportContext.IsIndexMark(element))
     return annotation || !target.insertIndexMark ? null : new XMLIndexMarkImportContext(paragraph);
   if (element === XMLToken.TEXT_SOFT_PAGE_BREAK) {
@@ -426,6 +431,34 @@ function createInlineContext(
     return new SvXMLIgnoreContext();
   }
   return null;
+}
+
+/** Retains a paragraph-local reference mark start. */
+class XMLStartReferenceContext extends SvXMLImportContext {
+  /** Binds the current paragraph's original hints. @param paragraph - Shared text owner. */
+  constructor(private readonly paragraph: XMLTextImportHelper) {
+    super();
+  }
+
+  /** Reads the original name and start position. @param _element - Opening token. @param attributes - Source attributes. */
+  override startFastElement(_element: XMLToken, attributes: FastAttributeList): void {
+    const name = attributes.get(XMLToken.TEXT_NAME);
+    if (name !== null) this.paragraph.StartReferenceMark(name);
+  }
+}
+
+/** Resolves the first matching reference mark start in the current paragraph. */
+class XMLEndReferenceContext extends SvXMLImportContext {
+  /** Binds the current paragraph's original hints. @param paragraph - Shared text owner. */
+  constructor(private readonly paragraph: XMLTextImportHelper) {
+    super();
+  }
+
+  /** Reads the original name and end position. @param _element - Opening token. @param attributes - Source attributes. */
+  override startFastElement(_element: XMLToken, attributes: FastAttributeList): void {
+    const name = attributes.get(XMLToken.TEXT_NAME);
+    if (name !== null) this.paragraph.EndReferenceMark(name);
+  }
 }
 
 /** Retains a native base range while importing the independent phonetic reading. */
