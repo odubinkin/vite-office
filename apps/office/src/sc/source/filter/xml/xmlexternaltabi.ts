@@ -5,6 +5,8 @@ import {
   type FastAttributeList,
 } from "../../../../xmloff/source/core/xmlimp";
 import { XMLToken } from "../../../../xmloff/source/core/xmltoken";
+import { SvXMLUnitConverter } from "../../../../xmloff/source/core/xmluconv";
+import { convertDurationToDays } from "../../../../sax/source/tools/converter.duration";
 import { getPrefix } from "../../../../tools/source/fsys/urlobj.data";
 import { toDouble } from "../../../../o3tl/inc/string_view";
 import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
@@ -54,10 +56,7 @@ class ScXMLExternalRefTableContext extends SvXMLImportContext {
     attributes: FastAttributeList,
   ): SvXMLImportContext {
     if (element === XMLToken.TABLE_TABLE_SOURCE)
-      this.owner
-        .GetDocument()
-        .GetExternalRefManager()
-        .setRelativeFileName(this.file, attributes.get(XMLToken.XLINK_HREF) ?? "");
+      return new ScXMLExternalRefTabSourceContext(this.owner, this.file, attributes);
     if (element === XMLToken.TABLE_TABLE_ROW)
       return new ScXMLExternalRefRowContext(this, attributes);
     if (
@@ -70,11 +69,37 @@ class ScXMLExternalRefTableContext extends SvXMLImportContext {
   }
 }
 
+/** Captures the native source metadata on the external file owner. */
+class ScXMLExternalRefTabSourceContext extends SvXMLImportContext {
+  private readonly relativeUrl: string;
+  private readonly filterName: string;
+  private readonly filterOptions: string;
+
+  /** Reads the external table source attributes. @param owner - ODF importer. @param file - Native file ID. @param attributes - Source attributes. */
+  constructor(
+    private readonly owner: ScXMLImport,
+    private readonly file: number,
+    attributes: FastAttributeList,
+  ) {
+    super();
+    this.relativeUrl = attributes.get(XMLToken.XLINK_HREF) ?? "";
+    this.filterName = attributes.get(XMLToken.TABLE_FILTER_NAME) ?? "";
+    this.filterOptions = attributes.get(XMLToken.TABLE_FILTER_OPTIONS) ?? "";
+  }
+
+  /** Publishes source metadata without loading the linked workbook. */
+  override endFastElement(): void {
+    const manager = this.owner.GetDocument().GetExternalRefManager();
+    manager.setRelativeFileName(this.file, this.relativeUrl);
+    manager.setFilterData(this.file, this.filterName, this.filterOptions);
+  }
+}
+
 /** Original incrementing row and column cursor, including repeated sparse rows. */
 class ScXMLExternalRefRowContext extends SvXMLImportContext {
   private readonly repeat: number;
   col = 0;
-  readonly values: [first: number, last: number, value: string | number][] = [];
+  readonly values: [first: number, last: number, value: string | number, format: number][] = [];
 
   /** Binds the current row. @param table - External cache table. @param attributes - Row attributes. @returns Row context. */
   constructor(
@@ -83,6 +108,11 @@ class ScXMLExternalRefRowContext extends SvXMLImportContext {
   ) {
     super();
     this.repeat = repeatCount(attributes, XMLToken.TABLE_NUMBER_ROWS_REPEATED);
+  }
+
+  /** Borrows the document import owner from the table. @returns ODF importer. */
+  GetScImport(): ScXMLImport {
+    return this.table.owner;
   }
 
   /** Admits cache cells and covered positions. @param element - XML token. @param attributes - Cell attributes. @returns Context. */
@@ -101,21 +131,21 @@ class ScXMLExternalRefRowContext extends SvXMLImportContext {
     const document = owner.GetDocument();
     const stop = Math.min(row + this.repeat, document.MaxRow() + 1);
     if (cache && this.values.length)
-      for (const [first, last, value] of this.values) {
+      for (const [first, last, value, format] of this.values) {
         const endCol = Math.min(last, document.MaxCol() + 1);
         if (endCol <= first || stop === row) continue;
         owner.consumeCells((endCol - first) * (stop - row));
         if (typeof value === "number") {
           for (let y = row; y < stop; ++y)
             for (let col = first; col < endCol; ++col)
-              cache.setCell(col, y, new FormulaDoubleToken(value));
+              cache.setCell(col, y, new FormulaDoubleToken(value), format);
         } else {
           const source = unicode(value);
           const shared = document.GetSharedStringPool().intern(source);
           try {
             for (let y = row; y < stop; ++y)
               for (let col = first; col < endCol; ++col)
-                cache.setCell(col, y, new FormulaStringToken(shared));
+                cache.setCell(col, y, new FormulaStringToken(shared), format);
           } finally {
             shared.dispose();
             source.dispose();
@@ -129,27 +159,61 @@ class ScXMLExternalRefRowContext extends SvXMLImportContext {
 /** Reads ODF numeric, logical and textual values in one cached cell. */
 class ScXMLExternalRefCellContext extends SvXMLImportContext {
   private readonly repeat: number;
-  private readonly numeric: number | undefined;
-  private value: string;
+  private numericValue = 0;
+  private isNumeric = false;
+  private value = "";
+  private nonempty = false;
+  private readonly format: number;
 
-  /** Reads the original scalar cache attributes. @param row - Current row owner. @param attributes - Source attributes. @returns Context. */
+  /** Reads source-ordered scalar values and the native number format. @param row - Current row owner. @param attributes - Source attributes. @returns Context. */
   constructor(
     private readonly row: ScXMLExternalRefRowContext,
     attributes: FastAttributeList,
   ) {
     super();
     this.repeat = repeatCount(attributes, XMLToken.TABLE_NUMBER_COLUMNS_REPEATED);
-    this.value = attributes.get(XMLToken.OFFICE_STRING_VALUE) ?? "";
-    const number = attributes.get(XMLToken.OFFICE_VALUE);
-    const logical = attributes.get(XMLToken.OFFICE_BOOLEAN_VALUE);
-    if (number) {
-      const source = unicode(number);
-      try {
-        this.numeric = toDouble(source.getStr());
-      } finally {
-        source.dispose();
+    const importer = row.GetScImport();
+    const formatter = importer.GetDocument().GetFormatTable();
+    const style = attributes.get(XMLToken.TABLE_STYLE_NAME);
+    this.format = style ? (importer.GetAutoStyle(style)?.GetNumberFormat(formatter) ?? 0) : 0;
+    for (const [token, source] of attributes) {
+      if (!source) continue;
+      switch (token) {
+        case XMLToken.OFFICE_VALUE: {
+          const lexical = unicode(source);
+          try {
+            this.numericValue = toDouble(lexical.getStr());
+          } finally {
+            lexical.dispose();
+          }
+          this.isNumeric = this.nonempty = true;
+          break;
+        }
+        case XMLToken.OFFICE_DATE_VALUE: {
+          const serial: [number] = [this.numericValue];
+          SvXMLUnitConverter.convertDateTimeToDays(serial, source, formatter.GetNullDate());
+          this.numericValue = serial[0];
+          this.isNumeric = this.nonempty = true;
+          break;
+        }
+        case XMLToken.OFFICE_TIME_VALUE: {
+          const serial: [number] = [this.numericValue];
+          convertDurationToDays(serial, source);
+          this.numericValue = serial[0];
+          this.nonempty = true;
+          break;
+        }
+        case XMLToken.OFFICE_STRING_VALUE:
+          this.value = source;
+          this.isNumeric = false;
+          this.nonempty = true;
+          break;
+        case XMLToken.OFFICE_BOOLEAN_VALUE:
+          this.numericValue = Number(source === "true");
+          this.isNumeric = this.nonempty = true;
+          break;
       }
-    } else if (logical) this.numeric = Number(logical === "true");
+    }
   }
 
   /** Admits a cache paragraph. @param element - XML token. @returns Context. */
@@ -167,8 +231,13 @@ class ScXMLExternalRefCellContext extends SvXMLImportContext {
   override endFastElement(): void {
     const first = this.row.col;
     this.row.col += this.repeat;
-    if (this.numeric !== undefined || this.value)
-      this.row.values.push([first, this.row.col, this.numeric ?? this.value]);
+    if (this.nonempty || this.value)
+      this.row.values.push([
+        first,
+        this.row.col,
+        this.isNumeric ? this.numericValue : this.value,
+        this.format,
+      ]);
   }
 }
 

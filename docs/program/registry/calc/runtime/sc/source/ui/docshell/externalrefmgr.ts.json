@@ -20,9 +20,11 @@
         "apps/office/src/sc/source/filter/oox/externallinkbuffer.test.ts",
         "vendor/libreoffice-reference/sc/source/ui/docshell/externalrefmgr.cxx#ScExternalRefManager::getExternalFileId",
         "apps/office/src/sc/source/core/tool/external-reference-formula.test.ts",
-        "vendor/libreoffice-reference/sc/source/ui/docshell/externalrefmgr.cxx#ScExternalRefManager::getSingleRefToken"
+        "vendor/libreoffice-reference/sc/source/ui/docshell/externalrefmgr.cxx#ScExternalRefManager::getSingleRefToken",
+        "apps/office/src/sc/source/filter/xml/xmlexternaltabi.test.ts#round-trips native ODF cache formats and source filter metadata",
+        "vendor/libreoffice-reference/sc/source/ui/docshell/externalrefmgr.cxx#ScExternalRefCache::Table::setCell"
       ],
-      "justification": "Resolves cached scalar and rectangular matrix operands and registers calling formula cells using the original file-ID boundary. Whole-table ODF caches distinguish known blank cells from unavailable workbook data. Cache reads use only imported data in the browser. External refresh, source-medium URL resolution and cross-sheet array assembly remain pending.",
+      "justification": "Resolves cached scalar and rectangular matrix operands and registers calling formula cells using the original file-ID boundary. Whole-table ODF caches distinguish known blank cells from unavailable workbook data. Cache reads use only imported data in the browser. External refresh, source-medium URL resolution and cross-sheet array assembly remain pending. The native sparse cell record keeps its token and number-format index together. Source filter data belongs to the external file record. Duplicate coordinates continue to retain the first complete cell.",
       "knownViolations": [],
       "localSymbols": [
         "ScExternalRefManager",

@@ -8,6 +8,11 @@ import {
   GetDoubleErrorValue,
 } from "../../../../formula/inc/errorcodes";
 import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { SvNumFormatType } from "../../../../svl/inc/zforlist";
+import {
+  decodeCalcDocument,
+  encodeCalcDocument,
+} from "../../../browser/filter/xml/calc-document-codec";
 import { ODF_NAMESPACES } from "../../../../xmloff/source/core/xmltoken";
 import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
 import { ScDocument } from "../../../inc/document";
@@ -16,15 +21,18 @@ import { ScXMLImport } from "./xmlimprt";
 import { ODS_MIMETYPE, readOdsDocument, writeOdsXml } from "./xmlwrap";
 import { createExternalRefTable } from "./xmlexternaltabi";
 
-/** Wraps cache tables in an ordinary Calc content document. @param cache - Original cache XML. @returns Primary format package. */
-function content(cache: string) {
-  const { office, table, text, xlink } = ODF_NAMESPACES;
+/** Wraps cache tables in an ordinary Calc content document. @param cache - Original cache XML. @param automaticStyles - Optional style definitions. @returns Primary format package. */
+function content(cache: string, automaticStyles = "") {
+  const { office, table, text, xlink, style, number } = ODF_NAMESPACES;
+  const styles = automaticStyles
+    ? `<office:automatic-styles>${automaticStyles}</office:automatic-styles>`
+    : "";
   return {
     format: "xml" as const,
     files: {
       mimetype: ODS_MIMETYPE,
       "META-INF/manifest.xml": `<manifest:manifest xmlns:manifest="urn:oasis:names:tc:opendocument:xmlns:manifest:1.0" manifest:version="1.3"><manifest:file-entry manifest:full-path="/" manifest:media-type="${ODS_MIMETYPE}" manifest:version="1.3"/><manifest:file-entry manifest:full-path="content.xml" manifest:media-type="text/xml"/></manifest:manifest>`,
-      "content.xml": `<office:document-content xmlns:office="${office}" xmlns:table="${table}" xmlns:text="${text}" xmlns:xlink="${xlink}"><office:body><office:spreadsheet><table:table table:name="Visible"/>${cache}</office:spreadsheet></office:body></office:document-content>`,
+      "content.xml": `<office:document-content xmlns:office="${office}" xmlns:table="${table}" xmlns:text="${text}" xmlns:xlink="${xlink}" xmlns:style="${style}" xmlns:number="${number}">${styles}<office:body><office:spreadsheet><table:table table:name="Visible"/>${cache}</office:spreadsheet></office:body></office:document-content>`,
     },
   };
 }
@@ -116,6 +124,7 @@ it("round-trips sparse gaps, repeated cache cells and native numeric values", /*
     cache.setCell(0, 8, new FormulaDoubleToken(CreateDoubleError(FormulaError.DivisionByZero)));
     const output = await writeOdsXml(source);
     expect(output.files["content.xml"]).toContain('table:style-name="ta_extref"');
+    expect(output.files["content.xml"]).toContain('xlink:href=""');
     expect(output.files["content.xml"]).toContain('table:number-rows-repeated="3"');
     reopened = await readOdsDocument(output);
     const restored = reopened.GetExternalRefManager().getCacheTable(0, "Sheet South");
@@ -159,5 +168,48 @@ it("applies the existing ODS expansion budget only to represented cache cells", 
     expect(doc.GetExternalRefManager().getCacheTable(0, "Sheet North")?.entries().size).toBe(0);
   } finally {
     doc.Dispose();
+  }
+});
+
+it("round-trips native ODF cache formats and source filter metadata", /** Checks temporal token values, native number formats and source metadata on each transport. @returns Completion. */ async () => {
+  const source = await readOdsDocument(
+    content(
+      `<table:table table:name="'file:///cache.ods'#Data">
+      <table:table-source xlink:href="../cache.ods" table:filter-name="calc8" table:filter-options="44,34"/>
+      <table:table-row>
+        <table:table-cell table:style-name="DateCell" office:value-type="date" office:date-value="1900-01-01"/>
+        <table:table-cell office:value-type="time" office:time-value="PT12H"/>
+      </table:table-row>
+    </table:table>`,
+      `<number:date-style style:name="Date"><number:year number:style="long"/><number:text>-</number:text><number:month number:style="long"/><number:text>-</number:text><number:day number:style="long"/></number:date-style>
+       <style:style style:name="DateCell" style:family="table-cell" style:data-style-name="Date"/>`,
+    ),
+  );
+  let restored: ScDocument | undefined;
+  let reopened: ScDocument | undefined;
+  try {
+    restored = decodeCalcDocument(structuredClone(encodeCalcDocument(source)));
+    const xml = await writeOdsXml(restored);
+    expect(xml.files["content.xml"]).toContain('office:value-type="float" office:value="2"');
+    reopened = await readOdsDocument(xml);
+    for (const document of [source, restored, reopened]) {
+      const manager = document.GetExternalRefManager();
+      const cache = manager.getCacheTable(0, "Data");
+      const format: [number] = [0];
+      expect(cache?.getCell(0, 0, format)).toEqual(new FormulaDoubleToken(2));
+      expect(document.GetFormatTable().GetType(format[0]) & SvNumFormatType.DATE).toBe(
+        SvNumFormatType.DATE,
+      );
+      expect(cache?.getCell(1, 0)).toEqual(new FormulaDoubleToken(0.5));
+      expect(manager.getExternalFiles()[0]).toMatchObject({
+        relativeName: "cache.ods",
+        filterName: "calc8",
+        filterOptions: "44,34",
+      });
+    }
+  } finally {
+    reopened?.Dispose();
+    restored?.Dispose();
+    source.Dispose();
   }
 });

@@ -20,9 +20,15 @@ export function getExternalFileUrl(name: string): string {
 /** Scalar tokens stored by the imported external sheet cache. */
 export type ScExternalCacheToken = FormulaDoubleToken | FormulaStringToken;
 
+/** Native cache cell owns the token and its format from the source workbook. */
+interface CacheCell {
+  readonly token: ScExternalCacheToken;
+  readonly format: number;
+}
+
 /** Original sparse two-dimensional cache of scalar formula tokens. */
 export class ScExternalRefCacheTable {
-  private readonly rows = new Map<number, Map<number, ScExternalCacheToken>>();
+  private readonly rows = new Map<number, Map<number, CacheCell>>();
   private wholeTableCached = false;
 
   /** Marks uncached positions as empty in an imported complete ODF cache. @returns Nothing. */
@@ -35,20 +41,22 @@ export class ScExternalRefCacheTable {
     return this.wholeTableCached;
   }
 
-  /** Inserts the first token recorded at a cache position. @param col - Column. @param row - Row. @param token - Owned scalar token. @returns Nothing. */
-  setCell(col: number, row: number, token: ScExternalCacheToken): void {
+  /** Inserts the first token recorded at a cache position. @param col - Column. @param row - Row. @param token - Owned scalar token. @param format - Native number-format index. @returns Nothing. */
+  setCell(col: number, row: number, token: ScExternalCacheToken, format = 0): void {
     let cells = this.rows.get(row);
     if (!cells) {
       cells = new Map();
       this.rows.set(row, cells);
     }
     if (cells.has(col)) token.dispose();
-    else cells.set(col, token);
+    else cells.set(col, { token, format });
   }
 
-  /** Borrows a cached token. @param col - Column. @param row - Row. @returns Token or absence. */
-  getCell(col: number, row: number): ScExternalCacheToken | undefined {
-    return this.rows.get(row)?.get(col);
+  /** Borrows a cached token. @param col - Column. @param row - Row. @param format - Optional number-format output. @returns Token or absence. */
+  getCell(col: number, row: number, format?: [number]): ScExternalCacheToken | undefined {
+    const cell = this.rows.get(row)?.get(col);
+    if (cell && format) format[0] = cell.format;
+    return cell?.token;
   }
 
   /** Builds the native one-sheet matrix when the entire requested area is cached. @param range - Absolute area. @param document - Sheet limits for whole-row and whole-column ranges. @returns Cached matrix or absence. */
@@ -64,7 +72,7 @@ export class ScExternalRefCacheTable {
       maxRow = firstRow;
     for (const [row, cached] of this.rows) {
       if (row < firstRow || row > lastRow) continue;
-      for (const [col, token] of cached) {
+      for (const [col, { token }] of cached) {
         if (col < firstCol || col > lastCol) continue;
         cells.push([col, row, token]);
         minCol = Math.min(col, minCol);
@@ -101,13 +109,13 @@ export class ScExternalRefCacheTable {
   }
 
   /** Walks the native sparse cache rows for export. @returns Borrowed rows. */
-  entries(): ReadonlyMap<number, ReadonlyMap<number, ScExternalCacheToken>> {
+  entries(): ReadonlyMap<number, ReadonlyMap<number, CacheCell>> {
     return this.rows;
   }
 
   /** Releases all retained cache tokens. @returns Nothing. */
   clear(): void {
-    for (const row of this.rows.values()) for (const token of row.values()) token.dispose();
+    for (const row of this.rows.values()) for (const { token } of row.values()) token.dispose();
     this.rows.clear();
     this.wholeTableCached = false;
   }
@@ -118,6 +126,8 @@ export class ScExternalRefManager {
   private readonly files: {
     name: string;
     relativeName?: string;
+    filterName?: string;
+    filterOptions?: string;
     tables: Map<string, { name: string; cache: ScExternalRefCacheTable }>;
   }[] = [];
   private readonly workbookLinks = new Map<number, number>();
@@ -207,6 +217,14 @@ export class ScExternalRefManager {
     if (file && href.startsWith("../")) file.relativeName = href.slice(3);
   }
 
+  /** Retains the original source filter data without opening the external workbook. @param fileId - Native file ID. @param filterName - Source filter. @param filterOptions - Filter options. */
+  setFilterData(fileId: number, filterName: string, filterOptions: string): void {
+    const file = this.files[fileId];
+    if (!file) return;
+    file.filterName = filterName;
+    file.filterOptions = filterOptions;
+  }
+
   /** Reads a registered external workbook's name. @param fileId - Native file ID. @returns Workbook identity or absence. */
   getExternalFileName(fileId: number): string | undefined {
     return this.files[fileId]?.name;
@@ -216,6 +234,8 @@ export class ScExternalRefManager {
   getExternalFiles(): readonly Readonly<{
     name: string;
     relativeName?: string;
+    filterName?: string;
+    filterOptions?: string;
     tables: ReadonlyMap<string, Readonly<{ name: string; cache: ScExternalRefCacheTable }>>;
   }>[] {
     return this.files;

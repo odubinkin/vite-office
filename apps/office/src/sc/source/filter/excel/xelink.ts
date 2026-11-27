@@ -103,7 +103,7 @@ export function SaveXmlExternalLinks(
           /** Sorts columns in source order. @param a - First column. @param b - Second column. @returns Comparison. */
           (a, b) => a[0] - b[0],
         ))
-          saveCell(xml, row, col, cell);
+          saveCell(xml, row, col, cell.token);
         xml.endElement(token("row"));
       }
       xml.endElement(token("sheetData"));

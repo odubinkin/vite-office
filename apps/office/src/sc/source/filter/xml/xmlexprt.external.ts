@@ -15,22 +15,29 @@ function repeat(axis: "rows" | "columns", count: number): string {
   return count > 1 ? ` table:number-${axis}-repeated="${count}"` : "";
 }
 
-/** Emits the original scalar cache cell value. @param value - Stored token. @returns ODF cell fragment. */
-function writeCell(value: ScExternalCacheToken): string {
+/** Emits a cache token with its resolved ODF cell style. @param value - Stored token. @param style - Native number style's cell reference. @returns ODF cell fragment. */
+function writeCell(value: ScExternalCacheToken, style: string): string {
+  const attribute = style ? ` table:style-name="${escapeXml(style)}"` : "";
   if (value instanceof FormulaDoubleToken) {
     const number = doubleToString(value.GetDouble());
-    return `<table:table-cell office:value-type="float" office:value="${number}"><text:p>${number}</text:p></table:table-cell>`;
+    return `<table:table-cell${attribute} office:value-type="float" office:value="${number}"><text:p>${number}</text:p></table:table-cell>`;
   }
-  return `<table:table-cell office:value-type="string"><text:p>${escapeXml(text(value.GetString().getString()))}</text:p></table:table-cell>`;
+  return `<table:table-cell${attribute} office:value-type="string"><text:p>${escapeXml(text(value.GetString().getString()))}</text:p></table:table-cell>`;
 }
 
-/** Writes hidden external cache tables without adding them to the worksheet list. @param document - Calc graph. @returns ODF table fragments. */
-export function WriteExternalRefCaches(document: ScDocument): string {
+/** Writes hidden external cache tables without adding them to the worksheet list. @param document - Calc graph. @param styleForNumberFormat - Automatic cell style resolver. @returns ODF table fragments. */
+export function WriteExternalRefCaches(
+  document: ScDocument,
+  styleForNumberFormat: (format: number) => string,
+): string {
   const xml: string[] = [];
   for (const file of document.GetExternalRefManager().getExternalFiles()) {
     const uri = getExternalFileUrl(file.name);
-    const relative = file.relativeName ?? (uri === file.name ? undefined : file.name);
-    const href = relative === undefined ? uri : "../" + relative;
+    const href = file.relativeName === undefined ? "" : "../" + file.relativeName;
+    const filterName = file.filterName ? ` table:filter-name="${escapeXml(file.filterName)}"` : "";
+    const filterOptions = file.filterOptions
+      ? ` table:filter-options="${escapeXml(file.filterOptions)}"`
+      : "";
     for (const { name, cache } of file.tables.values()) {
       const rows = cache.entries();
       let width = 1;
@@ -38,7 +45,7 @@ export function WriteExternalRefCaches(document: ScDocument): string {
         for (const col of cells.keys()) width = Math.max(width, col + 1);
       xml.push(
         `<table:table table:name="${escapeXml("'" + uri + "'#" + name)}" table:print="false" table:style-name="ta_extref">`,
-        `<table:table-source xlink:type="simple" xlink:href="${escapeXml(href)}" table:table-name="${escapeXml(name)}" table:mode="copy-results-only"/>`,
+        `<table:table-source xlink:type="simple" xlink:href="${escapeXml(href)}" table:table-name="${escapeXml(name)}"${filterName}${filterOptions} table:mode="copy-results-only"/>`,
         `<table:table-column${repeat("columns", width)}/>`,
       );
       let nextRow = 0;
@@ -57,7 +64,7 @@ export function WriteExternalRefCaches(document: ScDocument): string {
           (left, right) => left[0] - right[0],
         )) {
           if (col > nextCol) xml.push(`<table:table-cell${repeat("columns", col - nextCol)}/>`);
-          xml.push(writeCell(value));
+          xml.push(writeCell(value.token, styleForNumberFormat(value.format)));
           nextCol = col + 1;
         }
         xml.push("</table:table-row>");

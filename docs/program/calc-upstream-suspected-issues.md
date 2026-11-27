@@ -8117,3 +8117,15 @@ later. Calc preserves the original ordering gate.
 
 - [Original master-page child ordering](../../vendor/libreoffice-reference/xmloff/source/text/XMLTextMasterPageContext.cxx)
 - [Original Calc master-page child specialization](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlstyli.cxx)
+
+### CALC-850 — The cached workbook source can export an empty href
+
+When the external source has no relative name after export preparation,
+`ScXMLExport::WriteExternalRefCaches` passes that same empty relative name to
+`GetRelativeReference`. The converter leaves empty strings alone. The cache
+table name still contains the original workbook URL and sheet, while its
+`table:table-source` has an empty `xlink:href`. Calc follows that fallback
+when the browser document has no stored relative reference.
+
+- [Original external cache export](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlexprt.cxx)
+- [Original relative reference conversion](../../vendor/libreoffice-reference/xmloff/source/core/xmlexp.cxx)

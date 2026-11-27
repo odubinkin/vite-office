@@ -52,6 +52,10 @@
         {
           "path": "apps/office/src/sc/source/filter/xml/ods-icon-sets.test.ts",
           "marker": "retains complete Worker icon settings"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/xmlexternaltabi.test.ts",
+          "marker": "round-trips native ODF cache formats and source filter metadata"
         }
       ]
     },
@@ -74,7 +78,8 @@
       "Transports the existing Calc page-style name with native ODF layout and master-page XML, validates the assignment, and admits older transfer records.",
       "Transfers native ODF calculation properties alongside the existing date and case fields. Older Worker graphs without these settings retain native new-document options.",
       "Transfers drawing-grid values and the represented note, author, formula-mark and value-highlighting settings. Older records retain native defaults.",
-      "Adopts private icon-set settings after the existing XML has restored the threshold cells."
+      "Adopts private icon-set settings after the existing XML has restored the threshold cells.",
+      "Transfers optional external cache number formats through the existing version-one formatter table and native source filter metadata alongside the referenced workbook."
     ],
     "stackDivergence": {
       "kind": "local-infrastructure",

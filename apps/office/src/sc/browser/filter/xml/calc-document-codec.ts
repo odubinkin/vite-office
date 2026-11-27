@@ -84,13 +84,14 @@ import {
 } from "../../../../formula/inc/errorcodes";
 /** Cloneable external cache cell with an explicit error discriminator for NaN payloads. */
 type ExternalCell =
-  | readonly [col: number, row: number, kind: "double" | "error", value: number]
-  | readonly [col: number, row: number, kind: "string", value: string];
+  | readonly [col: number, row: number, kind: "double" | "error", value: number, format?: number]
+  | readonly [col: number, row: number, kind: "string", value: string, format?: number];
 /** External sources in file-ID order, with the real sheet names and sparse data. */
 type ExternalFile = readonly [
   name: string,
   sheets: readonly ExternalSheet[],
-  relativeName?: string,
+  relativeName?: string | undefined,
+  filter?: readonly [name: string, options: string],
 ];
 /** External sheet cache including the ODF complete-table marker. */
 type ExternalSheet = readonly [name: string, cells: readonly ExternalCell[], complete?: boolean];
@@ -314,11 +315,9 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
   const numberFormats: NumberFormat[] = [];
   const textStyles = new CellTextStylePool(document, fonts);
   const numberFormatIndices = new Map<number, number>();
-  /** Adds one native format definition to the transfer table. @param pattern - Source pattern. @returns Transfer index or General. */
-  function numberFormatIndex(pattern: ScPatternAttr): number | undefined {
-    if (!pattern.GetItemSet().GetItemIfSet(ATTR_VALUE_FORMAT, false)) return undefined;
+  /** Adds one native format definition to the transfer table. @param key - Number-format index. @returns Transfer index, if represented. */
+  function registerNumberFormat(key: number): number | undefined {
     const formatter = document.GetFormatTable();
-    const key = pattern.GetNumberFormat(formatter);
     const existing = numberFormatIndices.get(key);
     if (existing !== undefined) return existing;
     const entry = formatter.GetEntry(key);
@@ -501,7 +500,9 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
       for (let r = 0; r <= MAXROW;) {
         const pattern = data.GetPatternRange(first, last, r) as ScPatternAttr;
         const style = styleName(pattern);
-        const numberFormat = numberFormatIndex(pattern);
+        const numberFormat = pattern.GetItemSet().GetItemIfSet(ATTR_VALUE_FORMAT, false)
+          ? registerNumberFormat(pattern.GetNumberFormat(document.GetFormatTable()))
+          : undefined;
         const direction = (
           pattern.GetItemSet().GetItemIfSet(ATTR_WRITINGDIR, false) as
             SvxFrameDirectionItem | undefined
@@ -604,16 +605,18 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
     for (const sheet of file.tables.values()) {
       const cached: ExternalCell[] = [];
       for (const [row, cells] of sheet.cache.entries()) {
-        for (const [col, token] of cells) {
+        for (const [col, { token, format }] of cells) {
+          const index = format === 0 ? undefined : registerNumberFormat(format);
+          const formatValue: [number?] = index === undefined ? [] : [index];
           if (token instanceof FormulaStringToken)
-            cached.push([col, row, "string", text(token.GetString().getString())]);
+            cached.push([col, row, "string", text(token.GetString().getString()), ...formatValue]);
           else {
             const number = token.GetDouble();
             const error = GetDoubleErrorValue(number);
             cached.push(
               error === FormulaError.NONE
-                ? [col, row, "double", number]
-                : [col, row, "error", error],
+                ? [col, row, "double", number, ...formatValue]
+                : [col, row, "error", error, ...formatValue],
             );
           }
           yield;
@@ -623,10 +626,16 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
         sheet.cache.isWholeTableCached() ? [sheet.name, cached, true] : [sheet.name, cached],
       );
     }
+    const filter =
+      file.filterName || file.filterOptions
+        ? ([file.filterName ?? "", file.filterOptions ?? ""] as const)
+        : undefined;
     externalFiles.push(
-      file.relativeName === undefined
-        ? [file.name, sheets]
-        : [file.name, sheets, file.relativeName],
+      filter
+        ? [file.name, sheets, file.relativeName, filter]
+        : file.relativeName === undefined
+          ? [file.name, sheets]
+          : [file.name, sheets, file.relativeName],
     );
   }
   const options = document.GetDocOptions();
@@ -825,23 +834,40 @@ function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
       view.SetOption(ViewOption.SYNTAX, record.valueHighlighting);
     if (record.drawingGrid !== undefined)
       view.SetGridOptions(decodeDrawingGrid(record.drawingGrid));
-    for (const [name, sheets, relativeName] of record.externalFiles ?? []) {
+    for (const [name, sheets, relativeName, filter] of record.externalFiles ?? []) {
       const manager = document.GetExternalRefManager();
       const file = manager.getExternalFileId(name);
       if (typeof relativeName === "string") manager.setRelativeFileName(file, "../" + relativeName);
+      if (filter !== undefined) {
+        if (
+          !Array.isArray(filter) ||
+          filter.length !== 2 ||
+          typeof filter[0] !== "string" ||
+          typeof filter[1] !== "string"
+        )
+          throw new Error("Calc worker external source filter is invalid.");
+        manager.setFilterData(file, filter[0], filter[1]);
+      }
       for (const [sheet, cells, complete] of sheets) {
         const cache = manager.getCacheTable(file, sheet, true);
         if (!cache) throw new Error("Calc worker external sheet is invalid.");
         if (complete === true) cache.setWholeTableCached();
-        for (const [col, row, kind, value] of cells) {
+        for (const [col, row, kind, value, formatIndex] of cells) {
           if (!Number.isInteger(col) || !Number.isInteger(row) || !document.ValidColRow(col, row))
             throw new Error("Calc worker external cell address is invalid.");
+          let key = 0;
+          if (formatIndex !== undefined) {
+            const format = formats[formatIndex];
+            if (!Number.isInteger(formatIndex) || formatIndex < 0 || !format)
+              throw new Error("Calc worker external cell number format is invalid.");
+            key = format.key;
+          }
           if (kind === "string" && typeof value === "string") {
             const lexical = unicode(value);
             try {
               const shared = document.GetSharedStringPool().intern(lexical);
               try {
-                cache.setCell(col, row, new FormulaStringToken(shared));
+                cache.setCell(col, row, new FormulaStringToken(shared), key);
               } finally {
                 shared.dispose();
               }
@@ -849,12 +875,13 @@ function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
               lexical.dispose();
             }
           } else if (kind === "double" && Number.isFinite(value))
-            cache.setCell(col, row, new FormulaDoubleToken(value));
+            cache.setCell(col, row, new FormulaDoubleToken(value), key);
           else if (kind === "error" && Number.isInteger(value) && value > 0 && value <= 0xffff)
             cache.setCell(
               col,
               row,
               new FormulaDoubleToken(CreateDoubleError(value as FormulaError)),
+              key,
             );
           else throw new Error("Calc worker external cell value is invalid.");
           yield;

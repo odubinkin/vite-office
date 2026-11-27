@@ -36,7 +36,8 @@
       "Exports used master pages and page layouts and links the automatic table style to the actual named page style.",
       "Column output ends at the furthest used, formatted, geometrically changed, grouped or repeated-title column in the represented sheet model.",
       "Named definition output uses the native type and reference query, validates the name base, and formats it as an absolute qualified address.",
-      "Exports cell annotations before the owning cell value and includes note-only positions in the sheet bounds."
+      "Exports cell annotations before the owning cell value and includes note-only positions in the sheet bounds.",
+      "Registers automatic number-format styles for external cache entries through the same owner used by sheet cell styles."
     ],
     "omittedResponsibilities": [
       "Field identity and unimplemented character properties are outside this XML text boundary."
@@ -102,6 +103,10 @@
         {
           "path": "apps/office/src/sc/source/filter/xml/xmlexprt.ts",
           "marker": "entry.IsReference"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/xmlexternaltabi.test.ts",
+          "marker": "round-trips native ODF cache formats and source filter metadata"
         }
       ],
       "upstream": [
@@ -132,6 +137,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlexprt.cxx",
           "marker": "ScXMLExport::WriteAnnotation"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlexprt.cxx",
+          "marker": "ScXMLExport::GetNumberFormatStyleIndex"
         }
       ]
     }

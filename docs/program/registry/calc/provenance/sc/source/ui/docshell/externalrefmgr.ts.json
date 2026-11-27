@@ -25,7 +25,8 @@
     ],
     "preservedResponsibilities": [
       "Registers stable imported source workbook IDs, creates case-insensitive table caches, and retains the first native scalar token at each coordinate until document disposal.",
-      "Resolves cached scalar and rectangular matrix operands and registers calling formula cells using the original file-ID boundary. Whole-table ODF caches distinguish known blank cells from unavailable workbook data. Cache reads use only imported data in the browser."
+      "Resolves cached scalar and rectangular matrix operands and registers calling formula cells using the original file-ID boundary. Whole-table ODF caches distinguish known blank cells from unavailable workbook data. Cache reads use only imported data in the browser.",
+      "The native sparse cell record keeps its token and number-format index together. Source filter data belongs to the external file record. Duplicate coordinates continue to retain the first complete cell."
     ],
     "omittedResponsibilities": [
       "External refresh, source-medium URL resolution, multi-sheet matrix assembly and cached number format identity remain pending."
@@ -43,6 +44,10 @@
         {
           "path": "apps/office/src/sc/source/core/tool/external-reference-formula.test.ts",
           "marker": "uses source values, known blanks and unavailable cells"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/xmlexternaltabi.test.ts",
+          "marker": "round-trips native ODF cache formats and source filter metadata"
         }
       ],
       "upstream": [
@@ -61,6 +66,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/ui/docshell/externalrefmgr.cxx",
           "marker": "ScExternalRefManager::getSingleRefToken"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/docshell/externalrefmgr.cxx",
+          "marker": "ScExternalRefCache::Table::setCell"
         }
       ]
     }

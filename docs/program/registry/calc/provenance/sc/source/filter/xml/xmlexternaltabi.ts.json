@@ -16,7 +16,8 @@
       "ScXMLExternalRefCellContext::endFastElement"
     ],
     "preservedResponsibilities": [
-      "Imports native external ODS tables into the document's whole-table caches, retaining repeated sparse cells, referenced sheets, source relationships, scalar tokens and paragraph data."
+      "Imports native external ODS tables into the document's whole-table caches, retaining repeated sparse cells, referenced sheets, source relationships, scalar tokens and paragraph data.",
+      "Reads original temporal cache values, automatic number styles and table-source filter metadata before committing the native token and format index."
     ],
     "omittedResponsibilities": [
       "Temporal values, number format style identity, filters, external source refresh, and formula evaluation remain pending in this cache subset."
@@ -30,12 +31,20 @@
         {
           "path": "apps/office/src/sc/source/filter/xml/xmlexternaltabi.test.ts",
           "marker": "testExternalRefCacheODS"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/xmlexternaltabi.test.ts",
+          "marker": "round-trips native ODF cache formats and source filter metadata"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlexternaltabi.cxx",
           "marker": "ScXMLExternalRefRowContext::endFastElement"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlexternaltabi.cxx",
+          "marker": "ScXMLExternalRefCellContext::endFastElement"
         },
         {
           "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlexternaltabi.cxx",

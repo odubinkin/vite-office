@@ -452,6 +452,8 @@ const entries: readonly (readonly [string, string, XMLToken])[] = [
   [ODF_NAMESPACES.loext, "marker-style-name", XMLToken.LOEXT_MARKER_STYLE_NAME],
   [ODF_NAMESPACES.table, "table-column", XMLToken.TABLE_TABLE_COLUMN],
   [ODF_NAMESPACES.table, "table-source", XMLToken.TABLE_TABLE_SOURCE],
+  [ODF_NAMESPACES.table, "filter-name", XMLToken.TABLE_FILTER_NAME],
+  [ODF_NAMESPACES.table, "filter-options", XMLToken.TABLE_FILTER_OPTIONS],
   [ODF_NAMESPACES.table, "table-header-rows", XMLToken.TABLE_TABLE_HEADER_ROWS],
   [ODF_NAMESPACES.table, "table-row", XMLToken.TABLE_TABLE_ROW],
   [ODF_NAMESPACES.table, "table-cell", XMLToken.TABLE_TABLE_CELL],

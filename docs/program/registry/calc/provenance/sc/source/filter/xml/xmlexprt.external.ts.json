@@ -14,7 +14,8 @@
       "ScXMLExport::WriteExternalRefCaches"
     ],
     "preservedResponsibilities": [
-      "Writes native hidden external cache tables, their standard file URI names and table sources, and sparse repeated gaps with typed float and string tokens."
+      "Writes native hidden external cache tables, their standard file URI names and table sources, and sparse repeated gaps with typed float and string tokens.",
+      "Writes the original float cache tokens with a separate automatic cell style for their native number format. Exports filter metadata and follows the empty relative target fallback (CALC-850)."
     ],
     "omittedResponsibilities": [
       "Temporal values, number format style identity, filters, external source refresh, and formula evaluation remain pending in this cache subset."
@@ -28,9 +29,17 @@
         {
           "path": "apps/office/src/sc/source/filter/xml/xmlexternaltabi.test.ts",
           "marker": "testExternalRefCacheODS"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/xmlexternaltabi.test.ts",
+          "marker": "round-trips native ODF cache formats and source filter metadata"
         }
       ],
       "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlexprt.cxx",
+          "marker": "ScXMLExport::WriteExternalRefCaches"
+        },
         {
           "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlexprt.cxx",
           "marker": "ScXMLExport::WriteExternalRefCaches"

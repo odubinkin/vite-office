@@ -150,6 +150,13 @@ export class ScXMLExport {
       cell = exportCellPropertyElement(pattern),
       paragraph = exportCellParagraphProperties(pattern),
       properties = `${chars}${cell}${paragraph ? `<style:paragraph-properties${paragraph}/>` : ""}`;
+    const name = this.registerCellStyle(parent, dataStyle, properties);
+    this.patternNames.set(pattern, name);
+    return name;
+  }
+
+  /** Deduplicates original automatic cell styles for sheet and external-cache entries. @param parent - Named parent. @param dataStyle - Number format style. @param properties - Other ODF properties. @returns Automatic style name. */
+  private registerCellStyle(parent: string, dataStyle: string, properties: string): string {
     const key = JSON.stringify([parent, dataStyle, properties]);
     let style = this.styles.get(key);
     if (style === undefined) {
@@ -160,14 +167,17 @@ export class ScXMLExport {
       this.styles.set(key, style);
       this.automaticStyleNames.add(name);
     }
-    this.patternNames.set(pattern, style.name);
     return style.name;
   }
   /** Registers a compiled data style once for the effective native key. @param pattern - Native cell pattern. @returns Style name or the empty General default. */
   private numberStyleName(pattern: ScPatternAttr): string {
     if (pattern.GetItemSet().GetItemState(ATTR_VALUE_FORMAT, false) !== SfxItemState.SET) return "";
+    return this.registerNumberStyle(pattern.GetNumberFormat(this.document.GetFormatTable()));
+  }
+
+  /** Registers a number style from its real formatter index. @param key - Native format index. @returns Data style name or General default. */
+  private registerNumberStyle(key: number): string {
     const formatter = this.document.GetFormatTable();
-    const key = pattern.GetNumberFormat(formatter);
     const cached = this.numberStyles.get(key);
     if (cached !== undefined) return cached?.name ?? "";
     const name = `N${this.numberStyles.size + 1}`;
@@ -476,7 +486,15 @@ export class ScXMLExport {
         ExportConditionalFormat(this.document, table) +
         "</table:table>";
     }
-    const external = WriteExternalRefCaches(this.document);
+    const external = WriteExternalRefCaches(
+      this.document,
+      /** Resolves the format-only automatic style of a cached cell. @param key - Native format index. @returns ODF cell style. */
+      (key) => {
+        if (key === 0) return "";
+        const dataStyle = this.registerNumberStyle(key);
+        return dataStyle ? this.registerCellStyle("", dataStyle, "") : "";
+      },
+    );
     body += external + this.WriteNamedRange(-1) + WriteLabelRanges(this.document);
     let automatic = this.textStyles.exportStyles() + (external ? externalRefCacheStyle : "");
     for (const { properties, name, master } of tableStyles.values()) {

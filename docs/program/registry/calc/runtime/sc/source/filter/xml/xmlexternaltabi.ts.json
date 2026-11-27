@@ -18,9 +18,11 @@
       "evidence": [
         "apps/office/src/sc/source/filter/xml/xmlexternaltabi.ts",
         "apps/office/src/sc/source/filter/xml/xmlexternaltabi.test.ts",
-        "vendor/libreoffice-reference/sc/source/filter/xml/xmlexternaltabi.cxx#ScXMLExternalRefRowContext::endFastElement"
+        "vendor/libreoffice-reference/sc/source/filter/xml/xmlexternaltabi.cxx#ScXMLExternalRefRowContext::endFastElement",
+        "apps/office/src/sc/source/filter/xml/xmlexternaltabi.test.ts#round-trips native ODF cache formats and source filter metadata",
+        "vendor/libreoffice-reference/sc/source/filter/xml/xmlexternaltabi.cxx#ScXMLExternalRefCellContext::endFastElement"
       ],
-      "justification": "Imports native external ODS tables into the document's whole-table caches, retaining repeated sparse cells, referenced sheets, source relationships, scalar tokens and paragraph data. Temporal values, number format style identity, filters, external source refresh, and formula evaluation remain pending in this cache subset.",
+      "justification": "Imports native external ODS tables into the document's whole-table caches, retaining repeated sparse cells, referenced sheets, source relationships, scalar tokens and paragraph data. Temporal values, number format style identity, filters, external source refresh, and formula evaluation remain pending in this cache subset. Reads original temporal cache values, automatic number styles and table-source filter metadata before committing the native token and format index.",
       "knownViolations": [],
       "localSymbols": [
         "createExternalRefTable",
