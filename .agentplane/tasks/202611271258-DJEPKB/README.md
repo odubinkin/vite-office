@@ -1,10 +1,11 @@
 ---
 id: "202611271258-DJEPKB"
 title: "Use native plain ODF package media-type admission in Writer and Calc"
-status: "DOING"
+result_summary: "Read native plain odf package media types."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - "eee88f64aaafa4445449a10cde59080e616d88e6"
   findings:
     - "Normal package ZIP validation, manifest processing and filter progress were verified. The existing recovery and repair policies remain in effect."
-commit: null
+commit:
+  hash: "eee88f64aaafa4445449a10cde59080e616d88e6"
+  message: "🧩 DJEPKB odf: read native plain ODF package media types"
 comments:
   -
     author: "CODER"
     body: "Start: follow native ZipPackage metadata read and Sfx storage admission while preserving the existing non-recovery workflow."
+  -
+    author: "CODER"
+    body: "Verified: The original tdf106899.odt with a later mimetype entry and tdf103829_textTab.ods with a deflated mimetype opened. Ordinary loads used the original manifest type for optional or reordered MIME streams, and exported packages placed mimetype first and stored. Conflicts, malformed manifests, and repair-only fallbacks were rejected."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Tests  72 passed (72). Pinned fixtures and focused static, dependency, provenance and registry checks passed."
+  -
+    type: "status"
+    at: "2026-11-27T14:47:25.019Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: The original tdf106899.odt with a later mimetype entry and tdf103829_textTab.ods with a deflated mimetype opened. Ordinary loads used the original manifest type for optional or reordered MIME streams, and exported packages placed mimetype first and stored. Conflicts, malformed manifests, and repair-only fallbacks were rejected."
 doc_version: 3
-doc_updated_at: "2026-11-27T14:46:17.882Z"
+doc_updated_at: "2026-11-27T14:47:25.019Z"
 doc_updated_by: "CODER"
 description: "Route ODT and ODS file admission through pinned ZipPackage manifest/media-type rules. Accept standard typed content through the manifest when the optional mimetype stream is reordered, compressed or absent, preserving actual manifest conflicts and ordinary Sfx rejection of media-type fallback packages requiring repair. Keep normal ZIP validation, encryption scope, resource bounds, cancellation, and canonical uncompressed-first export. Verify pinned accepted documents, existing negative cases updated to native behavior, and public import and Worker routes."
 sections:
