@@ -20,7 +20,7 @@
         "apps/office/src/sw/source/filter/xml/odt-annotation.test.ts",
         "vendor/libreoffice-reference/xmloff/source/text/txtfldi.cxx"
       ],
-      "justification": "Imports annotation metadata, delegates editable text to the shared paragraph importer using the annotation TextRange cursor, and completes named annotation ranges.",
+      "justification": "Imports annotation metadata, delegates editable text to the shared paragraph importer using the annotation TextRange cursor, and completes named annotation ranges. Uses the shared shape text child dispatcher with isolated annotation list state and completes named ranges through the TextRange cursor.",
       "knownViolations": [],
       "localSymbols": [
         "XMLAnnotationImportContext"

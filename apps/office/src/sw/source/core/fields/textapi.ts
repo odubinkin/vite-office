@@ -23,6 +23,7 @@ import {
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { CONVERT_TWIPS } from "../../../../svl/inc/poolitem";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
+import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import { SfxVoidItem } from "../../../../svl/source/items/voiditem";
 import { illegal, invalid, noSuchElement, unknown } from "../unocore/unocrsrhelper";
 
@@ -331,10 +332,14 @@ class SwTextAPICursor {
     const entry = textProperties.get(text(name));
     if (entry === undefined) return unknown(text(name));
     const value = new Any();
-    (this.GetItem(entry[0]) as { QueryValue(output: Any, member: number): unknown }).QueryValue(
-      value,
-      entry[1],
-    );
+    const item = this.GetItem(entry[0]);
+    if (
+      item instanceof SfxInt16Item &&
+      item.Which() === EE.EE_PARA_OUTLLEVEL &&
+      item.GetValue() < 0
+    )
+      return value;
+    (item as { QueryValue(output: Any, member: number): unknown }).QueryValue(value, entry[1]);
     return value;
   }
 
@@ -431,6 +436,7 @@ const characterScriptItems = [
 
 /** EditEngine WhichId and member pairs consumed by the annotation XText property set. */
 const textProperties = new Map<string, readonly [number, number]>([
+  ["NumberingLevel", [EE.EE_PARA_OUTLLEVEL, 0]],
   ["CharColor", [EE.EE_CHAR_COLOR, 0]],
   ["CharTransparence", [EE.EE_CHAR_COLOR, M.MID_COLOR_ALPHA]],
   ["CharComplexColor", [EE.EE_CHAR_COLOR, M.MID_COMPLEX_COLOR]],
@@ -477,6 +483,12 @@ for (const [suffix, font, size, weight, posture, locale] of characterScriptItems
 
 /** Uses the native item members, including the numeric upper/lower spacing bindings. @param item - Detached destination item. @param value - UNO value. @param member - Original item member. @param name - Property name. @returns Whether accepted. */
 function putTextProperty(item: SfxPoolItem, value: Any, member: number, name: string): boolean {
+  if (item instanceof SfxInt16Item && item.Which() === EE.EE_PARA_OUTLLEVEL) {
+    const level: [number] = [-1];
+    if (!value.extract(level, "sal_Int16") || level[0] < -1 || level[0] > 9) return false;
+    item.SetValue(level[0]);
+    return true;
+  }
   if (item instanceof SvxULSpaceItem) {
     if (name === "ParaContextMargin") {
       const context: [boolean] = [false];

@@ -17,12 +17,17 @@
         {
           "path": "apps/office/src/sw/source/filter/xml/odt-annotation.test.ts",
           "marker": "transports native annotation editor text"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-annotation.test.ts",
+          "marker": "original Writer annotation list"
         }
       ]
     },
     "rationale": "Transfers native annotation EditEngine paragraphs and formatting items through the existing browser graph boundary.",
     "responsibilities": [
-      "Transfers native annotation EditEngine paragraphs and formatting items through the existing browser graph boundary."
+      "Transfers native annotation EditEngine paragraphs and formatting items through the existing browser graph boundary.",
+      "Transfers native annotation outline levels along with the existing EditEngine text and formatted items."
     ],
     "stackDivergence": {
       "kind": "local-infrastructure",

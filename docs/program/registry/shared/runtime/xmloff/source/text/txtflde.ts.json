@@ -20,7 +20,7 @@
         "apps/office/src/sw/source/filter/xml/odt-annotation.test.ts",
         "vendor/libreoffice-reference/xmloff/source/text/txtflde.cxx"
       ],
-      "justification": "Serializes the represented annotation metadata, content and named endpoint.",
+      "justification": "Serializes the represented annotation metadata, content and named endpoint. Writes annotation date metadata for the default field, omits the empty creator and emits ODF 1.3 initials in their native namespace.",
       "knownViolations": [],
       "localSymbols": [
         "exportAnnotation"

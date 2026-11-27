@@ -25,16 +25,11 @@ export class XMLAnnotationImportContext extends SvXMLImportContext {
   /** Routes one annotation declaration through the current text importer. @param helper - Original text import owner. @returns Context. */
   constructor(private readonly helper: XMLTextImportHelper) {
     super();
+    helper.PushAnnotationListContext();
   }
 
   /** Reads the original annotation attributes. @param element - Opening or closing annotation token. @param attributes - Source attributes. @returns Nothing. */
-  override startFastElement(element: XMLToken, attributes: FastAttributeList): void {
-    attributes.assertOnly(
-      element === XMLToken.OFFICE_ANNOTATION_END
-        ? [XMLToken.OFFICE_NAME]
-        : [XMLToken.OFFICE_NAME, XMLToken.LOEXT_PARENT_NAME, XMLToken.LOEXT_RESOLVED],
-      "annotation",
-    );
+  override startFastElement(_element: XMLToken, attributes: FastAttributeList): void {
     this.name = attributes.get(XMLToken.OFFICE_NAME) ?? "";
     this.parentName = attributes.get(XMLToken.LOEXT_PARENT_NAME) ?? "";
     const resolved = attributes.get(XMLToken.LOEXT_RESOLVED);
@@ -67,8 +62,7 @@ export class XMLAnnotationImportContext extends SvXMLImportContext {
             this.initials += chunk;
           },
         );
-      case XMLToken.TEXT_P:
-      case XMLToken.TEXT_H: {
+      default: {
         this.field ??= this.helper.CreateAnnotation(this.name);
         if (!this.cursor) {
           this.cursor = this.field.getTextRange().createTextCursor();
@@ -76,8 +70,6 @@ export class XMLAnnotationImportContext extends SvXMLImportContext {
         }
         return this.helper.CreateTextChildContext(element, attributes, "Annotation");
       }
-      default:
-        return null;
     }
   }
 
@@ -101,20 +93,24 @@ export class XMLAnnotationImportContext extends SvXMLImportContext {
 
   /** Completes the field or reattaches a named annotation to its expanded range. @param element - Closing token. @returns Nothing. */
   override endFastElement(element: XMLToken): void {
+    try {
+      if (this.cursor) {
+        const empty = xmlTextString("");
+        try {
+          this.cursor.gotoEnd(false);
+          this.cursor.goLeft(1, true);
+          this.cursor.setString(empty);
+        } finally {
+          empty.dispose();
+          this.helper.PopAnnotationCursor();
+        }
+      }
+    } finally {
+      this.helper.PopAnnotationListContext();
+    }
     if (element === XMLToken.OFFICE_ANNOTATION_END) {
       this.helper.EndAnnotation(this.name);
       return;
-    }
-    if (this.cursor) {
-      const empty = xmlTextString("");
-      try {
-        this.cursor.gotoEnd(false);
-        this.cursor.goLeft(1, true);
-        this.cursor.setString(empty);
-      } finally {
-        empty.dispose();
-        this.helper.PopAnnotationCursor();
-      }
     }
     const field = this.field ?? this.helper.CreateAnnotation(this.name);
     this.PrepareField(field);

@@ -12,6 +12,7 @@ import {
   EE_FEATURE_LINEBR,
   EE_FEATURE_TAB,
   EE_PARA_JUST,
+  EE_PARA_OUTLLEVEL,
   EE_PARA_ULSPACE,
 } from "../../../../editeng/inc/eeitem";
 import { EditTextObjectImpl } from "../../../../editeng/source/editeng/editobj.owner";
@@ -38,6 +39,8 @@ import { SwTextField } from "../../../inc/txtfld";
 import { SwPostItFieldType } from "../../core/fields/docufld";
 import { readOdtDocument } from "./swxml";
 import { writeOdtDocument } from "./wrtxml";
+import { importWriterXml } from "./xmlimp";
+import { ODF_NAMESPACES } from "../../../../xmloff/source/core/xmltoken";
 
 it("imports the named annotation and range from the upstream backward-search document", /** Reads the LibreOffice QA sample through the ordinary Writer importer. @returns Completion. */ async () => {
   const sample =
@@ -204,4 +207,71 @@ it("transports native annotation editor text through the ODT Worker record", /**
     value.dispose();
     rich.dispose();
   }
+});
+
+it("preserves formatting in the original Writer annotation list", /** Ports testAnnotationFormatting using the native EditEngine text object. @returns Completion. */ async () => {
+  const sample =
+    "../../vendor/libreoffice-reference/sw/qa/extras/odfimport/data/annotation-formatting.odt";
+  const metadata = { title: "Annotation formatting" };
+  const { document } = await readOdtDocument(new Uint8Array(readFileSync(sample)), metadata);
+  const transfer = createOdtWriterTransfer(document);
+  const restored = restoreOdtWriterTransfer(structuredClone(transfer));
+  const [first] = [...SwPostItFieldType.Get(restored).GatherFields()];
+  const note = first?.GetField().GetTextObject();
+  expect(note).toBeInstanceOf(EditTextObjectImpl);
+  if (!(note instanceof EditTextObjectImpl)) throw new Error("Missing native annotation text.");
+  const paragraph = note.GetContents()[0];
+  expect(first?.GetField().GetPar2()).toBe("Looses: bold");
+  expect(paragraph?.GetParaAttribs().Get(EE_PARA_OUTLLEVEL).QueryValue()).toBe(0);
+  const bold = paragraph
+    ?.GetCharAttribs()
+    .find(
+      /** Finds the native run for the second portion. @param attribute - Borrowed character attribute. @returns Whether the portion starts at the source position. */
+      (attribute) => attribute.GetStart() === 8 && attribute.GetItem()?.Which() === EE_CHAR_WEIGHT,
+    )
+    ?.GetItem();
+  expect(bold).toBeInstanceOf(SvxWeightItem);
+  expect((bold as SvxWeightItem).GetWeight()).toBe(FontWeight.WEIGHT_BOLD);
+  const reopened = await readOdtDocument(await writeOdtDocument(restored, metadata), metadata);
+  const [after] = [...SwPostItFieldType.Get(reopened.document).GatherFields()];
+  expect(after?.GetField().GetPar2()).toBe("Looses: bold");
+});
+
+it("round-trips the original resolved and unresolved annotations", /** Ports testResolvedComment and verifies its legacy initials become native ODF 1.3 metadata. @returns Completion. */ async () => {
+  const sample =
+    "../../vendor/libreoffice-reference/sw/qa/extras/odfexport/data/resolved-comment.odt";
+  const metadata = { title: "Resolved comments" };
+  const { document } = await readOdtDocument(new Uint8Array(readFileSync(sample)), metadata);
+  const restored = restoreOdtWriterTransfer(structuredClone(createOdtWriterTransfer(document)));
+  const result = await writeOdtDocument(restored, metadata);
+  expect(await (await DocumentArchive.open(result)).readTextEntry("content.xml")).toContain(
+    "<meta:creator-initials>SC</meta:creator-initials>",
+  );
+  const { document: reopened } = await readOdtDocument(result, metadata);
+  expect(
+    [...SwPostItFieldType.Get(reopened).GatherFields()].map(
+      /** Reads the represented native field metadata. @param item - Attached annotation format. @returns Resolved state, initials and authored text. */ (
+        item,
+      ) => {
+        const value = item.GetField().GetData();
+        return [value.resolved, value.initials, value.text];
+      },
+    ),
+  ).toEqual([
+    [true, "SC", "This comment is resolved"],
+    [false, "SC", "This comment is not resolved"],
+  ]);
+});
+
+it("imports the native paragraph extension and writes the empty annotation date", /** Exercises represented Shape text and native default metadata. @returns Completion. */ async () => {
+  const ns = `xmlns:office="${ODF_NAMESPACES.office}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:loext="${ODF_NAMESPACES.loext}"`;
+  const xml = `<office:document-content ${ns}><office:body><office:text><text:p>before<office:annotation><loext:p>note</loext:p></office:annotation>after</text:p></office:text></office:body></office:document-content>`;
+  const metadata = { title: "Annotation defaults" };
+  const { document } = importWriterXml(undefined, xml, metadata);
+  const [note] = [...SwPostItFieldType.Get(document).GatherFields()];
+  expect(note?.GetField().GetPar2()).toBe("note");
+  const bytes = await writeOdtDocument(document, metadata);
+  const content = await (await DocumentArchive.open(bytes)).readTextEntry("content.xml");
+  expect(content).toContain("<dc:date>0000-00-00T00:00:00</dc:date>");
+  expect(content).not.toContain("<dc:creator>");
 });

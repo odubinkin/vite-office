@@ -175,14 +175,24 @@ export class XMLTextImportHelper {
   }
   /** Suspends the containing text while the annotation TextRange owns the active cursor. @param cursor - Annotation text cursor. @returns Nothing. */
   public PushAnnotationCursor(cursor: XMLTextCursor): void {
-    this.PushTextFrameCursor(cursor);
+    this.PushTextCursor(cursor, false);
     this.annotationDepth++;
   }
 
   /** Restores the containing text after the annotation is parsed. @returns Nothing. */
   public PopAnnotationCursor(): void {
-    this.PopTextFrameCursor();
+    this.PopTextCursor();
     this.annotationDepth--;
+  }
+
+  /** Starts the independent list context even when an annotation has only metadata. @returns Nothing. */
+  public PushAnnotationListContext(): void {
+    this.lists.PushListContext();
+  }
+
+  /** Restores the enclosing list context after processing the annotation's children. @returns Nothing. */
+  public PopAnnotationListContext(): void {
+    this.lists.PopListContext();
   }
 
   /** Determines whether direct EditEngine range properties are in use. @returns Whether the cursor is in annotation text. */
@@ -248,6 +258,8 @@ export class XMLTextImportHelper {
           this.SetStyleAndAttrs(cursor, style, list, forceListRule, applyStyle || !cellStyle);
         }
         const paragraphTarget = cursor.getParagraphPropertySet?.() ?? cursor;
+        if (this.IsAnnotationText() && list)
+          this.SetProperty(paragraphTarget, "NumberingLevel", list.level, "sal_Int16");
         if (outlineLevel !== undefined && !this.IsAnnotationText())
           applyParagraphOutlineLevel(paragraphTarget, outlineLevel);
         applyTextImportProperties(paragraphTarget, properties, paragraph, alignment, left);
@@ -634,13 +646,13 @@ export class XMLTextImportHelper {
     attributes: FastAttributeList,
     type: XMLTextType,
   ): SvXMLImportContext | null {
-    if (element === XMLToken.TEXT_P || element === XMLToken.TEXT_H)
+    if (element === XMLToken.TEXT_P || element === XMLToken.TEXT_H || element === XMLToken.LOEXT_P)
       return new XMLParaContext(this.target, element, attributes);
-    if (type === "Annotation") return null;
     if (element === XMLToken.TEXT_NUMBERED_PARAGRAPH)
       return new XMLNumberedParaContext(this.target, attributes, this.lists);
     if (element === XMLToken.TEXT_LIST)
       return new XMLTextListBlockContext(this.target, attributes, this.lists);
+    if (type === "Annotation") return null;
     if (element === XMLToken.TABLE_TABLE) {
       if ("beginTable" in this.target)
         return new XMLTableContext(this.target as XMLTableImportTarget, attributes, this);

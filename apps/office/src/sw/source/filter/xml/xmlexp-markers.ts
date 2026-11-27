@@ -202,20 +202,18 @@ function makeAnnotationStart(
   const field = hint.GetAttr().GetField();
   const value = field.GetData();
   const paragraphs = projectAnnotationText(field.GetTextObject(), field.GetTyp().GetDoc());
-  let date = "";
-  if (value.dateTime.GetDay() !== 0) {
-    const buffer = new OUStringBuffer();
+  const buffer = new OUStringBuffer();
+  let date: string;
+  try {
+    Converter.convertDateTime(buffer, value.dateTime.GetUNODateTime(), null, true);
+    const lexical = buffer.makeStringAndClear();
     try {
-      Converter.convertDateTime(buffer, value.dateTime.GetUNODateTime(), null, true);
-      const lexical = buffer.makeStringAndClear();
-      try {
-        date = text(lexical);
-      } finally {
-        lexical.dispose();
-      }
+      date = text(lexical);
     } finally {
-      buffer.dispose();
+      lexical.dispose();
     }
+  } finally {
+    buffer.dispose();
   }
   return {
     kind: "annotation",

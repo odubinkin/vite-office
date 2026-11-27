@@ -30,7 +30,8 @@ export function exportAnnotation(
     return `<office:annotation-end office:name="${escapeXml(marker.name)}"/>`;
   const name = marker.name ? ` office:name="${escapeXml(marker.name)}"` : "";
   const parent = marker.parentName ? ` loext:parent-name="${escapeXml(marker.parentName)}"` : "";
-  const date = marker.date ? `<dc:date>${escapeXml(marker.date)}</dc:date>` : "";
+  const author = marker.author ? `<dc:creator>${escapeXml(marker.author)}</dc:creator>` : "";
+  const date = `<dc:date>${escapeXml(marker.date)}</dc:date>`;
   const initials = marker.initials
     ? `<meta:creator-initials>${escapeXml(marker.initials)}</meta:creator-initials>`
     : "";
@@ -44,5 +45,5 @@ export function exportAnnotation(
         ) => `<text:p>${exportText(line)}</text:p>`,
       )
       .join("");
-  return `<office:annotation${name}${parent} loext:resolved="${marker.resolved}"><dc:creator>${escapeXml(marker.author)}</dc:creator>${date}${initials}${paragraphs}</office:annotation>`;
+  return `<office:annotation${name}${parent} loext:resolved="${marker.resolved}">${author}${date}${initials}${paragraphs}</office:annotation>`;
 }

@@ -10,6 +10,7 @@ import type { SvtScriptType } from "../../../../svl/inc/languageoptions";
 import type { SfxStyleFamily } from "../../../../svl/inc/style-values";
 import type { SfxItemPool } from "../../../../svl/source/items/itempool";
 import type { SfxPoolItem, SfxPoolItemSnapshot } from "../../../../svl/source/items/poolitem";
+import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import { SfxVoidItem } from "../../../../svl/source/items/voiditem";
 import type { MapUnit } from "../../../../tools/inc/mapunit";
 import { getWriterAnnotationItemWhich } from "../../../source/core/fields/textapi";
@@ -42,6 +43,8 @@ export interface WriterAnnotationTextRecord {
 function encodeEditItem(item: SfxPoolItem): SfxPoolItemSnapshot | undefined {
   const which = item.Which();
   if (which === EE.EE_FEATURE_TAB || which === EE.EE_FEATURE_LINEBR) return { which, value: true };
+  if (which === EE.EE_PARA_OUTLLEVEL && item instanceof SfxInt16Item)
+    return { which, value: item.GetValue() };
   const writer = getWriterAnnotationItemWhich(which);
   if (writer === undefined) return undefined;
   const value = item.Clone();
@@ -60,6 +63,12 @@ function decodeEditItem(pool: SfxItemPool, item: SfxPoolItemSnapshot): SfxPoolIt
   if (which === EE.EE_FEATURE_TAB || which === EE.EE_FEATURE_LINEBR) {
     if (item.value !== true) throw new Error("Stored annotation text feature is invalid.");
     return new SfxVoidItem(which);
+  }
+  if (which === EE.EE_PARA_OUTLLEVEL) {
+    const level = item.value;
+    if (typeof level !== "number" || !Number.isInteger(level) || level < -1 || level > 9)
+      throw new Error("Stored annotation numbering level is invalid.");
+    return new SfxInt16Item(which, level);
   }
   const writer = getWriterAnnotationItemWhich(which);
   if (writer === undefined) throw new Error("Stored annotation text item is invalid.");
@@ -160,7 +169,11 @@ export function decodeAnnotationText(
       }
       paragraph.SetFamily(stored.family);
       for (const item of stored.paragraphItems as readonly SfxPoolItemSnapshot[]) {
-        if (!item || getWriterAnnotationItemWhich(item.which) === undefined)
+        if (
+          !item ||
+          (item.which !== EE.EE_PARA_OUTLLEVEL &&
+            getWriterAnnotationItemWhich(item.which) === undefined)
+        )
           throw new Error("Stored annotation paragraph item is invalid.");
         paragraph.GetParaAttribs().Put(decodeEditItem(pool, item), true);
       }

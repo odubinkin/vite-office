@@ -17,12 +17,20 @@
         {
           "path": "apps/office/src/sw/source/filter/xml/odt-annotation.test.ts",
           "marker": "imports the named annotation"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-annotation.test.ts",
+          "marker": "original Writer annotation list"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/xmloff/source/text/txtflde.cxx",
           "marker": "XML_ANNOTATION"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtflde.cxx",
+          "marker": "FIELD_ID_ANNOTATION"
         }
       ]
     },
@@ -31,7 +39,8 @@
       "XML_ANNOTATION"
     ],
     "preservedResponsibilities": [
-      "Serializes the represented annotation metadata, content and named endpoint."
+      "Serializes the represented annotation metadata, content and named endpoint.",
+      "Writes annotation date metadata for the default field, omits the empty creator and emits ODF 1.3 initials in their native namespace."
     ],
     "omittedResponsibilities": [
       "Only the represented annotation/marker path is implemented. Complete UNO services and unsupported rich comment formatting remain outside this mapping."

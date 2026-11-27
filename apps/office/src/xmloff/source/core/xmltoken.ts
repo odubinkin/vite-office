@@ -300,6 +300,7 @@ const entries: readonly (readonly [string, string, XMLToken])[] = [
   [ODF_NAMESPACES.loext, "user-id", XMLToken.LOEXT_USER_ID],
   [ODF_NAMESPACES.loext, "provider-id", XMLToken.LOEXT_PROVIDER_ID],
   [ODF_NAMESPACES.loext, "parent-name", XMLToken.LOEXT_PARENT_NAME],
+  [ODF_NAMESPACES.loext, "p", XMLToken.LOEXT_P],
   [ODF_NAMESPACES.text, "sender-initials", XMLToken.TEXT_SENDER_INITIALS],
   [ODF_NAMESPACES.loext, "sender-initials", XMLToken.LOEXT_SENDER_INITIALS],
   [ODF_NAMESPACES.meta, "creator-initials", XMLToken.META_CREATOR_INITIALS],

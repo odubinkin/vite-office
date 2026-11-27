@@ -18,9 +18,11 @@
       "evidence": [
         "apps/office/src/sw/source/core/fields/textapi.ts#SwTextAPIEditSource",
         "apps/office/src/sw/browser/presentation/WriterCommentsSidebar.test.tsx",
-        "vendor/libreoffice-reference/sw/source/core/fields/textapi.cxx"
+        "vendor/libreoffice-reference/sw/source/core/fields/textapi.cxx",
+        "apps/office/src/sw/source/filter/xml/odt-annotation.test.ts",
+        "vendor/libreoffice-reference/editeng/source/uno/unotext.cxx"
       ],
-      "justification": "Owns annotation TextRange cursors and native EditEngine text and property operations shared by Writer comment import and editing.",
+      "justification": "Owns annotation TextRange cursors and native EditEngine text and property operations shared by Writer comment import and editing. Sets the native annotation paragraph outline level through the EditEngine paragraph item and reports a void property for an inactive level.",
       "knownViolations": [],
       "localSymbols": [
         "SwTextAPIEditSource",

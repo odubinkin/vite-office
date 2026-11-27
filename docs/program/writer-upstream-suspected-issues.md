@@ -6342,3 +6342,10 @@ loading these sources while preserving the saved index body.
 - [Original illustration index template dispatch](../../vendor/libreoffice-reference/xmloff/source/text/XMLIndexIllustrationSourceContext.cxx#L52)
 - [Original object index template dispatch](../../vendor/libreoffice-reference/xmloff/source/text/XMLIndexObjectSourceContext.cxx#L118)
 - [Original level initialization and early return](../../vendor/libreoffice-reference/xmloff/source/text/XMLIndexTemplateContext.cxx#L59)
+
+
+### WRITER-766 — Annotation lists can retain a text level without an exportable numbering rule
+
+- Source: `xmloff/source/text/txtfldi.cxx` `XMLAnnotationImportContext::createFastChildContext`, `xmloff/source/text/txtimp.cxx` `XMLTextImportHelper::SetStyleAndAttrs`, `sw/source/core/fields/textapi.cxx` `ImplGetSvxTextPortionPropertySet`, `editeng/source/uno/unotext.cxx` `SvxUnoTextRangeBase::SetPropertyValueHelper`, `editeng/source/editeng/eerdll.cxx`, and `xmloff/source/text/XMLTextNumRuleInfo.cxx` `XMLTextNumRuleInfo::Set`.
+- The annotation Outliner exposes `NumberingRules`, but its special setter rejects a nonempty incoming rule. The XML importer catches that rejection and still sets `NumberingLevel`. A fresh EditEngine numbering item has zero levels, which the ODF exporter refuses as a list rule. The note retains its paragraph content and inline formatting even when the authored list wrapper is omitted on export.
+- The Writer annotation path follows the same sequence for its represented EditEngine properties. It retains the native outline depth through the Worker and exports the paragraph without inventing a replacement numbering rule.

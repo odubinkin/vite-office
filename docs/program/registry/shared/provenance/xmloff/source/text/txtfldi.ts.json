@@ -17,12 +17,20 @@
         {
           "path": "apps/office/src/sw/source/filter/xml/odt-annotation.test.ts",
           "marker": "imports the named annotation"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-annotation.test.ts",
+          "marker": "original Writer annotation list"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/xmloff/source/text/txtfldi.cxx",
           "marker": "XMLAnnotationImportContext::endFastElement"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtfldi.cxx",
+          "marker": "XMLAnnotationImportContext::createFastChildContext"
         }
       ]
     },
@@ -32,10 +40,11 @@
       "XMLAnnotationImportContext::endFastElement"
     ],
     "preservedResponsibilities": [
-      "Imports annotation metadata, delegates editable text to the shared paragraph importer using the annotation TextRange cursor, and completes named annotation ranges."
+      "Imports annotation metadata, delegates editable text to the shared paragraph importer using the annotation TextRange cursor, and completes named annotation ranges.",
+      "Uses the shared shape text child dispatcher with isolated annotation list state and completes named ranges through the TextRange cursor."
     ],
     "omittedResponsibilities": [
-      "Uses a typed TextRange operation over the represented EditEngine cursors. Annotation hyperlinks, lists and the complete UNO service surface remain outside this mapping."
+      "Annotation hyperlinks and unrepresented EditEngine fields remain outside this mapping."
     ]
   }
 }

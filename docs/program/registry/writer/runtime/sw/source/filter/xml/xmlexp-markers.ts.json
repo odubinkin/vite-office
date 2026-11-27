@@ -18,9 +18,10 @@
       "evidence": [
         "apps/office/src/sw/source/filter/xml/xmlexp-markers.ts#projectParagraphMarkers",
         "apps/office/src/sw/source/filter/xml/odt-annotation.test.ts",
-        "vendor/libreoffice-reference/xmloff/source/text/txtparae.cxx"
+        "vendor/libreoffice-reference/xmloff/source/text/txtparae.cxx",
+        "vendor/libreoffice-reference/xmloff/source/text/txtflde.cxx"
       ],
-      "justification": "Projects native annotation, bookmark and frame portions in the source coordinates of the owning paragraph.",
+      "justification": "Projects native annotation, bookmark and frame portions in the source coordinates of the owning paragraph. Projects the original empty or populated annotation date through the common date-time converter.",
       "knownViolations": [],
       "localSymbols": [
         "projectParagraphMarkers"

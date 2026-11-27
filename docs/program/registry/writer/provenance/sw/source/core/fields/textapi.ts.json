@@ -15,7 +15,8 @@
       "SwTextAPIObject"
     ],
     "preservedResponsibilities": [
-      "Owns annotation TextRange cursors and native EditEngine text and property operations shared by Writer comment import and editing."
+      "Owns annotation TextRange cursors and native EditEngine text and property operations shared by Writer comment import and editing.",
+      "Sets the native annotation paragraph outline level through the EditEngine paragraph item and reports a void property for an inactive level."
     ],
     "omittedResponsibilities": [
       "Uses EditEngine directly while the native Outliner and full UNO text forwarder remain outside the current slice."
@@ -33,12 +34,20 @@
         {
           "path": "apps/office/src/sw/source/filter/xml/odt-annotation.test.ts",
           "marker": "Missing native annotation paragraph."
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-annotation.test.ts",
+          "marker": "original Writer annotation list"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sw/source/core/fields/textapi.cxx",
           "marker": "SwTextAPIEditSource::SetText"
+        },
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/uno/unotext.cxx",
+          "marker": "EE_PARA_OUTLLEVEL"
         }
       ]
     }

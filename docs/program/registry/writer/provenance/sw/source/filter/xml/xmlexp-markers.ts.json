@@ -17,12 +17,20 @@
         {
           "path": "apps/office/src/sw/source/filter/xml/odt-annotation.test.ts",
           "marker": "imports the named annotation"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-annotation.test.ts",
+          "marker": "original Writer annotation list"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/xmloff/source/text/txtparae.cxx",
           "marker": "XML_ANNOTATION_END"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtflde.cxx",
+          "marker": "FIELD_ID_ANNOTATION"
         }
       ]
     },
@@ -31,7 +39,8 @@
       "XML_ANNOTATION_END"
     ],
     "preservedResponsibilities": [
-      "Projects native annotation, bookmark and frame portions in the source coordinates of the owning paragraph."
+      "Projects native annotation, bookmark and frame portions in the source coordinates of the owning paragraph.",
+      "Projects the original empty or populated annotation date through the common date-time converter."
     ],
     "omittedResponsibilities": [
       "Only the represented annotation/marker path is implemented. Complete UNO services and unsupported rich comment formatting remain outside this mapping."
