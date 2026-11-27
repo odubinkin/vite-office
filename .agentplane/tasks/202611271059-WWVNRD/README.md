@@ -1,10 +1,11 @@
 ---
 id: "202611271059-WWVNRD"
 title: "Reconcile Writer browser assertions from the ODF checkpoint"
-status: "DOING"
+result_summary: "Corrected logical adjacent-cell alignment and synchronized both width-dependent history tests with the imported fixture. No product source changes."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "4653d37011ecbcc5be82d8968640e3d8fa51f491"
   findings:
     - "Only test assertions and load synchronization changed; Writer runtime was unchanged."
-commit: null
+commit:
+  hash: "4653d37011ecbcc5be82d8968640e3d8fa51f491"
+  message: "🧪 WWVNRD verification: correct Writer browser checkpoint assertions"
 comments:
   -
     author: "CODER"
     body: "Start: reconcile the replayed browser assertions from the scheduled ODF checkpoint."
+  -
+    author: "CODER"
+    body: "Verified: three Writer Chromium checkpoint scenarios pass against the original build with corrected assertions."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "All three affected Chromium scenarios passed against the running checkpoint build. Canonical replay sources are byte-identical. Focused ESLint, Prettier and git diff passed."
+  -
+    type: "status"
+    at: "2026-11-27T11:02:33.790Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: three Writer Chromium checkpoint scenarios pass against the original build with corrected assertions."
 doc_version: 3
-doc_updated_at: "2026-11-27T11:00:29.455Z"
+doc_updated_at: "2026-11-27T11:02:33.791Z"
 doc_updated_by: "CODER"
 description: "Update the stale logical cell-alignment expectation and wait for the imported neighbor content before reading DOM style invariants in two history scenarios. Keep the pinned Chromium application build and replay the three affected scenarios."
 sections:
