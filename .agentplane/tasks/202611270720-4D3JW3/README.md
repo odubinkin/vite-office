@@ -1,10 +1,11 @@
 ---
 id: "202611270720-4D3JW3"
 title: "Connect native Writer Navigator context actions and outline depth"
-status: "DOING"
+result_summary: "Exposed native Navigator context operations and a shared persistent outline level."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
     - "output/playwright/writer-navigator-context-chromium.log"
   findings:
     - "Context authorization and order, heading descendants and undo, bookmark deletion, focus, and outline level synchronization and reload were verified."
-commit: null
+commit:
+  hash: "4b97ce51f0029f2d5866a9f665ca74094585342c"
+  message: "🧩 4D3JW3 code: Connect Writer Navigator context actions and outline depth"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: 38 focused tests, 7 Chromium scenarios, and production build."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: 38 focused Vitest cases and 7 Chromium Navigator scenarios. TypeScript, production Vite build, scoped ESLint and Prettier, module boundaries, source tree, Writer resources, policy routing and scoped source provenance passed."
+  -
+    type: "status"
+    at: "2026-11-27T07:33:38.876Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: 38 focused tests, 7 Chromium scenarios, and production build."
 doc_version: 3
-doc_updated_at: "2026-11-27T07:30:42.362Z"
+doc_updated_at: "2026-11-27T07:33:38.878Z"
 doc_updated_by: "CODER"
 description: "Expose existing Writer Navigator go-to, grouped heading moves, bookmark deletion, and tree expansion actions in native context resource order. Share the outline level between the toolbar, context submenu, and persistent Navigator configuration."
 sections:
