@@ -1,10 +1,11 @@
 ---
 id: "202611271734-VQYSKP"
 title: "Implement native Writer ODT save visibility for tracked deletions"
-status: "DOING"
+result_summary: "Writer applies the original two deletion visibility passes during ODT save and restores live registered state for represented inline deletions."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - "output/playwright/odf-writer-redlines/visibility-verification.md"
   findings:
     - "Original ODT redline fixtures and cancellation preserve saved representation and live model. Complex deletion transitions remain outside this slice."
-commit: null
+commit:
+  hash: "522fffce49a974be6c4213ddceb096a20ed6b102"
+  message: "🧩 VQYSKP writer: apply native tracked deletion visibility during ODT save"
 comments:
   -
     author: "CODER"
     body: "Start: attach the native SwXMLWriter redline save visibility transition."
+  -
+    author: "CODER"
+    body: "Verified: native ODT fixtures, deleted-text XML, cancellation restoration, Worker transport and 84 affected Writer tests passed."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "84 focused Writer tests plus all 8 final redline tests passed. Original deletion section XML, interrupted save restoration, Worker and ODT reopen verified. Typecheck, lint, provenance, module boundaries and scoped inventories passed."
+  -
+    type: "status"
+    at: "2026-11-27T17:49:14.287Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native ODT fixtures, deleted-text XML, cancellation restoration, Worker transport and 84 affected Writer tests passed."
 doc_version: 3
-doc_updated_at: "2026-11-27T17:46:59.743Z"
+doc_updated_at: "2026-11-27T17:49:14.289Z"
 doc_updated_by: "CODER"
 description: "Port the original redline visibility transition used by SwXMLWriter. Move represented deleted text into native redline sections for package export and restore the live document state, preserving positions and formatting. Verify the original whitespace, midnight timestamp and same-position deletion cases and restoration after an interrupted export."
 sections:
