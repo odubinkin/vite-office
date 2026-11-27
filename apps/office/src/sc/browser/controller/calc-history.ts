@@ -26,7 +26,7 @@ import {
   ScUndoDeleteContents,
   ScUndoMerge,
 } from "../../source/ui/undo/undoblk3";
-import { ScUndoSetCell } from "../../source/ui/inc/undocell";
+import { ScUndoEnterData, ScUndoSetCell } from "../../source/ui/inc/undocell";
 
 /** Reconciles source model,active sheet and input after history. @param this - Browser view owner. @param redo - Direction. @returns Changed. */
 export function History(this: CalcViewController, redo: boolean): boolean {
@@ -72,6 +72,7 @@ export function History(this: CalcViewController, redo: boolean): boolean {
   }
   const position =
     cursorAction instanceof ScUndoSetCell ||
+    cursorAction instanceof ScUndoEnterData ||
     cursorAction instanceof ScUndoCursorAttr ||
     cursorAction instanceof ScUndoPageBreak ||
     cursorAction instanceof ScUndoIndent ||

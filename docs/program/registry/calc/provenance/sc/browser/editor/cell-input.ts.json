@@ -12,7 +12,8 @@
       "TaskBG0GG5 ports actual ScUndoSetCell maPos/maOldValue/maNewValue move ownership,represented SetValue,GetComment and getAffectedRange at native source/header boundaries. ScCellValue.release transfers real formulas without cloning and copies literal strings before clearing ownership. Shared SfxListUndoAction exposes native inherited SfxUndoArray.GetUndoAction forward-storage access. The browser current plain-input decoder prepares actual native cell/formula owners at each selected sheet position before writes;source selected-mark iteration uses existing EnterListAction/LeaveListAction so one user input creates one compound action. Undo reverses children,Redo forwards them;browser focus follows the last executed native affected range. Native selected sheets render Writer indigo/slate selection tokens while active state remains distinct. Full ScSimpleUndo,ScDocFunc/ScViewFunc,ScUndoEnterData raw-string redo,formatter/format attributes,change tracking,sheet views,spill/VCL services remain unported;no facade or injected fake provider is introduced.",
       "TaskSRFT0T implements original ScViewOptions19boolean fields/defaults/copy and genuine document/view value boundaries;object modes,color,drawing-grid aggregate,configuration/window services and full equality remain explicitly unported. Native View Headers26242 and Show Formulas26250 accept slot bools or invert;headers initially change only the view,formula copies the entire represented view options into the document. Grid25018 ignores arguments,creates selected tab-data slots,changes only current-sheet bShowGrid and marks the document modified without adding history or committing input. Genuine shared Writer View menus/Sfx bindings render native checked states;header offsets and scroll geometry disappear,implicit grid lines hide while real cell frames remain,formula output reads source before cached errors. Shared quote-key canonicalization consumes original QUOTELEFT accelerator. Browser redraw/invalidation projects native paint/resize callbacks;no fake window/modificator/configuration service or alternate model. Native view-settings XML persistence and complete parity remain unported;Writer IO/no-recovery deviations remain.",
       "Uses the actual Calc formatted edit-cell path for native text features in browser display and input.",
-      "The existing grid uses ScCellFormat for visible cell text, so imported format keys determine the displayed value through Calc’s native formatter."
+      "The existing grid uses ScCellFormat for visible cell text, so imported format keys determine the displayed value through Calc’s native formatter.",
+      "The input line now uses ScCellFormat.GetInputString and the actual formatter for native literal quoting. Browser commit passes text to native EnterData."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",
@@ -22,7 +23,7 @@
       "local": [
         {
           "path": "apps/office/src/sc/browser/editor/cell-input.ts",
-          "marker": "captureCell"
+          "marker": "cellInputText"
         },
         {
           "path": "apps/office/src/sc/browser/presentation/calc-workbench.test.tsx",

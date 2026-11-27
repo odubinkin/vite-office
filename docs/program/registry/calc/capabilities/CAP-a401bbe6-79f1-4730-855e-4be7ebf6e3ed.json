@@ -1,0 +1,91 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-a401bbe6-79f1-4730-855e-4be7ebf6e3ed",
+    "capabilityId": "CAP-a401bbe6-79f1-4730-855e-4be7ebf6e3ed",
+    "suite": "calc",
+    "subsystem": "cell-input",
+    "type": "command",
+    "maturity": "implemented",
+    "capability": "Calc native normal cell input and format-aware history",
+    "assertions": [
+      "Normal browser entry delegates to the native view and document recognizer.",
+      "Selected sheets share one history action and undo restores old content and direct number-format presence.",
+      "Entering 1e-2 through the input line selects Scientific in the original Format Cells path."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser-controlled editor text is passed directly to the native entry operation; the existing browser history projects its affected cell range."
+    },
+    "gaps": [
+      "This slice covers the represented default normal view and enabled history. Rich text, matrix overrides, formula autocorrection dialogs and alternate views retain their existing owners."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/viewfunc.cxx",
+          "marker": "ScViewFunc::EnterData"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/operation/SetNormalStringOperation.cxx",
+          "marker": "SetNormalStringOperation::runImplementation"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/undo/undocell.cxx",
+          "marker": "ScUndoEnterData::Redo"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/uitest/calc_tests4/tdf88999_scientific_number_options.py",
+          "marker": "test_tdf88999_scientific_format_decimal_value"
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/libreoffice-reference/sc/uiconfig/scalc/ui/inputbar.ui",
+          "marker": "InputBar"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/ui/operation/SetNormalStringOperation.ts",
+          "marker": "SetNormalStringOperation"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/undo/undocell.ts",
+          "marker": "ScUndoEnterData"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/browser/controller/calc-view-controller.test.ts",
+          "marker": "groups native numeric input"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-format-cells.test.tsx",
+          "marker": "ports the scientific options regression"
+        }
+      ],
+      "docs": [
+        {
+          "path": ".agentplane/tasks/202611270607-W5BR5M/README.md",
+          "marker": "Verify Steps"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "aspect": "command-state",
+    "atomicOperation": "calc-native-normal-cell-input",
+    "scopeLimitations": [
+      "Normal input uses the existing number-recognition and selected-sheet editability boundaries."
+    ]
+  }
+}

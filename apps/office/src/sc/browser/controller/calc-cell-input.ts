@@ -1,43 +1,22 @@
-/** @fileoverview Existing browser cell commit definition partitioned onto the same controller;native cell/history owners remain unchanged. */
+/** @fileoverview Browser input activation and commit through the native Calc view function. */
 import type { CalcViewController } from "./calc-view-controller";
 import { ScInputMode } from "../../inc/global";
-import { ScAddress } from "../../inc/address";
-import { ScCellValue } from "../../inc/cellvalue";
-import { ScUndoSetCell } from "../../source/ui/undo/undocell";
-import { parseCellInput, prepareCell, captureCell } from "../editor/cell-input";
+import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 /** Commits actual scalar/formula input atomically through existing cell and history owners. @param this - Actual controller. @returns Accepted. */
 export function Commit(this: CalcViewController): boolean {
   if (this.mode === ScInputMode.SC_INPUT_NONE) return true;
   this.shell.EnsureOpen();
   try {
     if (this.inputHandler.IsModified()) {
-      const doc = this.shell.GetDocument(),
-        pos = this.Position();
-      if (!this["viewShell"].CheckCellInput(pos.Col(), pos.Row())) return false;
-      const content = parseCellInput(this.inputText),
-        manager = this.shell.GetUndoManager();
-      const prepared: { position: ScAddress; value: ScCellValue }[] = [];
+      if (/[\r\n]/u.test(this.inputText))
+        throw new Error("Multiline entry is not supported by the Calc input line.");
+      const pos = this.Position();
+      const input = unicode(this.inputText);
       try {
-        for (const tab of this.viewData.GetMarkData().GetSelectedTabs()) {
-          const position = new ScAddress(pos.Col(), pos.Row(), tab);
-          prepared.push({ position, value: prepareCell(doc, position, content) });
-        }
-        manager.EnterListAction("Input");
-        try {
-          for (const { position, value } of prepared) {
-            const before = captureCell(doc, position);
-            value.release(doc, position);
-            manager.AddUndoAction(
-              new ScUndoSetCell(this.shell, position, before, captureCell(doc, position)),
-            );
-          }
-        } finally {
-          manager.LeaveListAction();
-        }
+        if (!this.GetViewShell().EnterData(pos.Col(), pos.Row(), pos.Tab(), input)) return false;
       } finally {
-        for (const { value } of prepared) value.clear();
+        input.dispose();
       }
-      this.shell.SetDocumentModified();
     }
     this.inputHandler.SetMode(ScInputMode.SC_INPUT_NONE);
     this.inputHandler.ResetInputState();

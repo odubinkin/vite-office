@@ -1,19 +1,16 @@
 /** @fileoverview Real Calc model/view/history operations at the browser input boundary. */
+import { ATTR_VALUE_FORMAT } from "../../inc/scitems";
+import { NfIndexTableOffset, SvNumFormatType } from "../../../svl/inc/zforlist";
+import type { SfxUInt32Item } from "../../../svl/source/items/intitem";
 import { CellType, ScInputMode } from "../../inc/global";
 import { expect, it, vi } from "vitest";
 import { CalcViewController } from "./calc-view-controller";
 import { ScDocShell } from "../../source/ui/docshell/docsh";
 import { ScDocument } from "../../inc/document";
 import { ScAddress, MAXCOL, MAXROW } from "../../inc/address";
-import {
-  captureCell,
-  applyCell,
-  parseCellInput,
-  cellInputText,
-  cellPresentation,
-} from "../editor/cell-input";
+import { cellInputText, cellPresentation } from "../editor/cell-input";
 import { FormulaGrammar } from "../../../formula/inc/grammar";
-import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
+import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { EditTextObjectImpl, TextRotation } from "../../../editeng/inc/editobj";
 import { SvtScriptType } from "../../../svl/inc/languageoptions";
 import { MapUnit } from "../../../tools/inc/mapunit";
@@ -131,7 +128,8 @@ it("edits canonical scalars and formulas with real dependency updates and token-
   c.EnterString("'");
   expect(c.Input()).toBe("''");
   c.EnterString("'=");
-  expect(c.Input()).toBe("=");
+  expect(text(doc.GetSharedString(c.Position()).getString())).toBe("=");
+  expect(c.Input()).toBe("'=");
   expect(listener).toHaveBeenCalled();
   detach();
   c.Close();
@@ -391,39 +389,40 @@ it("keeps bounded cell input/display semantics and shell save-position ownership
   expect(shell.Redo()).toBe(false);
   shell.SetDocumentModified();
   expect(shell.IsModified()).toBe(true);
+  const controller = new CalcViewController(shell);
   for (const [input, kind] of [
-    ["", "empty"],
-    ["1,234.5", "number"],
-    ["-A1", "formula"],
-    ["=1", "formula"],
-    ["=", "text"],
-    ["a", "text"],
-  ] as const)
-    expect(parseCellInput(input).kind).toBe(kind);
+    ["", CellType.CELLTYPE_NONE],
+    ["1,234.5", CellType.CELLTYPE_VALUE],
+    ["-A1", CellType.CELLTYPE_FORMULA],
+    ["=1", CellType.CELLTYPE_FORMULA],
+    ["=", CellType.CELLTYPE_STRING],
+    ["a", CellType.CELLTYPE_STRING],
+  ] as const) {
+    controller.EnterString(input);
+    expect(doc.GetCellType(pos)).toBe(kind);
+  }
   for (const [input, display] of [
     ["'12", "12"],
     ["'text", "text"],
     ["=1/0", "#DIV/0!"],
     ["=1+", "Err:520"],
   ] as const) {
-    applyCell(doc, pos, parseCellInput(input));
+    controller.EnterString(input);
     expect(cellPresentation(doc, pos).text).toBe(display);
   }
-  applyCell(doc, pos, { kind: "text", value: "text" });
+  controller.EnterString("text");
   doc.SetFormula(new ScAddress(1, 0, 0), unicode("=A1"), FormulaGrammar.Grammar.GRAM_NATIVE);
   expect(cellPresentation(doc, new ScAddress(1, 0, 0))).toEqual({
     text: "text",
     alignment: "left",
   });
-  applyCell(doc, pos, { kind: "number", value: 12 });
+  controller.EnterString("12");
   expect(cellInputText(doc, pos)).toBe("12");
   expect(cellPresentation(doc, pos).text).toBe("12");
-  applyCell(doc, pos, { kind: "empty" });
+  controller.EnterString("");
   expect(cellPresentation(doc, pos).text).toBe("");
-  const captured = captureCell(doc, pos);
-  expect(captured.getType()).toBe(CellType.CELLTYPE_NONE);
-  captured.clear();
-  shell.Close();
+  expect(doc.GetCellType(pos)).toBe(CellType.CELLTYPE_NONE);
+  controller.Close();
   const clean = new CalcViewController();
   clean.EnterString("1");
   clean.Undo();
@@ -446,4 +445,76 @@ it("reports a non-Error presenter failure during a native Sum draft", /** Real p
   expect(controller.error).toBe("presenter invalidation failed");
   detach();
   controller.Close();
+});
+
+it("groups native numeric input and restores both absent and direct formats", /** Checks the underlying native items and values across the actual browser undo group. @returns Nothing. */ () => {
+  const controller = new CalcViewController();
+  try {
+    const doc = controller.shell.GetDocument();
+    const formatter = doc.GetFormatTable();
+    const a1 = new ScAddress();
+    const other = new ScAddress(0, 0, 1);
+    controller.InsertSheet();
+    controller.SelectTab(0, true);
+    const decimal = formatter.GetFormatIndex(NfIndexTableOffset.NF_NUMBER_DEC2, 0x0409);
+    doc.SetNumberFormat(other, decimal);
+    const format =
+      /** Reads the actual direct cell item after a history action. @param position - Target. @returns Direct format key. */ (
+        position: ScAddress,
+      ) =>
+        (
+          doc.GetPattern(position)?.GetItemSet().GetItemIfSet(ATTR_VALUE_FORMAT, false) as
+            SfxUInt32Item | undefined
+        )?.GetValue();
+    const count = controller.shell.GetUndoManager().GetUndoActionCount();
+
+    controller.EnterString("1e-2");
+    expect(doc.GetValue(a1)).toBe(0.01);
+    expect(doc.GetValue(other)).toBe(0.01);
+    expect(formatter.GetType(format(a1) ?? 0)).toBe(SvNumFormatType.SCIENTIFIC);
+    expect(format(other)).toBe(decimal);
+    expect(controller.shell.GetUndoManager().GetUndoActionCount()).toBe(count + 1);
+
+    expect(controller.Undo()).toBe(true);
+    expect(doc.GetCellType(a1)).toBe(CellType.CELLTYPE_NONE);
+    expect(doc.GetCellType(other)).toBe(CellType.CELLTYPE_NONE);
+    expect(format(a1)).toBeUndefined();
+    expect(format(other)).toBe(decimal);
+    expect(controller.Redo()).toBe(true);
+    expect(doc.GetValue(a1)).toBe(0.01);
+    expect(doc.GetValue(other)).toBe(0.01);
+    expect(formatter.GetType(format(a1) ?? 0)).toBe(SvNumFormatType.SCIENTIFIC);
+    expect(format(other)).toBe(decimal);
+  } finally {
+    controller.Close();
+  }
+});
+
+it("recognizes signed numbers, formulas, and text-format literals at normal entry", /** Verifies that the same native input path performs number recognition and formula admission. @returns Nothing. */ () => {
+  const controller = new CalcViewController();
+  try {
+    const doc = controller.shell.GetDocument();
+    controller.EnterString("-12.5%");
+    expect(doc.GetValue(new ScAddress())).toBe(-0.125);
+    expect(controller.Input()).toBe("-12.5%");
+    expect(doc.GetFormatTable().GetType(doc.GetNumberFormat(0, 0, 0))).toBe(
+      SvNumFormatType.PERCENT,
+    );
+    controller.Select(1, 0);
+    controller.EnterString("+1+2");
+    expect(doc.GetFormulaCell(new ScAddress(1, 0, 0))?.GetValue()).toBe(3);
+    controller.Select(2, 0);
+    const position = new ScAddress(2, 0, 0);
+    const textFormat = doc.GetFormatTable().GetFormatIndex(NfIndexTableOffset.NF_TEXT, 0x0409);
+    doc.SetNumberFormat(position, textFormat);
+    controller.EnterString("=1+2");
+    expect(doc.GetCellType(position)).toBe(CellType.CELLTYPE_STRING);
+    expect(text(doc.GetSharedString(position).getString())).toBe("=1+2");
+    expect(controller.Input()).toBe("=1+2");
+    controller.Select(3, 0);
+    controller.EnterString("'12%");
+    expect(controller.Input()).toBe("'12%");
+  } finally {
+    controller.Close();
+  }
 });

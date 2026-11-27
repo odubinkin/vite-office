@@ -3,7 +3,7 @@ import { afterEach, expect, it } from "vitest";
 import { act, cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { implementations } from "../../../desktop/browser/app/uno-components";
 import { InitApplicationServiceManager } from "../../../desktop/source/app/appinit";
-import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
+import { text } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import type { SfxBoolItem } from "../../../svl/source/items/cenumitm";
 import { SfxRequest } from "../../../sfx2/source/control/request";
 import { SvNumFormatType as T } from "../../../svl/inc/zforlist";
@@ -134,15 +134,14 @@ it("ports the original spell-out gallery pictures and formatted names" /** Verif
   }
 });
 
-it("ports the scientific options regression and keeps cancellation outside the document format table", /** Verifies automatic recognition through the native document and cancels a scientific draft. @returns Completion. */ async () => {
+it("ports the scientific options regression and keeps cancellation outside the document format table", /** Verifies automatic recognition through the actual input line and cancels a scientific draft. @returns Completion. */ async () => {
   const { controller } = mount();
   const doc = controller.shell.GetDocument();
-  const source = unicode("1e-2");
-  try {
-    expect(doc.SetString(new ScAddress(), source)).toBe(true);
-  } finally {
-    source.dispose();
-  }
+  const line = screen.getByRole("textbox", { name: "Input line" });
+  fireEvent.focus(line);
+  fireEvent.change(line, { target: { value: "1e-2" } });
+  fireEvent.click(screen.getByRole("button", { name: "Accept input" }));
+  expect(doc.GetValue(new ScAddress())).toBe(0.01);
   const table = doc.GetFormatTable();
   const count = table.GetROFormatData().GetFormatEntryMap().size;
   open();

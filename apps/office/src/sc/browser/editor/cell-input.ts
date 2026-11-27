@@ -1,18 +1,13 @@
-/** @fileoverview Browser scalar, formula and rich-text input/display bindings. History captures the actual native ScCellValue owner;only transient user input uses a browser parsing union. */
-import type { SharedStringConstReference } from "../../../svl/inc/sharedstring";
+/** @fileoverview Browser projection of native Calc input-line strings and grid display. */
 import type { ScProtectionAttr } from "../../inc/attrib";
 import { ATTR_PROTECTION } from "../../inc/scitems";
-import { ScFormulaCell } from "../../inc/formulacell";
-import { ScCellValue } from "../../inc/cellvalue";
 import type { Color } from "../../../tools/inc/color";
 import { FormulaError } from "../../../formula/inc/errorcodes";
 import type { ScDocument } from "../../inc/document";
 import type { ScAddress } from "../../inc/address";
 import { CellType } from "../../inc/global";
 import { ScCellFormat } from "../../source/core/tool/cellform";
-import { ScStringUtil } from "../../inc/stringutil";
-import { unicode, text } from "../../../i18nlangtag/source/isolang/isolang.tables";
-import { doubleToString } from "../../../sal/rtl/strtmpl.math";
+import { text } from "../../../i18nlangtag/source/isolang/isolang.tables";
 /** Native English symbols used by ScGlobal::GetErrorString for reachable scalar errors. */
 const errorSymbols = new Map<number, string>([
   [FormulaError.DivisionByZero, "#DIV/0!"],
@@ -25,67 +20,6 @@ const errorSymbols = new Map<number, string>([
 /** Projects source English error symbols or STR_ERROR_STR plus native code. @param error - Actual error. @returns Display text. */
 function errorText(error: FormulaError): string {
   return errorSymbols.get(error) ?? `Err:${error}`;
-}
-/** Scalar action alternatives. */
-type ScalarContent =
-  | Readonly<{ kind: "empty" }>
-  | Readonly<{ kind: "number"; value: number }>
-  | Readonly<{ kind: "text"; value: string }>;
-/** User input retains source text only until compilation. */
-export type CalcCellInput = ScalarContent | Readonly<{ kind: "formula"; value: string }>;
-/** Captures one actual native owning cell value for history;caller releases it through clear. @param doc - Source model. @param pos - Source position. @returns Detached owned value. */
-export function captureCell(doc: ScDocument, pos: ScAddress): ScCellValue {
-  const value = new ScCellValue();
-  value.assign(doc, pos);
-  return value;
-}
-/** Prepares an actual native value at the target position before grouped writes;this retains no alternate workbook state. @param doc - Actual model. @param pos - Actual target. @param content - Transient parsed input. @returns Owned native value. */
-export function prepareCell(doc: ScDocument, pos: ScAddress, content: CalcCellInput): ScCellValue {
-  if (content.kind === "empty") return new ScCellValue();
-  if (content.kind === "number") return new ScCellValue(content.value);
-  const value = unicode(content.value);
-  try {
-    if (content.kind === "formula") {
-      const result = new ScCellValue();
-      result.set(new ScFormulaCell(doc, pos, value, doc.GetGrammar()));
-      return result;
-    }
-    const shared = doc.GetSharedStringPool().intern(value);
-    try {
-      return new ScCellValue(shared);
-    } finally {
-      shared.dispose();
-    }
-  } finally {
-    value.dispose();
-  }
-}
-/** Adopts transient parsed input through native value release and actual document setters. @param doc - Model. @param pos - Cell. @param content - Transient input. @returns Nothing. */
-export function applyCell(doc: ScDocument, pos: ScAddress, content: CalcCellInput): void {
-  const value = prepareCell(doc, pos, content);
-  try {
-    value.release(doc, pos);
-  } finally {
-    value.clear();
-  }
-}
-/** Recognizes current plain scalar input with the source simple-number scanner. Date/currency/format services remain explicitly outside this plain-input binding. @param value - Input. @returns Typed input. @throws {Error} For unsupported multiline content. */
-export function parseCellInput(value: string): CalcCellInput {
-  if (/[\r\n]/.test(value))
-    throw new Error("Multiline entry is not supported by the Calc input line.");
-  if (!value) return { kind: "empty" };
-  if (value.length > 1 && value[0] === "'") return { kind: "text", value: value.slice(1) };
-  if (value.length > 1 && value[0] === "=") return { kind: "formula", value };
-  const number: [number] = [0],
-    input = unicode(value);
-  try {
-    if (ScStringUtil.parseSimpleNumber(input, 46, 44, 0, number))
-      return { kind: "number", value: number[0] };
-  } finally {
-    input.dispose();
-  }
-  if (value.length > 1 && (value[0] === "+" || value[0] === "-")) return { kind: "formula", value };
-  return { kind: "text", value };
 }
 /** Reads the direct or conditional visibility flags for a protected sheet. @param doc - Workbook. @param pos - Cell address. @param display - Whether the output uses conditional attributes. @returns Original protection item. */
 function sheetCellProtection(
@@ -114,20 +48,28 @@ export function cellInputText(doc: ScDocument, pos: ScAddress): string {
     }
   }
   const content = doc.GetRefCellValue(pos);
-  if (content.getType() === CellType.CELLTYPE_NONE) return "";
-  if (content.getType() === CellType.CELLTYPE_VALUE) return doubleToString(content.getDouble());
-  const edit = content.getEditText();
-  let value: string;
-  if (edit) {
-    const source = ScCellFormat.GetOutputString(doc, pos, content);
-    try {
-      value = text(source);
-    } finally {
-      source.dispose();
-    }
-  } else value = text((content.getSharedString() as SharedStringConstReference).getString());
-  if (/[\r\n]/u.test(value)) return value;
-  return parseCellInput(value).kind !== "text" || value.startsWith("'") ? "'" + value : value;
+  const type = content.getType();
+  const context = doc.GetNonThreadedContext();
+  const format = doc.GetNumberFormat(pos.Col(), pos.Row(), pos.Tab());
+  const input =
+    type === CellType.CELLTYPE_EDIT
+      ? ScCellFormat.GetOutputString(doc, pos, content)
+      : ScCellFormat.GetInputString(content, format, context, doc);
+  try {
+    const value = text(input);
+    if (
+      type === CellType.CELLTYPE_VALUE ||
+      type === CellType.CELLTYPE_NONE ||
+      /[\r\n]/u.test(value) ||
+      context.NFIsTextFormat(format)
+    )
+      return value;
+    return /^[=+'-]/u.test(value) || context.NFIsNumberFormat(input, [format], [0])
+      ? "'" + value
+      : value;
+  } finally {
+    input.dispose();
+  }
 }
 /** Projects grid display text through the native cell formatter. @param doc - Model. @param pos - Cell. @param showFormulas - Original formula-output mode. @param showZeros - Original display-zero mode. @returns Display value. */
 export function cellPresentation(

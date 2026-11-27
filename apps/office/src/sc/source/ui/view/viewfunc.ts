@@ -43,9 +43,10 @@ import { ScEditableTester } from "../docshell/editable";
 import { ScUndoWidthOrHeight } from "../undo/undoblk2";
 import { ScRangeList } from "../../../inc/rangelst";
 import { OpCode } from "../../../../formula/inc/opcode";
+import { SvNumFormatType } from "../../../../svl/inc/zforlist";
 import { ScDocument, ScDocumentMode } from "../../../inc/document";
 import { ScFormulaCell } from "../../../inc/formulacell";
-import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import type { ColRowSpan } from "../../../inc/columnspanset";
 import type { ScViewData } from "../inc/viewdata";
@@ -101,6 +102,36 @@ export function GetSelectionPattern(view: ScViewData): ScPatternAttr {
       ),
     );
   return doc.GetSelectionPattern(marks);
+}
+
+/** Recognizes a native formula before the number parser claims signed input.
+ * @param doc - Source document.
+ * @param col - Cell column.
+ * @param row - Cell row.
+ * @param tab - Source sheet.
+ * @param source - User input.
+ * @returns Formula admission.
+ */
+function checkFormula(
+  doc: ScDocument,
+  col: number,
+  row: number,
+  tab: number,
+  source: OUStringConstReference,
+): boolean {
+  const format: [number] = [doc.GetNumberFormat(col, row, tab)];
+  const formatter = doc.GetFormatTable();
+  if (source.getLength() <= 1 || formatter.GetType(format[0]) === SvNumFormatType.TEXT)
+    return false;
+  const input = text(source);
+  if (input.startsWith("=")) return true;
+  if (!input.startsWith("+") && !input.startsWith("-")) return false;
+  const test = unicode(input.replace(/^([+-])[+-]+/u, "$1"));
+  try {
+    return test.getLength() > 1 && !formatter.IsNumberFormat(test, format, [0]);
+  } finally {
+    test.dispose();
+  }
 }
 
 /** Native view-function layer owns the cursor-versus-mark deletion decision. */
@@ -327,21 +358,31 @@ export class ScViewFunc extends ScTabView {
   EnterBlock(source: OUStringConstReference, rich: null): void {
     EnterBlock.call(this, source, rich);
   }
-  /** Consumed ordinary-formula EnterData path,using native concrete formula operations and per-cell list history. Nonformula/rich-edit/matrix processing remains unported here. @param col - Column. @param row - Row. @param tab - Source sheet. @param source - Formula text. @returns Nothing. */
-  EnterData(col: number, row: number, tab: number, source: OUStringConstReference): void {
-    if (!this.CheckCellInput(col, row)) return;
-    if (!text(source).startsWith("="))
-      throw new Error("Nonformula EnterData processing is not implemented");
+  /** Routes the represented plain entry through native formula admission and the grouped input action.
+   * @param col - Column.
+   * @param row - Row.
+   * @param tab - Source sheet.
+   * @param source - User input.
+   * @returns Whether the input was accepted.
+   */
+  EnterData(col: number, row: number, tab: number, source: OUStringConstReference): boolean {
+    if (!this.CheckCellInput(col, row)) return false;
     const doc = this.data.GetDocument(),
-      manager = this.shell.GetUndoManager();
-    void tab;
+      manager = this.shell.GetUndoManager(),
+      functions = this.shell.GetDocFunc(),
+      marks = new ScMarkData(this.data.GetMarkData()),
+      formula = checkFormula(doc, col, row, tab, source),
+      formatSet: [boolean] = [false];
     manager.EnterListAction("Input");
     try {
-      for (const selected of this.data.GetMarkData().GetSelectedTabs()) {
-        const position = new ScAddress(col, row, selected),
-          cell = new ScFormulaCell(doc, position, source, doc.GetGrammar());
-        this.shell.GetDocFunc().SetFormulaCell(position, cell, true);
+      for (const selected of marks.GetSelectedTabs()) {
+        const position = new ScAddress(col, row, selected);
+        if (formula) {
+          const cell = new ScFormulaCell(doc, position, source, doc.GetGrammar());
+          if (!functions.SetFormulaCell(position, cell, true)) return false;
+        } else if (!functions.SetNormalString(formatSet, position, source, false)) return false;
       }
+      return true;
     } finally {
       manager.LeaveListAction();
     }

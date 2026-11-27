@@ -5,6 +5,7 @@ export enum OperationType {
   ApplyAttributesToCell = 3,
   DeleteContent = 4,
   DeleteCell = 5,
+  SetNormalString = 7,
   SetFormula = 11,
   ChangeIndent = 26,
   MergeCells = 33,
