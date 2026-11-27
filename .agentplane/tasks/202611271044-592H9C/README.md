@@ -1,10 +1,11 @@
 ---
 id: "202611271044-592H9C"
 title: "Use native storage grammar for ODS formulas and named expressions"
-status: "DOING"
+result_summary: "align legacy ODS storage formula grammar."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "b1314e12486c79778d0c773b327af615fd74018f"
   findings:
     - "The filter uses native legacy grammar selection and preserves formulas within the represented compiler. Goal Seek and external grammar providers are outside the tested slice."
-commit: null
+commit:
+  hash: "b1314e12486c79778d0c773b327af615fd74018f"
+  message: "🧩 592H9C calc: align legacy ODS storage formula grammar"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: Pinned tdf37341.ods formulas, the native legacy version default, explicit namespaces, matrix and named expressions, Worker persistence and modern export.       Tests  50 passed (50)."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Tests  50 passed (50). Office typecheck, lint, formatting, dependency, provenance and registry checks passed."
+  -
+    type: "status"
+    at: "2026-11-27T11:37:58.117Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Pinned tdf37341.ods formulas, the native legacy version default, explicit namespaces, matrix and named expressions, Worker persistence and modern export.       Tests  50 passed (50)."
 doc_version: 3
-doc_updated_at: "2026-11-27T11:36:57.151Z"
+doc_updated_at: "2026-11-27T11:37:58.118Z"
 doc_updated_by: "CODER"
 description: "Port Calc ODF version and formula-namespace storage grammar selection for ordinary and matrix cells, named expressions and existing style formula families, preserving import and modern OpenFormula export for the represented compiler slice."
 sections:
