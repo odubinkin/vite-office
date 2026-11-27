@@ -7,16 +7,25 @@
     "status": "mapped",
     "upstreamPath": "sc/source/filter/xml/celltextparacontext.cxx",
     "localSymbols": [
-      "ScXMLCellTextParaContext"
+      "ScXMLCellTextParaContext",
+      "ScXMLCellTextSpanContext",
+      "ScXMLCellFieldSContext",
+      "ScXMLCellTextRubyContext",
+      "ScXMLCellRubyBaseContext"
     ],
     "upstreamSymbols": [
       "ScXMLCellTextParaContext",
-      "ScXMLCellFieldURLContext::endFastElement"
+      "ScXMLCellFieldURLContext::endFastElement",
+      "ScXMLCellTextSpanContext::createFastChildContext",
+      "ScXMLCellFieldSContext::PushSpaces",
+      "ScXMLCellTextRubyContext::createFastChildContext",
+      "ScXMLCellRubyBaseContext::createFastChildContext"
     ],
     "preservedResponsibilities": [
       "Task204 imports modern ODF scalar content directly through native Calc document/body/table/row/cell/paragraph context boundaries and ScDocumentImport. Float missing/nonfinite defaults,repeat counts,covered/empty spans,valid sheet names,namespace-resolved same-sheet ODFF source and significant single-line text are represented. Actual SAX namespace resolution is borrowed;cached formula values are recomputed through the supported source-string formula owner rather than a second cached document.",
       "Calc text paragraphs collect styled spans and significant spaces in parser order. Structural tabs and breaks dispatch at the paragraph level.",
-      "Cell text dispatch builds URL, sheet, date and title features in the active paragraph and carries the enclosing span style."
+      "Cell text dispatch builds URL, sheet, date and title features in the active paragraph and carries the enclosing span style.",
+      "Preserves original paragraph and span child boundaries and imports direct and styled ruby base text without retaining the phonetic guide that Calc discards."
     ],
     "omittedResponsibilities": [
       "Supported content only:full style/number-format/layout/font metadata,objects,unrepresented rich text elements,merged/matrix/group/external/legacy formulas,repeated formula services,full cache/version/recalc policies and complete document/shell/import constructors remain unported. Unsupported metadata emits concrete diagnostics;unsupported cell semantics reject. This is not lossless full-ODF or UI parity. Browser ceilings and explicit grammar/byte transport are documented adaptations. No native C++/binary QA execution or physical memory management is claimed."
@@ -34,6 +43,10 @@
         {
           "path": "apps/office/src/sc/source/filter/xml/ods-rich-text-fields.test.ts",
           "marker": "testHyperlinkTargetFrameODS"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-rich-text-fields.test.ts",
+          "marker": "tdf129940.ods"
         }
       ],
       "upstream": [
@@ -44,6 +57,26 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/filter/xml/celltextparacontext.cxx",
           "marker": "ScXMLCellFieldURLContext::endFastElement"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/celltextparacontext.cxx",
+          "marker": "ScXMLCellTextSpanContext::createFastChildContext"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/celltextparacontext.cxx",
+          "marker": "ScXMLCellFieldSContext::PushSpaces"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/celltextparacontext.cxx",
+          "marker": "ScXMLCellTextRubyContext::createFastChildContext"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/celltextparacontext.cxx",
+          "marker": "ScXMLCellRubyBaseContext::createFastChildContext"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/subsequent_filters_test3.cxx",
+          "marker": "testTdf129940"
         }
       ]
     }

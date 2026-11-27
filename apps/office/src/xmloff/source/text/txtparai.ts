@@ -358,6 +358,13 @@ function createInlineContext(
     return annotation ? null : new XMLAnnotationImportContext(paragraph);
   if (element === XMLToken.DRAW_FRAME)
     return annotation ? null : paragraph.CreateTextFrameContext(attributes);
+  // The represented Writer text layer treats these containers as transparent.
+  if (
+    element === XMLToken.TEXT_RUBY ||
+    element === XMLToken.TEXT_RUBY_BASE ||
+    element === XMLToken.TEXT_RUBY_TEXT
+  )
+    return new XMLSpanContext(target, paragraph, properties, namedStyles, hyperlink);
   if (element === XMLToken.TEXT_SPAN) {
     attributes.assertOnly([XMLToken.TEXT_STYLE_NAME], "span");
     const name = attributes.get(XMLToken.TEXT_STYLE_NAME) ?? "";

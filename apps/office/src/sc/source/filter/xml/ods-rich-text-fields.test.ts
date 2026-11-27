@@ -17,6 +17,7 @@ import {
 } from "../../../browser/filter/xml/calc-document-codec";
 import { ScAddress } from "../../../inc/address";
 import { ScDocument } from "../../../inc/document";
+import { GetString } from "../../core/tool/editutil";
 import { ScXMLImport } from "./xmlimprt";
 import { readOdsDocument, writeOdsDocument } from "./xmlwrap";
 import { processOdsWorkerRequest } from "../../../browser/filter/xml/ods-worker-runtime";
@@ -28,6 +29,7 @@ import {
   EE_CHAR_EMPHASISMARK,
   EE_CHAR_ESCAPEMENT,
   EE_CHAR_FONTWIDTH,
+  EE_CHAR_FONTHEIGHT,
   EE_CHAR_ITALIC,
   EE_CHAR_KERNING,
   EE_CHAR_LANGUAGE,
@@ -37,6 +39,7 @@ import {
   EE_CHAR_WEIGHT,
   EE_CHAR_WLM,
 } from "../../../../editeng/inc/eeitem";
+import { SvxFontHeightItem } from "../../../../editeng/inc/fhgtitem";
 import { SvxEmphasisMarkItem } from "../../../../editeng/inc/emphasismarkitem";
 import { SvxEscapementItem } from "../../../../editeng/source/items/textitem.escapement";
 import { SvxWeightItem } from "../../../../editeng/inc/wghtitem";
@@ -347,6 +350,63 @@ it("writes multiline formula results as separate cached text paragraphs", /** Ch
     const formula = reopened.GetRefCellValue(new ScAddress(1, 0, 0)).getFormula();
     assert(formula);
     expect(text(formula.GetString().getString())).toBe("a\n\nb");
+  } finally {
+    reopened?.Dispose();
+    source.Dispose();
+  }
+});
+
+it("ports the ruby base import from the pinned tdf129940.ods", /** Verifies three original cell strings and independent base span sizes across Calc Worker and ODS. @returns Completion. */ async () => {
+  const input = new Uint8Array(readFileSync(`${fixtureRoot}/tdf129940.ods`));
+  const record = await processOdsWorkerRequest({
+    id: 1,
+    operation: "import",
+    input: input.buffer,
+    options: {},
+  });
+  const source = decodeCalcDocument(record as CalcDocumentRecord);
+  let reopened: ScDocument | undefined;
+  try {
+    const output = await writeOdsDocument(source);
+    reopened = await readOdsDocument(output);
+    for (const document of [source, reopened]) {
+      for (const [column, expected] of ["小笠原", "徳彦", "注音符號"].entries()) {
+        const cell = document.GetRefCellValue(new ScAddress(column, 0, 0));
+        const edit = cell.getEditText();
+        if (edit) {
+          const value = GetString(edit, document);
+          try {
+            expect(text(value)).toBe(expected);
+          } finally {
+            value.dispose();
+          }
+        } else {
+          const value = cell.getSharedString();
+          assert(value);
+          expect(text(value.getString())).toBe(expected);
+        }
+      }
+      const rich = document.GetRefCellValue(new ScAddress(2, 0, 0)).getEditText();
+      assert(rich);
+      const sections: Section[] = [];
+      rich.GetAllSections(sections);
+      const sizes: number[][] = [];
+      for (const section of sections) {
+        const size = section.maAttributes.find(
+          /** Finds the Latin font height stored by the original base span. @param item - Native character item. @returns Whether this is the font height. */ (
+            item,
+          ) => item.Which() === EE_CHAR_FONTHEIGHT,
+        );
+        if (size instanceof SvxFontHeightItem)
+          sizes.push([section.mnStart, section.mnEnd, size.GetHeight()]);
+      }
+      expect(sizes).toEqual([
+        [1, 2, 706],
+        [2, 3, 318],
+      ]);
+    }
+    const xml = await (await DocumentArchive.open(output)).readTextEntry("content.xml");
+    expect(xml).not.toContain("<text:ruby");
   } finally {
     reopened?.Dispose();
     source.Dispose();

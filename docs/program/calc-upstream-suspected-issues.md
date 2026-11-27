@@ -8289,3 +8289,10 @@ ODS persistence.
 
 - [Original registration and duplicate detection](../../vendor/libreoffice-reference/sc/source/ui/docshell/docsh6.cxx#L318)
 - [Original linked-sheet ODS export](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlexprt.cxx#L4077)
+
+
+### CALC-865 — Ruby guides are collected without a cell storage destination
+
+- Source: `sc/source/filter/xml/celltextparacontext.cxx` `ScXMLCellTextRubyContext`, `ScXMLCellRubyBaseContext` and `ScXMLCellRubyTextContext`; `sc/qa/unit/subsequent_filters_test3.cxx` `testTdf129940`.
+- LibreOffice sends the ruby base, including individually styled spans, into the ordinary Calc paragraph. `ScXMLCellRubyTextContext` collects the pronunciation and its style in its parent, but the parent never transfers them to cell storage. As a result, ODS export emits the base as ordinary cell text with its formatting.
+- The Calc reader retains that behavior and uses native EditEngine span items for the base. The original fixture's A1, B1 and C1 strings and the two distinct C1 span sizes survive Worker transfer and ODS reopening.

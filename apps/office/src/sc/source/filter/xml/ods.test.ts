@@ -240,7 +240,6 @@ it("keeps importer APIs on the actual document and does not allocate invalid coo
 });
 it("rejects unsupported cell services and malformed structure explicitly", /** Each input is independent from the exporter. @returns Nothing. */ () => {
   for (const cell of [
-    "<table:table-cell><text:p><text:ruby/></text:p></table:table-cell>",
     '<table:table-cell><text:p><text:s text:c="1000001"/></text:p></table:table-cell>',
     '<table:table-cell table:formula="unknown:=1"/>',
     "<table:table-cell><text:span>x</text:span></table:table-cell>",
