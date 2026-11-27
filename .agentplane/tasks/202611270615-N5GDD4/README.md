@@ -1,10 +1,11 @@
 ---
 id: "202611270615-N5GDD4"
 title: "Reconcile Writer and shared ODF provenance after branch integration"
-status: "DOING"
+result_summary: "Rebound Writer and shared ODF provenance to current native owners and verified behavior."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -41,7 +42,9 @@ quality_review:
     - "ab5ca4beff41628f9be0dadaaeacdb133fff5e3f"
   findings:
     - "Corrected ten stale references. Global provenance, both registry scopes and 66 existing Writer/shared tests passed."
-commit: null
+commit:
+  hash: "3858bb8c89d64b6910f2f99f0854aec81fe36c5d"
+  message: "🧩 ZWDB49 writer: preserve ODT list identity and rule overrides"
 comments:
   -
     author: "CODER"
@@ -49,6 +52,9 @@ comments:
   -
     author: "CODER"
     body: "Implementation evidence: ab5ca4beff41628f9be0dadaaeacdb133fff5e3f. Verified checks are recorded in output/playwright/N5GDD4/verification.md."
+  -
+    author: "CODER"
+    body: "Verified: global provenance, both registry scopes and 66 existing Writer/shared tests passed. Implementation: ab5ca4beff41628f9be0dadaaeacdb133fff5e3f."
 events:
   -
     type: "status"
@@ -68,8 +74,15 @@ events:
     at: "2026-11-27T06:46:24.087Z"
     author: "CODER"
     body: "Implementation evidence: ab5ca4beff41628f9be0dadaaeacdb133fff5e3f. Verified checks are recorded in output/playwright/N5GDD4/verification.md."
+  -
+    type: "status"
+    at: "2026-11-27T07:10:38.597Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: global provenance, both registry scopes and 66 existing Writer/shared tests passed. Implementation: ab5ca4beff41628f9be0dadaaeacdb133fff5e3f."
 doc_version: 3
-doc_updated_at: "2026-11-27T06:46:24.087Z"
+doc_updated_at: "2026-11-27T07:10:38.598Z"
 doc_updated_by: "CODER"
 description: "Restore traceable references to native ODT character effects, rotation, annotation and paragraph line numbering after the Writer and Calc integration. Re-run the affected existing tests and repository provenance and registry checks."
 sections:
