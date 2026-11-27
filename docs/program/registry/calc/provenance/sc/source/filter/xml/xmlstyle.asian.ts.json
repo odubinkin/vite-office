@@ -1,0 +1,56 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/filter/xml/xmlstyle.asian.ts",
+    "upstreamPath": "xmloff/source/text/txtprmap.cxx",
+    "localSymbols": [
+      "importCellAsianParagraphProperties",
+      "exportCellAsianParagraphProperties"
+    ],
+    "upstreamSymbols": [
+      "XML_TYPE_TEXT_AUTOSPACE",
+      "XML_TYPE_TEXT_PUNCTUATION_WRAP",
+      "XML_TYPE_TEXT_LINE_BREAK"
+    ],
+    "preservedResponsibilities": [
+      "Maps the original Calc UNO paragraph booleans to the three EditEngine ODF lexical pairs using native pooled items and the named-boolean handler."
+    ],
+    "omittedResponsibilities": [
+      "Other paragraph property families stay with their existing mappers."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/xml/xmlstyle.asian.ts",
+          "marker": "importCellAsianParagraphProperties"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/xmlstyle.asian.ts",
+          "marker": "exportCellAsianParagraphProperties"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx",
+          "marker": "XML_TYPE_TEXT_AUTOSPACE"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx",
+          "marker": "XML_TYPE_TEXT_PUNCTUATION_WRAP"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx",
+          "marker": "XML_TYPE_TEXT_LINE_BREAK"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/filter/xml/xmlstyle.asian.ts",
+      "rationale": "Groups Calc's consumed EditEngine paragraph fields beside the existing Calc style import and export owners.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

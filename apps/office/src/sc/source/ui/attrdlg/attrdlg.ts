@@ -28,6 +28,8 @@ import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { CellType } from "../../../inc/global";
 import { ScAddress } from "../../../inc/address";
 import { SfxUInt32Item } from "../../../../svl/source/items/intitem";
+import { SvxAsianTabPage } from "../../../../cui/source/tabpages/paragrph";
+import { IsAsianTypographyEnabled } from "../../../../svl/source/config/cjkoptions";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { ASIAN, COMPLEX, LATIN } from "../../../../offapi/com/sun/star/i18n/ScriptType";
 import * as attr from "../../../inc/scitems";
@@ -122,6 +124,7 @@ export const cellFormatPages = [
   ["font", "Font"],
   ["fonteffects", "Font Effects"],
   ["alignment", "Alignment"],
+  ...(IsAsianTypographyEnabled() ? ([["asiantypography", "Asian Typography"]] as const) : []),
   ["borders", "Borders"],
   ["background", "Background"],
   ["cellprotection", "Cell Protection"],
@@ -146,6 +149,7 @@ export class ScAttrDlg {
   readonly formatter;
   readonly numbers: SvxNumberFormatShell;
   readonly borders: SvxBorderTabPage;
+  readonly asianTypography: SvxAsianTabPage;
   readonly output: SfxItemSet;
 
   /** Captures the native selection format and original numeric preview sample. @param view - Actual view data. @returns Dialog input. */
@@ -187,6 +191,7 @@ export class ScAttrDlg {
     });
 
     this.output = this.items.Clone(false);
+    this.asianTypography = new SvxAsianTabPage(this.items, this.output);
     if (pattern.HasValidNumberFormat())
       this.items.Put(
         new SfxUInt32Item(ATTR_VALUE_FORMAT, pattern.GetNumberFormat(this.formatter)),

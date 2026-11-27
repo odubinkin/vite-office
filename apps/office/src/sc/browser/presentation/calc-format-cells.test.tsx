@@ -4,12 +4,14 @@ import { act, cleanup, fireEvent, render, screen, within } from "@testing-librar
 import { implementations } from "../../../desktop/browser/app/uno-components";
 import { InitApplicationServiceManager } from "../../../desktop/source/app/appinit";
 import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
+import type { SfxBoolItem } from "../../../svl/source/items/cenumitm";
 import { SfxRequest } from "../../../sfx2/source/control/request";
 import { SvNumFormatType as T } from "../../../svl/inc/zforlist";
 import type { SvxBrushItem } from "../../../editeng/inc/brushitem";
 import {
   ATTR_BORDER,
   ATTR_MARGIN,
+  ATTR_FORBIDDEN_RULES,
   ATTR_FONT_HEIGHT,
   ATTR_CJK_FONT_HEIGHT,
   ATTR_CTL_FONT_HEIGHT,
@@ -362,8 +364,9 @@ it("ports the Calc border width defaults and writes the shared padding item besi
   fireEvent.keyDown(borders.getByRole("spinbutton", { name: /^Left padding/ }), { key: "ArrowUp" });
   await accept();
   const position = new ScAddress();
-  /** Reads the selected anchor. @param value - Workbook. @returns Native pattern. */
-  const getPattern = (value: typeof doc) => value.GetPattern(position);
+  const getPattern =
+    /** Reads the selected anchor. @param value - Workbook. @returns Native pattern. */
+    (value: typeof doc) => value.GetPattern(position);
   const border = (getPattern(doc)?.GetItem(ATTR_BORDER) as SvxBoxItem).GetLeft();
   const margin = getPattern(doc)?.GetItem(ATTR_MARGIN) as SvxMarginItem;
   expect(border?.GetWidth()).toBeGreaterThan(0);
@@ -387,4 +390,86 @@ it("ports the Calc border width defaults and writes the shared padding item besi
   } finally {
     reopened.Dispose();
   }
+});
+
+/** Opens the original notebook page through Calc's active frame. @returns Dialog and Line Change queries. */
+function asianTypography() {
+  open();
+  const modal = dialog();
+  const tab = modal.getByRole("tab", { name: "Asian Typography" });
+  expect(modal.getAllByRole("tab").indexOf(tab)).toBe(4);
+  fireEvent.click(tab);
+  return { modal, group: within(modal.getByRole("group", { name: "Line Change" })) };
+}
+
+it("ports the Calc Asian Typography selection and reopen through the original command" /** Exercises formatCells.py's A1 checkbox with the original slot admission. @returns Completion. */, async () => {
+  const { controller } = mount();
+  controller.viewData.GetMarkData().SetMarkArea(new ScRange(0, 0, 0, 0, 0, 0));
+  const selector = { name: /^Apply list of forbidden characters/ };
+  const { group } = asianTypography();
+  expect(group.getByRole("checkbox", { name: "Allow hanging punctuation" })).toBeDisabled();
+  expect(
+    group.getByRole("checkbox", { name: "Apply spacing between Asian and non-Asian text" }),
+  ).toBeDisabled();
+  fireEvent.click(group.getByRole("checkbox", selector));
+  await accept();
+  controller.viewData.GetMarkData().SetMarkArea(new ScRange(0, 0, 0, 0, 0, 0));
+  expect(asianTypography().group.getByRole("checkbox", selector)).toBeChecked();
+});
+
+it("retains the native mixed forbidden-character selection through Reset, Cancel and history" /** Exercises a mixed selection plus reversible application to the real item set. @returns Completion. */, async () => {
+  const { controller } = mount();
+  const doc = controller.shell.GetDocument();
+  const history = controller.shell.GetUndoManager();
+  const forbidden = { name: /^Apply list of forbidden characters/ };
+  const address = new ScAddress();
+  let page = asianTypography();
+  fireEvent.click(page.group.getByRole("checkbox", forbidden));
+  await accept();
+  expect(history.GetUndoActionCount()).toBe(1);
+
+  controller.viewData.GetMarkData().SetMarkArea(new ScRange(0, 0, 0, 1, 0, 0));
+  page = asianTypography();
+  const rule = page.group.getByRole("checkbox", forbidden);
+  expect(rule).toBePartiallyChecked();
+  fireEvent.click(rule);
+  fireEvent.click(page.modal.getByRole("button", { name: "Reset" }));
+  expect(rule).toBePartiallyChecked();
+  await accept();
+  expect(history.GetUndoActionCount()).toBe(1);
+
+  controller.viewData.GetMarkData().SetMarkArea(new ScRange(0, 0, 0, 0, 0, 0));
+  page = asianTypography();
+  fireEvent.click(page.group.getByRole("checkbox", forbidden));
+  fireEvent.click(page.group.getByRole("checkbox", forbidden));
+  await accept();
+  expect(history.GetUndoActionCount()).toBe(1);
+
+  page = asianTypography();
+  fireEvent.click(page.group.getByRole("checkbox", forbidden));
+  fireEvent.click(page.modal.getByRole("button", { name: "Cancel" }));
+  expect(history.GetUndoActionCount()).toBe(1);
+
+  page = asianTypography();
+  expect(page.group.getByRole("checkbox", forbidden)).toBeChecked();
+  fireEvent.click(page.group.getByRole("checkbox", forbidden));
+  await accept();
+  expect(history.GetUndoActionCount()).toBe(2);
+  const read = /** Reads the cell's native boolean item. @returns Value. */ () =>
+    (doc.GetPattern(address)?.GetItem(ATTR_FORBIDDEN_RULES) as SfxBoolItem).GetValue();
+  expect(read()).toBe(false);
+  act(
+    /** Performs the original grouped format undo. @returns Nothing. */
+    () => {
+      expect(controller.Undo()).toBe(true);
+    },
+  );
+  expect(read()).toBe(true);
+  act(
+    /** Replays the original grouped format change. @returns Nothing. */
+    () => {
+      expect(controller.Redo()).toBe(true);
+    },
+  );
+  expect(read()).toBe(false);
 });

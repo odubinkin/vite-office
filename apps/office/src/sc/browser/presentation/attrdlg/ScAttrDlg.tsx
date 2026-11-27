@@ -17,7 +17,12 @@ import { CellBordersTabPage } from "./CellBordersTabPage";
 import { FontTabPage } from "./FontTabPage";
 import { FontEffectsTabPage } from "./FontEffectsTabPage";
 import { NumberFormatTabPage } from "./NumberFormatTabPage";
-import { AlignmentTabPage, BackgroundTabPage, CellProtectionTabPage } from "./CellAttributePages";
+import {
+  AlignmentTabPage,
+  AsianTypographyTabPage,
+  BackgroundTabPage,
+  CellProtectionTabPage,
+} from "./CellAttributePages";
 
 /** Owns the native modal's output acknowledgement. */
 interface Props {
@@ -83,6 +88,9 @@ export function ScAttrDlg({ model, onCancel, onSubmit }: Props): React.JSX.Eleme
         break;
       case "alignment":
         for (const which of alignmentWhich) model.output.ClearItem(which);
+        break;
+      case "asiantypography":
+        model.asianTypography.Reset();
         break;
       case "background":
         model.output.ClearItem(ATTR_BACKGROUND);
@@ -215,6 +223,17 @@ export function ScAttrDlg({ model, onCancel, onSubmit }: Props): React.JSX.Eleme
                   />
                 ) : page === "alignment" ? (
                   <AlignmentTabPage model={model} onChange={stage} />
+                ) : page === "asiantypography" ? (
+                  <AsianTypographyTabPage
+                    model={model.asianTypography}
+                    onChange={
+                      /** Stages the native checkbox state. @param slot - Native paragraph slot. @param checked - Control state. @returns Nothing. */
+                      (slot, checked) => {
+                        model.asianTypography.SetValue(slot, checked);
+                        setRevision(revision + 1);
+                      }
+                    }
+                  />
                 ) : page === "background" ? (
                   <BackgroundTabPage model={model} onChange={stage} />
                 ) : (

@@ -13,13 +13,21 @@ import {
   importJustifyMethod,
 } from "./xmlstyle.alignment";
 import {
+  cellAsianParagraphTokens,
+  exportCellAsianParagraphProperties,
+  importCellAsianParagraphProperties,
+} from "./xmlstyle.asian";
+import {
   cellProtectionTokens,
   exportCellProtection,
   importCellProtection,
 } from "./xmlstyle.protection";
 import {
+  ATTR_FORBIDDEN_RULES,
+  ATTR_HANGPUNCTUATION,
   ATTR_HOR_JUSTIFY_METHOD,
   ATTR_LINEBREAK,
+  ATTR_SCRIPTSPACE,
   ATTR_PROTECTION,
   ATTR_ROTATE_MODE,
   ATTR_ROTATE_VALUE,
@@ -212,6 +220,9 @@ export const cellTextWhichIds = [
   ATTR_ROTATE_MODE,
   ATTR_SHRINKTOFIT,
   ATTR_PROTECTION,
+  ATTR_FORBIDDEN_RULES,
+  ATTR_HANGPUNCTUATION,
+  ATTR_SCRIPTSPACE,
 ] as const;
 
 /** Resolves the programmatic name used by Calc's XStyle. @param name - Native display name. @returns Programmatic name. */
@@ -834,7 +845,9 @@ export function exportCellParagraphProperties(pattern: ScPatternAttr): string {
     indentOutput: [string] = [""],
     measure = new XMLMeasurePropHdl(2),
     metric = new SvXMLUnitConverter("mm100");
-  let indent = exportJustifyMethod(pattern, ATTR_HOR_JUSTIFY_METHOD, "css3t:text-justify");
+  let indent =
+    exportCellAsianParagraphProperties(pattern, unitConverter) +
+    exportJustifyMethod(pattern, ATTR_HOR_JUSTIFY_METHOD, "css3t:text-justify");
   try {
     if (pattern.GetItemSet().GetItemState(131, false) === SfxItemState.SET) {
       const hmm = Number(
@@ -868,9 +881,15 @@ export function importCellParagraphProperties(
   unsupported: (name: string) => void,
 ): void {
   attributes.assertOnly(
-    [XMLToken.FO_TEXT_ALIGN, XMLToken.FO_MARGIN_LEFT, XMLToken.CSS3T_TEXT_JUSTIFY],
+    [
+      XMLToken.FO_TEXT_ALIGN,
+      XMLToken.FO_MARGIN_LEFT,
+      XMLToken.CSS3T_TEXT_JUSTIFY,
+      ...cellAsianParagraphTokens,
+    ],
     "Calc paragraph properties",
   );
+  importCellAsianParagraphProperties(pattern, attributes, unitConverter, unsupported);
   const method = attributes.get(XMLToken.CSS3T_TEXT_JUSTIFY);
   if (method !== null) importJustifyMethod(pattern, method, ATTR_HOR_JUSTIFY_METHOD);
   const indent = attributes.get(XMLToken.FO_MARGIN_LEFT);

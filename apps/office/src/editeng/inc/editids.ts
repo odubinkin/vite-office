@@ -17,6 +17,13 @@ export const SID_ATTR_PARA_MODEL = 10065 as const;
 /** Native keep-with-next slot, SID_SVX_START +66. */
 export const SID_ATTR_PARA_KEEP = 10066 as const;
 
+/** Native Asian script spacing slot, SID_SVX_START +901. */
+export const SID_ATTR_PARA_SCRIPTSPACE = 10901 as const;
+/** Native hanging punctuation slot, SID_SVX_START +902. */
+export const SID_ATTR_PARA_HANGPUNCTUATION = 10902 as const;
+/** Native forbidden character rules slot, SID_SVX_START +903. */
+export const SID_ATTR_PARA_FORBIDDEN_RULES = 10903 as const;
+
 /** Native paragraph line-spacing slot, SID_SVX_START +33. */
 export const SID_ATTR_PARA_LINESPACE = 10033 as const;
 

@@ -7,14 +7,18 @@
     "status": "mapped",
     "upstreamPath": "cui/source/tabpages/paragrph.cxx",
     "localSymbols": [
-      "SvxExtParagraphTabPage"
+      "SvxExtParagraphTabPage",
+      "SvxAsianTabPage"
     ],
     "upstreamSymbols": [
       "SvxExtParagraphTabPage::AllowSplitHdl",
-      "SvxExtParagraphTabPage::PageBreakHdl"
+      "SvxExtParagraphTabPage::PageBreakHdl",
+      "SvxAsianTabPage::Reset",
+      "SvxAsianTabPage::FillItemSet"
     ],
     "preservedResponsibilities": [
-      "Definite split/widow/orphan and page-only break Reset,handler dependencies,retained drafts and changed-output decisions. Mixed/HTML,column and remaining controls are unported."
+      "Definite split/widow/orphan and page-only break Reset,handler dependencies,retained drafts and changed-output decisions. Mixed/HTML,column and remaining controls are unported.",
+      "Resolves original Asian paragraph slots and projects saved, mixed, disabled and changed checkbox values to the actual item sets."
     ],
     "omittedResponsibilities": [
       "Complete native textflow and mixed/HTML widget services."
@@ -24,6 +28,10 @@
         {
           "path": "apps/office/src/cui/source/tabpages/paragrph.ts",
           "marker": "SvxExtParagraphTabPage"
+        },
+        {
+          "path": "apps/office/src/cui/source/tabpages/paragrph.ts",
+          "marker": "SvxAsianTabPage"
         }
       ],
       "upstream": [
@@ -34,6 +42,10 @@
         {
           "path": "vendor/libreoffice-reference/cui/source/tabpages/paragrph.cxx",
           "marker": "SvxExtParagraphTabPage::PageBreakHdl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/cui/source/tabpages/paragrph.cxx",
+          "marker": "SvxAsianTabPage::FillItemSet"
         }
       ]
     }

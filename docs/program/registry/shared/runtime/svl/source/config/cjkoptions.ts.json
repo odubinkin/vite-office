@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svl/source/config/cjkoptions.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "asian-typography",
+    "capabilityIds": [
+      "CAP-1901ccb9-7fa6-41de-918c-43c0824a29fc"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/svl/source/config/cjkoptions.ts#IsAsianTypographyEnabled",
+        "vendor/libreoffice-reference/svl/source/config/cjkoptions.cxx#IsAsianTypographyEnabled",
+        "apps/office/src/sc/browser/presentation/calc-format-cells.test.tsx",
+        "apps/office/src/sc/source/filter/xml/ods.test.ts"
+      ],
+      "justification": "Reports the pinned CJK options eligibility for the Asian Typography notebook page.",
+      "knownViolations": [],
+      "localSymbols": [
+        "IsAsianTypographyEnabled"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "svl/source/config/cjkoptions.cxx",
+      "upstreamSymbols": [
+        "IsAsianTypographyEnabled"
+      ]
+    }
+  }
+}

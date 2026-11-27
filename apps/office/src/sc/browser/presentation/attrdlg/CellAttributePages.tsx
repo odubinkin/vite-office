@@ -1,4 +1,9 @@
-/** @fileoverview Alignment, Background and Cell Protection controls over native Calc items. */
+/** @fileoverview Alignment, Asian Typography, Background and Cell Protection controls over native Calc items. */
+import {
+  asianTypographyControls,
+  type AsianTypographySlot,
+  type SvxAsianTabPage,
+} from "../../../../cui/source/tabpages/paragrph";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { SvxBrushItem } from "../../../../editeng/inc/brushitem";
 import {
@@ -352,6 +357,40 @@ export function CellProtectionTabPage({ model, onChange }: PageProps): React.JSX
         />
       </fieldset>
     </div>
+  );
+}
+
+/** Renders the original Asian typography page's native Line Change group.
+ * @param props - Dialog bindings.
+ * @param props.model - Original control draft.
+ * @param props.onChange - Stages a changed checkbox.
+ * @returns Asian Typography tab.
+ */
+export function AsianTypographyTabPage({
+  model,
+  onChange,
+}: {
+  readonly model: SvxAsianTabPage;
+  readonly onChange: (slot: AsianTypographySlot, checked: boolean) => void;
+}): React.JSX.Element {
+  return (
+    <fieldset className="grid gap-3 rounded border border-slate-200 p-3 text-sm">
+      <legend className="px-1 font-medium">Line Change</legend>
+      {asianTypographyControls.map(
+        /** Maps the original slot to its native item state. @param control - Slot and label. @returns Checkbox. */
+        ([slot, label]) => (
+          <Check
+            key={slot}
+            label={label}
+            {...model.GetState(slot)}
+            change={
+              /** Stages the native checkbox value. @param checked - Control state. @returns Nothing. */
+              (checked) => onChange(slot, checked)
+            }
+          />
+        ),
+      )}
+    </fieldset>
   );
 }
 

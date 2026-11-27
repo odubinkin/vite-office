@@ -1,0 +1,103 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-1901ccb9-7fa6-41de-918c-43c0824a29fc",
+    "capabilityId": "CAP-1901ccb9-7fa6-41de-918c-43c0824a29fc",
+    "suite": "calc",
+    "subsystem": "cell-formatting",
+    "type": "command",
+    "maturity": "implemented",
+    "capability": "Calc Format Cells Asian Typography uses the source selection snapshot and three paragraph slots",
+    "assertions": [
+      "The page appears after Alignment and resolves all three controls through the Calc item-set slot map.",
+      "The editable forbidden-character checkbox preserves indeterminate selection state, Reset, Cancel and native format history.",
+      "ODS cell paragraph properties retain each original true and false lexical pair."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "HTML checkboxes and fieldset visualize the source CUI controls through a real SfxItemSet output."
+    },
+    "gaps": [
+      "This change preserves the existing EditEngine formatting transfer boundary."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/attrdlg/attrdlg.cxx",
+          "marker": "IsAsianTypographyEnabled"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/docpool.cxx",
+          "marker": "SID_ATTR_PARA_FORBIDDEN_RULES"
+        },
+        {
+          "path": "vendor/libreoffice-reference/cui/source/tabpages/paragrph.cxx",
+          "marker": "SvxAsianTabPage::FillItemSet"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlexprt.cxx",
+          "marker": "CreateParaExtPropMapper"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx",
+          "marker": "XML_TYPE_TEXT_AUTOSPACE"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/uitest/calc_tests/formatCells.py",
+          "marker": "test_format_cell_asian_typography_tab"
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/libreoffice-reference/cui/uiconfig/ui/asiantypography.ui",
+          "marker": "checkForbidList"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/attrdlg/CellAttributePages.tsx",
+          "marker": "AsianTypographyTabPage"
+        },
+        {
+          "path": "apps/office/src/cui/source/tabpages/paragrph.ts",
+          "marker": "SvxAsianTabPage"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/xmlstyle.asian.ts",
+          "marker": "exportCellAsianParagraphProperties"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-format-cells.test.tsx",
+          "marker": "ports the Calc Asian Typography"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods.test.ts",
+          "marker": "maps the three original Asian typography"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-upstream-suspected-issues.md",
+          "marker": "CALC239"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "aspect": "command-state",
+    "atomicOperation": "calc-format-cells-asian-typography",
+    "scopeLimitations": [
+      "Native item-set slot availability leaves the script-spacing and hanging punctuation controls insensitive in Calc Format Cells."
+    ]
+  }
+}

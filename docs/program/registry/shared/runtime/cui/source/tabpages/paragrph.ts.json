@@ -8,7 +8,8 @@
     "suite": "shared",
     "subsystem": "document-model",
     "capabilityIds": [
-      "CAP-0125"
+      "CAP-0125",
+      "CAP-1901ccb9-7fa6-41de-918c-43c0824a29fc"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -16,17 +17,21 @@
       "defaultStatus": "unverified",
       "divergenceClass": "none",
       "evidence": [
-        "apps/office/src/cui/source/tabpages/paragrph.ts#SvxExtParagraphTabPage"
+        "apps/office/src/cui/source/tabpages/paragrph.ts#SvxExtParagraphTabPage",
+        "apps/office/src/cui/source/tabpages/paragrph.ts#SvxAsianTabPage"
       ],
       "justification": "Definite split/widow/orphan and page-only break Reset,handler dependencies,retained drafts and changed-output decisions. Mixed/HTML,column and remaining controls are unported.",
       "knownViolations": [],
       "localSymbols": [
-        "SvxExtParagraphTabPage"
+        "SvxExtParagraphTabPage",
+        "SvxAsianTabPage"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "cui/source/tabpages/paragrph.cxx",
       "upstreamSymbols": [
-        "SvxExtParagraphTabPage::AllowSplitHdl"
+        "SvxExtParagraphTabPage::AllowSplitHdl",
+        "SvxAsianTabPage::Reset",
+        "SvxAsianTabPage::FillItemSet"
       ]
     }
   }
