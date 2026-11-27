@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/ui/unoobj/linkuno.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/ui/unoobj/linkuno.cxx",
+    "localSymbols": [
+      "GetSheetLinkByName"
+    ],
+    "upstreamSymbols": [
+      "ScSheetLinksObj::GetObjectByIndex_Impl",
+      "ScSheetLinksObj::GetObjectByName_Impl"
+    ],
+    "preservedResponsibilities": [
+      "Projects one shared link per source URL using metadata from the first matching linked worksheet."
+    ],
+    "omittedResponsibilities": [
+      "The desktop UNO collection wrapper and source refresh operations are outside the browser document model."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/ui/unoobj/linkuno.ts",
+          "marker": "GetSheetLinkByName"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-sheet-links.test.ts",
+          "marker": "tdf157897_main.ods"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/unoobj/linkuno.cxx",
+          "marker": "ScSheetLinksObj::GetObjectByIndex_Impl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/unoobj/linkuno.cxx",
+          "marker": "ScSheetLinksObj::GetObjectByName_Impl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/docshell/docsh6.cxx",
+          "marker": "ScDocShell::UpdateLinks"
+        }
+      ]
+    }
+  }
+}

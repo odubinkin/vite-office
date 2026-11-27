@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/ui/unoobj/linkuno.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "odf-filter",
+    "capabilityIds": [
+      "CAP-0128",
+      "CAP-0129"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/ui/unoobj/linkuno.ts",
+        "apps/office/src/sc/source/filter/xml/ods-sheet-links.test.ts",
+        "vendor/libreoffice-reference/sc/source/ui/unoobj/linkuno.cxx",
+        "vendor/libreoffice-reference/sc/source/ui/docshell/docsh6.cxx"
+      ],
+      "justification": "Projects one shared link per source URL using metadata from the first matching linked worksheet. The desktop UNO collection wrapper and source refresh operations are outside the browser document model.",
+      "knownViolations": [],
+      "localSymbols": [
+        "GetSheetLinkByName"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/source/ui/unoobj/linkuno.cxx",
+      "upstreamSymbols": [
+        "ScSheetLinksObj::GetObjectByIndex_Impl",
+        "ScSheetLinksObj::GetObjectByName_Impl"
+      ]
+    }
+  }
+}

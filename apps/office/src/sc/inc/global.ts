@@ -88,7 +88,14 @@ export const STD_EXTRA_WIDTH = Number(convert(2n, Length.mm, Length.twip));
 export const MAX_COL_WIDTH = 56693;
 /** Original maximum row height in twips. */
 export const MAX_ROW_HEIGHT = 56693;
-/** Original direct/optimal/show/visible-optimal/original size mode identities. */
+/** Original linked sheet modes from global.hxx. */
+export enum ScLinkMode {
+  NONE,
+  NORMAL,
+  VALUE,
+}
+
+/** Native sheet size modes used by row and column updates. */
 export enum ScSizeMode {
   SC_SIZE_DIRECT = 0,
   SC_SIZE_OPTIMAL = 1,

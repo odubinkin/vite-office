@@ -1,4 +1,5 @@
 /** @fileoverview ScTable scalar/local-reference,cell-attribute and standard row-height operations over lazy contiguous columns. Device layout and full sheet services remain unported. */
+import { ScLinkMode } from "../../../inc/global";
 import type { NoteEntry, ScPostIt } from "../../../inc/postit";
 import type { ScDBData } from "../../../inc/dbdata";
 import type { ScOutlineTable } from "./olinetab";
@@ -68,6 +69,49 @@ import * as table7 from "./table7";
 type ColumnDataApply = (column: ScColumnData, first: number, last: number) => void;
 /** Sheet owner for the supported scalar document operations. */
 export class ScTable {
+  private nLinkMode = ScLinkMode.NONE;
+  private readonly aLinkDoc = new OUString();
+  private readonly aLinkFlt = new OUString();
+  private readonly aLinkOpt = new OUString();
+  private readonly aLinkTab = new OUString();
+  private nLinkRefreshDelay = 0;
+  SetLink = table1.SetLink;
+
+  /** Reports whether this sheet has a native sheet link. @returns Linked state. */
+  IsLinked(): boolean {
+    return this.nLinkMode !== ScLinkMode.NONE;
+  }
+
+  /** Borrows the original link mode. @returns Native sheet link mode. */
+  GetLinkMode(): ScLinkMode {
+    return this.nLinkMode;
+  }
+
+  /** Borrows the original URL of the linked workbook. @returns File URL. */
+  GetLinkDoc(): OUStringConstReference {
+    return this.aLinkDoc;
+  }
+
+  /** Borrows the original linked document filter. @returns Native filter name. */
+  GetLinkFlt(): OUStringConstReference {
+    return this.aLinkFlt;
+  }
+
+  /** Borrows the saved filter options. @returns Filter options. */
+  GetLinkOpt(): OUStringConstReference {
+    return this.aLinkOpt;
+  }
+
+  /** Borrows the destination sheet's source name. @returns Source sheet name. */
+  GetLinkTab(): OUStringConstReference {
+    return this.aLinkTab;
+  }
+
+  /** Returns the original refresh setting. @returns Seconds, with zero disabling periodic refresh. */
+  GetLinkRefreshDelay(): number {
+    return this.nLinkRefreshDelay;
+  }
+
   declare private readonly aPrintRanges: ScRange[];
   declare private bPrintEntireSheet: boolean;
   declare private moRepeatColRange: ScRange | undefined;
@@ -814,6 +858,10 @@ export class ScTable {
     for (const column of this.aCol) column.Dispose();
     this.aUpperName.dispose();
     this.aName.dispose();
+    this.aLinkTab.dispose();
+    this.aLinkOpt.dispose();
+    this.aLinkFlt.dispose();
+    this.aLinkDoc.dispose();
   }
   /** Reads actual native/default column attributes. @param col - Column. @param row - Row. @returns Pattern or null. */
   GetPattern(col: number, row: number): ScPatternAttr | null {

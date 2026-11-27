@@ -12,6 +12,7 @@ import { createTableRowContext } from "./xmlrowi";
 import { ScXMLConditionalFormatsContext } from "./xmlcondformat";
 import { ScXMLNamedExpressionsContext } from "./xmlnexpi";
 import { readTableProtection, readTableProtectionOptions } from "./xmlsubti";
+import { ScXMLTableSourceContext } from "./XMLTableSourceContext";
 import { ScMyStylesImportHelper } from "./XMLStylesImportHelper";
 /** Real sheet import cursor;row/column positions are transient parser state only. */
 export class ScXMLTableContext extends ScXMLImportContext {
@@ -91,6 +92,8 @@ export class ScXMLTableContext extends ScXMLImportContext {
       if (this.protection) readTableProtectionOptions(this.protection, attributes);
       return new ScXMLImportContext(this.owner);
     }
+    if (element === XMLToken.TABLE_TABLE_SOURCE)
+      return new ScXMLTableSourceContext(this.owner, this.tab, attributes);
     if (element === XMLToken.TABLE_NAMED_EXPRESSIONS)
       return new ScXMLNamedExpressionsContext(this.owner, this.tab);
     const axis =

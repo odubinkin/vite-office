@@ -6,9 +6,9 @@ import type { ScRangeData } from "../tool/rangenam";
 import type { ScDocument } from "../../../inc/document";
 import type { ScTableProtection } from "./tabprotection";
 import type { RefUpdateContext } from "../../../inc/refupdatecontext";
-import { CellType, UpdateRefMode } from "../../../inc/global";
+import { CellType, ScLinkMode, UpdateRefMode } from "../../../inc/global";
 import { FormulaGrammar, type AddressConvention } from "../../../../formula/inc/grammar";
-import { OUString } from "../../../../sal/inc/rtl/ustring";
+import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { OUStringBuffer } from "../../../../sal/inc/rtl/ustrbuf";
 import { ScMF, type ScMergeAttr, type ScMergeFlagAttr } from "../../../inc/attrib";
 import {
@@ -311,4 +311,57 @@ export function SetTabProtection(
   protection?: ScTableProtection,
 ): void {
   this.FetchTable(tab)?.SetProtection(protection);
+}
+
+/** Reports the native linked state of a sheet. @param this - Workbook. @param tab - Native sheet index. @returns Whether linked. */
+export function IsLinked(this: ScDocument, tab: number): boolean {
+  return this.FetchTable(tab)?.IsLinked() ?? false;
+}
+
+/** Queries the original sheet link mode. @param this - Workbook. @param tab - Native sheet index. @returns Link mode or none. */
+export function GetLinkMode(this: ScDocument, tab: number): ScLinkMode {
+  return this.FetchTable(tab)?.GetLinkMode() ?? ScLinkMode.NONE;
+}
+
+/** Copies the external file URL. @param this - Workbook. @param tab - Native sheet index. @returns Owned URL. */
+export function GetLinkDoc(this: ScDocument, tab: number): OUString {
+  const table = this.FetchTable(tab);
+  return table ? new OUString(table.GetLinkDoc()) : new OUString();
+}
+
+/** Copies the external file filter name. @param this - Workbook. @param tab - Native sheet index. @returns Owned filter name. */
+export function GetLinkFlt(this: ScDocument, tab: number): OUString {
+  const table = this.FetchTable(tab);
+  return table ? new OUString(table.GetLinkFlt()) : new OUString();
+}
+
+/** Copies the external file filter options. @param this - Workbook. @param tab - Native sheet index. @returns Owned options. */
+export function GetLinkOpt(this: ScDocument, tab: number): OUString {
+  const table = this.FetchTable(tab);
+  return table ? new OUString(table.GetLinkOpt()) : new OUString();
+}
+
+/** Copies the name of the external sheet. @param this - Workbook. @param tab - Native sheet index. @returns Owned source name. */
+export function GetLinkTab(this: ScDocument, tab: number): OUString {
+  const table = this.FetchTable(tab);
+  return table ? new OUString(table.GetLinkTab()) : new OUString();
+}
+
+/** Returns the original refresh delay. @param this - Workbook. @param tab - Native sheet index. @returns Seconds. */
+export function GetLinkRefreshDelay(this: ScDocument, tab: number): number {
+  return this.FetchTable(tab)?.GetLinkRefreshDelay() ?? 0;
+}
+
+/** Sets link values on the canonical sheet. @param this - Workbook. @param sheet - Actual sheet index. @param mode - Native link mode. @param doc - File URL. @param filter - Native filter. @param options - Filter options. @param tab - Source sheet name. @param delay - Refresh seconds. @returns Nothing. */
+export function SetLink(
+  this: ScDocument,
+  sheet: number,
+  mode: ScLinkMode,
+  doc: OUStringConstReference,
+  filter: OUStringConstReference,
+  options: OUStringConstReference,
+  tab: OUStringConstReference,
+  delay: number,
+): void {
+  this.FetchTable(sheet)?.SetLink(mode, doc, filter, options, tab, delay);
 }

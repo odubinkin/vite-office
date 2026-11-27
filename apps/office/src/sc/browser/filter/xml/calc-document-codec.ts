@@ -1,5 +1,10 @@
 import { SetDatabaseRangeAutoFilterFlags } from "../../../source/filter/xml/xmldrani";
 /** @fileoverview Bounded Calc worker transfer of supported native cells, sparse attributes and geometry; XML remains the durable format. */
+import {
+  decodeSheetLink,
+  encodeSheetLink,
+  type CalcSheetLinkRecord,
+} from "./calc-sheet-link-codec";
 import { ATTR_VALIDDATA } from "../../../inc/scitems";
 import {
   decodeCalcValidations,
@@ -186,6 +191,7 @@ function isOoxPasswordHash(hash: ScOoxPasswordHash | undefined): boolean {
 /** Native sparse sheet transfer record. */
 interface Sheet {
   readonly visible?: boolean;
+  readonly link?: CalcSheetLinkRecord;
   readonly tabColor?: number;
   readonly pageStyle?: string;
   readonly protection?: {
@@ -385,6 +391,7 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
     const repeatColumns = table.GetRepeatColRange();
     const repeatRows = table.GetRepeatRowRange();
     const protection = table.GetProtection();
+    const link = encodeSheetLink(table);
     const cursor = getSheetCursor(document, tab);
     const tabSelected = getSheetTabSelected(document, tab);
     const panes = getSheetPaneLayout(document, tab);
@@ -396,6 +403,7 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
     document.GetAllNoteEntries(tab, noteEntries);
     const notes: CalcCellNoteRecord[] = [];
     const sheet: Sheet = {
+      ...(link ? { link } : {}),
       ...(pageStyles.names.has(pageStyle) ? { pageStyle } : {}),
       ...(tabColor.equals(COL_AUTO) ? {} : { tabColor: tabColor.toUInt32() }),
       ...(table.IsVisible() ? {} : { visible: false }),
@@ -837,6 +845,11 @@ function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
       const name = unicode(sheet.name);
       try {
         if (!document.InsertTab(tab, name)) throw new Error("Calc worker sheet is invalid.");
+        if (sheet.link !== undefined) {
+          if (!document.RenameTab(tab, name, true))
+            throw new Error("Calc worker linked sheet is invalid.");
+          decodeSheetLink(document.FetchTable(tab) as ScTable, sheet.link);
+        }
         if (sheet.visible === false) document.SetVisible(tab, false);
         if (sheet.pageStyle !== undefined) {
           if (

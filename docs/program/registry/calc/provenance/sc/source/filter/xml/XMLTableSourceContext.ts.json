@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/filter/xml/XMLTableSourceContext.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/filter/xml/XMLTableSourceContext.cxx",
+    "localSymbols": [
+      "ScXMLTableSourceContext"
+    ],
+    "upstreamSymbols": [
+      "ScXMLTableSourceContext::ScXMLTableSourceContext",
+      "ScXMLTableSourceContext::endFastElement"
+    ],
+    "preservedResponsibilities": [
+      "Imports the link mode, source sheet, external URL, filter and periodic refresh delay into the linked Calc worksheet."
+    ],
+    "omittedResponsibilities": [
+      "Loading the source medium, detecting its filter and refreshing links require the desktop document shell."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/xml/XMLTableSourceContext.ts",
+          "marker": "ScXMLTableSourceContext"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-sheet-links.test.ts",
+          "marker": "tdf157897_main.ods"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/XMLTableSourceContext.cxx",
+          "marker": "ScXMLTableSourceContext::ScXMLTableSourceContext"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/XMLTableSourceContext.cxx",
+          "marker": "ScXMLTableSourceContext::endFastElement"
+        }
+      ]
+    }
+  }
+}

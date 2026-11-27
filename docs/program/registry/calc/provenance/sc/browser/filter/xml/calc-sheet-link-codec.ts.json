@@ -1,0 +1,30 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "local-infrastructure",
+    "localPath": "apps/office/src/sc/browser/filter/xml/calc-sheet-link-codec.ts",
+    "status": "local-only",
+    "rationale": "Transports each worksheet link and its independent native metadata through the Calc Worker document graph.",
+    "responsibilities": [
+      "Transports each worksheet link and its independent native metadata through the Calc Worker document graph."
+    ],
+    "stackDivergence": {
+      "kind": "local-infrastructure",
+      "rationale": "Structured Worker transport of linked worksheet metadata."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/browser/filter/xml/calc-sheet-link-codec.ts",
+          "marker": "encodeSheetLink"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-sheet-links.test.ts",
+          "marker": "tdf157897_main.ods"
+        }
+      ],
+      "upstream": []
+    }
+  }
+}

@@ -11,9 +11,29 @@ import type { ScTable } from "../../../inc/table";
 import type { ScDocument } from "../../../inc/document";
 import type { RefUpdateContext } from "../../../inc/refupdatecontext";
 import { ScRange } from "../../../inc/address";
-import { UpdateRefMode } from "../../../inc/global";
+import { type ScLinkMode, UpdateRefMode } from "../../../inc/global";
 import { CRFlags } from "../../../inc/global";
+import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { ScHorizontalCellIterator } from "./dociter";
+
+/** Updates the native source fields and invalidates the sheet stream. @param this - Linked sheet. @param mode - Native mode. @param doc - Source workbook. @param filter - Native filter. @param options - Filter options. @param tab - Name in the source workbook. @param delay - Refresh seconds. @returns Nothing. */
+export function SetLink(
+  this: ScTable,
+  mode: ScLinkMode,
+  doc: OUStringConstReference,
+  filter: OUStringConstReference,
+  options: OUStringConstReference,
+  tab: OUStringConstReference,
+  delay: number,
+): void {
+  this["nLinkMode"] = mode;
+  this["aLinkDoc"].assign(doc);
+  this["aLinkFlt"].assign(filter);
+  this["aLinkOpt"].assign(options);
+  this["aLinkTab"].assign(tab);
+  this["nLinkRefreshDelay"] = delay;
+  this.SetStreamValid(false);
+}
 
 /** Shrinks the source rectangle to actual cell data, with optional sticky leading edges. @param this - Native sheet. @param shrunk - Whether the input bounds changed. @param startCol - First column. @param startRow - First row. @param endCol - Last column. @param endRow - Last row. @param columnsOnly - Preserve row bounds after clamping. @param stickyTopRow - Keep the leading row. @param stickyLeftCol - Keep the leading column. @returns Whether the adjusted area contains data. */
 export function ShrinkToUsedDataArea(

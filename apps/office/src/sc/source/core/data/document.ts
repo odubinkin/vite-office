@@ -384,6 +384,15 @@ export class ScDocument {
   GetGrammar(): Grammar {
     return this.eGrammar;
   }
+  IsLinked = documen3.IsLinked;
+  GetLinkMode = documen3.GetLinkMode;
+  GetLinkDoc = documen3.GetLinkDoc;
+  GetLinkFlt = documen3.GetLinkFlt;
+  GetLinkOpt = documen3.GetLinkOpt;
+  GetLinkTab = documen3.GetLinkTab;
+  GetLinkRefreshDelay = documen3.GetLinkRefreshDelay;
+  SetLink = documen3.SetLink;
+
   /** Original documen3 reference-convention query. @returns Stored grammar's reference convention. */
   GetAddressConvention(): ReturnType<typeof documen3.GetAddressConvention> {
     return documen3.GetAddressConvention.call(this);

@@ -8276,3 +8276,16 @@ import, export and explicit-setting behavior.
 
 - [Original ODS fallback](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlimprt.cxx#L1339)
 - [Original configuration setter and getter](../../vendor/libreoffice-reference/sc/source/ui/unoobj/confuno.cxx#L384)
+
+### CALC-864 — Sheets linked to the same file can share the first sheet's export settings
+
+Calc retains each sheet's filter name, options and refresh delay. During
+normal link registration, it creates one sheet link per file URL. Export
+looks up that shared link by URL, so the first connected sheet can supply
+its filter name, options and delay for later sheets even when those sheets
+carry different values. The individual link mode and source sheet name
+still come from the sheet being saved. Calc preserves this ordering for
+ODS persistence.
+
+- [Original registration and duplicate detection](../../vendor/libreoffice-reference/sc/source/ui/docshell/docsh6.cxx#L318)
+- [Original linked-sheet ODS export](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlexprt.cxx#L4077)

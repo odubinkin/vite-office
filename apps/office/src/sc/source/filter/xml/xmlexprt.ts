@@ -1,4 +1,7 @@
 /** @fileoverview Scalar ScXMLExport content path over actual row-major document cells and native ODFF serialization. */
+import { convertDaysToDuration } from "../../../../sax/source/tools/converter.duration";
+import { GetSheetLinkByName } from "../../ui/unoobj/linkuno";
+import { ScLinkMode } from "../../../inc/global";
 import { ScDocumentConfiguration } from "../../ui/unoobj/confuno";
 import { SfxUInt32Item } from "../../../../svl/source/items/intitem";
 import { ATTR_VALIDDATA } from "../../../inc/scitems";
@@ -141,6 +144,25 @@ export class ScXMLExport {
   /** Returns the original configuration property vector for the settings stream. @returns Owned workbook properties. */
   GetConfigurationSettings(): ConfigurationProperties {
     return SvXMLUnitConverter.convertPropertySet(new ScDocumentConfiguration(this.document));
+  }
+
+  /** Writes the original linked-sheet source independently of formula caches. @param table - Native sheet. @returns Optional ODF table-source element. */
+  private WriteTableSource(table: ScTable): string {
+    if (!table.IsLinked() || table.GetLinkDoc().isEmpty()) return "";
+    const settings = GetSheetLinkByName(this.document, table.GetLinkDoc());
+    if (!settings) return "";
+    const name = text(table.GetLinkTab());
+    const href = text(settings.GetLinkDoc());
+    const filter = text(settings.GetLinkFlt());
+    const options = text(settings.GetLinkOpt());
+    const delay = settings.GetLinkRefreshDelay();
+    let attributes = ` xlink:type="simple" xlink:href="${escapeXml(href)}"`;
+    if (name) attributes += ` table:table-name="${escapeXml(name)}"`;
+    if (filter) attributes += ` table:filter-name="${escapeXml(filter)}"`;
+    if (options) attributes += ` table:filter-options="${escapeXml(options)}"`;
+    if (table.GetLinkMode() === ScLinkMode.VALUE) attributes += ' table:mode="copy-results-only"';
+    if (delay) attributes += ` table:refresh-delay="${convertDaysToDuration(delay / 86400)}"`;
+    return `<table:table-source${attributes}/>`;
   }
 
   /** Registers direct font-height pattern data in the automatic-style pool. @param pattern - Real cell pattern. @returns Style name or empty default. */
@@ -336,6 +358,7 @@ export class ScXMLExport {
         styleAttribute = ` table:style-name="${style.name}"`;
       }
       body += `<table:table table:name="${escapeXml(text(name))}"${styleAttribute}${protectionAttributes}${print}>`;
+      body += this.WriteTableSource(table);
       name.dispose();
       if (protection?.isProtected()) body += writeTableProtectionOptions(protection);
       const outline = table.GetOutlineTable();
