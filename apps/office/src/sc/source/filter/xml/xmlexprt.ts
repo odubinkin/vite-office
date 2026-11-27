@@ -283,6 +283,8 @@ export class ScXMLExport {
     tableProtection: ReadonlyMap<Readonly<ScTableProtection>, string> = new Map(),
   ): string {
     this.fontPool = new XMLFontAutoStylePool();
+    if (this.document.IsEmbedFonts())
+      for (const font of this.document.GetEmbeddedFonts()) this.fontPool.AddEmbedded(font);
     this.textStyles = new CellTextStylePool(this.document, this.fontPool);
     for (const which of [100, 111, 116]) {
       const font = (this.document.GetPool() as ScDocumentPool).GetUserOrPoolDefaultItem(

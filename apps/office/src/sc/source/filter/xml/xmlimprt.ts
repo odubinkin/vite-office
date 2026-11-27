@@ -484,10 +484,13 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
       ),
     );
   }
-  /** Diagnoses the currently unported embedded-font package resource path. @param font - Original shared declaration. @returns Nothing. */
+  /** Registers the original declaration before the package wrapper reads its bytes. @param font - Shared declaration. */
   registerEmbeddedFont(font: OdfEmbeddedFont): void {
-    void font;
-    this.unsupported("embedded font resources are not preserved");
+    this.document.RegisterEmbeddedFont(font);
+  }
+  /** Applies the original Calc notification after a font has been admitted. */
+  NotifyContainsEmbeddedFont(): void {
+    this.document.SetEmbedFonts(true);
   }
   /** Borrows one actual declared font item. @param name - ODF reference. @returns Font or absent. */
   GetFontFace(name: string): SvxFontItem | undefined {

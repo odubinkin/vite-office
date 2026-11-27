@@ -1,5 +1,9 @@
 /** @fileoverview Native document modes, consumed pooled resources and scalar/local-reference storage, attributes and formula tracking. Full construction, formatter and shell services remain unported. */
 import { ScDetectiveRefIter } from "./formulaiter";
+import {
+  OdfFontResources,
+  type OdfFontResource,
+} from "../../../../package/source/zippackage/odf-font-resources";
 import type { ScConsolidateParam } from "./global2";
 import { DocumentLinkManager } from "../../ui/docshell/documentlinkmgr";
 import type { LinkManager } from "../../../../sfx2/source/appl/linkmgr2";
@@ -75,6 +79,66 @@ import { ScPrintRangeSaver } from "../tool/prnsave";
 import { ScRangeName } from "../tool/rangenam";
 /** Explicit initial document subset;all supported cells live in its actual sheet/column chain. */
 export class ScDocument {
+  private readonly embeddedFonts = new OdfFontResources();
+  private mbEmbedFonts = false;
+  private mbEmbedUsedFontsOnly = false;
+  private mbEmbedFontScriptLatin = true;
+  private mbEmbedFontScriptAsian = true;
+  private mbEmbedFontScriptComplex = true;
+
+  /** Reads original embedding setting. @returns Whether enabled. */
+  IsEmbedFonts(): boolean {
+    return this.mbEmbedFonts;
+  }
+  /** Assigns original embedding setting. @param value - Whether enabled. */
+  SetEmbedFonts(value: boolean): void {
+    this.mbEmbedFonts = value;
+  }
+  /** Reads original used-font setting. @returns Whether used fonts are selected. */
+  IsEmbedUsedFontsOnly(): boolean {
+    return this.mbEmbedUsedFontsOnly;
+  }
+  /** Assigns original used-font setting. @param value - Whether used fonts are selected. */
+  SetEmbedUsedFontsOnly(value: boolean): void {
+    this.mbEmbedUsedFontsOnly = value;
+  }
+  /** Reads the Latin script selection. @returns Script flag. */
+  IsEmbedFontScriptLatin(): boolean {
+    return this.mbEmbedFontScriptLatin;
+  }
+  /** Assigns the Latin script selection. @param value - Script flag. */
+  SetEmbedFontScriptLatin(value: boolean): void {
+    this.mbEmbedFontScriptLatin = value;
+  }
+  /** Reads the Asian script selection. @returns Script flag. */
+  IsEmbedFontScriptAsian(): boolean {
+    return this.mbEmbedFontScriptAsian;
+  }
+  /** Assigns the Asian script selection. @param value - Script flag. */
+  SetEmbedFontScriptAsian(value: boolean): void {
+    this.mbEmbedFontScriptAsian = value;
+  }
+  /** Reads the complex script selection. @returns Script flag. */
+  IsEmbedFontScriptComplex(): boolean {
+    return this.mbEmbedFontScriptComplex;
+  }
+  /** Assigns the complex script selection. @param value - Script flag. */
+  SetEmbedFontScriptComplex(value: boolean): void {
+    this.mbEmbedFontScriptComplex = value;
+  }
+  /** Claims an existing package font declaration. @param font - Original declaration. */
+  RegisterEmbeddedFont(font: OdfFontResource): void {
+    this.embeddedFonts.Register(font);
+  }
+  /** Attaches validated package font bytes. @param path - Original package entry. @param bytes - Binary font. @param canLoad - Viewing permission. */
+  SetEmbeddedFontBytes(path: string, bytes: Uint8Array, canLoad: boolean): void {
+    this.embeddedFonts.SetBytes(path, bytes, canLoad);
+  }
+  /** Copies the stored package font records. @returns Independent font catalogue. */
+  GetEmbeddedFonts(): readonly OdfFontResource[] {
+    return this.embeddedFonts.GetFonts();
+  }
+
   readonly documentProperties = new SfxDocumentProperties();
   GetCondResult = documen4.GetCondResult;
   GetCondColor = documen4.GetCondColor;

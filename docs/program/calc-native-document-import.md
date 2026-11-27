@@ -50,3 +50,15 @@ Full style/Latin-format hints, matrix/data-table/merge/visibility import,
 outline/cache finalization, workbook buffers and complete XLSX/DOCX filter/UI
 acceptance remain required. This checkpoint does not certify full import-owner,
 workbook or native ABI parity.
+
+## ODS package fonts
+
+Calc reads font-face declarations through the shared xmloff context and attaches
+font bytes after the same path, manifest, size and OpenType checks used by
+Writer. The document owns the package resource records and the five native
+embedding configuration flags. Successful resource import enables embedding.
+With embedding enabled, ODS save writes the retained font-specific declarations,
+font streams and manifest entries. The Worker retains the flags and validated
+bytes. The browser package path covers fonts already in the document. Native
+system font discovery and collection of used fonts by script remain outside
+this path.

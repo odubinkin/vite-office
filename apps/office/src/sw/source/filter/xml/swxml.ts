@@ -2,6 +2,7 @@
  * @fileoverview Reimplements the bounded SwXMLReader package orchestration from pinned LibreOffice `sw/source/filter/xml/swxml.cxx`.
  */
 
+import { readOdfFontResources } from "../../../../package/source/zippackage/odf-font-resources";
 import { initializeLibXml2 } from "../../../../external/libxml2/libxml2";
 import { importDocumentMetaXml } from "../../../../xmloff/source/meta/xmlmetai";
 import { SfxDocumentProperties } from "../../../../sfx2/source/doc/sfxbasemodel";
@@ -138,58 +139,22 @@ export class SwXMLReader {
       properties?.Dispose();
     }
     try {
-      let totalFontBytes = 0;
-      for (const font of imported.document.GetEmbeddedFonts()) {
-        checkpoint(control, "mapping");
-        if (
-          !/^Fonts\/(?!.*(?:\.\.|\/\/))[^\\?#]+$/u.test(font.path) ||
-          font.path.startsWith("Fonts//")
-        )
-          throw new Error(`ODF embedded font path is invalid: ${font.path}`);
-        if (!names.includes(font.path))
-          throw new Error(`ODF embedded font package entry is missing: ${font.path}`);
-        if (
-          manifest.get(font.path) !== "application/x-font-ttf" &&
-          manifest.get(font.path) !== "application/vnd.ms-opentype"
-        )
-          throw new Error(`ODF embedded font manifest entry is invalid: ${font.path}`);
-        const fontBytes = await packageFile.readEntry(font.path);
-        totalFontBytes += fontBytes.length;
-        if (fontBytes.length > 4 * 1024 * 1024 || totalFontBytes > 16 * 1024 * 1024)
-          throw new Error("ODF embedded fonts exceed size limit.");
-        imported.document.SetEmbeddedFontBytes(
-          font.path,
-          fontBytes,
-          isViewableOpenTypeFont(fontBytes),
-        );
-      }
+      const fonts = await readOdfFontResources(
+        imported.document.GetEmbeddedFonts(),
+        names,
+        manifest,
+        packageFile.readEntry.bind(packageFile),
+        /** Keeps the original Writer import progress checkpoint. */ () =>
+          checkpoint(control, "mapping"),
+      );
+      for (const font of fonts)
+        imported.document.SetEmbeddedFontBytes(font.path, font.bytes, font.canLoad);
       return imported;
     } catch (error) {
       imported.document.Dispose();
       throw error;
     }
   }
-}
-
-/** Checks OpenType structure and OS/2 embedding rights before browser font loading. @param bytes - Package font bytes. @returns Whether viewing is permitted. */
-function isViewableOpenTypeFont(bytes: Uint8Array): boolean {
-  if (bytes.length < 12) throw new Error("ODF embedded font is invalid.");
-  const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
-  const signature = view.getUint32(0, false);
-  if (signature !== 0x00010000 && signature !== 0x4f54544f)
-    throw new Error("ODF embedded font format is invalid.");
-  const tableCount = view.getUint16(4, false);
-  if (12 + tableCount * 16 > bytes.length) throw new Error("ODF embedded font tables are invalid.");
-  for (let index = 0; index < tableCount; index += 1) {
-    const offset = 12 + index * 16;
-    if (view.getUint32(offset, false) !== 0x4f532f32) continue;
-    const tableOffset = view.getUint32(offset + 8, false);
-    const tableLength = view.getUint32(offset + 12, false);
-    if (tableOffset + tableLength > bytes.length || tableLength < 10)
-      throw new Error("ODF embedded font rights table is invalid.");
-    return (view.getUint16(tableOffset + 8, false) & 0x0002) === 0;
-  }
-  return false;
 }
 
 /** Convenience ODT import boundary. @param bytes - Complete ODT bytes. @param metadata - Caller document identity. @param limits - Optional ZIP ceilings. @param control - Cooperative progress/cancellation controls. @returns Canonical SwDoc. */

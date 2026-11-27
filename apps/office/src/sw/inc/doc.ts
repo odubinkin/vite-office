@@ -1,4 +1,5 @@
 /** @fileoverview Native document public numbering-mode contract from doc.hxx and existing browser construction/font-ingress type declarations. Host-only option and package-font records do not claim native scalar/ABI parity. */
+import type { OdfFontResource } from "../../package/source/zippackage/odf-font-resources";
 import type { DefaultFontDevice } from "../source/core/doc/default-font";
 /** Construction policy for locale/device-dependent Writer defaults. */
 export interface SwDocOptions {
@@ -14,17 +15,8 @@ export enum SetNumRuleMode {
   ResetIndentAttrs = 4,
   DontSetIfAlreadyApplied = 8,
 }
-/** One package-backed Writer font face; bytes are attached only after manifest and ZIP validation. */
-export interface WriterEmbeddedFont {
-  readonly faceName: string;
-  readonly familyName: string;
-  readonly path: string;
-  readonly format: string;
-  readonly weight: "normal" | "bold";
-  readonly style: "normal" | "italic";
-  readonly bytes?: Uint8Array;
-  readonly canLoad?: boolean;
-}
+/** One package-backed Writer face, with the shared ODF package resource contract. */
+export type WriterEmbeddedFont = OdfFontResource;
 
 /** Original ThemeFontLangProps document interoperability values. */
 export interface ThemeFontLanguages {

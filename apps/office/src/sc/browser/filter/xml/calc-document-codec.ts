@@ -1,3 +1,7 @@
+import {
+  isOdfFontBytes,
+  type OdfFontResource,
+} from "../../../../package/source/zippackage/odf-font-resources";
 import { ScAreaLink } from "../../../source/ui/docshell/arealink";
 import {
   decodeCalcAreaLink,
@@ -302,6 +306,14 @@ function decodeDrawingGrid(input: DrawingGrid): ScGridOptions {
 
 /** Ephemeral transport, never persisted instead of XML. */
 export interface CalcDocumentRecord {
+  readonly fontEmbedding?: readonly [
+    enabled: boolean,
+    usedOnly: boolean,
+    latin: boolean,
+    asian: boolean,
+    complex: boolean,
+  ];
+  readonly embeddedFonts?: readonly OdfFontResource[];
   readonly consolidation?: CalcConsolidationRecord;
   readonly documentMetaXml?: string;
   readonly version: 1;
@@ -707,6 +719,14 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
   const validations = encodeCalcValidations(document);
   const documentMetaXml = document.documentProperties.GetTransferXml();
   const consolidation = document.GetConsolidateDlgData();
+  const embeddedFonts = document.GetEmbeddedFonts();
+  const fontEmbedding = [
+    document.IsEmbedFonts(),
+    document.IsEmbedUsedFontsOnly(),
+    document.IsEmbedFontScriptLatin(),
+    document.IsEmbedFontScriptAsian(),
+    document.IsEmbedFontScriptComplex(),
+  ] as const;
   const areaLinks: CalcAreaLinkRecord[] = [];
   for (const link of document.GetDocLinkManager().getExistingLinkManager()?.GetLinks() ?? []) {
     if (link instanceof ScAreaLink) areaLinks.push(encodeCalcAreaLink(link));
@@ -714,6 +734,14 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
   }
   return {
     version: 1,
+    ...(fontEmbedding[0] ||
+    fontEmbedding[1] ||
+    !fontEmbedding[2] ||
+    !fontEmbedding[3] ||
+    !fontEmbedding[4]
+      ? { fontEmbedding }
+      : {}),
+    ...(embeddedFonts.length ? { embeddedFonts } : {}),
     ...(consolidation === undefined ? {} : { consolidation: encodeConsolidation(consolidation) }),
     ...(documentMetaXml === undefined ? {} : { documentMetaXml }),
     ...(FormulaGrammar.isPODF(document.GetStorageGrammar())
@@ -811,6 +839,34 @@ function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
   let complete = false;
   document.SetAutoCalc(false);
   try {
+    if (record.fontEmbedding !== undefined) {
+      if (
+        !Array.isArray(record.fontEmbedding) ||
+        record.fontEmbedding.length !== 5 ||
+        !record.fontEmbedding.every((value) => typeof value === "boolean")
+      )
+        throw new Error("Calc worker font embedding settings are invalid.");
+      const [enabled, usedOnly, latin, asian, complex] = record.fontEmbedding;
+      document.SetEmbedFonts(enabled);
+      document.SetEmbedUsedFontsOnly(usedOnly);
+      document.SetEmbedFontScriptLatin(latin);
+      document.SetEmbedFontScriptAsian(asian);
+      document.SetEmbedFontScriptComplex(complex);
+    }
+    if (record.embeddedFonts !== undefined && !Array.isArray(record.embeddedFonts))
+      throw new Error("Calc worker embedded font catalogue is invalid.");
+    for (const font of record.embeddedFonts ?? []) {
+      if (
+        !font ||
+        typeof font.path !== "string" ||
+        typeof font.familyName !== "string" ||
+        typeof font.faceName !== "string" ||
+        typeof font.format !== "string" ||
+        (font.bytes !== undefined && !isOdfFontBytes(font.bytes))
+      )
+        throw new Error("Calc worker embedded font is invalid.");
+      document.RegisterEmbeddedFont(font);
+    }
     if (record.autoCalculate !== undefined && typeof record.autoCalculate !== "boolean")
       throw new Error("Calc worker AutoCalculate state is invalid.");
     if (record.stringRefSyntax !== undefined) {

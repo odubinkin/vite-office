@@ -1,4 +1,5 @@
 /** @fileoverview Internal canonical Writer graph codec used behind boundary-specific envelopes. */
+import { isOdfFontBytes } from "../../../../package/source/zippackage/odf-font-resources";
 import {
   decodeRedlineSections,
   encodeRedlineSections,
@@ -547,7 +548,7 @@ export function* decodeWriterDocumentSteps(
         typeof font.faceName !== "string" ||
         typeof font.familyName !== "string" ||
         typeof font.format !== "string" ||
-        (font.bytes !== undefined && !(font.bytes instanceof Uint8Array))
+        (font.bytes !== undefined && !isOdfFontBytes(font.bytes))
       )
         throw new Error("Stored Writer embedded font is invalid.");
       document.RegisterEmbeddedFont(font);

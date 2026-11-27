@@ -32,12 +32,23 @@ const rasterProperties = [
 /** The original raster property names stored in both the view and configuration groups. */
 type RasterProperty = (typeof rasterProperties)[number];
 
+const fontOptions = [
+  ["EmbedFonts", ["IsEmbedFonts", "SetEmbedFonts"]],
+  ["EmbedOnlyUsedFonts", ["IsEmbedUsedFontsOnly", "SetEmbedUsedFontsOnly"]],
+  ["EmbedLatinScriptFonts", ["IsEmbedFontScriptLatin", "SetEmbedFontScriptLatin"]],
+  ["EmbedAsianScriptFonts", ["IsEmbedFontScriptAsian", "SetEmbedFontScriptAsian"]],
+  ["EmbedComplexScriptFonts", ["IsEmbedFontScriptComplex", "SetEmbedFontScriptComplex"]],
+] as const;
+/** Original ScDocumentConfiguration properties backed by per-document font flags. */
+const configurationFontOptions = new Map<string, (typeof fontOptions)[number][1]>(fontOptions);
+
 const configurationProperties = new Set([
   ...configurationViewOptions.keys(),
   "GridColor",
   ...rasterProperties,
   "AutoCalculate",
   "SyntaxStringRef",
+  ...configurationFontOptions.keys(),
 ]);
 const address = FormulaGrammar.AddressConvention;
 
@@ -129,6 +140,8 @@ export class ScDocumentConfiguration {
     if (flag !== undefined) return new Any(options.GetOption(flag));
     if (name === "GridColor") return ColorToAny(options.GetGridColor());
     if (name === "AutoCalculate") return new Any(this.document.GetAutoCalc());
+    const fontOption = configurationFontOptions.get(name);
+    if (fontOption) return new Any(this.document[fontOption[0]]());
     if (name === "SyntaxStringRef") {
       const config = this.document.GetCalcConfig();
       const convention =
@@ -147,7 +160,9 @@ export class ScDocumentConfiguration {
   setPropertyValue(name: string, value: Any): void {
     const options = this.document.GetViewOptions();
     const flag = configurationViewOptions.get(name);
+    const fontOption = configurationFontOptions.get(name);
     if (flag !== undefined) options.SetOption(flag, getBool(value));
+    else if (fontOption) this.document[fontOption[1]](getBool(value));
     else if (name === "GridColor") {
       const color = new Color();
       if (extractColor(value, color)) options.SetGridColor(color);

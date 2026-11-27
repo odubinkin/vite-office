@@ -1,4 +1,5 @@
 /** @fileoverview Implements the Writer SwDoc aggregate from pinned LibreOffice `sw/inc/doc.hxx` and `sw/source/core/doc/docnew.cxx`. */
+import { OdfFontResources } from "../../../../package/source/zippackage/odf-font-resources";
 import { DocumentRedlineManager } from "./DocumentRedlineManager";
 import { SfxDocumentProperties } from "../../../../sfx2/source/doc/sfxbasemodel";
 import { InsertTableOf } from "./doctxm";
@@ -321,7 +322,7 @@ export class SwDoc {
   private readonly locale: string;
   private lineNumberInfo = new SwLineNumberInfo();
   private readonly pageDescs: SwPageDesc[];
-  private readonly embeddedFonts = new Map<string, WriterEmbeddedFont>();
+  private readonly embeddedFonts = new OdfFontResources();
   private readonly bitmapTable = new Map<string, XFillBitmapItem>();
   public readonly nodes: SwNodes;
   private readonly toxTypes = [
@@ -384,31 +385,15 @@ export class SwDoc {
   }
   /** Registers one package font resource by path; distinct declaration face names may alias the same resource, as in native fontFilesMap. @param font - Declared face and package path. @returns Nothing. */
   public RegisterEmbeddedFont(font: WriterEmbeddedFont): void {
-    const existing = this.embeddedFonts.get(font.path);
-    if (existing !== undefined) {
-      if (
-        existing.familyName !== font.familyName ||
-        existing.weight !== font.weight ||
-        existing.style !== font.style ||
-        existing.format !== font.format
-      )
-        throw new Error(`Conflicting ODF embedded font: ${font.path}`);
-      return;
-    }
-    this.embeddedFonts.set(font.path, { ...font });
+    this.embeddedFonts.Register(font);
   }
-  /** Attaches validated package bytes and embedding permission. @param path - ZIP entry name. @param bytes - Bounded font data. @param canLoad - Whether the font permits viewing. @returns Nothing. */
+  /** Attaches validated package bytes and embedding permission. @param path - ZIP entry name. @param bytes - Bounded font data. @param canLoad - Whether the font permits viewing. */
   public SetEmbeddedFontBytes(path: string, bytes: Uint8Array, canLoad: boolean): void {
-    const declared = this.embeddedFonts.get(path);
-    if (declared === undefined) throw new Error(`Unknown ODF embedded font: ${path}`);
-    this.embeddedFonts.set(path, { ...declared, bytes: bytes.slice(), canLoad });
+    this.embeddedFonts.SetBytes(path, bytes, canLoad);
   }
   /** Returns independent package font records for export, transfer, and browser loading. @returns Font records. */
   public GetEmbeddedFonts(): readonly WriterEmbeddedFont[] {
-    return [...this.embeddedFonts.values()].map(
-      /** Protects document-owned bytes. @param font - Stored font. @returns Independent record. */
-      (font) => ({ ...font, ...(font.bytes === undefined ? {} : { bytes: font.bytes.slice() }) }),
-    );
+    return this.embeddedFonts.GetFonts();
   }
   /** Returns the document-owned named drawing bitmaps. @returns Bitmap table. */
   public GetBitmapTable(): ReadonlyMap<string, XFillBitmapItem> {

@@ -1,4 +1,5 @@
 /** @fileoverview Calc browser-byte composition for native XML import/export wrapper responsibilities over shared ZIP/manifest services. */
+import { readOdfFontResources } from "../../../../package/source/zippackage/odf-font-resources";
 import { initializeLibXml2 } from "../../../../external/libxml2/libxml2";
 import {
   importDocumentMetaXml,
@@ -77,6 +78,13 @@ export class ScXMLImportWrapper {
             getEntryNames:
               /** Reads or measures an unpacked Calc XML stream.  @returns Operation result. */ () =>
                 Object.keys(bytes.files),
+            /** Reads an unpacked package resource. @param name - Package path. @returns Binary resource. */
+            async readEntry(name: string): Promise<Uint8Array> {
+              const value = bytes.files[name];
+              if (!(value instanceof Uint8Array))
+                throw new Error(`Missing ODS binary resource: ${name}`);
+              return value;
+            },
             readTextEntry:
               /** Reads or measures an unpacked Calc XML stream. @param name - name. @returns Operation result. */ async (
                 name: string,
@@ -131,6 +139,20 @@ export class ScXMLImportWrapper {
     const content = await zip.readTextEntry("content.xml");
     if (names.includes("styles.xml")) importer.importStyles(await zip.readTextEntry("styles.xml"));
     importer.importContent(content);
+    const fonts = await readOdfFontResources(
+      this.document.GetEmbeddedFonts(),
+      names,
+      metadata.streamMediaTypes,
+      zip.readEntry.bind(zip),
+      /** Checks cancellation while reading package resources. */
+      () => {
+        if (options.isCancelled?.()) throw new Error("ODS operation was cancelled");
+      },
+    );
+    for (const font of fonts) {
+      this.document.SetEmbeddedFontBytes(font.path, font.bytes, font.canLoad);
+      importer.NotifyContainsEmbeddedFont();
+    }
     if (views !== undefined) ReadUserDataSequence(this.document, views);
   }
   /** Writes an external ODS package. @param options - Controls. @returns Package bytes. */
@@ -154,14 +176,15 @@ export class ScXMLImportWrapper {
       importDocumentMetaXml(transferMeta, properties.LoadFromDocument.bind(properties), options);
     const native = properties.GetDocumentProperties();
     prepareDocumentMetaExport(native, native.m_xDoc);
+    const fonts = this.document.IsEmbedFonts() ? this.document.GetEmbeddedFonts() : [];
     const exporter = new ScXMLExport(this.document, options),
       content = exporter.exportContent(tableProtection),
       styles = exporter.exportStyles(),
       views = WriteUserDataSequence(this.document),
-      files: Record<string, string> = {},
+      files: Record<string, string | Uint8Array> = {},
       zip = {
         /** Retains one unpacked stream. @param name - Path. @param value - Text. @returns Nothing. */
-        putNextEntry(name: string, value: string) {
+        putNextEntry(name: string, value: string | Uint8Array) {
           files[name] = value;
         },
       };
@@ -192,6 +215,13 @@ export class ScXMLImportWrapper {
         ["FullPath", "settings.xml"],
         ["MediaType", "text/xml"],
       ],
+      ...fonts.map(
+        /** Uses the original xmloff font manifest media type. @param font - Embedded font. @returns Native manifest fields. */
+        (font) => [
+          ["FullPath", font.path],
+          ["MediaType", "application/x-font-ttf"],
+        ],
+      ),
     ].map(
       /** Builds actual native PropertyValue sequences. @param properties - Fields. @returns Sequence. */ (
         properties,
@@ -207,6 +237,10 @@ export class ScXMLImportWrapper {
     zip.putNextEntry("content.xml", content);
     zip.putNextEntry("meta.xml", properties.GetTransferXml() as string);
     if (styles) zip.putNextEntry("styles.xml", styles);
+    for (const font of fonts) {
+      if (!font.bytes) throw new Error(`ODF embedded font bytes are missing: ${font.path}`);
+      zip.putNextEntry(font.path, font.bytes);
+    }
     const configuration = exporter.GetConfigurationSettings();
     try {
       zip.putNextEntry(
@@ -220,7 +254,8 @@ export class ScXMLImportWrapper {
       /** Reads or measures an unpacked Calc XML stream. @param sum - sum. @param value - value. @returns Operation result. */ (
         sum,
         value,
-      ) => sum + new TextEncoder().encode(value).length,
+      ) =>
+        sum + (typeof value === "string" ? new TextEncoder().encode(value).length : value.length),
       0,
     );
     if (size > (options.maxOutputBytes ?? 64 * 1024 * 1024))

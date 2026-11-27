@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/package/source/zippackage/odf-font-resources.ts",
+    "classification": "local-infrastructure",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "document-lifecycle",
+    "capabilityIds": [
+      "CAP-aa9a7145-62c9-4e3c-9b22-4ba90b6833fa"
+    ],
+    "semantic": {
+      "behaviorStatus": "not-applicable",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/package/source/zippackage/odf-font-resources.ts",
+        "apps/office/src/sw/source/filter/xml/odt-embedded-fonts.test.ts",
+        "apps/office/src/sc/source/filter/xml/ods-embedded-fonts.test.ts"
+      ],
+      "justification": "Shares ODF stored fonts and browser package checks between Writer and Calc. Preserves validated font bytes and viewing permissions across the Worker.",
+      "knownViolations": [],
+      "localSymbols": [
+        "OdfFontResources",
+        "readOdfFontResources",
+        "isOdfFontBytes"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

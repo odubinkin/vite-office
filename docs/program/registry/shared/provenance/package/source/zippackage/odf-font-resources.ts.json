@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "local-infrastructure",
+    "localPath": "apps/office/src/package/source/zippackage/odf-font-resources.ts",
+    "status": "local-only",
+    "localSymbols": [
+      "OdfFontResources",
+      "readOdfFontResources",
+      "isOdfFontBytes"
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/package/source/zippackage/odf-font-resources.ts",
+          "marker": "OdfFontResources"
+        },
+        {
+          "path": "apps/office/src/package/source/zippackage/odf-font-resources.ts",
+          "marker": "readOdfFontResources"
+        },
+        {
+          "path": "apps/office/src/package/source/zippackage/odf-font-resources.ts",
+          "marker": "isOdfFontBytes"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-embedded-fonts.test.ts",
+          "marker": "Manbow"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-embedded-fonts.test.ts",
+          "marker": "embedded font"
+        }
+      ]
+    },
+    "rationale": "Shares ODF stored fonts and browser package checks between Writer and Calc. Preserves validated font bytes and viewing permissions across the Worker.",
+    "responsibilities": [
+      "Shares ODF stored fonts and browser package checks between Writer and Calc. Preserves validated font bytes and viewing permissions across the Worker."
+    ],
+    "stackDivergence": {
+      "kind": "local-infrastructure",
+      "rationale": "Browser package bytes and FontFace permission are adapted through existing ODF ZIP ingress."
+    }
+  }
+}
