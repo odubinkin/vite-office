@@ -1,10 +1,11 @@
 ---
 id: "202611271128-3A6WWR"
 title: "Verify the native Calc Styles menu in compact browser layouts"
-status: "DOING"
+result_summary: "Checked the native Calc Styles menu in the existing exact suffix scenarios."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "d863f65d694a3353985c403cbb3db9e4fd57db12"
   findings:
     - "The expected Calc root order now includes the pinned Styles menu, preserving every accessibility, keyboard and geometry check."
-commit: null
+commit:
+  hash: "d863f65d694a3353985c403cbb3db9e4fd57db12"
+  message: "🧪 3A6WWR verification: expect the native Calc Styles menu in overflow"
 comments:
   -
     author: "CODER"
     body: "Start: verify the pinned Calc Styles root through the existing menu overflow scenarios."
+  -
+    author: "CODER"
+    body: "Verified: all five existing menubar overflow cases passed on the original build."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Five Writer and Calc browser variants passed on the baseline build. Focused lint, formatting and diff checks passed."
+  -
+    type: "status"
+    at: "2026-11-27T11:30:52.501Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: all five existing menubar overflow cases passed on the original build."
 doc_version: 3
-doc_updated_at: "2026-11-27T11:30:27.368Z"
+doc_updated_at: "2026-11-27T11:30:52.501Z"
 doc_updated_by: "CODER"
 description: "Update the existing menu overflow acceptance to include the Calc Styles root from the pinned resource and verify all original desktop and compact menu reachability scenarios."
 sections:
