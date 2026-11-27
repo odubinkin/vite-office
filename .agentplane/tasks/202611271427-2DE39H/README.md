@@ -1,10 +1,11 @@
 ---
 id: "202611271427-2DE39H"
 title: "Preserve Calc external data area links through ODS"
-status: "DOING"
+result_summary: "Keep native external data area links through ODS and the Worker."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
     - "70cafce2f8b8fa30f58fda0fca6631fa9d55b6af"
   findings:
     - "CALC-867 through CALC-869 record the omitted-dimension rule, first registration selection and refresh metadata on repeated cells. The test fixture uses cached cells from its original content because unrelated native formula functions lie outside the current slice."
-commit: null
+commit:
+  hash: "70cafce2f8b8fa30f58fda0fca6631fa9d55b6af"
+  message: "🧩 2DE39H calc: preserve native external area ranges"
 comments:
   -
     author: "CODER"
     body: "Start: Match original Calc cell-range-source parsing, area-link registration and ODF writeback."
+  -
+    author: "CODER"
+    body: "Verified: The six worksheets and both original tdf124829 external data ranges retained their registration, dimensions, refresh delay and cached cells through the Calc Worker and ODS reopen."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Tests  40 passed (40). Pinned fixtures and focused static, dependency, provenance and registry checks passed."
+  -
+    type: "status"
+    at: "2026-11-27T15:24:48.541Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: The six worksheets and both original tdf124829 external data ranges retained their registration, dimensions, refresh delay and cached cells through the Calc Worker and ODS reopen."
 doc_version: 3
-doc_updated_at: "2026-11-27T15:20:22.107Z"
+doc_updated_at: "2026-11-27T15:24:48.545Z"
 doc_updated_by: "CODER"
 description: "Import and export Calc external data range definitions using native cell-range-source contexts, ScAreaLink ownership, destination ranges and original defaults. Preserve the cached worksheet cells, independent area and sheet link identity, and browser Worker transfer. Port the relevant pinned tdf124829 ODS case and verify sibling ODS link paths."
 sections:
