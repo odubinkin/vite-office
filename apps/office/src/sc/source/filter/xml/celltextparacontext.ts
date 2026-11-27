@@ -6,9 +6,8 @@ import {
   type FastAttributeList,
 } from "../../../../xmloff/source/core/xmlimp";
 import { XMLToken } from "../../../../xmloff/source/core/xmltoken";
-import type { ScXMLTableRowCellContext } from "./xmlcelli";
 import type { ScXMLImport } from "./xmlimprt";
-import type { CellTextField, CellTextSpan } from "./xmlexprt.celltext";
+import type { CellTextField, CellTextParagraph, CellTextSpan } from "./xmlexprt.celltext";
 import { SvxURLFormat } from "../../../../editeng/inc/flditem";
 
 /** Appends text with the active automatic character style in parser order. */
@@ -136,7 +135,10 @@ class ScXMLCellFieldContext extends SvXMLImportContext {
 export class ScXMLCellTextParaContext extends ScXMLCellTextSpanContext {
   /** Binds the cell that receives this paragraph. @param cell - Actual owning cell context. @returns Paragraph. */
   constructor(
-    private readonly cell: ScXMLTableRowCellContext,
+    private readonly cell: {
+      GetScImport(): ScXMLImport;
+      setParagraph(value: CellTextParagraph): void;
+    },
     tab: number,
   ) {
     super(cell.GetScImport(), [], tab, "", true);

@@ -1,0 +1,65 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/data/postit.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/data/postit.cxx",
+    "localSymbols": [
+      "ScPostIt",
+      "ScNoteUtil",
+      "NoteEntry"
+    ],
+    "upstreamSymbols": [
+      "ScPostIt::GetText",
+      "ScPostIt::AutoStamp",
+      "ScNoteUtil::CreateNoteFromString",
+      "ScNoteUtil::CreateNoteFromObjectData"
+    ],
+    "preservedResponsibilities": [
+      "Stores native author, date, session identity, visibility, and lazy simple or EditEngine caption contents. Transfers note ownership into the document column."
+    ],
+    "omittedResponsibilities": [
+      "The browser stores the edit text directly from caption initialization data. Native drawing caption creation and user-profile personalization are outside this scope."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/data/postit.ts",
+          "marker": "ScPostIt"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/postit.ts",
+          "marker": "ScNoteUtil"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/postit.ts",
+          "marker": "NoteEntry"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-cell-notes.test.ts",
+          "marker": "testCellNoteExportODS"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/postit.cxx",
+          "marker": "ScPostIt::GetText"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/postit.cxx",
+          "marker": "ScPostIt::AutoStamp"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/postit.cxx",
+          "marker": "ScNoteUtil::CreateNoteFromString"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/postit.cxx",
+          "marker": "ScNoteUtil::CreateNoteFromObjectData"
+        }
+      ]
+    }
+  }
+}

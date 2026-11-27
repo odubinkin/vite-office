@@ -1,4 +1,5 @@
-/** @fileoverview Original represented column storage, parsed input, owned edit/formula cells and broadcasting member groups; full construction, compute caches and note/sparkline services remain incomplete. */
+/** @fileoverview Original represented column storage, parsed input, owned edit/formula cells and broadcasting member groups; full construction, compute caches and sparkline services remain incomplete. */
+import { NoteEntry, type ScPostIt } from "../../../inc/postit";
 import { SetDirtyOnRangeHandler } from "./column.dirty";
 import {
   SetElementsToEmpty1,
@@ -28,6 +29,10 @@ import type { ScLineFlags, ScMergePatternState } from "../../../inc/attarray";
 import type { SvxBoxItem, SvxBoxInfoItem } from "../../../../editeng/source/items/frmitems";
 import {
   CellStoreType,
+  CellNoteStoreType,
+  cellnote_block,
+  cellnote_element_callbacks,
+  element_type_cellnote,
   element_type_empty,
   CellTextAttrStoreType,
   string_element_callbacks,
@@ -555,7 +560,7 @@ export class ScColumn extends ScColumnData {
     if (block.type !== element_type_empty) return false;
     return (last as number) < first + block.size - position.second;
   }
-  /** Original uncached occupancy overload;notes/drawing extras remain unported. @param row - Valid row. @returns Actual payload presence. */
+  /** Original uncached occupancy overload for cell contents. @param row - Valid row. @returns Actual payload presence. */
   HasDataAt(row: number): boolean {
     return this.maCells.get_type(row) !== element_type_empty;
   }
@@ -587,6 +592,7 @@ export class ScColumn extends ScColumnData {
   private mbEmptyBroadcastersPending = false;
   private readonly maBroadcasters: BroadcasterStoreType;
   private readonly maCells: CellStoreType;
+  private readonly maCellNotes: CellNoteStoreType;
   private readonly maCellTextAttrs: CellTextAttrStoreType;
   /** Creates empty stores spanning the document's actual row domain. @param rDocument - Owning document. @returns Column. */
   constructor(rDocument: ScDocument) {
@@ -594,6 +600,8 @@ export class ScColumn extends ScColumnData {
     this.maBroadcasters = new BroadcasterStoreType(rDocument.GetMaxRowCount());
     this.maCells = new CellStoreType(new CellStoreEvent(this));
     this.maCells.resize(rDocument.GetMaxRowCount());
+    this.maCellNotes = new CellNoteStoreType(new CellStoreEvent(this));
+    this.maCellNotes.resize(rDocument.GetMaxRowCount());
     this.maCellTextAttrs = new CellTextAttrStoreType(rDocument.GetMaxRowCount());
   }
   /** Updates native sheet identity in every real formula cell after sheet insertion. Formatting attributes remain a declared gap. @param tab - Sheet. @returns Nothing. */
@@ -614,6 +622,49 @@ export class ScColumn extends ScColumnData {
   GetCellStore(): CellStoreType {
     return this.maCells;
   }
+  /** Borrows the native note at a row. @param row - Cell row. @returns Note or null. */
+  GetCellNote(row: number): ScPostIt | null {
+    if (!this.rDocument.ValidRow(row)) return null;
+    const result: [ScPostIt | null] = [null];
+    this.maCellNotes.get(row, cellnote_element_callbacks, result);
+    return result[0];
+  }
+  /** Transfers note ownership into the independent column store. @param row - Cell row. @param note - Owned note or null to clear. */
+  SetCellNote(row: number, note: ScPostIt | null): void {
+    if (!this.rDocument.ValidRow(row)) {
+      note?.Dispose();
+      return;
+    }
+    if (this.GetCellNote(row) === note) return;
+    if (note) this.maCellNotes.set(row, note, cellnote_element_callbacks);
+    else this.maCellNotes.set_empty(row, row);
+  }
+  /** Deletes independent notes in the requested row span. @param position - Cached native note iterator. @param first - First row. @param last - Last row. */
+  DeleteCellNotes(position: ColumnBlockPosition, first: number, last: number): void {
+    if (!this.mnBlkCountCellNotes) return;
+    position.miCellNotePos = this.maCellNotes.set_empty(
+      position.miCellNotePos as NonNullable<ColumnBlockPosition["miCellNotePos"]>,
+      first,
+      last,
+    );
+  }
+  /** Collects actual note blocks, including rows with no scalar cell. @param notes - Native note entries. */
+  GetAllNoteEntries(notes: NoteEntry[]): void {
+    if (!this.mnBlkCountCellNotes) return;
+    for (
+      const block = this.maCellNotes.cbegin(), end = this.maCellNotes.cend();
+      !block.equals(end);
+      block.increment()
+    ) {
+      const { data, position, size, type } = block.get();
+      if (type !== element_type_cellnote) continue;
+      for (let offset = 0; offset < size; offset++) {
+        const note = cellnote_block.at(data as base_element_block, offset);
+        if (note)
+          notes.push(new NoteEntry(new ScAddress(this.nCol, position + offset, this.nTab), note));
+      }
+    }
+  }
   /** Original column2.cxx formula pointer lookup borrows the existing mdds data iterator at the row offset. The validated full-row-domain column store cannot return end();no malformed-store test state is manufactured for that defensive native guard. @param row - Requested row. @param size - Original full typed-block size output,including any prefix before the returned pointer. @returns Actual borrowed pointer position or null. */
   GetFormulaCellBlockAddress(
     row: number,
@@ -632,14 +683,16 @@ export class ScColumn extends ScColumnData {
     size[0] = block.size;
     return formula_block.data(block.data as base_element_block).advance(position.second);
   }
-  /** Original consumed const block-position initialization;note/sparkline stores are outside this scalar slice. @param position - Native position fields. @returns Nothing. */
+  /** Original consumed const block-position initialization;The sparkline store is outside this slice. @param position - Native position fields. @returns Nothing. */
   InitBlockPosition(position: ColumnBlockConstPosition | ColumnBlockPosition): void {
     if (position instanceof ColumnBlockPosition) {
       position.miCellPos = this.maCells.begin();
+      position.miCellNotePos = this.maCellNotes.begin();
       position.miCellTextAttrPos = this.maCellTextAttrs.begin();
       position.miBroadcasterPos = this.maBroadcasters.begin();
     } else {
       position.miCellPos = this.maCells.cbegin();
+      position.miCellNotePos = this.maCellNotes.cbegin();
       position.miCellTextAttrPos = this.maCellTextAttrs.cbegin();
     }
   }

@@ -1,4 +1,5 @@
 /** @fileoverview Bounded Calc worker transfer of supported native cells, sparse attributes and geometry; XML remains the durable format. */
+import { ScPostIt, type NoteEntry } from "../../../inc/postit";
 import { ScFormulaCell } from "../../../source/core/data/formulacell";
 import {
   decodeCalcIconSets,
@@ -102,6 +103,16 @@ type Cell =
   | readonly [col: number, row: number, kind: "text", value: string]
   | readonly [col: number, row: number, kind: "formula", value: string, cache?: FormulaCache]
   | readonly [col: number, row: number, kind: "edit", value: string | readonly CellTextParagraph[]];
+/** Metadata and either the simple or the original edit caption payload. */
+type CellNote = readonly [
+  col: number,
+  row: number,
+  author: string,
+  date: string,
+  shown: boolean,
+  text: string | readonly CellTextParagraph[],
+];
+
 /** Actual sparse pattern span; -1 selects the native default column. */
 type Pattern = readonly [
   col: number,
@@ -188,6 +199,7 @@ interface Sheet {
   readonly panes?: SheetPaneLayout;
   readonly optimalMinRowHeight?: number;
   readonly cells: Cell[];
+  readonly notes?: readonly CellNote[];
   readonly patterns: Pattern[];
   readonly merges?: [firstColumn: number, firstRow: number, lastColumn: number, lastRow: number][];
   readonly columns: [first: number, last: number, width: number, hidden: boolean][];
@@ -362,6 +374,9 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
     const pageStyle = table.GetPageStyle();
     const conditionalFormats = ExportConditionalFormat(document, table, true);
     const conditionalIconSets = encodeCalcIconSets(table);
+    const noteEntries: NoteEntry[] = [];
+    document.GetAllNoteEntries(tab, noteEntries);
+    const notes: CellNote[] = [];
     const sheet: Sheet = {
       ...(pageStyles.names.has(pageStyle) ? { pageStyle } : {}),
       ...(tabColor.equals(COL_AUTO) ? {} : { tabColor: tabColor.toUInt32() }),
@@ -401,12 +416,25 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
       ...(panes ? { panes } : {}),
       optimalMinRowHeight: table.GetOptimalMinRowHeight(),
       cells: [],
+      ...(noteEntries.length ? { notes } : {}),
       patterns: [],
       merges,
       columns: [],
       rows: [],
     };
     sheets.push(sheet);
+    for (const { maPos, mpNote } of noteEntries) {
+      const edit = mpNote.GetEditTextObject();
+      notes.push([
+        maPos.Col(),
+        maPos.Row(),
+        mpNote.GetAuthor(),
+        mpNote.GetDate(),
+        mpNote.IsCaptionShown(),
+        edit ? textStyles.collect(edit) : mpNote.GetText(),
+      ]);
+      yield;
+    }
     if (outline)
       for (const rows of [false, true]) {
         const axis = rows ? outline.GetRowArray() : outline.GetColArray();
@@ -974,6 +1002,27 @@ function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
       if (sheet.repeatColumns)
         table.SetRepeatColRange(decodePrintRange(sheet.repeatColumns, document));
       if (sheet.repeatRows) table.SetRepeatRowRange(decodePrintRange(sheet.repeatRows, document));
+      for (const [col, row, author, date, shown, value] of sheet.notes ?? []) {
+        if (
+          !document.ValidColRow(col, row) ||
+          !Number.isInteger(col) ||
+          !Number.isInteger(row) ||
+          typeof author !== "string" ||
+          typeof date !== "string" ||
+          typeof shown !== "boolean" ||
+          !(typeof value === "string" || Array.isArray(value))
+        )
+          throw new Error("Calc worker cell note is invalid.");
+        const position = new ScAddress(col, row, tab);
+        const note = new ScPostIt(
+          shown,
+          typeof value === "string" ? value : createCellEditText(importer, value),
+        );
+        note.SetAuthor(author);
+        note.SetDate(date);
+        document.SetNote(position, note);
+        yield;
+      }
       for (const record of sheet.cells) {
         if (record[2] === "matrix" || record[2] === "matrix-ref") {
           decodeMatrixCell(importer, tab, record);

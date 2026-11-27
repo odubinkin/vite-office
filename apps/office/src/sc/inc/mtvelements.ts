@@ -2,6 +2,7 @@
 import { MDDS_MTV_DEFINE_ELEMENT_CALLBACKS_PTR } from "../../external/mdds/include/mdds/multi_type_vector/macro.ts";
 import { SvtBroadcaster } from "../../svl/source/notify/broadcast";
 import type { SfxHint } from "../../svl/inc/hint";
+import type { ScPostIt } from "./postit";
 import type { ScFormulaCell } from "./formulacell";
 import type { EditTextObject } from "../../editeng/inc/editobj";
 import { CellStoreEvent, cell_store_event_value_ops } from "../source/core/data/mtvelements";
@@ -222,6 +223,36 @@ export const CellStoreType = Object.setPrototypeOf(
 /** Actual typed cell-store instance. */
 export type CellStoreType = InstanceType<typeof CellStoreType>;
 
+/** Native noncopyable note block owns each represented cell note. */
+export const cellnote_block = noncopyable_managed_element_block<ScPostIt>(element_type_cellnote, {
+  /** Releases the retained edit text. @param note - Removed note. */
+  delete(note) {
+    note.Dispose();
+  },
+});
+export const cellnote_element_callbacks = MDDS_MTV_DEFINE_ELEMENT_CALLBACKS_PTR(
+  element_type_cellnote,
+  null as ScPostIt | null,
+  cellnote_block,
+);
+const CellNoteTraits = {
+  ...default_traits,
+  event_func: CellStoreEvent,
+  block_funcs: element_block_funcs(cellnote_block),
+};
+const cell_note_constructor = (multi_type_vector<CellStoreEvent>).bind(
+  null,
+  CellNoteTraits,
+  cell_store_event_value_ops,
+);
+/** Shared native SoA note store, with independent note block counting. */
+export const CellNoteStoreType = Object.setPrototypeOf(
+  cell_note_constructor,
+  multi_type_vector,
+) as typeof cell_note_constructor & Omit<typeof multi_type_vector, "prototype">;
+/** Native note store instance. */
+export type CellNoteStoreType = InstanceType<typeof CellNoteStoreType>;
+
 /** Native broadcaster copy/semantic destruction. Dispose ends registrations and sends dying notifications; JS GC owns physical lifetime. */
 export const broadcaster_block = managed_element_block<SvtBroadcaster<SfxHint>>(
   element_type_broadcaster,
@@ -258,14 +289,16 @@ export const BroadcasterStoreType = Object.setPrototypeOf(
 /** Native broadcaster-store instance. */
 export type BroadcasterStoreType = InstanceType<typeof BroadcasterStoreType>;
 
-/** Consumed native ColumnBlockConstPosition fields;default iterator storage is uninitialized until the original InitBlockPosition operation. Note/sparkline cursor families remain unported. */
+/** Consumed native ColumnBlockConstPosition fields;default iterator storage is uninitialized until the original InitBlockPosition operation. The sparkline cursor remains unported. */
 export interface ColumnBlockConstPosition {
   miCellPos?: ReturnType<CellStoreType["cbegin"]>;
+  miCellNotePos?: ReturnType<CellNoteStoreType["cbegin"]>;
   miCellTextAttrPos?: ReturnType<CellTextAttrStoreType["cbegin"]>;
 }
-/** Original mutable block-position value;iterator members are uninitialized until InitBlockPosition,without dummy owners. Notes/sparklines remain unrepresented. */
+/** Original mutable block-position value;iterator members are uninitialized until InitBlockPosition,without dummy owners. Sparklines remain unrepresented. */
 export class ColumnBlockPosition {
   declare miCellPos?: ReturnType<CellStoreType["begin"]>;
+  declare miCellNotePos?: ReturnType<CellNoteStoreType["begin"]>;
   declare miCellTextAttrPos?: ReturnType<CellTextAttrStoreType["begin"]>;
   declare miBroadcasterPos?: ReturnType<BroadcasterStoreType["begin"]>;
 }

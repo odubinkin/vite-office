@@ -23,8 +23,11 @@ import type { ScTable } from "../../../inc/table";
 import { ScMatrixMode, type ScFormulaCell } from "../../../inc/formulacell";
 import type { SharedStringConstReference } from "../../../../svl/inc/sharedstring";
 import type { ScDocument } from "../../../inc/document";
-import { MAXCOL, MAXROW, ScAddress, ScRange, ScRefFlags } from "../../../inc/address";
-import { ScHorizontalCellIterator } from "../../../inc/dociter";
+import { MAXROW, ScAddress, ScRange, ScRefFlags } from "../../../inc/address";
+import { ScMyNotEmptyCellsIterator } from "./XMLExportIterator";
+import type { ScPostIt } from "../../../inc/postit";
+import { LANGUAGE_SYSTEM } from "../../../../i18nlangtag/inc/lang";
+import { NfIndexTableOffset } from "../../../../svl/inc/zforlist";
 import { CRFlags } from "../../../inc/global";
 import { CellType } from "../../../inc/global";
 import { FormulaGrammar } from "../../../../formula/inc/grammar";
@@ -42,7 +45,7 @@ import { DateTime } from "../../../../offapi/com/sun/star/util/DateTime";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { OUStringBuffer } from "../../../../sal/inc/rtl/ustrbuf";
 import { approxEqual } from "../../../../sal/inc/rtl/math";
-import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import type { ScRefCellValue } from "../../../inc/cellvalue";
 import type { ScPatternAttr } from "../../../inc/patattr";
 import { ATTR_VALUE_FORMAT } from "../../../inc/scitems";
@@ -328,7 +331,7 @@ export class ScXMLExport {
         columnGroups.GetLast(),
         columnBreaks.last,
       );
-      const bounds = new ScHorizontalCellIterator(this.document, tab, 0, 0, MAXCOL, MAXROW),
+      const bounds = new ScMyNotEmptyCellsIterator(this.document, tab),
         bc: [number] = [0],
         br: [number] = [0];
       while (bounds.GetNext(bc, br)) {
@@ -397,7 +400,7 @@ export class ScXMLExport {
         body += columnGroups.CloseGroups(stop);
         column = stop + 1;
       }
-      const iterator = new ScHorizontalCellIterator(this.document, tab, 0, 0, MAXCOL, MAXROW),
+      const iterator = new ScMyNotEmptyCellsIterator(this.document, tab),
         col: [number] = [0],
         row: [number] = [0];
       let cell = iterator.GetNext(col, row);
@@ -446,7 +449,8 @@ export class ScXMLExport {
           for (let column = range.first; column <= range.last;) {
             if (cell && row[0] === currentRow && col[0] === column) {
               body += this.exportCell(
-                cell,
+                iterator.cell,
+                iterator.note,
                 new ScAddress(column, currentRow, tab),
                 element,
                 attribute,
@@ -492,7 +496,7 @@ export class ScXMLExport {
       const hmm = Number(convert(BigInt(Number(width)), Length.twip, Length.mm100));
       automatic += `<style:style style:name="${name}" style:family="table-column"><style:table-column-properties fo:break-before="${pageBreak}" style:column-width="${new SvXMLUnitConverter("mm100").convertMeasureToXML(hmm)}"/></style:style>`;
     }
-    return `<?xml version="1.0" encoding="UTF-8"?><office:document-content xmlns:calcext="${ODF_NAMESPACES.calcext}" xmlns:office="${ODF_NAMESPACES.office}" xmlns:number="${ODF_NAMESPACES.number}" xmlns:table="${ODF_NAMESPACES.table}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:of="${ODF_NAMESPACES.of}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:fo="${ODF_NAMESPACES.fo}" xmlns:css3t="${ODF_NAMESPACES.css3t}" xmlns:svg="${ODF_NAMESPACES.svg}" xmlns:loext="${ODF_NAMESPACES.loext}" xmlns:xlink="${ODF_NAMESPACES.xlink}" office:version="1.3">${this.fontPool.exportXML()}<office:automatic-styles>${automatic}</office:automatic-styles><office:body><office:spreadsheet>${body}</office:spreadsheet></office:body></office:document-content>`;
+    return `<?xml version="1.0" encoding="UTF-8"?><office:document-content xmlns:calcext="${ODF_NAMESPACES.calcext}" xmlns:office="${ODF_NAMESPACES.office}" xmlns:dc="${ODF_NAMESPACES.dc}" xmlns:meta="${ODF_NAMESPACES.meta}" xmlns:number="${ODF_NAMESPACES.number}" xmlns:table="${ODF_NAMESPACES.table}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:of="${ODF_NAMESPACES.of}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:fo="${ODF_NAMESPACES.fo}" xmlns:css3t="${ODF_NAMESPACES.css3t}" xmlns:svg="${ODF_NAMESPACES.svg}" xmlns:loext="${ODF_NAMESPACES.loext}" xmlns:xlink="${ODF_NAMESPACES.xlink}" office:version="1.3">${this.fontPool.exportXML()}<office:automatic-styles>${automatic}</office:automatic-styles><office:body><office:spreadsheet>${body}</office:spreadsheet></office:body></office:document-content>`;
   }
   /** Writes calculation settings that differ from the ODF defaults. @returns ODF calculation settings. */
   private WriteCalculationSettings(): string {
@@ -583,13 +587,16 @@ export class ScXMLExport {
     if (output) return "<table:named-expressions>" + output + "</table:named-expressions>";
     return scope < 0 ? "<table:named-expressions/>" : "";
   }
-  /** Serializes the original scalar/formula alternatives with actual result computation. @param cell - Native cell view. @param address - Actual source coordinate. @param element - ODF cell element. @param attribute - Generated cell attributes. @returns Cell XML. */
+  /** Serializes the original scalar/formula alternatives with actual result computation. @param cell - Native cell view. @param note - Optional cell note. @param address - Actual source coordinate. @param element - ODF cell element. @param attribute - Generated cell attributes. @returns Cell XML. */
   private exportCell(
-    cell: ScRefCellValue,
+    cell: ScRefCellValue | null,
+    note: ScPostIt | null,
     address: ScAddress,
     element: string,
     attribute: string,
   ): string {
+    const annotation = note ? this.WriteAnnotation(note) : "";
+    if (!cell) return `<${element}${attribute}>${annotation}</${element}>`;
     const formatter = this.document.GetFormatTable();
     const key = this.document.GetPattern(address)?.GetNumberFormat(formatter) ?? 0;
     let formula = "",
@@ -668,7 +675,45 @@ export class ScXMLExport {
       const string = cell.getSharedString() as SharedStringConstReference;
       children = this.textParagraph(text(string.getString()));
     }
-    return `<${element}${attribute}${formula}${value}>${children}</${element}>`;
+    return `<${element}${attribute}${formula}${value}>${annotation}${children}</${element}>`;
+  }
+  /** Emits note metadata and caption text ahead of the cell's own text. @param note - Native note. @returns Annotation XML. */
+  private WriteAnnotation(note: ScPostIt): string {
+    const author = note.GetAuthor();
+    const creator = author ? `<dc:creator>${escapeXml(author)}</dc:creator>` : "";
+    const formatter = this.document.GetFormatTable();
+    const key: [number] = [
+      formatter.GetFormatIndex(NfIndexTableOffset.NF_DATE_SYS_DDMMYYYY, LANGUAGE_SYSTEM),
+    ];
+    const value: [number] = [0];
+    const lexical = unicode(note.GetDate());
+    let date: string;
+    try {
+      if (formatter.IsNumberFormat(lexical, key, value)) {
+        const converted = SvXMLUnitConverter.convertDaysToDateTime(
+          value[0],
+          formatter.GetNullDate(),
+        );
+        date = `<dc:date>${converted}</dc:date>`;
+      } else {
+        date = `<meta:date-string>${escapeXml(note.GetDate())}</meta:date-string>`;
+      }
+    } finally {
+      lexical.dispose();
+    }
+    const edit = note.GetEditTextObject();
+    const caption = edit
+      ? writeCellParagraphs(this.textStyles.collect(edit))
+      : note
+          .GetText()
+          .split(/\r\n?|\n/gu)
+          .map(
+            /** Writes a note paragraph. @param line - Plain caption line. @returns Paragraph XML. */
+            (line) => this.textParagraph(line),
+          )
+          .join("");
+    const display = note.IsCaptionShown() ? ' office:display="true"' : "";
+    return `<office:annotation${display}>${creator}${date}${caption}</office:annotation>`;
   }
   /** Reuses actual shared Writer/Calc inline encoding for a simple literal paragraph. @param value - Literal simple text. @returns Paragraph XML. */
   private textParagraph(value: string): string {

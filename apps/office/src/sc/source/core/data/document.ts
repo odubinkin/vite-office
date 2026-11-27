@@ -1,4 +1,5 @@
 /** @fileoverview Native document modes, consumed pooled resources and scalar/local-reference storage, attributes and formula tracking. Full construction, formatter and shell services remain unported. */
+import { ScPostIt, type NoteEntry } from "../../../inc/postit";
 import { ScRangePairList } from "../../../inc/rangelst";
 import * as documentGeometry from "./document.geometry";
 import { ScCalcConfig } from "../../../inc/calcconfig";
@@ -891,6 +892,34 @@ export class ScDocument {
   /** Checks native row bounds. @param row - Row. @returns Validity. */
   ValidRow(row: number): boolean {
     return ValidRow(row, MAXROW);
+  }
+  /** Gets the independent cell note. @param position - Cell address. @returns Borrowed note. */
+  GetNote(position: ScAddress): ScPostIt | null {
+    return this.FetchTable(position.Tab())?.GetNote(position.Col(), position.Row()) ?? null;
+  }
+  /** Indicates whether the cell owns a note. @param position - Cell address. @returns Whether a note exists. */
+  HasNote(position: ScAddress): boolean {
+    return this.GetNote(position) !== null;
+  }
+  /** Places a note in the sheet's native column store. @param position - Cell address. @param note - Owned note. */
+  SetNote(position: ScAddress, note: ScPostIt | null): void {
+    const table = this.FetchTable(position.Tab());
+    if (table) table.SetNote(position.Col(), position.Row(), note);
+    else note?.Dispose();
+  }
+  /** Returns the existing note or creates an initially empty one. @param position - Cell address. @returns Native note or null for an invalid address. */
+  GetOrCreateNote(position: ScAddress): ScPostIt | null {
+    if (!this.ValidColRow(position.Col(), position.Row()) || !this.FetchTable(position.Tab()))
+      return null;
+    const existing = this.GetNote(position);
+    if (existing) return existing;
+    const note = new ScPostIt();
+    this.SetNote(position, note);
+    return note;
+  }
+  /** Collects borrowed native note entries for a sheet. @param tab - Sheet. @param notes - Output vector. */
+  GetAllNoteEntries(tab: number, notes: NoteEntry[]): void {
+    this.FetchTable(tab)?.GetAllNoteEntries(notes);
   }
   /** Checks native column/row bounds. @param col - Column. @param row - Row. @returns Validity. */
   ValidColRow(col: number, row: number): boolean {

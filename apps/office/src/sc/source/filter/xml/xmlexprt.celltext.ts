@@ -14,6 +14,13 @@ import { convertTwipToMm100 } from "../../../../tools/inc/UnitConversion";
 import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import type { ScDocument } from "../../../inc/document";
+import {
+  ATTR_CJK_FONT_LANGUAGE,
+  ATTR_CTL_FONT_LANGUAGE,
+  ATTR_FONT_EMPHASISMARK,
+  ATTR_FONT_LANGUAGE,
+  ATTR_FONT_WORDLINE,
+} from "../../../inc/scitems";
 import { ScPatternAttr } from "../../../inc/patattr";
 import type { XMLFontAutoStylePool } from "../../../../xmloff/source/style/XMLFontAutoStylePool";
 import { escapeXml, exportText } from "../../../../xmloff/source/text/txtparae";
@@ -99,6 +106,15 @@ export class CellTextStylePool {
         } else items.Put(item);
       }
       pattern.GetFromEditItemSet(items);
+      // These properties belong to the edit-run map, whose word mode maps only to line-through-mode.
+      for (const which of [
+        ATTR_FONT_WORDLINE,
+        ATTR_FONT_EMPHASISMARK,
+        ATTR_FONT_LANGUAGE,
+        ATTR_CJK_FONT_LANGUAGE,
+        ATTR_CTL_FONT_LANGUAGE,
+      ])
+        pattern.ItemSetClearItem(which);
       properties = exportCellTextPropertyElement(
         pattern,
         this.fonts,

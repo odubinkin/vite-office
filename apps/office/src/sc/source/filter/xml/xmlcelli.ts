@@ -13,12 +13,14 @@ import { CellType } from "../../../inc/global";
 import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import type { ScXMLTableRowContext } from "./xmlrowi";
 import { repeatCount } from "./xmlrowi";
+import { ScXMLAnnotationContext } from "./xmlannoi";
 import { ScXMLCellTextParaContext } from "./celltextparacontext";
 import { createCellEditText } from "./xmlcelli.edit";
 import type { CellTextParagraph } from "./xmlexprt.celltext";
 /** Cell state is a transient native XML context,not an imported cell model. */
 export class ScXMLTableRowCellContext extends ScXMLImportContext {
   private readonly style: string | null;
+  private annotation: ScXMLAnnotationContext | null = null;
   private readonly paragraphs: CellTextParagraph[] = [];
   private readonly repeat: number;
   private readonly mergedColumns: number;
@@ -124,8 +126,18 @@ export class ScXMLTableRowCellContext extends ScXMLImportContext {
   setParagraph(value: CellTextParagraph): void {
     this.paragraphs.push(value);
   }
-  /** Creates actual simple text child state. @param element - Token. @returns Context. */
-  override createFastChildContext(element: XMLToken): SvXMLImportContext {
+  /** Dispatches native text or annotation state. @param element - Token. @param attributes - Child attributes. @returns Context. */
+  override createFastChildContext(
+    element: XMLToken,
+    attributes: FastAttributeList,
+  ): SvXMLImportContext {
+    if (element === XMLToken.OFFICE_ANNOTATION) {
+      return (this.annotation = new ScXMLAnnotationContext(
+        this.GetScImport(),
+        this.row.table.tab,
+        attributes,
+      ));
+    }
     if (element !== XMLToken.TEXT_P) throw new Error("ODS cell object is not implemented");
     return new ScXMLCellTextParaContext(this, this.row.table.tab);
   }
@@ -173,11 +185,8 @@ export class ScXMLTableRowCellContext extends ScXMLImportContext {
       (endCol !== pos.Col() + this.repeat - 1 || endRow !== pos.Row() + this.row.repeat - 1)
     )
       owner.unsupported("cell range overflow");
-    if (
-      this.source === null &&
-      (this.type === T.UNDEFINED || (this.type === T.TEXT && value === undefined))
-    )
-      return;
+    const hasValue = this.type !== T.UNDEFINED && (this.type !== T.TEXT || value !== undefined);
+    if (this.source === null && !hasValue && !this.annotation) return;
     const columns = Math.min(this.repeat, owner.GetDocument().MaxCol() - pos.Col() + 1),
       rows = Math.min(this.row.repeat, owner.GetDocument().MaxRow() - pos.Row() + 1);
     if (columns < this.repeat || rows < this.row.repeat) owner.unsupported("cell range overflow");
@@ -232,6 +241,10 @@ export class ScXMLTableRowCellContext extends ScXMLImportContext {
             ? number
             : null;
     if (this.source !== null) {
+      if (this.annotation) {
+        owner.consumeCells(1);
+        this.annotation.SetAnnotation(pos);
+      }
       if (this.matrixColumns !== null || this.matrixRows !== null) {
         if ((this.matrixColumns ?? 0) > 0 && (this.matrixRows ?? 0) > 0)
           owner.AddMatrixFormula(
@@ -254,7 +267,7 @@ export class ScXMLTableRowCellContext extends ScXMLImportContext {
             error,
           );
       } else {
-        owner.consumeCells(1);
+        if (!this.annotation) owner.consumeCells(1);
         owner.AddFormula(pos, this.source, cache, this.hasStyle, possibleEmpty && number === 0);
       }
       return;
@@ -264,10 +277,15 @@ export class ScXMLTableRowCellContext extends ScXMLImportContext {
       for (let col = 0; col < columns; col++)
         for (let row = 0; row < rows; row++) {
           const address = new ScAddress(pos.Col() + col, pos.Row() + row, pos.Tab());
+          if (this.annotation) {
+            owner.consumeCells(1);
+            this.annotation.SetAnnotation(address);
+          }
+          if (!hasValue) continue;
           if (this.covered && owner.GetDocument().GetCellType(address) !== CellType.CELLTYPE_NONE)
             continue;
           if (owner.SetMatrixFormulaResult(address, matrixValue, error)) continue;
-          owner.consumeCells(1);
+          if (!this.annotation) owner.consumeCells(1);
           if (this.type !== T.TEXT)
             doc.setNumericCell(address, Number.isFinite(number) ? number : 0);
           else if (

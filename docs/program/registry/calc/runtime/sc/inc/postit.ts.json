@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/inc/postit.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "cell-metadata",
+    "capabilityIds": [
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/inc/postit.ts#ScPostIt",
+        "apps/office/src/sc/inc/postit.ts#ScNoteUtil",
+        "apps/office/src/sc/inc/postit.ts#NoteEntry",
+        "apps/office/src/sc/source/filter/xml/ods-cell-notes.test.ts#testCellNoteExportODS",
+        "vendor/libreoffice-reference/sc/inc/postit.hxx#ScPostIt",
+        "vendor/libreoffice-reference/sc/inc/postit.hxx#ScNoteUtil",
+        "vendor/libreoffice-reference/sc/inc/postit.hxx#NoteEntry"
+      ],
+      "justification": "Exposes the represented note owner, note creation operations, and native address/borrowed-note entry. Drawing caption, clipboard, and threaded-comment declarations remain outside the represented note model.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ScPostIt",
+        "ScNoteUtil",
+        "NoteEntry"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/inc/postit.hxx",
+      "upstreamSymbols": [
+        "ScPostIt",
+        "ScNoteUtil",
+        "NoteEntry"
+      ]
+    }
+  }
+}

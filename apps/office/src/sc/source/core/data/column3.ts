@@ -605,12 +605,15 @@ export function GetSharedString(this: ScColumn, row: number): SharedString {
     : new SharedString();
 }
 
-/** Original column3 ImplDestroy body for the represented cell/text stores. Note/sparkline stores and CellStorageModified compute/stream services are not represented. @param this - Actual column. @returns Nothing. */
+/** Original column3 ImplDestroy body for the represented cell/text stores. The sparkline store and CellStorageModified compute/stream services are outside this slice. @param this - Actual column. @returns Nothing. */
 export function ImplDestroy(this: ScColumn): void {
   this.GetCellStore().event_handler().stop();
+  this["maCellNotes"].event_handler().stop();
   const rows = this.GetDoc().GetMaxRowCount();
   this.GetCellStore().clear();
   this.GetCellStore().resize(rows);
+  this["maCellNotes"].clear();
+  this["maCellNotes"].resize(rows);
   this.GetCellAttrStore().clear();
   this.GetCellAttrStore().resize(rows);
 }
@@ -618,6 +621,7 @@ export function ImplDestroy(this: ScColumn): void {
 export function Dispose(this: ScColumn): void {
   ImplDestroy.call(this);
   this.GetCellStore().dispose();
+  this["maCellNotes"].dispose();
   this["maBroadcasters"].dispose();
   this.GetCellAttrStore().dispose();
   this.DisposeAttributes();
@@ -632,7 +636,7 @@ export function BroadcastCells(this: ScColumn, rows: number[], id: SfxHintId): v
     this.GetDoc().Broadcast(hint);
   }
 }
-/** Original column3 DeleteArea content/attribute order over actual DeleteCellsResult. Full attribute deletion uses actual canonical runs;absent notes/sparkline/edit services remain unrepresented. @param this - Actual column. @param first - First row. @param last - Last row. @param flags - Native flags. @param broadcast - Original defaulttrue. @param spans - Original optional collector. @returns Nothing. */
+/** Original column3 DeleteArea content/attribute order over actual DeleteCellsResult. Full attribute deletion uses actual canonical runs;note deletion operates on the independent sparse store. @param this - Actual column. @param first - First row. @param last - Last row. @param flags - Native flags. @param broadcast - Original defaulttrue. @param spans - Original optional collector. @returns Nothing. */
 export function DeleteArea(
   this: ScColumn,
   first: number,
@@ -668,6 +672,7 @@ export function DeleteArea(
         spans.set(this.GetDoc(), this.GetTab(), this.GetCol(), row.mnRow1, row.mnRow2, true);
     }
   }
+  if (flags & InsertDeleteFlags.NOTE) this.DeleteCellNotes(position, first, last);
   if ((flags & InsertDeleteFlags.ATTRIB) === InsertDeleteFlags.ATTRIB)
     this["pAttrArray"].DeleteArea(first, last);
   else if (flags & InsertDeleteFlags.HARDATTR) this["pAttrArray"].DeleteHardAttr(first, last);

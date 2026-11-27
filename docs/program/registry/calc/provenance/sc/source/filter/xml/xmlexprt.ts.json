@@ -35,7 +35,8 @@
       "Writes ODF 1.3 table-family tab colors and preserves display and color in a single automatic table style.",
       "Exports used master pages and page layouts and links the automatic table style to the actual named page style.",
       "Column output ends at the furthest used, formatted, geometrically changed, grouped or repeated-title column in the represented sheet model.",
-      "Named definition output uses the native type and reference query, validates the name base, and formats it as an absolute qualified address."
+      "Named definition output uses the native type and reference query, validates the name base, and formats it as an absolute qualified address.",
+      "Exports cell annotations before the owning cell value and includes note-only positions in the sheet bounds."
     ],
     "omittedResponsibilities": [
       "Field identity and unimplemented character properties are outside this XML text boundary."
@@ -127,6 +128,10 @@
         {
           "path": "sc/source/filter/xml/xmlexprt.cxx",
           "marker": "ScXMLExport::WriteNamedRange"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlexprt.cxx",
+          "marker": "ScXMLExport::WriteAnnotation"
         }
       ]
     }

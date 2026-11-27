@@ -26,9 +26,10 @@
         "apps/office/src/sc/source/filter/xml/ods.test.ts",
         "apps/office/src/sc/source/filter/oox/excelfilter.test.ts",
         "vendor/libreoffice-reference/sc/source/filter/xml/xmlexprt.cxx#ScXMLExport::ExportCellTextAutoStyles",
-        "vendor/libreoffice-reference/sc/source/filter/xml/xmlexprt.cxx#ScXMLExport::WriteEditCell"
+        "vendor/libreoffice-reference/sc/source/filter/xml/xmlexprt.cxx#ScXMLExport::WriteEditCell",
+        "vendor/libreoffice-reference/sc/source/filter/xml/xmlexprt.cxx#ScXMLEditAttributeMap"
       ],
-      "justification": "Registers automatic styles from native EditTextObject character sections and emits the corresponding paragraph spans. Edit-engine field identity and properties outside the represented character-item mappings remain outside this responsibility. Encodes the native ODF complex-color child in each automatic character style.",
+      "justification": "Registers automatic styles from native EditTextObject character sections and emits the corresponding paragraph spans. Edit-engine field identity and properties outside the represented character-item mappings remain outside this responsibility. Encodes the native ODF complex-color child in each automatic character style. Exports properties owned by the native edit-run map once, including the line-through word mode and the three script locales.",
       "localSymbols": [
         "CellTextStylePool",
         "writeCellParagraphs"

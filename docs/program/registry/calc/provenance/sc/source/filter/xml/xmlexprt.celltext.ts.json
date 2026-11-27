@@ -17,7 +17,8 @@
     "preservedResponsibilities": [
       "Registers automatic styles from native EditTextObject character sections and emits the corresponding paragraph spans.",
       "Encodes the native ODF complex-color child in each automatic character style.",
-      "Reads raw EditTextObject sections and native field values, retaining represented feature XML, neighboring formatting, and cloneable field data."
+      "Reads raw EditTextObject sections and native field values, retaining represented feature XML, neighboring formatting, and cloneable field data.",
+      "Exports properties owned by the native edit-run map once, including the line-through word mode and the three script locales."
     ],
     "omittedResponsibilities": [
       "Other field classes and properties outside the represented character-item mappings remain outside this responsibility."
@@ -49,6 +50,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlexprt.cxx",
           "marker": "ScXMLExport::WriteEditCell"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlexprt.cxx",
+          "marker": "ScXMLEditAttributeMap"
         }
       ]
     },

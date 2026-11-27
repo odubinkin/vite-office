@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/filter/xml/XMLExportIterator.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/filter/xml/XMLExportIterator.cxx",
+    "localSymbols": [
+      "ScMyNotEmptyCellsIterator"
+    ],
+    "upstreamSymbols": [
+      "ScMyNotEmptyCellsIterator::GetNext"
+    ],
+    "preservedResponsibilities": [
+      "Merges native cell values and note entries by address, including positions that contain only a note, before serializing cells and repeated gaps."
+    ],
+    "omittedResponsibilities": [
+      "The represented merge covers native values and notes. Drawing shapes and detective streams are outside this scope."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/xml/XMLExportIterator.ts",
+          "marker": "ScMyNotEmptyCellsIterator"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-cell-notes.test.ts",
+          "marker": "testCellNoteExportODS"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/XMLExportIterator.cxx",
+          "marker": "ScMyNotEmptyCellsIterator::GetNext"
+        }
+      ]
+    }
+  }
+}

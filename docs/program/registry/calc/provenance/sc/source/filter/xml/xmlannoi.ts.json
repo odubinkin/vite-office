@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/filter/xml/xmlannoi.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/filter/xml/xmlannoi.cxx",
+    "localSymbols": [
+      "ScXMLAnnotationContext"
+    ],
+    "upstreamSymbols": [
+      "ScXMLAnnotationContext::createFastChildContext",
+      "ScXMLAnnotationContext::endFastElement"
+    ],
+    "preservedResponsibilities": [
+      "Imports annotation text separately from the cell value and reads creator, date, legacy date fallback, and display metadata. Retains valid ISO dates in the model for the browser, as LibreOfficeKit does."
+    ],
+    "omittedResponsibilities": [
+      "Caption drawing properties and threaded comments are outside this model."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/xml/xmlannoi.ts",
+          "marker": "ScXMLAnnotationContext"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-cell-notes.test.ts",
+          "marker": "testCellNoteExportODS"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlannoi.cxx",
+          "marker": "ScXMLAnnotationContext::createFastChildContext"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlannoi.cxx",
+          "marker": "ScXMLAnnotationContext::endFastElement"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlcelli.cxx",
+          "marker": "ScXMLTableRowCellContext::SetAnnotation"
+        }
+      ]
+    }
+  }
+}

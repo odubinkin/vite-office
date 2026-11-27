@@ -1,4 +1,5 @@
 /** @fileoverview ScTable scalar/local-reference,cell-attribute and standard row-height operations over lazy contiguous columns. Device layout and full sheet services remain unported. */
+import type { NoteEntry, ScPostIt } from "../../../inc/postit";
 import type { ScOutlineTable } from "./olinetab";
 import { Color, COL_AUTO } from "../../../../tools/inc/color";
 import type { ScTableProtection } from "./tabprotection";
@@ -980,6 +981,22 @@ export class ScTable {
     return this.rDocument.ValidColRow(col, row) && col < this.aCol.length
       ? (this.aCol[col] as ScColumn).GetValue(row)
       : 0;
+  }
+  /** Looks up a note in an allocated column. @param col - Column. @param row - Row. @returns Borrowed note or null. */
+  GetNote(col: number, row: number): ScPostIt | null {
+    return this.aCol[col]?.GetCellNote(row) ?? null;
+  }
+  /** Transfers the note to the actual cell column. @param col - Column. @param row - Row. @param note - Owned note. */
+  SetNote(col: number, row: number, note: ScPostIt | null): void {
+    if (!this.rDocument.ValidColRow(col, row)) {
+      note?.Dispose();
+      return;
+    }
+    this.CreateColumnIfNotExists(col).SetCellNote(row, note);
+  }
+  /** Appends each allocated column's notes to the native note list. @param notes - Output note list. */
+  GetAllNoteEntries(notes: NoteEntry[]): void {
+    for (const column of this.aCol) column.GetAllNoteEntries(notes);
   }
   /** Reads native scalar type with empty default. @param col - Column. @param row - Row. @returns Type. */
   GetCellType(col: number, row: number): CellType {
