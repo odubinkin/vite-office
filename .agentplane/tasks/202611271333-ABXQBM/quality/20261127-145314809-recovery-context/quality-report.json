@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "task_id": "202611271333-ABXQBM",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-27T14:53:14.809Z",
+  "verdict": "pass",
+  "summary": "The pinned annotation-formatting.odt and resolved-comment.odt preserved rich note text, original annotation metadata and range behavior across import, Worker transfer and ODT reopen.",
+  "evaluated_sha": "2042a4a67e59c8d02a74521f84e4418356cb21ac",
+  "blueprint_digest": "1bb03be9c56cffbf06e4e32b57c86b3f242684ca901ea0936b500f26cd4f7e2a",
+  "findings": [
+    "WRITER-766 records the original behavior when an annotation Outliner rejects a Writer numbering rule and retains its text level."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611271333-ABXQBM/README.md",
+    "/Users/odubinkin/Projects/vite-office/output/playwright/ABXQBM/verification.md",
+    "2042a4a67e59c8d02a74521f84e4418356cb21ac"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
