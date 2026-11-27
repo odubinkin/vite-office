@@ -2,6 +2,41 @@
 import { expect, test } from "@playwright/test";
 import { openBrowserMenu } from "../test-support/menu-pointer-e2e";
 
+test("Writer Navigator tracks one heading while the cursor moves in the heading root", /** Ports the pinned tdf114724 heading tracking workflow. @param fixtures - Browser test inputs. @param fixtures.page - Writer page. @returns Completion. */ async ({
+  page,
+}) => {
+  await page.goto("/writer", { waitUntil: "domcontentloaded" });
+  const paragraphs = page.locator("[data-writer-paragraph-id]");
+  await paragraphs.first().click();
+  for (let index = 1; index <= 4; index++) {
+    if (index > 1) await page.keyboard.press("Enter");
+    await page.keyboard.insertText(`HEADING ${index}`);
+  }
+  const formatting = page.getByRole("toolbar", { name: "Writer formatting toolbar" });
+  const style = formatting.getByRole("combobox", { name: "Paragraph style", exact: true });
+  for (let index = 0; index < 4; index++) {
+    await paragraphs.nth(index).click();
+    await formatting.getByRole("button", { name: "Show Paragraph style", exact: true }).click();
+    await page
+      .locator(`id=${await style.getAttribute("aria-controls")}`)
+      .getByRole("option", { name: "Heading 1", exact: true })
+      .click();
+  }
+  await paragraphs.first().click();
+  await page.keyboard.press("F5");
+  const navigator = page.getByRole("dialog", { name: "Navigator", exact: true });
+  await navigator.getByRole("button", { name: "Content Navigation View" }).click();
+  const selected = navigator.getByRole("treeitem", { selected: true });
+  await paragraphs.first().click();
+  await expect(selected).toHaveText("HEADING 1");
+  for (let index = 0; index < 3; index++) await page.keyboard.press("ArrowDown");
+  await expect(selected).toHaveText("HEADING 4");
+  for (let index = 0; index < 3; index++) await page.keyboard.press("ArrowUp");
+  await expect(selected).toHaveText("HEADING 1");
+  await navigator.getByRole("button", { name: "Content Navigation View" }).click();
+  await expect(navigator.getByRole("tree")).not.toHaveAttribute("aria-multiselectable");
+});
+
 test("Writer Navigator opens the selected bookmark and deletes all marks in one undo step", /** Verifies real bookmark slot dispatch and grouped deletion in Chromium. @param fixtures - Browser test inputs. @param fixtures.page - Writer page. @returns Completion. */ async ({
   page,
 }) => {

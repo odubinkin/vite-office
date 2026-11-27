@@ -10,7 +10,8 @@
       "Projects the original Navigator child window, page controls, content root and outline depth controls.",
       "Presents the native contextual heading toolbar and sends the selected heading, command ID and primary modifier to Writer.",
       "Projects the original heading-root multiple selection, retains visible heading identities after edits, and expands ancestors of the surviving selected entries.",
-      "Shows the original bookmark edit and delete controls for the active tree entry or category."
+      "Shows the original bookmark edit and delete controls for the active tree entry or category.",
+      "Applies cursor tracking outside the focused Navigator tree while retaining the represented root and outline depth."
     ],
     "evidence": {
       "local": [
@@ -21,6 +22,10 @@
         {
           "path": "apps/office/src/sw/browser/presentation/WriterNavigator.tsx",
           "marker": "headingTools"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterNavigator.tsx",
+          "marker": "trackDocumentCursor"
         }
       ]
     },

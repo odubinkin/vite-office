@@ -712,7 +712,7 @@ export function WriterWorkbench({
         navigator={
           <WriterNavigator
             view={view}
-            visible={snapshot.isNavigatorVisible}
+            visible={snapshot.isNavigatorVisible && isActive}
             editingHost={editingHostRef}
             focusDocument={focusDocument}
           />

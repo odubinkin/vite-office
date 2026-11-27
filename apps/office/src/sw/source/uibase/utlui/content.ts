@@ -39,6 +39,7 @@ export class SwContentTree {
   private readonly identities = new WeakMap<object, string>();
   private nextIdentity = 1;
   private selectedBookmarkName = "";
+  private lastGotoOutline: number | undefined;
 
   /** Borrows the native editing and page-layout owners. @param shell - Persistent Writer shell. @param layout - Current physical page-frame source. @returns Navigator model. */
   constructor(
@@ -70,23 +71,51 @@ export class SwContentTree {
     if (!target) return false;
     const oldBookmark = this.selectedBookmarkName;
     this.selectedBookmarkName = target.type === "bookmark" ? target.title : "";
+    this.lastGotoOutline =
+      target.type === "outline"
+        ? this.shell.GetDoc().GetNodes().GetOutLineNds().Seek_Entry(target.node).position
+        : undefined;
     return this.SetCursor(target.node, target.offset, oldBookmark !== this.selectedBookmarkName);
+  }
+
+  /** Resolves the default native cursor tracking priority in the current tree scope. @param root - Optional original content category root. @returns Tracked entry identity, if any. */
+  public UpdateTracking(root?: SwNavigatorContentType): string | undefined {
+    const outline = this.shell.GetOutlinePos();
+    const afterOutlineNavigation =
+      this.lastGotoOutline !== undefined && outline === this.lastGotoOutline;
+    if (!afterOutlineNavigation) {
+      this.lastGotoOutline = undefined;
+      const table = this.shell.IsCursorInTable()?.GetTable();
+      if (table && (root === undefined || root === "table")) return this.GetIdentity(table);
+    }
+    if (outline !== undefined && (root === undefined || root === "outline")) {
+      const heading = this.shell.GetDoc().GetNodes().GetOutLineNds().entries()[outline];
+      if (heading) return this.GetIdentity(heading);
+    }
+    return root === undefined || root === "bookmark" ? this.FindBookmarkAtCursor().id : undefined;
   }
 
   /** Queries the native bookmark toolbar admission at the current cursor position. @param id - Selected bookmark row. @returns Whether it is the bookmark associated with the cursor. */
   public IsSelectedBookmarkAtCursor(id: string): boolean {
+    if (this.shell.IsCursorInTable()) return false;
+    const match = this.FindBookmarkAtCursor();
+    return match.confirmed && match.id === id;
+  }
+
+  /** Scans the native bookmark index, preserving the distinct toolbar and tracking fallbacks. @returns Candidate bookmark and whether the native scan returned before its end. */
+  private FindBookmarkAtCursor(): { id: string | undefined; confirmed: boolean } {
     const point = this.shell.GetCursor().GetPoint();
-    if (point.GetNode().FindTableNode()) return false;
     let previous: string | undefined;
     for (const mark of this.shell.GetDoc().GetIDocumentMarkAccess().GetBookmarks()) {
       const [start, end] = mark.GetMarkStartEnd();
-      if (point.compare(start) < 0 && previous !== undefined) return previous === id;
+      if (point.compare(start) < 0 && previous !== undefined)
+        return { id: previous, confirmed: true };
       if (point.compare(start) >= 0 && point.compare(end) <= 0) {
-        previous = this.identities.get(mark);
-        if (mark.GetName() === this.selectedBookmarkName) return previous === id;
+        previous = this.GetIdentity(mark);
+        if (mark.GetName() === this.selectedBookmarkName) return { id: previous, confirmed: true };
       }
     }
-    return false;
+    return { id: previous, confirmed: false };
   }
 
   /** Removes a selected ordinary bookmark or the entire Bookmark category in one native edit. @param id - Selected bookmark, or absent for the category. @returns Whether any bookmarks were removed. */

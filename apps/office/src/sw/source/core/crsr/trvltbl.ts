@@ -10,7 +10,7 @@ import type { SwUndoCursorState } from "../undo/undobj";
 import type { SwTableLine } from "../table/swtable";
 import { SwRootFrame } from "../layout/newfrm";
 import { SwViewOption } from "../../../inc/viewopt";
-import type { SwPosition } from "./pam";
+import type { SwPaM, SwPosition } from "./pam";
 
 /** Native extended range retains the first structural node and trailing table owners. */
 export type ExtendedSelection = readonly [SwNode, readonly SwTableNode[]];
@@ -303,6 +303,22 @@ export abstract class SwCursorShell extends SwViewShell {
   /** Returns the native cursor used to display point and mark. @returns Table or ordinary display owner. */
   public getShellCursor(): SwCursor {
     return this.tableCursor ?? this.cursor;
+  }
+
+  /** Finds the native outline entry at or before the cursor within its outline level limit. @param level - Highest zero-based outline level to admit. @param range - Optional cursor override. @returns An outline index, if found. */
+  public GetOutlinePos(level = 0xff, range: SwPaM = this.getShellCursor()): number | undefined {
+    const point = range.GetPoint().GetNode();
+    const nodes = this.GetDoc().GetNodes();
+    const index = nodes.GetOutLineNds();
+    const { found, position } = index.Seek_Entry(point);
+    const outlines = index.entries();
+    const extras = nodes.GetEndOfExtras().GetIndex();
+    for (let candidate = found ? position : position - 1; candidate >= 0; candidate--) {
+      const heading = outlines[candidate];
+      if (!heading || heading.GetAttrOutlineLevel() - 1 > level) continue;
+      return heading.GetIndex() < extras && point.GetIndex() > extras ? undefined : candidate;
+    }
+    return undefined;
   }
 
   /** Reports the bounded shell table-selection mode. @returns Whether a native table cursor is active. */

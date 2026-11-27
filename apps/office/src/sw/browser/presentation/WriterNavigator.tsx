@@ -11,7 +11,15 @@ import {
   Trash2,
   X,
 } from "lucide-react";
-import { useEffect, useRef, useState, type KeyboardEvent, type RefObject } from "react";
+import {
+  useEffect,
+  useEffectEvent,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type KeyboardEvent,
+  type RefObject,
+} from "react";
 import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
 import type {
@@ -95,6 +103,29 @@ function getRows(
   return rows;
 }
 
+/** Expands the native path to each retained or tracked row. @param entries - Complete tree within the root and outline depth. @param ids - Rows to reveal. @param collapsed - Current closed entries. @returns Updated closed entries. */
+function expandAncestors(
+  entries: readonly NavigatorRow[],
+  ids: readonly string[],
+  collapsed: ReadonlySet<string>,
+): ReadonlySet<string> {
+  const byId = new Map(
+    entries.map(
+      /** Indexes the current tree parents. @param row - Native content entry. @returns Identity and entry. */
+      (row) => [row.id, row],
+    ),
+  );
+  const next = new Set(collapsed);
+  for (const id of ids) {
+    let parent = byId.get(id)?.parent;
+    while (parent) {
+      next.delete(parent);
+      parent = byId.get(parent)?.parent;
+    }
+  }
+  return next.size === collapsed.size ? collapsed : next;
+}
+
 /** Presents the original page toolbar and navigable content hierarchy for the active Writer view. @param props - Native tree owner and document focus callbacks. @returns Retained Navigator child window. */
 export function WriterNavigator({
   view,
@@ -115,9 +146,11 @@ export function WriterNavigator({
     /** Holds native expanded-state preferences for this window lifetime. @returns Closed entries. */
     () => new Set(),
   );
-  const [selected, setSelected] = useState("");
+  const [selected, setSelected] = useState<string | null>("");
   const [extended, setExtended] = useState<readonly string[]>([]);
   const selectionAnchor = useRef("");
+  const trackedScroll = useRef<string | undefined>(undefined);
+  const headingCommandActive = useRef(false);
   const [outlineLevel, setOutlineLevel] = useState(10);
   const [root, setRoot] = useState<SwNavigatorContentType>();
   const [pageDraft, setPageDraft] = useState<{ origin: number; value: string }>();
@@ -133,15 +166,26 @@ export function WriterNavigator({
       (row) => row.id === selected,
     ) ?? rows[0];
   const multiple = root === "outline";
-  const selectedIds = new Set(multiple ? extended : selectedRow ? [selectedRow.id] : []);
+  const selectedIds = new Set(
+    multiple ? extended : selectedRow && selected !== null ? [selectedRow.id] : [],
+  );
   const headings = rows.flatMap(
     /** Resolves the selected visible heading identities in tree order. @param row - Tree entry. @returns Selection identity, if applicable. */
     (row) => (row.type === "outline" && !row.group && selectedIds.has(row.id) ? [row.id] : []),
   );
-  const bookmarkRow = selectedRow?.type === "bookmark" ? selectedRow : undefined;
+  const bookmarkRow =
+    selectedRow?.type === "bookmark" && selectedIds.has(selectedRow.id) ? selectedRow : undefined;
   const deleteBookmark = bookmarkRow && (!bookmarkRow.group || bookmarkRow.children);
   const editBookmark =
     bookmarkRow && !bookmarkRow.group && tree.IsSelectedBookmarkAtCursor(bookmarkRow.id);
+
+  useEffect(
+    /** Releases grouped heading tracking after the retained tree selection is displayed. @returns Nothing. */
+    () => {
+      headingCommandActive.current = false;
+    },
+    [extended],
+  );
 
   useEffect(
     /** Restores native content tree focus when the retained Navigator is shown. @returns Nothing. */
@@ -151,6 +195,84 @@ export function WriterNavigator({
       (entry ?? treeRef.current)?.focus();
     },
     [visible],
+  );
+
+  const trackDocumentCursor = useEffectEvent(
+    /** Follows the native document cursor while the tree is unfocused. @returns Nothing. */
+    () => {
+      const contents = treeRef.current;
+      if (
+        !visible ||
+        !view.IsNavigatorVisible() ||
+        headingCommandActive.current ||
+        !contents ||
+        !editingHost.current?.contains(contents.ownerDocument.activeElement)
+      )
+        return;
+      const id = tree.UpdateTracking(root);
+      if (id === undefined) {
+        setSelected(null);
+        if (multiple) setExtended([]);
+        return;
+      }
+      if (selectedIds.size === 1 && selectedIds.has(id)) return;
+      const entries = getRows(tree.GetContents(), outlineLevel, new Set(), root, label);
+      if (
+        !entries.some(
+          /** Checks whether the actual tracked heading passes the outline depth setting. @param row - Candidate tree item. @returns Whether the identity is displayed. */
+          (row) => row.id === id,
+        )
+      )
+        return;
+      setCollapsed(expandAncestors(entries, [id], collapsed));
+      setSelected(id);
+      if (multiple) setExtended([id]);
+      selectionAnchor.current = id;
+      trackedScroll.current = id;
+    },
+  );
+  useEffect(
+    /** Observes native cursor and focus activity in the active document. @returns Listener cleanup. */
+    () => {
+      if (!visible) return;
+      return view.GetWrtShell().Subscribe(
+        /** Tracks either a standalone cursor event or a committed selection transaction. @param hint - Current Writer state notification. @returns Nothing. */
+        (hint) => {
+          if (
+            hint.kind === "cursor-selection-changed" ||
+            (hint.kind === "model-transaction" &&
+              hint.hints.some(
+                /** Detects a cursor notification in the model transaction. @param change - Original atomic hint. @returns Whether the cursor changed. */
+                (change) => change.kind === "cursor-selection-changed",
+              ))
+          )
+            trackDocumentCursor();
+        },
+      );
+    },
+    [view, visible],
+  );
+  useEffect(
+    /** Resumes tracking when focus returns to the document even without moving its cursor. @returns Listener cleanup. */
+    () => {
+      if (!visible) return;
+      const host = editingHost.current;
+      /** Tracks the current document after leaving the tree. @returns Nothing. */
+      const onFocus = () => trackDocumentCursor();
+      host?.addEventListener("focusin", onFocus);
+      return () => host?.removeEventListener("focusin", onFocus);
+    },
+    [editingHost, visible],
+  );
+  useLayoutEffect(
+    /** Reveals the tracked row after its ancestors are rendered. @returns Nothing. */
+    () => {
+      const id = trackedScroll.current;
+      if (id === undefined || id !== selected) return;
+      trackedScroll.current = undefined;
+      rowRefs.current.get(id)?.scrollIntoView?.({ block: "nearest", inline: "nearest" });
+    },
+    [selected, collapsed],
   );
 
   /** Closes the child window and restores focus to Writer. @returns Nothing. */
@@ -237,32 +359,31 @@ export function WriterNavigator({
 
   /** Applies the selected headings and reveals the retained native outline rows. @param command - Heading toolbar action. @param withChildren - Whether descendants move with their parent. @returns Nothing. */
   function runHeadingCommand(command: SwNavigatorHeadingCommand, withChildren: boolean): void {
-    const retained = tree.ExecCommand(headings, command, withChildren);
+    let retained: readonly string[];
+    headingCommandActive.current = true;
+    try {
+      retained = tree.ExecCommand(headings, command, withChildren);
+    } finally {
+      headingCommandActive.current = false;
+    }
     if (retained.length === 0) return;
     if (!multiple) {
       reveal();
       return;
     }
+    headingCommandActive.current = true;
     setExtended(retained);
     const active =
-      selectedIds.has(selected) && retained.includes(selected) ? selected : (retained[0] ?? "");
+      selected !== null && retained.includes(selected) ? selected : (retained[0] ?? "");
     setSelected(active);
     selectionAnchor.current = active;
-    const byId = new Map(
-      getRows(tree.GetContents(), outlineLevel, new Set(), root, label).map(
-        /** Indexes current tree parents after the chapter change. @param row - Live outline row. @returns Identity and tree entry. */
-        (row) => [row.id, row],
+    setCollapsed(
+      expandAncestors(
+        getRows(tree.GetContents(), outlineLevel, new Set(), root, label),
+        retained,
+        collapsed,
       ),
     );
-    const next = new Set(collapsed);
-    for (const id of retained) {
-      let parent = byId.get(id)?.parent;
-      while (parent) {
-        next.delete(parent);
-        parent = byId.get(parent)?.parent;
-      }
-    }
-    setCollapsed(next);
   }
 
   /** Applies native tree navigation and activation keys. @param event - Focused tree key action. @returns Nothing. */

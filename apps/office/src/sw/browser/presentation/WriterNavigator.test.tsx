@@ -11,6 +11,123 @@ import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-comma
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { WriterWorkbench } from "./writer-view";
 
+it("tracks heading and bookmark priority in the native tdf159428 cursor sequence", /** Moves the real document cursor across bookmark ranges under headings and before the first heading. @returns Nothing. */ () => {
+  const session = createWriterDocumentSession();
+  const shell = session.view.GetWrtShell();
+  const document = shell.GetDoc();
+  const before = document.paragraphs[0];
+  assert(before);
+  before.SetText("Earlier bookmarked text");
+  const first = document.nodes.MakeTextNode();
+  first.SetText("H1");
+  first.SetAttrOutlineLevel(1);
+  const body = document.nodes.MakeTextNode();
+  body.SetText("Bookmarked words after H1");
+  const second = document.nodes.MakeTextNode();
+  second.SetText("H1 mit Lesezeichen");
+  second.SetAttrOutlineLevel(1);
+  const marks = document.GetIDocumentMarkAccess();
+  /** Attaches an expanded bookmark to an existing paragraph. @param node - Actual text node. @param name - Source case name. @returns Nothing. */
+  function addBookmark(node: typeof first, name: string): void {
+    const start = new SwPosition(node, 0);
+    const end = new SwPosition(node, node.GetText().length);
+    const selection = new SwPaM(end, start);
+    try {
+      marks.MakeBookmark(selection, name);
+    } finally {
+      selection.Dispose();
+      end.Dispose();
+      start.Dispose();
+    }
+  }
+  addBookmark(before, "Lesezeichen 3");
+  addBookmark(body, "Lesezeichen 1");
+  addBookmark(second, "Lesezeichen 2");
+  try {
+    session.view.ToggleNavigator();
+    render(<WriterWorkbench view={session.view} isActive />);
+    const navigator = within(screen.getByRole("dialog", { name: "Navigator" }));
+    const editor = screen.getByRole("textbox", { name: "Writer document text" });
+    for (const [node, heading] of [
+      [body, "H1"],
+      [second, "H1 mit Lesezeichen"],
+      [before, "Lesezeichen 3"],
+    ] as const) {
+      act(
+        /** Transfers focus and the original selection to the document. @returns Nothing. */
+        () => {
+          editor.focus();
+          const point = new SwPosition(node, 2);
+          shell.SetCursor(point);
+          point.Dispose();
+        },
+      );
+      expect(navigator.getByRole("treeitem", { name: heading })).toHaveAttribute(
+        "aria-selected",
+        "true",
+      );
+      expect(navigator.getAllByRole("treeitem", { selected: true })).toHaveLength(1);
+    }
+    act(
+      /** Keeps an explicitly focused tree entry selected during a document cursor update. @returns Nothing. */
+      () => {
+        navigator.getByRole("treeitem", { name: "Lesezeichen 3" }).focus();
+        const point = new SwPosition(first, 0);
+        shell.SetCursor(point);
+        point.Dispose();
+      },
+    );
+    expect(navigator.getByRole("treeitem", { name: "Lesezeichen 3" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+  } finally {
+    cleanup();
+    session.Close();
+  }
+});
+
+it("tracks the actual table over its enclosing heading only in the matching root", /** Exercises table identity and headings root tracking using the live shell. @returns Nothing. */ () => {
+  const session = createWriterDocumentSession();
+  const shell = session.view.GetWrtShell();
+  const document = shell.GetDoc();
+  const heading = document.paragraphs[0];
+  assert(heading);
+  heading.SetText("Heading");
+  heading.SetAttrOutlineLevel(1);
+  const table = document.nodes.MakeTableNode("Document table", { width: 6000 });
+  table.AddColumnWidth(6000);
+  document.nodes.AppendTableRow(table, 1);
+  try {
+    const tree = session.view.GetNavigator();
+    const entries = tree.GetContents();
+    const tableId = entries.find(
+      /** Resolves the tables content group. @param group - Native tree group. @returns Whether it owns tables. */
+      (group) => group.type === "table",
+    )?.contents[0]?.id;
+    const headingId = entries.find(
+      /** Resolves the headings content group. @param group - Native tree group. @returns Whether it owns outlines. */
+      (group) => group.type === "outline",
+    )?.contents[0]?.id;
+    assert(tableId);
+    assert(headingId);
+    expect(tree.GotoContent(tableId)).toBe(true);
+    expect(tree.UpdateTracking()).toBe(tableId);
+    expect(tree.UpdateTracking("outline")).toBe(headingId);
+    expect(tree.UpdateTracking("bookmark")).toBeUndefined();
+    const tablePoint = new SwPosition(shell.GetCursor().GetPoint());
+    try {
+      expect(tree.GotoContent(headingId)).toBe(true);
+      shell.SetCursor(tablePoint);
+      expect(tree.UpdateTracking()).toBe(headingId);
+    } finally {
+      tablePoint.Dispose();
+    }
+  } finally {
+    session.Close();
+  }
+});
+
 it("edits and deletes native bookmarks through the Navigator toolbar and restores their ranges", /** Verifies cursor admission, the native dialog, grouped deletion and mark metadata. @returns Nothing. */ () => {
   const session = createWriterDocumentSession();
   const shell = session.view.GetWrtShell();
@@ -145,8 +262,17 @@ it("groups selected outline chapters and restores the selected heading identitie
         (heading) => heading.GetAttrOutlineLevel(),
       ),
     ).toEqual([1, 2, 1, 1]);
+    fireEvent.click(first);
+    fireEvent.click(second, { ctrlKey: true });
     fireEvent.click(navigator.getByRole("button", { name: "Move Heading Down" }));
-    expect(document.paragraphs).toEqual([chapters[3], chapters[0], chapters[1], chapters[2]]);
+    /** Reads the live outline order after each grouped history action. @returns Ordered chapter names. */
+    function chapterOrder(): string[] {
+      return document.paragraphs.map(
+        /** Reads actual document text. @param paragraph - Current chapter node. @returns Heading title. */
+        (paragraph) => paragraph.GetText(),
+      );
+    }
+    expect(chapterOrder()).toEqual(["Third", "First", "Child", "Second"]);
     expect(first).toHaveAttribute("aria-selected", "true");
     expect(second).toHaveAttribute("aria-selected", "true");
     act(
@@ -155,14 +281,14 @@ it("groups selected outline chapters and restores the selected heading identitie
         expect(shell.Undo()).toBe(true);
       },
     );
-    expect(document.paragraphs).toEqual(chapters);
+    expect(chapterOrder()).toEqual(["First", "Child", "Second", "Third"]);
     act(
       /** Replays the same ordered movement as one action. @returns Nothing. */
       () => {
         expect(shell.Redo()).toBe(true);
       },
     );
-    expect(document.paragraphs).toEqual([chapters[3], chapters[0], chapters[1], chapters[2]]);
+    expect(chapterOrder()).toEqual(["Third", "First", "Child", "Second"]);
   } finally {
     cleanup();
     session.Close();
