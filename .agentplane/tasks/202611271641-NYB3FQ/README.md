@@ -1,10 +1,11 @@
 ---
 id: "202611271641-NYB3FQ"
 title: "Reconcile Writer WhichId tooling with native TOX marks"
-status: "DOING"
+result_summary: "Updates the tooling expectation for the native TOX mark and ruby range WhichIds."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -39,11 +40,16 @@ quality_review:
     - "output/playwright/odf-next-checkpoint/hintids-main-replay.log"
   findings:
     - "Current main checks all 132 source identities and the failing tooling file passes 3/3."
-commit: null
+commit:
+  hash: "de7d29a5790b75717f6f2ce59f4d580909866aee"
+  message: "🧩 NYB3FQ checkpoint: count native Writer TOX and ruby identities"
 comments:
   -
     author: "CODER"
     body: "Start: reconcile the observed deterministic tooling failure from the full ODF checkpoint."
+  -
+    author: "CODER"
+    body: "Verified: dedicated WhichId check and all three selected tooling cases passed on main."
 events:
   -
     type: "status"
@@ -58,8 +64,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "The pinned snapshot has 131 declarations after RES_TXTATR_TOXMARK. Current main has 132 including RES_TXTATR_CJK_RUBY. Both resolve to the pinned expressions; the dedicated identity check and all three tooling tests pass on main. The intentional mismatch check stays in place."
+  -
+    type: "status"
+    at: "2026-11-27T16:44:39.162Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: dedicated WhichId check and all three selected tooling cases passed on main."
 doc_version: 3
-doc_updated_at: "2026-11-27T16:43:48.841Z"
+doc_updated_at: "2026-11-27T16:44:39.163Z"
 doc_updated_by: "CODER"
 description: "Resolve the deterministic full-checkpoint tooling failure caused by the addition of the original RES_TXTATR_TOXMARK identity. Keep all upstream expression and mismatch validation, update the coverage assertion against the current identity set, and replay the failing tooling file."
 sections:
