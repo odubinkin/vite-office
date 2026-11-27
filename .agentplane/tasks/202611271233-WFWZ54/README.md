@@ -1,10 +1,11 @@
 ---
 id: "202611271233-WFWZ54"
 title: "Preserve native Calc document configuration in ODS settings"
-status: "DOING"
+result_summary: "Preserved the represented native Calc document configuration."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - "99c0d66875e355613abfa2dfbad60ff71cd22547"
   findings:
     - "Existing view/import order and intentional shell lifecycle remain in effect. Device configuration, macros and external updates remain outside the slice."
-commit: null
+commit:
+  hash: "99c0d66875e355613abfa2dfbad60ff71cd22547"
+  message: "🧩 WFWZ54 calc: preserve native ODS document configuration"
 comments:
   -
     author: "CODER"
     body: "Start: trace the native typed settings sequence and link it to the represented Calc configuration owner in an isolated checkout of the live checkpoint baseline."
+  -
+    author: "CODER"
+    body: "Verified: native typed ODS configuration applies to existing document and view owners and survives Worker and ODS reopening."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Tests  57 passed (57). Original workbook configuration, native INDIRECT conventions, Worker and normal ODS reopened. Typecheck, lint, formatting, dependencies, provenance and scoped inventory passed."
+  -
+    type: "status"
+    at: "2026-11-27T14:42:58.388Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native typed ODS configuration applies to existing document and view owners and survives Worker and ODS reopening."
 doc_version: 3
-doc_updated_at: "2026-11-27T14:41:54.577Z"
+doc_updated_at: "2026-11-27T14:42:58.389Z"
 doc_updated_by: "CODER"
 description: "Connect the represented Calc document configuration property owner to the original ODS settings groups, native typed scalar values, ordinary calculation setup, and Worker transport. Preserve native view and raster option precedence, AutoCalculate state, and explicit and fallback SyntaxStringRef conventions. Retain existing shell lifecycle, UI, autosave, recovery, and link handling. Verify pinned LibreOffice ODS fixtures and relevant existing Calc, Writer shared settings and graph tests."
 sections:
