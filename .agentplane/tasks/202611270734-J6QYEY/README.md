@@ -1,10 +1,11 @@
 ---
 id: "202611270734-J6QYEY"
 title: "Connect Writer Navigator hyperlinks and comments to document fields"
-status: "DOING"
+result_summary: "Exposed native hyperlinks and comments with identity-based tracking and contextual actions."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - "output/playwright/writer-navigator-fields-chromium.log"
   findings:
     - "Pinned anchor ordering, duplicate link identity, collapsed comments refresh, context edit/delete, tracking flags and browser focus were checked against the represented shell."
-commit: null
+commit:
+  hash: "635de4df8312dc96e9d91a5d207dcbd1a2a412e1"
+  message: "🧩 J6QYEY code: Connect Writer Navigator hyperlinks and comments"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: 44 focused cases, 8 Chromium Navigator flows, and production build."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: 44 focused cases across Navigator, hyperlink and annotation modules, including the three latest replayed native field cases, plus 8 Chromium Navigator scenarios. TypeScript, Vite, ESLint, Prettier, dependency, source tree, Writer resources, policy routing and scoped provenance passed."
+  -
+    type: "status"
+    at: "2026-11-27T07:50:18.669Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: 44 focused cases, 8 Chromium Navigator flows, and production build."
 doc_version: 3
-doc_updated_at: "2026-11-27T07:46:22.309Z"
+doc_updated_at: "2026-11-27T07:50:18.676Z"
 doc_updated_by: "CODER"
 description: "Expose native Hyperlinks and Comments categories for the existing internet text attributes and annotation fields. Preserve source names and identity, document and anchor order, native cursor navigation and tracking priorities, category tracking settings, and supported contextual edit and delete actions."
 sections:
