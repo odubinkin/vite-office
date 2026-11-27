@@ -1,10 +1,10 @@
 ---
 id: "202611271154-2C7FY1"
 title: "Retain native database sort and subtotal descriptors in Calc ODS"
-status: "DOING"
+status: "BLOCKED"
 priority: "med"
 owner: "CODER"
-revision: 5
+revision: 6
 origin:
   system: "manual"
 depends_on: []
@@ -28,6 +28,9 @@ comments:
   -
     author: "CODER"
     body: "Start: retain native database sort and subtotal definitions in the Calc ODS filter and Worker."
+  -
+    author: "CODER"
+    body: "Blocked: superseded by RCV7KV because the fallback classified this implementation as analysis. The approved scope and existing scratch implementation continue on the code task."
 events:
   -
     type: "status"
@@ -36,8 +39,15 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: retain native database sort and subtotal definitions in the Calc ODS filter and Worker."
+  -
+    type: "status"
+    at: "2026-11-27T12:06:08.312Z"
+    author: "CODER"
+    from: "DOING"
+    to: "BLOCKED"
+    note: "Blocked: superseded by RCV7KV because the fallback classified this implementation as analysis. The approved scope and existing scratch implementation continue on the code task."
 doc_version: 3
-doc_updated_at: "2026-11-27T11:54:43.147Z"
+doc_updated_at: "2026-11-27T12:06:08.312Z"
 doc_updated_by: "CODER"
 description: "Restore the ScDBData sort and subtotal parameter owners, ODS XML import and export, and Worker transport. Verify the native persistence portions of tdf161948_NaturalSortSaveLoad.ods and tdf162262_summarybelow.ods, including the existing aggregate operations needed for the latter's SUBTOTAL cells. Interactive sorting, group generation and unrepresented aggregate selectors are outside the filter scope."
 sections:
