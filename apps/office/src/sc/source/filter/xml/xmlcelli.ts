@@ -14,6 +14,9 @@ import { CellType } from "../../../inc/global";
 import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import type { ScXMLTableRowContext } from "./xmlrowi";
 import { repeatCount } from "./xmlrowi";
+import { SvBaseLinkObjectType } from "../../../../sfx2/source/appl/lnkbase2";
+import { ScAreaLink } from "../../ui/docshell/arealink";
+import { ScMyImpCellRangeSource, ScXMLCellRangeSourceContext } from "./XMLCellRangeSourceContext";
 import { ScXMLAnnotationContext } from "./xmlannoi";
 import { ScXMLCellTextParaContext } from "./celltextparacontext";
 import { createCellEditText } from "./xmlcelli.edit";
@@ -23,6 +26,7 @@ export class ScXMLTableRowCellContext extends ScXMLImportContext {
   private readonly style: string | null;
   private readonly validation: string | null;
   private annotation: ScXMLAnnotationContext | null = null;
+  private pCellRangeSource: ScMyImpCellRangeSource | undefined;
   private readonly paragraphs: CellTextParagraph[] = [];
   private readonly repeat: number;
   private readonly mergedColumns: number;
@@ -134,6 +138,12 @@ export class ScXMLTableRowCellContext extends ScXMLImportContext {
     element: XMLToken,
     attributes: FastAttributeList,
   ): SvXMLImportContext {
+    if (element === XMLToken.TABLE_CELL_RANGE_SOURCE)
+      return new ScXMLCellRangeSourceContext(
+        this.GetScImport(),
+        attributes,
+        (this.pCellRangeSource ??= new ScMyImpCellRangeSource()),
+      );
     if (element === XMLToken.OFFICE_ANNOTATION) {
       return (this.annotation = new ScXMLAnnotationContext(
         this.GetScImport(),
@@ -201,7 +211,7 @@ export class ScXMLTableRowCellContext extends ScXMLImportContext {
         ),
       );
     const hasValue = this.type !== T.UNDEFINED && (this.type !== T.TEXT || value !== undefined);
-    if (this.source === null && !hasValue && !this.annotation) return;
+    if (this.source === null && !hasValue && !this.annotation && !this.pCellRangeSource) return;
     const columns = Math.min(this.repeat, owner.GetDocument().MaxCol() - pos.Col() + 1),
       rows = Math.min(this.row.repeat, owner.GetDocument().MaxRow() - pos.Row() + 1);
     if (columns < this.repeat || rows < this.row.repeat) owner.unsupported("cell range overflow");
@@ -256,6 +266,7 @@ export class ScXMLTableRowCellContext extends ScXMLImportContext {
             ? number
             : null;
     if (this.source !== null) {
+      this.SetCellRangeSource(pos);
       if (this.annotation) {
         owner.consumeCells(1);
         this.annotation.SetAnnotation(pos);
@@ -296,6 +307,7 @@ export class ScXMLTableRowCellContext extends ScXMLImportContext {
             owner.consumeCells(1);
             this.annotation.SetAnnotation(address);
           }
+          this.SetCellRangeSource(address);
           if (!hasValue) continue;
           if (this.covered && owner.GetDocument().GetCellType(address) !== CellType.CELLTYPE_NONE)
             continue;
@@ -313,5 +325,40 @@ export class ScXMLTableRowCellContext extends ScXMLImportContext {
     } finally {
       string.dispose();
     }
+  }
+
+  /** Registers the external area without opening its source workbook. @param position - Actual destination cell. */
+  private SetCellRangeSource(position: ScAddress): void {
+    const source = this.pCellRangeSource;
+    if (!source?.sSourceStr || !source.sFilterName || !source.sURL) return;
+    const importer = this.GetScImport();
+    importer.consumeCells(1);
+    const [col, row, tab] = position.GetVars();
+    const destination = new ScRange(
+      col,
+      row,
+      tab,
+      col + source.nColumns - 1,
+      row + source.nRows - 1,
+      tab,
+    );
+    const link = new ScAreaLink(
+      source.sURL,
+      source.sFilterName,
+      source.sFilterOptions,
+      source.sSourceStr,
+      destination,
+      source.nRefresh,
+    );
+    importer
+      .GetDocument()
+      .GetLinkManager()
+      .InsertFileLink(
+        link,
+        SvBaseLinkObjectType.ClientFile,
+        source.sURL,
+        source.sFilterName,
+        source.sSourceStr,
+      );
   }
 }

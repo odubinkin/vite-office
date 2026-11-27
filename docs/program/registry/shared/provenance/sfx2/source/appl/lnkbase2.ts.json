@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sfx2/source/appl/lnkbase2.ts",
+    "status": "mapped",
+    "upstreamPath": "sfx2/source/appl/lnkbase2.cxx",
+    "localSymbols": [
+      "SvBaseLink",
+      "SetLinkSourceName"
+    ],
+    "upstreamSymbols": [
+      "SvBaseLink::SvBaseLink",
+      "SvBaseLink::SetLinkSourceName"
+    ],
+    "preservedResponsibilities": [
+      "Keeps native client type, update mode, clipboard format and encoded source name."
+    ],
+    "omittedResponsibilities": [
+      "External data loading and desktop connect or disconnect services remain outside the represented package boundary."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sfx2/source/appl/lnkbase2.ts",
+          "marker": "SvBaseLink"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-area-links.test.ts",
+          "marker": "tdf124829.ods"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sfx2/source/appl/lnkbase2.cxx",
+          "marker": "SvBaseLink::SvBaseLink"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sfx2/source/appl/lnkbase2.cxx",
+          "marker": "SvBaseLink::SetLinkSourceName"
+        }
+      ]
+    }
+  }
+}

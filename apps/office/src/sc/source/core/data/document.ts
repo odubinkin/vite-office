@@ -1,4 +1,6 @@
 /** @fileoverview Native document modes, consumed pooled resources and scalar/local-reference storage, attributes and formula tracking. Full construction, formatter and shell services remain unported. */
+import { DocumentLinkManager } from "../../ui/docshell/documentlinkmgr";
+import type { LinkManager } from "../../../../sfx2/source/appl/linkmgr2";
 import { SfxDocumentProperties } from "../../../../sfx2/source/doc/sfxbasemodel";
 import type { ScValidationData } from "./validat";
 import { ScValidationDataList } from "./validat.list";
@@ -642,6 +644,18 @@ export class ScDocument {
   private readonly maPersonList: ScPersonData[] = [];
   private readonly maTabs: (ScTable | null)[] = [];
   protected nVisibleTab = 0;
+  private readonly mpDocLinkMgr = new DocumentLinkManager();
+
+  /** Borrows the document's native link owner. @returns Document link manager. */
+  GetDocLinkManager(): DocumentLinkManager {
+    return this.mpDocLinkMgr;
+  }
+
+  /** Borrows or creates the actual Sfx2 link manager. @returns Registered link owner. */
+  GetLinkManager(): LinkManager {
+    return this.GetDocLinkManager().getLinkManager();
+  }
+
   private externalReferences: ScExternalRefManager | undefined;
   /** Borrows the document's external reference owner. @returns External link manager. */
   GetExternalRefManager = (): ScExternalRefManager =>
@@ -772,6 +786,7 @@ export class ScDocument {
   /** Releases consumed native document observer lifetime,starting with area destruction before formula-cell destruction as in documen2. GC owns physical stores. @returns Nothing. */
   Dispose(): void {
     this.documentProperties.Dispose();
+    this.mpDocLinkMgr.Dispose();
     this.pValidationList?.Dispose();
     return documen2.Dispose.call(this);
   }

@@ -1,3 +1,9 @@
+import { ScAreaLink } from "../../../source/ui/docshell/arealink";
+import {
+  decodeCalcAreaLink,
+  encodeCalcAreaLink,
+  type CalcAreaLinkRecord,
+} from "./calc-area-link-codec";
 import { SetDatabaseRangeAutoFilterFlags } from "../../../source/filter/xml/xmldrani";
 /** @fileoverview Bounded Calc worker transfer of supported native cells, sparse attributes and geometry; XML remains the durable format. */
 import {
@@ -289,6 +295,7 @@ export interface CalcDocumentRecord {
   readonly styles: string;
   readonly sheets: Sheet[];
   readonly externalFiles?: readonly ExternalFile[];
+  readonly areaLinks?: readonly CalcAreaLinkRecord[];
   readonly persons?: readonly CalcPersonRecord[];
   readonly databaseRanges?: CalcDatabaseRangesRecord;
   readonly validations?: readonly CalcValidationRecord[];
@@ -673,6 +680,11 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
   const databaseRanges = encodeCalcDatabaseRanges(document);
   const validations = encodeCalcValidations(document);
   const documentMetaXml = document.documentProperties.GetTransferXml();
+  const areaLinks: CalcAreaLinkRecord[] = [];
+  for (const link of document.GetDocLinkManager().getExistingLinkManager()?.GetLinks() ?? []) {
+    if (link instanceof ScAreaLink) areaLinks.push(encodeCalcAreaLink(link));
+    yield;
+  }
   return {
     version: 1,
     ...(documentMetaXml === undefined ? {} : { documentMetaXml }),
@@ -683,6 +695,7 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
     ...(databaseRanges ? { databaseRanges } : {}),
     ...(validations.length ? { validations } : {}),
     ...(externalFiles.length ? { externalFiles } : {}),
+    ...(areaLinks.length ? { areaLinks } : {}),
     ...(persons.length ? { persons } : {}),
     ...(document.GetVisibleTab() ? { visibleTab: document.GetVisibleTab() } : {}),
     ...(view.GetOption(ViewOption.GRID) ? {} : { showGrid: false }),
@@ -1195,6 +1208,12 @@ function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
       }
     }
     for (const range of databaseRanges) SetDatabaseRangeAutoFilterFlags(document, range);
+    if (record.areaLinks !== undefined && !Array.isArray(record.areaLinks))
+      throw new Error("Calc Worker area-links collection is invalid.");
+    for (const link of record.areaLinks ?? []) {
+      decodeCalcAreaLink(document, link);
+      yield;
+    }
     importer.docImport.finalize();
     for (const [tab, sheet] of record.sheets.entries())
       if (sheet.conditionalFormats)

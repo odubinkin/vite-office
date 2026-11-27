@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/filter/xml/XMLCellRangeSourceContext.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "odf-filter",
+    "capabilityIds": [
+      "CAP-f15476e9-2d48-48f8-9cc5-6c90aa523b01"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/filter/xml/XMLCellRangeSourceContext.ts",
+        "apps/office/src/sc/source/filter/xml/ods-area-links.test.ts",
+        "vendor/libreoffice-reference/sc/source/filter/xml/XMLCellRangeSourceContext.cxx"
+      ],
+      "justification": "Reads original area link metadata with stream-relative source resolution and native dimension and time conversion. Resolving the actual external document and refreshing the stored range are separate operations.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ScXMLCellRangeSourceContext",
+        "ScMyImpCellRangeSource"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/source/filter/xml/XMLCellRangeSourceContext.cxx",
+      "upstreamSymbols": [
+        "ScXMLCellRangeSourceContext::ScXMLCellRangeSourceContext",
+        "ScMyImpCellRangeSource::ScMyImpCellRangeSource"
+      ]
+    }
+  }
+}

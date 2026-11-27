@@ -1,0 +1,30 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "local-infrastructure",
+    "localPath": "apps/office/src/sc/browser/filter/xml/calc-area-link-codec.ts",
+    "status": "local-only",
+    "rationale": "Transports the ordered native external area links and their destinations through the Calc Worker document graph.",
+    "responsibilities": [
+      "Transports the ordered native external area links and their destinations through the Calc Worker document graph."
+    ],
+    "stackDivergence": {
+      "kind": "local-infrastructure",
+      "rationale": "Structured Worker transport of registered area link metadata."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/browser/filter/xml/calc-area-link-codec.ts",
+          "marker": "encodeCalcAreaLink"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-area-links.test.ts",
+          "marker": "tdf124829.ods"
+        }
+      ],
+      "upstream": []
+    }
+  }
+}

@@ -8303,3 +8303,33 @@ ODS persistence.
 - Source: `sfx2/source/doc/SfxDocumentMetaData.cxx` `getChildNodeByName`, `SfxDocumentMetaData::init`, `SfxDocumentMetaData::setMetaText` and `SfxDocumentMetaData::serialize`.
 - Scalar property lookup claims the first matching immediate DOM element. Updating that property edits the selected node, while native SAX export traverses the whole preserved DOM. An invalid file with duplicate scalar elements can therefore still carry its later stale entry after save.
 - Ordinary ODF package filtering uses the same native property selection and DOM serialization. Browser shell titles continue to use the selected value returned by the Writer filter.
+
+### CALC-867 — Omitted external area dimensions remain zero
+
+The native area-link source initializes both dimensions to zero. A present
+dimension that fails parsing falls back to one. A missing dimension stays zero,
+so the registration produces an end coordinate one cell before the start on
+that axis. Calc retains the resulting native range and writes its zero span.
+
+- [Original area source defaults and attributes](../../vendor/libreoffice-reference/sc/source/filter/xml/XMLCellRangeSourceContext.cxx#L31)
+- [Original area link registration](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlcelli.cxx#L999)
+
+### CALC-868 — Only the first external area at a cell is exported
+
+The native area-link collection accepts separate registrations that begin at
+the same cell. The export traversal sorts those links by destination and
+writes only the first registration for that cell. Calc keeps the list order in
+its Worker graph and uses the first registration when writing ODF.
+
+- [Original export selection](../../vendor/libreoffice-reference/sc/source/filter/xml/XMLExportIterator.cxx#L277)
+
+### CALC-869 — Repeated external area links can inherit the first refresh interval
+
+The native cell comparison allows horizontally adjacent single-column external
+areas with equal source, filter, options, height, and cell contents to share an
+ODF repeated cell. The area-link comparison omits the refresh interval. When
+the links differ only in that interval, the export writes the interval from
+the first cell. Calc preserves this comparison and writeback rule.
+
+- [Original area-link comparison](../../vendor/libreoffice-reference/sc/source/filter/xml/XMLExportIterator.cxx#L243)
+- [Original cell repeat comparison](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlexprt.cxx#L3936)

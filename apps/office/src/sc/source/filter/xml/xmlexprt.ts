@@ -1,4 +1,5 @@
 /** @fileoverview Scalar ScXMLExport content path over actual row-major document cells and native ODFF serialization. */
+import type { ScAreaLink } from "../../ui/docshell/arealink";
 import { convertDaysToDuration } from "../../../../sax/source/tools/converter.duration";
 import { GetSheetLinkByName } from "../../ui/unoobj/linkuno";
 import { ScLinkMode } from "../../../inc/global";
@@ -32,7 +33,7 @@ import { ScMatrixMode, type ScFormulaCell } from "../../../inc/formulacell";
 import type { SharedStringConstReference } from "../../../../svl/inc/sharedstring";
 import type { ScDocument } from "../../../inc/document";
 import { MAXROW, ScAddress, ScRange, ScRefFlags } from "../../../inc/address";
-import { ScMyNotEmptyCellsIterator } from "./XMLExportIterator";
+import { ScMyAreaLinksContainer, ScMyNotEmptyCellsIterator } from "./XMLExportIterator";
 import type { ScPostIt, ScThreadedCommentEntry } from "../../../inc/postit";
 import { LANGUAGE_SYSTEM } from "../../../../i18nlangtag/inc/lang";
 import { NfIndexTableOffset } from "../../../../svl/inc/zforlist";
@@ -57,7 +58,7 @@ import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { OUStringBuffer } from "../../../../sal/inc/rtl/ustrbuf";
 import { approxEqual } from "../../../../sal/inc/rtl/math";
 import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
-import type { ScRefCellValue } from "../../../inc/cellvalue";
+import { ScRefCellValue } from "../../../inc/cellvalue";
 import type { ScPatternAttr } from "../../../inc/patattr";
 import { ATTR_VALUE_FORMAT } from "../../../inc/scitems";
 import { SC_STYLE_PROG_STANDARD } from "../../../inc/stylehelper";
@@ -305,6 +306,7 @@ export class ScXMLExport {
       : "";
     const validations = new ScMyValidationsContainer(this.document);
     const calculationSettings = this.WriteCalculationSettings();
+    const areaLinks = new ScMyAreaLinksContainer(this.document);
     let body = "";
     const tableStyles = new Map<string, { name: string; properties: string; master: string }>();
     for (let tab = 0; tab < this.document.GetTableCount(); tab++) {
@@ -383,7 +385,8 @@ export class ScXMLExport {
         columnGroups.GetLast(),
         columnBreaks.last,
       );
-      const bounds = new ScMyNotEmptyCellsIterator(this.document, tab),
+      const sheetLinks = areaLinks.GetSheetLinks(tab);
+      const bounds = new ScMyNotEmptyCellsIterator(this.document, tab, sheetLinks),
         bc: [number] = [0],
         br: [number] = [0];
       while (bounds.GetNext(bc, br)) {
@@ -453,7 +456,7 @@ export class ScXMLExport {
         body += columnGroups.CloseGroups(stop);
         column = stop + 1;
       }
-      const iterator = new ScMyNotEmptyCellsIterator(this.document, tab),
+      const iterator = new ScMyNotEmptyCellsIterator(this.document, tab, sheetLinks),
         col: [number] = [0],
         row: [number] = [0];
       let cell = iterator.GetNext(col, row);
@@ -503,15 +506,40 @@ export class ScXMLExport {
             attribute += ` table:number-columns-spanned="${range.merge.GetColMerge()}" table:number-rows-spanned="${range.merge.GetRowMerge()}"`;
           for (let column = range.first; column <= range.last;) {
             if (cell && row[0] === currentRow && col[0] === column) {
+              const area = iterator.areaLink;
+              const note = iterator.note;
+              const address = new ScAddress(column, currentRow, tab);
+              const combine = area && !note && (range.covered || !range.merge.IsMerged());
+              const first =
+                combine && iterator.cell ? new ScRefCellValue(iterator.cell) : iterator.cell;
+              let count = 1;
+              if (combine)
+                while (
+                  (cell = iterator.GetNext(col, row)) &&
+                  row[0] === currentRow &&
+                  col[0] === column + count &&
+                  col[0] <= range.last &&
+                  !iterator.note &&
+                  this.IsAreaLinkCellEqual(
+                    area,
+                    iterator.areaLink,
+                    first,
+                    iterator.cell,
+                    address,
+                    new ScAddress(col[0], row[0], tab),
+                  )
+                )
+                  count++;
               body += this.exportCell(
-                iterator.cell,
-                iterator.note,
-                new ScAddress(column, currentRow, tab),
+                first,
+                note,
+                area,
+                address,
                 element,
-                attribute,
+                attribute + (count > 1 ? ` table:number-columns-repeated="${count}"` : ""),
               );
-              column++;
-              cell = iterator.GetNext(col, row);
+              column += count;
+              if (!combine) cell = iterator.GetNext(col, row);
             } else {
               const stop = Math.min(
                 range.last + 1,
@@ -655,16 +683,18 @@ export class ScXMLExport {
     if (output) return "<table:named-expressions>" + output + "</table:named-expressions>";
     return scope < 0 ? "<table:named-expressions/>" : "";
   }
-  /** Serializes the original scalar/formula alternatives with actual result computation. @param cell - Native cell view. @param note - Optional cell note. @param address - Actual source coordinate. @param element - ODF cell element. @param attribute - Generated cell attributes. @returns Cell XML. */
+  /** Serializes the original scalar/formula alternatives with actual result computation. @param cell - Native cell view. @param note - Optional cell note. @param areaLink - Optional external area beginning at the cell. @param address - Actual source coordinate. @param element - ODF cell element. @param attribute - Generated cell attributes. @returns Cell XML. */
   private exportCell(
     cell: ScRefCellValue | null,
     note: ScPostIt | null,
+    areaLink: ScAreaLink | null,
     address: ScAddress,
     element: string,
     attribute: string,
   ): string {
     const annotation = note ? this.WriteAnnotation(note) : "";
-    if (!cell) return `<${element}${attribute}>${annotation}</${element}>`;
+    const area = areaLink ? this.WriteAreaLink(areaLink) : "";
+    if (!cell) return `<${element}${attribute}>${area}${annotation}</${element}>`;
     const formatter = this.document.GetFormatTable();
     const key = this.document.GetPattern(address)?.GetNumberFormat(formatter) ?? 0;
     let formula = "",
@@ -743,8 +773,63 @@ export class ScXMLExport {
       const string = cell.getSharedString() as SharedStringConstReference;
       children = this.textParagraph(text(string.getString()));
     }
-    return `<${element}${attribute}${formula}${value}>${annotation}${children}</${element}>`;
+    return `<${element}${attribute}${formula}${value}>${area}${annotation}${children}</${element}>`;
   }
+  /** Checks the area-link branch of the native cell repeat comparison. @param first - Link at the first cell. @param next - Link at the next cell. @param firstCell - First cell value. @param nextCell - Next cell value. @param firstAddress - First cell coordinate. @param nextAddress - Next cell coordinate. @returns Whether a single ODF repeated cell can represent both. */
+  private IsAreaLinkCellEqual(
+    first: ScAreaLink,
+    next: ScAreaLink | null,
+    firstCell: ScRefCellValue | null,
+    nextCell: ScRefCellValue | null,
+    firstAddress: ScAddress,
+    nextAddress: ScAddress,
+  ): boolean {
+    if (!next) return false;
+    const a = first.GetDestArea();
+    const b = next.GetDestArea();
+    if (
+      a.aEnd.Col() !== a.aStart.Col() ||
+      b.aEnd.Col() !== b.aStart.Col() ||
+      a.aEnd.Row() - a.aStart.Row() !== b.aEnd.Row() - b.aStart.Row() ||
+      first.GetFile() !== next.GetFile() ||
+      first.GetFilter() !== next.GetFilter() ||
+      first.GetOptions() !== next.GetOptions() ||
+      first.GetSource() !== next.GetSource()
+    )
+      return false;
+    if (!firstCell || !nextCell) return firstCell === nextCell;
+    if (firstCell.getType() !== nextCell.getType()) return false;
+    if (firstCell.getType() === CellType.CELLTYPE_STRING) {
+      const a = firstCell.getSharedString();
+      const b = nextCell.getSharedString();
+      return a && b ? a.getString().equals(b.getString()) : a === b;
+    }
+    if (
+      firstCell.getType() !== CellType.CELLTYPE_VALUE ||
+      firstCell.getDouble() !== nextCell.getDouble()
+    )
+      return false;
+    const formatter = this.document.GetFormatTable();
+    return (
+      this.document.GetPattern(firstAddress)?.GetNumberFormat(formatter) ===
+      this.document.GetPattern(nextAddress)?.GetNumberFormat(formatter)
+    );
+  }
+
+  /** Writes the original cell-range-source before the cell's annotation and text. @param link - Native external range. @returns Original attributes and empty range element. */
+  private WriteAreaLink(link: ScAreaLink): string {
+    const range = link.GetDestArea();
+    const columns = range.aEnd.Col() - range.aStart.Col() + 1;
+    const rows = range.aEnd.Row() - range.aStart.Row() + 1;
+    let attributes = ` table:name="${escapeXml(link.GetSource())}" xlink:type="simple" xlink:href="${escapeXml(link.GetFile())}" table:filter-name="${escapeXml(link.GetFilter())}"`;
+    const options = link.GetOptions();
+    if (options) attributes += ` table:filter-options="${escapeXml(options)}"`;
+    attributes += ` table:last-column-spanned="${columns}" table:last-row-spanned="${rows}"`;
+    const delay = link.GetRefreshDelaySeconds();
+    if (delay) attributes += ` table:refresh-delay="${convertDaysToDuration(delay / 86400)}"`;
+    return `<table:cell-range-source${attributes}/>`;
+  }
+
   /** Emits note metadata and caption text ahead of the cell's own text. @param note - Native note. @returns Annotation XML. */
   private WriteAnnotation(note: ScPostIt): string {
     const author = note.GetAuthor();

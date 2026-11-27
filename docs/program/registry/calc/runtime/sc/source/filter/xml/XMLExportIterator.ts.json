@@ -18,17 +18,21 @@
       "evidence": [
         "apps/office/src/sc/source/filter/xml/XMLExportIterator.ts#ScMyNotEmptyCellsIterator",
         "apps/office/src/sc/source/filter/xml/ods-cell-notes.test.ts#testCellNoteExportODS",
-        "vendor/libreoffice-reference/sc/source/filter/xml/XMLExportIterator.cxx#ScMyNotEmptyCellsIterator::GetNext"
+        "vendor/libreoffice-reference/sc/source/filter/xml/XMLExportIterator.cxx#ScMyNotEmptyCellsIterator::GetNext",
+        "apps/office/src/sc/source/filter/xml/ods-area-links.test.ts",
+        "vendor/libreoffice-reference/sc/source/filter/xml/XMLExportIterator.cxx#ScMyAreaLinksContainer::SetCellData"
       ],
-      "justification": "Merges native cell values and note entries by address, including positions that contain only a note, before serializing cells and repeated gaps. The represented merge covers native values and notes. Drawing shapes and detective streams are outside this scope.",
+      "justification": "Merges native cell values with notes and area-link anchors in row-major order. The first registered link supplies area metadata at a shared destination. Drawing and detective streams remain outside this traversal.",
       "knownViolations": [],
       "localSymbols": [
-        "ScMyNotEmptyCellsIterator"
+        "ScMyNotEmptyCellsIterator",
+        "ScMyAreaLinksContainer"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sc/source/filter/xml/XMLExportIterator.cxx",
       "upstreamSymbols": [
-        "ScMyNotEmptyCellsIterator::GetNext"
+        "ScMyNotEmptyCellsIterator::GetNext",
+        "ScMyAreaLinksContainer::SetCellData"
       ]
     }
   }

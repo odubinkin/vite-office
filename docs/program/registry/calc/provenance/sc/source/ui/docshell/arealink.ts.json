@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/ui/docshell/arealink.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/ui/docshell/arealink.cxx",
+    "localSymbols": [
+      "ScAreaLink",
+      "SetDestArea",
+      "GetRefreshDelaySeconds"
+    ],
+    "upstreamSymbols": [
+      "ScAreaLink::ScAreaLink",
+      "ScAreaLink::SetDestArea"
+    ],
+    "preservedResponsibilities": [
+      "Retains the native external file, filter, source area, copied destination range and refresh interval."
+    ],
+    "omittedResponsibilities": [
+      "Timer execution, desktop source-medium reload and interactive link editing remain outside the represented package boundary."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/ui/docshell/arealink.ts",
+          "marker": "ScAreaLink"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-area-links.test.ts",
+          "marker": "tdf124829.ods"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/docshell/arealink.cxx",
+          "marker": "ScAreaLink::ScAreaLink"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/docshell/arealink.cxx",
+          "marker": "ScAreaLink::SetDestArea"
+        }
+      ]
+    }
+  }
+}

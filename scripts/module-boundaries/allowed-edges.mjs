@@ -235,6 +235,8 @@ export const allowedEdges = new Map([
       "salhelper",
       "sax",
       "sfx2",
+      // Library_sc.mk links sot; ScAreaLink consumes the native SIMPLE_FILE clipboard format.
+      "sot",
       "svl",
       "svtools",
       "svx",

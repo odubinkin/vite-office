@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/ui/docshell/documentlinkmgr.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "document-lifecycle",
+    "capabilityIds": [
+      "CAP-f15476e9-2d48-48f8-9cc5-6c90aa523b01"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/ui/docshell/documentlinkmgr.ts",
+        "apps/office/src/sc/source/filter/xml/ods-area-links.test.ts",
+        "vendor/libreoffice-reference/sc/source/ui/docshell/documentlinkmgr.cxx"
+      ],
+      "justification": "Owns and lazily opens the native Sfx2 link registry and permits read-only lookup during export. Other native data streams and DDE services remain outside the represented area-link boundary.",
+      "knownViolations": [],
+      "localSymbols": [
+        "DocumentLinkManager",
+        "getLinkManager",
+        "getExistingLinkManager"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/source/ui/docshell/documentlinkmgr.cxx",
+      "upstreamSymbols": [
+        "DocumentLinkManager::getLinkManager",
+        "DocumentLinkManager::getExistingLinkManager"
+      ]
+    }
+  }
+}
