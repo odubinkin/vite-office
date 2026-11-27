@@ -4,7 +4,7 @@ title: "Preserve Calc cell notes through native storage and ODS round trips"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -24,6 +24,23 @@ verification:
   updated_by: "CODER"
   note: "44 focused Calc tests and all source, inventory and static checks passed after the separate integration evidence repair."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-11-27T07:10:47.674Z"
+  updated_by: "EVALUATOR"
+  note: "Calc ODS retains native notes independently of cell values through import, export, and Worker transfer."
+  evaluated_sha: "c9a6619db34b6073365c49718091769ea925e3b3"
+  blueprint_digest: "e3b9da84fed46711b7c726ee87e5d8682b39b53a04c54d156f3c8d3e0c92ecd9"
+  evidence_refs:
+    - ".agentplane/tasks/202611270603-8H0K5B/README.md"
+    - ".agentplane/tasks/202611270603-8H0K5B/quality/20261127-071047674-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202611270603-8H0K5B/quality/20261127-071047674-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202611270603-8H0K5B/quality/20261127-071047674-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202611270603-8H0K5B/blueprint/resolved-snapshot.json"
+    - "output/playwright/8H0K5B/verification.md"
+    - "784482b638a0"
+  findings:
+    - "The pinned note-only cell regression, 44 Calc tests, and source, inventory and static gates passed."
 commit: null
 comments:
   -
@@ -52,7 +69,7 @@ events:
     author: "CODER"
     body: "Implementation evidence: 784482b638a0. Verified checks are recorded in output/playwright/8H0K5B/verification.md."
 doc_version: 3
-doc_updated_at: "2026-11-27T07:10:42.222Z"
+doc_updated_at: "2026-11-27T07:10:47.802Z"
 doc_updated_by: "CODER"
 description: "Port the supported ScPostIt data and sparse column note ownership, cell annotation XML and Worker transfer from pinned LibreOffice. Verify native annotations on otherwise empty cells with testCellNoteExportODS and related existing checks."
 sections:
