@@ -4,7 +4,7 @@ title: "Implement native Writer structural redline boundaries in ODT"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 4
+revision: 6
 origin:
   system: "manual"
 depends_on: []
@@ -20,11 +20,27 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-11-27T17:18:46.016Z"
+  updated_by: "CODER"
+  note: "All 61 affected Writer tests passed. The tdf132911 table scope and sectionprot2 protection survived the ODT and Worker paths. Lint, type check, module boundaries, provenance and scoped inventories passed."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-11-27T17:18:46.557Z"
+  updated_by: "EVALUATOR"
+  note: "Writer ODT marks preserve the original table and section endpoint owners through the package filter and Worker."
+  evaluated_sha: "32075a1022b72c2af74237fc050be3a7035edb6d"
+  blueprint_digest: "19575c6156837846901b6eeb1cf5b99000480af00f8a20e44ea5967e693ea168"
+  evidence_refs:
+    - ".agentplane/tasks/202611271712-T82AA2/README.md"
+    - ".agentplane/tasks/202611271712-T82AA2/quality/20261127-171846557-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202611271712-T82AA2/quality/20261127-171846557-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202611271712-T82AA2/quality/20261127-171846557-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202611271712-T82AA2/blueprint/resolved-snapshot.json"
+    - "output/playwright/odf-writer-redlines/structural-verification.md"
+  findings:
+    - "The source table boundary and the incomplete protected-section fixture pass on original input. WRITER-771 records the original first-match export behavior."
 commit: null
 comments:
   -
@@ -38,8 +54,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: port original table and section redline placement."
+  -
+    type: "verify"
+    at: "2026-11-27T17:18:46.016Z"
+    author: "CODER"
+    state: "ok"
+    note: "All 61 affected Writer tests passed. The tdf132911 table scope and sectionprot2 protection survived the ODT and Worker paths. Lint, type check, module boundaries, provenance and scoped inventories passed."
 doc_version: 3
-doc_updated_at: "2026-11-27T17:12:50.523Z"
+doc_updated_at: "2026-11-27T17:18:46.075Z"
 doc_updated_by: "CODER"
 description: "Attach tracked-change markers around Writer tables and sections to their original registered structural nodes. Preserve position repair, structural markers and actual node relationships through ODT and the Worker. Use the original tdf132911 and section protection fixtures with related Writer regressions."
 sections:
@@ -59,6 +81,36 @@ sections:
     3. Compare the final result against ## Scope and record any residual follow-up in ## Findings. Expected: open edges are explicit rather than implicit.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-11-27T17:18:46.016Z — VERIFY — ok
+
+    By: CODER
+
+    Note: All 61 affected Writer tests passed. The tdf132911 table scope and sectionprot2 protection survived the ODT and Worker paths. Lint, type check, module boundaries, provenance and scoped inventories passed.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-27T17:12:50.523Z, excerpt_hash=sha256:e4982c80dceb350eaec53af8202eb652efb166acf9889b42a3615a685f5269e1
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611271712-T82AA2/blueprint/resolved-snapshot.json
+    - old_digest: 19575c6156837846901b6eeb1cf5b99000480af00f8a20e44ea5967e693ea168
+    - current_digest: 19575c6156837846901b6eeb1cf5b99000480af00f8a20e44ea5967e693ea168
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202611271712-T82AA2
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202611271712-T82AA2
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -92,6 +144,36 @@ PLANNER fallback scaffold for "Implement native Writer structural redline bounda
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-11-27T17:18:46.016Z — VERIFY — ok
+
+By: CODER
+
+Note: All 61 affected Writer tests passed. The tdf132911 table scope and sectionprot2 protection survived the ODT and Worker paths. Lint, type check, module boundaries, provenance and scoped inventories passed.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-27T17:12:50.523Z, excerpt_hash=sha256:e4982c80dceb350eaec53af8202eb652efb166acf9889b42a3615a685f5269e1
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611271712-T82AA2/blueprint/resolved-snapshot.json
+- old_digest: 19575c6156837846901b6eeb1cf5b99000480af00f8a20e44ea5967e693ea168
+- current_digest: 19575c6156837846901b6eeb1cf5b99000480af00f8a20e44ea5967e693ea168
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202611271712-T82AA2
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202611271712-T82AA2
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan

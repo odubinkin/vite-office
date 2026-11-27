@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202611271712-T82AA2",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-27T17:18:46.557Z",
+  "verdict": "pass",
+  "summary": "Writer ODT marks preserve the original table and section endpoint owners through the package filter and Worker.",
+  "evaluated_sha": "32075a1022b72c2af74237fc050be3a7035edb6d",
+  "blueprint_digest": "19575c6156837846901b6eeb1cf5b99000480af00f8a20e44ea5967e693ea168",
+  "findings": [
+    "The source table boundary and the incomplete protected-section fixture pass on original input. WRITER-771 records the original first-match export behavior."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611271712-T82AA2/README.md",
+    "output/playwright/odf-writer-redlines/structural-verification.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
