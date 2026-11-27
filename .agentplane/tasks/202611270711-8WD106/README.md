@@ -1,10 +1,11 @@
 ---
 id: "202611270711-8WD106"
 title: "Expose Writer Navigator cursor tracking preferences"
-status: "DOING"
+result_summary: "Exposed native Navigator outline, table, and bookmark tracking preferences with browser persistence."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
     - "output/playwright/writer-navigator-preferences-chromium.log"
   findings:
     - "Selected outline mode, checked table and bookmark settings, keyboard submenu, focus restoration, collapsed sibling branches and priority fallback are covered. Unrelated registry baseline drift is recorded in Findings."
-commit: null
+commit:
+  hash: "abf62188a7937c0422869da40f69648371f478ec"
+  message: "🧩 8WD106 code: Expose Writer Navigator tracking preferences"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: 37 targeted tests, 6 Chromium Navigator flows, TypeScript, and production build."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: 37 focused Navigator, configuration and shared popup tests and all six Chromium Navigator scenarios. TypeScript, production build, scoped lint and formatting, dependency and source tree checks, Writer resources, policy routing and scoped provenance passed."
+  -
+    type: "status"
+    at: "2026-11-27T07:20:31.988Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: 37 targeted tests, 6 Chromium Navigator flows, TypeScript, and production build."
 doc_version: 3
-doc_updated_at: "2026-11-27T07:19:00.571Z"
+doc_updated_at: "2026-11-27T07:20:31.989Z"
 doc_updated_by: "CODER"
 description: "Connect Navigator context-menu tracking controls for the represented outline, table and bookmark behaviors, with native defaults, focus mode, and persistent Writer Navigator configuration."
 sections:
