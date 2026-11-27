@@ -76,16 +76,20 @@
           "marker": "ParaLineNumberStartValue"
         },
         {
-          "path": "apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts",
-          "marker": "round-trips native overline, glyph outline, shadow and relief"
+          "path": "apps/office/src/sw/source/filter/xml/odt-layout-parity.test.ts",
+          "marker": "preserves a named ODT character style and a direct overline override across export"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-layout-parity.test.ts",
+          "marker": "keeps outline and shadow values under relief and restores each native item"
         },
         {
           "path": "apps/office/src/xmloff/source/text/txtprmap.test.ts",
-          "marker": "uses separate overline and underline states"
+          "marker": "merges the native underline and overline property sequences independently"
         },
         {
           "path": "apps/office/src/xmloff/source/text/txtprmap.test.ts",
-          "marker": "normalizes native rotation angles"
+          "marker": "converts ODF character rotation and scale with the native lexical handlers"
         }
       ],
       "upstream": [

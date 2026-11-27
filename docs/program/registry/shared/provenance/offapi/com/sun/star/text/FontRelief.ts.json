@@ -27,7 +27,7 @@
         },
         {
           "path": "apps/office/src/xmloff/source/text/txtprmap.test.ts",
-          "marker": "uses separate overline and underline states"
+          "marker": "uses the native outline, shadow and font relief ODF spellings"
         }
       ],
       "upstream": [

@@ -95,7 +95,7 @@
         },
         {
           "path": "apps/office/src/xmloff/source/style/xmlstyle.ts",
-          "marker": "rawLineStart"
+          "marker": "attributes.getAsInteger(XMLToken.TEXT_LINE_NUMBER)"
         }
       ],
       "upstream": [

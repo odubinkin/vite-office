@@ -158,8 +158,8 @@
           "marker": "it("
         },
         {
-          "path": "apps/office/src/sw/source/uibase/shells/textsh1.ts",
-          "marker": "GetLineNumber().GetStartValue()"
+          "path": "apps/office/src/sw/source/uibase/shells/txtattr-paragraph.ts",
+          "marker": "createParagraphLineCountItem"
         }
       ],
       "upstream": [

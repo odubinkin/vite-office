@@ -32,7 +32,7 @@
         },
         {
           "path": "apps/office/src/sw/source/filter/xml/odt-annotation.test.ts",
-          "marker": "preserves the bold second annotation run"
+          "marker": "transports native annotation editor text through the ODT Worker record"
         }
       ],
       "upstream": [

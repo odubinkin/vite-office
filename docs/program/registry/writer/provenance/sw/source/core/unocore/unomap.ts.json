@@ -111,16 +111,24 @@
           "marker": "@fileoverview"
         },
         {
-          "path": "apps/office/src/sw/source/core/unocore/unomap.ts",
-          "marker": "ParaLineNumberStartValue"
+          "path": "apps/office/src/sw/source/core/unocore/unomap1.ts",
+          "marker": "\"ParaLineNumberStartValue\""
         },
         {
-          "path": "apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts",
-          "marker": "round-trips native overline, glyph outline, shadow and relief"
+          "path": "apps/office/src/sw/source/filter/xml/odt-layout-parity.test.ts",
+          "marker": "preserves a named ODT character style and a direct overline override across export"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-layout-parity.test.ts",
+          "marker": "keeps outline and shadow values under relief and restores each native item"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/unocore/unomap.ts",
+          "marker": "\"CharRotationIsFitToLine\""
         },
         {
           "path": "apps/office/src/sw/source/core/unocore/native-text-default-schema.test.ts",
-          "marker": "CharRotationIsFitToLine"
+          "marker": "retains static default-table identity and clears MAYBEVOID"
         }
       ],
       "upstream": [

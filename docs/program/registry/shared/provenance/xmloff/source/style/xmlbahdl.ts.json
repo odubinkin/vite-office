@@ -45,7 +45,7 @@
         },
         {
           "path": "apps/office/src/xmloff/source/text/txtprmap.test.ts",
-          "marker": "normalizes native rotation angles"
+          "marker": "converts ODF character rotation and scale with the native lexical handlers"
         },
         {
           "path": "apps/office/src/xmloff/source/style/xmlbahdl.ts",

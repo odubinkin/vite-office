@@ -14,8 +14,12 @@
           "marker": "round trips the pinned character style without flattening its Word style ID"
         },
         {
-          "path": "apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts",
-          "marker": "round-trips native overline, glyph outline, shadow and relief"
+          "path": "apps/office/src/sw/source/filter/xml/odt-layout-parity.test.ts",
+          "marker": "preserves a named ODT character style and a direct overline override across export"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-layout-parity.test.ts",
+          "marker": "keeps outline and shadow values under relief and restores each native item"
         },
         {
           "path": "apps/office/src/sw/source/filter/xml/odt-native-character-values.test.ts",

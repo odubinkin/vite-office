@@ -29,7 +29,7 @@
         },
         {
           "path": "apps/office/src/sw/source/core/attr/swatrset.paragraph.ts",
-          "marker": "Stored Writer paragraph line numbering"
+          "marker": "if (which === RES_LINENUMBER)"
         }
       ]
     },
