@@ -1,5 +1,6 @@
 /** @fileoverview Owns native list-block/item context stack state during bounded Writer SAX import. */
-import type { XMLTextListRule } from "./txtparai";
+import { SetDefaultStyle } from "../style/xmlnumi";
+import type { XMLTextImportTarget, XMLTextListRule } from "./txtparai";
 
 /** Supported list-block state retained by the import helper. */
 export interface XMLTextListBlock {
@@ -16,13 +17,18 @@ export interface XMLTextListBlock {
 export interface XMLTextListItem {
   GetStartValue(): number | undefined;
 }
-/** Native block/item context pair; numbered-paragraph contexts remain outside the existing slice. */
+/** Native block/item context pair for nested list blocks. */
 interface ListContext {
   readonly block: XMLTextListBlock;
   item: XMLTextListItem | undefined;
 }
 /** Source-owned stack separating list blocks from the single-use numbered-item signal. */
 export class XMLTextListsHelper {
+  private readonly numberedParagraphs = new Map<
+    string,
+    Array<readonly [style: string, rule: XMLTextListRule]>
+  >();
+  private readonly lastNumberedParagraphs: Array<readonly [style: string, listId: string]> = [];
   private processedLists: Map<string, readonly [string, string]> | undefined;
   private listStyleDefaults: Map<string, readonly [string, string]> | undefined;
   private styleNameLastListIds: Map<string, string> | undefined;
@@ -82,6 +88,59 @@ export class XMLTextListsHelper {
     let hits = 0;
     while (this.IsListProcessed(listId)) listId = `${base}${++hits}`;
     return listId;
+  }
+  /** Selects the remembered list at the same explicit level and style, or allocates a fresh ID. @param level - Zero-based level. @param styleName - Source list style. @returns List identity. */
+  public GetNumberedParagraphListId(level: number, styleName: string): string {
+    const last = this.lastNumberedParagraphs[level];
+    return styleName && last?.[0] === styleName ? last[1] : this.GenerateNewListId();
+  }
+
+  /** Resolves a list rule from its parent, an explicit XML style, or the native bullet default. @param target - Rule owner. @param parent - Parent style and rule. @param styleName - Source XML style name. @param level - In/out level. @param setDefaults - Inherited per-level default flag. @returns Selected rule and whether it uses built-in defaults. */
+  public MakeNumRule(
+    target: XMLTextImportTarget,
+    parent: readonly [style: string, rule: XMLTextListRule] | undefined,
+    styleName: string,
+    level: [number],
+    setDefaults: boolean,
+  ): { rule: XMLTextListRule; setDefaults: boolean } {
+    let rule = parent?.[1];
+    if (styleName && parent?.[0] !== styleName) rule = target.getListRule(styleName) ?? rule;
+    if (!rule) {
+      rule = target.createNumberingRule?.();
+      if (!rule) throw new Error("The text model cannot create a numbering rule.");
+      setDefaults = true;
+    }
+    level[0] = Math.min(level[0], rule.levelCount - 1);
+    if (setDefaults && rule.rules) SetDefaultStyle(rule.rules, level[0], false);
+    return { rule, setDefaults };
+  }
+
+  /** Retains the native rule stack for one numbered-paragraph list ID. @param target - Rule owner. @param listId - Explicit or inferred identity. @param level - In/out level. @param styleName - Source XML style. @returns Selected rule. */
+  public EnsureNumberedParagraph(
+    target: XMLTextImportTarget,
+    listId: string,
+    level: [number],
+    styleName: string,
+  ): XMLTextListRule {
+    let list = this.numberedParagraphs.get(listId);
+    if (!list) {
+      const { rule } = this.MakeNumRule(target, undefined, "", [0], false);
+      list = [["", rule]];
+      this.numberedParagraphs.set(listId, list);
+    }
+    const last = list[list.length - 1] as readonly [string, XMLTextListRule];
+    if (level[0] === 0 || styleName) {
+      const parent = level[0] > 0 ? list[Math.min(level[0], list.length) - 1] : undefined;
+      const { rule } = this.MakeNumRule(target, parent, styleName, level, false);
+      while (list.length < level[0]) list.push(last);
+      list[level[0]] = [styleName, rule];
+    } else {
+      level[0] = Math.min(level[0], last[1].levelCount - 1);
+      while (list.length <= level[0]) list.push(last);
+    }
+    list.length = level[0] + 1;
+    this.lastNumberedParagraphs[level[0]] = [styleName, listId];
+    return (list[level[0]] as readonly [string, XMLTextListRule])[1];
   }
   /** Projects continuation first,then maps only the first root of a style to its native rule default ID. @param block - Raw block state. @returns Paragraph ListId. */
   public GetListIdForListBlock(

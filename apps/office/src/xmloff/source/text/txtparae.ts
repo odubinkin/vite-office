@@ -446,7 +446,7 @@ function exportParagraphBody(
           : ""
       : "";
     const item = includeStartValue && !info.IsNumbered() ? "list-header" : "list-item";
-    body += `<text:list text:style-name="${escapeXml(styleName)}"${identityAttributes}><text:${item}${startValue}>`;
+    body += `<text:list text:style-name="${styleName}"${identityAttributes}><text:${item}${startValue}>`;
     openItems.push(item);
     openRules.push(paragraphList.rule.name);
   }
@@ -466,11 +466,10 @@ function exportParagraphBody(
       continue;
     }
     const list = paragraph.list;
-    const currentRuleAtLevel = openRules[info.GetLevel() - 1];
     if (
       activeListId !== undefined &&
       (activeListId !== info.GetListId() ||
-        (currentRuleAtLevel !== undefined && currentRuleAtLevel !== info.GetNumRulesName()))
+        (activeListId === "" && openRules.at(-1) !== info.GetNumRulesName()))
     )
       closeAllLists();
     if (openRules.length === 0) {
@@ -494,7 +493,11 @@ function exportParagraphBody(
           : info.IsRestart() && info.GetLevel() === 1
             ? ` text:start-value="${info.GetListLevelStartValue()}"`
             : "";
-        body += `<text:list-item${startValue}>`;
+        const override =
+          openRules.at(-1) === info.GetNumRulesName()
+            ? ""
+            : ` text:style-override="${listStyleNames.get(info.GetNumRulesName())}"`;
+        body += `<text:list-item${startValue}${override}>`;
         openItems.push("list-item");
       }
     }

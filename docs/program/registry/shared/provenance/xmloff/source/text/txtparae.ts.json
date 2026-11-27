@@ -188,6 +188,10 @@
         {
           "path": "apps/office/src/sw/source/filter/xml/odt-annotation-range.test.ts",
           "marker": "preserves original comment text and anchors"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/native-odt-writer-api.test.ts",
+          "marker": "keeps Writer list-rule overrides and numbered paragraphs in their native lists"
         }
       ],
       "upstream": [
@@ -310,6 +314,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/core/unocore/unoportenum.cxx",
           "marker": "lcl_ExportAnnotationStarts"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtparae.cxx",
+          "marker": "XML_STYLE_OVERRIDE"
         }
       ]
     },
@@ -353,7 +361,8 @@
       "Collects shared paragraph and character automatic styles for each additional master-page text section.",
       "V4DQJW as-character graphic checkpoint. An as-char frame occupies one text position in the run and the original control marker is omitted from XML.",
       "Writes the paragraph start attribute independently of participation.",
-      "Exports original annotation range boundaries independently of the hidden field marker."
+      "Exports original annotation range boundaries independently of the hidden field marker.",
+      "Exports alternate item rules with text:style-override while the native list ID continues. Encodes the same list structure for native numbered paragraphs."
     ],
     "status": "mapped",
     "upstreamPath": "xmloff/source/text/txtparae.cxx",

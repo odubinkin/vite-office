@@ -14,6 +14,7 @@ export class XMLTextListBlockContext extends SvXMLImportContext {
   public readonly styleName: string;
   private readonly parent: XMLTextListBlockContext | undefined;
   private restartNumbering = false;
+  private readonly setDefaults: boolean;
 
   /** Resolves a list context. @param target - Writer target. @param attributes - List attributes. @param state - Stream identity state. @param restartAtSubList - Native second/later sublist restart signal. @returns Context. */
   public constructor(
@@ -38,13 +39,18 @@ export class XMLTextListBlockContext extends SvXMLImportContext {
     );
     const continueNumbering = attributes.get(XMLToken.TEXT_CONTINUE_NUMBERING);
     if (continueNumbering !== null) this.restartNumbering = continueNumbering !== "true";
-    const styleName = attributes.get(XMLToken.TEXT_STYLE_NAME) ?? parent?.styleName;
-    if (styleName === undefined) throw new Error("Unsupported ODF list without a list style.");
-    const rule = target.getListRule(styleName);
-    if (rule === undefined) throw new Error(`Unsupported ODF list style: ${styleName}`);
-    const level = parent === undefined ? 0 : parent.level + 1;
-    if (level >= rule.levelCount) throw new Error("Unsupported ODF list level.");
-    this.level = level;
+    const styleName = attributes.get(XMLToken.TEXT_STYLE_NAME) ?? parent?.styleName ?? "";
+    const level: [number] = [parent === undefined ? 0 : parent.level + 1];
+    const { rule, setDefaults } = textLists.MakeNumRule(
+      target,
+      parent ? [parent.styleName, parent.rule] : undefined,
+      styleName,
+      level,
+      parent?.setDefaults ?? false,
+    );
+    if (setDefaults && parent === undefined) this.restartNumbering = false;
+    this.setDefaults = setDefaults;
+    this.level = level[0];
     this.rule = rule;
     this.styleName = styleName;
     let listId = parent?.GetListId() ?? "";

@@ -43,7 +43,8 @@
       "Moves original paragraph border distances through native box item members and metric conversion.",
       "Paragraph split and widow/orphan values now retain actual concrete original items; native byte UNO access forwards QueryValue/PutValue on the real item instead of signed16 scalar substitution. Existing ODF paragraph emission validates and reads those concrete items. Defaults and browser IO behavior remain unchanged; full DOCX filter/model/UI acceptance remains unfinished.",
       "Writer UNO cursor property dispatch resolves CharStyleName to a real SwFormatCharFormat before the native ranged item insertion, including when the filter imports through its standalone document binding.",
-      "Dispatches member-aware writes to the concrete native item instead of flattening numeric subclasses."
+      "Dispatches member-aware writes to the concrete native item instead of flattening numeric subclasses.",
+      "The Writer NumberingStartValue UNO property activates restart when a rule exists and clears the explicit start for negative inputs."
     ],
     "omittedResponsibilities": [
       "Only the current canonical Writer core slice is represented. Full UNO service metadata/query interfaces, listeners, interactive undo/actions, Unicode cursor navigation, layout, unsupported character/table/conditional styles, ranges in unsupported sections, expanded bookmarks and wider properties remain unverified or unported. DomainMapper, OOXML package parser and export are outside this task; no whole-module parity claim."
@@ -97,6 +98,10 @@
         {
           "path": "apps/office/src/sw/source/filter/xml/odt-native-character-values.test.ts",
           "marker": "preserves typography deltas"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/native-odt-writer-api.test.ts",
+          "marker": "keeps Writer list-rule overrides and numbered paragraphs in their native lists"
         }
       ],
       "upstream": [
@@ -111,6 +116,10 @@
         {
           "path": "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx",
           "marker": "SvxBoxItem::PutValue"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/unocore/unoobj.cxx",
+          "marker": "lcl_SetNodeNumStart"
         }
       ]
     }

@@ -1,7 +1,7 @@
 /** @fileoverview Owns native item start/marker consumption and the repeated-sublist count. */
 import { FastAttributeList, SvXMLImportContext } from "../core/xmlimp";
 import { XMLToken } from "../core/xmltoken";
-import { XMLParaContext, type XMLTextImportTarget } from "./txtparai";
+import { XMLParaContext, type XMLTextImportTarget, type XMLTextListRule } from "./txtparai";
 import type { XMLTextListsHelper } from "./txtlists";
 import { XMLTextListBlockContext } from "./XMLTextListBlockContext";
 
@@ -9,6 +9,7 @@ import { XMLTextListBlockContext } from "./XMLTextListBlockContext";
 export class XMLTextListItemContext extends SvXMLImportContext {
   private readonly startValue: number | undefined;
   private subListCount = 0;
+  private readonly overrideRule: XMLTextListRule | undefined;
 
   /** Creates a list-item context. @param target - Writer target. @param attributes - Item attributes. @param state - Stream list state. @param active - Active list. @param header - Whether this is a header without a numbered-item signal. @returns Context. */
   public constructor(
@@ -19,7 +20,9 @@ export class XMLTextListItemContext extends SvXMLImportContext {
     header: boolean,
   ) {
     super();
-    attributes.assertOnly([XMLToken.TEXT_START_VALUE], "list item");
+    attributes.assertOnly([XMLToken.TEXT_START_VALUE, XMLToken.TEXT_STYLE_OVERRIDE], "list item");
+    const overrideName = attributes.get(XMLToken.TEXT_STYLE_OVERRIDE);
+    this.overrideRule = overrideName ? target.getListRule(overrideName) : undefined;
     if (!header) {
       const startValue = attributes.getAsInteger(XMLToken.TEXT_START_VALUE);
       if (startValue !== null && startValue >= 0 && startValue <= 32_767)
@@ -44,7 +47,8 @@ export class XMLTextListItemContext extends SvXMLImportContext {
     if (element === XMLToken.TEXT_P || element === XMLToken.TEXT_H) {
       const item = this.textLists.ListContextTop()?.item;
       const startValue = item?.GetStartValue();
-      const restart = this.active.IsRestartNumbering() || startValue !== undefined;
+      const rule = item && this.overrideRule ? this.overrideRule : this.active.rule;
+      const restart = this.active.IsRestartNumbering();
       this.active.ResetRestartNumbering();
       this.textLists.SetListItem(undefined);
       return new XMLParaContext(this.target, element, attributes, {
@@ -53,8 +57,8 @@ export class XMLTextListItemContext extends SvXMLImportContext {
         ...(item === undefined ? { counted: false } : {}),
         ...(restart ? { restart: true } : {}),
         ...(startValue === undefined ? {} : { startValue }),
-        ruleName: this.active.rule.name,
-        ...(this.active.rule.rules ? { rules: this.active.rule.rules } : {}),
+        ruleName: rule.name,
+        ...(rule.rules ? { rules: rule.rules } : {}),
       });
     }
     if (element === XMLToken.TEXT_LIST) {

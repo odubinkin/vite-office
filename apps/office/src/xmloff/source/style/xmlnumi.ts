@@ -1,4 +1,5 @@
 /** @fileoverview Owns independent supported list-level positioning and attribute import from pinned xmlnumi.cxx. */
+import { ARABIC, CHAR_SPECIAL } from "../../../offapi/com/sun/star/style/NumberingType";
 import { XGraphic } from "../../../offapi/com/sun/star/graphic/XGraphic";
 import {
   Size,
@@ -440,28 +441,66 @@ export function FillUnoNumRule(rules: XMLNumberingRules, declaration: XMLTextLis
         );
       // Native FillUnoProperties applies the explicit pattern after ParentNumbering.
       addString("ListFormat", level.listFormat);
-      const sequence = new ListPropertySequence(
-        {
-          get: /** Executes this bounded native operation. @param offset - Native operation input. @returns Native operation result. */ (
-            offset: number,
-          ) => properties[offset / 48],
-        },
-        properties.length,
-      );
-      const value = new Any(sequence.getAddress(), ["Sequence", propertyType]);
-      try {
-        rules.replaceByIndex(level.level, value);
-      } finally {
-        value.dispose();
-        sequence.dispose();
-        for (const property of properties) {
-          property.Name.dispose();
-          property.Value.dispose();
-        }
-      }
+      replaceLevelProperties(rules, level.level, properties);
     }
   } catch (error) {
     if (!(error instanceof Exception)) throw error;
     error.dispose();
+  }
+}
+
+/** Initializes the supplied fallback level using the native default marker properties. @param rules - Native rule service. @param level - Zero-based level. @param ordered - Selects the Arabic or bullet default. */
+export function SetDefaultStyle(rules: XMLNumberingRules, level: number, ordered: boolean): void {
+  const data: [string, string | number][] = [["NumberingType", ordered ? ARABIC : CHAR_SPECIAL]];
+  if (!ordered)
+    data.push(
+      ["BulletFontName", "starbats"],
+      ["BulletChar", "\uf095"],
+      ["CharStyleName", "Numbering Symbols"],
+    );
+  const properties = data.map(
+    /** Creates a typed default property. @param property - Name and native value. @returns UNO property. */
+    ([name, scalar]) => {
+      const key = xmlTextString(name);
+      const lexical = typeof scalar === "string" ? xmlTextString(scalar) : null;
+      const value = lexical
+        ? new Any(lexical.getDataAddress(), "OUString")
+        : new Any([scalar as number], "sal_Int16");
+      try {
+        return new PropertyValue(key, -1, value, 0);
+      } finally {
+        key.dispose();
+        lexical?.dispose();
+        value.dispose();
+      }
+    },
+  );
+  replaceLevelProperties(rules, level, properties);
+}
+
+/** Sends a source-ordered property sequence to the actual numbering service. @param rules - Native numbering owner. @param level - Zero-based level. @param properties - Owned property sequence values. */
+function replaceLevelProperties(
+  rules: XMLNumberingRules,
+  level: number,
+  properties: readonly PropertyValue[],
+): void {
+  const sequence = new ListPropertySequence(
+    {
+      get: /** Fetches a native property by offset. @param offset - Byte offset. @returns Property. */ (
+        offset: number,
+      ) => properties[offset / 48],
+    },
+    properties.length,
+  );
+  const value = new Any(sequence.getAddress(), ["Sequence", propertyType]);
+  try {
+    rules.replaceByIndex(level, value);
+  } finally {
+    value.dispose();
+    sequence.dispose();
+    for (const property of properties) {
+      property.Name.dispose();
+      property.Value.dispose();
+    }
   }
 }

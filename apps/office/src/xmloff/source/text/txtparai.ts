@@ -104,6 +104,7 @@ export interface XMLParagraphListState {
 export interface XMLTextImportTarget extends Partial<XMLTextFrameImportTarget> {
   GetTextImport(): XMLTextImportHelper;
   getListRule(styleName: string): XMLTextListRule | undefined;
+  createNumberingRule?(): XMLTextListRule;
   getStyle(family: OdfStyleDefinition["family"], styleName: string): OdfStyleDefinition | undefined;
   getAutoStyle(
     family: OdfStyleDefinition["family"],
@@ -581,4 +582,55 @@ function significantSpaces(attributes: FastAttributeList): string {
   if (!Number.isInteger(count) || count < 1 || count > 100_000)
     throw new Error("ODF significant-space count is invalid.");
   return " ".repeat(count);
+}
+
+/** Imports the numbered-paragraph wrapper and applies its rule to each contained paragraph. */
+export class XMLNumberedParaContext extends SvXMLImportContext {
+  private readonly state: XMLParagraphListState;
+
+  /** Parses native numeric bounds and resolves list identity before the child paragraph. @param target - Numbering-rule owner. @param attributes - Wrapper attributes. @param lists - Stream list state. */
+  constructor(
+    private readonly target: XMLTextImportTarget,
+    attributes: FastAttributeList,
+    lists: import("./txtlists").XMLTextListsHelper,
+  ) {
+    super();
+    attributes.assertOnly(
+      [
+        XMLToken.XML_ID,
+        XMLToken.TEXT_LIST_ID,
+        XMLToken.TEXT_LEVEL,
+        XMLToken.TEXT_STYLE_NAME,
+        XMLToken.TEXT_START_VALUE,
+        XMLToken.TEXT_CONTINUE_NUMBERING,
+      ],
+      "numbered paragraph",
+    );
+    const rawLevel = attributes.getAsInteger(XMLToken.TEXT_LEVEL);
+    const level: [number] = [
+      rawLevel !== null && rawLevel >= 1 && rawLevel <= 32767 ? rawLevel - 1 : 0,
+    ];
+    const styleName = attributes.get(XMLToken.TEXT_STYLE_NAME) ?? "";
+    const listId =
+      attributes.get(XMLToken.TEXT_LIST_ID) ||
+      lists.GetNumberedParagraphListId(level[0], styleName);
+    const rule = lists.EnsureNumberedParagraph(target, listId, level, styleName);
+    const start = attributes.getAsInteger(XMLToken.TEXT_START_VALUE);
+    this.state = {
+      level: level[0],
+      listId,
+      ruleName: rule.name,
+      ...(rule.rules ? { rules: rule.rules } : {}),
+      ...(start !== null && start >= 0 && start <= 32767 ? { startValue: start } : {}),
+    };
+  }
+
+  /** Shares the wrapper's numbering state over direct paragraph or heading children. @param element - Child token. @param attributes - Child attributes. @returns Paragraph context, if represented. */
+  override createFastChildContext(
+    element: XMLToken,
+    attributes: FastAttributeList,
+  ): SvXMLImportContext | null {
+    if (element !== XMLToken.TEXT_P && element !== XMLToken.TEXT_H) return null;
+    return new XMLParaContext(this.target, element, attributes, this.state);
+  }
 }

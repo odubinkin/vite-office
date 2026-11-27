@@ -88,13 +88,17 @@ function nodes(doc: SwDoc): SwTextNode[] {
       ): node is SwTextNode => node instanceof SwTextNode,
     );
 }
-/** Captures supported exact list item state without a body-only paragraph adapter. @param doc - Graph. @returns Values. */
-function state(doc: SwDoc) {
+/** Captures native list item state, optionally identifying randomized defaults by rule. @param doc - Graph. @param normalizeDefaults - Compare independent ODT reopens. @returns Values. */
+function state(doc: SwDoc, normalizeDefaults = false) {
+  const defaults = new Map<string, string>();
+  if (normalizeDefaults)
+    for (const [index, rule] of doc.GetNumRuleTable().entries())
+      defaults.set(rule.GetDefaultListId(), `default-${index}`);
   return nodes(doc).map(
     /** Reads canonical list metadata. @param node - Native node. @returns State. */ (node) => ({
       text: node.GetText(),
       kind: node.GetListKind(),
-      id: node.GetListId(),
+      id: defaults.get(node.GetListId()) ?? node.GetListId(),
       rule: node.GetNumRule()?.IsAutoRule()
         ? `automatic-${doc.GetNumRuleTable().slice(1).indexOf(required(node.GetNumRule()))}`
         : node.GetNumRuleName(),
@@ -251,7 +255,7 @@ for (const common of [false, true])
             expect(new Set(ids).size).toBe(ids.length);
             expect(xml).toContain("text:continue-list=");
             const reopened = (await readOdtDocument(bytes, { title: "Cell lists" })).document;
-            expect(state(reopened)).toEqual(state(current));
+            expect(state(reopened, true)).toEqual(state(current, true));
             expect(required(reopened.GetTables()[0]).GetFormat()).toEqual(nativeTable.GetFormat());
             expect(required(reopened.GetTables()[0]).GetColumnWidths()).toEqual([23, 23]);
             current = reopened;

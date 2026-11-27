@@ -398,8 +398,11 @@ export function SetPropertyValue(
       illegal("Invalid numbering level");
     for (const r of ranges) {
       if (name === "NumberingLevel") r.node.SetAttrListLevel(v as number);
-      else if (name === "NumberingStartValue") r.node.SetAttrListRestartValue(v as number);
-      else if (name === "ParaIsNumberingRestart") r.node.SetListRestart(v as boolean);
+      else if (name === "NumberingStartValue") {
+        if (r.node.GetNumRule()) r.node.SetListRestart(true);
+        const start = v as number;
+        r.node.SetAttrListRestartValue(start < 0 ? 65535 : start);
+      } else if (name === "ParaIsNumberingRestart") r.node.SetListRestart(v as boolean);
       else if (name === "NumberingIsNumber") r.node.SetCountedInList(v as boolean);
       else r.node.SetListId(v as string);
     }

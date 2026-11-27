@@ -44,6 +44,10 @@
         {
           "path": "apps/office/src/sw/source/filter/xml/odt-page-stories.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/native-odt-writer-api.test.ts",
+          "marker": "keeps Writer list-rule overrides and numbered paragraphs in their native lists"
         }
       ],
       "upstream": [
@@ -58,6 +62,10 @@
         {
           "path": "vendor/libreoffice-reference/xmloff/source/text/XMLTextFrameContext.cxx",
           "marker": "xOldTextCursor = xTextImportHelper->GetCursor()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtimp.cxx",
+          "marker": "pNumberedParagraph->GetNumRules"
         }
       ]
     },
@@ -80,7 +88,8 @@
       "Switches the native cursor and list context for a text box and restores the enclosing paragraph's tracked ranges.",
       "Applies each named character layer and preceding automatic properties to registered text ranges through the UNO cursor, preserving native attribute precedence.",
       "Ordinary ODF bookmarks use live registered selections that can extend to later paragraphs.",
-      "Allows the native HeaderFooter context to operate before the original body text cursor exists."
+      "Allows the native HeaderFooter context to operate before the original body text cursor exists.",
+      "Dispatches numbered-paragraph wrappers at represented text locations and applies their independent rule, level and list identity via the native paragraph properties."
     ],
     "status": "mapped",
     "upstreamPath": "xmloff/source/text/txtimp.cxx",

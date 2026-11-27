@@ -53,12 +53,17 @@ function metadata(title = "Imported") {
 /** Compares the complete native snapshot modulo process-local automatic rule names. @param doc - Imported graph. @returns Snapshot with identity-preserving rule labels. */
 function normalizedSnapshot(doc: ReturnType<typeof createWriterDocument>) {
   let value = JSON.stringify(encodeWriterDocument(doc));
-  for (const [index, rule] of doc.GetNumRuleTable().slice(1).entries())
-    if (rule.IsAutoRule())
+  for (const [index, rule] of doc.GetNumRuleTable().entries()) {
+    value = value.replaceAll(
+      JSON.stringify(rule.GetDefaultListId()),
+      JSON.stringify(`default-${index}`),
+    );
+    if (rule.IsAutoRule() && index > 0)
       value = value.replaceAll(
         JSON.stringify(rule.GetName()),
         JSON.stringify(`automatic-${index}`),
       );
+  }
   return JSON.parse(value);
 }
 /** Resolves the two literal declarations used by this fixture without relying on opaque automatic names. @param node - Actual paragraph. @returns Declaration name. */
@@ -427,11 +432,12 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       await writeTargetOdt(imported.document, { ...metadata(), title: imported.title }),
       metadata(),
     );
+    const reopenedListId = roundTripped.document.GetNumRuleTable().slice(1)[0]?.GetDefaultListId();
     expect(
       roundTripped.document.paragraphs.map(
-        /** Projects a text node into list assertions. @param node - Round-tripped Writer node. @returns Comparable list state. */
+        /** Compares default ID ownership across independent ODT imports. @param node - Round-tripped Writer node. @returns Comparable list state. */
         (node) => ({
-          listId: node.GetListId(),
+          listId: node.GetListId() === reopenedListId ? nativeListId : node.GetListId(),
           ruleName: listRuleIdentity(node),
           ...projectWriterParagraphList(node),
           text: node.GetText(),

@@ -236,6 +236,10 @@
         {
           "path": "apps/office/src/sw/source/filter/xml/xmlimp.ts",
           "marker": "applyLineNumbering"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/native-odt-writer-api.test.ts",
+          "marker": "keeps Writer list-rule overrides and numbered paragraphs in their native lists"
         }
       ],
       "upstream": [
@@ -418,6 +422,10 @@
         {
           "path": "xmloff/source/text/XMLLineNumberingImportContext.cxx",
           "marker": "XMLLineNumberingImportContext::CreateAndInsert"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtlists.cxx",
+          "marker": "XMLTextListsHelper::MakeNumRule"
         }
       ]
     },
@@ -475,7 +483,8 @@
       "Attaches the real ODF named theme to the document graph.",
       "Applies the ODF default style tab distance to the original Writer UNO text-default owner.",
       "Applies named styles before master-page text and restores the normal cursor and page layout association.",
-      "Applies global line settings with the original character style lookup after the common style pool is populated."
+      "Applies global line settings with the original character style lookup after the common style pool is populated.",
+      "Prefers the common numbering style to an automatic definition of the same raw name and creates fallback rules through the original Writer NumberingRules service."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/filter/xml/xmlimp.cxx",

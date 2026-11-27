@@ -220,6 +220,10 @@
         {
           "path": "apps/office/src/sw/source/filter/ww8/docxexport.default-tabs.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/native-odt-writer-api.test.ts",
+          "marker": "keeps Writer list-rule overrides and numbered paragraphs in their native lists"
         }
       ],
       "upstream": [
@@ -426,6 +430,10 @@
         {
           "path": "vendor/libreoffice-reference/xmloff/source/text/txtparai.cxx",
           "marker": "XMLParaContext::endFastElement"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtparai.cxx",
+          "marker": "XMLNumberedParaContext::XMLNumberedParaContext"
         }
       ]
     },
@@ -465,7 +473,8 @@
       "Dispatches draw:frame inline under the existing shared paragraph importer.",
       "Resolves named and automatic ODF text styles in their respective families and preserves the nesting order through spaces, tabs, line breaks and hyperlinks.",
       "Resolves the marker through the import automatic text style context and applies the interned name to ListAutoFormat at paragraph completion.",
-      "Carries the parsed standard tab distance alongside an ODF paragraph default style until model application."
+      "Carries the parsed standard tab distance alongside an ODF paragraph default style until model application.",
+      "Parses numbered-paragraph list IDs, style references, levels and starts in the native wrapper context."
     ],
     "status": "mapped",
     "upstreamPath": "xmloff/source/text/txtparai.cxx",

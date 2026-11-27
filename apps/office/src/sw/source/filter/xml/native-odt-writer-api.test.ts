@@ -3,6 +3,10 @@ import { afterEach, expect, it, vi } from "vitest";
 import { createWriterDocument } from "../../core/doc/doc";
 import { exportContentXml, exportStylesXml } from "./xmlexp";
 import { importWriterXml } from "./xmlimp";
+import {
+  createOdtWriterTransfer,
+  restoreOdtWriterTransfer,
+} from "../../../browser/filter/xml/odt-transfer";
 import { SwXText } from "../../core/unocore/unotext";
 import { SwXTextCursor } from "../../core/unocore/unoobj";
 import { SwXStyle } from "../../core/unocore/unostyle";
@@ -131,7 +135,7 @@ it("keeps common style properties inherited instead of copying them into paragra
   expect(node.GetpSwpHints()?.Count() ?? 0).toBe(0);
   expect(projectWriterTextRuns(node)[0]?.attributes.bold).toBe(true);
 });
-it("fills independent common and automatic numbering via native Any property sequences", /** Verifies native automatic rule identity and service assignment without ODF-name aliases in SwDoc. @returns Nothing. */ () => {
+it("fills independent common and automatic numbering via native Any property sequences", /** Verifies each declaration through the native service and common-style precedence on a name collision. @returns Nothing. */ () => {
   const levels = vi.spyOn(SwXNumberingRules.prototype, "replaceByIndex"),
     assignments: string[] = [],
     original = SwXTextCursor.prototype.setPropertyValue;
@@ -164,9 +168,55 @@ it("fills independent common and automatic numbering via native Any property seq
     actual = node?.GetNumRule(),
     common = doc.FindNumRulePtr("Shared");
   expect(common?.IsAutoRule()).toBe(false);
-  expect(actual?.IsAutoRule()).toBe(true);
-  expect(actual).not.toBe(common);
-  expect(actual?.GetName()).not.toBe("Shared");
-  expect(node?.GetListLabel()).toBe("1.");
+  expect(actual).toBe(common);
+  expect(node?.GetListLabel()).toBe("•");
   expect(actual?.GetDefaultListId()).not.toBe("");
+});
+it("keeps Writer list-rule overrides and numbered paragraphs in their native lists", /** Exercises both native ODF import contexts and export normalization. @returns Nothing. */ () => {
+  const decimal =
+    '<text:list-style style:name="Decimal"><text:list-level-style-number text:level="1" style:num-format="1" style:num-suffix="."/></text:list-style>';
+  const alpha =
+    '<text:list-style style:name="Alpha"><text:list-level-style-number text:level="1" style:num-format="a" style:num-suffix=")"/></text:list-style>';
+  const source = open(
+    '<text:numbered-paragraph text:list-id="Group" text:style-name="Decimal" text:start-value="5"><text:p>one</text:p></text:numbered-paragraph>' +
+      '<text:numbered-paragraph text:list-id="Group" text:style-name="Alpha"><text:p>two</text:p></text:numbered-paragraph>' +
+      '<text:numbered-paragraph text:style-name="Alpha"><text:p>three</text:p></text:numbered-paragraph>' +
+      '<text:list xml:id="BodyList" text:style-name="Decimal"><text:list-item><text:p>four</text:p></text:list-item><text:list-item text:style-override="Alpha"><text:p>five</text:p></text:list-item></text:list>',
+    "",
+    decimal + alpha,
+  );
+  const expected = ["Decimal", "Alpha", "Alpha", "Decimal", "Alpha"];
+  /** Captures native rule identities without depending on generated list IDs. @param document - Native Writer document. */
+  function expectListRules(document: ReturnType<typeof createWriterDocument>): void {
+    expect(
+      document.paragraphs.map(
+        /** Reads the effective native numbering rule. @param node - Paragraph. @returns Rule name. */
+        (node) => node.GetNumRule()?.GetName(),
+      ),
+    ).toEqual(expected);
+    const [one, two, three, four, five] = document.paragraphs;
+    expect(two?.GetListId()).toBe(one?.GetListId());
+    expect(three?.GetListId()).toBe(one?.GetListId());
+    expect(five?.GetListId()).toBe(four?.GetListId());
+    expect(four?.GetListId()).not.toBe(one?.GetListId());
+  }
+  expectListRules(source);
+  expect(source.paragraphs[0]?.GetAttrListRestartValue()).toBe(5);
+  expect(source.paragraphs[0]?.IsListRestart()).toBe(true);
+
+  const restored = restoreOdtWriterTransfer(structuredClone(createOdtWriterTransfer(source)));
+  expectListRules(restored);
+  const xml = exportContentXml(restored);
+  expect(xml.match(/<text:list-item text:style-override="Alpha">/gu)).toHaveLength(3);
+  expect(xml).not.toContain("<text:numbered-paragraph");
+  expect(xml).toContain('text:start-value="5"');
+  expectListRules(importWriterXml(exportStylesXml(restored), xml, { title: "Lists" }).document);
+
+  const fallback = open(
+    "<text:numbered-paragraph><text:p>default</text:p></text:numbered-paragraph>",
+  );
+  const format = fallback.paragraphs[0]?.GetNumRule()?.Get(0);
+  expect(format?.GetBulletChar()).toBe(0xf095);
+  expect(format?.GetBulletFont()?.GetFamilyName()).toBe("starbats");
+  expect(format?.GetCharFormat()?.GetName()).toBe("Numbering Symbols");
 });

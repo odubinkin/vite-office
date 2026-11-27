@@ -1,4 +1,5 @@
 /** @fileoverview Implements Writer's streaming SwXMLImport bridge over fast SAX contexts. */
+import { SwPoolFormatId } from "../../../inc/poolfmt";
 import { isOpenOffice2Generator } from "../../../../xmloff/source/core/xmlimp";
 import { getBuildIdFromGenerator } from "../../../../xmloff/source/meta/xmlmetai";
 import type { OdfBitmapGeometry } from "../../../../xmloff/source/draw/fill-properties";
@@ -524,7 +525,45 @@ class SwXMLImport
 
   /** Resolves one document-owned list rule. @param styleName - ODF list style name. @returns Rule view. */
   public getListRule(styleName: string): XMLTextListRule | undefined {
-    return this.automaticListRules.get(styleName) ?? this.listRules.get(styleName);
+    return this.listRules.get(styleName) ?? this.automaticListRules.get(styleName);
+  }
+
+  /** Creates the native unnamed numbering rule used by xmloff when no list style resolves. @returns Native rule view. */
+  public createNumberingRule(): XMLTextListRule {
+    this.document.GetCharFormatFromPool(SwPoolFormatId.CHR_NUM_LEVEL);
+    const service = xmlTextString("com.sun.star.text.NumberingRules");
+    try {
+      const rules = this.model.createInstance(service) as SwXNumberingRules;
+      return this.describeListRule(rules, []);
+    } finally {
+      service.dispose();
+    }
+  }
+
+  /** Captures native numbering-rule identity and capacity used by the text list contexts. @param rules - Rule service. @param levels - XML level declarations. @returns Native rule view. */
+  private describeListRule(
+    rules: SwXNumberingRules,
+    levels: XMLTextListRule["levels"],
+  ): XMLTextListRule {
+    const name = rules.getName(),
+      key = xmlTextString("DefaultListId"),
+      value = rules.getPropertyValue(key),
+      identity = xmlTextString("");
+    try {
+      value.extract(identity, "OUString");
+      return {
+        levels,
+        levelCount: rules.getCount(),
+        rules,
+        name: text(name),
+        defaultListId: text(identity),
+      };
+    } finally {
+      name.dispose();
+      key.dispose();
+      value.dispose();
+      identity.dispose();
+    }
   }
 
   /** Applies global ODF line numbering to the canonical Writer document. @param value - Imported configuration. @returns Nothing. */
@@ -692,24 +731,7 @@ class SwXMLImport
           value.dispose();
         }
       }
-      const name = rules.getName(),
-        key = xmlTextString("DefaultListId"),
-        value = rules.getPropertyValue(key),
-        identity = xmlTextString("");
-      try {
-        value.extract(identity, "OUString");
-        declarations.set(styleName, {
-          ...rule,
-          rules,
-          name: text(name),
-          defaultListId: text(identity),
-        });
-      } finally {
-        name.dispose();
-        key.dispose();
-        value.dispose();
-        identity.dispose();
-      }
+      declarations.set(styleName, this.describeListRule(rules, rule.levels));
     } finally {
       if (style) rules.release();
     }

@@ -12,7 +12,6 @@ import { SwList } from "./list";
 
 /** Owns the numbering-rule table required by the supported Writer slice. */
 export class DocumentListsManager {
-  private nextListId = 1;
   private nextNumRuleId = 1;
   private readonly lists = new Map<string, SwList>();
   private readonly listStyleLists = new Map<string, SwList>();
@@ -98,11 +97,12 @@ export class DocumentListsManager {
     for (const entry of this.lists.values())
       if (entry.GetDefaultListStyleName() === previous) entry.SetDefaultListStyleName(next);
   }
-  /** Creates a deterministic unique list id, the browser equivalent of CreateUniqueListId. @returns Unique identity. */
+  /** Generates a native unsigned32 list identity and resolves collisions with an increasing suffix. @returns Unique identity. */
   public CreateUniqueListId(): string {
-    let id: string;
-    do id = `list${this.nextListId++}`;
-    while (this.lists.has(id));
+    const base = `list${crypto.getRandomValues(new Uint32Array(1))[0]}`;
+    let id = base;
+    let hits = 0;
+    while (this.GetListByName(id)) id = `${base}${++hits}`;
     return id;
   }
 

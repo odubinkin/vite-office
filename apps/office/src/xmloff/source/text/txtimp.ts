@@ -18,7 +18,12 @@ import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
 import { RuntimeException } from "../../../cppu/inc/com/sun/star/uno/RuntimeException";
 import { applyTextImportProperties, xmlTextString } from "./txtprmap";
 import { APPEND_PARAGRAPH } from "../../../offapi/com/sun/star/text/ControlCharacter";
-import { XMLParaContext, resolveParagraphStyle, type XMLTextImportTarget } from "./txtparai";
+import {
+  XMLNumberedParaContext,
+  XMLParaContext,
+  resolveParagraphStyle,
+  type XMLTextImportTarget,
+} from "./txtparai";
 import { XMLTextListsHelper } from "./txtlists";
 import { XMLTextFrameContext } from "./XMLTextFrameContext";
 import { XMLTextListBlockContext } from "./XMLTextListBlockContext";
@@ -549,6 +554,8 @@ export class XMLTextImportHelper {
     if (element === XMLToken.TEXT_P || element === XMLToken.TEXT_H)
       return new XMLParaContext(this.target, element, attributes);
     if (type === "Annotation") return null;
+    if (element === XMLToken.TEXT_NUMBERED_PARAGRAPH)
+      return new XMLNumberedParaContext(this.target, attributes, this.lists);
     if (element === XMLToken.TEXT_LIST)
       return new XMLTextListBlockContext(this.target, attributes, this.lists);
     if (element === XMLToken.TABLE_TABLE) {
