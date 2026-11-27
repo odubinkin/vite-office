@@ -182,12 +182,16 @@ describe("privacy-safe ODT import diagnostics", /** Groups package diagnostic as
     expect(JSON.stringify(report)).not.toContain("application/vnd.private.invalid-manifest");
 
     const content = await (await DocumentArchive.open(fixture)).readTextEntry("content.xml");
-    const changed = content.replace("</office:text>", "<office:spreadsheet/></office:text>");
+    const changed = content.replace(
+      "</office:text>",
+      '<office:spreadsheet/><text:section text:name="PRIVATE"/></office:text>',
+    );
     expect(changed).not.toBe(content);
     const ignored = await diagnoseOdtImport(
       await replaceFixtureEntry("content.xml", new TextEncoder().encode(changed)),
     );
     expect(ignored.imported).toBe(true);
+    expect(JSON.stringify(ignored)).not.toContain("PRIVATE");
     expect(
       ignored.diagnostics.some(
         /** Detects unexpected import failures. @param diagnostic - Structural event. @returns Match. */ (
@@ -195,20 +199,18 @@ describe("privacy-safe ODT import diagnostics", /** Groups package diagnostic as
         ) => diagnostic.kind === "import-error",
       ),
     ).toBe(false);
-    const unsupported = content.replace(
+    const malformedContent = content.replace(
       "</office:text>",
-      '<text:section text:name="PRIVATE"/></office:text>',
+      "<text:p></text:PRIVATE></office:text>",
     );
     const xmlFailure = await replaceFixtureEntry(
       "content.xml",
-      new TextEncoder().encode(unsupported),
+      new TextEncoder().encode(malformedContent),
     );
-    const xmlReport = await diagnoseOdtImport(xmlFailure);
-    expect(xmlReport.imported).toBe(false);
-    expect(xmlReport.diagnostics).toContainEqual(
-      expect.objectContaining({ kind: "import-error", stream: "content.xml" }),
+    await expect(diagnoseOdtImport(xmlFailure)).rejects.toHaveProperty(
+      "message",
+      "ODF XML is malformed.",
     );
-    expect(JSON.stringify(xmlReport)).not.toContain("PRIVATE");
   });
 
   it("keeps the Reader's XML stream byte ceiling before inventory parsing", /** Checks resource ceiling. @returns Completion after rejection. */ async () => {
