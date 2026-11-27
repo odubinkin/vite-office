@@ -2,6 +2,9 @@
  * @fileoverview Reimplements the bounded SwXMLWriter package orchestration from pinned LibreOffice `sw/source/filter/xml/wrtxml.cxx`.
  */
 
+import { initializeLibXml2 } from "../../../../external/libxml2/libxml2";
+import { importDocumentMetaXml } from "../../../../xmloff/source/meta/xmlmetai";
+import { prepareDocumentMetaExport } from "../../../../xmloff/source/meta/xmlmetae";
 import {
   createManifestXml,
   createManifestProperty as property,
@@ -39,6 +42,7 @@ export class SwXMLWriter {
     metadata: Readonly<{ title: string }>,
     control: OdtExportControl = {},
   ): Promise<Uint8Array> {
+    if (document.documentProperties.GetPendingXml() !== undefined) await initializeLibXml2();
     const bytes = await packXmlPackage(this.WriteXml(document, metadata, control).files);
     if (bytes.length > (control.maxOutputBytes ?? ODT_EXPORT_BYTE_LIMIT))
       throw new Error("ODT export exceeds size limit.");
@@ -80,7 +84,18 @@ export class SwXMLWriter {
     output.putNextEntry("styles.xml", styles);
     output.putNextEntry("content.xml", content);
     checkpoint(control, "metadata");
-    output.putNextEntry("meta.xml", exportMetaXml(metadata.title, document.GetLocale()));
+    const properties = document.documentProperties;
+    const transferMeta = properties.GetPendingXml();
+    if (transferMeta !== undefined)
+      importDocumentMetaXml(transferMeta, properties.LoadFromDocument.bind(properties), control);
+    if (properties.HasDocumentProperties()) {
+      const native = properties.GetDocumentProperties();
+      prepareDocumentMetaExport(native, native.m_xDoc, metadata.title, document.GetLocale());
+    }
+    output.putNextEntry(
+      "meta.xml",
+      properties.GetTransferXml() ?? exportMetaXml(metadata.title, document.GetLocale()),
+    );
     output.putNextEntry("settings.xml", exportSettingsXml(document));
     for (const font of fonts) {
       if (font.bytes === undefined)

@@ -10,7 +10,8 @@
       "loadFromStorage",
       "storeToStorage",
       "loadFromMedium",
-      "storeToMedium"
+      "storeToMedium",
+      "serializeDocumentProperties"
     ],
     "upstreamSymbols": [
       "loadFromStorage",
@@ -24,7 +25,8 @@
     },
     "preservedResponsibilities": [
       "Original SfxDocumentMetaData.cxx storage/medium method bodies on the actual receiver. Source storage/version/parser/media dependencies remain under implementation; the metadata component is not registered while these dependencies are incomplete.",
-      "storeToMedium creates the descriptor-backed SfxMedium and releases its temporary storage even on failure. The genuine PACKAGE writable stream properties, XMLOasisMetaExporter/XMLMetaExporter and URL transfers remain dependencies for full metadata service output."
+      "storeToMedium creates the descriptor-backed SfxMedium and releases its temporary storage even on failure. The genuine PACKAGE writable stream properties, XMLOasisMetaExporter/XMLMetaExporter and URL transfers remain dependencies for full metadata service output.",
+      "Uses the original document DOM serializer and native SAX Writer for the model snapshot and the ODF metadata stream."
     ],
     "omittedResponsibilities": [
       "Metadata component production registration, actual StorageFactory backend/native SfxMedium and XML metadata services/full original QA remain unfinished. Four storage-path compiler dependency errors remain; no dummy provider or successful storage certificate is supplied.",
@@ -52,6 +54,10 @@
         {
           "path": "apps/office/src/sfx2/source/doc/docfile.storage.test.ts",
           "marker": "private:stream"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-document-metadata.test.ts",
+          "marker": "CUSTOM.odt"
         }
       ],
       "upstream": [
@@ -70,6 +76,10 @@
         {
           "path": "sfx2/source/doc/SfxDocumentMetaData.cxx",
           "marker": "storeToMedium"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sfx2/source/doc/SfxDocumentMetaData.cxx",
+          "marker": "SfxDocumentMetaData::serialize"
         }
       ]
     },

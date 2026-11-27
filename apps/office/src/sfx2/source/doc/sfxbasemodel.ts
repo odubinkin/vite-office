@@ -1,4 +1,9 @@
 /** @fileoverview Original consumed SfxBaseModel XChild, method entry checks, weak component and shell/listener ownership. Only the implemented XChild and language XEventListener interfaces are declared on the actual WeakImplHelper base; the full native interface list, XModel/factories/controllers/storage/properties/events remain unported. Synchronous calls inline the guard's entry check; native SolarMutex/thread behavior is unverified. */
+import { getProcessComponentContext } from "../../../comphelper/inc/processfactory";
+import type { XComponentContext } from "../../../udkapi/com/sun/star/uno/XComponentContext";
+import type { XDocument } from "../../../offapi/com/sun/star/xml/dom/XDocument";
+import { SfxDocumentMetaData } from "./SfxDocumentMetaData";
+import { serializeDocumentProperties } from "./SfxDocumentMetaData.storage";
 import { withSfxListener } from "../../../svl/source/notify/lstner";
 import { WeakImplHelper } from "../../../cppuhelper/inc/implbase";
 import { XChild } from "../../../udkapi/com/sun/star/container/XChild";
@@ -266,5 +271,82 @@ export class SfxBaseModel
     data?.m_aEventListeners.dispose();
     data?.m_sURL.dispose();
     super.Dispose();
+  }
+}
+
+/** Native document properties separated from the UI shell for filter models crossing a Worker boundary. */
+export class SfxDocumentProperties {
+  private readonly properties = new Reference<SfxDocumentMetaData>();
+  private serialized: string | undefined;
+
+  /** Reports whether input supplied a metadata stream or a native owner has been created. @returns Metadata availability. */
+  HasDocumentProperties(): boolean {
+    return this.properties.is() || this.serialized !== undefined;
+  }
+
+  /** Copies the actual native metadata reference adopted by the loaded document. @param source - Loaded owner. @returns Nothing. */
+  Assign(source: SfxDocumentProperties): void {
+    this.properties.assign(source.properties);
+    this.serialized = source.serialized;
+  }
+
+  /** Borrows the native metadata owner, constructing it on the first property access. @returns Actual SfxDocumentMetaData. */
+  GetDocumentProperties(): SfxDocumentMetaData {
+    if (this.serialized !== undefined)
+      throw new Error("Stored metadata needs its native DOM before reading properties.");
+    if (!this.properties.is()) {
+      const context = new Reference<XComponentContext>(getProcessComponentContext().get());
+      const owner = new Reference<SfxDocumentMetaData>();
+      try {
+        owner.assign(new SfxDocumentMetaData(context));
+        this.properties.assign(owner);
+      } finally {
+        owner.dispose();
+        context.dispose();
+      }
+    }
+    return this.properties.operatorStar();
+  }
+
+  /** Adopts the native metadata document after importing its XML. @param dom - Actual document built by xmloff. @returns Nothing. */
+  LoadFromDocument(dom: Reference<XDocument>): void {
+    const context = new Reference<XComponentContext>(getProcessComponentContext().get());
+    try {
+      const owner = new Reference(new SfxDocumentMetaData(context));
+      try {
+        owner.operatorStar().init(dom);
+        this.properties.assign(owner);
+        this.serialized = undefined;
+      } finally {
+        owner.dispose();
+      }
+    } finally {
+      context.dispose();
+    }
+  }
+
+  /** Returns the snapshot awaiting reconstruction in the receiving browser realm. @returns Optional original transfer snapshot. */
+  GetPendingXml(): string | undefined {
+    return this.serialized;
+  }
+
+  /** Writes a canonical snapshot of the native metadata to the existing Worker graph. @returns Serialized native metadata, if present. */
+  GetTransferXml(): string | undefined {
+    const properties = this.properties.get();
+    return properties ? serializeDocumentProperties(properties) : this.serialized;
+  }
+
+  /** Retains the serialized native owner until the next filter initializes this realm's DOM. @param xml - Worker snapshot. @returns Nothing. */
+  SetTransferXml(xml: unknown): void {
+    if (typeof xml !== "string" || xml.length > 16 * 1024 * 1024)
+      throw new Error("Stored ODF document metadata is invalid.");
+    this.properties.clear();
+    this.serialized = xml;
+  }
+
+  /** Releases the model's native metadata owner. @returns Nothing. */
+  Dispose(): void {
+    this.properties.dispose();
+    this.serialized = undefined;
   }
 }

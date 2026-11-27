@@ -6,29 +6,39 @@
     "status": "mapped",
     "localPath": "apps/office/src/xmloff/source/meta/xmlmetai.ts",
     "localSymbols": [
-      "getBuildIdFromGenerator"
+      "getBuildIdFromGenerator",
+      "importDocumentMetaXml"
     ],
     "upstreamPath": "xmloff/source/meta/xmlmetai.cxx",
     "upstreamSymbols": [
       "SvXMLMetaDocumentContext::setBuildId"
     ],
     "preservedResponsibilities": [
-      "Extracts the shared import BuildId from original generator text using the native milestone/build syntax, legacy StarOffice and NeoOffice aliases, and LibreOffice version suffix."
+      "Extracts the shared import BuildId from original generator text using the native milestone/build syntax, legacy StarOffice and NeoOffice aliases, and LibreOffice version suffix.",
+      "Routes the bounded metadata XML through the original document builder and initializes the model metadata from the resulting DOM. Writer title, language and BuildId come from the native owner."
     ],
     "omittedResponsibilities": [
-      "Document property service initialization and other metadata import remain outside this mapper."
+      "Generic flat ODF and desktop document property service orchestration remain outside this package-stream mapper."
     ],
     "evidence": {
       "local": [
         {
           "path": "apps/office/src/xmloff/source/meta/xmlmetai.ts",
           "marker": "getBuildIdFromGenerator"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-document-metadata.test.ts",
+          "marker": "CUSTOM.odt"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/xmloff/source/meta/xmlmetai.cxx",
           "marker": "SvXMLMetaDocumentContext::setBuildId"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/meta/xmlmetai.cxx",
+          "marker": "SvXMLMetaDocumentContext::FinishMetaElement"
         }
       ]
     }

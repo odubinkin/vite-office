@@ -18,12 +18,16 @@
       "evidence": [
         "apps/office/src/xmloff/source/meta/xmlmetai.ts#getBuildIdFromGenerator",
         "vendor/libreoffice-reference/xmloff/source/meta/xmlmetai.cxx#SvXMLMetaDocumentContext::setBuildId",
-        "apps/office/src/xmloff/source/text/txtprmap.test.ts"
+        "apps/office/src/xmloff/source/text/txtprmap.test.ts",
+        "apps/office/src/sw/source/filter/xml/odt-document-metadata.test.ts",
+        "apps/office/src/sc/source/filter/xml/ods-document-metadata.test.ts",
+        "vendor/libreoffice-reference/xmloff/source/meta/xmlmetai.cxx"
       ],
-      "justification": "Extracts the shared import BuildId from original generator text using the native milestone/build syntax, legacy StarOffice and NeoOffice aliases, and LibreOffice version suffix. Document property service initialization and other metadata import remain outside this mapper.",
+      "justification": "Extracts the shared import BuildId from original generator text using the native milestone/build syntax, legacy StarOffice and NeoOffice aliases, and LibreOffice version suffix. Routes the bounded metadata XML through the original document builder and initializes the model metadata from the resulting DOM. Writer title, language and BuildId come from the native owner.",
       "knownViolations": [],
       "localSymbols": [
-        "getBuildIdFromGenerator"
+        "getBuildIdFromGenerator",
+        "importDocumentMetaXml"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "xmloff/source/meta/xmlmetai.cxx",

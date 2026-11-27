@@ -6349,3 +6349,10 @@ loading these sources while preserving the saved index body.
 - Source: `xmloff/source/text/txtfldi.cxx` `XMLAnnotationImportContext::createFastChildContext`, `xmloff/source/text/txtimp.cxx` `XMLTextImportHelper::SetStyleAndAttrs`, `sw/source/core/fields/textapi.cxx` `ImplGetSvxTextPortionPropertySet`, `editeng/source/uno/unotext.cxx` `SvxUnoTextRangeBase::SetPropertyValueHelper`, `editeng/source/editeng/eerdll.cxx`, and `xmloff/source/text/XMLTextNumRuleInfo.cxx` `XMLTextNumRuleInfo::Set`.
 - The annotation Outliner exposes `NumberingRules`, but its special setter rejects a nonempty incoming rule. The XML importer catches that rejection and still sets `NumberingLevel`. A fresh EditEngine numbering item has zero levels, which the ODF exporter refuses as a list rule. The note retains its paragraph content and inline formatting even when the authored list wrapper is omitted on export.
 - The Writer annotation path follows the same sequence for its represented EditEngine properties. It retains the native outline depth through the Worker and exports the paragraph without inventing a replacement numbering rule.
+
+
+### WRITER-767 — Duplicate scalar metadata can remain in the DOM after editing the first entry
+
+- Source: `sfx2/source/doc/SfxDocumentMetaData.cxx` `getChildNodeByName`, `SfxDocumentMetaData::init`, `SfxDocumentMetaData::setMetaText` and `SfxDocumentMetaData::serialize`.
+- Scalar property lookup claims the first matching immediate DOM element. Updating that property edits the selected node, while native SAX export traverses the whole preserved DOM. An invalid file with duplicate scalar elements can therefore still carry its later stale entry after save.
+- Ordinary ODF package filtering uses the same native property selection and DOM serialization. Browser shell titles continue to use the selected value returned by the Writer filter.

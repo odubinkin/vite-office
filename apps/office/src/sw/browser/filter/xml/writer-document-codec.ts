@@ -163,6 +163,7 @@ interface WriterAnnotationMarkRecord {
 
 /** Internal graph record. Paragraph identity is array order, never a stored UI key. */
 export interface WriterDocumentRecord {
+  readonly documentMetaXml?: string;
   readonly theme?: ThemeRecord;
   readonly bodyOrder?: readonly ("text" | "table")[];
   readonly bodyBlocks?: readonly WriterSectionBlock[];
@@ -257,6 +258,7 @@ export function* encodeWriterDocumentSteps(document: SwDoc): Generator<void, Wri
   const documentProtection = ReadDocumentProtection(
     document.interopGrabBag.GetGrabBag().get("DocumentProtection"),
   );
+  const documentMetaXml = document.documentProperties.GetTransferXml();
   return {
     ...(documentProtection === undefined ? {} : { documentProtection }),
     ...(document.theme ? { theme: encodeTheme(document.theme) } : {}),
@@ -298,6 +300,7 @@ export function* encodeWriterDocumentSteps(document: SwDoc): Generator<void, Wri
     documentSettings: document.GetDocumentSettingManager().GetValues(),
     lineNumberInfo: document.GetLineNumberInfo().QueryValue(),
     locale: document.GetLocale(),
+    ...(documentMetaXml === undefined ? {} : { documentMetaXml }),
     characterFormats: encodeCharacterStyles(document),
     outlineRuleIndex: document.GetNumRuleTable().indexOf(document.GetOutlineNumRule()),
     numRules: document.GetNumRuleTable().map(
@@ -412,6 +415,8 @@ export function* decodeWriterDocumentSteps(
   });
   let complete = false;
   try {
+    if (record.documentMetaXml !== undefined)
+      document.documentProperties.SetTransferXml(record.documentMetaXml);
     if (record.theme !== undefined) document.theme = decodeTheme(record.theme);
     if (record.tableStyles !== undefined) {
       const model = new SwXTextDocument(document);

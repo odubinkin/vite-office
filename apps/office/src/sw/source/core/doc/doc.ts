@@ -1,4 +1,5 @@
 /** @fileoverview Implements the Writer SwDoc aggregate from pinned LibreOffice `sw/inc/doc.hxx` and `sw/source/core/doc/docnew.cxx`. */
+import { SfxDocumentProperties } from "../../../../sfx2/source/doc/sfxbasemodel";
 import { InsertTableOf } from "./doctxm";
 import type { SwSectionNode } from "../docnode/ndsect";
 import { SwTOXType, TOXTypes, type SwTOXBase } from "../tox/tox";
@@ -144,6 +145,7 @@ import {
 import { SetAttrMode } from "../../../inc/swtypes";
 /** Final Writer document aggregate; notification and domain policies are composed managers. */
 export class SwDoc {
+  readonly documentProperties = new SfxDocumentProperties();
   /** Document theme used by represented Writer text and format owners. */ theme?: Theme;
   /** Original ThemeFontLangProps values. */ themeFontLanguages?: ThemeFontLanguages;
   private readonly layoutManager = new DocumentLayoutManager(this);
@@ -1016,6 +1018,7 @@ export class SwDoc {
   }
   /** Disposes the document notification graph. @returns Nothing. */
   public Dispose(): void {
+    this.documentProperties.Dispose();
     this.mbDtor = true;
     this.interopGrabBag.Dispose();
     unoCursor.NotifyUnoCursorsOnDocDestruction(this);

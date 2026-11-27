@@ -1,4 +1,5 @@
 /** @fileoverview Native document modes, consumed pooled resources and scalar/local-reference storage, attributes and formula tracking. Full construction, formatter and shell services remain unported. */
+import { SfxDocumentProperties } from "../../../../sfx2/source/doc/sfxbasemodel";
 import type { ScValidationData } from "./validat";
 import { ScValidationDataList } from "./validat.list";
 import { ScPostIt, type NoteEntry, type ScPersonData } from "../../../inc/postit";
@@ -70,6 +71,7 @@ import { ScPrintRangeSaver } from "../tool/prnsave";
 import { ScRangeName } from "../tool/rangenam";
 /** Explicit initial document subset;all supported cells live in its actual sheet/column chain. */
 export class ScDocument {
+  readonly documentProperties = new SfxDocumentProperties();
   GetCondResult = documen4.GetCondResult;
   GetCondColor = documen4.GetCondColor;
   IsTabProtected = documen3.IsTabProtected;
@@ -769,6 +771,7 @@ export class ScDocument {
   }
   /** Releases consumed native document observer lifetime,starting with area destruction before formula-cell destruction as in documen2. GC owns physical stores. @returns Nothing. */
   Dispose(): void {
+    this.documentProperties.Dispose();
     this.pValidationList?.Dispose();
     return documen2.Dispose.call(this);
   }

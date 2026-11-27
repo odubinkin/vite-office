@@ -1,4 +1,9 @@
 /** @fileoverview Original SfxDocumentMetaData.cxx storage/medium method bodies on the actual receiver. Source storage/version/parser/media dependencies remain under implementation; the metadata component is not registered while these dependencies are incomplete. */
+import { SaxStringOutput } from "../../../comphelper/source/xml/saxstringwriter";
+import {
+  cppu_detail_getUnoType_StringPair,
+  type StringPair,
+} from "../../../udkapi/com/sun/star/beans/StringPair";
 import * as MediaDescriptor from "../../../unotools/inc/mediadescriptor";
 import {
   Reference,
@@ -471,5 +476,24 @@ export function storeToMedium(
     }
   } finally {
     md.dispose();
+  }
+}
+
+/** Runs the original normal XSAXSerializable path through the native XML writer. @param properties - Native document properties owner. @returns Metadata stream. */
+export function serializeDocumentProperties(properties: SfxDocumentMetaData): string {
+  const output = new SaxStringOutput();
+  const namespaces = new (Sequence.specialize<StringPair>(cppu_detail_getUnoType_StringPair, 16))();
+  try {
+    const writer = Writer.create(properties.m_xContext);
+    try {
+      writer.operatorStar().setOutputStream(output.stream);
+      properties.serialize(writer, namespaces);
+      return output.getXml();
+    } finally {
+      writer.dispose();
+    }
+  } finally {
+    namespaces.dispose();
+    output.dispose();
   }
 }

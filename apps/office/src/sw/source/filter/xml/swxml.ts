@@ -2,6 +2,9 @@
  * @fileoverview Reimplements the bounded SwXMLReader package orchestration from pinned LibreOffice `sw/source/filter/xml/swxml.cxx`.
  */
 
+import { initializeLibXml2 } from "../../../../external/libxml2/libxml2";
+import { importDocumentMetaXml } from "../../../../xmloff/source/meta/xmlmetai";
+import { SfxDocumentProperties } from "../../../../sfx2/source/doc/sfxbasemodel";
 import { CheckOdfStorageMediaType } from "../../../../sfx2/source/doc/objstor";
 import { readPlainPackageManifest } from "../../../../package/source/zippackage/ZipPackage";
 import { MIMETYPE_OASIS_OPENDOCUMENT_TEXT as ODT_MIMETYPE } from "../../../../comphelper/inc/documentconstants";
@@ -114,41 +117,57 @@ export class SwXMLReader {
       if (picture.length) graphics.set(path, { bytes: picture, mediaType });
       if (control.isCancelled?.() === true) throw new Error("ODT operation was cancelled.");
     }
-    const imported = importWriterXml(stylesXml, contentXml, metadata, metaXml, {
-      graphicHelper: new SvXMLGraphicHelper(graphics),
-      ...(settingsXml === undefined ? {} : { settingsXml }),
-      ...(control.isCancelled === undefined ? {} : { isCancelled: control.isCancelled }),
-      ...(control.defaultFontDevice === undefined
-        ? {}
-        : { defaultFontDevice: control.defaultFontDevice }),
-      ...(control.onDiagnostic === undefined ? {} : { onDiagnostic: control.onDiagnostic }),
-    });
-    let totalFontBytes = 0;
-    for (const font of imported.document.GetEmbeddedFonts()) {
-      checkpoint(control, "mapping");
-      if (
-        !/^Fonts\/(?!.*(?:\.\.|\/\/))[^\\?#]+$/u.test(font.path) ||
-        font.path.startsWith("Fonts//")
-      )
-        throw new Error(`ODF embedded font path is invalid: ${font.path}`);
-      if (!names.includes(font.path))
-        throw new Error(`ODF embedded font package entry is missing: ${font.path}`);
-      if (
-        manifest.get(font.path) !== "application/x-font-ttf" &&
-        manifest.get(font.path) !== "application/vnd.ms-opentype"
-      )
-        throw new Error(`ODF embedded font manifest entry is invalid: ${font.path}`);
-      const fontBytes = await packageFile.readEntry(font.path);
-      totalFontBytes += fontBytes.length;
-      if (fontBytes.length > 4 * 1024 * 1024 || totalFontBytes > 16 * 1024 * 1024)
-        throw new Error("ODF embedded fonts exceed size limit.");
-      imported.document.SetEmbeddedFontBytes(
-        font.path,
-        fontBytes,
-        isViewableOpenTypeFont(fontBytes),
-      );
+    const properties = metaXml === undefined ? undefined : new SfxDocumentProperties();
+    let imported: ImportedWriterDocument;
+    try {
+      if (metaXml !== undefined && properties) {
+        await initializeLibXml2();
+        importDocumentMetaXml(metaXml, properties.LoadFromDocument.bind(properties), control);
+      }
+      imported = importWriterXml(stylesXml, contentXml, metadata, undefined, {
+        ...(properties ? { documentProperties: properties } : {}),
+        graphicHelper: new SvXMLGraphicHelper(graphics),
+        ...(settingsXml === undefined ? {} : { settingsXml }),
+        ...(control.isCancelled === undefined ? {} : { isCancelled: control.isCancelled }),
+        ...(control.defaultFontDevice === undefined
+          ? {}
+          : { defaultFontDevice: control.defaultFontDevice }),
+        ...(control.onDiagnostic === undefined ? {} : { onDiagnostic: control.onDiagnostic }),
+      });
+    } finally {
+      properties?.Dispose();
     }
-    return imported;
+    try {
+      let totalFontBytes = 0;
+      for (const font of imported.document.GetEmbeddedFonts()) {
+        checkpoint(control, "mapping");
+        if (
+          !/^Fonts\/(?!.*(?:\.\.|\/\/))[^\\?#]+$/u.test(font.path) ||
+          font.path.startsWith("Fonts//")
+        )
+          throw new Error(`ODF embedded font path is invalid: ${font.path}`);
+        if (!names.includes(font.path))
+          throw new Error(`ODF embedded font package entry is missing: ${font.path}`);
+        if (
+          manifest.get(font.path) !== "application/x-font-ttf" &&
+          manifest.get(font.path) !== "application/vnd.ms-opentype"
+        )
+          throw new Error(`ODF embedded font manifest entry is invalid: ${font.path}`);
+        const fontBytes = await packageFile.readEntry(font.path);
+        totalFontBytes += fontBytes.length;
+        if (fontBytes.length > 4 * 1024 * 1024 || totalFontBytes > 16 * 1024 * 1024)
+          throw new Error("ODF embedded fonts exceed size limit.");
+        imported.document.SetEmbeddedFontBytes(
+          font.path,
+          fontBytes,
+          isViewableOpenTypeFont(fontBytes),
+        );
+      }
+      return imported;
+    } catch (error) {
+      imported.document.Dispose();
+      throw error;
+    }
   }
 }
 

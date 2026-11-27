@@ -9,6 +9,7 @@ import { SwDoc } from "../../core/doc/doc";
 import type { DefaultFontDevice } from "../../core/doc/default-font";
 import type { OdfXmlDiagnostic } from "../../../../xmloff/source/core/xmlimp";
 import { readOdtDocument, type OdtImportProgressStage } from "./swxml";
+import { initializeLibXml2 } from "../../../../external/libxml2/libxml2";
 import { writeOdtDocument, writeOdtXml, type OdtExportProgressStage } from "./wrtxml";
 
 /** Progress stages qualified by import/export direction. */
@@ -152,6 +153,8 @@ export class InlineOdtFilterService implements OdtFilterService {
   ): Promise<XmlPackage> {
     this.Begin(options.signal);
     try {
+      if (input.document.documentProperties.GetPendingXml() !== undefined)
+        await initializeLibXml2();
       return writeOdtXml(
         input.document,
         { title: input.title },

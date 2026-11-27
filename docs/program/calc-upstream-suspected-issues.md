@@ -8296,3 +8296,10 @@ ODS persistence.
 - Source: `sc/source/filter/xml/celltextparacontext.cxx` `ScXMLCellTextRubyContext`, `ScXMLCellRubyBaseContext` and `ScXMLCellRubyTextContext`; `sc/qa/unit/subsequent_filters_test3.cxx` `testTdf129940`.
 - LibreOffice sends the ruby base, including individually styled spans, into the ordinary Calc paragraph. `ScXMLCellRubyTextContext` collects the pronunciation and its style in its parent, but the parent never transfers them to cell storage. As a result, ODS export emits the base as ordinary cell text with its formatting.
 - The Calc reader retains that behavior and uses native EditEngine span items for the base. The original fixture's A1, B1 and C1 strings and the two distinct C1 span sizes survive Worker transfer and ODS reopening.
+
+
+### CALC-866 — Duplicate scalar metadata can remain in the DOM after editing the first entry
+
+- Source: `sfx2/source/doc/SfxDocumentMetaData.cxx` `getChildNodeByName`, `SfxDocumentMetaData::init`, `SfxDocumentMetaData::setMetaText` and `SfxDocumentMetaData::serialize`.
+- Scalar property lookup claims the first matching immediate DOM element. Updating that property edits the selected node, while native SAX export traverses the whole preserved DOM. An invalid file with duplicate scalar elements can therefore still carry its later stale entry after save.
+- Ordinary ODF package filtering uses the same native property selection and DOM serialization. Browser shell titles continue to use the selected value returned by the Writer filter.

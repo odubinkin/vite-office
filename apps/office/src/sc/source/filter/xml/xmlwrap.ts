@@ -1,4 +1,10 @@
 /** @fileoverview Calc browser-byte composition for native XML import/export wrapper responsibilities over shared ZIP/manifest services. */
+import { initializeLibXml2 } from "../../../../external/libxml2/libxml2";
+import {
+  importDocumentMetaXml,
+  resolveDocumentMetaLinks,
+} from "../../../../xmloff/source/meta/xmlmetai";
+import { prepareDocumentMetaExport } from "../../../../xmloff/source/meta/xmlmetae";
 import {
   DocumentArchive,
   ArchiveChecks,
@@ -90,6 +96,17 @@ export class ScXMLImportWrapper {
     CheckOdfStorageMediaType(metadata, ODS_MIMETYPE);
     if (options.isCancelled?.()) throw new Error("ODS operation was cancelled");
     const importer = new ScXMLImport(this.document, options);
+    if (zip.getEntryNames().includes("meta.xml")) {
+      const properties = this.document.documentProperties;
+      await initializeLibXml2();
+      importDocumentMetaXml(
+        await zip.readTextEntry("meta.xml"),
+        properties.LoadFromDocument.bind(properties),
+        options,
+      );
+      if (options.baseUrl)
+        resolveDocumentMetaLinks(properties.GetDocumentProperties(), options.baseUrl);
+    }
     let views: ViewSettings | undefined;
     if (names.includes("settings.xml")) {
       parseOdfXmlStream(
@@ -129,6 +146,14 @@ export class ScXMLImportWrapper {
     if (options.isCancelled?.()) throw new Error("ODS operation was cancelled");
     const tableProtection = await prepareTableProtection(this.document);
     if (options.isCancelled?.()) throw new Error("ODS operation was cancelled");
+    const properties = this.document.documentProperties;
+    await initializeLibXml2();
+    if (options.isCancelled?.()) throw new Error("ODS operation was cancelled");
+    const transferMeta = properties.GetPendingXml();
+    if (transferMeta !== undefined)
+      importDocumentMetaXml(transferMeta, properties.LoadFromDocument.bind(properties), options);
+    const native = properties.GetDocumentProperties();
+    prepareDocumentMetaExport(native, native.m_xDoc);
     const exporter = new ScXMLExport(this.document, options),
       content = exporter.exportContent(tableProtection),
       styles = exporter.exportStyles(),
@@ -149,6 +174,10 @@ export class ScXMLImportWrapper {
       ],
       [
         ["FullPath", "content.xml"],
+        ["MediaType", "text/xml"],
+      ],
+      [
+        ["FullPath", "meta.xml"],
         ["MediaType", "text/xml"],
       ],
       ...(styles
@@ -176,6 +205,7 @@ export class ScXMLImportWrapper {
     );
     zip.putNextEntry("META-INF/manifest.xml", createManifestXml(manifest));
     zip.putNextEntry("content.xml", content);
+    zip.putNextEntry("meta.xml", properties.GetTransferXml() as string);
     if (styles) zip.putNextEntry("styles.xml", styles);
     const configuration = exporter.GetConfigurationSettings();
     try {

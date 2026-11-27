@@ -1,5 +1,8 @@
 /** @fileoverview Privacy-safe structural diagnostics for the existing Writer ODT reader. */
 
+import { initializeExceptionAbi } from "../../apps/office/src/cppuhelper/browser/exception-abi";
+import { InitApplicationServiceManager } from "../../apps/office/src/desktop/source/app/appinit";
+import { implementations } from "../../apps/office/src/desktop/browser/app/uno-components";
 import { DocumentArchive } from "../../apps/office/src/package/source/zippackage/document-archive";
 import { parseFastXmlStream } from "../../apps/office/src/sax/source/fastparser/fastparser";
 import { projectWriterTextRuns } from "../../apps/office/src/sw/source/core/txtnode/ndtxt";
@@ -106,6 +109,8 @@ export async function diagnoseOdtImport(bytes: Uint8Array): Promise<OdtDiagnosti
       counts.set(key, { ...diagnostic, frequency: (prior?.frequency ?? 0) + 1, loss });
     };
   try {
+    initializeExceptionAbi();
+    InitApplicationServiceManager(implementations);
     const imported = await readOdtDocument(bytes, { title: "diagnostic" }, undefined, {
       onDiagnostic,
     });

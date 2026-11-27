@@ -1,7 +1,11 @@
 /** @fileoverview Implements Writer's streaming SwXMLImport bridge over fast SAX contexts. */
+import type { SfxDocumentProperties } from "../../../../sfx2/source/doc/sfxbasemodel";
 import { SwPoolFormatId, WRITER_CHARACTER_STYLE_POOL } from "../../../inc/poolfmt";
 import { isOpenOffice2Generator } from "../../../../xmloff/source/core/xmlimp";
-import { getBuildIdFromGenerator } from "../../../../xmloff/source/meta/xmlmetai";
+import {
+  getBuildIdFromGenerator,
+  getDocumentMetaImportInfo,
+} from "../../../../xmloff/source/meta/xmlmetai";
 import type { OdfBitmapGeometry } from "../../../../xmloff/source/draw/fill-properties";
 import { hasDrawingFrameFill, importPageBackground, importPageLayoutBox } from "./xmlimpit";
 import { getActivePageStory, type SwFrameFormat } from "../../core/layout/atrfrm";
@@ -153,17 +157,28 @@ export function importWriterXml(
   metaXml?: string,
   options: OdfXmlParseOptions & {
     readonly defaultFontDevice?: DefaultFontDevice;
+    readonly documentProperties?: SfxDocumentProperties;
     readonly settingsXml?: string;
     readonly graphicHelper?: SvXMLGraphicHelper;
   } = {},
 ): ImportedWriterDocument {
-  let locale = metadata.locale ?? "en-US";
-  let buildId = "";
+  const native = options.documentProperties
+    ? getDocumentMetaImportInfo(options.documentProperties.GetDocumentProperties())
+    : undefined;
+  let locale = native?.locale ?? metadata.locale ?? "en-US";
+  let buildId = native?.buildId ?? "";
+  let title = native?.title ?? metadata.title;
   if (metaXml !== undefined) {
     const metadataImport = new SwXMLImport(new SwDoc(false));
-    metadataImport.parse(metaXml, XMLToken.OFFICE_DOCUMENT_META, options);
-    locale = metadataImport.language ?? locale;
-    buildId = metadataImport.buildId;
+    try {
+      metadataImport.parse(metaXml, XMLToken.OFFICE_DOCUMENT_META, options);
+      locale = metadataImport.language ?? locale;
+      buildId = metadataImport.buildId;
+      title = metadataImport.title ?? title;
+    } finally {
+      metadataImport.dispose();
+      metadataImport.document.Dispose();
+    }
   }
   const xmlImport = new SwXMLImport(
     new SwDoc({
@@ -190,12 +205,10 @@ export function importWriterXml(
       xmlImport.parse(contentXml, XMLToken.OFFICE_DOCUMENT_CONTENT, options);
       xmlImport.finishContent();
     }
-    if (metaXml !== undefined) xmlImport.parse(metaXml, XMLToken.OFFICE_DOCUMENT_META, options);
+    if (options.documentProperties)
+      xmlImport.document.documentProperties.Assign(options.documentProperties);
     complete = true;
-    return {
-      document: xmlImport.document,
-      title: xmlImport.title ?? metadata.title,
-    };
+    return { document: xmlImport.document, title };
   } finally {
     xmlImport.dispose();
     xmlImport.document.SetInXMLImport(false);

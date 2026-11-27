@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/xmloff/source/meta/xmlmetae.ts",
+    "status": "mapped",
+    "upstreamPath": "xmloff/source/meta/xmlmetae.cxx",
+    "localSymbols": [
+      "prepareDocumentMetaExport"
+    ],
+    "upstreamSymbols": [
+      "SvXMLMetaExport::Export"
+    ],
+    "preservedResponsibilities": [
+      "Prepares the normal XML metadata path for the native SAX serializer, including the producer identifier and the current ODF package version."
+    ],
+    "omittedResponsibilities": [
+      "The desktop personal-information policy and non-serializable XDocumentProperties fallback remain outside this browser ODF path."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/xmloff/source/meta/xmlmetae.ts",
+          "marker": "prepareDocumentMetaExport"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-document-metadata.test.ts",
+          "marker": "CUSTOM.odt"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-document-metadata.test.ts",
+          "marker": "CUSTOM.odt"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/meta/xmlmetae.cxx",
+          "marker": "SvXMLMetaExport::Export"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sfx2/qa/cppunit/test_misc.cxx",
+          "marker": "testODFCustomMetadata"
+        }
+      ]
+    }
+  }
+}
