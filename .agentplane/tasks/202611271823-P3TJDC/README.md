@@ -1,10 +1,11 @@
 ---
 id: "202611271823-P3TJDC"
 title: "Preserve native Writer bookmark and mark reference fields in ODT"
-status: "DOING"
+result_summary: "Writer ODT now preserves native GetReference fields and their named text anchors."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - "output/playwright/odf-writer-redlines/reference-fields-verification.md"
   findings:
     - "Unmodified LibreOffice reference fixtures passed their represented source, cached text and expansion checks. Page-dependent evaluation remains outside this slice."
-commit: null
+commit:
+  hash: "5760ce646992a1641f6fb89a72242ca14f61f70d"
+  message: "🧩 P3TJDC writer: preserve native named reference fields in ODT"
 comments:
   -
     author: "CODER"
     body: "Start: add native Writer GetReference text-field ownership and ODT paths."
+  -
+    author: "CODER"
+    body: "Verified: original named reference fixtures, 135 related Writer cases, Native ODT and Worker round trips passed."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "135 affected Writer cases passed plus both final pinned reference cases and 3 WhichId tests. Live named text update, Worker and reopened ODT verified. All static and inventory checks passed."
+  -
+    type: "status"
+    at: "2026-11-27T18:45:09.941Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original named reference fixtures, 135 related Writer cases, Native ODT and Worker round trips passed."
 doc_version: 3
-doc_updated_at: "2026-11-27T18:43:49.442Z"
+doc_updated_at: "2026-11-27T18:45:09.942Z"
 doc_updated_by: "CODER"
 description: "Port the original Writer GetReference field owners and the ODT bookmark-ref and reference-ref contracts. Preserve the field result, source, format and language, text reference updates against current bookmark and reference mark owners, and Worker transport. Port represented assertions from the original named reference fixtures. Page-layout and additional reference sources remain scoped to their currently represented behavior."
 sections:
