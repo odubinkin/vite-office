@@ -1,10 +1,11 @@
 ---
 id: "202611271138-BPVCFM"
 title: "Preserve Writer table of contents in ODT and Worker"
-status: "DOING"
+result_summary: "Preserved the original Writer contents index section in the ODT filter."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "361043929fcbc23ec34f01afc98849bfec78a449"
   findings:
     - "The filter preserves the native connected TOX and original form in the represented slice. Interactive rebuilding, other index kinds and PDF verification remain outside this task."
-commit: null
+commit:
+  hash: "361043929fcbc23ec34f01afc98849bfec78a449"
+  message: "🧩 BPVCFM writer: retain native tables of contents through ODT"
 comments:
   -
     author: "CODER"
     body: "Start: preserve the native table-of-contents section and properties in the represented Writer ODT filter and Worker."
+  -
+    author: "CODER"
+    body: "Verified: the pinned contents index, native form and linked generated body survive the Worker and ODT round trip."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Tests  43 passed (43). Original SimpleTOC, typecheck, lint, formatting, dependencies, provenance and Writer/shared inventory passed."
+  -
+    type: "status"
+    at: "2026-11-27T11:54:10.902Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: the pinned contents index, native form and linked generated body survive the Worker and ODT round trip."
 doc_version: 3
-doc_updated_at: "2026-11-27T11:53:07.201Z"
+doc_updated_at: "2026-11-27T11:54:10.905Z"
 doc_updated_by: "CODER"
 description: "Restore native Writer table of contents section ownership, shared ODF source, title, level templates and generated body, and Worker preservation. Use the pinned SimpleTOC.odt fixture. The represented filter slice preserves imported contents and descriptor properties through open and save. Index regeneration, other index families and PDF export are outside this task."
 sections:
