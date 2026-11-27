@@ -4,7 +4,10 @@ import type { XMLTextExportBlock } from "../table/XMLTableExport";
 import { exportWritingDirection } from "../style/prhdlfac";
 import { encodeStyleName } from "../core/xmluconv";
 import { Converter } from "../../../sax/source/tools/converter";
-import type { XMLIndexTOCSource } from "./XMLIndexTOCSourceContext";
+import type { XMLIndexSource } from "./XMLIndexTOCContext";
+import { LanguageTag } from "../../../i18nlangtag/inc/languagetag";
+import { text } from "../../../i18nlangtag/source/isolang/isolang.tables";
+import { OUString } from "../../../sal/inc/rtl/ustring";
 import type { XMLIndexEntry } from "./XMLIndexTemplateContext";
 import { escapeXml, exportOdfLength } from "./txtparae";
 import type { XMLSectionSource } from "./XMLSectionSourceImportContext";
@@ -19,7 +22,7 @@ export interface XMLSectionExportSource {
   readonly protected: boolean;
   readonly protectionKey: Uint8Array;
   readonly source?: XMLSectionSource;
-  readonly index?: XMLIndexTOCSource;
+  readonly index?: XMLIndexSource;
   readonly indexHeader?: boolean;
   readonly style: XMLSectionStyle;
   readonly content: readonly XMLTextExportBlock[];
@@ -54,7 +57,7 @@ export function exportSection(
   if (section.index || section.indexHeader) {
     if (section.protected) attributes += ' text:protected="true"';
     if (section.index)
-      return `<text:table-of-content${attributes}>${exportIndexSource(section.index)}<text:index-body>${content}</text:index-body></text:table-of-content>`;
+      return `<text:${section.index.family}${attributes}>${exportIndexSource(section.index)}<text:index-body>${content}</text:index-body></text:${section.index.family}>`;
     return `<text:index-title${attributes}>${content}</text:index-title>`;
   }
   if (section.condition) {
@@ -81,12 +84,72 @@ export function exportSection(
   return `<text:section${attributes}>${sourceElement}${content}</text:section>`;
 }
 
-/** Exports the original source properties, title, templates and paragraph style lists. @param source - Native TOC properties. @returns TOC source XML. */
-function exportIndexSource(source: XMLIndexTOCSource): string {
-  let attributes = ` text:outline-level="${source.outlineLevel}"`;
-  if (!source.useOutline) attributes += ' text:use-outline-level="false"';
-  if (!source.useMarks) attributes += ' text:use-index-marks="false"';
-  if (source.useStyles) attributes += ' text:use-index-source-styles="true"';
+/** Writes one original source boolean when it differs from the ODF default. @param name - Attribute name. @param value - Native option. @param initial - ODF default. @returns Optional attribute. */
+function exportIndexBoolean(name: string, value: boolean, initial = false): string {
+  return value === initial ? "" : ` text:${name}="${value}"`;
+}
+
+/** Writes the pinned exporter's ODF language attributes using the native locale. @param language - Writer language id. @returns ODF language attributes. */
+function exportIndexLanguage(language: number): string {
+  const tag = new LanguageTag(language);
+  try {
+    const locale = tag.getLocale(false);
+    if (locale.Variant.isEmpty())
+      return ` fo:language="${escapeXml(text(locale.Language))}" fo:country="${escapeXml(text(locale.Country))}"`;
+    const iso = tag.isIsoODF();
+    const languageName = new OUString();
+    const script = new OUString();
+    const country = new OUString();
+    try {
+      tag.getIsoLanguageScriptCountry(languageName, script, country);
+      let attributes = iso ? "" : ` style:rfc-language-tag="${escapeXml(text(tag.getBcp47()))}"`;
+      if (iso || !languageName.isEmpty())
+        attributes += ` fo:language="${escapeXml(text(languageName))}"`;
+      if (!script.isEmpty()) attributes += ` fo:script="${escapeXml(text(script))}"`;
+      if (iso || !country.isEmpty()) attributes += ` fo:country="${escapeXml(text(country))}"`;
+      return attributes;
+    } finally {
+      country.dispose();
+      script.dispose();
+      languageName.dispose();
+    }
+  } finally {
+    tag.dispose();
+  }
+}
+
+/** Exports the original source properties, title, templates and paragraph style lists. @param source - Native index source. @returns Index source XML. */
+function exportIndexSource(source: XMLIndexSource): string {
+  let attributes = "";
+  if (source.family === "table-of-content") {
+    attributes = ` text:outline-level="${source.outlineLevel}"`;
+    attributes += exportIndexBoolean("use-outline-level", source.useOutline, true);
+    attributes += exportIndexBoolean("use-index-marks", source.useMarks, true);
+    attributes += exportIndexBoolean("use-index-source-styles", source.useStyles);
+  } else if (source.family === "user-index") {
+    attributes += exportIndexBoolean("use-objects", source.useObjects);
+    attributes += exportIndexBoolean("use-graphics", source.useGraphics);
+    attributes += exportIndexBoolean("use-index-marks", source.useMarks);
+    attributes += exportIndexBoolean("use-tables", source.useTables);
+    attributes += exportIndexBoolean("use-floating-frames", source.useFrames);
+    attributes += exportIndexBoolean("copy-outline-levels", source.copyOutlineLevels);
+    attributes += exportIndexBoolean("use-index-source-styles", source.useStyles);
+    attributes += ` text:index-name="${escapeXml(source.indexName)}"`;
+  } else {
+    if (source.mainEntryStyle)
+      attributes += ` text:main-entry-style-name="${escapeXml(encodeStyleName(source.mainEntryStyle))}"`;
+    attributes += exportIndexBoolean("ignore-case", source.ignoreCase);
+    attributes += exportIndexBoolean("alphabetical-separators", source.separators);
+    attributes += exportIndexBoolean("combine-entries", source.combineEntries, true);
+    attributes += exportIndexBoolean("combine-entries-with-dash", source.combineWithDash);
+    attributes += exportIndexBoolean("use-keys-as-entries", source.useKeysAsEntries);
+    attributes += exportIndexBoolean("combine-entries-with-pp", source.combineWithPP, true);
+    attributes += exportIndexBoolean("capitalize-entries", source.capitalizeEntries);
+    attributes += exportIndexBoolean("comma-separated", source.commaSeparated);
+    if (source.sortAlgorithm)
+      attributes += ` text:sort-algorithm="${escapeXml(source.sortAlgorithm)}"`;
+    if (source.language !== undefined) attributes += exportIndexLanguage(source.language);
+  }
   if (source.fromChapter) attributes += ' text:index-scope="chapter"';
   if (!source.relativeTabs) attributes += ' text:relative-tab-stop-position="false"';
   const title = source.title
@@ -94,7 +157,14 @@ function exportIndexSource(source: XMLIndexTOCSource): string {
     : "";
   let templates = "";
   for (const template of source.templates) {
-    templates += `<text:table-of-content-entry-template text:outline-level="${template.level}" text:style-name="${escapeXml(encodeStyleName(template.styleName ?? ""))}">${template.entries.map(exportIndexEntry).join("")}</text:table-of-content-entry-template>`;
+    const level =
+      source.family === "alphabetical-index"
+        ? template.level === 1
+          ? "separator"
+          : template.level - 1
+        : template.level;
+    const name = `text:${source.family}-entry-template`;
+    templates += `<${name} text:outline-level="${level}" text:style-name="${escapeXml(encodeStyleName(template.styleName ?? ""))}">${template.entries.map(exportIndexEntry).join("")}</${name}>`;
   }
   let styles = "";
   for (const [level, names] of source.sourceStyles) {
@@ -103,7 +173,7 @@ function exportIndexSource(source: XMLIndexTOCSource): string {
       styles += `<text:index-source-style text:style-name="${escapeXml(encodeStyleName(name))}"/>`;
     styles += "</text:index-source-styles>";
   }
-  return `<text:table-of-content-source${attributes}>${title}${templates}${styles}</text:table-of-content-source>`;
+  return `<text:${source.family}-source${attributes}>${title}${templates}${styles}</text:${source.family}-source>`;
 }
 
 /** Writes one native TOC entry template token. @param entry - Field properties. @returns Field XML. */

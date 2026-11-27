@@ -42,15 +42,23 @@ export class XMLIndexTemplateContext extends SvXMLImportContext {
   private readonly styleName: string | null;
   private readonly valid: boolean;
 
-  /** Captures the outline level and style before reading its fields. @param attributes - Entry template attributes. @param levels - Native outline depth. @param publish - Source definition owner. @returns Context. */
+  /** Captures the outline level and style before reading its fields. @param attributes - Entry template attributes. @param levels - Native outline depth. @param publish - Source definition owner. @param alphabetical - Uses the original alphabetical level and token table. @returns Context. */
   public constructor(
     attributes: FastAttributeList,
     levels: number,
     private readonly publish: (template: XMLIndexTemplate) => void,
+    private readonly alphabetical = false,
   ) {
     super();
     this.styleName = attributes.get(XMLToken.TEXT_STYLE_NAME);
     const level = attributes.get(XMLToken.TEXT_OUTLINE_LEVEL);
+    if (alphabetical) {
+      const entry =
+        level === "separator" ? 1 : level === "1" ? 2 : level === "2" ? 3 : level === "3" ? 4 : 0;
+      this.valid = entry !== 0;
+      this.level[0] = entry;
+      return;
+    }
     const numeric = Number(level);
     this.valid =
       level !== null &&
@@ -67,6 +75,7 @@ export class XMLIndexTemplateContext extends SvXMLImportContext {
     attributes: FastAttributeList,
   ): SvXMLImportContext | null {
     const kind = indexEntries.get(token);
+    if (this.alphabetical && (kind === "link-start" || kind === "link-end")) return null;
     return this.valid && kind
       ? new XMLIndexEntryContext(
           kind,

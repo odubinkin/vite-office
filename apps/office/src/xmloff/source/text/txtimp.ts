@@ -648,7 +648,7 @@ export class XMLTextImportHelper {
     }
     if (element === XMLToken.TEXT_SEQUENCE_DECLS && type === "Body")
       return new SvXMLIgnoreContext(true);
-    if (element === XMLToken.TEXT_TABLE_OF_CONTENT && this.target.beginDocumentIndex)
+    if (XMLIndexTOCContext.IsIndex(element) && this.target.beginDocumentIndex)
       return new XMLIndexTOCContext(this, this.target.beginDocumentIndex.bind(this.target));
     if (
       (element === XMLToken.TEXT_SECTION || element === XMLToken.TEXT_INDEX_TITLE) &&

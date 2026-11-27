@@ -35,7 +35,7 @@ export function InsertTableOf(
   before: SwNode,
   descriptor: SwTOXBase,
 ): SwSectionNode {
-  const tox = descriptor.Clone(document.GetTOXType());
+  const tox = descriptor.Clone(document.GetTOXType(descriptor.type.type, descriptor.type.name));
   tox.name = GetUniqueTOXBaseName(document, tox.type, tox.name);
   const data = new SwSectionData(SectionType.ToxContent, tox.name);
   const node = document.GetNodes().InsertTextSection(before, data, tox);

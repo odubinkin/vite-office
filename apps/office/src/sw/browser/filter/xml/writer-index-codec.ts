@@ -1,4 +1,6 @@
 /** @fileoverview Native Writer contents-index form and source in the detached worker graph. */
+import { LanguageTag } from "../../../../i18nlangtag/inc/languagetag";
+import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { SvxTabAdjust } from "../../../../editeng/inc/svxenum";
 import type { SwDoc } from "../../../source/core/doc/doc";
 import {
@@ -7,10 +9,21 @@ import {
   SwChapterFormat,
   SwFormToken,
   SwTOXBase,
+  TOXTypes,
 } from "../../../source/core/tox/tox";
 
 /** Value-only TOC descriptor record, with its structural children carried by the section codec. */
 export interface WriterIndexRecord {
+  readonly type?: TOXTypes.Index | TOXTypes.User;
+  readonly typeName?: string;
+  readonly levelFromChapter?: boolean;
+  readonly alphabetical?: {
+    readonly mainEntryCharStyle: string;
+    readonly languageTag: string;
+    readonly sortAlgorithm: string;
+    readonly flags: number;
+    readonly commaSeparated: boolean;
+  };
   readonly title: string;
   readonly level: number;
   readonly fromChapter: boolean;
@@ -38,7 +51,30 @@ export function encodeIndex(tox: SwTOXBase): WriterIndexRecord {
     });
     if (level > 0) sourceStyles.push(tox.GetStyleNames(level - 1));
   }
+  const type = tox.type.type;
+  if (type !== TOXTypes.Content && type !== TOXTypes.User && type !== TOXTypes.Index)
+    throw new Error("Writer index type is not represented in the Worker graph.");
+  const tag = new LanguageTag(tox.language);
+  let languageTag: string;
+  try {
+    languageTag = text(tag.getBcp47(false));
+  } finally {
+    tag.dispose();
+  }
   return {
+    ...(type === TOXTypes.Content ? {} : { type, typeName: tox.type.name }),
+    ...(type === TOXTypes.User ? { levelFromChapter: tox.levelFromChapter } : {}),
+    ...(type === TOXTypes.Index
+      ? {
+          alphabetical: {
+            mainEntryCharStyle: tox.mainEntryCharStyle,
+            languageTag,
+            sortAlgorithm: tox.sortAlgorithm,
+            flags: tox.indexOptions,
+            commaSeparated: tox.form.IsCommaSeparated(),
+          },
+        }
+      : {}),
     title: tox.title,
     level: tox.level,
     fromChapter: tox.fromChapter,
@@ -52,6 +88,15 @@ export function encodeIndex(tox: SwTOXBase): WriterIndexRecord {
 
 /** Restores the native TOC properties under the receiving document type. @param document - Receiving model. @param name - Connected section identity. @param record - Detached values. @returns Native TOC descriptor. */
 export function decodeIndex(document: SwDoc, name: string, record: WriterIndexRecord): SwTOXBase {
+  const type = record.type ?? TOXTypes.Content;
+  if (
+    (type !== TOXTypes.Content && type !== TOXTypes.User && type !== TOXTypes.Index) ||
+    (record.typeName !== undefined && typeof record.typeName !== "string") ||
+    (record.levelFromChapter !== undefined && typeof record.levelFromChapter !== "boolean")
+  )
+    throw new Error("Stored Writer index type is invalid.");
+  const tox = new SwTOXBase(document.GetTOXType(type, record.typeName));
+  const max = tox.form.GetFormMax();
   if (
     typeof record.title !== "string" ||
     !Number.isInteger(record.level) ||
@@ -61,15 +106,41 @@ export function decodeIndex(document: SwDoc, name: string, record: WriterIndexRe
     typeof record.protected !== "boolean" ||
     !Number.isInteger(record.createType) ||
     record.createType < 0 ||
-    record.createType > 7 ||
+    record.createType > 0x7f ||
     typeof record.relativeTabs !== "boolean" ||
     !Array.isArray(record.form) ||
-    record.form.length !== MAXLEVEL + 1 ||
+    record.form.length !== max ||
     !Array.isArray(record.sourceStyles) ||
-    record.sourceStyles.length !== MAXLEVEL
+    record.sourceStyles.length !== max - 1
   )
     throw new Error("Stored Writer index is invalid.");
-  const tox = new SwTOXBase(document.GetTOXType());
+  if (type === TOXTypes.Index) {
+    const alpha = record.alphabetical;
+    if (
+      !alpha ||
+      typeof alpha.mainEntryCharStyle !== "string" ||
+      typeof alpha.languageTag !== "string" ||
+      typeof alpha.sortAlgorithm !== "string" ||
+      !Number.isInteger(alpha.flags) ||
+      alpha.flags < 0 ||
+      alpha.flags > 0x7f ||
+      typeof alpha.commaSeparated !== "boolean"
+    )
+      throw new Error("Stored Writer alphabetical index is invalid.");
+    const bcp47 = unicode(alpha.languageTag);
+    const tag = new LanguageTag(bcp47);
+    try {
+      tox.language = tag.getLanguageType(false);
+    } finally {
+      tag.dispose();
+      bcp47.dispose();
+    }
+    tox.indexOptions = alpha.flags;
+    tox.mainEntryCharStyle = alpha.mainEntryCharStyle;
+    tox.sortAlgorithm = alpha.sortAlgorithm;
+    tox.form.SetCommaSeparated(alpha.commaSeparated);
+  }
+  tox.levelFromChapter = record.levelFromChapter ?? false;
   tox.name = name;
   tox.title = record.title;
   tox.level = record.level;
@@ -92,8 +163,9 @@ export function decodeIndex(document: SwDoc, name: string, record: WriterIndexRe
         !Number.isInteger(field.nTabStopPosition) ||
         field.nTabStopPosition < 0 ||
         (field.eTabAlign !== SvxTabAdjust.Left && field.eTabAlign !== SvxTabAdjust.End) ||
-        (field.nChapterFormat !== SwChapterFormat.Number &&
-          field.nChapterFormat !== SwChapterFormat.NumberNoPrePostAndTitle) ||
+        !Number.isInteger(field.nChapterFormat) ||
+        field.nChapterFormat < SwChapterFormat.Number ||
+        field.nChapterFormat > SwChapterFormat.NumberNoPrePostAndTitle ||
         !Number.isInteger(field.nOutlineLevel) ||
         field.nOutlineLevel < 1 ||
         field.nOutlineLevel > MAXLEVEL ||

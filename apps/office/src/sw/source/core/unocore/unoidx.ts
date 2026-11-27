@@ -11,9 +11,12 @@ export class SwXDocumentIndex {
   private readonly descriptor: SwTOXBase;
   private section: SwTOXBaseSection | undefined;
 
-  /** Registers the contents descriptor with its original document type. @param document - Native document. @returns New index descriptor. */
-  public constructor(private readonly document: SwDoc) {
-    this.descriptor = new SwTOXBase(document.GetTOXType());
+  /** Registers the descriptor with its original document type. @param document - Native document. @param type - Index family. @returns New index descriptor. */
+  public constructor(
+    private readonly document: SwDoc,
+    type = TOXTypes.Content,
+  ) {
+    this.descriptor = new SwTOXBase(document.GetTOXType(type));
   }
 
   /** Returns descriptor fields before attachment and connected fields afterwards. @returns Index properties. */

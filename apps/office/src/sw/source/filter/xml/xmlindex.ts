@@ -1,11 +1,15 @@
 /** @fileoverview Connects shared contents-index XML properties to the Writer index service. */
+import { SwGetPoolIdFromName } from "../../../inc/SwGetPoolIdFromName";
+import { SwStyleNameMapper } from "../../core/doc/SwStyleNameMapper";
+import type { SwDoc } from "../../core/doc/doc";
 import { SvxTabAdjust } from "../../../../editeng/inc/svxenum";
 import { convert, Length } from "../../../../o3tl/inc/unit_conversion";
 import type {
   XMLIndexImport,
   XMLIndexImportProperties,
+  XMLIndexSource,
 } from "../../../../xmloff/source/text/XMLIndexTOCContext";
-import type { XMLIndexTOCSource } from "../../../../xmloff/source/text/XMLIndexTOCSourceContext";
+import type { XMLIndexSourceProperties } from "../../../../xmloff/source/text/XMLIndexSourceBaseContext";
 import type { XMLIndexEntry } from "../../../../xmloff/source/text/XMLIndexTemplateContext";
 import type { XMLSectionStyle } from "../../../../xmloff/source/text/XMLSectionStyleContext";
 import type { XMLTextImportHelper } from "../../../../xmloff/source/text/txtimp";
@@ -15,11 +19,17 @@ import {
   SwChapterFormat,
   SwFormToken,
   SwTOXElement,
+  SwTOIOptions,
+  TOXTypes,
   TOX_STYLE_DELIMITER,
   type SwTOXBase,
 } from "../../core/tox/tox";
 import type { SwXTextCursor } from "../../core/unocore/unoobj";
-import { SwXDocumentIndex } from "../../core/unocore/unoidx";
+import {
+  getUserIndexProgrammaticName,
+  getUserIndexTypeName,
+  SwXDocumentIndex,
+} from "../../core/unocore/unoidx";
 import { importSectionStyle, pushSectionCursor } from "./xmlsection";
 
 const formTypes: Readonly<Record<XMLIndexEntry["kind"], FormTokenType>> = {
@@ -39,20 +49,60 @@ const xmlTypes = new Map<FormTokenType, XMLIndexEntry["kind"]>(
   ),
 );
 
+xmlTypes.set(FormTokenType.Entry, "text");
+xmlTypes.set(FormTokenType.ChapterInfo, "chapter");
+
+const chapterDisplay = [
+  "number",
+  "name",
+  "number-and-name",
+  "plain-number-and-name",
+  "plain-number",
+] as const;
+
 /** Resolves the native display name declared for a referenced ODF style. */
 type IndexStyleName = (family: "text" | "paragraph", name: string) => string | undefined;
 
 /** Writes the index source through the original Writer descriptor and form. @param tox - Attached index descriptor. @param source - Shared parsed properties. @param styleName - Original style-name boundary. @returns Nothing. */
 function importIndexSource(
   tox: SwTOXBase,
-  source: XMLIndexTOCSource,
+  source: XMLIndexSource,
   styleName: IndexStyleName,
+  document: SwDoc,
 ): void {
-  tox.level = source.outlineLevel;
-  tox.createType =
-    (source.useMarks ? SwTOXElement.Mark : SwTOXElement.None) |
-    (source.useOutline ? SwTOXElement.OutlineLevel : SwTOXElement.None) |
-    (source.useStyles ? SwTOXElement.Template : SwTOXElement.None);
+  if (source.family === "alphabetical-index") {
+    tox.indexOptions =
+      (source.combineEntries ? SwTOIOptions.SameEntry : SwTOIOptions.None) |
+      (source.combineWithPP ? SwTOIOptions.FF : SwTOIOptions.None) |
+      (!source.ignoreCase ? SwTOIOptions.CaseSensitive : SwTOIOptions.None) |
+      (source.useKeysAsEntries ? SwTOIOptions.KeyAsEntry : SwTOIOptions.None) |
+      (source.separators ? SwTOIOptions.AlphaDelimiter : SwTOIOptions.None) |
+      (source.combineWithDash ? SwTOIOptions.Dash : SwTOIOptions.None) |
+      (source.capitalizeEntries ? SwTOIOptions.InitialCaps : SwTOIOptions.None);
+    tox.mainEntryCharStyle = styleName("text", source.mainEntryStyle) ?? "";
+    tox.form.SetCommaSeparated(source.commaSeparated);
+    if (source.language !== undefined) tox.language = source.language;
+    if (source.sortAlgorithm) tox.sortAlgorithm = source.sortAlgorithm;
+  } else {
+    tox.createType =
+      (source.useMarks ? SwTOXElement.Mark : SwTOXElement.None) |
+      (source.useStyles ? SwTOXElement.Template : SwTOXElement.None);
+    if (source.family === "table-of-content") {
+      tox.level = source.outlineLevel;
+      if (source.useOutline) tox.createType |= SwTOXElement.OutlineLevel;
+    } else {
+      if (source.useObjects) tox.createType |= SwTOXElement.Ole;
+      if (source.useGraphics) tox.createType |= SwTOXElement.Graphic;
+      if (source.useTables) tox.createType |= SwTOXElement.Table;
+      if (source.useFrames) tox.createType |= SwTOXElement.Frame;
+      tox.levelFromChapter = source.copyOutlineLevels;
+      if (source.indexName)
+        tox.type = document.GetTOXType(
+          TOXTypes.User,
+          getUserIndexTypeName(document, source.indexName),
+        );
+    }
+  }
   tox.fromChapter = source.fromChapter;
   tox.form.SetRelTabPos(source.relativeTabs);
   if (source.title) {
@@ -65,7 +115,11 @@ function importIndexSource(
     if (paraStyle) tox.form.SetTemplate(template.level, paraStyle);
     const tokens: SwFormToken[] = [];
     for (const entry of template.entries) {
-      const token = new SwFormToken(formTypes[entry.kind]);
+      const type =
+        entry.kind === "chapter" && source.family !== "table-of-content"
+          ? FormTokenType.ChapterInfo
+          : formTypes[entry.kind];
+      const token = new SwFormToken(type);
       token.sCharStyleName = styleName("text", entry.styleName) ?? entry.styleName;
       if (entry.kind === "link-start" && !token.sCharStyleName) token.sCharStyleName = "Index Link";
       if (entry.kind === "span") token.sText = entry.text ?? "";
@@ -80,14 +134,11 @@ function importIndexSource(
         token.bWithTab = entry.withTab ?? true;
       }
       if (entry.kind === "chapter") {
-        if (entry.display === "plain-number")
-          token.nChapterFormat = SwChapterFormat.NumberNoPrePostAndTitle;
-        else if (
-          entry.display === "name" ||
-          entry.display === "number-and-name" ||
-          entry.display === "plain-number-and-name"
-        )
-          throw new Error("Writer TOC entry requires a chapter-number format.");
+        const chapter = chapterDisplay.findIndex(
+          /** Finds the recognized native chapter field. @param display - Original spelling. @returns Match. */
+          (display) => display === entry.display,
+        );
+        if (chapter >= 0) token.nChapterFormat = chapter;
         if (entry.chapterLevel !== undefined) {
           if (entry.chapterLevel < 1 || entry.chapterLevel > MAXLEVEL)
             throw new Error("Writer TOC entry chapter outline level is invalid.");
@@ -119,7 +170,14 @@ export function importDocumentIndex(
   styleName: IndexStyleName,
 ): XMLIndexImport {
   const parent = helper.GetCursor() as SwXTextCursor;
-  const index = new SwXDocumentIndex(parent.GetPaM().GetPoint().GetNode().GetDoc());
+  const document = parent.GetDoc();
+  const type =
+    properties.family === "alphabetical-index"
+      ? TOXTypes.Index
+      : properties.family === "user-index"
+        ? TOXTypes.User
+        : TOXTypes.Content;
+  const index = new SwXDocumentIndex(document, type);
   const descriptor = index.GetTOXBase();
   descriptor.name = properties.name;
   descriptor.protected = properties.protected;
@@ -129,15 +187,15 @@ export function importDocumentIndex(
     outlineLevels: MAXLEVEL,
     /** Sets the attached native index source before exposure. @param source - Parsed source definition. @returns Nothing. */
     setSource(source): void {
-      importIndexSource(index.GetTOXBase(), source, styleName);
+      importIndexSource(index.GetTOXBase(), source, styleName, document);
     },
     end: pushSectionCursor(helper, node, parent),
   };
 }
 
-/** Projects the original TOC property values through the common section exporter. @param tox - Connected index properties. @returns ODF index data. */
-export function exportDocumentIndex(tox: SwTOXBase): XMLIndexTOCSource {
-  const templates: XMLIndexTOCSource["templates"][number][] = [];
+/** Projects the original index properties through the common section exporter. @param tox - Connected index properties. @param document - Actual index owner. @returns ODF index data. */
+export function exportDocumentIndex(tox: SwTOXBase, document: SwDoc): XMLIndexSource {
+  const templates: XMLIndexSourceProperties["templates"][number][] = [];
   const sourceStyles = new Map<number, readonly string[]>();
   for (let level = 1; level < tox.form.GetFormMax(); level++) {
     const entries: XMLIndexEntry[] = [];
@@ -149,10 +207,17 @@ export function exportDocumentIndex(tox: SwTOXBase): XMLIndexTOCSource {
         entries.push({
           kind,
           styleName,
-          ...(token.nOutlineLevel === MAXLEVEL ? {} : { chapterLevel: token.nOutlineLevel }),
-          ...(token.nChapterFormat === SwChapterFormat.NumberNoPrePostAndTitle
-            ? { display: "plain-number" }
-            : {}),
+          ...(token.eTokenType === FormTokenType.ChapterInfo
+            ? {
+                chapterLevel: token.nOutlineLevel,
+                display: chapterDisplay[token.nChapterFormat],
+              }
+            : {
+                ...(token.nOutlineLevel === MAXLEVEL ? {} : { chapterLevel: token.nOutlineLevel }),
+                ...(token.nChapterFormat === SwChapterFormat.NumberNoPrePostAndTitle
+                  ? { display: "plain-number" }
+                  : {}),
+              }),
         });
       else if (kind === "span") entries.push({ kind, styleName, text: token.sText });
       else if (kind === "tab-stop")
@@ -170,15 +235,55 @@ export function exportDocumentIndex(tox: SwTOXBase): XMLIndexTOCSource {
     const styles = tox.GetStyleNames(level - 1);
     if (styles) sourceStyles.set(level, styles.split(TOX_STYLE_DELIMITER));
   }
-  return {
-    outlineLevel: tox.level,
-    useOutline: Boolean(tox.createType & SwTOXElement.OutlineLevel),
-    useMarks: Boolean(tox.createType & SwTOXElement.Mark),
-    useStyles: Boolean(tox.createType & SwTOXElement.Template),
+  const common = {
     fromChapter: tox.fromChapter,
     relativeTabs: tox.form.IsRelTabPos(),
     title: { styleName: tox.form.GetTemplate(0), text: tox.title },
     templates,
     sourceStyles,
+  };
+  if (tox.type.type === TOXTypes.Index) {
+    const options = tox.indexOptions;
+    return {
+      ...common,
+      family: "alphabetical-index",
+      mainEntryStyle: SwStyleNameMapper.FillProgName(
+        tox.mainEntryCharStyle,
+        SwGetPoolIdFromName.ChrFmt,
+      ),
+      separators: Boolean(options & SwTOIOptions.AlphaDelimiter),
+      ignoreCase: !(options & SwTOIOptions.CaseSensitive),
+      combineEntries: Boolean(options & SwTOIOptions.SameEntry),
+      combineWithDash: Boolean(options & SwTOIOptions.Dash),
+      useKeysAsEntries: Boolean(options & SwTOIOptions.KeyAsEntry),
+      combineWithPP: Boolean(options & SwTOIOptions.FF),
+      capitalizeEntries: Boolean(options & SwTOIOptions.InitialCaps),
+      commaSeparated: tox.form.IsCommaSeparated(),
+      sortAlgorithm: tox.sortAlgorithm,
+      language: tox.language,
+    };
+  }
+  const useMarks = Boolean(tox.createType & SwTOXElement.Mark);
+  const useStyles = Boolean(tox.createType & SwTOXElement.Template);
+  if (tox.type.type === TOXTypes.User)
+    return {
+      ...common,
+      family: "user-index",
+      indexName: getUserIndexProgrammaticName(document, tox.type.name),
+      useMarks,
+      useStyles,
+      useObjects: Boolean(tox.createType & SwTOXElement.Ole),
+      useGraphics: Boolean(tox.createType & SwTOXElement.Graphic),
+      useTables: Boolean(tox.createType & SwTOXElement.Table),
+      useFrames: Boolean(tox.createType & SwTOXElement.Frame),
+      copyOutlineLevels: tox.levelFromChapter,
+    };
+  return {
+    ...common,
+    family: "table-of-content",
+    outlineLevel: tox.level,
+    useOutline: Boolean(tox.createType & SwTOXElement.OutlineLevel),
+    useMarks,
+    useStyles,
   };
 }

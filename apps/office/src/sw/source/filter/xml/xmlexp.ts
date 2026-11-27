@@ -644,7 +644,7 @@ function projectBlock(block: SwSectionBlock, anchored: XMLBoundWriterFrames): XM
       kind: "section",
       section:
         section instanceof SwTOXBaseSection
-          ? { ...properties, index: exportDocumentIndex(section.tox) }
+          ? { ...properties, index: exportDocumentIndex(section.tox, block.GetDoc()) }
           : properties,
     };
   }

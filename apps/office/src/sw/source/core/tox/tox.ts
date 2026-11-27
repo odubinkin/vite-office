@@ -2,6 +2,7 @@
 import { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { RES_TXTATR_TOXMARK } from "../../../inc/hintids";
 import type { SwTextTOXMark } from "../txtnode/atrtox";
+import { MsLangId } from "../../../../i18nlangtag/inc/mslangid";
 import { SvxTabAdjust } from "../../../../editeng/inc/svxenum";
 import { WRITER_MAX_LIST_LEVEL } from "../doc/list";
 
@@ -28,6 +29,22 @@ export enum SwTOXElement {
   Mark = 0x0001,
   OutlineLevel = 0x0002,
   Template = 0x0004,
+  Ole = 0x0008,
+  Table = 0x0010,
+  Graphic = 0x0020,
+  Frame = 0x0040,
+}
+
+/** Native alphabetical-index option bits. */
+export enum SwTOIOptions {
+  None = 0,
+  SameEntry = 0x01,
+  FF = 0x02,
+  CaseSensitive = 0x04,
+  KeyAsEntry = 0x08,
+  AlphaDelimiter = 0x10,
+  Dash = 0x20,
+  InitialCaps = 0x40,
 }
 
 /** Original stored TOX form token identities. */
@@ -67,29 +84,41 @@ export class SwFormToken {
   public constructor(public readonly eTokenType: FormTokenType) {}
 }
 
-/** Native form with one title template and ten contents levels. */
+/** Native title and entry templates with type-specific default patterns. */
 export class SwForm {
-  private readonly templates = ["Contents Heading"];
+  private readonly templates: string[] = [];
   private readonly patterns: SwFormToken[][] = [[]];
   private relativeTabPosition = true;
+  private commaSeparated = false;
 
-  /** Initializes the original contents styles, hyperlink and page-number pattern. @returns Native contents form. */
-  public constructor() {
-    for (let level = 1; level <= MAXLEVEL; level++) {
-      const link = new SwFormToken(FormTokenType.LinkStart);
-      link.sCharStyleName = "Index Link";
+  /** Initializes the original TOX styles and token order for its type. @param type - Native index family. @returns Form. */
+  public constructor(type = TOXTypes.Content) {
+    const alphabetical = type === TOXTypes.Index;
+    const content = type === TOXTypes.Content;
+    const style = alphabetical ? "Index" : content ? "Contents" : "User Index";
+    this.templates.push(`${style} Heading`);
+    if (alphabetical) {
+      this.templates.push("Index Separator");
+      this.patterns.push([new SwFormToken(FormTokenType.Entry)]);
+    }
+    const levels = alphabetical ? 3 : MAXLEVEL;
+    for (let level = 1; level <= levels; level++) {
       const tab = new SwFormToken(FormTokenType.TabStop);
       tab.cTabFillChar = ".";
       tab.eTabAlign = SvxTabAdjust.End;
-      this.templates.push(`Contents ${level}`);
-      this.patterns.push([
-        link,
-        new SwFormToken(FormTokenType.EntryNo),
-        new SwFormToken(FormTokenType.EntryText),
-        tab,
-        new SwFormToken(FormTokenType.PageNums),
-        new SwFormToken(FormTokenType.LinkEnd),
-      ]);
+      this.templates.push(`${style} ${level}`);
+      const fields = [tab, new SwFormToken(FormTokenType.PageNums)];
+      if (content) {
+        const link = new SwFormToken(FormTokenType.LinkStart);
+        link.sCharStyleName = "Index Link";
+        fields.unshift(
+          link,
+          new SwFormToken(FormTokenType.EntryNo),
+          new SwFormToken(FormTokenType.EntryText),
+        );
+        fields.push(new SwFormToken(FormTokenType.LinkEnd));
+      } else fields.unshift(new SwFormToken(FormTokenType.Entry));
+      this.patterns.push(fields);
     }
   }
 
@@ -121,6 +150,16 @@ export class SwForm {
     );
   }
 
+  /** Reads the native consecutive-entry layout option. @returns Whether entries are comma-separated. */
+  public IsCommaSeparated(): boolean {
+    return this.commaSeparated;
+  }
+
+  /** Sets the native consecutive-entry layout option. @param separated - Comma-separated entries. @returns Nothing. */
+  public SetCommaSeparated(separated: boolean): void {
+    this.commaSeparated = separated;
+  }
+
   /** Reads the original position reference. @returns Whether tabs are relative to the paragraph margin. */
   public IsRelTabPos(): boolean {
     return this.relativeTabPosition;
@@ -148,12 +187,17 @@ export class SwTOXBase {
   public level = MAXLEVEL;
   public fromChapter = false;
   public protected = true;
+  public levelFromChapter = false;
+  public indexOptions = SwTOIOptions.None;
+  public mainEntryCharStyle = "";
+  public language = MsLangId.getConfiguredSystemUILanguage();
+  public sortAlgorithm = "";
   private readonly styles: string[] = Array<string>(MAXLEVEL).fill("");
 
   /** Binds one native source type and owned form. @param type - Document type definition. @param form - Index form. @param createType - Original source flags. @returns Index descriptor. */
   public constructor(
-    public readonly type: SwTOXType,
-    public readonly form = new SwForm(),
+    public type: SwTOXType,
+    public readonly form = new SwForm(type.type),
     public createType = SwTOXElement.Mark,
   ) {
     this.title = type.name;
@@ -171,7 +215,8 @@ export class SwTOXBase {
 
   /** Copies all descriptor values and rebinds to the destination document type. @param type - Destination type. @returns Independent index descriptor. */
   public Clone(type = this.type): SwTOXBase {
-    const form = new SwForm();
+    const form = new SwForm(type.type);
+    form.SetCommaSeparated(this.form.IsCommaSeparated());
     form.SetRelTabPos(this.form.IsRelTabPos());
     for (let level = 0; level < form.GetFormMax(); level++) {
       form.SetTemplate(level, this.form.GetTemplate(level));
@@ -183,6 +228,11 @@ export class SwTOXBase {
     copy.level = this.level;
     copy.fromChapter = this.fromChapter;
     copy.protected = this.protected;
+    copy.levelFromChapter = this.levelFromChapter;
+    copy.indexOptions = this.indexOptions;
+    copy.mainEntryCharStyle = this.mainEntryCharStyle;
+    copy.language = this.language;
+    copy.sortAlgorithm = this.sortAlgorithm;
     for (let level = 0; level < MAXLEVEL; level++) copy.styles[level] = this.GetStyleNames(level);
     return copy;
   }

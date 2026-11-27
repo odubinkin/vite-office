@@ -1,5 +1,5 @@
 /** @fileoverview Implements Writer's streaming SwXMLImport bridge over fast SAX contexts. */
-import { SwPoolFormatId } from "../../../inc/poolfmt";
+import { SwPoolFormatId, WRITER_CHARACTER_STYLE_POOL } from "../../../inc/poolfmt";
 import { isOpenOffice2Generator } from "../../../../xmloff/source/core/xmlimp";
 import { getBuildIdFromGenerator } from "../../../../xmloff/source/meta/xmlmetai";
 import type { OdfBitmapGeometry } from "../../../../xmloff/source/draw/fill-properties";
@@ -57,6 +57,7 @@ import {
   type SvXMLImportRootFactory as SvXMLImportContract,
 } from "../../../../xmloff/source/core/xmlimp";
 import { XMLToken } from "../../../../xmloff/source/core/xmltoken";
+import { encodeStyleName } from "../../../../xmloff/source/core/xmluconv";
 import {
   XMLFontStylesContext,
   type XMLFontStylesImportTarget,
@@ -234,7 +235,11 @@ class SwXMLImport
       (family, name) => {
         const declaration = this.getStyle(family, name);
         if (declaration) return declaration.displayName ?? name;
-        return family === "paragraph" && this.resolveNamedParagraphStyle(name) ? name : undefined;
+        if (family === "paragraph") return this.resolveNamedParagraphStyle(name) ? name : undefined;
+        return WRITER_CHARACTER_STYLE_POOL.find(
+          /** Resolves an original built-in character style even when the package omits its declaration. @param style - Native pool style. @returns Whether the style matches. */
+          (style) => style.name === name || encodeStyleName(style.name) === name,
+        )?.uiName;
       },
     );
   }

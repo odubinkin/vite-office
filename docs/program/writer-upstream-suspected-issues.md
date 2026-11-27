@@ -6316,3 +6316,15 @@ behavior for native mark cloning.
 
 - [Original bookmark property setter](../../vendor/libreoffice-reference/sw/source/core/unocore/unoidx.cxx#L2133)
 - [Original mark copy constructor](../../vendor/libreoffice-reference/sw/source/core/tox/tox.cxx#L116)
+
+### WRITER-764 — A TOC entry-number token exports only two of its accepted chapter formats
+
+The native chapter field importer accepts the five recognized display formats
+for both entry numbers and chapter information. When Writer exposes an
+entry-number token to the ODF exporter, it only retains the original number
+or plain-number formatting. It maps the other recognized values to number.
+A chapter-information token in a user or alphabetical index retains its full
+format. Writer preserves these type-specific read and export rules.
+
+- [Original chapter field importer](../../vendor/libreoffice-reference/xmloff/source/text/XMLIndexChapterInfoEntryContext.cxx#L69)
+- [Original Writer token exposure](../../vendor/libreoffice-reference/sw/source/core/unocore/unoidx.cxx#L2894)
