@@ -159,7 +159,12 @@ transfer. A point mark owns the native in-word dummy character. Range start
 and end markers pair by name within their paragraph, and an unmatched start
 becomes a point mark.
 
-Images, fields, annotations, sections, objects, scripts,
+Named bookmark and reference-mark fields retain their source name, format,
+language and stored display text through ODT and Worker transfer. Writer can
+update text references from the current registered target. Formats that need
+page layout retain the imported display text in this filter slice.
+
+Images, other field types, annotations, sections, objects, scripts,
 signatures, encryption, RDF, non-decimal numbering,
 and merged or nested tables remain unsupported. Table rows are
 visible at their body-order anchors but are not paginated by the page-frame

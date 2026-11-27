@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/browser/filter/xml/writer-reference-field-codec.ts",
+    "classification": "local-infrastructure",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "document-lifecycle",
+    "capabilityIds": [
+      "CAP-0130"
+    ],
+    "semantic": {
+      "behaviorStatus": "not-applicable",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/browser/filter/xml/writer-reference-field-codec.ts",
+        "apps/office/src/sw/source/filter/xml/odt-reference-fields.test.ts"
+      ],
+      "justification": "Transfers the native named field source, format, cached text and original paragraph offset through the Worker.",
+      "knownViolations": [],
+      "localSymbols": [
+        "encodeReferenceFields",
+        "decodeReferenceFields"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

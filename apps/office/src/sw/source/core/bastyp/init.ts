@@ -68,6 +68,8 @@ import { RES_PARATR_LIST_AUTOFMT, RES_TXTATR_AUTOFMT } from "../../../inc/hintid
 import { SwTOXMark } from "../tox/tox";
 import { SwFormatRefMark } from "../txtnode/atrref";
 import { SwFormatFlyCnt } from "../../../inc/fmtflcnt";
+import { SwFormatField } from "../../../inc/fmtfld";
+import { RES_TXTATR_FIELD, RES_TXTATR_ANNOTATION } from "../../../inc/hintids";
 import { SvxLanguageItem } from "../../../../editeng/inc/langitem";
 import { LANGUAGE_DONTKNOW } from "../../../../i18nlangtag/inc/lang";
 
@@ -322,6 +324,8 @@ class ItemInfoPackageSwAttributes extends ItemInfoPackage {
     add(new SwFormatAutoFormat(RES_PARATR_LIST_AUTOFMT));
     add(new SwFormatAutoFormat(RES_TXTATR_AUTOFMT));
     add(new SwFormatFlyCnt(null));
+    add(new SwFormatField(RES_TXTATR_FIELD));
+    add(new SwFormatField(RES_TXTATR_ANNOTATION));
     add(new SwFormatRefMark());
     add(new SwTOXMark());
   }

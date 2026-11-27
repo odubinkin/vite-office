@@ -1,7 +1,7 @@
 /** @fileoverview Native document annotation field values retained by Writer text hints. */
 import type { SwFormatField } from "../../../inc/fmtfld";
 import { RES_TXTATR_ANNOTATION } from "../../../inc/hintids";
-import { SwTextField } from "../../../inc/txtfld";
+import { isAnnotationTextField } from "../../../inc/txtfld";
 import type { SwDoc } from "../doc/doc";
 import type { EditTextObject } from "../../../../editeng/source/editeng/editobj";
 import { DateTime } from "../../../../tools/source/datetime/datetime";
@@ -10,20 +10,13 @@ let nextPostItId = 1;
 
 /** Original annotation field type carries the document that owns the fields. */
 export class SwPostItFieldType {
-  private static readonly types = new WeakMap<SwDoc, SwPostItFieldType>();
-
   /** Finds the document's system annotation field type. @param document - Owning document. @returns Canonical field type. */
   static Get(document: SwDoc): SwPostItFieldType {
-    let type = this.types.get(document);
-    if (!type) {
-      type = new SwPostItFieldType(document);
-      this.types.set(document, type);
-    }
-    return type;
+    return document.getIDocumentFieldsAccess().GetPostItFieldType();
   }
 
   /** Associates the annotation type with one Writer document. @param document - Owning document. @returns Field type. */
-  private constructor(private readonly document: SwDoc) {}
+  public constructor(private readonly document: SwDoc) {}
 
   /** Enumerates live format owners in model order. @returns Annotation formats. */
   *GatherFields(): IterableIterator<SwFormatField> {
@@ -36,7 +29,7 @@ export class SwPostItFieldType {
         index++
       ) {
         const hint = hints.GetSortedByWhichAndStart(index);
-        if (!(hint instanceof SwTextField)) break;
+        if (!isAnnotationTextField(hint)) break;
         yield hint.GetAttr();
       }
     }
@@ -175,6 +168,11 @@ export class SwPostItField {
       ...this.data,
       ...(this.textObject ? { textObject: this.textObject } : {}),
     });
+  }
+
+  /** Copies the annotation to the original field type of another document. @param document - Destination. @returns Owned field. */
+  CopyToDocument(document: SwDoc): SwPostItField {
+    return this.Copy(SwPostItFieldType.Get(document));
   }
 
   /** Releases the native editor snapshot. @returns Nothing. */

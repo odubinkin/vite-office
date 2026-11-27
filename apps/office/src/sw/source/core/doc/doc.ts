@@ -13,6 +13,7 @@ import { GetTextDirection, GetUniqueFrameName } from "./doclay";
 import { ClearFrameFormatIndices, DestroyFrameFormatTables } from "./docnew";
 import { FrameFormats, type SpzFrameFormats } from "../../../inc/frameformats";
 import { DocumentLayoutManager } from "./DocumentLayoutManager";
+import { DocumentFieldsManager } from "./DocumentFieldsManager";
 import { GetEditShell, CorrAbsNodes } from "./doccorr";
 import * as unoCursor from "./doc.unocursor";
 import type { UnoCursorWeakPtr } from "../../../inc/unocrsr";
@@ -152,6 +153,11 @@ export class SwDoc {
   /** Document theme used by represented Writer text and format owners. */ theme?: Theme;
   /** Original ThemeFontLangProps values. */ themeFontLanguages?: ThemeFontLanguages;
   private readonly layoutManager = new DocumentLayoutManager(this);
+  private readonly fieldsManager = new DocumentFieldsManager(this);
+  /** Borrows the original document-owned system fields. @returns Native manager. */
+  public getIDocumentFieldsAccess(): DocumentFieldsManager {
+    return this.fieldsManager;
+  }
   /** Original document-owned layout access. @returns Actual native manager. */
   getIDocumentLayoutAccess(): DocumentLayoutManager {
     return this.layoutManager;

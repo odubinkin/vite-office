@@ -6,9 +6,15 @@ import {
 } from "../../../../offapi/com/sun/star/util/DateTime";
 import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { DateTime } from "../../../../tools/source/datetime/datetime";
-import type { SwTextField } from "../../../inc/txtfld";
+import { SwTextField, type SwTextReferenceField } from "../../../inc/txtfld";
+import { SwFormatField } from "../../../inc/fmtfld";
+import { RES_TXTATR_FIELD } from "../../../inc/hintids";
+import { RefFieldFormat } from "../../../inc/reffld";
+import { ReferencesSubtype } from "../../../inc/reffldsubtype";
+import { ReferenceFieldSource } from "../../../../offapi/com/sun/star/text/ReferenceFieldSource";
 import { SwPaM, SwPosition } from "../crsr/pam";
 import { SwPostItField, SwPostItFieldType, type SwPostItFieldData } from "../fields/docufld";
+import { SwGetRefField, type SwGetRefFieldData } from "../fields/reffld";
 import { SwTextAPIObject } from "../fields/textapi";
 import { SwXTextRange, type SwXTextOwner } from "./unoobj2";
 import { illegal, invalid, scalar, stringValue, text, unicode, unknown } from "./unocrsrhelper";
@@ -151,5 +157,94 @@ export class SwXTextField {
     this.parent = undefined;
     this.textRange?.dispose();
     this.textRange = undefined;
+  }
+}
+
+/** Consumed native GetReference descriptor over the same field attachment boundary as annotations. */
+export class SwXGetReferenceField {
+  private data: SwGetRefFieldData = {
+    name: "",
+    format: RefFieldFormat.Page,
+    source: ReferencesSubtype.SetRefAttr,
+    language: "",
+    flags: 0,
+    presentation: "",
+  };
+  private hint: SwTextReferenceField | undefined;
+
+  /** Assigns original UNO reference field properties on the descriptor. @param name - Native property. @param input - Typed UNO value. */
+  public setPropertyValue(name: OUStringConstReference, input: Any): void {
+    if (this.hint) invalid("Writer reference field is attached.");
+    const property = text(name);
+    switch (property) {
+      case "SourceName":
+        this.data = { ...this.data, name: stringValue(input) };
+        break;
+      case "ReferenceFieldPart": {
+        const format = scalar(input, "sal_Int16") as number;
+        this.data = {
+          ...this.data,
+          format: RefFieldFormat[format] === undefined ? RefFieldFormat.Page : format,
+        };
+        break;
+      }
+      case "ReferenceFieldSource": {
+        const source = scalar(input, "sal_Int16") as number;
+        if (
+          source !== ReferenceFieldSource.REFERENCE_MARK &&
+          source !== ReferenceFieldSource.BOOKMARK
+        )
+          illegal(property);
+        this.data = {
+          ...this.data,
+          source:
+            source === ReferenceFieldSource.BOOKMARK
+              ? ReferencesSubtype.Bookmark
+              : ReferencesSubtype.SetRefAttr,
+        };
+        break;
+      }
+      case "ReferenceFieldLanguage":
+        this.data = { ...this.data, language: stringValue(input) };
+        break;
+      case "ReferenceFieldFlags":
+        this.data = { ...this.data, flags: (scalar(input, "sal_Int16") as number) & 0xffff };
+        break;
+      case "CurrentPresentation":
+        this.data = { ...this.data, presentation: stringValue(input) };
+        break;
+      default:
+        unknown(property);
+    }
+  }
+
+  /** Attaches the native field to the current text position. @param range - Actual Writer range. */
+  public attach(range: SwXTextRange): void {
+    if (this.hint) invalid("Writer reference field is already attached.");
+    const position = range.GetPaM().Start();
+    const node = position.GetNode().GetTextNode();
+    if (!node) illegal("Writer reference field must be in text.");
+    const type = node.GetDoc().getIDocumentFieldsAccess().GetReferenceFieldType();
+    const field = new SwGetRefField(type, this.data);
+    const hint = new SwTextField(
+      new SwFormatField(field, RES_TXTATR_FIELD),
+      position.GetContentIndex(),
+    );
+    if (!node.InsertHint(hint)) invalid("Writer reference field could not be inserted.");
+    this.hint = hint;
+  }
+
+  /** Returns the original field name or cached expansion. @param showCommand - Whether to show the field command. @returns Field presentation. */
+  public getPresentation(showCommand: boolean): OUStringConstReference {
+    const field = this.hint?.GetAttr().GetField();
+    if (!field) invalid("Writer reference field is detached.");
+    return unicode(showCommand ? `Reference ${field.GetData().name}` : field.Expand());
+  }
+
+  /** Removes the attached native field point. */
+  public dispose(): void {
+    const hint = this.hint;
+    this.hint = undefined;
+    if (hint) hint.GetTextNode()?.EraseText(hint.GetStart(), 1);
   }
 }

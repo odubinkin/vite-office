@@ -38,12 +38,15 @@ export interface XMLText {
   createTextCursorByRange(range: XMLTextRange): XMLTextCursor;
   insertString(range: XMLTextRange, value: OUStringConstReference, absorb: boolean): void;
   insertControlCharacter(range: XMLTextRange, value: number, absorb: boolean): void;
-  insertTextContent(range: XMLTextRange, content: XMLNamedTextContent, absorb: boolean): void;
+  insertTextContent(range: XMLTextRange, content: XMLTextContent, absorb: boolean): void;
+}
+/** The property surface consumed before native text-content attachment. */
+export interface XMLTextContent {
+  setPropertyValue(name: OUStringConstReference, value: Any): void;
 }
 /** The currently represented XNamed/XTextContent service. */
-export interface XMLNamedTextContent {
+export interface XMLNamedTextContent extends XMLTextContent {
   setName(name: OUStringConstReference): void;
-  setPropertyValue(name: OUStringConstReference, value: Any): void;
 }
 /** Text field attachment surface consumed by annotation ranges. */
 export interface XMLAnnotationTextContent extends XMLNamedTextContent {

@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/inc/reffld.ts",
+    "status": "mapped",
+    "upstreamPath": "sw/inc/reffld.hxx",
+    "localSymbols": [
+      "RefFieldFormat"
+    ],
+    "upstreamSymbols": [
+      "RefFieldFormat"
+    ],
+    "preservedResponsibilities": [
+      "Preserves the original Writer reference display format values."
+    ],
+    "omittedResponsibilities": [
+      "Reference expansion lives in the original field owner."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/inc/reffld.ts",
+          "marker": "RefFieldFormat"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-reference-fields.test.ts",
+          "marker": "testTdf157287"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/reffld.hxx",
+          "marker": "RefFieldFormat"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/qa/core/txtnode/txtnode.cxx",
+          "marker": "testTdf157287"
+        }
+      ]
+    }
+  }
+}

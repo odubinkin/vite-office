@@ -4,7 +4,7 @@ import { DateTime } from "../../../../tools/source/datetime/datetime";
 import { SwFormatField } from "../../../inc/fmtfld";
 import { CH_TXTATR_INWORD, RES_TXTATR_ANNOTATION } from "../../../inc/hintids";
 import { SetAttrMode } from "../../../inc/swtypes";
-import { SwTextField } from "../../../inc/txtfld";
+import { isAnnotationTextField } from "../../../inc/txtfld";
 import { SwTextAnnotationField } from "../../../inc/txtannotationfld";
 import { SwPaM, SwPosition } from "../../../source/core/crsr/pam";
 import type { SwDoc } from "../../../source/core/doc/doc";
@@ -58,7 +58,7 @@ export function encodeAnnotations(
       index++
     ) {
       const hint = hints.GetSortedByWhichAndStart(index);
-      if (!(hint instanceof SwTextField)) break;
+      if (!isAnnotationTextField(hint)) break;
       const format = hint.GetAttr();
       const field = format.GetField();
       const { dateTime, ...data } = field.GetData();

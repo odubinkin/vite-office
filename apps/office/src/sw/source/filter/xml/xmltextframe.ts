@@ -442,6 +442,7 @@ export function compareParagraphMarkers(
       case "annotation-end":
       case "index-mark":
       case "reference-mark":
+      case "reference-field":
         return 6;
     }
   }

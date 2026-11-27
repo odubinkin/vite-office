@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/doc/DocumentFieldsManager.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "document-core",
+    "capabilityIds": [
+      "CAP-0128",
+      "CAP-0129"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/core/doc/DocumentFieldsManager.ts",
+        "apps/office/src/sw/source/filter/xml/odt-reference-fields.test.ts",
+        "vendor/libreoffice-reference/sw/source/core/doc/DocumentFieldsManager.cxx",
+        "vendor/libreoffice-reference/sw/qa/core/txtnode/txtnode.cxx"
+      ],
+      "justification": "Owns the represented native system field types for each document and updates its reference fields.",
+      "knownViolations": [],
+      "localSymbols": [
+        "DocumentFieldsManager"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/doc/DocumentFieldsManager.cxx",
+      "upstreamSymbols": [
+        "DocumentFieldsManager::InitFieldTypes",
+        "DocumentFieldsManager::UpdateRefFields"
+      ]
+    }
+  }
+}

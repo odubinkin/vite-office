@@ -7,7 +7,12 @@ import { RTL_TEXTENCODING_DONTKNOW } from "../../../sal/inc/rtl/textenc";
 import { exportInlineFont, getFontFamilyFromGeneric } from "../style/fonthdl";
 import { XMLShadowPropHdl } from "../style/shadwhdl";
 import { exportIndexMark, type XMLIndexMarkExportMarker } from "./XMLIndexMarkExport";
-import { exportAnnotation, type XMLAnnotationExportMarker } from "./txtflde";
+import {
+  exportAnnotation,
+  exportReferenceField,
+  type XMLAnnotationExportMarker,
+  type XMLReferenceFieldExportMarker,
+} from "./txtflde";
 import type { XMLTextFrameExportSource } from "./XMLTextFrameExport";
 import { exportFillProperties } from "../draw/fill-properties";
 import { paragraphPropertiesKey, parseParagraphPropertiesKey } from "./txtparae-properties";
@@ -158,6 +163,7 @@ export type XMLTextParagraphMarker =
       offset: number;
     }>
   | XMLAnnotationExportMarker
+  | XMLReferenceFieldExportMarker
   | XMLRedlineExportMarker
   | Readonly<{ kind: "frame"; frame: XMLTextFrameExportSource; offset: number }>;
 
@@ -625,6 +631,7 @@ function exportParagraphElement(
               marker.kind === "annotation-end" ||
               marker.kind === "index-mark" ||
               marker.kind === "reference-mark" ||
+              marker.kind === "reference-field" ||
               (marker.kind === "annotation" && marker.consumesMarker),
           );
         markerIndex += 1;
@@ -718,6 +725,7 @@ function exportMarker(
   }
   if (marker.kind === "annotation" || marker.kind === "annotation-end")
     return exportAnnotation(marker, escapeXml, exportText, exportAnnotationParagraph);
+  if (marker.kind === "reference-field") return exportReferenceField(marker, escapeXml);
   if (
     marker.kind === "index-mark" ||
     marker.kind === "index-mark-start" ||

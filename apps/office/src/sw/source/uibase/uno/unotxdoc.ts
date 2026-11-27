@@ -7,7 +7,7 @@ import { SwUnoTextDocumentPropertyMap, aSwMapProvider } from "../../core/unocore
 import { unknown } from "../../core/unocore/unocrsrhelper";
 import { SwXAutoStyles } from "../../core/unocore/unostyle-auto";
 
-import { SwXTextField } from "../../core/unocore/unofield";
+import { SwXGetReferenceField, SwXTextField } from "../../core/unocore/unofield";
 import { SwXBookmark } from "../../core/unocore/unobkm";
 import { SwXReferenceMark } from "../../core/unocore/unorefmk";
 import type { SwDoc } from "../../core/doc/doc";
@@ -112,13 +112,22 @@ export class SwXTextDocument {
   /** Implements the represented native createInstance operation. @param name - Native property or element name. @returns The represented native operation result. */
   createInstance(
     name: OUStringConstReference,
-  ): SwXStyle | SwXNumberingRules | SwXBookmark | SwXReferenceMark | SwXTextField {
+  ):
+    | SwXStyle
+    | SwXNumberingRules
+    | SwXBookmark
+    | SwXReferenceMark
+    | SwXTextField
+    | SwXGetReferenceField {
     const n = text(name),
       doc = this.GetDoc();
     switch (n) {
       case "com.sun.star.text.TextField.Annotation":
       case "com.sun.star.text.textfield.Annotation":
         return new SwXTextField();
+      case "com.sun.star.text.TextField.GetReference":
+      case "com.sun.star.text.textfield.GetReference":
+        return new SwXGetReferenceField();
       case "com.sun.star.text.Bookmark":
         return new SwXBookmark();
       case "com.sun.star.text.ReferenceMark":

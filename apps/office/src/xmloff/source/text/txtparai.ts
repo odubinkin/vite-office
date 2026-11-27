@@ -15,6 +15,8 @@ import { FastAttributeList, SvXMLImportContext, SvXMLIgnoreContext } from "../co
 import { XMLToken } from "../core/xmltoken";
 import { XMLAnnotationImportContext } from "./txtfldi";
 import { XMLTextMarkImportContext } from "./XMLTextMarkImportContext";
+import { XMLReferenceFieldImportContext } from "./txtfldi";
+import { ReferenceFieldSource } from "../../../offapi/com/sun/star/text/ReferenceFieldSource";
 import type {
   OdfCharacterProperties,
   OdfHyperlink,
@@ -423,6 +425,15 @@ function createInlineContext(
     return annotation ? null : new XMLStartReferenceContext(paragraph);
   if (element === XMLToken.TEXT_REFERENCE_MARK_END)
     return annotation ? null : new XMLEndReferenceContext(paragraph);
+  if (element === XMLToken.TEXT_REFERENCE_REF || element === XMLToken.TEXT_BOOKMARK_REF)
+    return annotation
+      ? null
+      : new XMLReferenceFieldImportContext(
+          paragraph,
+          element === XMLToken.TEXT_BOOKMARK_REF
+            ? ReferenceFieldSource.BOOKMARK
+            : ReferenceFieldSource.REFERENCE_MARK,
+        );
   if (XMLIndexMarkImportContext.IsIndexMark(element))
     return annotation || !target.insertIndexMark ? null : new XMLIndexMarkImportContext(paragraph);
   if (element === XMLToken.TEXT_SOFT_PAGE_BREAK) {

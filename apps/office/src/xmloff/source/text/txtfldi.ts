@@ -10,6 +10,91 @@ import { type FastAttributeList, SvXMLImportContext } from "../core/xmlimp";
 import { XMLToken } from "../core/xmltoken";
 import type { XMLTextImportHelper } from "./txtimp";
 import { xmlTextString } from "./txtprmap";
+import { ReferenceFieldPart } from "../../../offapi/com/sun/star/text/ReferenceFieldPart";
+import { referenceFieldFormats, type XMLReferenceField } from "./txtflde";
+import { toBoolean } from "../../../sal/rtl/strtmpl";
+
+/** Original named GetReference field import and remembered presentation. */
+export class XMLReferenceFieldImportContext extends SvXMLImportContext {
+  private name: string | null = null;
+  private part: number = ReferenceFieldPart.PAGE_DESC;
+  private language = "";
+  private flags = 0;
+  private presentation = "";
+
+  /** Binds the original field context to the active text stream. @param helper - Text importer. @param source - Named field source. */
+  constructor(
+    private readonly helper: XMLTextImportHelper,
+    private readonly source: XMLReferenceField["source"],
+  ) {
+    super();
+  }
+
+  /** Collects the named reference properties. @param _element - Opening token. @param attributes - Authored ODF attributes. */
+  override startFastElement(_element: XMLToken, attributes: FastAttributeList): void {
+    for (const [token, value] of attributes) {
+      switch (token) {
+        case XMLToken.TEXT_REF_NAME:
+          this.name = value;
+          break;
+        case XMLToken.TEXT_REFERENCE_FORMAT: {
+          const part = referenceFieldFormats.find(
+            /** Finds the matching ODF token. @param format - Native part and ODF token. @returns Match. */
+            ([, format]) => format === value,
+          )?.[0];
+          if (
+            part !== undefined &&
+            part !== ReferenceFieldPart.CATEGORY_AND_NUMBER &&
+            part !== ReferenceFieldPart.ONLY_CAPTION &&
+            part !== ReferenceFieldPart.ONLY_SEQUENCE_NUMBER
+          )
+            this.part = part;
+          break;
+        }
+        case XMLToken.TEXT_REFERENCE_LANGUAGE:
+        case XMLToken.LOEXT_REFERENCE_LANGUAGE:
+          this.language = value;
+          break;
+        case XMLToken.TEXT_REFERENCE_HIDE_NON_NUMERICAL:
+        case XMLToken.LOEXT_REFERENCE_HIDE_NON_NUMERICAL:
+        case XMLToken.TEXT_REFERENCE_FROM_BOTTOM:
+        case XMLToken.LOEXT_REFERENCE_FROM_BOTTOM: {
+          const lexical = xmlTextString(value);
+          try {
+            if (toBoolean(lexical.getStr()))
+              this.flags |=
+                token === XMLToken.TEXT_REFERENCE_FROM_BOTTOM ||
+                token === XMLToken.LOEXT_REFERENCE_FROM_BOTTOM
+                  ? 0xc100
+                  : 0xc200;
+          } finally {
+            lexical.dispose();
+          }
+          break;
+        }
+      }
+    }
+  }
+
+  /** Appends a presentation text callback. @param value - Original characters. */
+  override characters(value: string): void {
+    this.presentation += value;
+  }
+
+  /** Attaches the field or inserts its fallback text for a missing source name. */
+  override endFastElement(): void {
+    if (this.name === null) this.helper.InsertString(this.presentation);
+    else
+      this.helper.InsertReferenceField({
+        name: this.name,
+        source: this.source,
+        part: this.part,
+        language: this.language,
+        flags: this.flags,
+        presentation: this.presentation,
+      });
+  }
+}
 
 /** Original annotation import with metadata distinct from the editable comment paragraphs. */
 export class XMLAnnotationImportContext extends SvXMLImportContext {

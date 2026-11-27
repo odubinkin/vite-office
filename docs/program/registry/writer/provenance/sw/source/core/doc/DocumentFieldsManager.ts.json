@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/core/doc/DocumentFieldsManager.ts",
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/doc/DocumentFieldsManager.cxx",
+    "localSymbols": [
+      "DocumentFieldsManager"
+    ],
+    "upstreamSymbols": [
+      "DocumentFieldsManager::InitFieldTypes",
+      "DocumentFieldsManager::UpdateRefFields"
+    ],
+    "preservedResponsibilities": [
+      "Owns the represented native system field types for each document and updates its reference fields."
+    ],
+    "omittedResponsibilities": [
+      "Other system fields, full update ordering and layout notifications."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/doc/DocumentFieldsManager.ts",
+          "marker": "DocumentFieldsManager"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-reference-fields.test.ts",
+          "marker": "testTdf157287"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentFieldsManager.cxx",
+          "marker": "DocumentFieldsManager::InitFieldTypes"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentFieldsManager.cxx",
+          "marker": "DocumentFieldsManager::UpdateRefFields"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/qa/core/txtnode/txtnode.cxx",
+          "marker": "testTdf157287"
+        }
+      ]
+    }
+  }
+}

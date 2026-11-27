@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/inc/reffldsubtype.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "document-core",
+    "capabilityIds": [
+      "CAP-0128",
+      "CAP-0129"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/inc/reffldsubtype.ts",
+        "apps/office/src/sw/source/filter/xml/odt-reference-fields.test.ts",
+        "vendor/libreoffice-reference/sw/inc/reffldsubtype.hxx",
+        "vendor/libreoffice-reference/sw/qa/core/txtnode/txtnode.cxx"
+      ],
+      "justification": "Preserves the original Writer reference subtype enum.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ReferencesSubtype"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/inc/reffldsubtype.hxx",
+      "upstreamSymbols": [
+        "ReferencesSubtype"
+      ]
+    }
+  }
+}

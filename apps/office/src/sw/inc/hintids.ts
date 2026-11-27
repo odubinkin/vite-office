@@ -153,6 +153,9 @@ export const RES_TXTATR_CJK_RUBY = 56 as const;
 /** Exclusive upper bound for native ranged text attributes. */
 export const RES_TXTATR_WITHEND_END = 60 as const;
 
+/** Original point attribute for an ordinary text field. */
+export const RES_TXTATR_FIELD = 60 as const;
+
 /** Point text attribute attached to an as-character fly. */
 export const RES_TXTATR_FLYCNT = 61 as const;
 /** Original point text identity for an annotation field. */

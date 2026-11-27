@@ -3,13 +3,14 @@ import type { SwFormatRuby } from "./fmtatr2";
 import type { SwTextNode } from "./ndtxt";
 import type { SwpHints, TextNodeAttribute } from "./ndhints";
 import { SwTextFlyCnt } from "../../../inc/txtflcnt";
-import { SwTextField } from "../../../inc/txtfld";
+import { SwTextField, type SwTextReferenceField } from "../../../inc/txtfld";
 import { SwTextTOXMark } from "./atrtox";
 import { SwTextRefMark } from "./atrref";
 import {
   CH_TXTATR_BREAKWORD,
   CH_TXTATR_INWORD,
   RES_TXTATR_ANNOTATION,
+  RES_TXTATR_FIELD,
   RES_TXTATR_REFMARK,
   RES_TXTATR_TOXMARK,
 } from "../../../inc/hintids";
@@ -152,7 +153,7 @@ export function InsertTextNodeHint(
 /** Applies the native point-hint insertion order, inserting its dummy before binding the owned point. @param node - Owning text node. @param hint - Detached point. @param mode - Native insertion flags. @returns Whether inserted. */
 function InsertPointHint(
   node: SwTextNode,
-  hint: SwTextFlyCnt | SwTextField | SwTextTOXMark | SwTextRefMark,
+  hint: SwTextFlyCnt | SwTextField | SwTextReferenceField | SwTextTOXMark | SwTextRefMark,
   mode: SetAttrMode,
 ): boolean {
   const format = hint instanceof SwTextFlyCnt ? hint.GetAttr().GetFrameFormat() : undefined;
@@ -172,7 +173,10 @@ function InsertPointHint(
         ? "Writer inline hint requires a detached point and an owned fly format."
         : "Writer text hint requires a detached point in its owning document.",
     );
-  const marker = hint instanceof SwTextFlyCnt ? CH_TXTATR_BREAKWORD : CH_TXTATR_INWORD;
+  const marker =
+    hint instanceof SwTextFlyCnt || hint.Which() === RES_TXTATR_FIELD
+      ? CH_TXTATR_BREAKWORD
+      : CH_TXTATR_INWORD;
   const start = hint.GetStart();
   const existing = node.GetpSwpHints();
   const hasMarker = (mode & SetAttrMode.NOTXTATRCHR) !== 0;
@@ -180,6 +184,7 @@ function InsertPointHint(
     hasMarker &&
     (node.GetText().charAt(start) !== marker ||
       existing?.GetTextAttrForCharAt(start) ||
+      existing?.GetTextAttrForCharAt(start, RES_TXTATR_FIELD) ||
       existing?.GetTextAttrForCharAt(start, RES_TXTATR_ANNOTATION) ||
       existing?.GetTextAttrForCharAt(start, RES_TXTATR_REFMARK) ||
       existing?.GetTextAttrForCharAt(start, RES_TXTATR_TOXMARK))

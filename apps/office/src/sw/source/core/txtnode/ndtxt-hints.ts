@@ -32,6 +32,7 @@ import {
   CH_TXTATR_INWORD,
   RES_TXTATR_ANNOTATION,
   RES_TXTATR_AUTOFMT,
+  RES_TXTATR_FIELD,
   RES_TXTATR_FLYCNT,
 } from "../../../inc/hintids";
 import { isTextFormatHint, SwFormatAutoFormat } from "./txatbase";
@@ -60,7 +61,17 @@ export function GetTextNodeExpandedText(node: SwTextNode, start: number, end: nu
     .replaceAll(CH_TXT_ATR_FIELDEND, "")
     .replaceAll(CH_TXT_ATR_INPUTFIELDSTART, "")
     .replaceAll(CH_TXT_ATR_INPUTFIELDEND, "")
-    .replaceAll(CH_TXTATR_BREAKWORD, "")
+    .replaceAll(
+      CH_TXTATR_BREAKWORD,
+      /** Expands ordinary fields and discards other word-breaking dummies. @param _marker - Field character. @param offset - Offset in the copied span. @returns Field expansion. */
+      (_marker, offset: number) =>
+        node
+          .GetpSwpHints()
+          ?.GetTextAttrForCharAt(start + offset, RES_TXTATR_FIELD)
+          ?.GetAttr()
+          .GetField()
+          .Expand() ?? "",
+    )
     .replaceAll(CH_TXTATR_INWORD, "");
 }
 
@@ -92,7 +103,8 @@ export function EraseTextNodeReplacementDummies(
     const hints = node.GetpSwpHints();
     const hint =
       marker === CH_TXTATR_BREAKWORD
-        ? hints?.GetTextAttrForCharAt(offset)
+        ? (hints?.GetTextAttrForCharAt(offset) ??
+          hints?.GetTextAttrForCharAt(offset, RES_TXTATR_FIELD))
         : marker === CH_TXTATR_INWORD
           ? (hints?.GetTextAttrForCharAt(offset, RES_TXTATR_ANNOTATION) ??
             hints?.GetTextAttrForCharAt(offset, RES_TXTATR_REFMARK) ??

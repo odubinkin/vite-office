@@ -2,6 +2,7 @@
 import { XMLChangeImportContext } from "./XMLChangeImportContext";
 import { XMLTrackedChangesImportContext } from "./XMLTrackedChangesImportContext";
 import type { XMLIndexMarkProperties } from "./XMLIndexMarkImportContext";
+import type { XMLReferenceField } from "./txtflde";
 import { FastAttributeList, SvXMLIgnoreContext, SvXMLImportContext } from "../core/xmlimp";
 import { XMLToken } from "../core/xmltoken";
 import { XMLTableContext, type XMLTableImportTarget } from "../table/XMLTableImport";
@@ -13,6 +14,7 @@ import type {
   XMLTextCursor,
   XMLTextRange,
   XMLNamedTextContent,
+  XMLTextContent,
   XMLPropertySet,
   XMLText,
 } from "../../inc/txtimp";
@@ -596,6 +598,24 @@ export class XMLTextImportHelper {
     cursor.getText().insertTextContent(cursor, field, false);
     this.MovePastAnnotation(cursor, field);
     if (name) this.annotations.set(name, field);
+  }
+
+  /** Creates and attaches an original GetReference field. @param value - Named reference data. */
+  public InsertReferenceField(value: XMLReferenceField): void {
+    const service = xmlTextString("com.sun.star.text.TextField.GetReference");
+    try {
+      const field = this.model.createInstance(service) as XMLTextContent;
+      this.SetProperty(field, "ReferenceFieldPart", value.part, "sal_Int16");
+      this.SetProperty(field, "ReferenceFieldSource", value.source, "sal_Int16");
+      this.SetProperty(field, "ReferenceFieldLanguage", value.language);
+      this.SetProperty(field, "SourceName", value.name);
+      this.SetProperty(field, "ReferenceFieldFlags", (value.flags << 16) >> 16, "sal_Int16");
+      this.SetProperty(field, "CurrentPresentation", value.presentation);
+      const cursor = this.GetCursor();
+      cursor.getText().insertTextContent(cursor, field, false);
+    } finally {
+      service.dispose();
+    }
   }
 
   /** Reattaches a named annotation to the range ending at the active text cursor. @param name - ODF annotation name. @returns Nothing. */

@@ -3,7 +3,7 @@ import { SwFormatField } from "../../../inc/fmtfld";
 import { CH_TXTATR_INWORD } from "../../../inc/hintids";
 import * as H from "../../../inc/hintids";
 import { SetAttrMode } from "../../../inc/swtypes";
-import { SwTextField } from "../../../inc/txtfld";
+import { isAnnotationTextField, type SwTextField } from "../../../inc/txtfld";
 import { SwTextAnnotationField } from "../../../inc/txtannotationfld";
 import {
   SwPostItField,
@@ -31,6 +31,7 @@ import { getCharacterProperties } from "./xmlexp-character";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import type { DateTime } from "../../../../offapi/com/sun/star/util/DateTime";
 
+/** One formatted span in the original annotation text. */
 export interface XMLAnnotationSpan {
   readonly text: string;
   readonly properties: Partial<OdfCharacterProperties>;
@@ -167,7 +168,7 @@ export function* getPostItFields(node: SwTextNode): Iterable<SwTextField> {
   if (hints) {
     for (let i = 0; i < hints.Count(); i++) {
       const hint = hints.Get(i);
-      if (hint instanceof SwTextField) yield hint;
+      if (isAnnotationTextField(hint)) yield hint;
     }
   }
 }

@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/offapi/com/sun/star/text/ReferenceFieldPart.ts",
+    "status": "mapped",
+    "upstreamPath": "offapi/com/sun/star/text/ReferenceFieldPart.idl",
+    "localSymbols": [
+      "ReferenceFieldPart",
+      "PAGE_DESC"
+    ],
+    "upstreamSymbols": [
+      "ReferenceFieldPart",
+      "PAGE_DESC"
+    ],
+    "preservedResponsibilities": [
+      "Retains the original UNO short constants for ReferenceFieldPart."
+    ],
+    "omittedResponsibilities": [
+      "No additional behavior for an IDL constant group."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/text/ReferenceFieldPart.ts",
+          "marker": "ReferenceFieldPart"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-reference-fields.test.ts",
+          "marker": "testTdf157287"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/offapi/com/sun/star/text/ReferenceFieldPart.idl",
+          "marker": "PAGE_DESC"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/qa/core/txtnode/txtnode.cxx",
+          "marker": "testTdf157287"
+        }
+      ]
+    }
+  }
+}

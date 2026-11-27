@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/inc/fldbas.ts",
+    "status": "mapped",
+    "upstreamPath": "sw/inc/fldbas.hxx",
+    "localSymbols": [
+      "SwField"
+    ],
+    "upstreamSymbols": [
+      "SwField"
+    ],
+    "preservedResponsibilities": [
+      "Represents the native field value and destination document copy boundary."
+    ],
+    "omittedResponsibilities": [
+      "Native field formatting and system field families outside the consumed slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/inc/fldbas.ts",
+          "marker": "SwField"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-reference-fields.test.ts",
+          "marker": "testTdf157287"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/fldbas.hxx",
+          "marker": "SwField"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/qa/core/txtnode/txtnode.cxx",
+          "marker": "testTdf157287"
+        }
+      ]
+    }
+  }
+}

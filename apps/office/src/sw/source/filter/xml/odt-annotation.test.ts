@@ -34,8 +34,7 @@ import {
   createOdtWriterTransfer,
   restoreOdtWriterTransfer,
 } from "../../../browser/filter/xml/odt-transfer";
-import { RES_TXTATR_ANNOTATION } from "../../../inc/hintids";
-import { SwTextField } from "../../../inc/txtfld";
+import { isAnnotationTextField, type SwTextField } from "../../../inc/txtfld";
 import { SwPostItFieldType } from "../../core/fields/docufld";
 import { readOdtDocument } from "./swxml";
 import { writeOdtDocument } from "./wrtxml";
@@ -56,7 +55,7 @@ it("imports the named annotation and range from the upstream backward-search doc
     const hints = node.GetTextNode()?.GetpSwpHints();
     for (let index = 0; hints && index < hints.Count(); index++) {
       const hint = hints.Get(index);
-      if (hint instanceof SwTextField && hint.Which() === RES_TXTATR_ANNOTATION) fields.push(hint);
+      if (isAnnotationTextField(hint)) fields.push(hint);
     }
   }
   expect(fields).toHaveLength(1);

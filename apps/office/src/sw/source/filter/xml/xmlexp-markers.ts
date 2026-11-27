@@ -27,7 +27,7 @@ import { Converter } from "../../../../sax/source/tools/converter";
 import { OUStringBuffer } from "../../../../sal/inc/rtl/ustrbuf";
 import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { RES_TXTATR_ANNOTATION, WRITER_CHARACTER_WHICH_RANGES } from "../../../inc/hintids";
-import { SwTextField } from "../../../inc/txtfld";
+import { isAnnotationTextField, type SwTextField } from "../../../inc/txtfld";
 import { putAnnotationCharacterItems } from "../../core/fields/textapi";
 import type { SwDoc } from "../../core/doc/doc";
 import { getCharacterProperties } from "./xmlexp-character";
@@ -39,6 +39,8 @@ import {
 import { getParagraphOdfStyleName } from "./xmlexp-style-names";
 import { AnnotationMark } from "../../core/crsr/annotationmark";
 import { SwBookmark } from "../../core/doc/docbm";
+import { ReferenceFieldSource } from "../../../../offapi/com/sun/star/text/ReferenceFieldSource";
+import { ReferencesSubtype } from "../../../inc/reffldsubtype";
 import type { SwSectionBlock } from "../../core/docnode/nodes";
 import { getUserIndexProgrammaticName } from "../../core/unocore/unoidx";
 import { TOXTypes } from "../../core/tox/tox";
@@ -90,6 +92,25 @@ export function projectParagraphMarkers(
     ...projectAnnotationMarkers(node),
     ...projectIndexMarks(node),
     ...projectReferenceMarks(node),
+    ...(node.GetpSwpHints()?.GetReferenceFields() ?? []).map(
+      /** Projects the actual native field at its dummy character. @param hint - Reference attribute. @returns ODF field portion. */
+      (hint): XMLTextParagraphMarker => {
+        const data = hint.GetAttr().GetField().GetData();
+        return {
+          kind: "reference-field",
+          offset: hint.GetStart(),
+          name: data.name,
+          part: data.format,
+          source:
+            data.source === ReferencesSubtype.Bookmark
+              ? ReferenceFieldSource.BOOKMARK
+              : ReferenceFieldSource.REFERENCE_MARK,
+          language: data.language,
+          presentation: data.presentation,
+          flags: data.flags,
+        };
+      },
+    ),
     ...node
       .GetDoc()
       .GetIDocumentRedlineAccess()
@@ -242,7 +263,7 @@ function projectAnnotationMarkers(node: SwTextNode): XMLTextParagraphMarker[] {
       index++
     ) {
       const hint = hints.GetSortedByWhichAndStart(index);
-      if (!(hint instanceof SwTextField)) break;
+      if (!isAnnotationTextField(hint)) break;
       const field = hint.GetAttr();
       if (access.GetAnnotationMark(field))
         markers.push({

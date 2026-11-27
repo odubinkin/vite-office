@@ -21,7 +21,7 @@ import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SwContentNode, SwTableNode, type SwNode, type SwNodeType } from "../docnode/node";
 import type { SwFormatColl, SwTextFormatColl } from "../doc/fmtcol";
-import { SwTextField } from "../../../inc/txtfld";
+import { isAnnotationTextField, SwTextField } from "../../../inc/txtfld";
 import type { SwTextFlyCnt } from "../../../inc/txtflcnt";
 import { SwUndoDelLayFormat } from "./undobj1";
 import { RndStdIds } from "../../../../svx/inc/swframetypes";
@@ -549,7 +549,7 @@ export class SwHistory {
       const hint = hints.Get(index),
         attrStart = hint.GetStart();
       if (attrStart > end) break;
-      if (hint instanceof SwTextField) {
+      if (isAnnotationTextField(hint)) {
         if (copyFields && start <= attrStart && attrStart < end)
           this.m_SwpHstry.push(new SwHistorySetTextField(hint, nodeIndex));
         continue;

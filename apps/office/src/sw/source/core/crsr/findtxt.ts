@@ -1,5 +1,5 @@
 /** @fileoverview Writer model-text FindTextImpl and inline fly/soft-hyphen cleanup from native findtxt.cxx; layout-merged text and fields/notes remain unported. */
-import { SwTextField } from "../../../inc/txtfld";
+import { isAnnotationTextField, type SwTextField } from "../../../inc/txtfld";
 import type { SwFormatField } from "../../../inc/fmtfld";
 import { fnMoveBackward, fnMoveForward, SwPaM } from "./pam";
 import {
@@ -251,7 +251,7 @@ function FindTextWithNotes(
     const hint = hints.Get(index);
     const position = hint.GetStart();
     if (position > high) break;
-    if (position >= low && hint instanceof SwTextField) anchors.push(hint);
+    if (position >= low && isAnnotationTextField(hint)) anchors.push(hint);
   }
   const active = notes.GetActiveField()?.GetTextField();
   if (active?.GetTextNode() === node) {

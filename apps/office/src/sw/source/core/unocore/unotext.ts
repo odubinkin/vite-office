@@ -14,7 +14,7 @@ import { IllegalArgumentException } from "../../../../cppu/inc/com/sun/star/lang
 import { RuntimeException } from "../../../../cppu/inc/com/sun/star/uno/RuntimeException";
 import type { SwXBookmark } from "./unobkm";
 import type { SwXReferenceMark } from "./unorefmk";
-import type { SwXTextField } from "./unofield";
+import type { SwXGetReferenceField, SwXTextField } from "./unofield";
 import { SwXTextRange, type SwXTextOwner } from "./unoobj2";
 import { SwXTextCursor } from "./unoobj";
 import {
@@ -338,7 +338,7 @@ export class SwXText implements SwXTextOwner {
   /** Attaches currently supported native text contents; selection deletion is not part of bookmark attachment. @param range - Registered canonical range. @param content - Original content input. @param absorb - Original absorb input. @returns The represented native operation result. */
   insertTextContent(
     range: SwXTextRange,
-    content: SwXBookmark | SwXReferenceMark | SwXTextField,
+    content: SwXBookmark | SwXReferenceMark | SwXTextField | SwXGetReferenceField,
     absorb: boolean,
   ): void {
     this.check(range);
@@ -353,7 +353,9 @@ export class SwXText implements SwXTextOwner {
     }
   }
   /** Implements the represented native removeTextContent operation. @param content - Original content input. @returns The represented native operation result. */
-  removeTextContent(content: SwXBookmark | SwXReferenceMark | SwXTextField): void {
+  removeTextContent(
+    content: SwXBookmark | SwXReferenceMark | SwXTextField | SwXGetReferenceField,
+  ): void {
     content.dispose();
   }
 
