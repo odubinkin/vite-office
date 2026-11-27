@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "task_id": "202611271059-WWVNRD",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-27T11:00:30.045Z",
+  "verdict": "pass",
+  "summary": "Verified three Chromium replays on the pinned control build.",
+  "evaluated_sha": "4653d37011ecbcc5be82d8968640e3d8fa51f491",
+  "blueprint_digest": "851982f6f063a19d04d44595d179b27ad7977e3afc08a1e4ed6036731f67ab39",
+  "findings": [
+    "Only test assertions and load synchronization changed; Writer runtime was unchanged."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611271059-WWVNRD/README.md",
+    "output/playwright/odf-full-checkpoint-20261127/browser-replay-verification.md",
+    "4653d37011ecbcc5be82d8968640e3d8fa51f491"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
