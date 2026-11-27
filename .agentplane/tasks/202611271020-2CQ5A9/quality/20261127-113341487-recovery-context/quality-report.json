@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "task_id": "202611271020-2CQ5A9",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-27T11:33:41.487Z",
+  "verdict": "pass",
+  "summary": "Pinned protection keys; nested body and repeated table sections, linked descriptors, crossing bookmarks and original section properties.",
+  "evaluated_sha": "0e0f5fdec50e98cb00763296a5b8e3486ccbd585",
+  "blueprint_digest": "223e121ceed9b48b7a7a46814f65373ceab3ecc9821089b5ce75465819cc499a",
+  "findings": [
+    "Section nodes retain named ownership and text flow across document and Worker boundaries. Physical section layout, unrepresented format properties, and link refresh are outside the tested slice."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611271020-2CQ5A9/README.md",
+    "/Users/odubinkin/Projects/vite-office/output/playwright/2CQ5A9/verification.md",
+    "0e0f5fdec50e98cb00763296a5b8e3486ccbd585"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
