@@ -19,10 +19,10 @@
         "apps/office/src/sc/browser/presentation/attrdlg/CellAttributePages.tsx",
         "apps/office/src/sc/browser/presentation/calc-format-cells.test.tsx"
       ],
-      "justification": "Binds alignment, Asian Typography and cell protection controls to pooled Calc items.",
+      "justification": "Binds Asian Typography and cell protection controls to pooled Calc items.",
       "knownViolations": [],
       "localSymbols": [
-        "AlignmentTabPage",
+        "AsianTypographyTabPage",
         "CellProtectionTabPage"
       ],
       "sourceResponsibility": "browser-owned",

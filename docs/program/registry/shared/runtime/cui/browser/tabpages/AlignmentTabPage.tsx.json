@@ -1,0 +1,32 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/cui/browser/tabpages/AlignmentTabPage.tsx",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "cell-alignment",
+    "capabilityIds": [
+      "CAP-665e024a-e4af-4413-b428-8a86099de453"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/cui/browser/tabpages/AlignmentTabPage.tsx#AlignmentTabPage",
+        "apps/office/src/sc/browser/presentation/calc-format-cells.test.tsx"
+      ],
+      "justification": "Presents original CUI alignment and orientation controls using native HTML form widgets.",
+      "knownViolations": [],
+      "localSymbols": [
+        "AlignmentTabPage"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

@@ -1,4 +1,5 @@
 /** @fileoverview Native ODF Calc style property projection for orientation, rotation and justification methods. */
+import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { Converter } from "../../../../sax/source/tools/converter";
 import { SvxJustifyMethodItem } from "../../../../editeng/inc/justifyitem";
 import { SvxCellJustifyMethod as J } from "../../../../editeng/inc/svxenum";
@@ -12,6 +13,7 @@ import * as Which from "../../../inc/scitems";
 /** Supported native table-cell property names. */
 export const alignmentCellTokens = [
   T.STYLE_DIRECTION,
+  T.STYLE_GLYPH_ORIENTATION_VERTICAL,
   T.STYLE_ROTATION_ANGLE,
   T.STYLE_ROTATION_ALIGN,
   T.STYLE_SHRINK_TO_FIT,
@@ -39,6 +41,11 @@ export function importCellAlignment(
         if (source === "ttb" || source === "ltr")
           pattern.ItemSetPut(new ScVerticalStackCell(source === "ttb"));
         else unsupported("invalid cell orientation");
+        break;
+      case T.STYLE_GLYPH_ORIENTATION_VERTICAL:
+        if (source === "auto" || source === "0")
+          pattern.ItemSetPut(new SfxBoolItem(Which.ATTR_VERTICAL_ASIAN, source === "auto"));
+        else unsupported("invalid vertical glyph orientation");
         break;
       case T.STYLE_ROTATION_ANGLE: {
         const angle: [number] = [0];
@@ -81,6 +88,7 @@ export function exportCellAlignment(pattern: ScPatternAttr): string {
   const set = pattern.GetItemSet();
   const orientation = set.GetItemIfSet(Which.ATTR_STACKED, false) as
     ScVerticalStackCell | undefined;
+  const asian = set.GetItemIfSet(Which.ATTR_VERTICAL_ASIAN, false) as SfxBoolItem | undefined;
   const angle = set.GetItemIfSet(Which.ATTR_ROTATE_VALUE, false) as ScRotateValueItem | undefined;
   const reference = set.GetItemIfSet(Which.ATTR_ROTATE_MODE, false) as
     SvxRotateModeItem | undefined;
@@ -89,6 +97,9 @@ export function exportCellAlignment(pattern: ScPatternAttr): string {
     (orientation === undefined
       ? ""
       : ` style:direction="${orientation.GetValue() ? "ttb" : "ltr"}"`) +
+    (asian === undefined
+      ? ""
+      : ` style:glyph-orientation-vertical="${asian.GetValue() ? "auto" : "0"}"`) +
     (angle === undefined ? "" : ` style:rotation-angle="${Math.trunc(angle.GetValue() / 100)}"`) +
     (reference === undefined
       ? ""

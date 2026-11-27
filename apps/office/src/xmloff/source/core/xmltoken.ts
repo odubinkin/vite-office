@@ -486,6 +486,7 @@ const entries: readonly (readonly [string, string, XMLToken])[] = [
   [ODF_NAMESPACES.style, "cell-protect", XMLToken.STYLE_CELL_PROTECT],
   [ODF_NAMESPACES.style, "print-content", XMLToken.STYLE_PRINT_CONTENT],
   [ODF_NAMESPACES.style, "rotation-angle", XMLToken.STYLE_ROTATION_ANGLE],
+  [ODF_NAMESPACES.style, "glyph-orientation-vertical", XMLToken.STYLE_GLYPH_ORIENTATION_VERTICAL],
   [ODF_NAMESPACES.style, "rotation-align", XMLToken.STYLE_ROTATION_ALIGN],
   [ODF_NAMESPACES.style, "shrink-to-fit", XMLToken.STYLE_SHRINK_TO_FIT],
   [ODF_NAMESPACES.style, "vertical-justify", XMLToken.STYLE_VERTICAL_JUSTIFY],

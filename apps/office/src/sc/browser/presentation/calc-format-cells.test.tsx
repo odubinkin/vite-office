@@ -7,6 +7,8 @@ import { text } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import type { SfxBoolItem } from "../../../svl/source/items/cenumitm";
 import { SfxRequest } from "../../../sfx2/source/control/request";
 import { SvNumFormatType as T } from "../../../svl/inc/zforlist";
+import { SvxHorJustifyItem, SvxJustifyMethodItem } from "../../../editeng/inc/justifyitem";
+import { SvxCellHorJustify, SvxCellJustifyMethod } from "../../../editeng/inc/svxenum";
 import { SvxBrushItem } from "../../../editeng/inc/brushitem";
 import { ComplexColor } from "../../../docmodel/inc/color/ComplexColor";
 import { ThemeColorType } from "../../../docmodel/inc/theme/ThemeColorType";
@@ -39,9 +41,19 @@ import { SvxLanguageItem } from "../../../editeng/source/items/textitem.language
 import { SvxLineItem } from "../../../editeng/inc/lineitem";
 import { SvxShadowItem } from "../../../editeng/source/items/frmitems.shadow";
 import { SvxShadowLocation } from "../../../editeng/inc/svxenum";
+import { SvxRotateMode, SvxRotateModeItem } from "../../../svx/inc/rotmodit";
 import { ScAddress, ScRange } from "../../inc/address";
-import { ScProtectionAttr, ScLineBreakCell } from "../../inc/attrib";
-import { ATTR_BACKGROUND, ATTR_LINEBREAK, ATTR_PROTECTION } from "../../inc/scitems";
+import { ScProtectionAttr, ScLineBreakCell, ScRotateValueItem } from "../../inc/attrib";
+import {
+  ATTR_BACKGROUND,
+  ATTR_LINEBREAK,
+  ATTR_PROTECTION,
+  ATTR_VERTICAL_ASIAN,
+  ATTR_ROTATE_VALUE,
+  ATTR_ROTATE_MODE,
+  ATTR_HOR_JUSTIFY,
+  ATTR_HOR_JUSTIFY_METHOD,
+} from "../../inc/scitems";
 import { FID_CELL_FORMAT } from "../../source/ui/attrdlg/attrdlg";
 import { readOdsDocument, writeOdsDocument } from "../../source/filter/xml/xmlwrap";
 import { createCalcSession } from "../composition/calc-module";
@@ -179,6 +191,7 @@ it("applies alignment, fill and protection as one attribute transaction and pres
   fireEvent.change(modal.getByLabelText("Horizontal"), { target: { value: "1" } });
   fireEvent.change(modal.getByLabelText("Indent"), { target: { value: "2" } });
   fireEvent.click(modal.getByRole("checkbox", { name: "Vertically stacked" }));
+  fireEvent.click(modal.getByRole("checkbox", { name: "Asian layout mode" }));
   fireEvent.click(modal.getByRole("checkbox", { name: "Wrap text automatically" }));
   fireEvent.click(modal.getByRole("checkbox", { name: "Hyphenation active" }));
   fireEvent.change(modal.getByLabelText("Text direction"), { target: { value: "0" } });
@@ -198,6 +211,7 @@ it("applies alignment, fill and protection as one attribute transaction and pres
     ) => {
       const pattern = value.GetPattern(pos);
       expect((pattern?.GetItem(ATTR_LINEBREAK) as ScLineBreakCell).GetValue()).toBe(true);
+      expect((pattern?.GetItem(ATTR_VERTICAL_ASIAN) as SfxBoolItem).GetValue()).toBe(true);
       expect((pattern?.GetItem(ATTR_BACKGROUND) as SvxBrushItem).GetColor().GetGreen()).toBe(136);
       const protection = pattern?.GetItem(ATTR_PROTECTION) as ScProtectionAttr;
       expect([
@@ -756,4 +770,160 @@ it("ports the original Background selector palettes and their named recent color
   await accept();
   const brush = doc.GetPattern(new ScAddress(3, 2, 0))?.GetItem(ATTR_BACKGROUND) as SvxBrushItem;
   expect(brush.GetColor().toUInt32()).toBe(0xff420e);
+});
+
+/** Opens the original Calc alignment page and returns its form queries. @returns Alignment panel. */
+function alignmentPage() {
+  open();
+  const modal = dialog();
+  fireEvent.click(modal.getByRole("tab", { name: "Alignment" }));
+  return { modal, alignment: within(modal.getByRole("tabpanel", { name: "Alignment" })) };
+}
+
+it("tracks the native orientation dial and its three reference edges through grouped history", /** Exercises a drag through the dial and verifies the actual selected native angle and mode. @returns Completion. */ async () => {
+  const { controller } = mount();
+  const doc = controller.shell.GetDocument();
+  controller.viewData.GetMarkData().SetMarkArea(new ScRange(0, 0, 0, 1, 0, 0));
+  const { alignment } = alignmentPage();
+  const horizontal = alignment.getByRole("combobox", { name: "Horizontal" });
+  const angle = alignment.getByRole("spinbutton", { name: "Degrees" });
+  const dial = alignment.getByRole("slider", { name: "Rotation dial" });
+  const stacked = alignment.getByRole("checkbox", { name: "Vertically stacked" });
+  const asian = alignment.getByRole("checkbox", { name: "Asian layout mode" });
+  const hyphen = alignment.getByRole("checkbox", { name: "Hyphenation active" });
+  const shrink = alignment.getByRole("checkbox", { name: "Shrink to fit cell size" });
+  expect(alignment.getAllByRole("radio")).toHaveLength(3);
+  expect(
+    alignment.getByRole("radio", { name: "Text Extension From Lower Cell Border" }),
+  ).toBeChecked();
+  expect(asian).toBeDisabled();
+  expect(hyphen).toBeDisabled();
+  expect(shrink).toBeEnabled();
+  fireEvent.change(horizontal, { target: { value: "5" } });
+  expect(angle).toBeDisabled();
+  expect(stacked).toBeDisabled();
+  expect(shrink).toBeDisabled();
+  fireEvent.change(horizontal, { target: { value: "6" } });
+  expect(hyphen).toBeDisabled();
+  expect(shrink).toBeDisabled();
+  fireEvent.change(horizontal, { target: { value: "4" } });
+  expect(hyphen).toBeEnabled();
+  expect(shrink).toBeDisabled();
+  fireEvent.change(horizontal, { target: { value: "1" } });
+  const indent = alignment.getByRole("spinbutton", { name: "Indent" });
+  fireEvent.keyDown(indent, { key: "ArrowUp" });
+  expect(indent).toHaveValue(10);
+
+  fireEvent.change(angle, { target: { value: "33" } });
+  expect(dial).toHaveAttribute("aria-valuenow", "33");
+  dial.getBoundingClientRect =
+    /** Supplies fixed dial geometry to the browser event runner. @returns Dial bounds. */ () =>
+      new DOMRect(0, 0, 100, 100);
+  /** Dispatches an actual left pointer event within the dial. @param type - Pointer event type. @param x - Horizontal coordinate. @param y - Vertical coordinate. @returns Nothing. */
+  function pointer(type: string, x: number, y: number): void {
+    const event = new MouseEvent(type, { bubbles: true, clientX: x, clientY: y, button: 0 });
+    Object.defineProperties(event, { pointerId: { value: 1 }, isPrimary: { value: true } });
+    fireEvent(dial, event);
+  }
+  pointer("pointerdown", 90, 30);
+  expect(angle).toHaveValue(30);
+  fireEvent.keyDown(dial, { key: "Escape" });
+  expect(angle).toHaveValue(33);
+  expect(angle).toHaveFocus();
+  pointer("pointerdown", 90, 30);
+  expect(angle).toHaveValue(30);
+  pointer("pointermove", 90, 20);
+  expect(angle).toHaveValue(37);
+  pointer("pointerup", 90, 20);
+  expect(angle).toHaveFocus();
+  fireEvent.click(alignment.getByRole("radio", { name: "Text Extension From Upper Cell Border" }));
+  await accept();
+
+  for (const column of [0, 1]) {
+    const pattern = doc.GetPattern(new ScAddress(column, 0, 0));
+    expect((pattern?.GetItem(ATTR_ROTATE_VALUE) as ScRotateValueItem).GetValue()).toBe(3700);
+    expect((pattern?.GetItem(ATTR_ROTATE_MODE) as SvxRotateModeItem).GetValue()).toBe(
+      SvxRotateMode.SVX_ROTATE_MODE_TOP,
+    );
+  }
+  expect(controller.shell.GetUndoManager().GetUndoActionCount()).toBe(1);
+  act(
+    /** Reverts the grouped alignment change on both selected cells. @returns Nothing. */ () => {
+      expect(controller.Undo()).toBe(true);
+    },
+  );
+  expect(
+    (
+      doc.GetPattern(new ScAddress(1, 0, 0))?.GetItem(ATTR_ROTATE_VALUE) as ScRotateValueItem
+    ).GetValue(),
+  ).toBe(0);
+});
+
+it("cycles the original mixed alignment checkbox and restores it on Reset and Cancel", /** Preserves true and false values until a mixed check reaches a saved change. @returns Nothing. */ () => {
+  const { controller } = mount();
+  const doc = controller.shell.GetDocument();
+  doc.ApplyAttr(0, 0, 0, new ScLineBreakCell(true));
+  controller.viewData.GetMarkData().SetMarkArea(new ScRange(0, 0, 0, 1, 0, 0));
+  const { modal, alignment } = alignmentPage();
+  const wrap = alignment.getByRole("checkbox", { name: "Wrap text automatically" });
+  const shrink = alignment.getByRole("checkbox", { name: "Shrink to fit cell size" });
+  expect(wrap).toBePartiallyChecked();
+  expect(shrink).toBeDisabled();
+  fireEvent.click(wrap);
+  expect(wrap).not.toBeChecked();
+  expect(wrap).not.toBePartiallyChecked();
+  expect(shrink).toBeEnabled();
+  fireEvent.click(wrap);
+  expect(wrap).toBeChecked();
+  fireEvent.click(wrap);
+  expect(wrap).toBePartiallyChecked();
+  fireEvent.click(wrap);
+  fireEvent.click(modal.getByRole("button", { name: "Reset" }));
+  expect(wrap).toBePartiallyChecked();
+  fireEvent.click(modal.getByRole("button", { name: "Cancel" }));
+  expect(
+    (doc.GetPattern(new ScAddress())?.GetItem(ATTR_LINEBREAK) as ScLineBreakCell).GetValue(),
+  ).toBe(true);
+  expect(
+    (doc.GetPattern(new ScAddress(1, 0, 0))?.GetItem(ATTR_LINEBREAK) as ScLineBreakCell).GetValue(),
+  ).toBe(false);
+  expect(controller.shell.GetUndoManager().GetUndoActionCount()).toBe(0);
+});
+
+it("preserves the pinned justify-method rewrite after visiting a mixed Alignment page", /** Keeps the source independent method exchange when the mixed alignment combo has no active row. @returns Completion. */ async () => {
+  const { controller } = mount();
+  const doc = controller.shell.GetDocument();
+  for (const [column, align] of [
+    [0, SvxCellHorJustify.Block],
+    [1, SvxCellHorJustify.Left],
+  ] as const) {
+    doc.ApplyAttr(column, 0, 0, new SvxHorJustifyItem(align, ATTR_HOR_JUSTIFY));
+    doc.ApplyAttr(
+      column,
+      0,
+      0,
+      new SvxJustifyMethodItem(SvxCellJustifyMethod.Distribute, ATTR_HOR_JUSTIFY_METHOD),
+    );
+  }
+  controller.viewData.GetMarkData().SetMarkArea(new ScRange(0, 0, 0, 1, 0, 0));
+  /** Reads the actual justification method carried by the selected cell. @param column - Selected column. @returns Stored method. */
+  function method(column: number): SvxCellJustifyMethod {
+    return (
+      doc
+        .GetPattern(new ScAddress(column, 0, 0))
+        ?.GetItem(ATTR_HOR_JUSTIFY_METHOD) as SvxJustifyMethodItem
+    ).GetValue();
+  }
+  open();
+  await accept();
+  expect(method(0)).toBe(SvxCellJustifyMethod.Distribute);
+  const { alignment } = alignmentPage();
+  expect(alignment.getByRole("combobox", { name: "Horizontal" })).toHaveValue("");
+  await accept();
+  expect(method(0)).toBe(SvxCellJustifyMethod.Auto);
+  expect(method(1)).toBe(SvxCellJustifyMethod.Auto);
+  expect(
+    (doc.GetPattern(new ScAddress())?.GetItem(ATTR_HOR_JUSTIFY) as SvxHorJustifyItem).GetValue(),
+  ).toBe(SvxCellHorJustify.Block);
+  expect(controller.shell.GetUndoManager().GetUndoActionCount()).toBe(1);
 });

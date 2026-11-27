@@ -113,3 +113,12 @@ export const SID_ATTR_BRUSH = 10001 as const;
 
 /** Original SID_SVX_START +855 numbering rule exchange item. */
 export const SID_ATTR_NUMBERING_RULE = 10855 as const;
+
+/** Original horizontal justification method slot, SID_EDIT_START + 69. */
+export const SID_ATTR_ALIGN_HOR_JUSTIFY_METHOD = 11569 as const;
+/** Original vertical justification method slot, SID_EDIT_START + 70. */
+export const SID_ATTR_ALIGN_VER_JUSTIFY_METHOD = 11570 as const;
+/** Original horizontal alignment slot, SID_EDIT_START + 71. */
+export const SID_ATTR_ALIGN_HOR_JUSTIFY = 11571 as const;
+/** Original vertical alignment slot, SID_EDIT_START + 72. */
+export const SID_ATTR_ALIGN_VER_JUSTIFY = 11572 as const;

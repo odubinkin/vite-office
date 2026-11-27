@@ -1,4 +1,5 @@
 /** @fileoverview Format Cells' original selection snapshot and typed output exchange. */
+import { AlignmentTabPage } from "../../../../cui/source/tabpages/align";
 import { SvxBkgTabPage } from "../../../../cui/source/tabpages/backgrnd";
 import { SvxBorderTabPage } from "../../../../cui/source/tabpages/border";
 import { SvxBorderLineStyle as Style } from "../../../../editeng/source/items/borderline";
@@ -14,18 +15,6 @@ import {
   ATTR_BORDER,
   ATTR_BORDER_INNER,
   ATTR_MARGIN,
-  ATTR_HOR_JUSTIFY,
-  ATTR_HOR_JUSTIFY_METHOD,
-  ATTR_VER_JUSTIFY,
-  ATTR_VER_JUSTIFY_METHOD,
-  ATTR_INDENT,
-  ATTR_ROTATE_VALUE,
-  ATTR_ROTATE_MODE,
-  ATTR_STACKED,
-  ATTR_LINEBREAK,
-  ATTR_HYPHENATE,
-  ATTR_SHRINKTOFIT,
-  ATTR_WRITINGDIR,
 } from "../../../inc/scitems";
 import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { CellType } from "../../../inc/global";
@@ -39,22 +28,6 @@ import * as attr from "../../../inc/scitems";
 import { SfxItemState, type SfxItemSet } from "../../../../svl/source/items/itemset";
 import type { ScViewData } from "../inc/viewdata";
 import { GetSelectionPattern } from "../view/viewfunc";
-
-/** Native alignment page attributes cleared by Reset. */
-export const alignmentWhich = [
-  ATTR_HOR_JUSTIFY,
-  ATTR_HOR_JUSTIFY_METHOD,
-  ATTR_VER_JUSTIFY,
-  ATTR_VER_JUSTIFY_METHOD,
-  ATTR_INDENT,
-  ATTR_ROTATE_VALUE,
-  ATTR_ROTATE_MODE,
-  ATTR_STACKED,
-  ATTR_LINEBREAK,
-  ATTR_HYPHENATE,
-  ATTR_SHRINKTOFIT,
-  ATTR_WRITINGDIR,
-] as const;
 
 /** Original Font page character items by writing system. */
 export const fontGroups = [
@@ -154,6 +127,7 @@ export class ScAttrDlg {
   readonly numbers: SvxNumberFormatShell;
   readonly borders: SvxBorderTabPage;
   readonly background: SvxBkgTabPage;
+  readonly alignment: AlignmentTabPage;
   readonly asianTypography: SvxAsianTabPage;
   readonly output: SfxItemSet;
 
@@ -196,6 +170,7 @@ export class ScAttrDlg {
     });
 
     this.background = new SvxBkgTabPage(this.items);
+    this.alignment = new AlignmentTabPage(this.items);
     this.output = this.items.Clone(false);
     this.output.MergeRange(SID_ATTR_NUMBERFORMAT_INFO, SID_ATTR_NUMBERFORMAT_INFO);
     this.asianTypography = new SvxAsianTabPage(this.items, this.output);

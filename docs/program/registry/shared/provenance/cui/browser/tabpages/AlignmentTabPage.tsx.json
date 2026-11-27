@@ -1,0 +1,25 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/cui/browser/tabpages/AlignmentTabPage.tsx",
+    "rationale": "Presents original CUI alignment and orientation controls using native HTML form widgets.",
+    "responsibilities": [
+      "Presents original CUI alignment and orientation controls using native HTML form widgets."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "HTML form inputs and Pointer Events present the native CUI layout and SVX dial while existing pooled values retain the data exchange contract."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/cui/browser/tabpages/AlignmentTabPage.tsx",
+          "marker": "AlignmentTabPage"
+        }
+      ]
+    }
+  }
+}

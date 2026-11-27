@@ -3,6 +3,9 @@ import { expect, it } from "vitest";
 import { createCalcSession } from "../../../browser/composition/calc-module";
 import { ScDocument } from "../../../inc/document";
 import { ScAddress } from "../../../inc/address";
+import { ScIndentItem } from "../../../inc/attrib";
+import { ATTR_INDENT, ATTR_VERTICAL_ASIAN } from "../../../inc/scitems";
+import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { ScPatternAttr } from "../../../inc/patattr";
 import { SvxHorJustifyItem, SvxVerJustifyItem } from "../../../../editeng/inc/justifyitem";
 import { SvxCellHorJustify as H, SvxCellVerJustify as V } from "../../../../editeng/inc/svxenum";
@@ -129,5 +132,41 @@ it("diagnoses invalid supported values and unported paragraph scopes while retai
     expect(diagnostics).toHaveLength(5);
   } finally {
     doc.DisposeAttributes();
+  }
+});
+
+it("preserves native glyph orientation and indent-only automatic styles in ODS", /** Verifies the lexical values and the independent native item owners. @returns Completion. */ async () => {
+  const session = createCalcSession();
+  const doc = session.controller.shell.GetDocument();
+  try {
+    doc.ApplyAttr(0, 0, 0, new SfxBoolItem(ATTR_VERTICAL_ASIAN, true));
+    doc.ApplyAttr(1, 0, 0, new SfxBoolItem(ATTR_VERTICAL_ASIAN, false));
+    doc.ApplyAttr(2, 0, 0, new ScIndentItem(200));
+    const bytes = await writeOdsDocument(doc);
+    const content = await (await DocumentArchive.open(bytes)).readTextEntry("content.xml");
+    expect(content).toContain('style:glyph-orientation-vertical="auto"');
+    expect(content).toContain('style:glyph-orientation-vertical="0"');
+    expect(content).toContain("<style:paragraph-properties fo:margin-left=");
+    const saved = await readOdsDocument(bytes);
+    try {
+      expect(
+        (
+          saved.GetPattern(new ScAddress(0, 0, 0))?.GetItem(ATTR_VERTICAL_ASIAN) as SfxBoolItem
+        ).GetValue(),
+      ).toBe(true);
+      expect(
+        saved
+          .GetPattern(new ScAddress(1, 0, 0))
+          ?.GetItemSet()
+          .GetItemState(ATTR_VERTICAL_ASIAN, false),
+      ).toBe(SfxItemState.SET);
+      expect(
+        (saved.GetPattern(new ScAddress(2, 0, 0))?.GetItem(ATTR_INDENT) as ScIndentItem).GetValue(),
+      ).toBe(200);
+    } finally {
+      saved.DisposeAttributes();
+    }
+  } finally {
+    session.Close();
   }
 });

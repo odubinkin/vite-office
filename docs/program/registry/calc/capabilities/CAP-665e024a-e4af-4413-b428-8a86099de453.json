@@ -1,0 +1,104 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-665e024a-e4af-4413-b428-8a86099de453",
+    "capabilityId": "CAP-665e024a-e4af-4413-b428-8a86099de453",
+    "suite": "calc",
+    "subsystem": "cell-formatting",
+    "type": "command",
+    "maturity": "implemented",
+    "capability": "Calc Format Cells native Alignment groups and exchange",
+    "assertions": [
+      "The three original groups use the source combo entries, reference choices, mixed states and control sensitivity.",
+      "The linked dial preserves initial fifteen-degree and captured one-degree angle resolution.",
+      "The shared CUI page applies native selected-cell attributes and preserves the original independent justification method exchange.",
+      "ODS preserves original vertical glyph values and direct indent-only styles."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "HTML form inputs and Pointer Events present the native CUI layout and SVX dial while existing pooled values retain the data exchange contract."
+    },
+    "gaps": [
+      "Grid text rendering remains within the existing browser layout slice. Shared native dialog compatibility outside Calc is unverified."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/cui/source/tabpages/align.cxx",
+          "marker": "AlignmentTabPage::FillItemSet"
+        },
+        {
+          "path": "vendor/libreoffice-reference/cui/source/tabpages/align.cxx",
+          "marker": "AlignmentTabPage::UpdateEnableControls"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svx/source/dialog/dialcontrol.cxx",
+          "marker": "DialControl::HandleMouseEvent"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlstyle.cxx",
+          "marker": "XmlScPropHdl_Vertical::importXML"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/uitest/calc_tests/formatCells.py",
+          "marker": "test_format_cell_alignment_tab"
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/libreoffice-reference/cui/uiconfig/ui/cellalignment.ui",
+          "marker": "id=\"spinDegrees\""
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/cui/source/tabpages/align.ts",
+          "marker": "class AlignmentTabPage"
+        },
+        {
+          "path": "apps/office/src/cui/browser/tabpages/AlignmentTabPage.tsx",
+          "marker": "Reference edge"
+        },
+        {
+          "path": "apps/office/src/svx/source/dialog/dialcontrol.ts",
+          "marker": "getDialMouseAngle"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-format-cells.test.tsx",
+          "marker": "tracks the native orientation dial"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-native-alignment.test.ts",
+          "marker": "preserves native glyph orientation and indent-only"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-format-cells.test.tsx",
+          "marker": "cycles the original mixed alignment checkbox"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-upstream-suspected-issues.md",
+          "marker": "CALC-852"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "aspect": "command-state",
+    "atomicOperation": "calc-format-cells-alignment",
+    "scopeLimitations": [
+      "Uses the current browser sheet renderer and Calc selection transaction. Document opening and recovery use existing browser policies."
+    ]
+  }
+}

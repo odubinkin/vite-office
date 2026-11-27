@@ -54,6 +54,9 @@ export const ATTR_VER_JUSTIFY_METHOD = 133;
 /** Original cell alignment item identity. */
 export const ATTR_ROTATE_MODE = 136;
 
+/** Original Asian vertical layout flag. */
+export const ATTR_VERTICAL_ASIAN = 137;
+
 /** Original four-sided cell margin item identity. */
 export const ATTR_MARGIN = 143;
 

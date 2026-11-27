@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/cui/source/tabpages/align.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "cell-alignment",
+    "capabilityIds": [
+      "CAP-665e024a-e4af-4413-b428-8a86099de453"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/cui/source/tabpages/align.ts#AlignmentTabPage",
+        "vendor/libreoffice-reference/cui/source/tabpages/align.cxx#AlignmentTabPage::FillItemSet",
+        "apps/office/src/sc/browser/presentation/calc-format-cells.test.tsx"
+      ],
+      "justification": "Preserves the native Alignment slot mapping, selection values, control sensitivity and typed item exchange.",
+      "knownViolations": [],
+      "localSymbols": [
+        "AlignmentTabPage"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "cui/source/tabpages/align.cxx",
+      "upstreamSymbols": [
+        "AlignmentTabPage"
+      ]
+    }
+  }
+}

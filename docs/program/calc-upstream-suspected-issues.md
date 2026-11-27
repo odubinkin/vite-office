@@ -8131,3 +8131,10 @@ later. Calc preserves the original ordering gate.
 - Observation: Reset splits the partial-alpha brush into an opaque RGB color and a separate drawing transparency item. The solid branch compares the RGB color with the complete prior brush color and writes a brush from the RGB color alone when they differ.
 - Impact: accepting a visited Background page can replace partial opacity with an opaque solid of the same RGB. A matching opaque brush retains its original metadata. Cancel and dialogs where Background is unvisited leave opacity alone.
 - Local preservation: use the same split and full-color comparison through the native brush exchange, with a targeted dialog and history case.
+
+
+### CALC-852 — Visiting Alignment can change a uniform justification method on a mixed selection
+
+The pinned `lcl_SetJustifyMethodToItemSet` in `cui/source/tabpages/align.cxx` derives the outgoing method from the active combo row even when that row was untouched. A combined selection may retain an explicit Distribute method while its horizontal alignment is mixed. The inactive row resolves to Auto, so accepting the visited page changes both cells' methods and preserves their distinct alignment values.
+
+Calc preserves this exchange rule. The regression combines a justified cell and a left-aligned cell with the same stored method, then checks the unvisited and visited acceptance paths and grouped history.
