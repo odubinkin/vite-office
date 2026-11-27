@@ -1,10 +1,11 @@
 ---
 id: "202611271109-QDA3NS"
 title: "Preserve native Calc data validation rules in ODS"
-status: "DOING"
+result_summary: "Retained native Calc ODS data validation and cell-pattern ownership."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "b0653f9908ec94117fe04f3c571c55233e1de25c"
   findings:
     - "The shared formula condition, document-owned rule keys and XML contexts retain the native rule and prompt behavior in the represented filter. Interactive validation and macro events are outside this slice."
-commit: null
+commit:
+  hash: "b0653f9908ec94117fe04f3c571c55233e1de25c"
+  message: "🧩 QDA3NS calc: retain native data validation rules in ODS"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: pinned Calc data validation definitions, assigned ranges, cell values and custom formula survived Worker and ODS round trips."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Tests  42 passed (42). Native dataValidity.ods, typecheck, lint, formatting, dependencies, provenance and Calc inventory passed."
+  -
+    type: "status"
+    at: "2026-11-27T11:40:33.841Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: pinned Calc data validation definitions, assigned ranges, cell values and custom formula survived Worker and ODS round trips."
 doc_version: 3
-doc_updated_at: "2026-11-27T11:39:34.357Z"
+doc_updated_at: "2026-11-27T11:40:33.842Z"
 doc_updated_by: "CODER"
 description: "Port the original validation condition owner, document rule list and cell pattern reference, ODS validation declarations and cell bindings, and Worker transport. Verify the original dataValidity.ods fixture and required formula predicates in the represented kernel."
 sections:
