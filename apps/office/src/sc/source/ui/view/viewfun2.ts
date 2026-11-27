@@ -380,7 +380,35 @@ export function GetAutoSumArea(view: ScViewData, ranges: ScRangeList): boolean {
   }
   return false;
 }
-/** Original formula token construction for the consumed ordinary,unfiltered aggregate path. SUBTOTAL evaluation remains explicitly unavailable. @param view - Actual view. @param ranges - Ordered source ranges. @param subtotal - Native filtered-data request. @param address - Formula position. @param code - Aggregate opcode. @returns Owned formula source. */
+/** Returns the native SUBTOTAL selector for an AutoSum opcode. @param code - Selected function. @returns Original selector, with SUM as fallback. */
+function GetSubTotal(code: OpCode): number {
+  switch (code) {
+    case OpCode.ocAverage:
+      return 1;
+    case OpCode.ocCount:
+      return 2;
+    case OpCode.ocCount2:
+      return 3;
+    case OpCode.ocMax:
+      return 4;
+    case OpCode.ocMin:
+      return 5;
+    case OpCode.ocProduct:
+      return 6;
+    case OpCode.ocStDev:
+      return 7;
+    case OpCode.ocStDevP:
+      return 8;
+    case OpCode.ocVar:
+      return 10;
+    case OpCode.ocVarP:
+      return 11;
+    default:
+      return 9;
+  }
+}
+
+/** Builds the native AutoSum formula directly from source references. @param view - Actual view. @param ranges - Ordered source ranges. @param subtotal - Native filtered-data request. @param address - Formula position. @param code - Aggregate opcode. @returns Owned formula source. */
 export function GetAutoSumFormula(
   view: ScViewData,
   ranges: ScRangeList,
@@ -388,12 +416,15 @@ export function GetAutoSumFormula(
   address: ScAddress,
   code: OpCode,
 ): OUString {
-  if (subtotal) throw new Error("SUBTOTAL formula construction/evaluation is not implemented");
   const doc = view.GetDocument(),
     array = new ScTokenArray(doc),
     output = new OUString();
-  array.AddOpCode(code);
+  array.AddOpCode(subtotal ? OpCode.ocSubTotal : code);
   array.AddOpCode(OpCode.ocOpen);
+  if (subtotal) {
+    array.AddDouble(GetSubTotal(code));
+    array.AddOpCode(OpCode.ocSep);
+  }
   let index = 0;
   for (const range of ranges) {
     if (index++ !== 0) array.AddOpCode(OpCode.ocSep);

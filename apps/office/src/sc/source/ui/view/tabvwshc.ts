@@ -1,10 +1,10 @@
-/** @fileoverview Consumed native DoAutoSum command orchestration from tabvwshc.cxx over actual view/mark owners. Named database filters remain an unported boundary. */
+/** @fileoverview Consumed native DoAutoSum command orchestration from tabvwshc.cxx over actual view/mark owners. */
 import type { ScTabViewShell } from "./tabvwsh4";
 import { ScRangeList } from "../../../inc/rangelst";
 import { ScAddress } from "../../../inc/address";
 import type { OpCode } from "../../../../formula/inc/opcode";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
-/** Original represented filtered-row scan;named database/autofilter collections are not represented by the current document and are not replaced with an empty service. @param view - Actual view shell. @param ranges - Native ranges. @returns A represented filtered row intersects. */
+/** Original filtered-row scan followed by intersection with named autofilter ranges. @param view - Actual view shell. @param ranges - Native ranges. @returns Whether the range uses a native filter. */
 export function UseSubTotal(view: ScTabViewShell, ranges: ScRangeList): boolean {
   const doc = view.GetViewData().GetDocument();
   let subtotal = false,
@@ -21,6 +21,13 @@ export function UseSubTotal(view: ScTabViewShell, ranges: ScRangeList): boolean 
       ++tab;
     }
     ++index;
+  }
+  if (!subtotal) {
+    for (const database of doc.GetDBCollection().getNamedDBs()) {
+      if (!database.HasAutoFilter()) continue;
+      const area = database.GetArea();
+      for (const range of ranges) if (area.Intersects(range)) return true;
+    }
   }
   return subtotal;
 }

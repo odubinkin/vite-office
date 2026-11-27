@@ -200,6 +200,7 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
       this.bChanged = true;
       this.aResult.SetToken(null);
       this.bCompile = false;
+      if (this.IsSubTotal()) this.rDocument.AddSubTotalCell(this);
       if (!noListening) this.StartListeningTo(this.rDocument);
     }
     if (inTree) this.rDocument.PutInFormulaTree(this);
@@ -349,6 +350,7 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
         this.mxGroup = formulaOrPosition;
         this.nFormatType = formulaOrPosition.mnFormatType;
         this.pCode = formulaOrPosition.mpCode ?? new ScTokenArray(this.rDocument);
+        if (this.IsSubTotal()) this.rDocument.AddSubTotalCell(this);
         return;
       }
       this.cMatrixFlag = matrixMode;
@@ -378,6 +380,7 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
         this.Compile(formula, true, this.eTempGrammar);
       }
     }
+    if (this.IsSubTotal()) this.rDocument.AddSubTotalCell(this);
   }
   /** Original default and relocated Clone delegate to the native copy constructor without starting listeners. @param position - Optional original relocated-clone argument. @returns Owned formula copy. */
   Clone(position: ScAddress = this.aPos): ScFormulaCell {
@@ -942,6 +945,7 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
     this.EndListeningTo(this.rDocument);
     this.rDocument.RemoveFromFormulaTrack(this);
     this.rDocument.RemoveFromFormulaTree(this);
+    this.rDocument.RemoveSubTotalCell(this);
     if (this.mxGroup?.mpTopCell === this) this.mxGroup.mpTopCell = null;
     this.mxGroup = null;
     super.Dispose();

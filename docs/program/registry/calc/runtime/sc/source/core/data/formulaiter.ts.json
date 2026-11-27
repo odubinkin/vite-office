@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/core/data/formulaiter.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "numeric-formula-editing",
+    "capabilityIds": [
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/core/data/formulaiter.ts",
+        "apps/office/src/sc/source/core/data/formula-group-owner.test.ts",
+        "apps/office/src/sc/source/filter/xml/ods-subtotal-autosum.test.ts",
+        "vendor/libreoffice-reference/sc/source/core/data/formulaiter.cxx"
+      ],
+      "justification": "Walks actual compiled references in source RPN order, rejects invalid absolute endpoints and provides native ranges for subtotal invalidation. Desktop detective rendering is outside the represented reference iteration.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ScDetectiveRefIter",
+        "GetNextRef"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/source/core/data/formulaiter.cxx",
+      "upstreamSymbols": [
+        "ScDetectiveRefIter::ScDetectiveRefIter",
+        "ScDetectiveRefIter::GetNextRef"
+      ]
+    }
+  }
+}

@@ -335,7 +335,7 @@ it("preserves browser-owned select-all when focusing existing formula-line text"
   cleanup();
   session.Close();
 });
-it("keeps unsupported SUBTOTAL disabled in the mounted shared formula bar", /** Real filtered source rows keep the ordinary Sum action unavailable without a replacement calculation. @returns Nothing. */ () => {
+it("inserts the native filtered subtotal from the mounted shared formula bar", /** The Sum action exposes the native filtered subtotal formula, selection and evaluated result. @returns Nothing. */ () => {
   const session = createCalcSession(),
     c = session.controller,
     doc = c.shell.GetDocument();
@@ -351,10 +351,16 @@ it("keeps unsupported SUBTOTAL disabled in the mounted shared formula bar", /** 
     />,
   );
   const sum = screen.getByRole("button", { name: "Sum" });
-  expect(sum).toBeDisabled();
+  expect(sum).toBeEnabled();
   fireEvent.click(sum);
+  const line = screen.getByRole<HTMLInputElement>("textbox", { name: "Input line" });
+  expect(line).toHaveValue("=SUBTOTAL(9;A1:A1)");
+  expect([line.selectionStart, line.selectionEnd]).toEqual([12, 17]);
   expect(doc.GetFormulaCell(new ScAddress(0, 1, 0))).toBeNull();
-  expect(c.shell.GetUndoManager().GetUndoActionCount()).toBe(0);
+  fireEvent.click(screen.getByRole("button", { name: "Accept input" }));
+  expect(doc.GetFormulaCell(new ScAddress(0, 1, 0))?.IsSubTotal()).toBe(true);
+  expect(doc.GetValue(new ScAddress(0, 1, 0))).toBe(0);
+  expect(c.shell.GetUndoManager().GetUndoActionCount()).toBe(1);
   expect(screen.queryByRole("alert")).not.toBeInTheDocument();
   cleanup();
   session.Close();

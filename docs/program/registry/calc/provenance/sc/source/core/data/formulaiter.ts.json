@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/data/formulaiter.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/data/formulaiter.cxx",
+    "localSymbols": [
+      "ScDetectiveRefIter",
+      "GetNextRef"
+    ],
+    "upstreamSymbols": [
+      "ScDetectiveRefIter::ScDetectiveRefIter",
+      "ScDetectiveRefIter::GetNextRef"
+    ],
+    "preservedResponsibilities": [
+      "Walks actual compiled references in source RPN order, rejects invalid absolute endpoints and provides native ranges for subtotal invalidation."
+    ],
+    "omittedResponsibilities": [
+      "Desktop detective rendering is outside the represented reference iteration."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/data/formulaiter.ts",
+          "marker": "ScDetectiveRefIter"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/formula-group-owner.test.ts",
+          "marker": "SetSubTotalCellsDirty"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-subtotal-autosum.test.ts",
+          "marker": "autosum.ods"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/formulaiter.cxx",
+          "marker": "ScDetectiveRefIter::ScDetectiveRefIter"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/formulaiter.cxx",
+          "marker": "ScDetectiveRefIter::GetNextRef"
+        }
+      ]
+    }
+  }
+}

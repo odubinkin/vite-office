@@ -217,15 +217,14 @@ it("retains source treatment of unrecognized adjacent outer functions and initia
   );
   expect(text(empty)).toBe("=SUM()");
   empty.dispose();
-  expect(
-    /** Keeps unavailable filtered execution explicit. @returns Formula. */ () =>
-      functions.GetAutoSumFormula(
-        new ScRangeList(new ScRange()),
-        true,
-        new ScAddress(),
-        OpCode.ocSum,
-      ),
-  ).toThrow(/SUBTOTAL/);
+  const subtotal = functions.GetAutoSumFormula(
+    new ScRangeList(new ScRange()),
+    true,
+    new ScAddress(),
+    OpCode.ocSum,
+  );
+  expect(text(subtotal)).toBe("=SUBTOTAL(9;A1:A1)");
+  subtotal.dispose();
   assert(doc.GetGrammar() === FormulaGrammar.Grammar.GRAM_NATIVE);
   doc.Dispose();
 });

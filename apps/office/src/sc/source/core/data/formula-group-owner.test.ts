@@ -1,7 +1,7 @@
 /** @fileoverview Original shared-group token ownership over real detached formula cells;column splitting and group-area admission remain separate acceptance. */
 import { expect, it } from "vitest";
 import { ScDocument } from "../../../inc/document";
-import { ScAddress } from "../../../inc/address";
+import { ScAddress, ScRange } from "../../../inc/address";
 import { ScFormulaCell, ScFormulaCellGroup } from "../../../inc/formulacell";
 import { ScCompiler } from "../../../inc/compiler";
 import { ScTokenArray } from "../../../inc/tokenarray";
@@ -153,7 +153,7 @@ it("preserves precompiled RPN and constructor format metadata without recompilin
   cell.Dispose();
   doc.Dispose();
 });
-it("retains native empty group-code fallback and exposes unavailable subtotal registration", /** Existing genuine token values identify the unported document service. @returns Nothing. */ () => {
+it("retains native empty group-code fallback and registers subtotal formula owners", /** Existing group flags and compiled references participate in native subtotal invalidation. @returns Nothing. */ () => {
   const doc = document(),
     group = new ScFormulaCellGroup(),
     member = new ScFormulaCell(doc, new ScAddress(), group, grammar);
@@ -161,18 +161,32 @@ it("retains native empty group-code fallback and exposes unavailable subtotal re
   expect(member.GetSharedCode()).toBeNull();
   member.Dispose();
   group.mbSubTotal = true;
-  expect(
-    /** Unsupported real group metadata. @returns Cell. */ () =>
-      new ScFormulaCell(doc, new ScAddress(), group, grammar),
-  ).toThrow(/Subtotal-cell/);
+  const subtotalMember = new ScFormulaCell(doc, new ScAddress(), group, grammar);
+  expect(subtotalMember.IsSubTotal()).toBe(true);
+  subtotalMember.Dispose();
   for (const opcode of [OpCode.ocSubTotal, OpCode.ocAggregate]) {
     const code = new ScTokenArray(doc),
       token = code.AddToken(new FormulaByteToken(opcode, 1)) as FormulaByteToken;
     code.CreateNewRPNArrayFromData([token], 1);
-    expect(
-      /** Unsupported real subtotal RPN. @returns Cell. */ () =>
-        new ScFormulaCell(doc, new ScAddress(), code, grammar),
-    ).toThrow(/Subtotal-cell/);
+    const cell = new ScFormulaCell(doc, new ScAddress(), code, grammar);
+    expect(cell.IsSubTotal()).toBe(true);
+    cell.Dispose();
+  }
+
+  const source = new ScAddress();
+  const target = new ScAddress(0, 1, 0);
+  const formula = unicode("=SUBTOTAL(9;A1:A1)");
+  try {
+    doc.SetValue(source, 3);
+    doc.SetFormula(target, formula, grammar);
+    expect(doc.GetValue(target)).toBe(3);
+    doc.SetRowFiltered(0, 0, 0, true);
+    doc.SetSubTotalCellsDirty(new ScRange(new ScAddress(2, 0, 0)));
+    expect(doc.GetFormulaCell(target)?.GetDirty()).toBe(false);
+    doc.SetSubTotalCellsDirty(new ScRange(source));
+    expect(doc.GetValue(target)).toBe(0);
+  } finally {
+    formula.dispose();
   }
   const empty = new ScTokenArray(doc);
   empty.SetCodeError(FormulaError.NoName);

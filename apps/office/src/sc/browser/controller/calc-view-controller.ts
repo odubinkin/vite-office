@@ -671,7 +671,7 @@ export class CalcViewController {
     this.Changed();
     return changed;
   }
-  /** Browser availability boundary over actual native inference and copied marks. Ordinary empty-block fill is available;SUBTOTAL and filtered paste services remain unported. @returns The represented native action can execute. */
+  /** Checks whether the browser can apply the native AutoSum operation to the copied selection. @returns The represented native action can execute. */
   CanAutoSum(): boolean {
     const marks = this.viewData.GetMarkData(),
       ranges = new ScRangeList(),
@@ -688,17 +688,12 @@ export class CalcViewController {
             range.aStart.Tab(),
           )
         ) {
-          const inferred = new ScRangeList(),
-            targets = new ScMarkData(marks);
-          this.viewShell.GetAutoSumArea(inferred);
+          const targets = new ScMarkData(marks);
           targets.MarkToSimple();
-          return (
-            (targets.IsMultiMarked() || !ScViewUtil.HasFiltered(targets.GetMarkArea(), doc)) &&
-            !this.viewShell.UseSubTotal(inferred)
-          );
+          return targets.IsMultiMarked() || !ScViewUtil.HasFiltered(targets.GetMarkArea(), doc);
         }
-    } else this.viewShell.GetAutoSumArea(ranges);
-    return !this.viewShell.UseSubTotal(ranges);
+    }
+    return true;
   }
   /** Runs original AutoSum and SetFuncString caret selection through real view/input owners. @returns Native selection when an input-line draft was created. */
   AutoSum(): readonly [number, number] | undefined {
@@ -718,8 +713,7 @@ export class CalcViewController {
           open = value.indexOf("(");
         this.StartInput(ScInputMode.SC_INPUT_TOP, value);
         if (rangeFinder[0] && open !== -1 && length > open)
-          // GetAutoSumFormula rejects SUBTOTAL before returning in this kernel slice.
-          return [open + 1, length - 1];
+          return [open + (subtotal[0] ? 3 : 1), length - 1];
         return [length - 1, length - 1];
       } finally {
         formula.dispose();

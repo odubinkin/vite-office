@@ -22,7 +22,7 @@ it("admits empty ordinary marks and preserves native no-data no-op", /** Availab
   expect(marks.IsMultiMarked()).toBe(false);
   c.Close();
 });
-it("keeps unavailable filtered paste and SUBTOTAL disabled while admitting native disjoint-mark fallback", /** Actual compressed filter runs and copied native marks drive the service boundary. @returns Nothing. */ () => {
+it("admits filtered-source subtotal and preserves filtered destination and disjoint-mark checks", /** Actual compressed filter runs and copied native marks drive the service boundary. @returns Nothing. */ () => {
   const c = new CalcViewController(),
     doc = c.shell.GetDocument(),
     marks = c.viewData.GetMarkData();
@@ -33,7 +33,7 @@ it("keeps unavailable filtered paste and SUBTOTAL disabled while admitting nativ
   expect(c.CanAutoSum()).toBe(false);
   doc.SetRowFiltered(1, 1, 0, false);
   doc.SetRowFiltered(0, 0, 0, true);
-  expect(c.CanAutoSum()).toBe(false);
+  expect(c.CanAutoSum()).toBe(true);
   doc.SetRowFiltered(0, 0, 0, false);
   marks.ResetMark();
   marks.SetMultiMarkArea(new ScRange(0, 1, 0, 0, 1, 0), true);

@@ -8333,3 +8333,13 @@ the first cell. Calc preserves this comparison and writeback rule.
 
 - [Original area-link comparison](../../vendor/libreoffice-reference/sc/source/filter/xml/XMLExportIterator.cxx#L243)
 - [Original cell repeat comparison](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlexprt.cxx#L3936)
+
+### CALC-870 — AutoSum uses the same subtotal selection offset for every selector
+
+The native input window selects the inferred formula range starting three
+UTF-16 positions after the opening parenthesis for every SUBTOTAL formula.
+For selectors 10 and 11, that position is the argument separator rather than
+the beginning of the range. Calc preserves the native selection offsets.
+
+- [Original AutoSum selection](../../vendor/libreoffice-reference/sc/source/ui/app/inputwin.cxx#L814)
+- [Original subtotal selector mapping](../../vendor/libreoffice-reference/sc/source/ui/view/viewfun2.cxx#L476)

@@ -31,15 +31,19 @@ it("stops actual marking and preserves native multi-selection feedback after doc
   }
   c.Close();
 });
-it("presents a genuine unsupported SUBTOTAL error without a replacement formula or evaluator", /** Actual filtered source data reaches the native formatter/function admission error. @returns Nothing. */ () => {
+it("prepares a native subtotal formula and commits the filtered result", /** Actual filtered source data selects the subtotal formula and its range in the input line. @returns Nothing. */ () => {
   const c = new CalcViewController(),
     doc = c.shell.GetDocument();
   doc.SetValue(new ScAddress(), 3);
   doc.SetRowFiltered(0, 0, 0, true);
   c.viewData.SetCurY(1);
-  expect(c.AutoSum()).toBeUndefined();
-  expect(c.error).toContain("SUBTOTAL");
+  expect(c.AutoSum()).toEqual([12, 17]);
+  expect(c.Input()).toBe("=SUBTOTAL(9;A1:A1)");
+  expect(c.error).toBe("");
   expect(doc.GetFormulaCell(new ScAddress(0, 1, 0))).toBeNull();
-  expect(c.shell.GetUndoManager().GetUndoActionCount()).toBe(0);
+  expect(c.Commit()).toBe(true);
+  expect(doc.GetFormulaCell(new ScAddress(0, 1, 0))?.IsSubTotal()).toBe(true);
+  expect(doc.GetValue(new ScAddress(0, 1, 0))).toBe(0);
+  expect(c.shell.GetUndoManager().GetUndoActionCount()).toBe(1);
   c.Close();
 });

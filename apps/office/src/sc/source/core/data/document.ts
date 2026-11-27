@@ -1,4 +1,5 @@
 /** @fileoverview Native document modes, consumed pooled resources and scalar/local-reference storage, attributes and formula tracking. Full construction, formatter and shell services remain unported. */
+import { ScDetectiveRefIter } from "./formulaiter";
 import { DocumentLinkManager } from "../../ui/docshell/documentlinkmgr";
 import type { LinkManager } from "../../../../sfx2/source/appl/linkmgr2";
 import { SfxDocumentProperties } from "../../../../sfx2/source/doc/sfxbasemodel";
@@ -765,6 +766,41 @@ export class ScDocument {
     style: ScPatternStyleReference,
   ): void {
     this.FetchTable(tab)?.ApplyStyleArea(startCol, startRow, endCol, endRow, style);
+  }
+
+  private maSubTotalCells = new Set<ScFormulaCell>();
+
+  /** Registers a formula that consumes the native subtotal data selection. @param cell - Formula owner. */
+  AddSubTotalCell(cell: ScFormulaCell): void {
+    this.maSubTotalCells.add(cell);
+  }
+
+  /** Releases a subtotal registration when the formula owner is destroyed. @param cell - Formula owner. */
+  RemoveSubTotalCell(cell: ScFormulaCell): void {
+    this.maSubTotalCells.delete(cell);
+  }
+
+  /** Dirties subtotal formulas referring to a filtered area and removes obsolete registrations. @param dirtyRange - Query operation's changed range. */
+  SetSubTotalCellsDirty(dirtyRange: ScRange): void {
+    const live = new Set<ScFormulaCell>();
+    const autoCalc = this.GetAutoCalc();
+    this.SetAutoCalc(false);
+    try {
+      for (const cell of this.maSubTotalCells) {
+        if (!cell.IsSubTotal()) continue;
+        live.add(cell);
+        const iterator = new ScDetectiveRefIter(this, cell);
+        const range = new ScRange();
+        while (iterator.GetNextRef(range)) {
+          if (!range.Intersects(dirtyRange)) continue;
+          cell.SetDirty();
+          break;
+        }
+      }
+    } finally {
+      this.SetAutoCalc(autoCalc);
+    }
+    this.maSubTotalCells = live;
   }
 
   /** Original pattern-area dispatch through the actual sheet owner. @param args - Native coordinates and pattern delta. @returns Whether changed. */
