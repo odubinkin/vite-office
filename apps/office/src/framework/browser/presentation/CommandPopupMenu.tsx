@@ -8,11 +8,29 @@ import {
   type CommandMenuItemPlacement,
 } from "./CommandMenuBar";
 import type { BrowserCommandSurfaceProps } from "./command-surface";
+/** A native popup can invoke either a slot or a local menu handler. */
+export type PopupMenuItemPlacement =
+  | Exclude<CommandMenuItemPlacement, { kind: "submenu" }>
+  | Readonly<{
+      kind: "submenu";
+      id: string;
+      label: string;
+      items: readonly PopupMenuItemPlacement[];
+    }>
+  | Readonly<{
+      kind: "local";
+      id: string;
+      label: string;
+      semantics: "radio" | "check";
+      checked: boolean;
+      activate: () => void;
+    }>;
+
 /** Original resource and final device position selected by the owning native frame. */
 export interface CommandPopupMenuProps extends BrowserCommandSurfaceProps {
   readonly ariaLabel: string;
   readonly getMenuLabel?: CommandMenuBarProps["getMenuLabel"];
-  readonly items: readonly CommandMenuItemPlacement[];
+  readonly items: readonly PopupMenuItemPlacement[];
   readonly position: Readonly<{ x: number; y: number }>;
   readonly getCommandResource: CommandMenuBarProps["getCommandResource"];
   readonly onClose: () => void;
@@ -144,7 +162,7 @@ export function CommandPopupMenu({
   );
   const preselect = useRef(false);
   /** Applies native HighlightChanged admission before creating a child window. @param item - Actual child resource. @param depth - Parent depth. @param trigger - Original parent entry. @param keyboard - Whether to select first child. @returns Nothing. */ function open(
-    item: Extract<CommandMenuItemPlacement, { kind: "submenu" }>,
+    item: Extract<PopupMenuItemPlacement, { kind: "submenu" }>,
     depth: number,
     trigger: HTMLElement,
     keyboard = false,
@@ -164,7 +182,7 @@ export function CommandPopupMenu({
     setPath([...activePath.current.slice(0, depth), item.id]);
   }
   /** Queues native HighlightChanged for the current selection after150ms. @param values - Actual popup resources. @param depth - Current menu depth. @param trigger - Actual pointer entry. @returns Nothing. */ function pointerSelect(
-    values: readonly CommandMenuItemPlacement[],
+    values: readonly PopupMenuItemPlacement[],
     depth: number,
     trigger: HTMLElement,
   ): void {
@@ -247,7 +265,7 @@ export function CommandPopupMenu({
   /** Routes menu input without invoking document shortcuts. @param event - Current menu keyboard input. @param depth - Native popup depth. @param values - Current native resource entries. @returns Nothing. */ function key(
     event: React.KeyboardEvent<HTMLDivElement>,
     depth: number,
-    values: readonly CommandMenuItemPlacement[],
+    values: readonly PopupMenuItemPlacement[],
   ): void {
     event.stopPropagation();
     const target = event.target as HTMLElement,
@@ -295,7 +313,7 @@ export function CommandPopupMenu({
     }
   }
   /** Renders original recursive resource placements using shared command controller items. @param values - Native placements. @param depth - Popup depth. @returns Menu items. */ function renderItems(
-    values: readonly CommandMenuItemPlacement[],
+    values: readonly PopupMenuItemPlacement[],
     depth: number,
   ): React.ReactNode {
     return values.map(
@@ -311,10 +329,10 @@ export function CommandPopupMenu({
               key={`separator-${index}`}
             />
           );
-        if (item.kind === "command")
+        if (item.kind !== "submenu")
           return (
             <div
-              key={item.commandId}
+              key={item.kind === "command" ? item.commandId : item.id}
               onAuxClick={
                 /** Reuses original binding activation for browser-native nonprimary clicks. @param event - Actual auxiliary click. @returns Nothing. */ (
                   event,
@@ -336,14 +354,34 @@ export function CommandPopupMenu({
                 ) => pointerLeave(depth, event.currentTarget.firstElementChild as HTMLElement)
               }
             >
-              <BindingsMenuCommand
-                closeMenu={closeMenu}
-                commandSource={commandSource}
-                getCommandResource={getCommandResource}
-                item={item}
-                key={item.commandId}
-                resolveArguments={resolveArguments}
-              />
+              {item.kind === "command" ? (
+                <BindingsMenuCommand
+                  closeMenu={closeMenu}
+                  commandSource={commandSource}
+                  getCommandResource={getCommandResource}
+                  item={item}
+                  resolveArguments={resolveArguments}
+                />
+              ) : (
+                <button
+                  aria-checked={item.checked}
+                  className="flex w-full items-center rounded-md py-2 pr-2 pl-1 text-left text-sm text-slate-700"
+                  onClick={
+                    /** Dismisses the shared popup before calling the local handler. @returns Nothing. */ () => {
+                      flushSync(closeMenu);
+                      item.activate();
+                    }
+                  }
+                  role={item.semantics === "radio" ? "menuitemradio" : "menuitemcheckbox"}
+                  tabIndex={-1}
+                  type="button"
+                >
+                  <span aria-hidden="true" className="w-4 shrink-0 text-xs font-semibold">
+                    {item.checked ? "✓" : null}
+                  </span>
+                  <span>{item.label}</span>
+                </button>
+              )}
             </div>
           );
         const expanded = openPath[depth] === item.id,
@@ -455,13 +493,13 @@ function stopTimer(timers: Map<number, ReturnType<typeof setTimeout>>, owner: nu
 }
 /** Resolves a child from the actual resource list shared by key and timer input. @param values - Current menu resources. @param id - Actual selected entry identity. @returns Original child, if present. */
 function childResource(
-  values: readonly CommandMenuItemPlacement[],
+  values: readonly PopupMenuItemPlacement[],
   id: string,
-): Extract<CommandMenuItemPlacement, { kind: "submenu" }> | undefined {
+): Extract<PopupMenuItemPlacement, { kind: "submenu" }> | undefined {
   return values.find(
     /** Retains original native placement ownership. @param value - Resource entry. @returns Whether it owns the selected child. */ (
       value,
-    ): value is Extract<CommandMenuItemPlacement, { kind: "submenu" }> =>
+    ): value is Extract<PopupMenuItemPlacement, { kind: "submenu" }> =>
       value.kind === "submenu" && value.id === id,
   );
 }

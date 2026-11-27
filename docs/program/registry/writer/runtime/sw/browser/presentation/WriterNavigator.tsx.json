@@ -23,9 +23,12 @@
         "vendor/libreoffice-reference/sw/uiconfig/swriter/ui/navigatorpanel.ui#HeadingsContentFunctionButtonsToolbar",
         "vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx#SwContentTree::ToggleToRoot",
         "apps/office/src/sw/browser/presentation/WriterNavigator.tsx#trackDocumentCursor",
-        "vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx#SwContentTree::UpdateTracking"
+        "vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx#SwContentTree::UpdateTracking",
+        "apps/office/src/sw/browser/presentation/WriterNavigator.tsx#trackingItems",
+        "vendor/libreoffice-reference/sw/uiconfig/swriter/ui/navigatorcontextmenu.ui#navigatorcontextmenu|STR_OUTLINE_TRACKING",
+        "vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx#m_nOutlineTracking == 2"
       ],
-      "justification": "Projects the original Navigator child window, page controls, content root and outline depth controls. Browser focus, tree events and CSS supply the modeless child window and keyboard behavior. Presents the native contextual heading toolbar and sends the heading selection, command ID and primary modifier to Writer. Projects the original heading-root multiple selection, retains visible heading identities after edits, and expands ancestors of the surviving selected entries. Shows the original bookmark edit and delete controls for the active tree entry or category. Applies cursor tracking outside the focused Navigator tree while retaining the represented root and outline depth.",
+      "justification": "Projects the original Navigator child window, page controls, content root and outline depth controls. Browser focus, tree events and CSS supply the modeless child window and keyboard behavior. Presents the native contextual heading toolbar and sends the heading selection, command ID and primary modifier to Writer. Projects the original heading-root multiple selection, retains visible heading identities after edits, and expands ancestors of the surviving selected entries. Shows the original bookmark edit and delete controls for the active tree entry or category. Applies cursor tracking outside the focused Navigator tree while retaining the represented root and outline depth. Projects the row-specific Navigator tracking popup with native check and radio states, and focuses the tracked outline branch when the Focus mode is enabled.",
       "knownViolations": [],
       "localSymbols": [
         "WriterNavigator"

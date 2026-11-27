@@ -5,6 +5,7 @@ import type { SwRootFrame } from "../../core/layout/newfrm";
 import type { SwTable } from "../../core/table/swtable";
 import { SwTextNode } from "../../core/txtnode/ndtxt";
 import type { SwWrtShell } from "../wrtsh/wrtsh1";
+import { OutlineTrackingMode, SwNavigationConfig, type TrackedContentType } from "./navicfg";
 
 /** Original content families with connected Writer model ownership. */
 export type SwNavigatorContentType = "outline" | "table" | "bookmark";
@@ -40,12 +41,21 @@ export class SwContentTree {
   private nextIdentity = 1;
   private selectedBookmarkName = "";
   private lastGotoOutline: number | undefined;
+  private outlineTracking: OutlineTrackingMode;
+  private readonly trackContentType: Record<TrackedContentType, boolean>;
 
-  /** Borrows the native editing and page-layout owners. @param shell - Persistent Writer shell. @param layout - Current physical page-frame source. @returns Navigator model. */
+  /** Borrows the native editing and page-layout owners. @param shell - Persistent Writer shell. @param layout - Current physical page-frame source. @param config - Navigator preferences. @returns Navigator model. */
   constructor(
     private readonly shell: SwWrtShell,
     private readonly layout: SwRootFrame,
-  ) {}
+    private readonly config = new SwNavigationConfig(),
+  ) {
+    this.outlineTracking = config.GetOutlineTracking();
+    this.trackContentType = {
+      table: config.GetContentTypeTrack("table"),
+      bookmark: config.GetContentTypeTrack("bookmark"),
+    };
+  }
 
   /** Lists represented content in native category and document order. @returns Content tree roots. */
   public GetContents(): readonly SwNavigatorContentGroup[] {
@@ -78,7 +88,29 @@ export class SwContentTree {
     return this.SetCursor(target.node, target.offset, oldBookmark !== this.selectedBookmarkName);
   }
 
-  /** Resolves the default native cursor tracking priority in the current tree scope. @param root - Optional original content category root. @returns Tracked entry identity, if any. */
+  /** Reads the active outline tracking mode. @returns Original configuration value. */
+  public GetOutlineTracking(): OutlineTrackingMode {
+    return this.outlineTracking;
+  }
+
+  /** Sets the current outline tracking mode. @param mode - Native outline tracking mode. @returns Nothing. */
+  public SetOutlineTracking(mode: OutlineTrackingMode): void {
+    this.outlineTracking = mode;
+    this.config.SetOutlineTracking(mode);
+  }
+
+  /** Reads tracking for a represented content type. @param type - Native content type. @returns Whether tracking is active. */
+  public GetContentTypeTracking(type: TrackedContentType): boolean {
+    return this.trackContentType[type];
+  }
+
+  /** Sets tracking for a represented type. @param type - Native content type. @param track - New state. @returns Nothing. */
+  public SetContentTypeTracking(type: TrackedContentType, track: boolean): void {
+    this.trackContentType[type] = track;
+    this.config.SetContentTypeTrack(type, track);
+  }
+
+  /** Resolves the native cursor tracking priority in the current tree scope. @param root - Optional original content category root. @returns Tracked entry identity, if any. */
   public UpdateTracking(root?: SwNavigatorContentType): string | undefined {
     const outline = this.shell.GetOutlinePos();
     const afterOutlineNavigation =
@@ -86,13 +118,20 @@ export class SwContentTree {
     if (!afterOutlineNavigation) {
       this.lastGotoOutline = undefined;
       const table = this.shell.IsCursorInTable()?.GetTable();
-      if (table && (root === undefined || root === "table")) return this.GetIdentity(table);
+      if (table && this.GetContentTypeTracking("table") && (root === undefined || root === "table"))
+        return this.GetIdentity(table);
     }
-    if (outline !== undefined && (root === undefined || root === "outline")) {
+    if (
+      outline !== undefined &&
+      this.GetOutlineTracking() !== OutlineTrackingMode.Off &&
+      (root === undefined || root === "outline")
+    ) {
       const heading = this.shell.GetDoc().GetNodes().GetOutLineNds().entries()[outline];
       if (heading) return this.GetIdentity(heading);
     }
-    return root === undefined || root === "bookmark" ? this.FindBookmarkAtCursor().id : undefined;
+    return this.GetContentTypeTracking("bookmark") && (root === undefined || root === "bookmark")
+      ? this.FindBookmarkAtCursor().id
+      : undefined;
   }
 
   /** Queries the native bookmark toolbar admission at the current cursor position. @param id - Selected bookmark row. @returns Whether it is the bookmark associated with the cursor. */

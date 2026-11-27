@@ -48,6 +48,7 @@ import { RES_PAGEDESC } from "../../../inc/hintids";
 import type { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
 import { getPageRegisterStyles, PageDescToItemSet } from "../utlui/uitool";
 import { SwContentTree } from "../utlui/content";
+import type { NavigatorConfiguration } from "../utlui/navicfg";
 import { SvxRuler } from "../../../../svx/source/dialog/svxruler";
 
 /** Persistent Writer view joining SwDocShell, SwWrtShell, and frame dispatch. */
@@ -71,13 +72,14 @@ export class SwView {
   private readonly layout: SwRootFrame;
   private readonly wrtShellSubscription: () => void;
 
-  /** Creates one persistent view over a persistent document shell. @param docShell - Owning Writer document shell. @param module - Actual module metric preferences and open-view enumeration. @param searchOptions - User search configuration. @param createRegex - Browser regular-expression compiler. @param commentDeleteConfiguration - Shared comment deletion query preference. @returns Nothing. */
+  /** Creates one persistent view over a persistent document shell. @param docShell - Owning Writer document shell. @param module - Actual module metric preferences and open-view enumeration. @param searchOptions - User search configuration. @param createRegex - Browser regular-expression compiler. @param commentDeleteConfiguration - Shared comment deletion query preference. @param navigatorConfiguration - Writer Navigator preference provider. @returns Nothing. */
   public constructor(
     private readonly docShell: SwDocShell,
     private readonly module: SwModule = SwModule.get(),
     searchOptions?: SearchOptionsConfiguration,
     createRegex?: RegexMatcherFactory,
     commentDeleteConfiguration?: WriterCommentDeleteConfiguration,
+    navigatorConfiguration?: NavigatorConfiguration,
   ) {
     const pref = module.GetUsrPref(false);
     this.horizontalRuler.SetUnit(pref.GetHScrollMetric());
@@ -98,7 +100,11 @@ export class SwView {
       this.viewOptions,
       this,
     );
-    this.navigator = new SwContentTree(this.wrtShell, this.layout);
+    this.navigator = new SwContentTree(
+      this.wrtShell,
+      this.layout,
+      module.GetNavigationConfig(navigatorConfiguration),
+    );
     this.postItMgr = new SwPostItMgr(
       this.viewOptions,
       this.wrtShell,

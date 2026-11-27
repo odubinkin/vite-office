@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "path": "apps/office/src/sw/browser/storage/writer-navigator-configuration-store.ts",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "navigator",
+    "capabilityIds": [
+      "CAP-0103",
+      "CAP-0104"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/browser/storage/writer-navigator-configuration-store.ts#WriterNavigatorConfigurationStore",
+        "apps/office/src/sw/browser/storage/writer-navigator-configuration-store.test.ts#keeps native defaults and round-trips tracking preferences",
+        "vendor/libreoffice-reference/officecfg/registry/schema/org/openoffice/Office/Writer.xcs#oor:name=\"TableTracking\"",
+        "vendor/libreoffice-reference/officecfg/registry/schema/org/openoffice/Office/Writer.xcs#oor:name=\"BookmarkTracking\""
+      ],
+      "justification": "Reads and writes represented Office.Writer/Navigator configuration fields through browser storage, independently of any document.",
+      "knownViolations": [],
+      "localSymbols": [
+        "WriterNavigatorConfigurationStore"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

@@ -19,7 +19,8 @@
       "Uses the selected outline entry, native chapter offsets, level bounds and optional descendants for the four heading actions.",
       "Applies selected heading commands as a single undo group in native document order, reversing chapter moves down and filtering included descendants.",
       "Connects ordinary bookmark selection, cursor-dependent edit admission and group deletion through the native Writer mark and undo owners.",
-      "Tracks the live table, outline and bookmark indexes in the native order for the current content root."
+      "Tracks the live table, outline and bookmark indexes in the native order for the current content root.",
+      "Uses source outline tracking mode and content-type flags when choosing the next tracked entry."
     ],
     "omittedResponsibilities": [
       "The represented tree serves the active document and the three connected native content families."
@@ -37,6 +38,10 @@
         {
           "path": "apps/office/src/sw/source/uibase/utlui/content.ts",
           "marker": "UpdateTracking"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/utlui/content.ts",
+          "marker": "SetContentTypeTracking"
         }
       ],
       "upstream": [
@@ -55,6 +60,14 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx",
           "marker": "SwContentTree::UpdateTracking"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx",
+          "marker": "SwContentTree::SetContentTypeTracking"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx",
+          "marker": "SwContentTree::SetOutlineTracking"
         }
       ]
     }

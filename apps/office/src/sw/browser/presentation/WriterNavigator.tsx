@@ -20,6 +20,13 @@ import {
   type KeyboardEvent,
   type RefObject,
 } from "react";
+import { createPortal } from "react-dom";
+import {
+  CommandPopupMenu,
+  type CommandPopupMenuProps,
+  type PopupMenuItemPlacement,
+} from "../../../framework/browser/presentation/CommandPopupMenu";
+import type { BrowserCommandSurfaceProps } from "../../../framework/browser/presentation/command-surface";
 import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
 import type {
@@ -27,6 +34,8 @@ import type {
   SwNavigatorContentType,
   SwNavigatorHeadingCommand,
 } from "../../source/uibase/utlui/content";
+import { OutlineTrackingMode } from "../../source/uibase/utlui/navicfg";
+import { selectWriterPopupCommandResource } from "./writer-command-presentation";
 import type { SwView } from "../../source/uibase/uiview/view";
 import { queueWriterCursorReveal } from "./writer-cursor-reveal";
 
@@ -132,12 +141,16 @@ export function WriterNavigator({
   visible,
   editingHost,
   focusDocument,
-}: Readonly<{
-  view: SwView;
-  visible: boolean;
-  editingHost: RefObject<HTMLElement | null>;
-  focusDocument: () => void;
-}>): React.JSX.Element {
+  commandSource,
+  resolveArguments,
+}: Readonly<
+  BrowserCommandSurfaceProps & {
+    view: SwView;
+    visible: boolean;
+    editingHost: RefObject<HTMLElement | null>;
+    focusDocument: () => void;
+  }
+>): React.JSX.Element {
   const tree = view.GetNavigator();
   const localization = useBrowserLocalization();
   const treeRef = useRef<HTMLUListElement>(null);
@@ -154,6 +167,10 @@ export function WriterNavigator({
   const [outlineLevel, setOutlineLevel] = useState(10);
   const [root, setRoot] = useState<SwNavigatorContentType>();
   const [pageDraft, setPageDraft] = useState<{ origin: number; value: string }>();
+  const [popup, setPopup] = useState<
+    { type: SwNavigatorContentType; position: CommandPopupMenuProps["position"] } | undefined
+  >();
+  if (!visible && popup !== undefined) setPopup(undefined);
   const page = tree.GetPageState();
   /** Looks up the application's translation for a native Navigator label. @param key - Control identity. @param fallback - Source label. @returns Label. */
   function label(key: string, fallback: string): string {
@@ -217,14 +234,17 @@ export function WriterNavigator({
       }
       if (selectedIds.size === 1 && selectedIds.has(id)) return;
       const entries = getRows(tree.GetContents(), outlineLevel, new Set(), root, label);
-      if (
-        !entries.some(
-          /** Checks whether the actual tracked heading passes the outline depth setting. @param row - Candidate tree item. @returns Whether the identity is displayed. */
-          (row) => row.id === id,
-        )
-      )
-        return;
-      setCollapsed(expandAncestors(entries, [id], collapsed));
+      const entry = entries.find(
+        /** Checks whether the tracked row passes the outline depth setting. @param row - Candidate tree item. @returns Whether it is tracked. */
+        (row) => row.id === id,
+      );
+      if (!entry) return;
+      const focused =
+        entry.type === "outline" && tree.GetOutlineTracking() === OutlineTrackingMode.Focus;
+      const closed = new Set(collapsed);
+      if (focused)
+        for (const row of entries) if (row.parent === "outline" && row.children) closed.add(row.id);
+      setCollapsed(expandAncestors(entries, [id], focused ? closed : collapsed));
       setSelected(id);
       if (multiple) setExtended([id]);
       selectionAnchor.current = id;
@@ -388,6 +408,13 @@ export function WriterNavigator({
 
   /** Applies native tree navigation and activation keys. @param event - Focused tree key action. @returns Nothing. */
   function handleTreeKey(event: KeyboardEvent<HTMLUListElement>): void {
+    if (selectedRow && (event.key === "ContextMenu" || (event.shiftKey && event.key === "F10"))) {
+      event.preventDefault();
+      event.stopPropagation();
+      const rect = rowRefs.current.get(selectedRow.id)?.getBoundingClientRect();
+      if (rect) openContextMenu(selectedRow, { x: rect.left, y: rect.bottom });
+      return;
+    }
     if (!selectedRow) return;
     const primary = event.ctrlKey || event.metaKey;
     if (
@@ -452,6 +479,58 @@ export function WriterNavigator({
     if (multiple && primary && !event.shiftKey) setSelected(next.id);
     else select(next, event.shiftKey, primary);
     rowRefs.current.get(next.id)?.focus();
+  }
+
+  /** Opens the original content-type popup against a selected tree row. @param row - Row receiving the popup request. @param position - Browser device point. @returns Nothing. */
+  function openContextMenu(row: NavigatorRow, position: CommandPopupMenuProps["position"]): void {
+    if (!selectedIds.has(row.id)) select(row, false, false);
+    rowRefs.current.get(row.id)?.focus({ preventScroll: true });
+    setPopup({ type: row.type, position });
+  }
+
+  /** Returns represented tracking entries in pinned popup order. @param type - Active content category. @returns Native popup placements. */
+  function trackingItems(type: SwNavigatorContentType): readonly PopupMenuItemPlacement[] {
+    if (type === "outline")
+      return [
+        {
+          kind: "submenu",
+          id: "4",
+          label: label("outline-tracking", "Outline Tracking"),
+          items: (
+            [
+              [OutlineTrackingMode.Default, "default", "Default"],
+              [OutlineTrackingMode.Focus, "focus", "Focus"],
+              [OutlineTrackingMode.Off, "off", "Off"],
+            ] as const
+          ).map(
+            /** Projects an outline tracking radio item. @param item - Native value and label. @returns Menu placement. */
+            ([mode, key, fallback]) => ({
+              kind: "local",
+              id: String(10 + mode),
+              label: label(`outline-tracking-${key}`, fallback),
+              semantics: "radio",
+              checked: tree.GetOutlineTracking() === mode,
+              activate: /** Applies the selected outline tracking policy. @returns Nothing. */ () =>
+                tree.SetOutlineTracking(mode),
+            }),
+          ),
+        },
+      ];
+    const checked = tree.GetContentTypeTracking(type);
+    return [
+      {
+        kind: "local",
+        id: `${type}tracking`,
+        label:
+          type === "table"
+            ? label("table-tracking", "Table Tracking")
+            : label("bookmark-tracking", "Bookmark Tracking"),
+        semantics: "check",
+        checked,
+        activate: /** Toggles the current category's tracking policy. @returns Nothing. */ () =>
+          tree.SetContentTypeTracking(type, !checked),
+      },
+    ];
   }
 
   const title = label("title", "Navigator");
@@ -695,6 +774,14 @@ export function WriterNavigator({
                   if (row.group && !event.shiftKey && !event.ctrlKey && !event.metaKey) toggle(row);
                 }
               }
+              onContextMenu={
+                /** Opens the Writer tree's row-specific popup. @param event - Context request. @returns Nothing. */
+                (event) => {
+                  event.preventDefault();
+                  event.stopPropagation();
+                  openContextMenu(row, { x: event.clientX, y: event.clientY });
+                }
+              }
               onDoubleClick={
                 /** Activates a content entry. @returns Nothing. */ () => {
                   if (!row.group) activate(row);
@@ -724,6 +811,26 @@ export function WriterNavigator({
           ),
         )}
       </ul>
+      {visible &&
+        popup &&
+        createPortal(
+          <CommandPopupMenu
+            ariaLabel={label("context-menu", "Navigator context menu")}
+            commandSource={commandSource}
+            getCommandResource={
+              /** Resolves standard command labels for bindings-backed popup entries. @param url - Command URL. @returns Display resource. */
+              (url) => selectWriterPopupCommandResource(localization, url)
+            }
+            items={trackingItems(popup.type)}
+            position={popup.position}
+            onClose={
+              /** Dismisses the current Navigator popup. @returns Nothing. */ () =>
+                setPopup(undefined)
+            }
+            resolveArguments={resolveArguments}
+          />,
+          document.body,
+        )}
     </section>
   );
 }

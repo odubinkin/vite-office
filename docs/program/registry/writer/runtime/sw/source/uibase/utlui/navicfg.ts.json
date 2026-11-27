@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "path": "apps/office/src/sw/source/uibase/utlui/navicfg.ts",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "navigator",
+    "capabilityIds": [
+      "CAP-0103",
+      "CAP-0104"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/uibase/utlui/navicfg.ts#SwNavigationConfig",
+        "apps/office/src/sw/browser/storage/writer-navigator-configuration-store.test.ts#keeps native defaults and round-trips tracking preferences",
+        "vendor/libreoffice-reference/sw/source/uibase/utlui/navicfg.cxx#SwNavigationConfig::SwNavigationConfig",
+        "vendor/libreoffice-reference/sw/source/uibase/utlui/navicfg.cxx#SwNavigationConfig::ImplCommit",
+        "vendor/libreoffice-reference/officecfg/registry/schema/org/openoffice/Office/Writer.xcs#oor:name=\"OutlineTracking\""
+      ],
+      "justification": "Loads and updates the native outline mode and content-type tracking flags with the Writer Navigator configuration defaults.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwNavigationConfig"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/uibase/utlui/navicfg.cxx",
+      "upstreamSymbols": [
+        "SwNavigationConfig::SwNavigationConfig",
+        "SwNavigationConfig::ImplCommit"
+      ]
+    }
+  }
+}

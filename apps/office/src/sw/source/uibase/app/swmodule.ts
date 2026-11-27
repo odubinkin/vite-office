@@ -1,6 +1,7 @@
 /** @fileoverview Consumed SwModule preference/ApplyUserMetric contracts over actual live Writer views;no complete application/service facade. */
 import { FieldUnit } from "../../../../tools/inc/fldunit";
 import { SwMasterUsrPref, type SwMetricConfigValues } from "../config/usrpref";
+import { SwNavigationConfig, type NavigatorConfiguration } from "../utlui/navicfg";
 /** Actual view methods consumed by the native metric update loops. */
 export interface SwMetricView {
   ChangeTabMetric(unit: FieldUnit): void;
@@ -35,6 +36,7 @@ export class SwModule {
   private static instance: SwModule | undefined;
   private m_pUsrPref: SwMasterUsrPref | undefined;
   private m_pWebUsrPref: SwMasterUsrPref | undefined;
+  private m_pNavigationConfig: SwNavigationConfig | undefined;
   private readonly views = new Map<SwMetricView, boolean>();
   /** Creates genuine preference owners from projected configuration values. @param text - Writer values. @param web - WriterWeb values. @returns Module metric owner. */
   constructor(
@@ -55,6 +57,10 @@ export class SwModule {
     return web
       ? (this.m_pWebUsrPref ??= new SwMasterUsrPref(this.web))
       : (this.m_pUsrPref ??= new SwMasterUsrPref(this.text));
+  }
+  /** Lazily shares the native Navigator configuration across views. @param configuration - Optional platform provider at initialization. @returns Navigator configuration. */
+  GetNavigationConfig(configuration?: NavigatorConfiguration): SwNavigationConfig {
+    return (this.m_pNavigationConfig ??= new SwNavigationConfig(configuration));
   }
   /** Original module pass-through. @param web - WriterWeb selection. @returns Field unit. */
   GetMetric(web: boolean): FieldUnit {

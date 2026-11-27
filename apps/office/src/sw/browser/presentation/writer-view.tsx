@@ -711,6 +711,8 @@ export function WriterWorkbench({
         }
         navigator={
           <WriterNavigator
+            commandSource={commandSource}
+            resolveArguments={resolveCommandArguments}
             view={view}
             visible={snapshot.isNavigatorVisible && isActive}
             editingHost={editingHostRef}

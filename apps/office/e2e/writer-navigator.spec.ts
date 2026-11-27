@@ -232,3 +232,64 @@ test("Writer Navigator heading tools move and relevel the selected chapter", /**
   await tools.getByRole("button", { name: "Promote Outline Level" }).click();
   await expect(child).toBeVisible();
 });
+
+test("Writer Navigator context menus change tracking and keep native preferences after reload", /** Exercises row-specific checkboxes, a keyboard submenu and browser persistence. @param fixtures - Browser test inputs. @param fixtures.page - Writer page. @returns Completion. */ async ({
+  page,
+}) => {
+  await page.goto("/writer", { waitUntil: "domcontentloaded" });
+  const editor = page.getByRole("textbox", { name: "Writer document text" });
+  const navigator = page.getByRole("dialog", { name: "Navigator", exact: true });
+  const context = page.getByRole("menu", { name: "Navigator context menu" });
+  const headings = navigator.getByRole("treeitem", { name: "Headings", exact: true });
+  const tableTracking = context.getByRole("menuitemcheckbox", { name: "Table Tracking" });
+  const bookmarkTracking = context.getByRole("menuitemcheckbox", { name: "Bookmark Tracking" });
+  const outlineTracking = context.getByRole("menuitem", { name: "Outline Tracking" });
+  const outlineMenu = context.getByRole("menu", { name: "Outline Tracking menu" });
+  await editor.click();
+  await page.keyboard.press("F5");
+  await headings.press("Shift+F10");
+  await expect(context).toBeFocused();
+  await page.keyboard.press("ArrowDown");
+  await expect(outlineTracking).toBeFocused();
+  await page.keyboard.press("ArrowRight");
+  await expect(outlineMenu.getByRole("menuitemradio", { name: "Default" })).toHaveAttribute(
+    "aria-checked",
+    "true",
+  );
+  await page.keyboard.press("End");
+  await page.keyboard.press("Enter");
+  await expect(headings).toBeFocused();
+  await expect(context).toBeHidden();
+  for (const [category, toggle] of [
+    ["Tables", tableTracking],
+    ["Bookmarks", bookmarkTracking],
+  ] as const) {
+    const row = navigator.getByRole("treeitem", { name: category, exact: true });
+    await row.click({ button: "right" });
+    await expect(outlineTracking).toHaveCount(0);
+    await expect(toggle).toHaveAttribute("aria-checked", "true");
+    await toggle.click();
+    await expect(row).toBeFocused();
+  }
+  await page.reload({ waitUntil: "domcontentloaded" });
+  await editor.click();
+  await page.keyboard.press("F5");
+  for (const [category, toggle] of [
+    ["Tables", tableTracking],
+    ["Bookmarks", bookmarkTracking],
+  ] as const) {
+    await navigator
+      .getByRole("treeitem", { name: category, exact: true })
+      .click({ button: "right" });
+    await expect(toggle).toHaveAttribute("aria-checked", "false");
+    await page.keyboard.press("Escape");
+    await expect(context).toBeHidden();
+    await expect(navigator).toBeVisible();
+  }
+  await headings.click({ button: "right" });
+  await outlineTracking.click();
+  await expect(outlineMenu.getByRole("menuitemradio", { name: "Off" })).toHaveAttribute(
+    "aria-checked",
+    "true",
+  );
+});

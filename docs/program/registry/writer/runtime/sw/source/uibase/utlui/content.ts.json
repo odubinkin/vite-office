@@ -24,9 +24,12 @@
         "apps/office/src/sw/source/uibase/utlui/content.ts#ExecCommand",
         "vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx#SwContentTree::ExecCommand",
         "apps/office/src/sw/source/uibase/utlui/content.ts#UpdateTracking",
-        "vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx#SwContentTree::UpdateTracking"
+        "vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx#SwContentTree::UpdateTracking",
+        "apps/office/src/sw/source/uibase/utlui/content.ts#SetContentTypeTracking",
+        "vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx#SwContentTree::SetContentTypeTracking",
+        "vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx#SwContentTree::SetOutlineTracking"
       ],
-      "justification": "Reads the native outline, table and bookmark owners and navigates through the live Writer cursor. The represented tree serves the active document and the three connected native content families. Uses the selected outline entry, native chapter offsets, level bounds and optional descendants for the four heading actions. Applies selected heading commands as a single undo group in native document order, reversing chapter moves down and filtering included descendants. Connects ordinary bookmark selection, cursor-dependent edit admission and group deletion through the native Writer mark and undo owners. Tracks the live table, outline and bookmark indexes in the native order for the current content root.",
+      "justification": "Reads the native outline, table and bookmark owners and navigates through the live Writer cursor. The represented tree serves the active document and the three connected native content families. Uses the selected outline entry, native chapter offsets, level bounds and optional descendants for the four heading actions. Applies selected heading commands as a single undo group in native document order, reversing chapter moves down and filtering included descendants. Connects ordinary bookmark selection, cursor-dependent edit admission and group deletion through the native Writer mark and undo owners. Tracks the live table, outline and bookmark indexes in the native order for the current content root. Uses source outline tracking mode and content-type flags when choosing the next tracked entry.",
       "knownViolations": [],
       "localSymbols": [
         "SwContentTree"

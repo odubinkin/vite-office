@@ -6,6 +6,7 @@ import { SfxInt16Item } from "../../../svl/inc/intitem";
 import { RES_BREAK } from "../../inc/hintids";
 import { SwFormatLayoutSplit } from "../../inc/fmtlsplt";
 import { SwPaM, SwPosition } from "../../source/core/crsr/pam";
+import { OutlineTrackingMode } from "../../source/uibase/utlui/navicfg";
 import type { SwNavigatorHeadingCommand } from "../../source/uibase/utlui/content";
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
 import { createWriterDocumentSession } from "../composition/writer-module";
@@ -81,6 +82,33 @@ it("tracks heading and bookmark priority in the native tdf159428 cursor sequence
       "aria-selected",
       "true",
     );
+    const tree = session.view.GetNavigator();
+    tree.SetOutlineTracking(OutlineTrackingMode.Off);
+    try {
+      const point = new SwPosition(body, 1);
+      act(
+        /** Puts the cursor inside a bookmark under a disabled outline target. @returns Nothing. */
+        () => shell.SetCursor(point),
+      );
+      point.Dispose();
+      const bookmark = tree
+        .GetContents()
+        .find(
+          /** Gets the native bookmark group. @param group - Navigator category. @returns Whether it owns bookmarks. */
+          (group) => group.type === "bookmark",
+        )
+        ?.contents.find(
+          /** Identifies the mark at the active cursor. @param entry - Original bookmark. @returns Whether it is the test target. */
+          (entry) => entry.title === "Lesezeichen 1",
+        );
+      assert(bookmark);
+      expect(tree.UpdateTracking()).toBe(bookmark.id);
+      tree.SetContentTypeTracking("bookmark", false);
+      expect(tree.UpdateTracking()).toBeUndefined();
+    } finally {
+      tree.SetContentTypeTracking("bookmark", true);
+      tree.SetOutlineTracking(OutlineTrackingMode.Default);
+    }
   } finally {
     cleanup();
     session.Close();
@@ -115,6 +143,13 @@ it("tracks the actual table over its enclosing heading only in the matching root
     expect(tree.UpdateTracking()).toBe(tableId);
     expect(tree.UpdateTracking("outline")).toBe(headingId);
     expect(tree.UpdateTracking("bookmark")).toBeUndefined();
+    tree.SetContentTypeTracking("table", false);
+    try {
+      expect(tree.UpdateTracking()).toBe(headingId);
+      expect(tree.UpdateTracking("table")).toBeUndefined();
+    } finally {
+      tree.SetContentTypeTracking("table", true);
+    }
     const tablePoint = new SwPosition(shell.GetCursor().GetPoint());
     try {
       expect(tree.GotoContent(headingId)).toBe(true);
@@ -641,6 +676,69 @@ it("uses the current formatted physical pages and exact follow cursor offsets", 
     expect(shell.GetCursor().GetPoint().GetNode()).toBe(second);
     expect(shell.GetCursor().GetPoint().GetContentIndex()).toBe(0);
   } finally {
+    session.Close();
+  }
+});
+
+it("collapses other top-level headings only while focused outline tracking follows a new row", /** Verifies the native focused expansion policy on the mounted tree. @returns Nothing. */ () => {
+  const session = createWriterDocumentSession();
+  const shell = session.view.GetWrtShell();
+  const document = shell.GetDoc();
+  const first = document.paragraphs[0];
+  assert(first);
+  const child = document.nodes.MakeTextNode();
+  const second = document.nodes.MakeTextNode();
+  const secondChild = document.nodes.MakeTextNode();
+  for (const [node, title, depth] of [
+    [first, "Chapter A", 1],
+    [child, "Section A", 2],
+    [second, "Chapter B", 1],
+    [secondChild, "Section B", 2],
+  ] as const) {
+    node.SetText(title);
+    node.SetAttrOutlineLevel(depth);
+  }
+  const tree = session.view.GetNavigator();
+  try {
+    session.view.ToggleNavigator();
+    render(<WriterWorkbench view={session.view} isActive />);
+    const navigator = within(screen.getByRole("dialog", { name: "Navigator" }));
+    const editor = screen.getByRole("textbox", { name: "Writer document text" });
+    /** Places the focused document cursor on a specific heading. @param node - Existing heading. @returns Nothing. */
+    function track(node: typeof child): void {
+      act(
+        /** Uses the native shell to notify the mounted Navigator. @returns Nothing. */
+        () => {
+          editor.focus();
+          const point = new SwPosition(node, 1);
+          shell.SetCursor(point);
+          point.Dispose();
+        },
+      );
+    }
+    track(child);
+    expect(navigator.getByRole("treeitem", { name: "Section B" })).toBeVisible();
+    const chapterA = navigator.getByRole("treeitem", { name: "Chapter A" });
+    fireEvent.contextMenu(chapterA, { clientX: 12, clientY: 24 });
+    fireEvent.mouseDown(screen.getByRole("menuitem", { name: "Outline Tracking" }));
+    const focus = screen.getByRole("menuitemradio", { name: "Focus" });
+    expect(screen.getByRole("menuitemradio", { name: "Default" })).toHaveAttribute(
+      "aria-checked",
+      "true",
+    );
+    fireEvent.click(focus);
+    expect(chapterA).toHaveFocus();
+    track(secondChild);
+    expect(chapterA).toHaveAttribute("aria-expanded", "false");
+    expect(navigator.queryByRole("treeitem", { name: "Section A" })).toBeNull();
+    expect(navigator.getByRole("treeitem", { name: "Section B", selected: true })).toBeVisible();
+    track(child);
+    expect(chapterA).toHaveAttribute("aria-expanded", "true");
+    expect(navigator.queryByRole("treeitem", { name: "Section B" })).toBeNull();
+    expect(navigator.getByRole("treeitem", { name: "Section A", selected: true })).toBeVisible();
+  } finally {
+    tree.SetOutlineTracking(OutlineTrackingMode.Default);
+    cleanup();
     session.Close();
   }
 });
