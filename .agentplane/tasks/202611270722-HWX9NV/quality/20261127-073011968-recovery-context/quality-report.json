@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "task_id": "202611270722-HWX9NV",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-27T07:30:11.968Z",
+  "verdict": "pass",
+  "summary": "Writer exports and resolves native master-page style identity consistently across ODT and Worker.",
+  "evaluated_sha": "24dea702b5513a2556dbbf9c98f324b12c72305c",
+  "blueprint_digest": "c7a48cbca811caee052d14ccdd4bee5b5975f5c02304aa709b8f36f89fe9c098",
+  "findings": [
+    "Pinned master-page layout/follow fallback and paragraph PageDescName rules pass focused tests. Implementation: 24dea702b5513a2556dbbf9c98f324b12c72305c."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611270722-HWX9NV/README.md",
+    "output/playwright/HWX9NV/verification.md",
+    "24dea702b5513a2556dbbf9c98f324b12c72305c"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
