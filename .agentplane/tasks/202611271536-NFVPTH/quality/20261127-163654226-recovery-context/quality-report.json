@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202611271536-NFVPTH",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-27T16:36:54.226Z",
+  "verdict": "pass",
+  "summary": "Native Writer ODT tracked-change ranges and represented deletion text survive package and Worker round trips.",
+  "evaluated_sha": "9eef6a0497491b7f2f38dcf565de28aad9501c08",
+  "blueprint_digest": "71d3f44642ecd761769e365047b10d88655397b8df0cb4e840fbaf2bbb401416",
+  "findings": [
+    "Original midnight, whitespace and same-position deletion fixtures pass. Complex deletion moves, structural markers and prior-format automatic style ownership remain separate parity work."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611271536-NFVPTH/README.md",
+    "output/playwright/odf-writer-redlines/verification.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
