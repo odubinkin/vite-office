@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "task_id": "202611271340-APZTZW",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-27T14:56:49.223Z",
+  "verdict": "pass",
+  "summary": "The pinned tdf129940.ods preserved the three original cell strings and distinct ruby base span sizes through the Calc Worker and ODS reopen. Existing native rich-text, field, note and paragraph tests passed.",
+  "evaluated_sha": "a109ada2928f0d6f2176ee44b3e88b24a94b8491",
+  "blueprint_digest": "54dc1bd219277bbee5ea04dfd1002b47799b9eb9f95ba4912f40174943a0806d",
+  "findings": [
+    "CALC-865 records the original removal of ruby pronunciation and guide styling after the meaningful base has been imported."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611271340-APZTZW/README.md",
+    "/Users/odubinkin/Projects/vite-office/output/playwright/APZTZW/verification.md",
+    "a109ada2928f0d6f2176ee44b3e88b24a94b8491"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
