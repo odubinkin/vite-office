@@ -1,10 +1,11 @@
 ---
 id: "202611271020-2CQ5A9"
 title: "Preserve native Writer text sections through ODT and Worker transport"
-status: "DOING"
+result_summary: "retain named text sections through ODT and Worker."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "0e0f5fdec50e98cb00763296a5b8e3486ccbd585"
   findings:
     - "Section nodes retain named ownership and text flow across document and Worker boundaries. Physical section layout, unrepresented format properties, and link refresh are outside the tested slice."
-commit: null
+commit:
+  hash: "0e0f5fdec50e98cb00763296a5b8e3486ccbd585"
+  message: "🧩 2CQ5A9 writer: retain named text sections through ODT and Worker"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: Pinned protection keys; nested body and repeated table sections, linked descriptors, crossing bookmarks and original section properties.       Tests  92 passed (92)."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Tests  92 passed (92). Office typecheck, lint, formatting, dependency, provenance and registry checks passed."
+  -
+    type: "status"
+    at: "2026-11-27T11:35:02.475Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Pinned protection keys; nested body and repeated table sections, linked descriptors, crossing bookmarks and original section properties.       Tests  92 passed (92)."
 doc_version: 3
-doc_updated_at: "2026-11-27T11:33:41.086Z"
+doc_updated_at: "2026-11-27T11:35:02.476Z"
 doc_updated_by: "CODER"
 description: "Port the represented ordinary Writer text-section owner, body and cell hierarchy, ODF section property import/export and Worker graph transport against pinned LibreOffice. Preserve the existing editing projection and compatible legacy graph decode."
 sections:
