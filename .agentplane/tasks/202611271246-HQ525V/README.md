@@ -1,10 +1,11 @@
 ---
 id: "202611271246-HQ525V"
 title: "Round-trip native Writer alphabetical and user index sections in ODT"
-status: "DOING"
+result_summary: "Preserve native alphabetical and user index sections."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - "ffda762b101061f6aa8ed68751278bb4ad13597d"
   findings:
     - "This task covers the represented alphabetical and user index source and cached sections. Runtime index generation, bibliography and the other index sources remain outside its scope."
-commit: null
+commit:
+  hash: "ffda762b101061f6aa8ed68751278bb4ad13597d"
+  message: "🧩 HQ525V writer: preserve native alphabetical and user index sections"
 comments:
   -
     author: "CODER"
     body: "Start: trace the actual user and alphabetical index sources and forms with the pinned graph and stage Writer changes independently of the running full verification."
+  -
+    author: "CODER"
+    body: "Verified: The original tdf144672.odt and tdf153636.odt retained the original alphabetical separators and levels, the main-entry character style and collation settings, the user-index flags, and the stored title and entries across the Worker and ODT reopen."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Tests  32 passed (32). Pinned fixtures and focused static, dependency, provenance and registry checks passed."
+  -
+    type: "status"
+    at: "2026-11-27T14:45:03.043Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: The original tdf144672.odt and tdf153636.odt retained the original alphabetical separators and levels, the main-entry character style and collation settings, the user-index flags, and the stored title and entries across the Worker and ODT reopen."
 doc_version: 3
-doc_updated_at: "2026-11-27T14:44:03.542Z"
+doc_updated_at: "2026-11-27T14:45:03.043Z"
 doc_updated_by: "CODER"
 description: "Generalize the existing native Writer TOX source, form and cached section path for alphabetical and user-defined index sections. Port the original index-type forms, source flags, sort locale and algorithm, title/templates and cached body ownership through Writer import, export and Worker graph transport. Keep index generation or UI updates and unrelated section families outside this task. Verify original LibreOffice fixtures and relevant Writer suites."
 sections:
