@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "task_id": "202611271209-MY81Z8",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-27T14:36:58.550Z",
+  "verdict": "pass",
+  "summary": "The unmodified tdf149248.odt, whitespace.odt and udindex3.odt retained their native range pairs, original whitespace and TOC/user type ownership across Worker and ODT reopening. The XML writer consumed the native dummy characters.",
+  "evaluated_sha": "8ccf760cd25653c6dff9654a3330c8abd25fe4f0",
+  "blueprint_digest": "0a1b3f14dff8741e8ff6183cc0708bcdd8efac01d3f02642ac857dee0379b014",
+  "findings": [
+    "Interactive index regeneration, index jump links and index sections other than contents remain outside this task."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611271209-MY81Z8/README.md",
+    "/Users/odubinkin/Projects/vite-office/output/playwright/MY81Z8/verification.md",
+    "8ccf760cd25653c6dff9654a3330c8abd25fe4f0"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
