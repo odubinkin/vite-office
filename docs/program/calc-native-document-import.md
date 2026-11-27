@@ -62,3 +62,16 @@ font streams and manifest entries. The Worker retains the flags and validated
 bytes. The browser package path covers fonts already in the document. Native
 system font discovery and collection of used fonts by script remain outside
 this path.
+
+## ODS sheet writing direction
+
+Calc reads the table-family writing mode through xmloff's original token map,
+including the short ODF aliases. The sheet property applies right-to-left
+layout for `RL_TB` and left-to-right layout for the other accepted modes.
+During XML import, ScDocument defers the change through ScTable's loading flag
+and applies it when parsing completes.
+
+ODS export writes the resulting horizontal mode as `lr-tb` or `rl-tb`. The
+Worker transfers the native sheet flag, defaulting to left-to-right for older
+records. The original mixed-direction `cell-invalidations.ods` exercises both
+directions. Drawing mirroring and tiled rendering remain outside this slice.

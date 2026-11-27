@@ -28,6 +28,8 @@
       "IncInterpretLevel",
       "DecInterpretLevel",
       "IsImportingXML",
+      "SetImportingXML",
+      "SetLayoutRTL",
       "IsInDtorClear",
       "SetName",
       "IsMerged",
@@ -122,6 +124,7 @@
       "Exposes native leading-overlap, trailing-merge and covered-anchor operations for view selection.",
       "Exposes the original document tab color operations from the documen3 owner.",
       "Dispatches GetPageStyle and SetPageStyle through the actual native sheet.",
+      "Defers a sheet's right-to-left layout to the native XML-load boundary using ScTable's loading flag.",
       "The document exposes native conditional scale backgrounds via its existing conditional-format owner.",
       "Owns ordered threaded-comment persons and keeps the first record for each exact identifier.",
       "Owns global database ranges and routes a sheet anonymous range to the native ScTable owner.",
@@ -361,6 +364,14 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
           "marker": "ScDocument::SetValue"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+          "marker": "ScDocument::SetLayoutRTL"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/documen9.cxx",
+          "marker": "ScDocument::SetImportingXML"
         },
         {
           "path": "vendor/libreoffice-reference/sc/inc/mtvelements.hxx",

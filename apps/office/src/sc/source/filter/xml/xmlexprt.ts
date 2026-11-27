@@ -18,6 +18,8 @@ import { ScMyDefaultStyles } from "./XMLStylesExportHelper";
 import type { ScDocumentPool } from "../../core/data/docpool";
 import { convert, Length } from "../../../../o3tl/inc/unit_conversion";
 import { XMLFontAutoStylePool } from "../../../../xmloff/source/style/XMLFontAutoStylePool";
+import { exportWritingDirection } from "../../../../xmloff/source/style/prhdlfac";
+import { WritingMode2 } from "../../../../offapi/com/sun/star/text/WritingMode2";
 import { SvxFontItem } from "../../../../editeng/inc/fontitem";
 import {
   cellTextWhichIds,
@@ -343,26 +345,24 @@ export class ScXMLExport {
         name.dispose();
         throw new Error("Sheet protection changed during ODS export.");
       }
-      let tableProperties = table.IsVisible() ? "" : ' table:display="false"';
+      let tableProperties = ` table:display="${table.IsVisible()}"`;
       const color = table.GetTabBgColor();
       if (!color.equals(COL_AUTO)) {
         const rgb: [string] = [""];
         Converter.convertColor(rgb, color.toUInt32());
         tableProperties += ` table:tab-color="${rgb[0]}"`;
       }
-      let styleAttribute = "";
+      const mode = table.IsLayoutRTL() ? WritingMode2.RL_TB : WritingMode2.LR_TB;
+      tableProperties += ` style:writing-mode="${exportWritingDirection(mode, false)}"`;
       const master = this.pageStyles.names.get(table.GetPageStyle()) ?? "";
-      if (tableProperties || master) {
-        const key = master + "\0" + tableProperties;
-        const style = tableStyles.get(key) ?? {
-          name: `ta${tableStyles.size + 1}`,
-          properties: tableProperties,
-          master,
-        };
-        tableStyles.set(key, style);
-        styleAttribute = ` table:style-name="${style.name}"`;
-      }
-      body += `<table:table table:name="${escapeXml(text(name))}"${styleAttribute}${protectionAttributes}${print}>`;
+      const key = master + "\0" + tableProperties;
+      const style = tableStyles.get(key) ?? {
+        name: `ta${tableStyles.size + 1}`,
+        properties: tableProperties,
+        master,
+      };
+      tableStyles.set(key, style);
+      body += `<table:table table:name="${escapeXml(text(name))}" table:style-name="${style.name}"${protectionAttributes}${print}>`;
       body += this.WriteTableSource(table);
       body += this.WriteScenario(table);
       name.dispose();

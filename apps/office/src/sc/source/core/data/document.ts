@@ -555,9 +555,11 @@ export class ScDocument {
   SetPageStyle(tab: number, name: string): void {
     this.FetchTable(tab)?.SetPageStyle(name);
   }
-  /** Original represented table flag dispatch;drawing/visibility services remain unported. @param tab - Sheet. @param set - RTL state. @returns Nothing. */
+  /** Dispatches or defers the sheet direction for the original XML import contract. @param tab - Sheet. @param set - RTL state. @returns Nothing. */
   SetLayoutRTL(tab: number, set: boolean): void {
-    this.FetchTable(tab)?.SetLayoutRTL(set);
+    const table = this.FetchTable(tab);
+    if (this.bImportingXML) table?.SetLoadingRTL(set);
+    else table?.SetLayoutRTL(set);
   }
   /** Original existing-line style/color dispatch. @param marks - Actual multi marks. @param line - Source style or absence. @param colorOnly - Color mode. @returns Nothing. */
   ApplySelectionLineStyle(
@@ -707,6 +709,19 @@ export class ScDocument {
   /** Original XML-import query. @returns Importing. */
   IsImportingXML(): boolean {
     return this.bImportingXML;
+  }
+  /** Ends XML loading before applying each sheet's deferred right-to-left layout. @param importing - Original loading flag. */
+  SetImportingXML(importing: boolean): void {
+    this.bImportingXML = importing;
+    if (importing) return;
+    for (let tab = 0; tab < this.GetTableCount(); ++tab) {
+      const table = this.FetchTable(tab);
+      if (!table) break;
+      if (table.IsLoadingRTL()) {
+        table.SetLoadingRTL(false);
+        this.SetLayoutRTL(tab, true);
+      }
+    }
   }
   /** Original document teardown query. @returns Clearing. */
   IsInDtorClear(): boolean {

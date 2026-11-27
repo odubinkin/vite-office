@@ -19,9 +19,10 @@
       "evidence": [
         "apps/office/src/xmloff/source/style/prhdlfac.ts#importWritingDirection",
         "vendor/libreoffice-reference/xmloff/source/style/prhdlfac.cxx#aXML_WritingDirection_Enum",
-        "apps/office/src/sw/source/filter/xml/odt-table-roundtrip.test.ts"
+        "apps/office/src/sw/source/filter/xml/odt-table-roundtrip.test.ts",
+        "apps/office/src/sc/source/filter/xml/ods-sheet-layout.test.ts"
       ],
-      "justification": "Ports the default-capable writing-mode constant handler selection, original enum order, canonical tokens and import aliases for Writer table styles.",
+      "justification": "Ports both writing-mode constant handler variants with their original enum order, canonical tokens, aliases and default tokens for Writer tables and Calc sheets.",
       "knownViolations": [],
       "localSymbols": [
         "aXML_WritingDirection_Enum",

@@ -16,7 +16,7 @@
       "XMLPropertyHandlerFactory::CreatePropertyHandler"
     ],
     "preservedResponsibilities": [
-      "Ports the default-capable writing-mode constant handler selection, original enum order, canonical tokens and import aliases for Writer table styles."
+      "Ports both writing-mode constant handler variants with their original enum order, canonical tokens, aliases and default tokens for Writer tables and Calc sheets."
     ],
     "omittedResponsibilities": [
       "Other generic property-handler factory entries remain outside this table direction slice."
@@ -30,6 +30,10 @@
         {
           "path": "apps/office/src/sw/source/filter/xml/odt-table-roundtrip.test.ts",
           "marker": "keeps native RTF table directions"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-sheet-layout.test.ts",
+          "marker": "testCellMinimalInvalidations"
         }
       ],
       "upstream": [

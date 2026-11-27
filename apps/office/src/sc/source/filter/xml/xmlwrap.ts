@@ -137,8 +137,14 @@ export class ScXMLImportWrapper {
       );
     }
     const content = await zip.readTextEntry("content.xml");
-    if (names.includes("styles.xml")) importer.importStyles(await zip.readTextEntry("styles.xml"));
-    importer.importContent(content);
+    const styles = names.includes("styles.xml") ? await zip.readTextEntry("styles.xml") : undefined;
+    this.document.SetImportingXML(true);
+    try {
+      if (styles !== undefined) importer.importStyles(styles);
+      importer.importContent(content);
+    } finally {
+      this.document.SetImportingXML(false);
+    }
     const fonts = await readOdfFontResources(
       this.document.GetEmbeddedFonts(),
       names,

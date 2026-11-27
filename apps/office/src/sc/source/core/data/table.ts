@@ -390,6 +390,7 @@ export class ScTable {
   }
   /** Native table layout direction;the constructor default matches the non-visible core-document path. */
   private bLayoutRTL = false;
+  private bLoadingRTL = false;
   /** Original actual layout-direction query. @returns RTL flag. */
   IsLayoutRTL(): boolean {
     return this.bLayoutRTL;
@@ -397,6 +398,16 @@ export class ScTable {
   /** Original table1.cxx actual flag update. @param set - RTL state. @returns Nothing. */
   SetLayoutRTL(set: boolean): void {
     this.bLayoutRTL = set;
+  }
+
+  /** Whether the original XML load has deferred a right-to-left layout. @returns Pending direction. */
+  IsLoadingRTL(): boolean {
+    return this.bLoadingRTL;
+  }
+
+  /** Stores the pending layout while XML objects are loaded in normal orientation. @param set - Deferred direction. */
+  SetLoadingRTL(set: boolean): void {
+    this.bLoadingRTL = set;
   }
   /** Original line-style mutation visits allocated columns only. @param marks - Marks. @param line - Style or absence. @param colorOnly - Color mode. @returns Nothing. */
   ApplySelectionLineStyle(

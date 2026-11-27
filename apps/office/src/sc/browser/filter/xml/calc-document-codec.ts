@@ -214,6 +214,7 @@ interface Sheet {
     readonly ranges: readonly PrintRange[];
   };
   readonly visible?: boolean;
+  readonly layoutRTL?: boolean;
   readonly link?: CalcSheetLinkRecord;
   readonly tabColor?: number;
   readonly pageStyle?: string;
@@ -453,6 +454,7 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
       ...(pageStyles.names.has(pageStyle) ? { pageStyle } : {}),
       ...(tabColor.equals(COL_AUTO) ? {} : { tabColor: tabColor.toUInt32() }),
       ...(table.IsVisible() ? {} : { visible: false }),
+      ...(table.IsLayoutRTL() ? { layoutRTL: true } : {}),
       ...(protection
         ? {
             protection: {
@@ -953,6 +955,10 @@ function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
           decodeSheetLink(document.FetchTable(tab) as ScTable, sheet.link);
         }
         if (sheet.visible === false) document.SetVisible(tab, false);
+        if (sheet.layoutRTL !== undefined) {
+          if (typeof sheet.layoutRTL !== "boolean") throw new Error("Invalid Calc sheet layout.");
+          document.SetLayoutRTL(tab, sheet.layoutRTL);
+        }
         if (sheet.pageStyle !== undefined) {
           if (
             typeof sheet.pageStyle !== "string" ||

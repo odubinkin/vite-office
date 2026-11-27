@@ -24,6 +24,7 @@ import { ScXMLConditionHelper } from "./XMLConverter";
 import { SvXMLUnitConverter } from "../../../../xmloff/source/core/xmluconv";
 import { ScPatternAttr } from "../../../inc/patattr";
 import { IsNumberStyle, SvXMLNumFormatContext } from "../../../../xmloff/source/style/xmlnumfi";
+import { importWritingDirection } from "../../../../xmloff/source/style/prhdlfac";
 import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { SC_STYLE_PROG_STANDARD } from "../../../inc/stylehelper";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
@@ -159,6 +160,7 @@ export class XMLTableStylesContext extends ScXMLImportContext {
 class XMLSheetStyleContext extends ScXMLImportContext {
   private visible = true;
   private tabColor: Readonly<Color> = COL_AUTO;
+  private writingMode: number | undefined;
   /** Binds a real ODF table style. @param owner - Importer. @param name - Style name. @param masterPage - Associated master page. @returns Context. */
   constructor(
     private readonly owner: ScXMLImport,
@@ -167,7 +169,7 @@ class XMLSheetStyleContext extends ScXMLImportContext {
   ) {
     super(owner);
   }
-  /** Consumes the source table display and tab color properties. @param element - Child token. @param attributes - Style properties. @returns Property context. */
+  /** Consumes the represented table-family properties. @param element - Child token. @param attributes - Style properties. @returns Property context. */
   override createFastChildContext(
     element: XMLToken,
     attributes: FastAttributeList,
@@ -175,6 +177,8 @@ class XMLSheetStyleContext extends ScXMLImportContext {
     if (element === XMLToken.STYLE_TABLE_PROPERTIES) {
       const display = attributes.get(XMLToken.TABLE_DISPLAY);
       this.visible = display !== "false" && display !== "0";
+      const direction = attributes.get(XMLToken.STYLE_WRITING_MODE);
+      if (direction !== null) this.writingMode = importWritingDirection(direction, false);
       for (const [token, value] of attributes) {
         if (token !== XMLToken.TABLE_TAB_COLOR && token !== XMLToken.TABLE_EXT_TAB_COLOR) continue;
         const rgb: [number] = [0];
@@ -188,7 +192,13 @@ class XMLSheetStyleContext extends ScXMLImportContext {
   /** Commits the automatic style under its XML identity. @param element - Closing token. @returns Nothing. */
   override endFastElement(element: XMLToken): void {
     if (element === XMLToken.STYLE_STYLE)
-      this.owner.AddTableStyle(this.name, this.visible, this.tabColor, this.masterPage);
+      this.owner.AddTableStyle(
+        this.name,
+        this.visible,
+        this.tabColor,
+        this.masterPage,
+        this.writingMode,
+      );
   }
 }
 /** Automatic text style for a native Calc edit-cell span. */

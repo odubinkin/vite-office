@@ -72,6 +72,7 @@ import { ScXMLBodyContext } from "./xmlbodyi";
 import type { ScLineBreakCell } from "../../../inc/attrib";
 import { ScDocOptions } from "../../core/tool/docoptio";
 import { INetURLObject } from "../../../../tools/source/fsys/urlobj.object";
+import { WritingMode2 } from "../../../../offapi/com/sun/star/text/WritingMode2";
 /** Browser parser ceilings bind native scalar import to bounded resources. */
 export interface ScXMLImportOptions extends OdfXmlParseOptions {
   readonly maxExpandedCells?: number;
@@ -510,16 +511,22 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
   readonly pageStyles: ScXMLPageStyles;
   private readonly tableStyles = new Map<
     string,
-    { visible: boolean; tabColor: Readonly<Color>; masterPage: string | null }
+    {
+      visible: boolean;
+      tabColor: Readonly<Color>;
+      masterPage: string | null;
+      writingMode: number | undefined;
+    }
   >();
-  /** Registers properties of the native table-family style. @param name - Automatic style. @param visible - Sheet display. @param tabColor - Sheet tab color. @param masterPage - Associated page style. @returns Nothing. */
+  /** Registers properties of the native table-family style. @param name - Automatic style. @param visible - Sheet display. @param tabColor - Sheet tab color. @param masterPage - Associated page style. @param writingMode - Authored UNO sheet layout mode. @returns Nothing. */
   AddTableStyle(
     name: string,
     visible: boolean,
     tabColor: Readonly<Color>,
     masterPage: string | null,
+    writingMode?: number,
   ): void {
-    this.tableStyles.set(name, { visible, tabColor, masterPage });
+    this.tableStyles.set(name, { visible, tabColor, masterPage, writingMode });
   }
   /** Applies the sheet style to its native owner. @param name - Automatic style. @param tab - Native sheet. @returns Nothing. */
   ApplyTableStyle(name: string, tab: number): void {
@@ -528,6 +535,8 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
     else {
       this.document.SetVisible(tab, style.visible);
       this.document.SetTabBgColor(tab, style.tabColor);
+      if (style.writingMode !== undefined)
+        this.document.SetLayoutRTL(tab, style.writingMode === WritingMode2.RL_TB);
       if (style.masterPage) this.pageStyles.Apply(tab, style.masterPage);
     }
   }
