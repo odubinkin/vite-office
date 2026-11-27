@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202611271659-6P09PX",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-27T17:10:09.842Z",
+  "verdict": "pass",
+  "summary": "Writer redline prior character formatting is now owned by the original automatic-style item set.",
+  "evaluated_sha": "fda30b316e25b9789772499678b214f71b386956",
+  "blueprint_digest": "bce499cecf9a3328600b655855bcd8f04841adc5d5424a8dbab24ae2ebf64015",
+  "findings": [
+    "Both pinned LibreOffice formats preserve old named and direct properties through import, Worker and export."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611271659-6P09PX/README.md",
+    "output/playwright/odf-writer-redlines/prior-style-verification.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
