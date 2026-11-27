@@ -1,10 +1,11 @@
 ---
 id: "202611271316-RX0J5A"
 title: "Preserve linked Calc sheet sources through ODS and Worker transfer"
-status: "DOING"
+result_summary: "Preserve linked sheet sources through ODS and the Calc Worker."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - "6f483c9d8d6b324b21fd927bc505073b36788a86"
   findings:
     - "CALC-864 records native first-sheet metadata per source URL. Refreshing source media is outside the browser document model."
-commit: null
+commit:
+  hash: "6f483c9d8d6b324b21fd927bc505073b36788a86"
+  message: "🧩 RX0J5A calc: preserve linked sheet sources through ODS"
 comments:
   -
     author: "CODER"
     body: "Start: port native Calc linked sheet source persistence using the original ScTable owner and ODS table-source context."
+  -
+    author: "CODER"
+    body: "Verified: The pinned tdf157897_main.ods retained the real linked sheet, its source and cached cells through the Worker and ODS reopen. Reload delay and per-URL export metadata follow the native link owner."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Tests  16 passed (16). Pinned fixtures and focused static, dependency, provenance and registry checks passed."
+  -
+    type: "status"
+    at: "2026-11-27T14:52:15.046Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: The pinned tdf157897_main.ods retained the real linked sheet, its source and cached cells through the Worker and ODS reopen. Reload delay and per-URL export metadata follow the native link owner."
 doc_version: 3
-doc_updated_at: "2026-11-27T14:51:11.603Z"
+doc_updated_at: "2026-11-27T14:52:15.046Z"
 doc_updated_by: "CODER"
 description: "Port the native Calc table-source descriptor for actual linked sheets, independently of external formula caches. Retain the original sheet owner, native link modes, source URL and filter fields, refresh-duration parsing, same-file link property reconciliation, cached cell contents, and ODS/Worker transport. Match the existing browser document origin and shell boundaries. Verify the pinned LibreOffice table-source fixture and relevant linked/external package tests."
 sections:
