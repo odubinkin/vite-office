@@ -1,10 +1,11 @@
 ---
 id: "202611271307-Y4QY0R"
 title: "Preserve Writer table, illustration and object index sections through ODT"
-status: "DOING"
+result_summary: "Preserve native table, illustration and object index sections."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - "f99f2152067c999a0a9b04bcd5c0676aa7f0347c"
   findings:
     - "WRITER-765 records the native single-level template reader behavior. Runtime index regeneration is outside this slice."
-commit: null
+commit:
+  hash: "f99f2152067c999a0a9b04bcd5c0676aa7f0347c"
+  message: "🧩 Y4QY0R writer: preserve table illustration and object indexes"
 comments:
   -
     author: "CODER"
     body: "Start: port native TOX caption and object section properties using the current source context and stored index body."
+  -
+    author: "CODER"
+    body: "Verified: The pinned tdf99689_tables.odt, tdf99689_figures.odt and TESTXMLID.odt retained native caption source options, object filters and stored index sections through the Worker and ODT reopen."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Tests  22 passed (22). Pinned fixtures and focused static, dependency, provenance and registry checks passed."
+  -
+    type: "status"
+    at: "2026-11-27T14:49:37.816Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: The pinned tdf99689_tables.odt, tdf99689_figures.odt and TESTXMLID.odt retained native caption source options, object filters and stored index sections through the Worker and ODT reopen."
 doc_version: 3
-doc_updated_at: "2026-11-27T14:48:21.884Z"
+doc_updated_at: "2026-11-27T14:49:37.817Z"
 doc_updated_by: "CODER"
 description: "Extend the native Writer index descriptor stack to table, illustration and object indexes with their original source options, caption field formats, style sources, single-level forms, and cached content. Preserve those values across ODT and Worker transfer. Scope validation to pinned LibreOffice fixtures and related Writer tests. Keep dynamic object discovery, index generation and bibliography outside the persistence slice."
 sections:
