@@ -1,10 +1,11 @@
 ---
 id: "202611271816-5TSN0F"
 title: "Apply native Calc ODS sheet backgrounds as cell formatting"
-status: "DOING"
+result_summary: "Calc imports table-family background into native sparse cell formatting and exports it through ODS cell styles."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - "output/playwright/odf-next-checkpoint/sheet-background-verification.md"
   findings:
     - "Cell override and both transport paths passed. Source behavior for the ignored table complex-color child is documented as CALC-872."
-commit: null
+commit:
+  hash: "7e66bc3707adf0e38a6b73f35e799addc47d78b6"
+  message: "🧩 5TSN0F calc: apply ODS sheet background through native cell styles"
 comments:
   -
     author: "CODER"
     body: "Start: apply original table-family background properties through the native cell pattern."
+  -
+    author: "CODER"
+    body: "Verified: 48 related Calc cases passed, including native sparse sheet background, overrides, Worker and ODS reopen."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "48 focused Calc tests passed. Sheet default, transparent override, sparse far cells, Worker and ODS reopen verified. Typecheck, lint, provenance and inventory passed."
+  -
+    type: "status"
+    at: "2026-11-27T18:23:53.800Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: 48 related Calc cases passed, including native sparse sheet background, overrides, Worker and ODS reopen."
 doc_version: 3
-doc_updated_at: "2026-11-27T18:22:14.078Z"
+doc_updated_at: "2026-11-27T18:23:53.801Z"
 doc_updated_by: "CODER"
 description: "Port the import-only table-family background color, transparency and complex-color properties. Apply them through the original sheet-wide native cell pattern before cell style ranges. Keep the sparse default-column representation and export the inherited result through regular ODS cell styles and Worker formatting. Verify overrides, sparse far cells and reopen with the related existing color and style tests."
 sections:
