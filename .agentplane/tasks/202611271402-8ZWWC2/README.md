@@ -1,10 +1,11 @@
 ---
 id: "202611271402-8ZWWC2"
 title: "Preserve native Writer ruby text and styled ranges through ODT"
-status: "DOING"
+result_summary: "Keep native Writer ruby properties and nesting through ODT and the Worker."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
     - "2eda752120c585c1a2e5ca7443f432a23470ad86"
   findings:
     - "WRITER-768 records the accepted incompatible Any ruby values. Existing character, nested hyperlink, ODT and Worker tests pass."
-commit: null
+commit:
+  hash: "2eda752120c585c1a2e5ca7443f432a23470ad86"
+  message: "🧩 8ZWWC2 writer: preserve native ruby ODT ranges"
 comments:
   -
     author: "CODER"
     body: "Start: Trace the pinned Writer ruby attribute, ODF styles and containment of linked text."
+  -
+    author: "CODER"
+    body: "Verified: The original ruby-position.odt retains its inter-character ruby position through the Worker and ODT reopen. The original tdf168817 fixture retains the Unicode hyperlink inside the ruby base."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Tests  333 passed (333). Pinned fixtures and focused static, dependency, provenance and registry checks passed."
+  -
+    type: "status"
+    at: "2026-11-27T15:14:52.047Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: The original ruby-position.odt retains its inter-character ruby position through the Worker and ODT reopen. The original tdf168817 fixture retains the Unicode hyperlink inside the ruby base."
 doc_version: 3
-doc_updated_at: "2026-11-27T15:11:02.638Z"
+doc_updated_at: "2026-11-27T15:14:52.049Z"
 doc_updated_by: "CODER"
 description: "Implement the represented SwFormatRuby and SwTextRuby nesting attribute, conforming UNO properties and ruby style import/export. Preserve ruby reading, position, formatting and ruby-base hyperlinks through Worker and ODT. Port the pinned ruby position and hyperlink fixtures."
 sections:
