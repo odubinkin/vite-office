@@ -10,7 +10,12 @@ import { CellType, ScGlobal, InsertDeleteFlags, UpdateRefMode } from "../../../i
 import type { ScPatternAttr } from "../../../inc/patattr";
 import { ATTR_MERGE_FLAG } from "../../../inc/scitems";
 import { ScRangeList } from "../../../inc/rangelst";
-import { RefUpdateContext, SetFormulaDirtyContext } from "../../../inc/refupdatecontext";
+import {
+  RefUpdateContext,
+  RefUpdateDeleteTabContext,
+  RefUpdateInsertTabContext,
+  SetFormulaDirtyContext,
+} from "../../../inc/refupdatecontext";
 import { AutoCalcSwitch } from "../../../inc/scopetools";
 import { ScBulkBroadcast } from "../inc/bcaslot";
 import { StartListeners, SetDirtyIncludingEmptyCells as dirtyColumn } from "./column3";
@@ -763,7 +768,10 @@ export function InsertTab(
   if (!ValidTab(position)) return false;
   const shifted = new ScRange(0, 0, position, this.MaxCol(), this.MaxRow(), MAXTAB);
   const isInsertion = position < this["maTabs"].length;
-  if (isInsertion) UpdateLabelRangesOnTab(this, shifted, 1);
+  if (isInsertion) {
+    UpdateLabelRangesOnTab(this, shifted, 1);
+    this.GetValidationList()?.UpdateInsertTab(new RefUpdateInsertTabContext(this, position, 1));
+  }
   this["maTabs"].splice(position, 0, new ScTable(this, position, name));
   for (let i = position + 1; i < this["maTabs"].length; i++) this["maTabs"][i]?.SetTabNo(i);
   if (isInsertion) this["pBASM"]?.UpdateBroadcastAreas(UpdateRefMode.URM_INSDEL, shifted, 0, 0, 1);
@@ -802,6 +810,7 @@ export function DeleteTab(this: ScDocument, tab: number): boolean {
   let cell;
   while ((cell = iterator.GetNext(col, row))) cell.getFormula()?.Dispose();
   UpdateLabelRangesOnTab(this, shifted, -1);
+  this.GetValidationList()?.UpdateDeleteTab(new RefUpdateDeleteTabContext(this, tab, 1));
   (this["maTabs"][tab] as ScTable).DisposeAttributes();
   this["maTabs"].splice(tab, 1);
   for (let index = tab; index < this["maTabs"].length; index++)

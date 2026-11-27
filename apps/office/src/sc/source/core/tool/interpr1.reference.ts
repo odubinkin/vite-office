@@ -143,6 +143,40 @@ export function ScOffset(this: ScInterpreter, count: number): void {
   }
 }
 
+/** Tests the original text value in scalar, reference or matrix operands. @param this - Active interpreter. @returns Nothing. */
+export function ScIsString(this: ScInterpreter): void {
+  const type = this["pStack"].at(-1)?.GetType();
+  let result = false;
+  if (type === StackVar.svSingleRef || type === StackVar.svDoubleRef) {
+    const address = type === StackVar.svSingleRef ? this["PopSingleRef"]() : new ScAddress();
+    if (type === StackVar.svDoubleRef)
+      this["DoubleRefToPosSingleRef"](this["PopDoubleRef"](), address);
+    if (
+      this.GetError() === FormulaError.NONE &&
+      this.mrDoc.GetErrCode(address) === FormulaError.NONE
+    ) {
+      const value = this.mrDoc.GetRefCellValue(address);
+      result = value.hasString() && !value.hasEmptyValue();
+    }
+  } else if (type === StackVar.svExternalSingleRef) {
+    const token = this["PopExternalSingleRef"]();
+    result = this.GetError() === FormulaError.NONE && token?.GetType() === StackVar.svString;
+  } else if (type === StackVar.svMatrix || type === StackVar.svExternalDoubleRef) {
+    const matrix = this["GetLookupMatrix"]();
+    result =
+      matrix !== null &&
+      matrix !== undefined &&
+      matrix.IsStringOrEmpty(0, 0) &&
+      !matrix.IsEmpty(0, 0);
+  } else {
+    this["pStack"].pop();
+    result = type === StackVar.svString;
+  }
+  this["nGlobalError"] = FormulaError.NONE;
+  this["nRetFmtType"] = SvNumFormatType.LOGICAL;
+  this["PushDouble"](Number(result));
+}
+
 /** Tests error state without coercing text to numbers. @param this - Active interpreter. @returns Nothing. */
 export function ScIsError(this: ScInterpreter): void {
   const type = this["pStack"].at(-1)?.GetType();

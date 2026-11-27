@@ -1,5 +1,10 @@
 /** @fileoverview Calc scalar,cell-font and row/column geometry import over shared fast XML contexts;advanced styles,device layout and objects remain unported. */
 import { SetLabelRanges, type ScMyLabelRange } from "./xmllabri";
+import type { ScMyImportValidation } from "./xmlcvali";
+import { ScValidationData } from "../../core/data/validat";
+import { ScCompiler } from "../../../inc/compiler";
+import type { ScTokenArray } from "../../../inc/tokenarray";
+import { ScRangeStringConverter } from "../../core/tool/rangeutl";
 import type { ScXMLDatabaseRangeContext } from "./xmldrani";
 import { FormulaError } from "../../../../formula/inc/errorcodes";
 import { ScFormulaCell } from "../../core/data/formulacell";
@@ -46,7 +51,7 @@ import {
 } from "../../../../xmloff/source/core/xmlimp";
 import { XMLToken, ODF_NAMESPACES } from "../../../../xmloff/source/core/xmltoken";
 import { ScDocumentImport } from "../../../inc/documentimport";
-import type { ScAddress, ScRange } from "../../../inc/address";
+import { ScAddress, type ScRange } from "../../../inc/address";
 import { ScConditionalFormat } from "../../../inc/conditio";
 import { ScRangeList } from "../../../inc/rangelst";
 import { FormulaGrammar, type Grammar } from "../../../../formula/inc/grammar";
@@ -100,6 +105,94 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
   }
   readonly docImport: ScDocumentImport;
   private readonly labelRanges: ScMyLabelRange[] = [];
+  private readonly validations = new Map<string, ScMyImportValidation>();
+  private readonly validationRanges: { name: string; range: ScRange }[] = [];
+
+  /** Registers the first ODF validation declaration with its source name. @param definition - Declared rule. @returns Nothing. */
+  AddValidation(definition: ScMyImportValidation): void {
+    if (!this.validations.has(definition.name)) this.validations.set(definition.name, definition);
+  }
+
+  /** Records the cell range until named expressions and styles are available. @param name - Source declaration name. @param range - Native range including repeated blank cells. @returns Nothing. */
+  AddValidationRange(name: string, range: ScRange): void {
+    this.validationRanges.push({ name, range });
+  }
+
+  /** Resolves referenced rules and applies their original pattern delta. @returns Nothing. */
+  private FinalizeValidations(): void {
+    const document = this.document;
+    const keys = new Map<string, number>();
+    for (const { name, range } of this.validationRanges) {
+      let key = keys.get(name);
+      if (key === undefined) {
+        const descriptor = this.validations.get(name);
+        if (!descriptor) continue;
+        const base = new ScAddress();
+        ScRangeStringConverter.GetAddressFromString(
+          base,
+          descriptor.base,
+          document,
+          FormulaGrammar.AddressConvention.CONV_OOO,
+          [0],
+        );
+        const tokens: ScTokenArray[] = [];
+        try {
+          for (const operand of descriptor.operands) {
+            const expression = unicode(operand.source);
+            try {
+              tokens.push(
+                new ScCompiler(document, base, operand.grammar).CompileString(expression),
+              );
+            } finally {
+              expression.dispose();
+            }
+          }
+          const rule = new ScValidationData(
+            descriptor.mode,
+            descriptor.comparison,
+            tokens,
+            document,
+            base,
+            document.GetStorageGrammar(),
+          );
+          try {
+            rule.SetIgnoreBlank(descriptor.ignoreBlank);
+            rule.SetCaseSensitive(descriptor.caseSensitive);
+            rule.SetListType(descriptor.showList);
+            rule.SetInput(descriptor.input.title, descriptor.input.message);
+            if (!descriptor.input.display) rule.ResetInput();
+            rule.SetError(descriptor.error.title, descriptor.error.message, descriptor.alert);
+            if (!descriptor.error.display) rule.ResetError();
+            key = document.AddValidationEntry(rule);
+            keys.set(name, key);
+          } finally {
+            rule.Dispose();
+          }
+        } finally {
+          for (const code of tokens) code.Clear();
+        }
+      }
+      if (!key) continue;
+      const pattern = new ScPatternAttr(document.getCellAttributeHelper());
+      const item = new SfxUInt32Item(ATTR_VALIDDATA, key);
+      try {
+        pattern.ItemSetPut(item);
+        document.ApplyPatternAreaTab(
+          range.aStart.Col(),
+          range.aStart.Row(),
+          range.aEnd.Col(),
+          range.aEnd.Row(),
+          range.aStart.Tab(),
+          pattern,
+        );
+      } finally {
+        item.Dispose();
+        pattern.Dispose();
+      }
+    }
+    this.validationRanges.length = 0;
+    this.validations.clear();
+  }
   /** Stages a label pair until all sheets are known. @param range - Pair text. @returns Nothing. */
   AddLabelRange(range: ScMyLabelRange): void {
     this.labelRanges.push(range);
@@ -790,6 +883,7 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
       }
       this.docImport.finalize();
       this.FinalizeConditionalFormats();
+      this.FinalizeValidations();
       for (const [tab, ranges] of this.recalcRows) {
         const table = this.document.FetchTable(tab) as ScTable;
         const context = new RowHeightContext(this.document.MaxRow(), 1 / 15, 1 / 15, 1, 1, null);
@@ -862,4 +956,9 @@ class ScXMLBodyContext_Impl extends ScXMLImportContext {
   }
 }
 import { SfxUInt32Item } from "../../../../svl/source/items/intitem";
-import { ATTR_LANGUAGE_FORMAT, ATTR_LINEBREAK, ATTR_VALUE_FORMAT } from "../../../inc/scitems";
+import {
+  ATTR_LANGUAGE_FORMAT,
+  ATTR_LINEBREAK,
+  ATTR_VALIDDATA,
+  ATTR_VALUE_FORMAT,
+} from "../../../inc/scitems";

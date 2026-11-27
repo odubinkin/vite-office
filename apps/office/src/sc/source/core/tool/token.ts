@@ -494,6 +494,7 @@ const operators = new Set<OpCode>([
   OpCode.ocNotAvail,
   OpCode.ocSqrt,
   OpCode.ocIsError,
+  OpCode.ocIsString,
   OpCode.ocFrequency,
   OpCode.ocAnd,
   OpCode.ocOffset,

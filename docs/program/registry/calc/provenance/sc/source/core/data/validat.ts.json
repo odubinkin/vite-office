@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/data/validat.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/data/validat.cxx",
+    "localSymbols": [
+      "ScValidationData",
+      "EqualEntries"
+    ],
+    "upstreamSymbols": [
+      "ScValidationData::ScValidationData",
+      "ScValidationData::EqualEntries"
+    ],
+    "preservedResponsibilities": [
+      "Owns native validation conditions, modes, list visibility and saved input and error messages."
+    ],
+    "omittedResponsibilities": [
+      "Interactive input admission, selection list population and macro invocation are outside this slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/data/validat.ts",
+          "marker": "ScValidationData"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-data-validation.test.ts",
+          "marker": "dataValidity.ods"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/validat.cxx",
+          "marker": "ScValidationData::ScValidationData"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/validat.cxx",
+          "marker": "ScValidationData::EqualEntries"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/subsequent_filters_test.cxx",
+          "marker": "testDataValidityODS"
+        }
+      ]
+    }
+  }
+}

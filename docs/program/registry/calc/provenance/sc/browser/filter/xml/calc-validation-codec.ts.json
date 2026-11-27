@@ -1,0 +1,30 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "local-infrastructure",
+    "localPath": "apps/office/src/sc/browser/filter/xml/calc-validation-codec.ts",
+    "status": "local-only",
+    "rationale": "Transports document-owned validation conditions and native keys for cell patterns in the existing Calc Worker graph.",
+    "responsibilities": [
+      "Transports document-owned validation conditions and native keys for cell patterns in the existing Calc Worker graph."
+    ],
+    "stackDivergence": {
+      "kind": "local-infrastructure",
+      "rationale": "Structured Worker transport of validation rules."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/browser/filter/xml/calc-validation-codec.ts",
+          "marker": "encodeCalcValidations"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-data-validation.test.ts",
+          "marker": "dataValidity.ods"
+        }
+      ],
+      "upstream": []
+    }
+  }
+}

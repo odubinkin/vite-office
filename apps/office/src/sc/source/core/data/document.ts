@@ -1,4 +1,6 @@
 /** @fileoverview Native document modes, consumed pooled resources and scalar/local-reference storage, attributes and formula tracking. Full construction, formatter and shell services remain unported. */
+import type { ScValidationData } from "./validat";
+import { ScValidationDataList } from "./validat.list";
 import { ScPostIt, type NoteEntry, type ScPersonData } from "../../../inc/postit";
 import { ScRangePairList } from "../../../inc/rangelst";
 import { ScDBCollection, type ScDBData } from "../../../inc/dbdata";
@@ -341,6 +343,33 @@ export class ScDocument {
   CountNonFilteredRows(first: number, last: number, tab: number): number {
     return this.FetchTable(tab)?.getFilterData().countNonFilteredRows(first, last) ?? 0;
   }
+  private pValidationList: ScValidationDataList | undefined;
+
+  /** Borrows the actual document-owned validation list. @returns Native list, if allocated. */
+  GetValidationList(): ScValidationDataList | undefined {
+    return this.pValidationList;
+  }
+
+  /** Finds the rule selected by a native cell pattern. @param index - Validation identity. @returns Borrowed rule, if present. */
+  GetValidationEntry(index: number): ScValidationData | undefined {
+    return this.pValidationList?.GetData(index);
+  }
+
+  /** Reuses equal rules and otherwise clones into the original monotonic key space. @param rule - Candidate validation rule. @returns Native key or zero for the default. */
+  AddValidationEntry(rule: ScValidationData): number {
+    if (rule.IsEmpty()) return 0;
+    const list = (this.pValidationList ??= new ScValidationDataList());
+    let max = 0;
+    for (const entry of list) {
+      if (entry.EqualEntries(rule)) return entry.GetKey();
+      max = Math.max(max, entry.GetKey());
+    }
+    const copy = rule.Clone(this);
+    copy.SetKey(max + 1);
+    list.InsertNew(copy);
+    return copy.GetKey();
+  }
+
   private eStorageGrammar: Grammar = FormulaGrammar.Grammar.GRAM_ODFF;
   /** Returns the document's ODF formula storage grammar. @returns Native storage grammar. */
   GetStorageGrammar(): Grammar {
@@ -731,6 +760,7 @@ export class ScDocument {
   }
   /** Releases consumed native document observer lifetime,starting with area destruction before formula-cell destruction as in documen2. GC owns physical stores. @returns Nothing. */
   Dispose(): void {
+    this.pValidationList?.Dispose();
     return documen2.Dispose.call(this);
   }
   /** Borrows document-independent native sheet limits. @returns Limits. */

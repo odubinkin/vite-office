@@ -8218,3 +8218,22 @@ formulas. Calc keeps the native numeric conversion and threshold.
 
 - [Original storage grammar selection](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlbodyi.cxx#L69)
 - [Original formula namespace fallback](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlimprt.cxx#L1571)
+
+## CALC-860: Reject validation drops its stored alert text on ODS export
+
+Status: suspicious source behavior, preserved.
+
+The pinned [Calc validation import](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sc/source/filter/xml/xmlcvali.cxx#L248)
+maps `table:message-type="reject"` to the native None alert. The
+[message handler](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sc/source/filter/xml/xmlcvali.cxx#L404)
+still retains its title, body and display flag. The
+[ODS exporter](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sc/source/filter/xml/XMLStylesExportHelper.cxx#L405)
+passes empty strings to the message writer for that alert, even when the
+stored title or body is what made the exporter emit the element.
+
+An imported reject alert with title `Limit`, paragraph `Try a smaller value`
+and display enabled retains all three properties in the model. Its next ODS
+export writes the reject type and display flag with an empty message. The
+intent for disabled or dormant alert text is unverified. The Calc filter
+preserves the source behavior, and the Worker transport carries the original
+model properties until ODS export.

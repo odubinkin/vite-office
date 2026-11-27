@@ -18,18 +18,21 @@
       "evidence": [
         "apps/office/src/sc/source/filter/xml/XMLStylesExportHelper.ts",
         "apps/office/src/sc/source/filter/xml/ods-default-cell-styles.test.ts",
-        "vendor/libreoffice-reference/sc/source/filter/xml/XMLStylesExportHelper.cxx"
+        "vendor/libreoffice-reference/sc/source/filter/xml/XMLStylesExportHelper.cxx",
+        "apps/office/src/sc/source/filter/xml/ods-data-validation.test.ts"
       ],
-      "justification": "Selects native per-column default cell styles over live document rows and keeps the XML column runs within each selected default style.",
+      "justification": "Selects native per-column default cell styles over live document rows and keeps the XML column runs within each selected default style. Collects Calc ODF validation definitions referenced by cell patterns and exports the corresponding conditions, original base addresses and prompt text.",
       "knownViolations": [],
       "localSymbols": [
         "ScMyDefaultStyles",
-        "ClipRange"
+        "ClipRange",
+        "ScMyValidationsContainer"
       ],
       "sourceResponsibility": "divergent",
       "upstreamFile": "sc/source/filter/xml/XMLStylesExportHelper.cxx",
       "upstreamSymbols": [
-        "ScMyDefaultStyles::FillDefaultStyles"
+        "ScMyDefaultStyles::FillDefaultStyles",
+        "ScMyValidationsContainer::WriteValidations"
       ]
     }
   }

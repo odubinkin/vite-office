@@ -16,6 +16,7 @@ import { FormulaGrammar } from "../../../../formula/inc/grammar";
 import { stringToDouble } from "../../../../sal/inc/rtl/math";
 import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { createExternalRefTable } from "./xmlexternaltabi";
+import { ScXMLContentValidationsContext } from "./xmlcvali";
 /** Spreadsheet content owns table creation,not a separate workbook model. */
 export class ScXMLBodyContext extends ScXMLImportContext {
   private hadCalculationSettings = false;
@@ -40,6 +41,8 @@ export class ScXMLBodyContext extends ScXMLImportContext {
     attributes: FastAttributeList,
   ): SvXMLImportContext {
     if (element === XMLToken.LOEXT_PERSONS) return new ScXMLPersonsContext(this.owner);
+    if (element === XMLToken.TABLE_CONTENT_VALIDATIONS)
+      return new ScXMLContentValidationsContext(this.owner);
     if (element === XMLToken.TABLE_DATABASE_RANGES)
       return new ScXMLDatabaseRangesContext(this.owner);
     if (element === XMLToken.TABLE_DATABASE_RANGE)

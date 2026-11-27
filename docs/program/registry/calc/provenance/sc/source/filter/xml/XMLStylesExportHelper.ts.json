@@ -8,16 +8,19 @@
     "upstreamPath": "sc/source/filter/xml/XMLStylesExportHelper.cxx",
     "localSymbols": [
       "ScMyDefaultStyles",
-      "ClipRange"
+      "ClipRange",
+      "ScMyValidationsContainer"
     ],
     "upstreamSymbols": [
-      "ScMyDefaultStyles::FillDefaultStyles"
+      "ScMyDefaultStyles::FillDefaultStyles",
+      "ScMyValidationsContainer::WriteValidations"
     ],
     "preservedResponsibilities": [
-      "Selects native per-column default cell styles over live document rows and keeps the XML column runs within each selected default style."
+      "Selects native per-column default cell styles over live document rows and keeps the XML column runs within each selected default style.",
+      "Collects Calc ODF validation definitions referenced by cell patterns and exports the corresponding conditions, original base addresses and prompt text."
     ],
     "omittedResponsibilities": [
-      "The other native style export collectors remain outside this helper."
+      "Other Calc style collectors and validation macro event export are outside this slice."
     ],
     "evidence": {
       "local": [
@@ -32,12 +35,20 @@
         {
           "path": "apps/office/src/sc/source/filter/xml/ods-default-cell-styles.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-data-validation.test.ts",
+          "marker": "dataValidity.ods"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sc/source/filter/xml/XMLStylesExportHelper.cxx",
           "marker": "ScMyDefaultStyles::FillDefaultStyles"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/XMLStylesExportHelper.cxx",
+          "marker": "ScMyValidationsContainer::WriteValidations"
         }
       ]
     }

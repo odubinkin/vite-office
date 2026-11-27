@@ -1,4 +1,7 @@
 /** @fileoverview Scalar ScXMLExport content path over actual row-major document cells and native ODFF serialization. */
+import { SfxUInt32Item } from "../../../../svl/source/items/intitem";
+import { ATTR_VALIDDATA } from "../../../inc/scitems";
+import { ScMyValidationsContainer } from "./XMLStylesExportHelper";
 import { WriteDatabaseRanges } from "./XMLExportDatabaseRanges";
 import { WriteLabelRanges } from "./xmllabri";
 import { ExportConditionalFormat } from "./xmlcondformat";
@@ -60,6 +63,7 @@ import { writeTableProtectionOptions } from "./xmlexprt.protection";
 import type { ScTableProtection } from "../../core/data/tabprotection";
 /** Effective style and merge state within a horizontal row run. */
 interface RowCellRange {
+  readonly validation: number;
   first: number;
   last: number;
   style: string;
@@ -225,16 +229,18 @@ export class ScXMLExport {
         covered = (pattern.GetItem(ATTR_MERGE_FLAG) as ScMergeFlagAttr).IsOverlapped(),
         end = column < allocated ? column : endColumn;
       if (merge.IsMerged()) endRow = row;
+      const validation = (pattern.GetItem(ATTR_VALIDDATA) as SfxUInt32Item).GetValue();
       const previous = ranges.at(-1);
       if (
         previous?.style === style &&
         previous.automatic === automatic &&
+        previous.validation === validation &&
         previous.covered === covered &&
         !merge.IsMerged() &&
         !previous.merge.IsMerged()
       )
         previous.last = end;
-      else ranges.push({ first: column, last: end, style, automatic, covered, merge });
+      else ranges.push({ first: column, last: end, style, automatic, covered, merge, validation });
       column = end + 1;
     }
     return { endRow, ranges };
@@ -266,7 +272,9 @@ export class ScXMLExport {
     const defaultName = this.document.GetStyleSheetPool()?.GetDefaultStyle()?.GetItemSet().Count()
       ? text(SC_STYLE_PROG_STANDARD)
       : "";
-    let body = this.WriteCalculationSettings();
+    const validations = new ScMyValidationsContainer(this.document);
+    const calculationSettings = this.WriteCalculationSettings();
+    let body = "";
     const tableStyles = new Map<string, { name: string; properties: string; master: string }>();
     for (let tab = 0; tab < this.document.GetTableCount(); tab++) {
       const table = this.document.FetchTable(tab) as ScTable,
@@ -358,6 +366,7 @@ export class ScXMLExport {
             .GetPatternRange(first, last, row) as ScPatternAttr;
           if (
             this.styleName(pattern) ||
+            (pattern.GetItem(ATTR_VALIDDATA) as SfxUInt32Item).GetValue() !== 0 ||
             (pattern.GetItem(ATTR_MERGE) as ScMergeAttr).IsMerged() ||
             (pattern.GetItem(ATTR_MERGE_FLAG) as ScMergeFlagAttr).IsOverlapped()
           ) {
@@ -456,6 +465,8 @@ export class ScXMLExport {
         for (const range of columnStyles.ranges) {
           const element = range.covered ? "table:covered-table-cell" : "table:table-cell";
           let attribute = range.style ? ` table:style-name="${escapeXml(range.style)}"` : "";
+          const validation = validations.AddValidation(range.validation);
+          if (validation) attribute += ` table:content-validation-name="${validation}"`;
           if (!range.covered && range.merge.IsMerged())
             attribute += ` table:number-columns-spanned="${range.merge.GetColMerge()}" table:number-rows-spanned="${range.merge.GetRowMerge()}"`;
           for (let column = range.first; column <= range.last;) {
@@ -521,7 +532,7 @@ export class ScXMLExport {
       const hmm = Number(convert(BigInt(Number(width)), Length.twip, Length.mm100));
       automatic += `<style:style style:name="${name}" style:family="table-column"><style:table-column-properties fo:break-before="${pageBreak}" style:column-width="${new SvXMLUnitConverter("mm100").convertMeasureToXML(hmm)}"/></style:style>`;
     }
-    return `<?xml version="1.0" encoding="UTF-8"?><office:document-content xmlns:calcext="${ODF_NAMESPACES.calcext}" xmlns:office="${ODF_NAMESPACES.office}" xmlns:dc="${ODF_NAMESPACES.dc}" xmlns:meta="${ODF_NAMESPACES.meta}" xmlns:number="${ODF_NAMESPACES.number}" xmlns:table="${ODF_NAMESPACES.table}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:of="${ODF_NAMESPACES.of}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:fo="${ODF_NAMESPACES.fo}" xmlns:css3t="${ODF_NAMESPACES.css3t}" xmlns:svg="${ODF_NAMESPACES.svg}" xmlns:loext="${ODF_NAMESPACES.loext}" xmlns:xlink="${ODF_NAMESPACES.xlink}" office:version="1.3">${this.fontPool.exportXML()}<office:automatic-styles>${automatic}</office:automatic-styles><office:body><office:spreadsheet>${body}</office:spreadsheet></office:body></office:document-content>`;
+    return `<?xml version="1.0" encoding="UTF-8"?><office:document-content xmlns:calcext="${ODF_NAMESPACES.calcext}" xmlns:office="${ODF_NAMESPACES.office}" xmlns:dc="${ODF_NAMESPACES.dc}" xmlns:meta="${ODF_NAMESPACES.meta}" xmlns:number="${ODF_NAMESPACES.number}" xmlns:table="${ODF_NAMESPACES.table}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:of="${ODF_NAMESPACES.of}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:fo="${ODF_NAMESPACES.fo}" xmlns:css3t="${ODF_NAMESPACES.css3t}" xmlns:svg="${ODF_NAMESPACES.svg}" xmlns:loext="${ODF_NAMESPACES.loext}" xmlns:xlink="${ODF_NAMESPACES.xlink}" office:version="1.3">${this.fontPool.exportXML()}<office:automatic-styles>${automatic}</office:automatic-styles><office:body><office:spreadsheet>${calculationSettings}${validations.WriteValidations()}${body}</office:spreadsheet></office:body></office:document-content>`;
   }
   /** Writes calculation settings that differ from the ODF defaults. @returns ODF calculation settings. */
   private WriteCalculationSettings(): string {

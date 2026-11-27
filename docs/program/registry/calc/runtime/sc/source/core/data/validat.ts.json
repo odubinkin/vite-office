@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/core/data/validat.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "ods-content-filter",
+    "capabilityIds": [
+      "CAP-eec4dd5f-723f-4652-b275-5ad5817f761d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/core/data/validat.ts",
+        "apps/office/src/sc/source/filter/xml/ods-data-validation.test.ts",
+        "vendor/libreoffice-reference/sc/source/core/data/validat.cxx",
+        "vendor/libreoffice-reference/sc/qa/unit/subsequent_filters_test.cxx"
+      ],
+      "justification": "Owns native validation conditions, modes, list visibility and saved input and error messages. Interactive input admission, selection list population and macro invocation are outside this slice.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ScValidationData",
+        "EqualEntries"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/source/core/data/validat.cxx",
+      "upstreamSymbols": [
+        "ScValidationData::ScValidationData",
+        "ScValidationData::EqualEntries"
+      ]
+    }
+  }
+}

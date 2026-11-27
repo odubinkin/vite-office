@@ -21,6 +21,7 @@ import type { CellTextParagraph } from "./xmlexprt.celltext";
 /** Cell state is a transient native XML context,not an imported cell model. */
 export class ScXMLTableRowCellContext extends ScXMLImportContext {
   private readonly style: string | null;
+  private readonly validation: string | null;
   private annotation: ScXMLAnnotationContext | null = null;
   private readonly paragraphs: CellTextParagraph[] = [];
   private readonly repeat: number;
@@ -119,6 +120,7 @@ export class ScXMLTableRowCellContext extends ScXMLImportContext {
     this.source = !formula
       ? null
       : row.table.owner.ExtractFormulaNamespaceGrammar(formula, attributes);
+    this.validation = attributes.get(XMLToken.TABLE_CONTENT_VALIDATION_NAME);
     const name = attributes.get(XMLToken.TABLE_STYLE_NAME);
     this.style = name;
     this.hasStyle = name !== null;
@@ -186,6 +188,18 @@ export class ScXMLTableRowCellContext extends ScXMLImportContext {
       (endCol !== pos.Col() + this.repeat - 1 || endRow !== pos.Row() + this.row.repeat - 1)
     )
       owner.unsupported("cell range overflow");
+    if (this.validation !== null && document.ValidColRow(pos.Col(), pos.Row()))
+      owner.AddValidationRange(
+        this.validation,
+        new ScRange(
+          pos.Col(),
+          pos.Row(),
+          pos.Tab(),
+          this.source === null ? endCol : pos.Col(),
+          this.source === null ? endRow : pos.Row(),
+          pos.Tab(),
+        ),
+      );
     const hasValue = this.type !== T.UNDEFINED && (this.type !== T.TEXT || value !== undefined);
     if (this.source === null && !hasValue && !this.annotation) return;
     const columns = Math.min(this.repeat, owner.GetDocument().MaxCol() - pos.Col() + 1),

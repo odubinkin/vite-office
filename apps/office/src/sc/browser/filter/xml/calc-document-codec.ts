@@ -1,5 +1,11 @@
 import { SetDatabaseRangeAutoFilterFlags } from "../../../source/filter/xml/xmldrani";
 /** @fileoverview Bounded Calc worker transfer of supported native cells, sparse attributes and geometry; XML remains the durable format. */
+import { ATTR_VALIDDATA } from "../../../inc/scitems";
+import {
+  decodeCalcValidations,
+  encodeCalcValidations,
+  type CalcValidationRecord,
+} from "./calc-validation-codec";
 import type { NoteEntry } from "../../../inc/postit";
 import {
   decodeCalcDatabaseRanges,
@@ -125,7 +131,8 @@ type Pattern = readonly [
   last: number,
   style: string,
   numberFormat?: number | undefined,
-  writingDirection?: D,
+  writingDirection?: D | undefined,
+  validation?: number,
 ];
 /** Compiled format source and locale, independent of the process-local format key. */
 type NumberFormat = readonly [locale: number, code: string];
@@ -276,6 +283,7 @@ export interface CalcDocumentRecord {
   readonly externalFiles?: readonly ExternalFile[];
   readonly persons?: readonly CalcPersonRecord[];
   readonly databaseRanges?: CalcDatabaseRangesRecord;
+  readonly validations?: readonly CalcValidationRecord[];
   readonly visibleTab?: number;
   readonly showGrid?: boolean;
   readonly showFormulas?: boolean;
@@ -506,12 +514,15 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
           pattern.GetItemSet().GetItemIfSet(ATTR_WRITINGDIR, false) as
             SvxFrameDirectionItem | undefined
         )?.GetValue();
+        const validation = (pattern.GetItem(ATTR_VALIDDATA) as SfxUInt32Item).GetValue();
         sheet.patterns.push(
-          direction !== undefined
-            ? [column, r, last[0], style, numberFormat, direction]
-            : numberFormat === undefined
-              ? [column, r, last[0], style]
-              : [column, r, last[0], style, numberFormat],
+          validation
+            ? [column, r, last[0], style, numberFormat, direction, validation]
+            : direction !== undefined
+              ? [column, r, last[0], style, numberFormat, direction]
+              : numberFormat === undefined
+                ? [column, r, last[0], style]
+                : [column, r, last[0], style, numberFormat],
         );
         const merge = pattern.GetItem(ATTR_MERGE) as ScMergeAttr;
         if (column >= 0 && merge.IsMerged()) {
@@ -645,6 +656,7 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
     yield;
   }
   const databaseRanges = encodeCalcDatabaseRanges(document);
+  const validations = encodeCalcValidations(document);
   return {
     version: 1,
     ...(FormulaGrammar.isPODF(document.GetStorageGrammar())
@@ -652,6 +664,7 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
       : {}),
     sheets,
     ...(databaseRanges ? { databaseRanges } : {}),
+    ...(validations.length ? { validations } : {}),
     ...(externalFiles.length ? { externalFiles } : {}),
     ...(persons.length ? { persons } : {}),
     ...(document.GetVisibleTab() ? { visibleTab: document.GetVisibleTab() } : {}),
@@ -925,6 +938,7 @@ function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
       ),
       FormulaGrammar.Grammar.GRAM_ODFF,
     );
+    if (record.validations !== undefined) decodeCalcValidations(document, record.validations);
     for (const [tab, sheet] of record.sheets.entries()) {
       const table = document.FetchTable(tab) as ScTable;
       if (sheet.protection) {
@@ -978,15 +992,15 @@ function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
       }
       if (sheet.optimalMinRowHeight !== undefined)
         table.SetOptimalMinRowHeight(sheet.optimalMinRowHeight);
-      for (const [col, first, last, style, numberFormat, direction] of sheet.patterns) {
+      for (const [col, first, last, style, numberFormat, direction, validation] of sheet.patterns) {
         const pattern = style
           ? importer.GetAutoStyle(style)
           : document.getCellAttributeHelper().getDefaultCellAttribute();
         if (!pattern) throw new Error("Calc worker style is missing.");
-        const styleKey = `${style}:${numberFormat ?? ""}:${direction ?? ""}`;
+        const styleKey = `${style}:${numberFormat ?? ""}:${direction ?? ""}:${validation ?? ""}`;
         let holder = transferredStyles.get(styleKey);
         if (!holder) {
-          if (numberFormat === undefined && direction === undefined)
+          if (numberFormat === undefined && direction === undefined && validation === undefined)
             holder = new CellAttributeHolder(pattern);
           else {
             const formatted = new ScPatternAttr(pattern);
@@ -1004,6 +1018,16 @@ function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
               }
             }
             if (direction !== undefined) formatted.ItemSetPut(restoreWritingDirection(direction));
+            if (validation !== undefined) {
+              if (!document.GetValidationEntry(validation))
+                throw new Error("Calc worker cell references a missing validation rule.");
+              const item = new SfxUInt32Item(ATTR_VALIDDATA, validation);
+              try {
+                formatted.ItemSetPut(item);
+              } finally {
+                item.Dispose();
+              }
+            }
             holder = new CellAttributeHolder(formatted, true);
           }
           transferredStyles.set(styleKey, holder);

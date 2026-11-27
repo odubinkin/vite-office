@@ -35,45 +35,71 @@ const functionConditions = new Map([
   ["is-true-formula", Mode.Direct],
 ]);
 
+const emptyConditions = new Set([
+  "cell-content-is-whole-number",
+  "cell-content-is-decimal-number",
+  "cell-content-is-date",
+  "cell-content-is-time",
+]);
+
+/** Original token, operator, operands and resume position for condition chains. */
+interface ScXMLConditionParseResult {
+  readonly name: string;
+  readonly mode: Mode;
+  readonly operands: string[];
+  readonly endIndex: number;
+}
+
 /** Calc XML converter's shared expression scanner. */
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class -- Original ScXMLConditionHelper exposes static scanner operations.
 export class ScXMLConditionHelper {
   /** Reads the operator and operands used by an original style map. @param source - Condition attribute without its formula namespace. @returns Native condition data. */
   static parseCondition(source: string): { mode: Mode; operands: string[] } {
-    let start = 0;
+    const parsed = this.parseConditionAt(source, 0);
+    return parsed
+      ? { mode: parsed.mode, operands: parsed.operands }
+      : { mode: Mode.NONE, operands: [] };
+  }
+
+  /** Scans a native condition token from an offset and returns its resume position. @param source - Entire attribute. @param offset - UTF-16 starting offset. @returns Parsed token or absence. */
+  static parseConditionAt(source: string, offset: number): ScXMLConditionParseResult | undefined {
+    if (offset < 0 || offset >= source.length) return undefined;
+    let start = offset;
     while (source.charCodeAt(start) <= 32) ++start;
-    const identifier = /^[a-z-]+/u.exec(source.slice(start));
-    if (!identifier) return { mode: Mode.NONE, operands: [] };
-    const argument = source.slice(start + identifier[0].length);
-    if (comparisonConditions.has(identifier[0])) {
-      if (!argument.startsWith("(")) return { mode: Mode.NONE, operands: [] };
-      let position = 1;
-      while (argument.charCodeAt(position) <= 32) ++position;
-      if (argument[position++] !== ")") return { mode: Mode.NONE, operands: [] };
-      const operator = /^(<=|>=|!=|<|>|=)/u.exec(argument.slice(position))?.[0];
-      if (!operator) return { mode: Mode.NONE, operands: [] };
-      position += operator.length;
-      while (argument.charCodeAt(position) <= 32) ++position;
+    const name = /^[a-z-]+/u.exec(source.slice(start))?.[0];
+    if (!name) return undefined;
+    let endIndex = start + name.length;
+    if (name === "and") return { name, mode: Mode.NONE, operands: [], endIndex };
+    if (source[endIndex++] !== "(") return undefined;
+    if (emptyConditions.has(name) || comparisonConditions.has(name)) {
+      while (source.charCodeAt(endIndex) <= 32) ++endIndex;
+      if (source[endIndex++] !== ")") return undefined;
+      if (emptyConditions.has(name)) return { name, mode: Mode.NONE, operands: [], endIndex };
+      const operator = /^(<=|>=|!=|<|>|=)/u.exec(source.slice(endIndex))?.[0];
+      if (!operator) return undefined;
+      endIndex += operator.length;
+      while (source.charCodeAt(endIndex) <= 32) ++endIndex;
+      if (endIndex >= source.length) return undefined;
       return {
+        name,
         mode: conditionOperators.get(operator) ?? Mode.NONE,
-        operands: position < argument.length ? [argument.slice(position)] : [],
+        operands: [source.slice(endIndex)],
+        endIndex,
       };
     }
-    const mode = functionConditions.get(identifier[0]) ?? Mode.NONE;
-    const operands: string[] = [];
-    if (mode !== Mode.NONE && argument.startsWith("(")) {
-      const binary = mode === Mode.Between || mode === Mode.NotBetween;
-      const position: [number] = [1];
-      const first = this.getExpression(argument, position, binary ? "," : ")");
-      if (first) {
-        operands.push(first);
-        if (binary) {
-          const second = this.getExpression(argument, position, ")");
-          if (second) operands.push(second);
-        }
-      }
+    const mode = functionConditions.get(name);
+    if (mode === undefined) return undefined;
+    const binary = mode === Mode.Between || mode === Mode.NotBetween;
+    const position: [number] = [endIndex];
+    const first = this.getExpression(source, position, binary ? "," : ")");
+    if (!first) return undefined;
+    const operands = [first];
+    if (binary) {
+      const second = this.getExpression(source, position, ")");
+      if (!second) return undefined;
+      operands.push(second);
     }
-    return { mode, operands };
+    return { name, mode, operands, endIndex: position[0] };
   }
 
   /** Reads one expression and advances past its delimiter, or exhausts the input. @param source - Condition attribute. @param position - In/out UTF-16 offset. @param delimiter - Original terminating character. @returns Trimmed operand or empty text. */

@@ -52,7 +52,7 @@ import { CompareScalar } from "./compare";
 import { InterpretDateOpcode, ScRangeFunc } from "./interpr2";
 import { ScFrequency, ScMatRef } from "./interpr5";
 import { InterpretAnalysisAddIn } from "./addincol.analysis";
-import { ScIsEmpty, ScIsError, ScNot, ScOffset } from "./interpr1.reference";
+import { ScIsEmpty, ScIsError, ScIsString, ScNot, ScOffset } from "./interpr1.reference";
 import { ScColRowNameAuto } from "./interpr4.colrowname";
 import { isComparison } from "../../../../formula/inc/FormulaCompiler";
 import { ScQueryEntry, type ScQueryItem } from "./queryentry";
@@ -894,6 +894,7 @@ export class ScInterpreter {
         if (number < 0) this.SetError(FormulaError.IllegalArgument);
         else this.PushDouble(Math.sqrt(number));
       } else if (op === OpCode.ocIsError) ScIsError.call(this);
+      else if (op === OpCode.ocIsString) ScIsString.call(this);
       else if (op === OpCode.ocAnd) ScAnd.call(this, (token as FormulaByteToken).GetByte());
       else if (op === OpCode.ocNot) ScNot.call(this, (token as FormulaByteToken).GetByte());
       else if (op === OpCode.ocIsEmpty) ScIsEmpty.call(this, (token as FormulaByteToken).GetByte());

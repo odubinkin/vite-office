@@ -1,0 +1,55 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/filter/xml/xmlcvali.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/filter/xml/xmlcvali.cxx",
+    "localSymbols": [
+      "ScXMLContentValidationsContext",
+      "ScXMLContentValidationContext"
+    ],
+    "upstreamSymbols": [
+      "ScXMLContentValidationsContext",
+      "ScXMLContentValidationContext::GetCondition",
+      "ScXMLContentValidationContext::SetErrorMessage"
+    ],
+    "preservedResponsibilities": [
+      "Reads Calc ODF validation declarations, formula conditions, source addresses, messages and their display attributes."
+    ],
+    "omittedResponsibilities": [
+      "External formula provider and macro event execution services are outside this slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/xml/xmlcvali.ts",
+          "marker": "ScXMLContentValidationsContext"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-data-validation.test.ts",
+          "marker": "dataValidity.ods"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlcvali.cxx",
+          "marker": "ScXMLContentValidationsContext"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlcvali.cxx",
+          "marker": "ScXMLContentValidationContext::GetCondition"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlcvali.cxx",
+          "marker": "ScXMLContentValidationContext::SetErrorMessage"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/subsequent_filters_test.cxx",
+          "marker": "testDataValidityODS"
+        }
+      ]
+    }
+  }
+}

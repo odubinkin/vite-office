@@ -27,6 +27,9 @@ import { ScFormatEntry, ScFormatEntryType, type ScConditionalFormat } from "./co
 import { ScGlobal } from "./global";
 import { ScHorizontalCellIterator } from "./dociter";
 
+const SC_COND_NOBLANKS = 1;
+const SC_COND_CASESENS = 2;
+
 /** Original ScConditionMode identities. */
 export enum ScConditionMode {
   Equal,
@@ -78,11 +81,11 @@ function duplicateKey(value: string): string {
   }
 }
 
-/** Orders operands of the same native scalar type. @param first - Left operand. @param second - Right operand. @returns Comparison sign. */
-function compare(first: number | string, second: number | string): number {
+/** Orders operands of the same native scalar type. @param first - Left operand. @param second - Right operand. @param caseSensitive - Native condition option. @returns Comparison sign. */
+function compare(first: number | string, second: number | string, caseSensitive: boolean): number {
   if (typeof first === "number" && typeof second === "number")
     return approxEqual(first, second) ? 0 : Math.sign(first - second);
-  return GetCollator().compare(String(first), String(second));
+  return GetCollator(!caseSensitive).compare(String(first), String(second));
 }
 
 /** Uses the original comparison service and casing rules of each text condition. @param mode - Text operation. @param value - Actual scalar. @param operand - Condition operand. @returns Match. */
@@ -134,6 +137,7 @@ export class ScConditionEntry extends ScFormatEntry {
   private readonly source: ScAddress;
   private parent: ScConditionalFormat | null = null;
   private readonly arrays: ScTokenArray[] = [];
+  protected nOptions = 0;
   private readonly compiled = new Set<ScTokenArray>();
   private rendering = false;
   private statistics: ScConditionEntryCache | undefined;
@@ -165,6 +169,28 @@ export class ScConditionEntry extends ScFormatEntry {
       for (const code of this.arrays) code.Clear();
       throw error;
     }
+  }
+
+  /** Reads the native blank-cell option. @returns Whether blank input is ignored. */
+  IsIgnoreBlank(): boolean {
+    return !(this.nOptions & SC_COND_NOBLANKS);
+  }
+
+  /** Sets the inverse native blank-cell option. @param ignore - Ignore blank cells. @returns Nothing. */
+  SetIgnoreBlank(ignore: boolean): void {
+    if (ignore) this.nOptions &= ~SC_COND_NOBLANKS;
+    else this.nOptions |= SC_COND_NOBLANKS;
+  }
+
+  /** Reads the native case comparison option. @returns Whether casing is significant. */
+  IsCaseSensitive(): boolean {
+    return Boolean(this.nOptions & SC_COND_CASESENS);
+  }
+
+  /** Updates the native case comparison option. @param caseSensitive - Compare casing. @returns Nothing. */
+  SetCaseSensitive(caseSensitive: boolean): void {
+    if (caseSensitive) this.nOptions |= SC_COND_CASESENS;
+    else this.nOptions &= ~SC_COND_CASESENS;
   }
 
   /** Reads the native comparison mode. @returns Operation. */
@@ -391,7 +417,7 @@ export class ScConditionEntry extends ScFormatEntry {
     if (this.mode >= ScConditionMode.BeginsWith && this.mode <= ScConditionMode.NotContainsText)
       return IsTextValid(this.mode, value, first);
     if (typeof value !== typeof first) return this.mode === ScConditionMode.NotEqual;
-    const order = compare(value, first);
+    const order = compare(value, first, this.IsCaseSensitive());
     switch (this.mode) {
       case ScConditionMode.Equal:
         return order === 0;
@@ -409,7 +435,7 @@ export class ScConditionEntry extends ScFormatEntry {
       case ScConditionMode.NotBetween: {
         const second = this.Interpret(1, position);
         if (second === undefined || typeof second !== typeof value) return false;
-        const other = compare(value, second);
+        const other = compare(value, second, this.IsCaseSensitive());
         const inside = (order >= 0 && other <= 0) || (order <= 0 && other >= 0);
         return this.mode === ScConditionMode.Between ? inside : !inside;
       }
@@ -420,13 +446,15 @@ export class ScConditionEntry extends ScFormatEntry {
 
   /** Copies the source tokens independently. @param document - Destination document. @returns Condition entry. */
   override Clone(document: ScDocument): ScConditionEntry {
-    return new ScConditionEntry(
+    const copy = new ScConditionEntry(
       this.mode,
       this.arrays,
       document,
       this.source,
       FormulaGrammar.Grammar.GRAM_ODFF,
     );
+    copy.nOptions = this.nOptions;
+    return copy;
   }
   /** Returns the original plain condition type. @returns Entry discriminator. */
   override GetType(): ScFormatEntryType {
@@ -519,6 +547,7 @@ export class ScConditionEntry extends ScFormatEntry {
       other instanceof ScConditionEntry &&
       this.GetType() === other.GetType() &&
       this.mode === other.mode &&
+      this.nOptions === other.nOptions &&
       (ignore || this.source.equals(other.source)) &&
       this.arrays.length === other.arrays.length &&
       this.arrays.every(
@@ -567,7 +596,7 @@ export class ScCondFormatEntry extends ScConditionEntry {
   }
   /** Copies formulas and the style binding. @param document - Destination. @returns Format entry. */
   override Clone(document: ScDocument): ScCondFormatEntry {
-    return new ScCondFormatEntry(
+    const copy = new ScCondFormatEntry(
       this.GetOperation(),
       this.GetCode(),
       document,
@@ -576,6 +605,8 @@ export class ScCondFormatEntry extends ScConditionEntry {
       this.styleName,
       this.type,
     );
+    copy.nOptions = this.nOptions;
+    return copy;
   }
   /** Compares the condition and the associated style. @param other - Candidate entry. @param ignore - Ignore the reference origin. @returns Equality. */
   override IsEqual(other: ScFormatEntry, ignore: boolean): boolean {
