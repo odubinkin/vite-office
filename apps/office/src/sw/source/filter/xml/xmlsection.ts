@@ -11,7 +11,7 @@ import type { XMLTextImportHelper } from "../../../../xmloff/source/text/txtimp"
 import type { XMLSectionSource } from "../../../../xmloff/source/text/XMLSectionSourceImportContext";
 import { RES_LR_SPACE } from "../../../inc/hintids";
 import type { SwSectionNode } from "../../core/docnode/ndsect";
-import type { SwSectionFormat } from "../../core/docnode/section";
+import { SectionType, type SwSectionFormat } from "../../core/docnode/section";
 import { SwXTextCursor } from "../../core/unocore/unoobj";
 import { SwPaM, SwPosition } from "../../core/crsr/pam";
 import { SwXTextSection } from "../../core/unocore/unosect";
@@ -19,7 +19,7 @@ import { exportFrameVisualProperties } from "./xmlexpit";
 import { importFrameVisualProperties } from "./xmlimpit";
 
 /** Applies existing frame items from the section style map. @param format - Section format. @param style - Authored section style. @returns Nothing. */
-function importSectionStyle(format: SwSectionFormat, style: XMLSectionStyle): void {
+export function importSectionStyle(format: SwSectionFormat, style: XMLSectionStyle): void {
   importFrameVisualProperties(format, style);
   if (style.marginLeft === undefined && style.marginRight === undefined) return;
   const margins = format.GetLRSpace().Clone();
@@ -45,10 +45,26 @@ export function importTextSection(
     properties.currentlyVisible,
     properties.protected,
     properties.protectionKey,
+    properties.indexHeader ? SectionType.ToxHeader : SectionType.Content,
   );
   const parent = helper.GetCursor() as SwXTextCursor;
   const node = descriptor.attach(parent);
   if (style) importSectionStyle(node.GetSection().GetFormat(), style);
+  return {
+    /** Sets the imported FileLink and LinkRegion properties. @param source - Original section source values. @returns Nothing. */
+    setSource(source: XMLSectionSource): void {
+      descriptor.SetFileLink(source.url, source.filter, source.region);
+    },
+    end: pushSectionCursor(helper, node, parent),
+  };
+}
+
+/** Enters a connected section and returns the native text import completion operation. @param helper - Shared dispatcher. @param node - New section. @param parent - Original text cursor. @returns Completion callback. */
+export function pushSectionCursor(
+  helper: XMLTextImportHelper,
+  node: SwSectionNode,
+  parent: SwXTextCursor,
+): (hasContent: boolean) => void {
   const atStart = new SwPosition(node.GetNodes().at(node.GetIndex() + 1), 0);
   const range = new SwPaM(atStart);
   let cursor: SwXTextCursor;
@@ -59,18 +75,13 @@ export function importTextSection(
     atStart.Dispose();
   }
   helper.PushSectionCursor(cursor);
-  return {
-    /** Sets the imported FileLink and LinkRegion properties. @param source - Original section source values. @returns Nothing. */
-    setSource(source: XMLSectionSource): void {
-      descriptor.SetFileLink(source.url, source.filter, source.region);
-    },
-    /** Removes the import terminator when the section received actual text content. @param hasContent - Whether a supported text child was read. @returns Nothing. */
-    end(hasContent: boolean): void {
-      const trailing = cursor.GetPaM().GetPoint().GetNode().GetTextNode();
-      helper.PopSectionCursor();
-      if (hasContent && trailing?.Len() === 0 && trailing.GetIndex() > node.GetIndex() + 1)
-        node.GetNodes().RemoveNode(trailing.GetIndex(), 1, true);
-    },
+  return /** Removes the import terminator after successfully reading section text. @param hasContent - Whether a supported text child was read. @returns Nothing. */ (
+    hasContent,
+  ) => {
+    const trailing = cursor.GetPaM().GetPoint().GetNode().GetTextNode();
+    helper.PopSectionCursor();
+    if (hasContent && trailing?.Len() === 0 && trailing.GetIndex() > node.GetIndex() + 1)
+      node.GetNodes().RemoveNode(trailing.GetIndex(), 1, true);
   };
 }
 
@@ -93,6 +104,7 @@ export function exportTextSection(
     protected: section.IsProtect(),
     protectionKey: data.password,
     ...(source ? { source } : {}),
+    ...(data.type === SectionType.ToxHeader ? { indexHeader: true } : {}),
     style: {
       ...exportFrameVisualProperties(items),
       marginLeft: spacing?.ResolveLeft(),

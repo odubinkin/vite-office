@@ -1,5 +1,6 @@
 /** @fileoverview Writer UNO descriptor attachment for an ordinary text section from unosect.cxx. */
 import type { SwSectionNode } from "../docnode/ndsect";
+import type { SwTextNode } from "../txtnode/ndtxt";
 import { SectionType, SwSectionData } from "../docnode/section";
 import type { SwXTextRange } from "./unoobj2";
 
@@ -9,7 +10,7 @@ const tokenSeparator = "\uffff";
 export class SwXTextSection {
   private node: SwSectionNode | undefined;
 
-  /** Creates a descriptor before it is attached to actual Writer text. @param name - Section name. @param condition - Writer visibility expression. @param visible - Section visibility property. @param currentlyVisible - Stored conditional visibility. @param protectedContent - Original content protection flag. @param protectionKey - Native digest sequence. @returns Text-section descriptor. */
+  /** Creates a descriptor before it is attached to actual Writer text. @param name - Section name. @param condition - Writer visibility expression. @param visible - Section visibility property. @param currentlyVisible - Stored conditional visibility. @param protectedContent - Original content protection flag. @param protectionKey - Native digest sequence. @param type - Original ordinary or index-header section. @returns Text-section descriptor. */
   public constructor(
     private readonly name = "",
     private readonly condition = "",
@@ -17,6 +18,7 @@ export class SwXTextSection {
     private readonly currentlyVisible = true,
     private readonly protectedContent = false,
     private readonly protectionKey: Uint8Array = new Uint8Array(),
+    private readonly type = SectionType.Content,
   ) {}
 
   /** Attaches the descriptor at the paragraph boundary used by the streaming text importer. @param range - Native insertion cursor. @returns Connected section. */
@@ -29,7 +31,9 @@ export class SwXTextSection {
       throw new Error("Writer text section requires a paragraph insertion boundary.");
     const doc = text.GetDoc();
     const data = new SwSectionData(
-      SectionType.Content,
+      this.type === SectionType.ToxHeader && canInsertIndexHeader(text)
+        ? SectionType.ToxHeader
+        : SectionType.Content,
       doc.GetUniqueSectionName(this.name || "TextSection"),
     );
     data.condition = this.condition;
@@ -58,4 +62,18 @@ export class SwXTextSection {
     const [url = "", filter = "", region = ""] = data.linkFileName.split(tokenSeparator);
     return { url, filter, region };
   }
+}
+
+/** Applies the native first-header-only rule for the current index. @param text - Insertion paragraph. @returns Whether the header remains an index header. */
+function canInsertIndexHeader(text: SwTextNode): boolean {
+  let section = text.FindSectionNode();
+  while (section && section.GetSection().GetSectionData().type !== SectionType.ToxContent)
+    section = section.StartOfSectionNode().FindSectionNode();
+  if (!section) return false;
+  const nodes = section.GetNodes();
+  for (let index = section.GetIndex() + 1; index < section.EndOfSectionIndex(); index++) {
+    const child = nodes.at(index).GetSectionNode();
+    if (child?.GetSection().GetSectionData().type === SectionType.ToxHeader) return false;
+  }
+  return true;
 }

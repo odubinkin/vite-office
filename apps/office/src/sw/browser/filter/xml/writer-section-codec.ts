@@ -6,6 +6,8 @@ import type { SwSectionNode } from "../../../source/core/docnode/ndsect";
 import type { SwNode } from "../../../source/core/docnode/node";
 import { SectionType, SwSectionData } from "../../../source/core/docnode/section";
 import { decodeSfxPoolItem, encodeSfxPoolItem } from "./item-codec";
+import { decodeIndex, encodeIndex, type WriterIndexRecord } from "./writer-index-codec";
+import { SwTOXBaseSection } from "../../../source/core/inc/doctxm";
 
 /** Worker section properties with no node index or UNO identity in the record. */
 export interface WriterSectionRecord {
@@ -17,6 +19,7 @@ export interface WriterSectionRecord {
   readonly password: readonly number[];
   readonly linkFileName: string;
   readonly format: readonly SfxPoolItemSnapshot[];
+  readonly index?: WriterIndexRecord;
 }
 
 /** Encodes the content section's own data and direct attributes. @param node - Native section owner. @returns Cloneable properties. */
@@ -36,6 +39,7 @@ export function encodeSection(node: SwSectionNode): WriterSectionRecord {
     password: Array.from(data.password),
     linkFileName: data.linkFileName,
     format,
+    ...(section instanceof SwTOXBaseSection ? { index: encodeIndex(section.tox) } : {}),
   };
 }
 
@@ -46,7 +50,11 @@ export function decodeSection(
   record: WriterSectionRecord,
 ): SwSectionNode {
   if (
-    (record.type !== SectionType.Content && record.type !== SectionType.FileLink) ||
+    (record.type !== SectionType.Content &&
+      record.type !== SectionType.FileLink &&
+      record.type !== SectionType.ToxHeader &&
+      record.type !== SectionType.ToxContent) ||
+    (record.type === SectionType.ToxContent) !== (record.index !== undefined) ||
     typeof record.name !== "string" ||
     typeof record.condition !== "string" ||
     typeof record.hidden !== "boolean" ||
@@ -66,7 +74,9 @@ export function decodeSection(
   data.condHidden = record.condHidden;
   data.password = new Uint8Array(record.password);
   data.linkFileName = record.linkFileName;
-  const section = document.GetNodes().InsertTextSection(position, data);
+  const tox =
+    record.index === undefined ? undefined : decodeIndex(document, record.name, record.index);
+  const section = document.GetNodes().InsertTextSection(position, data, tox);
   const format = section.GetSection().GetFormat();
   for (const value of record.format) {
     if (value.which === RES_CNTNT)

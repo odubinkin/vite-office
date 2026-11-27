@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/core/unocore/unoidx.ts",
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/unocore/unoidx.cxx",
+    "localSymbols": [
+      "SwXDocumentIndex"
+    ],
+    "upstreamSymbols": [
+      "SwXDocumentIndex::attach",
+      "SwDocIndexDescriptorProperties_Impl::SwDocIndexDescriptorProperties_Impl"
+    ],
+    "preservedResponsibilities": [
+      "Creates and attaches the native Writer contents-index descriptor at the stream import cursor."
+    ],
+    "omittedResponsibilities": [
+      "The complete index UNO property set and interactive update service are outside this slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/unocore/unoidx.ts",
+          "marker": "SwXDocumentIndex"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-table-of-content.test.ts",
+          "marker": "SimpleTOC.odt"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/unocore/unoidx.cxx",
+          "marker": "SwXDocumentIndex::attach"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/unocore/unoidx.cxx",
+          "marker": "SwDocIndexDescriptorProperties_Impl::SwDocIndexDescriptorProperties_Impl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/qa/extras/globalfilter/globalfilter.cxx",
+          "marker": "testTableOfContentLinksHaveContentSet"
+        }
+      ]
+    }
+  }
+}

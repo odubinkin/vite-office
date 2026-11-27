@@ -1,0 +1,30 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "local-infrastructure",
+    "localPath": "apps/office/src/sw/browser/filter/xml/writer-index-codec.ts",
+    "status": "local-only",
+    "rationale": "Retains the native contents-index source and tokenized form in the detached Worker graph. The existing section codec carries the generated content.",
+    "responsibilities": [
+      "Retains the native contents-index source and tokenized form in the detached Worker graph. The existing section codec carries the generated content."
+    ],
+    "stackDivergence": {
+      "kind": "local-infrastructure",
+      "rationale": "Structured Writer Worker transport of native index form values."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/filter/xml/writer-index-codec.ts",
+          "marker": "encodeIndex"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-table-of-content.test.ts",
+          "marker": "SimpleTOC.odt"
+        }
+      ],
+      "upstream": []
+    }
+  }
+}

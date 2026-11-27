@@ -1,0 +1,55 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/filter/xml/xmlindex.ts",
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/unocore/unoidx.cxx",
+    "localSymbols": [
+      "importDocumentIndex",
+      "exportDocumentIndex"
+    ],
+    "upstreamSymbols": [
+      "SwXDocumentIndex::attach",
+      "SwXDocumentIndex"
+    ],
+    "preservedResponsibilities": [
+      "Projects original Writer index and level format values to and from the shared ODF section contexts."
+    ],
+    "omittedResponsibilities": [
+      "The complete UNO service and other index types are outside this projection."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/xml/xmlindex.ts",
+          "marker": "importDocumentIndex"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-table-of-content.test.ts",
+          "marker": "SimpleTOC.odt"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/unocore/unoidx.cxx",
+          "marker": "SwXDocumentIndex::attach"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/unocore/unoidx.cxx",
+          "marker": "SwXDocumentIndex"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/qa/extras/globalfilter/globalfilter.cxx",
+          "marker": "testTableOfContentLinksHaveContentSet"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/filter/xml/xmlindex.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The TypeScript XML filter adapter preserves the explicit shared XML to Writer descriptor boundary without importing Writer from xmloff."
+    }
+  }
+}

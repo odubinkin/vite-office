@@ -1,6 +1,8 @@
 /**
  * @fileoverview Reimplements the bounded Writer ODF XML export bridge from pinned LibreOffice `sw/source/filter/xml/xmlexp.cxx`.
  */
+import { SwTOXBaseSection } from "../../core/inc/doctxm";
+import { exportDocumentIndex } from "./xmlindex";
 import { exportParagraphAlignment } from "../../../../xmloff/source/style/adjushdl";
 import { SvxHyphenZoneItem } from "../../../../editeng/source/items/paraitem";
 import { SwRegisterItem } from "../../core/para/paratr";
@@ -636,7 +638,15 @@ function projectBlock(block: SwSectionBlock, anchored: XMLBoundWriterFrames): XM
         /** Projects a structural child of the named section. @param child - Native node. @returns ODF block. */
         (child) => projectBlock(child, anchored),
       );
-    return { kind: "section", section: exportTextSection(block, content) };
+    const section = block.GetSection();
+    const properties = exportTextSection(block, content);
+    return {
+      kind: "section",
+      section:
+        section instanceof SwTOXBaseSection
+          ? { ...properties, index: exportDocumentIndex(section.tox) }
+          : properties,
+    };
   }
   if (!(block instanceof SwTableNode))
     return { kind: "paragraph", paragraph: projectParagraph(block, anchored) };

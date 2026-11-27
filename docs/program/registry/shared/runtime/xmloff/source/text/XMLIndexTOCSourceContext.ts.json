@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/xmloff/source/text/XMLIndexTOCSourceContext.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "odf-filter",
+    "capabilityIds": [
+      "CAP-0128",
+      "CAP-0129"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/xmloff/source/text/XMLIndexTOCSourceContext.ts",
+        "apps/office/src/sw/source/filter/xml/odt-table-of-content.test.ts",
+        "vendor/libreoffice-reference/xmloff/source/text/XMLIndexTOCSourceContext.cxx",
+        "vendor/libreoffice-reference/sw/qa/extras/globalfilter/globalfilter.cxx"
+      ],
+      "justification": "Applies original contents source defaults, scope, title and source styles. Index families other than the Writer contents index remain outside this filter slice.",
+      "knownViolations": [],
+      "localSymbols": [
+        "XMLIndexTOCSourceContext"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "xmloff/source/text/XMLIndexTOCSourceContext.cxx",
+      "upstreamSymbols": [
+        "XMLIndexTOCSourceContext::ProcessAttribute",
+        "XMLIndexTOCSourceContext::endFastElement"
+      ]
+    }
+  }
+}

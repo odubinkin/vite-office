@@ -7,14 +7,15 @@
     "localPath": "apps/office/src/xmloff/source/text/XMLSectionExport.ts",
     "upstreamPath": "xmloff/source/text/XMLSectionExport.cxx",
     "localSymbols": [
-      "exportRegularSection",
+      "exportSection",
       "exportSectionStyleAttributes"
     ],
     "upstreamSymbols": [
       "XMLSectionExport::ExportRegularSectionStart"
     ],
     "preservedResponsibilities": [
-      "Emits the native regular section visibility, protection digest and file-source attributes."
+      "Emits the native regular section visibility, protection digest and file-source attributes.",
+      "The original section exporter writes TOC sources and forms, cached bodies and their index-title sections."
     ],
     "omittedResponsibilities": [
       "Indexes, global document mute mode and platform DDE are outside the represented regular section."
@@ -23,11 +24,15 @@
       "local": [
         {
           "path": "apps/office/src/xmloff/source/text/XMLSectionExport.ts",
-          "marker": "exportRegularSection"
+          "marker": "exportSection"
         },
         {
           "path": "apps/office/src/sw/source/filter/xml/odt-text-sections.test.ts",
           "marker": "testProtectionKey"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-table-of-content.test.ts",
+          "marker": "SimpleTOC.odt"
         }
       ],
       "upstream": [

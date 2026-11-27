@@ -105,6 +105,9 @@ export interface XMLTextImportTarget extends Partial<XMLTextFrameImportTarget> {
   beginTextSection?(
     properties: import("./XMLSectionImportContext").XMLSectionImportProperties,
   ): import("./XMLSectionImportContext").XMLSectionImport;
+  beginDocumentIndex?(
+    properties: import("./XMLIndexTOCContext").XMLIndexImportProperties,
+  ): import("./XMLIndexTOCContext").XMLIndexImport;
   GetTextImport(): XMLTextImportHelper;
   getListRule(styleName: string): XMLTextListRule | undefined;
   createNumberingRule?(): XMLTextListRule;

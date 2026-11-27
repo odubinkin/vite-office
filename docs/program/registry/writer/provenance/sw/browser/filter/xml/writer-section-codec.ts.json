@@ -7,7 +7,8 @@
     "status": "local-only",
     "rationale": "Worker structured-clone transport retains native named-section properties, direct format items and children without serializing the document node index.",
     "responsibilities": [
-      "Worker structured-clone transport retains native named-section properties, direct format items and children without serializing the document node index."
+      "Worker structured-clone transport retains native named-section properties, direct format items and children without serializing the document node index.",
+      "The version-compatible section record keeps the native TOX form with indexed content sections and retains their header section type."
     ],
     "stackDivergence": {
       "kind": "local-infrastructure",
@@ -22,6 +23,10 @@
         {
           "path": "apps/office/src/sw/source/filter/xml/odt-text-sections.test.ts",
           "marker": "through Worker and ODT"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-table-of-content.test.ts",
+          "marker": "SimpleTOC.odt"
         }
       ],
       "upstream": []

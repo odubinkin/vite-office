@@ -15,10 +15,11 @@
       "XMLSectionImportContext::createFastChildContext"
     ],
     "preservedResponsibilities": [
-      "Reads regular text section properties, original condition scope, stored visibility and protection digest bytes."
+      "Reads regular text section properties, original condition scope, stored visibility and protection digest bytes.",
+      "The original index-header service uses the same scoped section cursor and independently applies its style and protection."
     ],
     "omittedResponsibilities": [
-      "Index headers, metadata identity, redline nodes and platform DDE are outside the represented regular section."
+      "metadata identity, redline nodes and platform DDE are outside the represented regular section."
     ],
     "evidence": {
       "local": [
@@ -29,6 +30,10 @@
         {
           "path": "apps/office/src/sw/source/filter/xml/odt-text-sections.test.ts",
           "marker": "testProtectionKey"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-table-of-content.test.ts",
+          "marker": "SimpleTOC.odt"
         }
       ],
       "upstream": [

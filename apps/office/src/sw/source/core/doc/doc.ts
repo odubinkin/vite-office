@@ -1,4 +1,7 @@
 /** @fileoverview Implements the Writer SwDoc aggregate from pinned LibreOffice `sw/inc/doc.hxx` and `sw/source/core/doc/docnew.cxx`. */
+import { InsertTableOf } from "./doctxm";
+import type { SwSectionNode } from "../docnode/ndsect";
+import { SwTOXType, TOXTypes, type SwTOXBase } from "../tox/tox";
 import { toInt32 } from "../../../../o3tl/inc/string_view";
 import type { SwFormat } from "../attr/format";
 import type { Theme } from "../../../../docmodel/inc/theme/Theme";
@@ -317,6 +320,7 @@ export class SwDoc {
   private readonly embeddedFonts = new Map<string, WriterEmbeddedFont>();
   private readonly bitmapTable = new Map<string, XFillBitmapItem>();
   public readonly nodes: SwNodes;
+  private readonly contentsIndexType = new SwTOXType(TOXTypes.Content, "Table of Contents");
   /** Creates the canonical fixed sections and optionally one empty body node. @param createInitialTextNode - Whether to create initial body content. @returns Nothing. */
   public constructor(createInitialTextNode: boolean | SwDocOptions = true) {
     const options = typeof createInitialTextNode === "object" ? createInitialTextNode : undefined;
@@ -943,6 +947,16 @@ export class SwDoc {
   public GetTextDirection(position: SwPosition): SvxFrameDirection {
     return GetTextDirection(this, position);
   }
+  /** Borrows the original contents type registered on this document. @returns Native type identity. */
+  public GetTOXType(): SwTOXType {
+    return this.contentsIndexType;
+  }
+
+  /** Inserts a native contents index with its ODF descriptor. @param before - Native paragraph boundary. @param descriptor - Original index values. @returns Connected section. */
+  public InsertTableOf(before: SwNode, descriptor: SwTOXBase): SwSectionNode {
+    return InsertTableOf(this, before, descriptor);
+  }
+
   /** Allocates the original first available section name. @param requested - Requested document name. @returns Unique section identity. */
   public GetUniqueSectionName(requested?: string): string {
     const names = new Set<string>();

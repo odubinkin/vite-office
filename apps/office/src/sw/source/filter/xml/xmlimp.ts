@@ -69,6 +69,11 @@ import type {
 } from "../../../../xmloff/source/text/XMLSectionImportContext";
 import type { XMLSectionStyle } from "../../../../xmloff/source/text/XMLSectionStyleContext";
 import { importTextSection } from "./xmlsection";
+import { importDocumentIndex } from "./xmlindex";
+import type {
+  XMLIndexImport,
+  XMLIndexImportProperties,
+} from "../../../../xmloff/source/text/XMLIndexTOCContext";
 import { applyPageRegisterReference } from "../../core/layout/pagedesc";
 import type { Theme } from "../../../../docmodel/inc/theme/Theme";
 import type { XMLTableImportTarget } from "../../../../xmloff/source/table/XMLTableImport";
@@ -213,6 +218,21 @@ class SwXMLImport
       this.GetTextImport(),
       properties,
       this.sectionStyles.get(properties.styleName),
+    );
+  }
+
+  /** Attaches a Writer contents index through its original UNO descriptor. @param properties - ODF index properties. @returns Connected index and text operations. */
+  public beginDocumentIndex(properties: XMLIndexImportProperties): XMLIndexImport {
+    return importDocumentIndex(
+      this.GetTextImport(),
+      properties,
+      this.sectionStyles.get(properties.styleName),
+      /** Resolves the native display name of a TOC source style. @param family - Style family. @param name - XML style name. @returns Native display name. */
+      (family, name) => {
+        const declaration = this.getStyle(family, name);
+        if (declaration) return declaration.displayName ?? name;
+        return family === "paragraph" && this.resolveNamedParagraphStyle(name) ? name : undefined;
+      },
     );
   }
 

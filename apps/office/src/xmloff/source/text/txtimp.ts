@@ -28,6 +28,7 @@ import { XMLTextListsHelper } from "./txtlists";
 import { XMLTextFrameContext } from "./XMLTextFrameContext";
 import { XMLTextListBlockContext } from "./XMLTextListBlockContext";
 import { XMLSectionImportContext } from "./XMLSectionImportContext";
+import { XMLIndexTOCContext } from "./XMLIndexTOCContext";
 
 /** Native text import locations represented by the current body/table slice. */
 export type XMLTextType = "Body" | "Cell" | "TextBox" | "HeaderFooter" | "Annotation" | "Section";
@@ -588,7 +589,12 @@ export class XMLTextImportHelper {
     }
     if (element === XMLToken.TEXT_SEQUENCE_DECLS && type === "Body")
       return new SvXMLIgnoreContext(true);
-    if (element === XMLToken.TEXT_SECTION && this.target.beginTextSection)
+    if (element === XMLToken.TEXT_TABLE_OF_CONTENT && this.target.beginDocumentIndex)
+      return new XMLIndexTOCContext(this, this.target.beginDocumentIndex.bind(this.target));
+    if (
+      (element === XMLToken.TEXT_SECTION || element === XMLToken.TEXT_INDEX_TITLE) &&
+      this.target.beginTextSection
+    )
       return new XMLSectionImportContext(this, this.target.beginTextSection.bind(this.target));
     return null;
   }

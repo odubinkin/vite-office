@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/core/tox/tox.ts",
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/tox/tox.cxx",
+    "localSymbols": [
+      "SwTOXBase",
+      "SwForm",
+      "SwFormToken"
+    ],
+    "upstreamSymbols": [
+      "SwTOXBase::SwTOXBase",
+      "SwForm::SwForm"
+    ],
+    "preservedResponsibilities": [
+      "Owns the contents-index source and independent native form, including original default levels, paragraph styles and token order."
+    ],
+    "omittedResponsibilities": [
+      "Index generation and other index types remain outside this model slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/tox/tox.ts",
+          "marker": "SwTOXBase"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-table-of-content.test.ts",
+          "marker": "SimpleTOC.odt"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/tox/tox.cxx",
+          "marker": "SwTOXBase::SwTOXBase"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/tox/tox.cxx",
+          "marker": "SwForm::SwForm"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/qa/extras/globalfilter/globalfilter.cxx",
+          "marker": "testTableOfContentLinksHaveContentSet"
+        }
+      ]
+    }
+  }
+}

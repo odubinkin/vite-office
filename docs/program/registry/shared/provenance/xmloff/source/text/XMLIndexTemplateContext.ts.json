@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/xmloff/source/text/XMLIndexTemplateContext.ts",
+    "status": "mapped",
+    "upstreamPath": "xmloff/source/text/XMLIndexTemplateContext.cxx",
+    "localSymbols": [
+      "XMLIndexTemplateContext"
+    ],
+    "upstreamSymbols": [
+      "XMLIndexTemplateContext::startFastElement",
+      "XMLIndexTemplateContext::endFastElement"
+    ],
+    "preservedResponsibilities": [
+      "Imports the original level template and ordered TOC pattern fields."
+    ],
+    "omittedResponsibilities": [
+      "Index families other than the Writer contents index remain outside this filter slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/xmloff/source/text/XMLIndexTemplateContext.ts",
+          "marker": "XMLIndexTemplateContext"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-table-of-content.test.ts",
+          "marker": "SimpleTOC.odt"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/XMLIndexTemplateContext.cxx",
+          "marker": "XMLIndexTemplateContext::startFastElement"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/XMLIndexTemplateContext.cxx",
+          "marker": "XMLIndexTemplateContext::endFastElement"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/qa/extras/globalfilter/globalfilter.cxx",
+          "marker": "testTableOfContentLinksHaveContentSet"
+        }
+      ]
+    }
+  }
+}

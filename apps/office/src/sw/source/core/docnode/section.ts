@@ -7,6 +7,8 @@ import { SwFrameFormat } from "../layout/atrfrm";
 /** Native ordinary and linked section types. */
 export enum SectionType {
   Content = 0,
+  ToxHeader,
+  ToxContent,
   FileLink = 0x90,
 }
 

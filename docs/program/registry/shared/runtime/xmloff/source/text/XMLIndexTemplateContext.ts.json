@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/xmloff/source/text/XMLIndexTemplateContext.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "odf-filter",
+    "capabilityIds": [
+      "CAP-0128",
+      "CAP-0129"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/xmloff/source/text/XMLIndexTemplateContext.ts",
+        "apps/office/src/sw/source/filter/xml/odt-table-of-content.test.ts",
+        "vendor/libreoffice-reference/xmloff/source/text/XMLIndexTemplateContext.cxx",
+        "vendor/libreoffice-reference/sw/qa/extras/globalfilter/globalfilter.cxx"
+      ],
+      "justification": "Imports the original level template and ordered TOC pattern fields. Index families other than the Writer contents index remain outside this filter slice.",
+      "knownViolations": [],
+      "localSymbols": [
+        "XMLIndexTemplateContext"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "xmloff/source/text/XMLIndexTemplateContext.cxx",
+      "upstreamSymbols": [
+        "XMLIndexTemplateContext::startFastElement",
+        "XMLIndexTemplateContext::endFastElement"
+      ]
+    }
+  }
+}

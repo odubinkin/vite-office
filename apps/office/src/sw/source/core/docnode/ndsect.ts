@@ -4,23 +4,26 @@ import { RES_CNTNT } from "../../../inc/hintids";
 import { SwStartNodeType } from "../../../inc/ndtyp";
 import { SwStartNode } from "./node";
 import type { SwNodes } from "./nodes";
+import { SwTOXBaseSection } from "../inc/doctxm";
+import type { SwTOXBase } from "../tox/tox";
 import { SwSection, SwSectionFormat, type SwSectionData } from "./section";
 
 /** Native start node for a named text section and owner of its SwSection. */
 export class SwSectionNode extends SwStartNode {
   private readonly section: SwSection;
 
-  /** Connects the actual Writer node, section and derived format. @param nodes - Owning array. @param parent - Containing start node. @param data - Owned section data. @param parentFormat - Nearest containing named section format. @returns New section node. */
+  /** Connects the actual Writer node, section and derived format. @param nodes - Owning array. @param parent - Containing start node. @param data - Owned section data. @param parentFormat - Nearest containing named section format. @param tox - Owned index descriptor, if this is an index. @returns New section node. */
   public constructor(
     nodes: SwNodes,
     parent: SwStartNode,
     data: SwSectionData,
     parentFormat?: SwSectionFormat,
+    tox?: SwTOXBase,
   ) {
     super(nodes, parent, SwStartNodeType.SwNormalStartNode, "section");
     const format = new SwSectionFormat(nodes.GetDoc(), parentFormat);
     format.SetFormatName(data.name);
-    this.section = new SwSection(data, format);
+    this.section = tox ? new SwTOXBaseSection(data, format, tox) : new SwSection(data, format);
     const content = new SwFormatContent(this);
     format.LockModify();
     try {

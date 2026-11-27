@@ -12,7 +12,7 @@ import {
 } from "../text/XMLTextFrameExport";
 import { WritingMode2 } from "../../../offapi/com/sun/star/text/WritingMode2";
 import {
-  exportRegularSection,
+  exportSection,
   exportSectionStyleAttributes,
   type XMLSectionExportSource,
 } from "../text/XMLSectionExport";
@@ -136,7 +136,7 @@ export function exportTableBlocks(
           const properties = attributes ? `<style:section-properties${attributes}/>` : "";
           automaticStyles += `<style:style style:name="${name}" style:family="section">${properties}</style:style>`;
         }
-        body += exportRegularSection(block.section, name, renderBlocks(block.section.content));
+        body += exportSection(block.section, name, renderBlocks(block.section.content));
         continue;
       }
       const table = block.table;

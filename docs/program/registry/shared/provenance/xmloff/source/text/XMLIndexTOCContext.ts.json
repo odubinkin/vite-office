@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/xmloff/source/text/XMLIndexTOCContext.ts",
+    "status": "mapped",
+    "upstreamPath": "xmloff/source/text/XMLIndexTOCContext.cxx",
+    "localSymbols": [
+      "XMLIndexTOCContext"
+    ],
+    "upstreamSymbols": [
+      "XMLIndexTOCContext::startFastElement",
+      "XMLIndexTOCContext::createFastChildContext"
+    ],
+    "preservedResponsibilities": [
+      "Connects the ODF contents index and routes its source and generated body."
+    ],
+    "omittedResponsibilities": [
+      "Index families other than the Writer contents index remain outside this filter slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/xmloff/source/text/XMLIndexTOCContext.ts",
+          "marker": "XMLIndexTOCContext"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-table-of-content.test.ts",
+          "marker": "SimpleTOC.odt"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/XMLIndexTOCContext.cxx",
+          "marker": "XMLIndexTOCContext::startFastElement"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/XMLIndexTOCContext.cxx",
+          "marker": "XMLIndexTOCContext::createFastChildContext"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/qa/extras/globalfilter/globalfilter.cxx",
+          "marker": "testTableOfContentLinksHaveContentSet"
+        }
+      ]
+    }
+  }
+}

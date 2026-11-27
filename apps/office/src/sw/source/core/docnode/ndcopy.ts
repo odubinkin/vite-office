@@ -5,6 +5,8 @@ import type { SwTableBox } from "../table/swtable";
 import { RES_CNTNT } from "../../../inc/hintids";
 import { SwSectionNode } from "./ndsect";
 import { SwSectionData } from "./section";
+import { SwTOXBaseSection } from "../inc/doctxm";
+import { GetUniqueTOXBaseName } from "../doc/doctxm";
 
 /** Copies direct content, including table sections, before a native insertion boundary. @param source - Source section. @param target - Destination section. @param before - Connected destination boundary. @returns Copied paragraph count at this level. */
 export function CopyNodes(source: SwStartNode, target: SwStartNode, before: SwNode): number {
@@ -32,11 +34,16 @@ function MakeSectionCopy(original: SwSectionNode, before: SwNode): number {
   const source = original.GetSection();
   const data = source.GetSectionData();
   const doc = before.GetDoc();
+  const tox = source instanceof SwTOXBaseSection ? source.tox.Clone(doc.GetTOXType()) : undefined;
+  const name = tox
+    ? GetUniqueTOXBaseName(doc, tox.type, data.name)
+    : doc.GetUniqueSectionName(data.name);
+  if (tox) tox.name = name;
   const copyData = Object.assign(new SwSectionData(data.type, data.name), data, {
-    name: doc.GetUniqueSectionName(data.name),
+    name,
     password: data.password.slice(),
   });
-  const copy = doc.GetNodes().InsertTextSection(before, copyData);
+  const copy = doc.GetNodes().InsertTextSection(before, copyData, tox);
   const format = copy.GetSection().GetFormat();
   for (const item of source.GetFormat().GetAttrSet().entries()) {
     if (item.Which() !== RES_CNTNT) format.SetFormatAttr(item);

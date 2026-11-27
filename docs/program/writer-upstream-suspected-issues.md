@@ -6275,3 +6275,20 @@ can reserve `Section1` from automatic allocation even though the names
 are distinct. Writer keeps the native suffix conversion for this path.
 
 - [Original Writer section name allocation](../../vendor/libreoffice-reference/sw/source/core/docnode/ndsect.cxx#L1385)
+
+The same permissive suffix scan applies to automatic TOC names. A contents
+index named `Table of Contents1Appendix` can reserve `Table of Contents1`.
+
+- [Original Writer TOC name allocation](../../vendor/libreoffice-reference/sw/source/core/doc/doctxm.cxx#L719)
+
+### WRITER-761 — An explicitly empty TOC outline level selects one level
+
+The TOC source starts at the document's full chapter-numbering depth. If the
+outline-level attribute is present with an empty value, the shared SAX number
+converter consumes the entire empty string, obtains zero and clamps it to one
+before reporting success. Omitting the attribute retains the original full
+depth. The port preserves this distinction and the separate exact-token lookup
+for individual level templates.
+
+- [Original TOC source](../../vendor/libreoffice-reference/xmloff/source/text/XMLIndexTOCSourceContext.cxx#L62)
+- [Original SAX number converter](../../vendor/libreoffice-reference/sax/source/tools/converter.cxx#L716)

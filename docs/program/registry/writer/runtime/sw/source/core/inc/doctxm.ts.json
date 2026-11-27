@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/inc/doctxm.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "document-core",
+    "capabilityIds": [
+      "CAP-0128",
+      "CAP-0129"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/core/inc/doctxm.ts",
+        "apps/office/src/sw/source/filter/xml/odt-table-of-content.test.ts",
+        "vendor/libreoffice-reference/sw/source/core/inc/doctxm.hxx",
+        "vendor/libreoffice-reference/sw/qa/extras/globalfilter/globalfilter.cxx"
+      ],
+      "justification": "Connects the original index descriptor to the native Writer section format and node. Regeneration and layout-dependent index calculation remain outside this slice.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwTOXBaseSection"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/inc/doctxm.hxx",
+      "upstreamSymbols": [
+        "SwTOXBaseSection"
+      ]
+    }
+  }
+}

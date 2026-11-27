@@ -18,6 +18,7 @@ export interface XMLSectionImportProperties {
   readonly currentlyVisible: boolean;
   readonly protected: boolean;
   readonly protectionKey: Uint8Array;
+  readonly indexHeader?: boolean;
 }
 
 /** Connected section operations used by the shared text importer. */
@@ -39,10 +40,11 @@ export class XMLSectionImportContext extends SvXMLImportContext {
     super();
   }
 
-  /** Parses native name, visibility and protection properties before attaching the section. @param _element - Current token. @param attributes - Section attributes. @returns Nothing. */
-  public override startFastElement(_element: XMLToken, attributes: FastAttributeList): void {
+  /** Parses native name, visibility and protection properties before attaching the section. @param element - Current token. @param attributes - Section attributes. @returns Nothing. */
+  public override startFastElement(element: XMLToken, attributes: FastAttributeList): void {
     const name = attributes.get(XMLToken.TEXT_NAME);
-    if (name === null) return;
+    const indexHeader = element === XMLToken.TEXT_INDEX_TITLE;
+    if (name === null && !indexHeader) return;
 
     const condition = attributes.get(XMLToken.TEXT_CONDITION) ?? "";
     const separator = condition.indexOf(":");
@@ -60,13 +62,16 @@ export class XMLSectionImportContext extends SvXMLImportContext {
         Converter.convertBool(protect, value);
     }
     this.section = this.createSection({
-      name,
+      name: name ?? "",
+      ...(indexHeader ? { indexHeader } : {}),
       styleName: attributes.get(XMLToken.TEXT_STYLE_NAME) ?? "",
-      condition: validCondition ? condition.slice(separator + 1) : "",
-      visible: display !== "none" && display !== "condition",
-      currentlyVisible: !hidden[0],
+      condition: !indexHeader && validCondition ? condition.slice(separator + 1) : "",
+      visible: indexHeader || (display !== "none" && display !== "condition"),
+      currentlyVisible: indexHeader || !hidden[0],
       protected: protect[0],
-      protectionKey: decodeBase64(attributes.get(XMLToken.TEXT_PROTECTION_KEY) ?? ""),
+      protectionKey: decodeBase64(
+        indexHeader ? "" : (attributes.get(XMLToken.TEXT_PROTECTION_KEY) ?? ""),
+      ),
     });
   }
 

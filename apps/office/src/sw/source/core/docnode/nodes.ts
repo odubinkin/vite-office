@@ -29,6 +29,7 @@ import {
 import { SwTextNode } from "../txtnode/ndtxt";
 import { SwSectionNode } from "./ndsect";
 import type { SwSectionData } from "./section";
+import type { SwTOXBase } from "../tox/tox";
 import {
   SwTable,
   SwTableBox,
@@ -223,13 +224,13 @@ export class SwNodes {
     );
   }
 
-  /** Inserts an ordinary named section at a native text boundary. @param before - Existing insertion boundary. @param data - Section data. @returns Connected owner with an initial text node. */
-  public InsertTextSection(before: SwNode, data: SwSectionData): SwSectionNode {
+  /** Inserts an ordinary named section at a native text boundary. @param before - Existing insertion boundary. @param data - Section data. @param tox - Owned index descriptor for a TOX content section. @returns Connected owner with an initial text node. */
+  public InsertTextSection(before: SwNode, data: SwSectionData, tox?: SwTOXBase): SwSectionNode {
     if (before.GetNodes() !== this) throw new Error("Writer section belongs to another document.");
     const index = before.GetIndex();
     const parent = before.StartOfSectionNode();
     const format = parent.FindSectionNode()?.GetSection().GetFormat();
-    const start = new SwSectionNode(this, parent, data, format);
+    const start = new SwSectionNode(this, parent, data, format, tox);
     const end = new SwEndNode(this, start);
     start.setEndOfSection(end);
     this.nodeArray.splice(index, 0, start, end);

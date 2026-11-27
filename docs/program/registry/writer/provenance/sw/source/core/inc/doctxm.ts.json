@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/core/inc/doctxm.ts",
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/inc/doctxm.hxx",
+    "localSymbols": [
+      "SwTOXBaseSection"
+    ],
+    "upstreamSymbols": [
+      "SwTOXBaseSection"
+    ],
+    "preservedResponsibilities": [
+      "Connects the original index descriptor to the native Writer section format and node."
+    ],
+    "omittedResponsibilities": [
+      "Regeneration and layout-dependent index calculation remain outside this slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/inc/doctxm.ts",
+          "marker": "SwTOXBaseSection"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-table-of-content.test.ts",
+          "marker": "SimpleTOC.odt"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/inc/doctxm.hxx",
+          "marker": "SwTOXBaseSection"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/qa/extras/globalfilter/globalfilter.cxx",
+          "marker": "testTableOfContentLinksHaveContentSet"
+        }
+      ]
+    }
+  }
+}
