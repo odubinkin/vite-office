@@ -4,7 +4,7 @@ title: "Implement native Calc embedded fonts in ODS packages"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 4
+revision: 6
 origin:
   system: "manual"
 depends_on: []
@@ -20,11 +20,27 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-11-27T17:32:07.533Z"
+  updated_by: "CODER"
+  note: "All 56 related Calc, Writer and package cases passed. The final two Calc font cases passed with original resource bytes and native defaults. Typecheck, lint, dependency boundaries, provenance and scoped inventories passed."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-11-27T17:32:08.047Z"
+  updated_by: "EVALUATOR"
+  note: "Calc preserves existing ODS font resources, original embedding settings and viewing permissions across its browser Worker."
+  evaluated_sha: "c834010f16459446331b504d9fa796c767337fee"
+  blueprint_digest: "2aac0c439f514f924f49b5a9f410912903db04325f598bde39ca57c8ed1bbcaa"
+  evidence_refs:
+    - ".agentplane/tasks/202611271720-0A3Q2H/README.md"
+    - ".agentplane/tasks/202611271720-0A3Q2H/quality/20261127-173208047-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202611271720-0A3Q2H/quality/20261127-173208047-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202611271720-0A3Q2H/quality/20261127-173208047-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202611271720-0A3Q2H/blueprint/resolved-snapshot.json"
+    - "output/playwright/odf-next-checkpoint/font-verification.md"
+  findings:
+    - "The original shared fixture bytes round-trip exactly and existing Writer resource tests pass."
 commit: null
 comments:
   -
@@ -38,8 +54,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: attach native Calc ODS font embedding and package resources."
+  -
+    type: "verify"
+    at: "2026-11-27T17:32:07.533Z"
+    author: "CODER"
+    state: "ok"
+    note: "All 56 related Calc, Writer and package cases passed. The final two Calc font cases passed with original resource bytes and native defaults. Typecheck, lint, dependency boundaries, provenance and scoped inventories passed."
 doc_version: 3
-doc_updated_at: "2026-11-27T17:20:48.713Z"
+doc_updated_at: "2026-11-27T17:32:07.589Z"
 doc_updated_by: "CODER"
 description: "Connect Calc's native font embedding flags and original XMLFontAutoStylePool to the shared ODF font declaration and package resource path. Retain admitted font bytes and rights metadata through ODS imports and exports and the Worker, and share the existing Writer resource checks while preserving their behavior. Port the native Calc defaults and verify pinned embedded font bytes in ODS."
 sections:
@@ -59,6 +81,36 @@ sections:
     3. Compare the final result against ## Scope and record any residual follow-up in ## Findings. Expected: open edges are explicit rather than implicit.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-11-27T17:32:07.533Z — VERIFY — ok
+
+    By: CODER
+
+    Note: All 56 related Calc, Writer and package cases passed. The final two Calc font cases passed with original resource bytes and native defaults. Typecheck, lint, dependency boundaries, provenance and scoped inventories passed.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-27T17:20:48.713Z, excerpt_hash=sha256:aff1845d7d2c52af1f527c51ada324ae4a5a06792ac905290eac29ee3d71b12e
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611271720-0A3Q2H/blueprint/resolved-snapshot.json
+    - old_digest: 2aac0c439f514f924f49b5a9f410912903db04325f598bde39ca57c8ed1bbcaa
+    - current_digest: 2aac0c439f514f924f49b5a9f410912903db04325f598bde39ca57c8ed1bbcaa
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202611271720-0A3Q2H
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202611271720-0A3Q2H
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -92,6 +144,36 @@ PLANNER fallback scaffold for "Implement native Calc embedded fonts in ODS packa
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-11-27T17:32:07.533Z — VERIFY — ok
+
+By: CODER
+
+Note: All 56 related Calc, Writer and package cases passed. The final two Calc font cases passed with original resource bytes and native defaults. Typecheck, lint, dependency boundaries, provenance and scoped inventories passed.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-27T17:20:48.713Z, excerpt_hash=sha256:aff1845d7d2c52af1f527c51ada324ae4a5a06792ac905290eac29ee3d71b12e
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611271720-0A3Q2H/blueprint/resolved-snapshot.json
+- old_digest: 2aac0c439f514f924f49b5a9f410912903db04325f598bde39ca57c8ed1bbcaa
+- current_digest: 2aac0c439f514f924f49b5a9f410912903db04325f598bde39ca57c8ed1bbcaa
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202611271720-0A3Q2H
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202611271720-0A3Q2H
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan

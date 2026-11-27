@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202611271720-0A3Q2H",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-27T17:32:08.047Z",
+  "verdict": "pass",
+  "summary": "Calc preserves existing ODS font resources, original embedding settings and viewing permissions across its browser Worker.",
+  "evaluated_sha": "c834010f16459446331b504d9fa796c767337fee",
+  "blueprint_digest": "2aac0c439f514f924f49b5a9f410912903db04325f598bde39ca57c8ed1bbcaa",
+  "findings": [
+    "The original shared fixture bytes round-trip exactly and existing Writer resource tests pass."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611271720-0A3Q2H/README.md",
+    "output/playwright/odf-next-checkpoint/font-verification.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
