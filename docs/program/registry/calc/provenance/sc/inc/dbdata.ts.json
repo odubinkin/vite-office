@@ -1,0 +1,64 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/inc/dbdata.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/inc/dbdata.hxx",
+    "localSymbols": [
+      "ScDBData",
+      "ScDBCollection",
+      "ScDBRangeType"
+    ],
+    "upstreamSymbols": [
+      "ScDBData",
+      "ScDBCollection",
+      "enum RangeType"
+    ],
+    "preservedResponsibilities": [
+      "Publishes the represented native database data, collection and ownership kinds."
+    ],
+    "omittedResponsibilities": [
+      "Table style, update listener, external source, sorting, subtotal and formula services are outside these declarations."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/inc/dbdata.ts",
+          "marker": "ScDBData"
+        },
+        {
+          "path": "apps/office/src/sc/inc/dbdata.ts",
+          "marker": "ScDBCollection"
+        },
+        {
+          "path": "apps/office/src/sc/inc/dbdata.ts",
+          "marker": "ScDBRangeType"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-database-ranges.test.ts",
+          "marker": "testDatabaseRangesODS"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/dbdata.hxx",
+          "marker": "ScDBData"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/dbdata.hxx",
+          "marker": "ScDBCollection"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/dbdata.hxx",
+          "marker": "enum RangeType"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/subsequent_filters_test.cxx",
+          "marker": "testDatabaseRangesODS"
+        }
+      ]
+    }
+  }
+}

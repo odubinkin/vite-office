@@ -1,5 +1,6 @@
 /** @fileoverview Calc scalar,cell-font and row/column geometry import over shared fast XML contexts;advanced styles,device layout and objects remain unported. */
 import { SetLabelRanges, type ScMyLabelRange } from "./xmllabri";
+import type { ScXMLDatabaseRangeContext } from "./xmldrani";
 import { FormulaError } from "../../../../formula/inc/errorcodes";
 import { ScFormulaCell } from "../../core/data/formulacell";
 import { SV_COUNTRY_LANGUAGE_OFFSET, SvNumFormatType as T } from "../../../../svl/inc/zforlist";
@@ -107,6 +108,13 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
     emptyDisplay: boolean;
     matrix?: MatrixFormulaRange;
   }[] = [];
+
+  private readonly databaseRanges: ScXMLDatabaseRangeContext[] = [];
+
+  /** Queues a database range until all source sheets are available. @param context - Native database context. */
+  AddDatabaseRange(context: ScXMLDatabaseRangeContext): void {
+    this.databaseRanges.push(context);
+  }
 
   /** Collects the named definition before resolution. @param expression - Original XML definition. @returns Nothing. */
   AddNamedExpression(expression: ScMyNamedExpression): void {
@@ -722,6 +730,8 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
       if (!this.body) throw new Error("ODS spreadsheet body is missing");
       const grammar = FormulaGrammar.Grammar.GRAM_ODFF;
       SetLabelRanges(this.document, this.labelRanges);
+      for (const range of this.databaseRanges) range.Apply(this.document);
+      this.databaseRanges.length = 0;
       InsertRangeNames(
         this.document,
         this.namedExpressions.map(

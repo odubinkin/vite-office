@@ -8149,3 +8149,41 @@ caption content can create a note at each position, while
 creates. Calc preserves this ownership transfer.
 
 - [Original repeated-cell and note import](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlcelli.cxx)
+
+### CALC-853 — Auto-filter setup always reports failure for a global anonymous range
+
+The database-range importer applies the native auto-filter flags, but its
+helper returns false even when it placed the buttons. The global
+anonymous branch therefore always inserts the range in the document
+collection. Calc keeps the global owner and still applies the flags.
+
+- [Original global anonymous database range import](../../vendor/libreoffice-reference/sc/source/filter/xml/xmldrani.cxx)
+
+### CALC-854 — The database range selection attribute is read without applying it
+
+The database-range context recognizes `table:is-selection`. Conversion
+into `ScDBData` leaves the selection flag at its default. ODS export
+writes the attribute only when the native range flag is true. Calc
+reproduces this import and export behavior.
+
+- [Original database range parsing and conversion](../../vendor/libreoffice-reference/sc/source/filter/xml/xmldrani.cxx)
+- [Original database range attribute export](../../vendor/libreoffice-reference/sc/source/filter/xml/XMLExportDatabaseRanges.cxx)
+
+### CALC-855 — The last XML filter condition sets the search and case flags for all conditions
+
+Each condition updates the same query-level case flag and resets the
+shared search mode before handling its own operator. As a result, a
+comparison after a regexp condition can drop regexp matching from all
+earlier conditions. Calc retains the last condition's flags.
+
+- [Original filter condition conversion](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlfilti.cxx)
+
+### CALC-856 — The nonempty condition can lose its special query item
+
+The importer creates a nonempty-cell item for `!empty`, then processes
+its ordinary value. The corresponding early return applies to `empty`
+only. The value processing overwrites the nonempty item type, so Calc
+retains the resulting ordinary comparison.
+
+- [Original filter operator and condition conversion](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlfilti.cxx)
+- [Original empty and nonempty condition tests](../../vendor/libreoffice-reference/sc/source/core/tool/queryentry.cxx)

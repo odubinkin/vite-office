@@ -17,7 +17,8 @@
     "preservedResponsibilities": [
       "Task204 imports modern ODF scalar content directly through native Calc document/body/table/row/cell/paragraph context boundaries and ScDocumentImport. Float missing/nonfinite defaults,repeat counts,covered/empty spans,valid sheet names,namespace-resolved same-sheet ODFF source and significant single-line text are represented. Actual SAX namespace resolution is borrowed;cached formula values are recomputed through the supported source-string formula owner rather than a second cached document.",
       "When the calculation-settings element is absent, applies the original ODF defaults at the spreadsheet end, including regular expression search.",
-      "Imports native person declarations from the spreadsheet body into the document person list."
+      "Imports native person declarations from the spreadsheet body into the document person list.",
+      "Routes ODS database ranges to their native contexts."
     ],
     "omittedResponsibilities": [
       "Supported content only:full style/number-format/layout/font metadata,objects,rich/multiline text,merged/matrix/group/external/legacy formulas,repeated formula services,full cache/version/recalc policies and complete document/shell/import constructors remain unported. Unsupported metadata emits concrete diagnostics;unsupported cell semantics reject. This is not lossless full-ODF or UI parity. Browser ceilings and explicit grammar/byte transport are documented adaptations. No native C++/binary QA execution or physical memory management is claimed."
@@ -43,6 +44,14 @@
         {
           "path": "apps/office/src/sc/source/filter/xml/ods-cell-notes.test.ts",
           "marker": "testThreadedCommentOdsRoundtrip"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/xmlbodyi.ts",
+          "marker": "ScXMLDatabaseRangesContext"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-database-ranges.test.ts",
+          "marker": "testDatabaseRangesODS"
         }
       ],
       "upstream": [
@@ -57,6 +66,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlbodyi.cxx",
           "marker": "ScXMLPersonsContext"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlbodyi.cxx",
+          "marker": "ScXMLDatabaseRangesContext"
         }
       ]
     }

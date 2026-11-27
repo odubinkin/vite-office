@@ -1,0 +1,69 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/filter/xml/xmldrani.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/filter/xml/xmldrani.cxx",
+    "localSymbols": [
+      "ScXMLDatabaseRangesContext",
+      "ScXMLDatabaseRangeContext",
+      "AdoptDatabaseRange"
+    ],
+    "upstreamSymbols": [
+      "ScXMLDatabaseRangesContext",
+      "ScXMLDatabaseRangeContext::ConvertToDBData",
+      "ScXMLDatabaseRangeContext::endFastElement",
+      "setAutoFilterFlags"
+    ],
+    "preservedResponsibilities": [
+      "Reads native ODS range attributes and transfers the represented data to the corresponding document or sheet owner, including the original header-cell flag."
+    ],
+    "omittedResponsibilities": [
+      "External sources, sorting, subtotals and formula evaluation remain outside this import slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/xml/xmldrani.ts",
+          "marker": "ScXMLDatabaseRangesContext"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/xmldrani.ts",
+          "marker": "ScXMLDatabaseRangeContext"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/xmldrani.ts",
+          "marker": "AdoptDatabaseRange"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-database-ranges.test.ts",
+          "marker": "testDatabaseRangesODS"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmldrani.cxx",
+          "marker": "ScXMLDatabaseRangesContext"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmldrani.cxx",
+          "marker": "ScXMLDatabaseRangeContext::ConvertToDBData"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmldrani.cxx",
+          "marker": "ScXMLDatabaseRangeContext::endFastElement"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmldrani.cxx",
+          "marker": "setAutoFilterFlags"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/subsequent_filters_test.cxx",
+          "marker": "testDatabaseRangesODS"
+        }
+      ]
+    }
+  }
+}

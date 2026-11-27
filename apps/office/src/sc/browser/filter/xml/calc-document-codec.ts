@@ -1,6 +1,11 @@
 /** @fileoverview Bounded Calc worker transfer of supported native cells, sparse attributes and geometry; XML remains the durable format. */
 import type { NoteEntry } from "../../../inc/postit";
 import {
+  decodeCalcDatabaseRanges,
+  encodeCalcDatabaseRanges,
+  type CalcDatabaseRangesRecord,
+} from "./calc-database-range-codec";
+import {
   decodeCalcCellNote,
   decodeCalcPerson,
   encodeCalcCellNote,
@@ -268,6 +273,7 @@ export interface CalcDocumentRecord {
   readonly sheets: Sheet[];
   readonly externalFiles?: readonly ExternalFile[];
   readonly persons?: readonly CalcPersonRecord[];
+  readonly databaseRanges?: CalcDatabaseRangesRecord;
   readonly visibleTab?: number;
   readonly showGrid?: boolean;
   readonly showFormulas?: boolean;
@@ -636,9 +642,11 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
     persons.push(encodeCalcPerson(person));
     yield;
   }
+  const databaseRanges = encodeCalcDatabaseRanges(document);
   return {
     version: 1,
     sheets,
+    ...(databaseRanges ? { databaseRanges } : {}),
     ...(externalFiles.length ? { externalFiles } : {}),
     ...(persons.length ? { persons } : {}),
     ...(document.GetVisibleTab() ? { visibleTab: document.GetVisibleTab() } : {}),
@@ -1095,6 +1103,8 @@ function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
         yield;
       }
     }
+    if (record.databaseRanges !== undefined)
+      decodeCalcDatabaseRanges(document, record.databaseRanges);
     importer.docImport.finalize();
     for (const [tab, sheet] of record.sheets.entries())
       if (sheet.conditionalFormats)

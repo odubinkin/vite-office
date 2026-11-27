@@ -68,6 +68,14 @@
         {
           "path": "apps/office/src/sc/source/filter/xml/ods-cell-notes.test.ts",
           "marker": "testThreadedCommentOdsRoundtrip"
+        },
+        {
+          "path": "apps/office/src/sc/browser/filter/xml/calc-document-codec.ts",
+          "marker": "encodeCalcDatabaseRanges"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-database-ranges.test.ts",
+          "marker": "testDatabaseRangesODS"
         }
       ]
     },
@@ -92,7 +100,8 @@
       "Transfers drawing-grid values and the represented note, author, formula-mark and value-highlighting settings. Older records retain native defaults.",
       "Adopts private icon-set settings after the existing XML has restored the threshold cells.",
       "Transfers optional external cache number formats through the existing version-one formatter table and native source filter metadata alongside the referenced workbook.",
-      "Transfers optional note threads and native persons while admitting earlier version-one snapshots."
+      "Transfers optional note threads and native persons while admitting earlier version-one snapshots.",
+      "Keeps the database range query and ownership state in compatible Worker records."
     ],
     "stackDivergence": {
       "kind": "local-infrastructure",

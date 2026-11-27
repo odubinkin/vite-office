@@ -1,0 +1,64 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/tool/dbdata.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/tool/dbdata.cxx",
+    "localSymbols": [
+      "ScDBData",
+      "ScDBCollection"
+    ],
+    "upstreamSymbols": [
+      "ScDBData::ScDBData",
+      "ScDBCollection::NamedDBs::insert",
+      "ScDBCollection::AnonDBs::insert",
+      "ScDBData::GetQueryParam"
+    ],
+    "preservedResponsibilities": [
+      "Owns the database area, native flags and query, preserving separate named and anonymous storage and the name index counter."
+    ],
+    "omittedResponsibilities": [
+      "Reference updates, table column listeners, database source refresh and database formula evaluation remain unported."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/dbdata.ts",
+          "marker": "ScDBData"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/dbdata.ts",
+          "marker": "ScDBCollection"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-database-ranges.test.ts",
+          "marker": "testDatabaseRangesODS"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/dbdata.cxx",
+          "marker": "ScDBData::ScDBData"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/dbdata.cxx",
+          "marker": "ScDBCollection::NamedDBs::insert"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/dbdata.cxx",
+          "marker": "ScDBCollection::AnonDBs::insert"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/dbdata.cxx",
+          "marker": "ScDBData::GetQueryParam"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/subsequent_filters_test.cxx",
+          "marker": "testDatabaseRangesODS"
+        }
+      ]
+    }
+  }
+}

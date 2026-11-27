@@ -29,7 +29,8 @@
       "Routes the native ODF document-default wrap property to the Calc reference-string option.",
       "Applies native table-family display and tab color properties to the actual destination sheet.",
       "Resolves master-page names and applies the original table-family style assignment to the destination sheet.",
-      "Applies legacy automatic-style conditional maps with pre-compile entry equality and sheet ownership, joining their ranges before native formula compilation."
+      "Applies legacy automatic-style conditional maps with pre-compile entry equality and sheet ownership, joining their ranges before native formula compilation.",
+      "Finalizes database range ownership before building formula cells from imported data."
     ],
     "omittedResponsibilities": [
       "Supported content only:full style/number-format/layout/font metadata,objects,rich/multiline text,merged/matrix/group/external/legacy formulas,repeated formula services,full cache/version/recalc policies and complete document/shell/import constructors remain unported. Unsupported metadata emits concrete diagnostics;unsupported cell semantics reject. This is not lossless full-ODF or UI parity. Browser ceilings and explicit grammar/byte transport are documented adaptations. No native C++/binary QA execution or physical memory management is claimed."
@@ -63,6 +64,14 @@
         {
           "path": "apps/office/src/sc/source/filter/xml/xmlimprt.ts",
           "marker": "ApplyCondFormat"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/xmlimprt.ts",
+          "marker": "AddDatabaseRange"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-database-ranges.test.ts",
+          "marker": "testDatabaseRangesODS"
         }
       ],
       "upstream": [
@@ -81,6 +90,10 @@
         {
           "path": "sc/source/filter/xml/xmlstyli.cxx",
           "marker": "XMLTableStyleContext::ApplyCondFormat"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlimprt.cxx",
+          "marker": "ScXMLImport::endDocument"
         }
       ]
     }

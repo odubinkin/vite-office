@@ -9,6 +9,7 @@ import { XMLToken } from "../../../../xmloff/source/core/xmltoken";
 import type { ScXMLImport } from "./xmlimprt";
 import { ScXMLTableContext } from "./xmltabi";
 import { ScXMLLabelRangesContext } from "./xmllabri";
+import { ScXMLDatabaseRangeContext, ScXMLDatabaseRangesContext } from "./xmldrani";
 import { ScXMLNamedExpressionsContext } from "./xmlnexpi";
 import { ScXMLCalculationSettingsContext } from "./XMLCalculationSettingsContext";
 import { createExternalRefTable } from "./xmlexternaltabi";
@@ -25,6 +26,10 @@ export class ScXMLBodyContext extends ScXMLImportContext {
     attributes: FastAttributeList,
   ): SvXMLImportContext {
     if (element === XMLToken.LOEXT_PERSONS) return new ScXMLPersonsContext(this.owner);
+    if (element === XMLToken.TABLE_DATABASE_RANGES)
+      return new ScXMLDatabaseRangesContext(this.owner);
+    if (element === XMLToken.TABLE_DATABASE_RANGE)
+      return new ScXMLDatabaseRangeContext(this.owner, attributes);
     if (element === XMLToken.TABLE_LABEL_RANGES) return new ScXMLLabelRangesContext(this.owner);
     if (element === XMLToken.TABLE_NAMED_EXPRESSIONS)
       return new ScXMLNamedExpressionsContext(this.owner, -1);

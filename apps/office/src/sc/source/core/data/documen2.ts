@@ -30,6 +30,7 @@ export function Dispose(this: ScDocument): void {
   uno?.Dispose();
   this.Clear();
   this.GetRangeName()?.clear();
+  this.GetDBCollection().clear();
   this["mpEditEngine"]?.Dispose();
   this["mpEditEngine"] = null;
   if (this["mxPoolHelper"] && !this.IsClipOrUndo()) this["mxPoolHelper"].SourceDocumentGone();

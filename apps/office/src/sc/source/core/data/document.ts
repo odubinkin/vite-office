@@ -1,6 +1,7 @@
 /** @fileoverview Native document modes, consumed pooled resources and scalar/local-reference storage, attributes and formula tracking. Full construction, formatter and shell services remain unported. */
 import { ScPostIt, type NoteEntry, type ScPersonData } from "../../../inc/postit";
 import { ScRangePairList } from "../../../inc/rangelst";
+import { ScDBCollection, type ScDBData } from "../../../inc/dbdata";
 import * as documentGeometry from "./document.geometry";
 import { ScCalcConfig } from "../../../inc/calcconfig";
 import { ScInterpreter } from "../inc/interpre";
@@ -109,6 +110,19 @@ export class ScDocument {
   /** Looks up the owner of names in this scope. @param tab - Sheet scope or -1. @returns Native names. */
   GetRangeName(tab = -1) {
     return tab === -1 ? this.pRangeName : this.FetchTable(tab)?.GetRangeName();
+  }
+  private readonly pDBCollection = new ScDBCollection();
+  /** Borrows the native global database range collection. @returns Database ranges. */
+  GetDBCollection(): ScDBCollection {
+    return this.pDBCollection;
+  }
+  /** Borrows the anonymous range owned by a sheet. @param tab - Sheet index. @returns Range or null. */
+  GetAnonymousDBData(tab: number): ScDBData | null {
+    return this.FetchTable(tab)?.GetAnonymousDBData() ?? null;
+  }
+  /** Transfers the anonymous range to its native sheet owner. @param tab - Sheet index. @param data - Database range. */
+  SetAnonymousDBData(tab: number, data: ScDBData): void {
+    this.FetchTable(tab)?.SetAnonymousDBData(data);
   }
   /** Original exact block lookup with local scope precedence. */
   GetRangeAtBlock = documen3.GetRangeAtBlock;

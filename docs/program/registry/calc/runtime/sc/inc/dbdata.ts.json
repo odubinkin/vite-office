@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/inc/dbdata.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "editable-workspace",
+    "capabilityIds": [
+      "CAP-52bb76b0-ff2d-4a8c-86df-79f033c21d86"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "sourceResponsibility": "unverified",
+      "localSymbols": [
+        "ScDBData",
+        "ScDBCollection",
+        "ScDBRangeType"
+      ],
+      "upstreamFile": "sc/inc/dbdata.hxx",
+      "upstreamSymbols": [
+        "ScDBData",
+        "ScDBCollection",
+        "enum RangeType"
+      ],
+      "evidence": [
+        "apps/office/src/sc/inc/dbdata.ts",
+        "apps/office/src/sc/source/filter/xml/ods-database-ranges.test.ts",
+        "vendor/libreoffice-reference/sc/inc/dbdata.hxx"
+      ],
+      "knownViolations": [],
+      "justification": "Publishes the represented native database data, collection and ownership kinds. Table style, update listener, external source, sorting, subtotal and formula services are outside these declarations."
+    }
+  }
+}

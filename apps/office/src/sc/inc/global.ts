@@ -153,3 +153,29 @@ export enum InsCellCmd {
   INS_INSROWS_AFTER,
   INS_INSCOLS_AFTER,
 }
+
+/** Native database query comparison operations, in declaration order. */
+export enum ScQueryOp {
+  SC_EQUAL,
+  SC_LESS,
+  SC_GREATER,
+  SC_LESS_EQUAL,
+  SC_GREATER_EQUAL,
+  SC_NOT_EQUAL,
+  SC_TOPVAL,
+  SC_BOTVAL,
+  SC_TOPPERC,
+  SC_BOTPERC,
+  SC_CONTAINS,
+  SC_DOES_NOT_CONTAIN,
+  SC_BEGINS_WITH,
+  SC_DOES_NOT_BEGIN_WITH,
+  SC_ENDS_WITH,
+  SC_DOES_NOT_END_WITH,
+}
+
+/** Native connector between consecutive database query entries. */
+export enum ScQueryConnect {
+  SC_AND,
+  SC_OR,
+}

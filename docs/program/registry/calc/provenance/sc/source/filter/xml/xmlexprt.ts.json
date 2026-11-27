@@ -42,7 +42,8 @@
       "Named definition output uses the native type and reference query, validates the name base, and formats it as an absolute qualified address.",
       "Exports cell annotations before the owning cell value and includes note-only positions in the sheet bounds.",
       "Registers automatic number-format styles for external cache entries through the same owner used by sheet cell styles.",
-      "Writes threaded comment metadata after the classic author and date, with the workbook persons following the external caches."
+      "Writes threaded comment metadata after the classic author and date, with the workbook persons following the external caches.",
+      "Exports database range ownership and filters after named expressions."
     ],
     "omittedResponsibilities": [
       "Field identity and unimplemented character properties are outside this XML text boundary."
@@ -124,6 +125,14 @@
         {
           "path": "apps/office/src/sc/source/filter/xml/ods-cell-notes.test.ts",
           "marker": "testThreadedCommentOdsRoundtrip"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/xmlexprt.ts",
+          "marker": "WriteDatabaseRanges"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-database-ranges.test.ts",
+          "marker": "testDatabaseRangesODS"
         }
       ],
       "upstream": [
@@ -170,6 +179,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/qa/unit/subsequent_export_test.cxx",
           "marker": "testThreadedCommentOdsRoundtrip"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlexprt.cxx",
+          "marker": "aExportDatabaseRanges.WriteDatabaseRanges"
         }
       ]
     }

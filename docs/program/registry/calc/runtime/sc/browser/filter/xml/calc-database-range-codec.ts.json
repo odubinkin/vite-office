@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/browser/filter/xml/calc-database-range-codec.ts",
+    "classification": "local-infrastructure",
+    "state": "active",
+    "suite": "calc",
+    "subsystem": "document-lifecycle",
+    "capabilityIds": [
+      "CAP-f15476e9-2d48-48f8-9cc5-6c90aa523b01"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/browser/filter/xml/calc-database-range-codec.ts",
+        "apps/office/src/sc/source/filter/xml/ods-database-ranges.test.ts"
+      ],
+      "justification": "Transfers native Calc database-range owners, cell coordinates, query parameters and index counter in detached version-one Worker records.",
+      "knownViolations": [],
+      "localSymbols": [
+        "encodeCalcDatabaseRanges",
+        "decodeCalcDatabaseRanges"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

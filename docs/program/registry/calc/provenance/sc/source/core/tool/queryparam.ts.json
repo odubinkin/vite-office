@@ -13,7 +13,8 @@
       "ScQueryParamBase::FillInExcelSyntax"
     ],
     "preservedResponsibilities": [
-      "Parses original Excel criteria operators, literal and numeric operands, and explicit empty forms through the existing number formatter and query entries."
+      "Parses original Excel criteria operators, literal and numeric operands, and explicit empty forms through the existing number formatter and query entries.",
+      "Owns original database query defaults and ordered query fields in addition to existing Excel criteria parsing."
     ],
     "omittedResponsibilities": [
       "Only the original interpreter one-entry path is used here. Database table query parameters and non-interpreter contexts remain separate."
@@ -27,12 +28,24 @@
         {
           "path": "apps/office/src/sc/source/core/tool/interpr1.conditional.test.ts",
           "marker": "evaluates Excel criteria"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/queryparam.ts",
+          "marker": "ScQueryParam"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-database-ranges.test.ts",
+          "marker": "testDatabaseRangesODS"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sc/source/core/tool/queryparam.cxx",
           "marker": "ScQueryParamBase::FillInExcelSyntax"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/queryparam.cxx",
+          "marker": "ScQueryParam::Clear"
         }
       ]
     }

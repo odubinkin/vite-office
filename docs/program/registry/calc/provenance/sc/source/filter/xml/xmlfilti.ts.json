@@ -1,0 +1,64 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/filter/xml/xmlfilti.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/filter/xml/xmlfilti.cxx",
+    "localSymbols": [
+      "ScXMLFilterContext",
+      "ScXMLConditionContext",
+      "readDatabaseRangeAddress"
+    ],
+    "upstreamSymbols": [
+      "ScXMLFilterContext",
+      "ScXMLConditionContext::endFastElement",
+      "ScXMLFilterContext::GetConnection"
+    ],
+    "preservedResponsibilities": [
+      "Reads the native query connector sequence, condition fields, case flags, typed operands and advanced filter metadata."
+    ],
+    "omittedResponsibilities": [
+      "Executing advanced filters and resolving top/bottom thresholds against live cell values belong to the unported query commands."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/xml/xmlfilti.ts",
+          "marker": "ScXMLFilterContext"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/xmlfilti.ts",
+          "marker": "ScXMLConditionContext"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/xmlfilti.ts",
+          "marker": "readDatabaseRangeAddress"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-database-ranges.test.ts",
+          "marker": "testDatabaseRangesODS"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlfilti.cxx",
+          "marker": "ScXMLFilterContext"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlfilti.cxx",
+          "marker": "ScXMLConditionContext::endFastElement"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlfilti.cxx",
+          "marker": "ScXMLFilterContext::GetConnection"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/subsequent_filters_test.cxx",
+          "marker": "testDatabaseRangesODS"
+        }
+      ]
+    }
+  }
+}

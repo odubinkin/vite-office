@@ -123,7 +123,8 @@
       "Exposes the original document tab color operations from the documen3 owner.",
       "Dispatches GetPageStyle and SetPageStyle through the actual native sheet.",
       "The document exposes native conditional scale backgrounds via its existing conditional-format owner.",
-      "Owns ordered threaded-comment persons and keeps the first record for each exact identifier."
+      "Owns ordered threaded-comment persons and keeps the first record for each exact identifier.",
+      "Owns global database ranges and routes a sheet anonymous range to the native ScTable owner."
     ],
     "omittedResponsibilities": [
       "The browser document text-object slice only admits the consumed operations."
@@ -341,6 +342,14 @@
         {
           "path": "apps/office/src/sc/source/filter/xml/ods-cell-notes.test.ts",
           "marker": "testThreadedCommentOdsRoundtrip"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/document.ts",
+          "marker": "GetDBCollection"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-database-ranges.test.ts",
+          "marker": "testDatabaseRangesODS"
         }
       ],
       "upstream": [
@@ -599,6 +608,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
           "marker": "ScDocument::GetPersonById"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+          "marker": "ScDocument::GetAnonymousDBData"
         }
       ]
     }

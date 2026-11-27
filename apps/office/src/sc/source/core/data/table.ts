@@ -1,5 +1,6 @@
 /** @fileoverview ScTable scalar/local-reference,cell-attribute and standard row-height operations over lazy contiguous columns. Device layout and full sheet services remain unported. */
 import type { NoteEntry, ScPostIt } from "../../../inc/postit";
+import type { ScDBData } from "../../../inc/dbdata";
 import type { ScOutlineTable } from "./olinetab";
 import { Color, COL_AUTO } from "../../../../tools/inc/color";
 import type { ScTableProtection } from "./tabprotection";
@@ -88,6 +89,15 @@ export class ScTable {
   /** Returns the sheet-local name owner. @returns Names. */
   GetRangeName(): ScRangeName {
     return this.pRangeName;
+  }
+  private mpDBDataNoName: ScDBData | null = null;
+  /** Borrows the anonymous range owned by this sheet. @returns Range or null. */
+  GetAnonymousDBData(): ScDBData | null {
+    return this.mpDBDataNoName;
+  }
+  /** Replaces the anonymous database range. @param data - New owner. */
+  SetAnonymousDBData(data: ScDBData): void {
+    this.mpDBDataNoName = data;
   }
   declare private pTabProtection: ScTableProtection | undefined;
   IsProtected = table5.IsProtected;
@@ -794,6 +804,7 @@ export class ScTable {
   /** Releases represented members in native reverse declaration order after document-level conditional listeners are cleared. @returns Nothing. */
   Dispose(): void {
     this.pRangeName.clear();
+    this.mpDBDataNoName = null;
     this.aDefaultColData.DisposeAttributes();
     this.mpCondFormatList?.Dispose();
     for (const column of this.aCol) column.Dispose();

@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/core/tool/dbdata.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "editable-workspace",
+    "capabilityIds": [
+      "CAP-52bb76b0-ff2d-4a8c-86df-79f033c21d86"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "sourceResponsibility": "unverified",
+      "localSymbols": [
+        "ScDBData",
+        "ScDBCollection"
+      ],
+      "upstreamFile": "sc/source/core/tool/dbdata.cxx",
+      "upstreamSymbols": [
+        "ScDBData::ScDBData",
+        "ScDBCollection::NamedDBs::insert",
+        "ScDBCollection::AnonDBs::insert",
+        "ScDBData::GetQueryParam"
+      ],
+      "evidence": [
+        "apps/office/src/sc/source/core/tool/dbdata.ts",
+        "apps/office/src/sc/source/filter/xml/ods-database-ranges.test.ts",
+        "vendor/libreoffice-reference/sc/source/core/tool/dbdata.cxx"
+      ],
+      "knownViolations": [],
+      "justification": "Owns the database area, native flags and query, preserving separate named and anonymous storage and the name index counter. Reference updates, table column listeners, database source refresh and database formula evaluation remain unported."
+    }
+  }
+}

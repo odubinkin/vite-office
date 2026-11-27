@@ -13,7 +13,8 @@
       "constexpr sal_uInt32 TEXTWIDTH_DIRTY"
     ],
     "preservedResponsibilities": [
-      "Original UInt32 text-width dirty constant65535 used by the original UInt16 metadata initializer."
+      "Original UInt32 text-width dirty constant65535 used by the original UInt16 metadata initializer.",
+      "Exposes the reserved sheet and document anonymous database range name prefixes."
     ],
     "omittedResponsibilities": [
       "Other global name and value constants remain absent; full header parity unverified."
@@ -27,12 +28,24 @@
         {
           "path": "apps/office/src/sc/source/core/data/celltextattr.test.ts",
           "marker": "retains original cell variants and native default discriminators"
+        },
+        {
+          "path": "apps/office/src/sc/inc/globalnames.ts",
+          "marker": "STR_DB_LOCAL_NONAME"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-database-ranges.test.ts",
+          "marker": "testDatabaseRangesODS"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sc/inc/globalnames.hxx",
           "marker": "constexpr sal_uInt32 TEXTWIDTH_DIRTY"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/globalnames.hxx",
+          "marker": "STR_DB_LOCAL_NONAME"
         }
       ]
     }

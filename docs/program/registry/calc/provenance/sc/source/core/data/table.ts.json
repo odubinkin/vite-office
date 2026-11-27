@@ -98,7 +98,8 @@
       "Owns the native protected sheet state projected by table5.",
       "Exposes the marked selection editability check on the actual sheet.",
       "Owns the original sheet tab color value with COL_AUTO initialization and by-value access.",
-      "Maintains the original sheet-owned named page-style pointer by its style identity."
+      "Maintains the original sheet-owned named page-style pointer by its style identity.",
+      "Owns its single anonymous database range."
     ],
     "omittedResponsibilities": [
       "Task76 document/table paste orchestration,source general sparse-sheet copy,UndoToDocument/paste history and EnterBlock/UI are pending. Rich text,notes,sparklines,drawings,3D/matrix,nondefault paste and complete formatter/layout services remain outside this admitted slice."
@@ -276,6 +277,14 @@
         {
           "path": "apps/office/src/sc/source/filter/oox/excelfilter.enhanced-protection.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/table.ts",
+          "marker": "SetAnonymousDBData"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-database-ranges.test.ts",
+          "marker": "testDatabaseRangesODS"
         }
       ],
       "upstream": [
@@ -442,6 +451,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/core/data/table2.cxx",
           "marker": "ScTable::SetMergedCells"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/table.hxx",
+          "marker": "GetAnonymousDBData"
         }
       ]
     },
