@@ -4,7 +4,7 @@ title: "Reconcile Writer and shared ODF provenance after branch integration"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -24,6 +24,23 @@ verification:
   updated_by: "CODER"
   note: "Global provenance and both scoped invariant gates pass, and 66 scoped Writer/shared tests pass."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-11-27T06:53:40.399Z"
+  updated_by: "EVALUATOR"
+  note: "Rebound Writer and shared ODF provenance to current native owners and verified behavior."
+  evaluated_sha: "3858bb8c89d64b6910f2f99f0854aec81fe36c5d"
+  blueprint_digest: "5fa81cef0110fc63674c0dbf5f9b87178fbb73f920a1f727b06f60108d8c510d"
+  evidence_refs:
+    - ".agentplane/tasks/202611270615-N5GDD4/README.md"
+    - ".agentplane/tasks/202611270615-N5GDD4/quality/20261127-065340399-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202611270615-N5GDD4/quality/20261127-065340399-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202611270615-N5GDD4/quality/20261127-065340399-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202611270615-N5GDD4/blueprint/resolved-snapshot.json"
+    - "output/playwright/N5GDD4/verification.md"
+    - "ab5ca4beff41628f9be0dadaaeacdb133fff5e3f"
+  findings:
+    - "Corrected ten stale references. Global provenance, both registry scopes and 66 existing Writer/shared tests passed."
 commit: null
 comments:
   -
