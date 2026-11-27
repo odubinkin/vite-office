@@ -13,6 +13,12 @@ import { ColorSet } from "../../../../docmodel/inc/theme/ColorSet";
 import { Theme } from "../../../../docmodel/inc/theme/Theme";
 import { ThemeColorType } from "../../../../docmodel/inc/theme/ThemeColorType";
 import { ScXMLExport } from "./xmlexprt";
+import { ATTR_BACKGROUND } from "../../../inc/scitems";
+import {
+  decodeCalcDocument,
+  encodeCalcDocument,
+} from "../../../browser/filter/xml/calc-document-codec";
+import { ODF_NAMESPACES } from "../../../../xmloff/source/core/xmltoken";
 it("writes original text and table-cell color groups and retains RGB/automatic/transparent across reopens", /** Checks actual package bytes and item state. @returns Completion. */ async () => {
   const session = createCalcSession(),
     c = session.controller;
@@ -149,6 +155,60 @@ it("matches the native ODF theme with an empty color-set name", /** Verifies the
   } finally {
     importer.DisposeStyles();
     restored.Dispose();
+    doc.Dispose();
+  }
+});
+
+it("applies the import-only table background before cell overrides and saves it as sparse cell formatting", /** Exercises the native table style, Worker and ODS save. @returns Completion. */ async () => {
+  const doc = new ScDocument();
+  let worker: ScDocument | undefined;
+  let reopened: ScDocument | undefined;
+  const ns = ODF_NAMESPACES;
+  try {
+    new ScXMLImport(doc).importContent(`
+      <office:document-content xmlns:office="${ns.office}" xmlns:style="${ns.style}" xmlns:table="${ns.table}" xmlns:fo="${ns.fo}" xmlns:loext="${ns.loext}">
+        <office:automatic-styles>
+          <style:style style:name="Sheet" style:family="table">
+            <style:table-properties fo:background-color="#aabbcc">
+              <loext:background-complex-color loext:theme-type="accent1"/>
+            </style:table-properties>
+          </style:style>
+          <style:style style:name="Override" style:family="table-cell">
+            <style:table-cell-properties fo:background-color="transparent"/>
+          </style:style>
+        </office:automatic-styles>
+        <office:body><office:spreadsheet>
+          <table:table table:name="Data" table:style-name="Sheet">
+            <table:table-row>
+              <table:table-cell table:style-name="Override" office:value-type="float" office:value="2"/>
+              <table:table-cell office:value-type="float" office:value="3"/>
+            </table:table-row>
+          </table:table>
+        </office:spreadsheet></office:body>
+      </office:document-content>`);
+    worker = decodeCalcDocument(structuredClone(encodeCalcDocument(doc)));
+    const output = await writeOdsDocument(worker);
+    const content = await (await DocumentArchive.open(output)).readTextEntry("content.xml");
+    expect(content).toMatch(/<style:table-cell-properties[^>]*fo:background-color="#aabbcc"/u);
+    expect(content).not.toMatch(/<style:table-properties[^>]*fo:background-color/u);
+    reopened = await readOdsDocument(output);
+    for (const model of [doc, worker, reopened]) {
+      const first = model.GetPattern(new ScAddress())?.GetItem(ATTR_BACKGROUND) as SvxBrushItem;
+      const next = model
+        .GetPattern(new ScAddress(1, 0, 0))
+        ?.GetItem(ATTR_BACKGROUND) as SvxBrushItem;
+      const far = model
+        .GetPattern(new ScAddress(model.MaxCol(), model.MaxRow(), 0))
+        ?.GetItem(ATTR_BACKGROUND) as SvxBrushItem;
+      expect(first.GetColor().GetAlpha()).toBe(0);
+      expect(next.GetColor().toUInt32()).toBe(0xaabbcc);
+      expect(far.GetColor().toUInt32()).toBe(0xaabbcc);
+      expect(far.getComplexColor().isValidThemeType()).toBe(false);
+      expect(model.FetchTable(0)?.GetAllocatedColumnsCount()).toBeLessThan(5);
+    }
+  } finally {
+    reopened?.Dispose();
+    worker?.Dispose();
     doc.Dispose();
   }
 });

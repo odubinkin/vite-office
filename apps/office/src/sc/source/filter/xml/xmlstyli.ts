@@ -4,6 +4,7 @@ import { Converter } from "../../../../sax/source/tools/converter";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { SvxHorJustifyItem } from "../../../../editeng/inc/justifyitem";
 import {
+  importCellBackgroundColor,
   importCellTextProperties,
   importCellProperties,
   importCellParagraphProperties,
@@ -161,6 +162,7 @@ class XMLSheetStyleContext extends ScXMLImportContext {
   private visible = true;
   private tabColor: Readonly<Color> = COL_AUTO;
   private writingMode: number | undefined;
+  private background: SvxBrushItem | undefined;
   /** Binds a real ODF table style. @param owner - Importer. @param name - Style name. @param masterPage - Associated master page. @returns Context. */
   constructor(
     private readonly owner: ScXMLImport,
@@ -179,12 +181,28 @@ class XMLSheetStyleContext extends ScXMLImportContext {
       this.visible = display !== "false" && display !== "0";
       const direction = attributes.get(XMLToken.STYLE_WRITING_MODE);
       if (direction !== null) this.writingMode = importWritingDirection(direction, false);
+      const background = attributes.get(XMLToken.FO_BACKGROUND_COLOR);
+      if (background !== null) {
+        this.background ??= (
+          this.owner
+            .GetDocument()
+            .getCellAttributeHelper()
+            .getDefaultCellAttribute()
+            .GetItem(ATTR_BACKGROUND) as SvxBrushItem
+        ).Clone();
+        importCellBackgroundColor(
+          this.background,
+          background,
+          /** Reports the original background property failure. @param name - Diagnostic name. */
+          (name) => this.owner.unsupported(name),
+        );
+      }
       for (const [token, value] of attributes) {
         if (token !== XMLToken.TABLE_TAB_COLOR && token !== XMLToken.TABLE_EXT_TAB_COLOR) continue;
         const rgb: [number] = [0];
         if (Converter.convertColor(rgb, value)) this.tabColor = new Color(rgb[0]);
       }
-      return new ScXMLImportContext(this.owner);
+      return new XMLTableStylePropertyContext(this.owner);
     }
     this.owner.unsupported("table style properties");
     return new SvXMLIgnoreContext(true);
@@ -198,6 +216,7 @@ class XMLSheetStyleContext extends ScXMLImportContext {
         this.tabColor,
         this.masterPage,
         this.writingMode,
+        this.background,
       );
   }
 }

@@ -636,15 +636,28 @@ export function importCellProperties(
   }
   const source = attributes.get(XMLToken.FO_BACKGROUND_COLOR);
   if (source === null) return;
-  const brush = (pattern.GetItem(148) as SvxBrushItem).Clone(),
-    value = new Any();
+  const brush = (pattern.GetItem(ATTR_BACKGROUND) as SvxBrushItem).Clone();
+  try {
+    importCellBackgroundColor(brush, source, unsupported);
+    pattern.ItemSetPut(brush);
+  } finally {
+    brush.Dispose();
+  }
+}
+
+/** Imports the native color and transparency properties shared by cell and sheet styles. @param brush - Writable background item. @param source - ODF color attribute. @param unsupported - Original importer diagnostic. */
+export function importCellBackgroundColor(
+  brush: SvxBrushItem,
+  source: string,
+  unsupported: (message: string) => void,
+): void {
+  const value = new Any();
   try {
     if (backgroundColor.importXML(source, value, unitConverter))
       brush.PutValue(value, MID_BACK_COLOR);
     else if (source !== "transparent") unsupported("invalid cell background color");
     backgroundTransparent.importXML(source, value, unitConverter);
     brush.PutValue(value, MID_GRAPHIC_TRANSPARENT);
-    pattern.ItemSetPut(brush);
   } finally {
     value.dispose();
   }

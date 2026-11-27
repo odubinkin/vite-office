@@ -73,6 +73,7 @@ import type { ScLineBreakCell } from "../../../inc/attrib";
 import { ScDocOptions } from "../../core/tool/docoptio";
 import { INetURLObject } from "../../../../tools/source/fsys/urlobj.object";
 import { WritingMode2 } from "../../../../offapi/com/sun/star/text/WritingMode2";
+import type { SvxBrushItem } from "../../../../editeng/inc/brushitem";
 /** Browser parser ceilings bind native scalar import to bounded resources. */
 export interface ScXMLImportOptions extends OdfXmlParseOptions {
   readonly maxExpandedCells?: number;
@@ -516,17 +517,20 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
       tabColor: Readonly<Color>;
       masterPage: string | null;
       writingMode: number | undefined;
+      background: SvxBrushItem | undefined;
     }
   >();
-  /** Registers properties of the native table-family style. @param name - Automatic style. @param visible - Sheet display. @param tabColor - Sheet tab color. @param masterPage - Associated page style. @param writingMode - Authored UNO sheet layout mode. @returns Nothing. */
+  /** Registers properties of the native table-family style. @param name - Automatic style. @param visible - Sheet display. @param tabColor - Sheet tab color. @param masterPage - Associated page style. @param writingMode - Authored UNO sheet layout mode. @param background - Owned import-only cell background. @returns Nothing. */
   AddTableStyle(
     name: string,
     visible: boolean,
     tabColor: Readonly<Color>,
     masterPage: string | null,
     writingMode?: number,
+    background?: SvxBrushItem,
   ): void {
-    this.tableStyles.set(name, { visible, tabColor, masterPage, writingMode });
+    this.tableStyles.get(name)?.background?.Dispose();
+    this.tableStyles.set(name, { visible, tabColor, masterPage, writingMode, background });
   }
   /** Applies the sheet style to its native owner. @param name - Automatic style. @param tab - Native sheet. @returns Nothing. */
   ApplyTableStyle(name: string, tab: number): void {
@@ -538,6 +542,22 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
       if (style.writingMode !== undefined)
         this.document.SetLayoutRTL(tab, style.writingMode === WritingMode2.RL_TB);
       if (style.masterPage) this.pageStyles.Apply(tab, style.masterPage);
+      if (style.background) {
+        const pattern = new ScPatternAttr(this.document.getCellAttributeHelper());
+        try {
+          pattern.ItemSetPut(style.background);
+          this.document.ApplyPatternAreaTab(
+            0,
+            0,
+            this.document.MaxCol(),
+            this.document.MaxRow(),
+            tab,
+            pattern,
+          );
+        } finally {
+          pattern.Dispose();
+        }
+      }
     }
   }
   private readonly columnStyles = new Map<string, { width: number | null; pageBreak: boolean }>();
@@ -952,6 +972,7 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
     this.textStyles.clear();
     this.rowStyles.clear();
     this.columnStyles.clear();
+    for (const { background } of this.tableStyles.values()) background?.Dispose();
     this.tableStyles.clear();
     this.fontFaces.clear();
   }

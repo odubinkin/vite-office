@@ -8360,3 +8360,15 @@ areas at their default coordinates.
 - [Original consolidation export](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlexprt.cxx#L5230)
 - [Original address formatter](../../vendor/libreoffice-reference/sc/source/core/tool/rangeutl.cxx#L620)
 - [Original consolidation admission](../../vendor/libreoffice-reference/sc/source/filter/xml/XMLConsolidationContext.cxx#L77)
+
+### CALC-872 — The table background complex-color entry is mapped but skipped
+
+The table-family background complex-color map has no element import flag.
+The generic style property context also has a complex-color branch only for
+the character color child. The table background theme metadata is therefore
+ignored while the scalar background color and transparency are imported.
+Calc preserves that behavior.
+
+- [Original table import map](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlstyle.cxx#L174)
+- [Original element import gate](../../vendor/libreoffice-reference/xmloff/source/style/xmlprcon.cxx#L55)
+- [Original generic style property context](../../vendor/libreoffice-reference/xmloff/source/style/StylePropertiesContext.cxx#L30)

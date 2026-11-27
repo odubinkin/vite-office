@@ -30,6 +30,7 @@
       "Applies the original typed ODF table-cell border color children after shorthand geometry.",
       "Reads standard and legacy ODF table-family tab colors via the native SAX color conversion.",
       "Reads the native sheet writing mode with the shared handler variant and applies the original horizontal layout property.",
+      "Reads the original import-only table background color and transparency with the shared cell brush handlers. The generic table property context ignores the mapped complex-color child.",
       "Routes page layouts and preserves native master-page names referenced by automatic table styles.",
       "Automatic cell styles collect legacy conditional maps with their style display names, native formula grammars and OOo A1 source strings.",
       "Uses the original storage grammar when a conditional style map has no explicit formula namespace."

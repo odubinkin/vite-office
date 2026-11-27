@@ -75,3 +75,14 @@ ODS export writes the resulting horizontal mode as `lr-tb` or `rl-tb`. The
 Worker transfers the native sheet flag, defaulting to left-to-right for older
 records. The original mixed-direction `cell-invalidations.ods` exercises both
 directions. Drawing mirroring and tiled rendering remain outside this slice.
+
+## ODS sheet background
+
+Calc reads the table-family background color and transparency into the native
+cell background item. It applies that item to the sheet's sparse default column
+and allocated columns before applying cell styles. An explicit cell style can
+replace the background, including with transparency.
+
+The Worker transfers the resulting cell formatting. ODS export uses automatic
+cell styles and the existing default-cell-style resolution for columns. Calc
+preserves LibreOffice's handling of the table-family complex-color child.
