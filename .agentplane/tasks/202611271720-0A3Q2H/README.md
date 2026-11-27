@@ -1,10 +1,11 @@
 ---
 id: "202611271720-0A3Q2H"
 title: "Implement native Calc embedded fonts in ODS packages"
-status: "DOING"
+result_summary: "Preserves Calc ODS font resources and the original embedding property values through the Worker."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - "output/playwright/odf-next-checkpoint/font-verification.md"
   findings:
     - "The original shared fixture bytes round-trip exactly and existing Writer resource tests pass."
-commit: null
+commit:
+  hash: "c834010f16459446331b504d9fa796c767337fee"
+  message: "🧩 0A3Q2H calc: preserve embedded ODS font resources"
 comments:
   -
     author: "CODER"
     body: "Start: attach native Calc ODS font embedding and package resources."
+  -
+    author: "CODER"
+    body: "Verified: 56 affected tests, byte-identical ODS font through final replay, and scoped static checks."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "All 56 related Calc, Writer and package cases passed. The final two Calc font cases passed with original resource bytes and native defaults. Typecheck, lint, dependency boundaries, provenance and scoped inventories passed."
+  -
+    type: "status"
+    at: "2026-11-27T17:33:19.905Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: 56 affected tests, byte-identical ODS font through final replay, and scoped static checks."
 doc_version: 3
-doc_updated_at: "2026-11-27T17:32:07.589Z"
+doc_updated_at: "2026-11-27T17:33:19.905Z"
 doc_updated_by: "CODER"
 description: "Connect Calc's native font embedding flags and original XMLFontAutoStylePool to the shared ODF font declaration and package resource path. Retain admitted font bytes and rights metadata through ODS imports and exports and the Worker, and share the existing Writer resource checks while preserving their behavior. Port the native Calc defaults and verify pinned embedded font bytes in ODS."
 sections:
