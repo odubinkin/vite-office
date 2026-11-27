@@ -293,3 +293,57 @@ test("Writer Navigator context menus change tracking and keep native preferences
     "true",
   );
 });
+
+test("Writer Navigator context commands share heading undo and the persistent outline level", /** Uses the native edit surface, two heading branches and the contextual outline control. @param fixtures - Browser test inputs. @param fixtures.page - Writer page. @returns Completion. */ async ({
+  page,
+}) => {
+  await page.goto("/writer", { waitUntil: "domcontentloaded" });
+  const paragraphs = page.locator("[data-writer-paragraph-id]");
+  const editor = page.getByRole("textbox", { name: "Writer document text" });
+  await paragraphs.first().click();
+  for (const [index, text] of ["Chapter A", "Section A", "Chapter B"].entries()) {
+    if (index > 0) await page.keyboard.press("Enter");
+    await page.keyboard.insertText(text);
+  }
+  const toolbar = page.getByRole("toolbar", { name: "Writer formatting toolbar" });
+  const style = toolbar.getByRole("combobox", { name: "Paragraph style", exact: true });
+  for (const [index, heading] of ["Heading 1", "Heading 2", "Heading 1"].entries()) {
+    await paragraphs.nth(index).click();
+    await toolbar.getByRole("button", { name: "Show Paragraph style", exact: true }).click();
+    await page
+      .locator(`id=${await style.getAttribute("aria-controls")}`)
+      .getByRole("option", { name: heading, exact: true })
+      .click();
+  }
+  await page.keyboard.press("F5");
+  const navigator = page.getByRole("dialog", { name: "Navigator", exact: true });
+  const chapter = navigator.getByRole("treeitem", { name: "Chapter A", exact: true });
+  const section = navigator.getByRole("treeitem", { name: "Section A", exact: true });
+  const context = page.getByRole("menu", { name: "Navigator context menu" });
+  await chapter.click({ button: "right" });
+  await context.getByRole("menuitem", { name: "Move Heading Down" }).click();
+  await expect(paragraphs).toHaveText(["Chapter B", "Chapter A", "Section A"]);
+  await page
+    .getByRole("toolbar", { name: "Writer standard toolbar" })
+    .getByRole("button", { name: "Undo", exact: true })
+    .click();
+  await expect(paragraphs).toHaveText(["Chapter A", "Section A", "Chapter B"]);
+  await chapter.click({ button: "right" });
+  const levelMenu = context.getByRole("menuitem", { name: "Show Up to Outline Level" });
+  await levelMenu.click();
+  await context.getByRole("menuitemradio", { name: "1", exact: true }).click();
+  const level = navigator.getByRole("combobox", { name: "Show Up to Outline Level" });
+  await expect(level).toHaveValue("1");
+  await expect(section).toBeHidden();
+  await page.reload({ waitUntil: "domcontentloaded" });
+  await editor.click();
+  await page.keyboard.press("F5");
+  await expect(level).toHaveValue("1");
+  const headings = navigator.getByRole("treeitem", { name: "Headings", exact: true });
+  await headings.click({ button: "right" });
+  await levelMenu.click();
+  await expect(context.getByRole("menuitemradio", { name: "1", exact: true })).toHaveAttribute(
+    "aria-checked",
+    "true",
+  );
+});

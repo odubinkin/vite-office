@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/browser/presentation/writer-navigator-menu.ts",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "navigator",
+    "capabilityIds": [
+      "CAP-0103",
+      "CAP-0104"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/browser/presentation/writer-navigator-menu.ts#getWriterNavigatorMenuItems",
+        "apps/office/src/sw/browser/presentation/WriterNavigator.test.tsx#runs the native Navigator context actions for outline branches and bookmark rows",
+        "vendor/libreoffice-reference/sw/uiconfig/swriter/ui/navigatorcontextmenu.ui#id=\"collapseallcategories\"",
+        "vendor/libreoffice-reference/sw/uiconfig/swriter/ui/navigatorcontextmenu.ui#id=\"outlinelevel\"",
+        "vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx#SwContentTree::ExecuteContextMenuAction"
+      ],
+      "justification": "Projects applicable Navigator context entries in pinned resource order, connecting local handlers, radio preferences and disabled action state.",
+      "knownViolations": [],
+      "localSymbols": [
+        "getWriterNavigatorMenuItems"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

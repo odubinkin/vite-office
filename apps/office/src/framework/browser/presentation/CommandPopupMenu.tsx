@@ -21,8 +21,9 @@ export type PopupMenuItemPlacement =
       kind: "local";
       id: string;
       label: string;
-      semantics: "radio" | "check";
-      checked: boolean;
+      semantics: "action" | "radio" | "check";
+      checked?: boolean;
+      disabled?: boolean;
       activate: () => void;
     }>;
 
@@ -365,14 +366,21 @@ export function CommandPopupMenu({
               ) : (
                 <button
                   aria-checked={item.checked}
-                  className="flex w-full items-center rounded-md py-2 pr-2 pl-1 text-left text-sm text-slate-700"
+                  className="flex w-full items-center rounded-md py-2 pr-2 pl-1 text-left text-sm text-slate-700 disabled:cursor-not-allowed disabled:opacity-45"
+                  disabled={item.disabled}
                   onClick={
                     /** Dismisses the shared popup before calling the local handler. @returns Nothing. */ () => {
                       flushSync(closeMenu);
                       item.activate();
                     }
                   }
-                  role={item.semantics === "radio" ? "menuitemradio" : "menuitemcheckbox"}
+                  role={
+                    item.semantics === "action"
+                      ? "menuitem"
+                      : item.semantics === "radio"
+                        ? "menuitemradio"
+                        : "menuitemcheckbox"
+                  }
                   tabIndex={-1}
                   type="button"
                 >

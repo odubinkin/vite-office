@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/sw/browser/presentation/writer-navigator-menu.ts",
+    "localSymbols": [
+      "getWriterNavigatorMenuItems"
+    ],
+    "rationale": "Projects applicable Navigator context entries in pinned resource order, connecting local handlers, radio preferences and disabled action state.",
+    "responsibilities": [
+      "Projects applicable Navigator context entries in pinned resource order, connecting local handlers, radio preferences and disabled action state."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-navigator-menu.ts",
+          "marker": "getWriterNavigatorMenuItems"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterNavigator.test.tsx",
+          "marker": "runs the native Navigator context actions for outline branches and bookmark rows"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/uiconfig/swriter/ui/navigatorcontextmenu.ui",
+          "marker": "id=\"collapseallcategories\""
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/uiconfig/swriter/ui/navigatorcontextmenu.ui",
+          "marker": "id=\"outlinelevel\""
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx",
+          "marker": "SwContentTree::ExecuteContextMenuAction"
+        }
+      ]
+    },
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Uses the shared DOM popup rather than the native weld menu renderer."
+    }
+  }
+}

@@ -14,7 +14,8 @@
       "SwNavigationConfig::ImplCommit"
     ],
     "preservedResponsibilities": [
-      "Loads and updates the native outline mode and content-type tracking flags with the Writer Navigator configuration defaults."
+      "Loads and updates the native outline mode and content-type tracking flags with the Writer Navigator configuration defaults.",
+      "Restores and stores the original OutlineLevel property, using the native ten-level default."
     ],
     "omittedResponsibilities": [
       "Other Navigator settings and unrepresented content types are outside the connected tracking slice."
@@ -28,6 +29,10 @@
         {
           "path": "apps/office/src/sw/browser/storage/writer-navigator-configuration-store.test.ts",
           "marker": "keeps native defaults and round-trips tracking preferences"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/utlui/navicfg.ts",
+          "marker": "GetOutlineLevel"
         }
       ],
       "upstream": [
@@ -42,6 +47,10 @@
         {
           "path": "vendor/libreoffice-reference/officecfg/registry/schema/org/openoffice/Office/Writer.xcs",
           "marker": "oor:name=\"OutlineTracking\""
+        },
+        {
+          "path": "vendor/libreoffice-reference/officecfg/registry/schema/org/openoffice/Office/Writer.xcs",
+          "marker": "oor:name=\"OutlineLevel\""
         }
       ]
     }

@@ -1,4 +1,8 @@
-/** @fileoverview Owns the represented Office.Writer/Navigator tracking properties. */
+/** @fileoverview Owns the represented Office.Writer/Navigator properties. */
+import { WRITER_MAX_LIST_LEVEL } from "../../core/doc/list";
+
+/** Native MAXLEVEL count, above the highest zero-based list level. */
+export const MAX_NAVIGATOR_OUTLINE_LEVEL = WRITER_MAX_LIST_LEVEL + 1;
 
 /** OutlineTracking values in the Writer configuration schema. */
 export enum OutlineTrackingMode {
@@ -12,8 +16,9 @@ export type TrackedContentType = "table" | "bookmark";
 
 const trackingProperties = { table: "TableTracking", bookmark: "BookmarkTracking" } as const;
 
-/** Configuration fields used by the native Navigator content tree. */
-export interface NavigatorTrackingProperties {
+/** Represented configuration fields used by the native Navigator content tree. */
+export interface NavigatorProperties {
+  readonly OutlineLevel: number;
   readonly OutlineTracking: OutlineTrackingMode;
   readonly TableTracking: boolean;
   readonly BookmarkTracking: boolean;
@@ -22,18 +27,26 @@ export interface NavigatorTrackingProperties {
 /** Configuration provider passed to the native owner by the platform. */
 export interface NavigatorConfiguration {
   readonly Load: () => Readonly<Record<string, unknown>>;
-  readonly Save: (values: NavigatorTrackingProperties) => void;
+  readonly Save: (values: NavigatorProperties) => void;
 }
 
-/** Stores Navigator tracking settings independently of the active document. */
+/** Stores Navigator settings independently of the active document. */
 export class SwNavigationConfig {
-  private properties: NavigatorTrackingProperties;
+  private properties: NavigatorProperties;
 
   /** Loads supported preferences and applies native defaults to absent or invalid values. @param configuration - Platform configuration provider. @returns Navigator configuration. */
   constructor(private readonly configuration?: NavigatorConfiguration) {
     const values = configuration?.Load() ?? {};
     const outline = values.OutlineTracking;
+    const level = values.OutlineLevel;
     this.properties = {
+      OutlineLevel:
+        typeof level === "number" &&
+        Number.isInteger(level) &&
+        level >= 0 &&
+        level <= MAX_NAVIGATOR_OUTLINE_LEVEL
+          ? level
+          : MAX_NAVIGATOR_OUTLINE_LEVEL,
       OutlineTracking:
         outline === OutlineTrackingMode.Focus || outline === OutlineTrackingMode.Off
           ? outline
@@ -41,6 +54,18 @@ export class SwNavigationConfig {
       TableTracking: values.TableTracking !== false,
       BookmarkTracking: values.BookmarkTracking !== false,
     };
+  }
+
+  /** Reads the maximum displayed outline depth. @returns Number of represented levels. */
+  public GetOutlineLevel(): number {
+    return this.properties.OutlineLevel;
+  }
+
+  /** Sets the maximum displayed outline depth. @param level - Native Navigator depth. @returns Nothing. */
+  public SetOutlineLevel(level: number): void {
+    if (level === this.GetOutlineLevel()) return;
+    this.properties = { ...this.properties, OutlineLevel: level };
+    this.configuration?.Save(this.properties);
   }
 
   /** Reads the source outline mode. @returns Current mode. */

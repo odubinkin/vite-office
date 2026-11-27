@@ -24,7 +24,6 @@ import { createPortal } from "react-dom";
 import {
   CommandPopupMenu,
   type CommandPopupMenuProps,
-  type PopupMenuItemPlacement,
 } from "../../../framework/browser/presentation/CommandPopupMenu";
 import type { BrowserCommandSurfaceProps } from "../../../framework/browser/presentation/command-surface";
 import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
@@ -38,6 +37,7 @@ import { OutlineTrackingMode } from "../../source/uibase/utlui/navicfg";
 import { selectWriterPopupCommandResource } from "./writer-command-presentation";
 import type { SwView } from "../../source/uibase/uiview/view";
 import { queueWriterCursorReveal } from "./writer-cursor-reveal";
+import { getWriterNavigatorMenuItems, navigatorOutlineLevels } from "./writer-navigator-menu";
 
 /** One visible original content tree row and its keyboard ancestry. */
 interface NavigatorRow {
@@ -59,21 +59,16 @@ const headingTools = [
   ["chapterdown", "Move Heading Down", ArrowDown],
 ] as const satisfies readonly (readonly [SwNavigatorHeadingCommand, string, typeof ArrowUp])[];
 
-/** Projects the native content hierarchy and retains the requested outline depth. @param groups - Native content roots. @param outlineLevel - Maximum visible heading level. @param collapsed - Retained closed entries. @param root - Optional content-navigation root. @param label - Original localized text. @returns Visible rows. */
+/** Projects the native content hierarchy and retains the requested outline depth. @param groups - Native content roots. @param collapsed - Retained closed entries. @param root - Optional content-navigation root. @param label - Original localized text. @returns Visible rows. */
 function getRows(
   groups: readonly SwNavigatorContentGroup[],
-  outlineLevel: number,
   collapsed: ReadonlySet<string>,
   root: SwNavigatorContentType | undefined,
   label: (key: string, fallback: string) => string,
 ): NavigatorRow[] {
   const rows: NavigatorRow[] = [];
-  for (const { type, contents } of groups) {
+  for (const { type, contents: entries } of groups) {
     if (root && root !== type) continue;
-    const entries = contents.filter(
-      /** Filters deeper outlines as the native level control does. @param content - Existing content entry. @returns Whether visible at the selected depth. */
-      (content) => (content.level ?? 1) <= outlineLevel,
-    );
     const group: NavigatorRow = {
       type,
       group: true,
@@ -164,11 +159,19 @@ export function WriterNavigator({
   const selectionAnchor = useRef("");
   const trackedScroll = useRef<string | undefined>(undefined);
   const headingCommandActive = useRef(false);
-  const [outlineLevel, setOutlineLevel] = useState(10);
+  const [outlineLevel, setOutlineLevel] = useState(
+    /** Restores the native configuration before building the tree. @returns Initial outline depth. */
+    () => tree.GetOutlineLevel(),
+  );
   const [root, setRoot] = useState<SwNavigatorContentType>();
   const [pageDraft, setPageDraft] = useState<{ origin: number; value: string }>();
   const [popup, setPopup] = useState<
-    { type: SwNavigatorContentType; position: CommandPopupMenuProps["position"] } | undefined
+    | {
+        rowId: string;
+        position: CommandPopupMenuProps["position"];
+        items: CommandPopupMenuProps["items"];
+      }
+    | undefined
   >();
   if (!visible && popup !== undefined) setPopup(undefined);
   const page = tree.GetPageState();
@@ -176,12 +179,18 @@ export function WriterNavigator({
   function label(key: string, fallback: string): string {
     return localization.GetText(`writer.navigator.${key}`, fallback);
   }
-  const rows = getRows(visible ? tree.GetContents() : [], outlineLevel, collapsed, root, label);
+  const rows = getRows(visible ? tree.GetContents() : [], collapsed, root, label);
   const selectedRow =
     rows.find(
       /** Resolves the existing focus identity after a document edit. @param row - Mounted tree row. @returns Selection match. */
       (row) => row.id === selected,
     ) ?? rows[0];
+  const popupRow = popup
+    ? rows.find(
+        /** Locates the context row while it is still visible. @param row - Navigator entry. @returns Whether it owns the menu. */
+        (row) => row.id === popup.rowId,
+      )
+    : undefined;
   const multiple = root === "outline";
   const selectedIds = new Set(
     multiple ? extended : selectedRow && selected !== null ? [selectedRow.id] : [],
@@ -233,7 +242,7 @@ export function WriterNavigator({
         return;
       }
       if (selectedIds.size === 1 && selectedIds.has(id)) return;
-      const entries = getRows(tree.GetContents(), outlineLevel, new Set(), root, label);
+      const entries = getRows(tree.GetContents(), new Set(), root, label);
       const entry = entries.find(
         /** Checks whether the tracked row passes the outline depth setting. @param row - Candidate tree item. @returns Whether it is tracked. */
         (row) => row.id === id,
@@ -326,6 +335,19 @@ export function WriterNavigator({
     else if (tree.GotoContent(row.id)) reveal();
   }
 
+  /** Updates the shared outline level from either native control. @param level - Selected visible depth. @returns Nothing. */
+  function changeOutlineLevel(level: number): void {
+    tree.SetOutlineLevel(level);
+    setOutlineLevel(level);
+  }
+
+  /** Deletes the row or its bookmark category through the existing native history owner. @param row - Selected bookmark row or group. @returns Nothing. */
+  function removeBookmarks(row: NavigatorRow): void {
+    if (!tree.DeleteBookmarks(row.group ? undefined : row.id)) return;
+    setSelected("bookmark");
+    reveal();
+  }
+
   /** Navigates to an existing physical page. @param number - One-based page number. @returns Nothing. */
   function goToPage(number: number): void {
     if (!tree.GotoPage(number)) return;
@@ -377,12 +399,16 @@ export function WriterNavigator({
     setExtended(entry ? [entry] : []);
   }
 
-  /** Applies the selected headings and reveals the retained native outline rows. @param command - Heading toolbar action. @param withChildren - Whether descendants move with their parent. @returns Nothing. */
-  function runHeadingCommand(command: SwNavigatorHeadingCommand, withChildren: boolean): void {
+  /** Applies the selected headings and reveals the retained native outline rows. @param command - Heading toolbar action. @param withChildren - Whether descendants move with their parent. @param selection - Heading identities when a native popup opened. @returns Nothing. */
+  function runHeadingCommand(
+    command: SwNavigatorHeadingCommand,
+    withChildren: boolean,
+    selection: readonly string[] = headings,
+  ): void {
     let retained: readonly string[];
     headingCommandActive.current = true;
     try {
-      retained = tree.ExecCommand(headings, command, withChildren);
+      retained = tree.ExecCommand(selection, command, withChildren);
     } finally {
       headingCommandActive.current = false;
     }
@@ -398,11 +424,7 @@ export function WriterNavigator({
     setSelected(active);
     selectionAnchor.current = active;
     setCollapsed(
-      expandAncestors(
-        getRows(tree.GetContents(), outlineLevel, new Set(), root, label),
-        retained,
-        collapsed,
-      ),
+      expandAncestors(getRows(tree.GetContents(), new Set(), root, label), retained, collapsed),
     );
   }
 
@@ -483,54 +505,87 @@ export function WriterNavigator({
 
   /** Opens the original content-type popup against a selected tree row. @param row - Row receiving the popup request. @param position - Browser device point. @returns Nothing. */
   function openContextMenu(row: NavigatorRow, position: CommandPopupMenuProps["position"]): void {
-    if (!selectedIds.has(row.id)) select(row, false, false);
+    const alreadySelected = selectedIds.has(row.id);
+    if (!alreadySelected) select(row, false, false);
     rowRefs.current.get(row.id)?.focus({ preventScroll: true });
-    setPopup({ type: row.type, position });
+    setPopup({
+      rowId: row.id,
+      position,
+      items: menuItems(row, alreadySelected ? headings : [row.id]),
+    });
   }
 
-  /** Returns represented tracking entries in pinned popup order. @param type - Active content category. @returns Native popup placements. */
-  function trackingItems(type: SwNavigatorContentType): readonly PopupMenuItemPlacement[] {
-    if (type === "outline")
-      return [
-        {
-          kind: "submenu",
-          id: "4",
-          label: label("outline-tracking", "Outline Tracking"),
-          items: (
-            [
-              [OutlineTrackingMode.Default, "default", "Default"],
-              [OutlineTrackingMode.Focus, "focus", "Focus"],
-              [OutlineTrackingMode.Off, "off", "Off"],
-            ] as const
-          ).map(
-            /** Projects an outline tracking radio item. @param item - Native value and label. @returns Menu placement. */
-            ([mode, key, fallback]) => ({
-              kind: "local",
-              id: String(10 + mode),
-              label: label(`outline-tracking-${key}`, fallback),
-              semantics: "radio",
-              checked: tree.GetOutlineTracking() === mode,
-              activate: /** Applies the selected outline tracking policy. @returns Nothing. */ () =>
-                tree.SetOutlineTracking(mode),
-            }),
-          ),
+  /** Finds every expandable heading in the requested branch. @param row - Current outline entry. @returns Original expandable branch identities. */
+  function outlineBranch(row: NavigatorRow): string[] {
+    if (row.type !== "outline" || !row.children) return [];
+    const entries = getRows(tree.GetContents(), new Set(), root, label);
+    const index = entries.findIndex(
+      /** Locates the subtree start in the full depth-limited tree. @param entry - Complete tree row. @returns Whether it is the root. */
+      (entry) => entry.id === row.id,
+    );
+    const branch = [row.id];
+    for (let i = index + 1; i < entries.length; i++) {
+      const entry = entries[i];
+      if (!entry || entry.level <= row.level) break;
+      if (entry.children) branch.push(entry.id);
+    }
+    return branch;
+  }
+
+  /** Collapses categories while retaining descendant expansion state. @param row - Context row. @param categories - Open categories. @returns Nothing. */
+  function collapseCategories(row: NavigatorRow, categories: readonly NavigatorRow[]): void {
+    const next = new Set(collapsed);
+    for (const category of categories) next.add(category.id);
+    setCollapsed(next);
+    setSelected(row.type);
+    rowRefs.current.get(row.type)?.focus({ preventScroll: true });
+  }
+
+  /** Projects the current tree's native context action state. @param row - Owning menu row. @param selection - Heading selection at popup admission. @returns Connected menu entries. */
+  function menuItems(
+    row: NavigatorRow,
+    selection: readonly string[],
+  ): ReturnType<typeof getWriterNavigatorMenuItems> {
+    const branch = outlineBranch(row);
+    const allExpanded = branch.length
+      ? branch.every(
+          /** Tests whether the native branch contains any closed parent. @param id - Expandable row. @returns Whether it is open. */
+          (id) => !collapsed.has(id),
+        )
+      : undefined;
+    const categories = rows.filter(
+      /** Collects open top-level categories without changing their descendants. @param entry - Visible row. @returns Whether it is a category to collapse. */
+      (entry) => entry.group && entry.children && !collapsed.has(entry.id),
+    );
+    return getWriterNavigatorMenuItems(tree, {
+      type: row.type,
+      group: row.group,
+      allExpanded,
+      canCollapseCategories: root === undefined && categories.length > 0,
+      hasBookmarks: row.type === "bookmark" && (!row.group || row.children === true),
+      label,
+      toggleOutlineBranch:
+        /** Applies the native expand or collapse operation to the whole outline branch. @returns Nothing. */ () => {
+          const next = new Set(collapsed);
+          for (const id of branch)
+            if (allExpanded) next.add(id);
+            else next.delete(id);
+          setCollapsed(next);
         },
-      ];
-    const checked = tree.GetContentTypeTracking(type);
-    return [
-      {
-        kind: "local",
-        id: `${type}tracking`,
-        label:
-          type === "table"
-            ? label("table-tracking", "Table Tracking")
-            : label("bookmark-tracking", "Bookmark Tracking"),
-        semantics: "check",
-        checked,
-        activate: /** Toggles the current category's tracking policy. @returns Nothing. */ () =>
-          tree.SetContentTypeTracking(type, !checked),
-      },
-    ];
+      goTo: /** Moves the Writer cursor to the content entry. @returns Nothing. */ () =>
+        activate(row),
+      runHeadingCommand:
+        /** Applies a native context action with sublevels. @param command - Original heading operation. @returns Nothing. */ (
+          command,
+        ) => runHeadingCommand(command, true, selection),
+      deleteBookmarks:
+        /** Reuses the toolbar action for the same selected bookmark target. @returns Nothing. */ () =>
+          removeBookmarks(row),
+      setOutlineLevel: changeOutlineLevel,
+      collapseCategories:
+        /** Collapses the current tree's top-level categories. @returns Nothing. */ () =>
+          collapseCategories(row, categories),
+    });
   }
 
   const title = label("title", "Navigator");
@@ -638,16 +693,15 @@ export function WriterNavigator({
           className="rounded border border-slate-300 px-1 text-sm"
           onChange={
             /** Sets the original maximum outline level. @param event - Level choice. @returns Nothing. */
-            (event) => setOutlineLevel(Number(event.currentTarget.value))
+            (event) => changeOutlineLevel(Number(event.currentTarget.value))
           }
         >
-          {Array.from(
-            { length: 10 },
-            /** Presents a native outline depth. @param _unused - Empty slot. @param index - Level offset. @returns Number. */ (
-              _unused,
-              index,
-            ) => index + 1,
-          ).map(
+          {outlineLevel === 0 && (
+            <option hidden value={0}>
+              0
+            </option>
+          )}
+          {navigatorOutlineLevels.map(
             /** Presents one original heading depth. @param level - Maximum depth. @returns Entry. */
             (level) => (
               <option key={level} value={level}>
@@ -725,11 +779,7 @@ export function WriterNavigator({
             className="rounded p-1 hover:bg-slate-100"
             onClick={
               /** Deletes the selected mark or all marks under the Bookmark category. @returns Nothing. */
-              () => {
-                if (!tree.DeleteBookmarks(bookmarkRow.group ? undefined : bookmarkRow.id)) return;
-                setSelected("bookmark");
-                reveal();
-              }
+              () => removeBookmarks(bookmarkRow)
             }
           >
             <Trash2 size={16} />
@@ -813,6 +863,7 @@ export function WriterNavigator({
       </ul>
       {visible &&
         popup &&
+        popupRow &&
         createPortal(
           <CommandPopupMenu
             ariaLabel={label("context-menu", "Navigator context menu")}
@@ -821,7 +872,7 @@ export function WriterNavigator({
               /** Resolves standard command labels for bindings-backed popup entries. @param url - Command URL. @returns Display resource. */
               (url) => selectWriterPopupCommandResource(localization, url)
             }
-            items={trackingItems(popup.type)}
+            items={popup.items}
             position={popup.position}
             onClose={
               /** Dismisses the current Navigator popup. @returns Nothing. */ () =>

@@ -742,3 +742,97 @@ it("collapses other top-level headings only while focused outline tracking follo
     session.Close();
   }
 });
+
+it("runs the native Navigator context actions for outline branches and bookmark rows", /** Drives the mounted native handlers with heading, table and bookmark content. @returns Nothing. */ () => {
+  const session = createWriterDocumentSession();
+  const shell = session.view.GetWrtShell();
+  const document = shell.GetDoc();
+  const first = document.paragraphs[0];
+  assert(first);
+  first.SetText("Chapter");
+  first.SetAttrOutlineLevel(1);
+  const child = document.nodes.MakeTextNode();
+  child.SetText("Section");
+  child.SetAttrOutlineLevel(2);
+  const table = document.nodes.MakeTableNode("Reference table", { width: 6000 });
+  table.AddColumnWidth(6000);
+  document.nodes.AppendTableRow(table, 1);
+  const marks = document.GetIDocumentMarkAccess();
+  marks.MakeMark(child, 2, "Reference");
+  const tree = session.view.GetNavigator();
+  const previousLevel = tree.GetOutlineLevel();
+  try {
+    session.view.ToggleNavigator();
+    render(<WriterWorkbench view={session.view} isActive />);
+    const navigator = within(screen.getByRole("dialog", { name: "Navigator" }));
+    /** Gets the active Navigator context popup. @returns Queries scoped to the menu. */
+    const context = () => within(screen.getByRole("menu", { name: "Navigator context menu" }));
+    const chapter = navigator.getByRole("treeitem", { name: "Chapter" });
+    const headings = navigator.getByRole("treeitem", { name: "Headings" });
+    const depth = navigator.getByRole("combobox", { name: "Show Up to Outline Level" });
+
+    fireEvent.contextMenu(chapter);
+    expect(
+      context()
+        .getAllByRole("menuitem")
+        .map(
+          /** Reads the actual native projection order. @param item - Rendered action or submenu. @returns Its visible text. */
+          (item) => item.textContent?.replace(/›$/u, ""),
+        ),
+    ).toEqual([
+      "Collapse All",
+      "Go to",
+      "Move Heading Up",
+      "Move Heading Down",
+      "Promote Outline Level",
+      "Demote Outline Level",
+      "Outline Tracking",
+      "Show Up to Outline Level",
+      "Collapse All Categories",
+    ]);
+    fireEvent.click(context().getByRole("menuitem", { name: "Collapse All" }));
+    expect(chapter).toHaveFocus();
+    expect(navigator.queryByRole("treeitem", { name: "Section" })).toBeNull();
+    fireEvent.contextMenu(headings);
+    fireEvent.click(context().getByRole("menuitem", { name: "Expand All" }));
+    expect(navigator.getByRole("treeitem", { name: "Section" })).toBeVisible();
+
+    fireEvent.contextMenu(headings);
+    fireEvent.mouseDown(context().getByRole("menuitem", { name: "Show Up to Outline Level" }));
+    const depthOne = context().getByRole("menuitemradio", { name: "1" });
+    fireEvent.click(depthOne);
+    expect(tree.GetOutlineLevel()).toBe(1);
+    expect(depth).toHaveValue("1");
+    expect(navigator.queryByRole("treeitem", { name: "Section" })).toBeNull();
+    fireEvent.change(depth, { target: { value: "2" } });
+    expect(navigator.getByRole("treeitem", { name: "Section" })).toBeVisible();
+
+    fireEvent.contextMenu(navigator.getByRole("treeitem", { name: "Reference table" }));
+    fireEvent.click(context().getByRole("menuitem", { name: "Go to" }));
+    expect(shell.GetCursor().GetPoint().GetNode().FindTableNode()?.GetTable()).toBe(table);
+
+    fireEvent.contextMenu(navigator.getByRole("treeitem", { name: "Reference" }));
+    expect(context().queryByRole("menuitem", { name: "Delete All Bookmarks" })).toBeNull();
+    fireEvent.click(context().getByRole("menuitem", { name: "Delete Bookmark" }));
+    expect(marks.GetBookmarks()).toHaveLength(0);
+    act(
+      /** Restores the deleted bookmark through ordinary document undo. @returns Nothing. */
+      () => {
+        session.view.Execute(WRITER_COMMAND_IDS.undo);
+      },
+    );
+    expect(marks.GetBookmarks()).toHaveLength(1);
+    fireEvent.contextMenu(navigator.getByRole("treeitem", { name: "Bookmarks" }));
+    expect(context().getByRole("menuitem", { name: "Delete All Bookmarks" })).toBeVisible();
+    fireEvent.click(context().getByRole("menuitem", { name: "Collapse All Categories" }));
+    expect(headings).toHaveAttribute("aria-expanded", "false");
+    expect(navigator.getByRole("treeitem", { name: "Bookmarks" })).toHaveAttribute(
+      "aria-expanded",
+      "false",
+    );
+  } finally {
+    tree.SetOutlineLevel(previousLevel);
+    cleanup();
+    session.Close();
+  }
+});

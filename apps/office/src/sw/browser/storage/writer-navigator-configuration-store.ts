@@ -1,7 +1,7 @@
 /** @fileoverview Persists represented Office.Writer/Navigator properties outside the document. */
 import type {
   NavigatorConfiguration,
-  NavigatorTrackingProperties,
+  NavigatorProperties,
 } from "../../source/uibase/utlui/navicfg";
 
 /** Original Writer Navigator configuration subtree. */
@@ -26,7 +26,7 @@ export class WriterNavigatorConfigurationStore implements NavigatorConfiguration
   }
 
   /** Persists represented properties alongside future or unrelated settings. @param values - Current configuration projection. @returns Nothing. */
-  public Save(values: NavigatorTrackingProperties): void {
+  public Save(values: NavigatorProperties): void {
     try {
       this.storage.setItem(
         WRITER_NAVIGATOR_CONFIGURATION_KEY,

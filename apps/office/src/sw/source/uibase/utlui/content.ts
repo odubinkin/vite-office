@@ -41,6 +41,7 @@ export class SwContentTree {
   private nextIdentity = 1;
   private selectedBookmarkName = "";
   private lastGotoOutline: number | undefined;
+  private outlineLevel: number;
   private outlineTracking: OutlineTrackingMode;
   private readonly trackContentType: Record<TrackedContentType, boolean>;
 
@@ -50,6 +51,7 @@ export class SwContentTree {
     private readonly layout: SwRootFrame,
     private readonly config = new SwNavigationConfig(),
   ) {
+    this.outlineLevel = config.GetOutlineLevel();
     this.outlineTracking = config.GetOutlineTracking();
     this.trackContentType = {
       table: config.GetContentTypeTrack("table"),
@@ -59,7 +61,10 @@ export class SwContentTree {
 
   /** Lists represented content in native category and document order. @returns Content tree roots. */
   public GetContents(): readonly SwNavigatorContentGroup[] {
-    const targets = this.GetTargets();
+    const targets = this.GetTargets().filter(
+      /** Limits outline members to the visible depth. @param target - Original content target. @returns Whether the entry is represented. */
+      (target) => (target.level ?? 0) <= this.outlineLevel,
+    );
     return contentTypes.map(
       /** Builds one native content root. @param type - Content family. @returns Named group. */
       (type) => ({
@@ -86,6 +91,18 @@ export class SwContentTree {
         ? this.shell.GetDoc().GetNodes().GetOutLineNds().Seek_Entry(target.node).position
         : undefined;
     return this.SetCursor(target.node, target.offset, oldBookmark !== this.selectedBookmarkName);
+  }
+
+  /** Reads the original maximum heading depth. @returns Outline level. */
+  public GetOutlineLevel(): number {
+    return this.outlineLevel;
+  }
+
+  /** Updates the persistent outline depth used by the represented content list. @param level - Native outline level. @returns Nothing. */
+  public SetOutlineLevel(level: number): void {
+    if (level === this.outlineLevel) return;
+    this.outlineLevel = level;
+    this.config.SetOutlineLevel(level);
   }
 
   /** Reads the active outline tracking mode. @returns Original configuration value. */
