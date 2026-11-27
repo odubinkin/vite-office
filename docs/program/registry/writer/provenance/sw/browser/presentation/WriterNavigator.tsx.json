@@ -13,7 +13,8 @@
       "Shows the original bookmark edit and delete controls for the active tree entry or category.",
       "Applies cursor tracking outside the focused Navigator tree while retaining the represented root and outline depth.",
       "Projects the row-specific Navigator tracking popup with native check and radio states, and focuses the tracked outline branch when the Focus mode is enabled.",
-      "Shares outline depth between the toolbar and native context submenu, and routes contextual navigation, heading edits, bookmark deletion and expansion to the connected owners."
+      "Shares outline depth between the toolbar and native context submenu, and routes contextual navigation, heading edits, bookmark deletion and expansion to the connected owners.",
+      "Exposes Hyperlinks and Comments in the retained content tree and routes their contextual actions to Writer slots and annotation management."
     ],
     "evidence": {
       "local": [
@@ -40,6 +41,14 @@
         {
           "path": "apps/office/src/sw/browser/presentation/WriterNavigator.test.tsx",
           "marker": "runs the native Navigator context actions for outline branches and bookmark rows"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterNavigator.tsx",
+          "marker": "editContent"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterNavigatorFields.test.tsx",
+          "marker": "updates the collapsed comments category for the pinned tdf137274 sequence"
         }
       ],
       "upstream": [
@@ -54,6 +63,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx",
           "marker": "SwContentTree::ExecuteContextMenuAction"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx",
+          "marker": "SwContentTree::EditEntry"
         }
       ]
     },

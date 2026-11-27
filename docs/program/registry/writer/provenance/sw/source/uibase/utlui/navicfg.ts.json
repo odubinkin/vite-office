@@ -15,7 +15,8 @@
     ],
     "preservedResponsibilities": [
       "Loads and updates the native outline mode and content-type tracking flags with the Writer Navigator configuration defaults.",
-      "Restores and stores the original OutlineLevel property, using the native ten-level default."
+      "Restores and stores the original OutlineLevel property, using the native ten-level default.",
+      "Reads and persists native HyperlinkTracking and CommentTracking flags with default true."
     ],
     "omittedResponsibilities": [
       "Other Navigator settings and unrepresented content types are outside the connected tracking slice."
@@ -33,6 +34,10 @@
         {
           "path": "apps/office/src/sw/source/uibase/utlui/navicfg.ts",
           "marker": "GetOutlineLevel"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/utlui/navicfg.ts",
+          "marker": "HyperlinkTracking"
         }
       ],
       "upstream": [
@@ -51,6 +56,14 @@
         {
           "path": "vendor/libreoffice-reference/officecfg/registry/schema/org/openoffice/Office/Writer.xcs",
           "marker": "oor:name=\"OutlineLevel\""
+        },
+        {
+          "path": "vendor/libreoffice-reference/officecfg/registry/schema/org/openoffice/Office/Writer.xcs",
+          "marker": "oor:name=\"HyperlinkTracking\""
+        },
+        {
+          "path": "vendor/libreoffice-reference/officecfg/registry/schema/org/openoffice/Office/Writer.xcs",
+          "marker": "oor:name=\"CommentTracking\""
         }
       ]
     }

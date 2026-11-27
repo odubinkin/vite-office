@@ -1,14 +1,20 @@
 /** @fileoverview Connects the represented native Writer Navigator content index and cursor targets. */
-import { SwPosition } from "../../core/crsr/pam";
+import { RES_TXTATR_ANNOTATION, RES_TXTATR_INETFMT } from "../../../inc/hintids";
+import type { SwFormatField } from "../../../inc/fmtfld";
+import { SwPaM, SwPosition } from "../../core/crsr/pam";
 import { WRITER_MAX_LIST_LEVEL } from "../../core/doc/list";
+import { SwPostItFieldType } from "../../core/fields/docufld";
 import type { SwRootFrame } from "../../core/layout/newfrm";
 import type { SwTable } from "../../core/table/swtable";
+import { SwTextINetFormat } from "../../core/txtnode/txtatr2";
 import { SwTextNode } from "../../core/txtnode/ndtxt";
+import type { SwPostItMgr } from "../docvw/PostItMgr";
 import type { SwWrtShell } from "../wrtsh/wrtsh1";
+import { GetURLFieldContents, GetURLFieldContentName } from "./content-hyperlink";
 import { OutlineTrackingMode, SwNavigationConfig, type TrackedContentType } from "./navicfg";
 
 /** Original content families with connected Writer model ownership. */
-export type SwNavigatorContentType = "outline" | "table" | "bookmark";
+export type SwNavigatorContentType = "outline" | TrackedContentType;
 
 /** Command identifiers from the native Navigator heading toolbar. */
 export type SwNavigatorHeadingCommand = "promote" | "demote" | "chapterup" | "chapterdown";
@@ -31,9 +37,11 @@ interface SwNavigatorTarget extends SwNavigatorContent {
   readonly type: SwNavigatorContentType;
   readonly node: SwTextNode;
   readonly offset: number;
+  readonly hyperlink?: SwTextINetFormat;
+  readonly comment?: SwFormatField;
 }
 
-const contentTypes = ["outline", "table", "bookmark"] as const;
+const contentTypes = ["outline", "table", "bookmark", "hyperlink", "comment"] as const;
 
 /** Builds the native content tree from the active document and moves its real editing cursor. */
 export class SwContentTree {
@@ -45,17 +53,20 @@ export class SwContentTree {
   private outlineTracking: OutlineTrackingMode;
   private readonly trackContentType: Record<TrackedContentType, boolean>;
 
-  /** Borrows the native editing and page-layout owners. @param shell - Persistent Writer shell. @param layout - Current physical page-frame source. @param config - Navigator preferences. @returns Navigator model. */
+  /** Borrows the native editing and page-layout owners. @param shell - Persistent Writer shell. @param layout - Current physical page-frame source. @param config - Navigator preferences. @param postIts - Active annotation manager. @returns Navigator model. */
   constructor(
     private readonly shell: SwWrtShell,
     private readonly layout: SwRootFrame,
     private readonly config = new SwNavigationConfig(),
+    private readonly postIts?: SwPostItMgr,
   ) {
     this.outlineLevel = config.GetOutlineLevel();
     this.outlineTracking = config.GetOutlineTracking();
     this.trackContentType = {
       table: config.GetContentTypeTrack("table"),
       bookmark: config.GetContentTypeTrack("bookmark"),
+      hyperlink: config.GetContentTypeTrack("hyperlink"),
+      comment: config.GetContentTypeTrack("comment"),
     };
   }
 
@@ -90,7 +101,68 @@ export class SwContentTree {
       target.type === "outline"
         ? this.shell.GetDoc().GetNodes().GetOutLineNds().Seek_Entry(target.node).position
         : undefined;
+    if (target.hyperlink) {
+      const start = new SwPosition(target.node, target.offset);
+      const position = new SwPaM(start);
+      start.Dispose();
+      try {
+        // Native GotoINetAttr is followed by one Chars step.
+        position.Move();
+        return this.SetCursor(target.node, position.GetPoint().GetContentIndex());
+      } finally {
+        position.Dispose();
+      }
+    }
     return this.SetCursor(target.node, target.offset, oldBookmark !== this.selectedBookmarkName);
+  }
+
+  /** Selects the exact internet attribute for the existing edit or remove hyperlink slot. @param id - Navigator hyperlink identity. @returns Whether the linked span still exists. */
+  public SelectHyperlink(id: string): boolean {
+    const hyperlink = this.GetTargets().find(
+      /** Matches the borrowed native hyperlink owner. @param entry - Current entry. @returns Whether it is the requested hyperlink. */
+      (entry) => entry.id === id,
+    )?.hyperlink;
+    const node = hyperlink?.GetpTextNode();
+    if (!hyperlink || !node) return false;
+    const start = new SwPosition(node, hyperlink.GetStart());
+    const end = new SwPosition(node, hyperlink.GetEnd());
+    try {
+      this.shell.SetPaM(end, start);
+      return true;
+    } finally {
+      end.Dispose();
+      start.Dispose();
+    }
+  }
+
+  /** Opens the anchored annotation editor through the native sidebar manager. @param id - Navigator comment identity. @returns Whether the annotation still exists. */
+  public EditComment(id: string): boolean {
+    const target = this.FindCommentTarget(id);
+    if (!target?.comment || !this.postIts) return false;
+    this.SetCursor(target.node, target.offset);
+    this.postIts.Focus(target.comment);
+    return true;
+  }
+
+  /** Deletes all annotations through the original configurable confirmation and undo. @returns Whether any annotation was deleted. */
+  public async DeleteComments(): Promise<boolean> {
+    return (await this.postIts?.DeleteNotes()) ?? false;
+  }
+
+  /** Deletes an existing annotation via the native sidebar manager. @param id - Navigator comment identity. @returns Whether the annotation was removed. */
+  public DeleteComment(id: string): boolean {
+    const target = this.FindCommentTarget(id);
+    if (!target?.comment) return false;
+    this.SetCursor(target.node, target.offset);
+    return this.postIts?.Delete(target.comment.GetField().GetPostItId()) ?? false;
+  }
+
+  /** Resolves a still-anchored comment by the native format address. @param id - Navigator comment identity. @returns Current comment target. */
+  private FindCommentTarget(id: string): SwNavigatorTarget | undefined {
+    return this.GetTargets().find(
+      /** Matches the borrowed native annotation owner. @param entry - Current entry. @returns Whether it is requested. */
+      (entry) => entry.type === "comment" && entry.id === id,
+    );
   }
 
   /** Reads the original maximum heading depth. @returns Outline level. */
@@ -127,13 +199,32 @@ export class SwContentTree {
     this.config.SetContentTypeTrack(type, track);
   }
 
-  /** Resolves the native cursor tracking priority in the current tree scope. @param root - Optional original content category root. @returns Tracked entry identity, if any. */
-  public UpdateTracking(root?: SwNavigatorContentType): string | undefined {
+  /** Resolves the native cursor tracking priority in the current tree scope. @param root - Optional original content category root. @returns Tracked identity, undefined to clear, or null when tracking stops without changing selection. */
+  public UpdateTracking(root?: SwNavigatorContentType): string | null | undefined {
     const outline = this.shell.GetOutlinePos();
     const afterOutlineNavigation =
       this.lastGotoOutline !== undefined && outline === this.lastGotoOutline;
     if (!afterOutlineNavigation) {
       this.lastGotoOutline = undefined;
+      const point = this.shell.GetCursor().GetPoint();
+      const node = point.GetNode().GetTextNode();
+      const offset = point.GetContentIndex();
+      if (root === undefined || root === "hyperlink") {
+        const attribute = node?.GetTextAttrAt(offset, RES_TXTATR_INETFMT);
+        if (node && attribute instanceof SwTextINetFormat)
+          return !this.GetContentTypeTracking("hyperlink")
+            ? null
+            : GetURLFieldContentName(node, attribute)
+              ? this.GetIdentity(attribute)
+              : undefined;
+      }
+      if (root === undefined || root === "comment") {
+        const comment =
+          node?.GetpSwpHints()?.GetTextAttrForCharAt(offset, RES_TXTATR_ANNOTATION)?.GetAttr() ??
+          this.postIts?.GetActiveField();
+        if (comment)
+          return this.GetContentTypeTracking("comment") ? this.GetIdentity(comment) : null;
+      }
       const table = this.shell.IsCursorInTable()?.GetTable();
       if (table && this.GetContentTypeTracking("table") && (root === undefined || root === "table"))
         return this.GetIdentity(table);
@@ -424,6 +515,34 @@ export class SwContentTree {
           node,
           offset: point.GetContentIndex(),
         });
+    }
+    for (const { text, attribute } of GetURLFieldContents(document)) {
+      const node = attribute.GetpTextNode();
+      if (!node) continue;
+      entries.push({
+        type: "hyperlink",
+        id: this.GetIdentity(attribute),
+        title: text,
+        node,
+        offset: attribute.GetStart(),
+        hyperlink: attribute,
+      });
+    }
+    for (const comment of SwPostItFieldType.Get(document).GatherFields()) {
+      const hint = comment.GetTextField();
+      const node = hint?.GetTextNode();
+      if (!hint || !node) continue;
+      entries.push({
+        type: "comment",
+        id: this.GetIdentity(comment),
+        title: comment
+          .GetField()
+          .GetPar2()
+          .replace(/[\n\r]/gu, " "),
+        node,
+        offset: hint.GetStart(),
+        comment,
+      });
     }
     return entries;
   }

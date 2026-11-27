@@ -18,6 +18,8 @@ it("keeps native defaults and round-trips tracking preferences while preserving 
     expect(config.GetOutlineTracking()).toBe(OutlineTrackingMode.Default);
     expect(config.GetContentTypeTrack("table")).toBe(true);
     expect(config.GetContentTypeTrack("bookmark")).toBe(true);
+    expect(config.GetContentTypeTrack("hyperlink")).toBe(true);
+    expect(config.GetContentTypeTrack("comment")).toBe(true);
     config.SetOutlineLevel(3);
     config.SetOutlineTracking(OutlineTrackingMode.Focus);
     config.SetContentTypeTrack("table", false);
@@ -28,6 +30,8 @@ it("keeps native defaults and round-trips tracking preferences while preserving 
       OutlineTracking: 2,
       TableTracking: false,
       BookmarkTracking: false,
+      HyperlinkTracking: true,
+      CommentTracking: true,
     });
     const reloaded = new SwNavigationConfig(store);
     expect(reloaded.GetOutlineLevel()).toBe(3);

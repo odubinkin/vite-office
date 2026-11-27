@@ -12,9 +12,14 @@ export enum OutlineTrackingMode {
 }
 
 /** Native content types with implemented tracking. */
-export type TrackedContentType = "table" | "bookmark";
+export type TrackedContentType = "table" | "bookmark" | "hyperlink" | "comment";
 
-const trackingProperties = { table: "TableTracking", bookmark: "BookmarkTracking" } as const;
+const trackingProperties = {
+  table: "TableTracking",
+  bookmark: "BookmarkTracking",
+  hyperlink: "HyperlinkTracking",
+  comment: "CommentTracking",
+} as const;
 
 /** Represented configuration fields used by the native Navigator content tree. */
 export interface NavigatorProperties {
@@ -22,6 +27,8 @@ export interface NavigatorProperties {
   readonly OutlineTracking: OutlineTrackingMode;
   readonly TableTracking: boolean;
   readonly BookmarkTracking: boolean;
+  readonly HyperlinkTracking: boolean;
+  readonly CommentTracking: boolean;
 }
 
 /** Configuration provider passed to the native owner by the platform. */
@@ -53,6 +60,8 @@ export class SwNavigationConfig {
           : OutlineTrackingMode.Default,
       TableTracking: values.TableTracking !== false,
       BookmarkTracking: values.BookmarkTracking !== false,
+      HyperlinkTracking: values.HyperlinkTracking !== false,
+      CommentTracking: values.CommentTracking !== false,
     };
   }
 

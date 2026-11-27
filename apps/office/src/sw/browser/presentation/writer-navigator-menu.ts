@@ -23,12 +23,14 @@ interface NavigatorMenuOptions {
   readonly group: boolean;
   readonly allExpanded: boolean | undefined;
   readonly canCollapseCategories: boolean;
-  readonly hasBookmarks: boolean;
+  readonly hasContents: boolean;
   readonly label: (key: string, fallback: string) => string;
   readonly toggleOutlineBranch: () => void;
   readonly goTo: () => void;
   readonly runHeadingCommand: (command: SwNavigatorHeadingCommand) => void;
   readonly deleteBookmarks: () => void;
+  readonly editContent: () => void;
+  readonly deleteContent: () => void;
   readonly setOutlineLevel: (level: number) => void;
   readonly collapseCategories: () => void;
 }
@@ -39,6 +41,13 @@ const headingActions = [
   ["803", "promote", "Promote Outline Level"],
   ["804", "demote", "Demote Outline Level"],
 ] as const satisfies readonly (readonly [string, SwNavigatorHeadingCommand, string])[];
+
+const trackingLabels = {
+  table: ["table-tracking", "Table Tracking"],
+  bookmark: ["bookmark-tracking", "Bookmark Tracking"],
+  hyperlink: ["hyperlink-tracking", "Hyperlink Tracking"],
+  comment: ["comment-tracking", "Comment Tracking"],
+} as const;
 
 const trackingModes = [
   [OutlineTrackingMode.Default, "default", "Default"],
@@ -54,12 +63,14 @@ export function getWriterNavigatorMenuItems(
     group,
     allExpanded,
     canCollapseCategories,
-    hasBookmarks,
+    hasContents,
     label,
     toggleOutlineBranch,
     goTo,
     runHeadingCommand,
     deleteBookmarks,
+    editContent,
+    deleteContent,
     setOutlineLevel,
     collapseCategories,
   }: NavigatorMenuOptions,
@@ -100,7 +111,15 @@ export function getWriterNavigatorMenuItems(
               runHeadingCommand(name),
         });
   }
-  if (hasBookmarks)
+  if (!group && (type === "hyperlink" || type === "comment"))
+    items.push({
+      kind: "local",
+      id: "403",
+      label: label("edit-entry", "Edit…"),
+      semantics: "action",
+      activate: editContent,
+    });
+  if (type === "bookmark" && hasContents)
     items.push({
       kind: "local",
       id: group ? "deleteallbookmarks" : "deletebookmark",
@@ -111,7 +130,26 @@ export function getWriterNavigatorMenuItems(
       activate: deleteBookmarks,
     });
 
-  if (!group || hasBookmarks) items.push({ kind: "separator" });
+  if (!group && type === "hyperlink")
+    items.push({
+      kind: "local",
+      id: "deletehyperlink",
+      label: label("delete-hyperlink", "Delete Hyperlink"),
+      semantics: "action",
+      activate: deleteContent,
+    });
+  if (type === "comment" && hasContents)
+    items.push({
+      kind: "local",
+      id: group ? "deleteallcomments" : "deletecomment",
+      label: group
+        ? label("delete-all-comments", "Delete All Comments")
+        : label("delete-comment", "Delete Comment"),
+      semantics: "action",
+      activate: deleteContent,
+    });
+  if (!group || ((type === "bookmark" || type === "comment") && hasContents))
+    items.push({ kind: "separator" });
   if (type === "outline") {
     items.push({
       kind: "submenu",
@@ -132,13 +170,11 @@ export function getWriterNavigatorMenuItems(
     });
   } else {
     const checked = tree.GetContentTypeTracking(type);
+    const [key, fallback] = trackingLabels[type];
     items.push({
       kind: "local",
       id: `${type}tracking`,
-      label:
-        type === "table"
-          ? label("table-tracking", "Table Tracking")
-          : label("bookmark-tracking", "Bookmark Tracking"),
+      label: label(key, fallback),
       semantics: "check",
       checked,
       activate: /** Toggles tracking for the current category. @returns Nothing. */ () =>

@@ -347,3 +347,51 @@ test("Writer Navigator context commands share heading undo and the persistent ou
     "true",
   );
 });
+
+test("Writer Navigator edits an anchored hyperlink and opens and removes a live comment", /** Exercises the native contextual field commands through Chromium. @param fixtures - Browser test inputs. @param fixtures.page - Writer page. @returns Completion. */ async ({
+  page,
+}) => {
+  await page.goto("/writer", { waitUntil: "domcontentloaded" });
+  const editor = page.getByRole("textbox", { name: "Writer document text" });
+  await editor.fill("Linked text");
+  await editor.press("Home");
+  await editor.press("Shift+End");
+  const hyperlinkDialog = page.getByRole("dialog", { name: "Hyperlink", exact: true });
+  await page.getByRole("button", { name: "Hyperlink", exact: true }).click();
+  await hyperlinkDialog.getByLabel("URL").fill("https://example.test/first");
+  await hyperlinkDialog.getByRole("button", { name: "Apply" }).click();
+  await expect(editor.getByRole("link", { name: "Linked text" })).toHaveAttribute(
+    "href",
+    "https://example.test/first",
+  );
+  await page.keyboard.press("F5");
+  const navigator = page.getByRole("dialog", { name: "Navigator", exact: true });
+  const popup = page.getByRole("menu", { name: "Navigator context menu" });
+  await navigator
+    .getByRole("treeitem", { name: "Linked text", exact: true })
+    .click({ button: "right" });
+  await expect(popup.getByRole("menuitemcheckbox", { name: "Hyperlink Tracking" })).toBeChecked();
+  await popup.getByRole("menuitem", { name: "Edit…", exact: true }).click();
+  await expect(hyperlinkDialog.getByLabel("URL")).toHaveValue("https://example.test/first");
+  await hyperlinkDialog.getByLabel("URL").fill("https://example.test/updated");
+  await hyperlinkDialog.getByRole("button", { name: "Apply" }).click();
+  await expect(editor.getByRole("link", { name: "Linked text" })).toHaveAttribute(
+    "href",
+    "https://example.test/updated",
+  );
+  await editor.press("End");
+  await page.getByRole("button", { name: "Comment", exact: true }).click();
+  const comment = page.getByRole("textbox", { name: "Comment — Unknown Author" });
+  await expect(comment).toBeFocused();
+  await page.keyboard.insertText("Navigator note");
+  const noteRow = navigator.getByRole("treeitem", { name: "Navigator note", exact: true });
+  await expect(noteRow).toBeVisible();
+  await noteRow.click({ button: "right" });
+  await expect(popup.getByRole("menuitemcheckbox", { name: "Comment Tracking" })).toBeChecked();
+  await popup.getByRole("menuitem", { name: "Edit…", exact: true }).click();
+  await expect(comment).toBeFocused();
+  await noteRow.click({ button: "right" });
+  await popup.getByRole("menuitem", { name: "Delete Comment", exact: true }).click();
+  await expect(noteRow).toHaveCount(0);
+  await expect(comment).toHaveCount(0);
+});

@@ -100,11 +100,6 @@ export class SwView {
       this.viewOptions,
       this,
     );
-    this.navigator = new SwContentTree(
-      this.wrtShell,
-      this.layout,
-      module.GetNavigationConfig(navigatorConfiguration),
-    );
     this.postItMgr = new SwPostItMgr(
       this.viewOptions,
       this.wrtShell,
@@ -113,6 +108,12 @@ export class SwView {
         this.Invalidate("selection"),
       this.dialogController,
       commentDeleteConfiguration,
+    );
+    this.navigator = new SwContentTree(
+      this.wrtShell,
+      this.layout,
+      module.GetNavigationConfig(navigatorConfiguration),
+      this.postItMgr,
     );
     this.annotationShell = new SwAnnotationShell(this.postItMgr, this.wrtShell);
     this.search = new SwViewSearch(this.wrtShell, searchOptions, createRegex, this.postItMgr);

@@ -50,7 +50,13 @@ interface NavigatorRow {
   readonly children?: boolean;
 }
 
-const contentTitles = { outline: "Headings", table: "Tables", bookmark: "Bookmarks" } as const;
+const contentTitles = {
+  outline: "Headings",
+  table: "Tables",
+  bookmark: "Bookmarks",
+  hyperlink: "Hyperlinks",
+  comment: "Comments",
+} as const;
 
 const headingTools = [
   ["promote", "Promote Outline Level", IndentDecrease],
@@ -93,7 +99,7 @@ function getRows(
           type,
           group: false,
           id: entry.id,
-          title: entry.title || label("empty-heading", "Empty heading"),
+          title: entry.title || (type === "outline" ? label("empty-heading", "Empty heading") : ""),
           parent: parent.row.id,
           level: parent.row.level + 1,
           children: (entries[index + 1]?.level ?? 0) > sourceLevel,
@@ -232,10 +238,12 @@ export function WriterNavigator({
         !view.IsNavigatorVisible() ||
         headingCommandActive.current ||
         !contents ||
-        !editingHost.current?.contains(contents.ownerDocument.activeElement)
+        (!editingHost.current?.contains(contents.ownerDocument.activeElement) &&
+          !view.GetPostItMgr().GetActiveSidebarWin()?.HasFocus?.())
       )
         return;
       const id = tree.UpdateTracking(root);
+      if (id === null) return;
       if (id === undefined) {
         setSelected(null);
         if (multiple) setExtended([]);
@@ -285,11 +293,11 @@ export function WriterNavigator({
     /** Resumes tracking when focus returns to the document even without moving its cursor. @returns Listener cleanup. */
     () => {
       if (!visible) return;
-      const host = editingHost.current;
-      /** Tracks the current document after leaving the tree. @returns Nothing. */
+      const owner = editingHost.current?.ownerDocument;
+      /** Tracks the document or its native annotation window after leaving the tree. @returns Nothing. */
       const onFocus = () => trackDocumentCursor();
-      host?.addEventListener("focusin", onFocus);
-      return () => host?.removeEventListener("focusin", onFocus);
+      owner?.addEventListener("focusin", onFocus);
+      return () => owner?.removeEventListener("focusin", onFocus);
     },
     [editingHost, visible],
   );
@@ -346,6 +354,24 @@ export function WriterNavigator({
     if (!tree.DeleteBookmarks(row.group ? undefined : row.id)) return;
     setSelected("bookmark");
     reveal();
+  }
+
+  /** Routes an editable entry through the original dialog or annotation editor. @param row - Target content entry. @returns Nothing. */
+  function editContent(row: NavigatorRow): void {
+    if (row.type === "hyperlink" && tree.SelectHyperlink(row.id))
+      view.Execute(WRITER_COMMAND_IDS.editHyperlink);
+    else if (row.type === "comment") tree.EditComment(row.id);
+  }
+
+  /** Removes a represented hyperlink attribute or annotation through its native owner. @param row - Target content or group. @returns Nothing. */
+  function deleteContent(row: NavigatorRow): void {
+    if (row.type === "hyperlink" && tree.SelectHyperlink(row.id)) {
+      view.Execute(WRITER_COMMAND_IDS.removeHyperlink);
+      reveal();
+    } else if (row.type === "comment") {
+      if (row.group) void tree.DeleteComments();
+      else if (tree.DeleteComment(row.id)) reveal();
+    }
   }
 
   /** Navigates to an existing physical page. @param number - One-based page number. @returns Nothing. */
@@ -562,7 +588,7 @@ export function WriterNavigator({
       group: row.group,
       allExpanded,
       canCollapseCategories: root === undefined && categories.length > 0,
-      hasBookmarks: row.type === "bookmark" && (!row.group || row.children === true),
+      hasContents: !row.group || row.children === true,
       label,
       toggleOutlineBranch:
         /** Applies the native expand or collapse operation to the whole outline branch. @returns Nothing. */ () => {
@@ -581,6 +607,11 @@ export function WriterNavigator({
       deleteBookmarks:
         /** Reuses the toolbar action for the same selected bookmark target. @returns Nothing. */ () =>
           removeBookmarks(row),
+      editContent: /** Opens the original editor for the selected entry. @returns Nothing. */ () =>
+        editContent(row),
+      deleteContent:
+        /** Removes the selected content through its native action. @returns Nothing. */ () =>
+          deleteContent(row),
       setOutlineLevel: changeOutlineLevel,
       collapseCategories:
         /** Collapses the current tree's top-level categories. @returns Nothing. */ () =>

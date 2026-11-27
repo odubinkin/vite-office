@@ -21,7 +21,8 @@
       "Connects ordinary bookmark selection, cursor-dependent edit admission and group deletion through the native Writer mark and undo owners.",
       "Tracks the live table, outline and bookmark indexes in the native order for the current content root.",
       "Uses source outline tracking mode and content-type flags when choosing the next tracked entry.",
-      "Applies the native configured outline depth at the Navigator content list."
+      "Applies the native configured outline depth at the Navigator content list.",
+      "Lists the attached hyperlink and annotation owners in native order, and routes their address-based navigation and cursor tracking."
     ],
     "omittedResponsibilities": [
       "The represented tree serves the active document and the three connected native content families."
@@ -47,6 +48,18 @@
         {
           "path": "apps/office/src/sw/source/uibase/utlui/content.ts",
           "marker": "SetOutlineLevel"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/utlui/content.ts",
+          "marker": "FindCommentTarget"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterNavigatorFields.test.tsx",
+          "marker": "updates the collapsed comments category for the pinned tdf137274 sequence"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterNavigatorFields.test.tsx",
+          "marker": "orders the pinned tdf134960 hyperlinks by document and frame-anchor position"
         }
       ],
       "upstream": [
@@ -77,6 +90,14 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx",
           "marker": "SwContentTree::SetOutlineLevel"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx",
+          "marker": "SwContentTree::UpdateTracking"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx",
+          "marker": "SwContentTree::GotoContent"
         }
       ]
     }
