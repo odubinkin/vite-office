@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "task_id": "202611271307-Y4QY0R",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-27T14:48:22.355Z",
+  "verdict": "pass",
+  "summary": "The pinned tdf99689_tables.odt, tdf99689_figures.odt and TESTXMLID.odt retained native caption source options, object filters and stored index sections through the Worker and ODT reopen.",
+  "evaluated_sha": "f99f2152067c999a0a9b04bcd5c0676aa7f0347c",
+  "blueprint_digest": "e0843716b1e07180456bed42bf59b22102f8b0e3b69445a4b08edaabf56ba6f9",
+  "findings": [
+    "WRITER-765 records the native single-level template reader behavior. Runtime index regeneration is outside this slice."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611271307-Y4QY0R/README.md",
+    "/Users/odubinkin/Projects/vite-office/output/playwright/Y4QY0R/verification.md",
+    "f99f2152067c999a0a9b04bcd5c0676aa7f0347c"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
