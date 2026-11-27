@@ -4,7 +4,7 @@ title: "Implement native Writer reference marks in ODT"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 4
+revision: 6
 origin:
   system: "manual"
 depends_on: []
@@ -20,11 +20,27 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-11-27T18:15:30.527Z"
+  updated_by: "CODER"
+  note: "216 focused Writer checks and 3 targeted WhichId cases passed. Original whitespace.odt retains point and range reference marks through the Writer Worker and package reopen. Static and provenance checks passed."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-11-27T18:15:31.303Z"
+  updated_by: "EVALUATOR"
+  note: "Writer preserves original named reference marks through ODT and Worker on native text hints."
+  evaluated_sha: "9b4abc8280042041076ddb80dc057f7013bacde9"
+  blueprint_digest: "1537415af64eaafed1f430712b5fa18c04367125965a194b0aa004f35f24bc08"
+  evidence_refs:
+    - ".agentplane/tasks/202611271759-8EGZMJ/README.md"
+    - ".agentplane/tasks/202611271759-8EGZMJ/quality/20261127-181531303-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202611271759-8EGZMJ/quality/20261127-181531303-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202611271759-8EGZMJ/quality/20261127-181531303-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202611271759-8EGZMJ/blueprint/resolved-snapshot.json"
+    - "output/playwright/odf-writer-redlines/refmark-verification.md"
+  findings:
+    - "Point and range assertions are ported from the original ODT fixture. Documented the source expansion and rename behavior."
 commit: null
 comments:
   -
@@ -38,8 +54,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement actual Writer reference-mark hints and the ODT paths."
+  -
+    type: "verify"
+    at: "2026-11-27T18:15:30.527Z"
+    author: "CODER"
+    state: "ok"
+    note: "216 focused Writer checks and 3 targeted WhichId cases passed. Original whitespace.odt retains point and range reference marks through the Writer Worker and package reopen. Static and provenance checks passed."
 doc_version: 3
-doc_updated_at: "2026-11-27T17:59:43.730Z"
+doc_updated_at: "2026-11-27T18:15:30.636Z"
 doc_updated_by: "CODER"
 description: "Port the SwFormatRefMark and SwTextRefMark item and hint owners, original point and paragraph-scoped ranged XML import, ODT export and Worker persistence. Retain the native missing-end collapse and first-match behavior, native hint identity and expansion. Port the point and ranged assertions from the pinned whitespace.odt regression and document the preserved reference mark expansion issue."
 sections:
@@ -59,6 +81,36 @@ sections:
     3. Compare the final result against ## Scope and record any residual follow-up in ## Findings. Expected: open edges are explicit rather than implicit.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-11-27T18:15:30.527Z — VERIFY — ok
+
+    By: CODER
+
+    Note: 216 focused Writer checks and 3 targeted WhichId cases passed. Original whitespace.odt retains point and range reference marks through the Writer Worker and package reopen. Static and provenance checks passed.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-27T17:59:43.730Z, excerpt_hash=sha256:39a67dba70c2835f0fa28a83521c3556c60ebaf3d3158bab8132a16628046974
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611271759-8EGZMJ/blueprint/resolved-snapshot.json
+    - old_digest: 1537415af64eaafed1f430712b5fa18c04367125965a194b0aa004f35f24bc08
+    - current_digest: 1537415af64eaafed1f430712b5fa18c04367125965a194b0aa004f35f24bc08
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202611271759-8EGZMJ
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202611271759-8EGZMJ
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -92,6 +144,36 @@ PLANNER fallback scaffold for "Implement native Writer reference marks in ODT". 
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-11-27T18:15:30.527Z — VERIFY — ok
+
+By: CODER
+
+Note: 216 focused Writer checks and 3 targeted WhichId cases passed. Original whitespace.odt retains point and range reference marks through the Writer Worker and package reopen. Static and provenance checks passed.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-27T17:59:43.730Z, excerpt_hash=sha256:39a67dba70c2835f0fa28a83521c3556c60ebaf3d3158bab8132a16628046974
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611271759-8EGZMJ/blueprint/resolved-snapshot.json
+- old_digest: 1537415af64eaafed1f430712b5fa18c04367125965a194b0aa004f35f24bc08
+- current_digest: 1537415af64eaafed1f430712b5fa18c04367125965a194b0aa004f35f24bc08
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202611271759-8EGZMJ
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202611271759-8EGZMJ
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan

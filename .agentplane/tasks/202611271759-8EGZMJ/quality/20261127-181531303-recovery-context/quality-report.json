@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202611271759-8EGZMJ",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-27T18:15:31.303Z",
+  "verdict": "pass",
+  "summary": "Writer preserves original named reference marks through ODT and Worker on native text hints.",
+  "evaluated_sha": "9b4abc8280042041076ddb80dc057f7013bacde9",
+  "blueprint_digest": "1537415af64eaafed1f430712b5fa18c04367125965a194b0aa004f35f24bc08",
+  "findings": [
+    "Point and range assertions are ported from the original ODT fixture. Documented the source expansion and rename behavior."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611271759-8EGZMJ/README.md",
+    "output/playwright/odf-writer-redlines/refmark-verification.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
