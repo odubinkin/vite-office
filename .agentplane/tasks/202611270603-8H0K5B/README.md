@@ -4,7 +4,7 @@ title: "Preserve Calc cell notes through native storage and ODS round trips"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -29,6 +29,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Implementation evidence: 784482b638a0. Verified checks are recorded in output/playwright/8H0K5B/verification.md."
 events:
   -
     type: "status"
@@ -43,8 +46,13 @@ events:
     author: "CODER"
     state: "ok"
     note: "44 focused Calc tests and all source, inventory and static checks passed after the separate integration evidence repair."
+  -
+    type: "comment"
+    at: "2026-11-27T07:10:42.215Z"
+    author: "CODER"
+    body: "Implementation evidence: 784482b638a0. Verified checks are recorded in output/playwright/8H0K5B/verification.md."
 doc_version: 3
-doc_updated_at: "2026-11-27T06:24:30.064Z"
+doc_updated_at: "2026-11-27T07:10:42.222Z"
 doc_updated_by: "CODER"
 description: "Port the supported ScPostIt data and sparse column note ownership, cell annotation XML and Worker transfer from pinned LibreOffice. Verify native annotations on otherwise empty cells with testCellNoteExportODS and related existing checks."
 sections:
