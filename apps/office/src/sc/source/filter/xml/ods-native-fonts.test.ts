@@ -133,7 +133,7 @@ it("round-trips distinct font declarations and every represented metadata field 
   }
   for (const model of [doc, loaded, again]) model.DisposeAttributes();
 });
-it("retains missing-face defaults and diagnoses unported resources and invalid styles roots", /** Checks actual import boundaries without silently inventing a font. @returns Nothing. */ () => {
+it("retains font declarations and missing-face defaults and rejects invalid styles roots", /** Checks font ownership before package resource admission. @returns Nothing. */ () => {
   const doc = new ScDocument(),
     diagnostics: string[] = [];
   const importer = new ScXMLImport(doc, {
@@ -152,15 +152,17 @@ it("retains missing-face defaults and diagnoses unported resources and invalid s
     pitch: FontPitch.PITCH_DONTKNOW,
     charSet: RTL_TEXTENCODING_UTF8,
   });
-  importer.registerEmbeddedFont({
+  const declaration = {
     faceName: "Default",
     familyName: "Native Default",
     path: "Fonts/test.ttf",
     format: "truetype",
     weight: "normal",
     style: "normal",
-  });
-  expect(diagnostics).toContain("embedded font resources are not preserved");
+  } as const;
+  importer.registerEmbeddedFont(declaration);
+  expect(doc.GetEmbeddedFonts()).toEqual([declaration]);
+  expect(doc.IsEmbedFonts()).toBe(false);
   expect(
     /** Rejects another known ODF root. @returns Nothing. */ () =>
       importer.importStyles(
