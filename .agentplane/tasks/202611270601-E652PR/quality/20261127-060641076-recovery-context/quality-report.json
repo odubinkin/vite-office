@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "task_id": "202611270601-E652PR",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-27T06:06:41.076Z",
+  "verdict": "pass",
+  "summary": "Heading-root multi-selection controls native grouped Navigator actions.",
+  "evaluated_sha": "d2f0cdd21dcd42bade27ea95c68efbae9d13fe4b",
+  "blueprint_digest": "c0c3a8d330c716a9572a064778ca664be05e756e07f7def89307cc3b47fdcd0b",
+  "findings": [
+    "Browser selection and original command order are validated independent of document history and root-mode focus."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611270601-E652PR/README.md",
+    "output/playwright/writer-navigator-multi-vitest.log",
+    "output/playwright/writer-navigator-multi-chromium.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
