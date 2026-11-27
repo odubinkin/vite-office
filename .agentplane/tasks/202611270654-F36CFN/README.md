@@ -4,7 +4,7 @@ title: "Preserve Calc ODS external cache number formats and source metadata"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -24,6 +24,24 @@ verification:
   updated_by: "CODER"
   note: "All 32 selected Calc cases pass across the initial run and the corrected ODS/XLSX cache replay. All static checks passed."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-11-27T07:09:52.855Z"
+  updated_by: "EVALUATOR"
+  note: "Calc ODS retains native cache formats and source filter metadata."
+  evaluated_sha: "5a6146604c2d69d5d54d29593bf4ab487434f993"
+  blueprint_digest: "346cae7f12ded2af0ab6ed0c9ec364d8db611b6af026c3472e8ce4235d2702e1"
+  evidence_refs:
+    - ".agentplane/tasks/202611270654-F36CFN/README.md"
+    - ".agentplane/tasks/202611270654-F36CFN/quality/20261127-070952855-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202611270654-F36CFN/quality/20261127-070952855-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202611270654-F36CFN/quality/20261127-070952855-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202611270654-F36CFN/blueprint/resolved-snapshot.json"
+    - "output/playwright/F36CFN/verification.md"
+    - "a890e2055a2b"
+    - "d3e2478eeedb"
+  findings:
+    - "Styled date caches and numeric durations pass ODS and Worker round trips, and the original relative XLSX link survives an ODS reopen."
 commit: null
 comments:
   -

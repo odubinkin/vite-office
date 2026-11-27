@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202611270654-F36CFN",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-27T07:09:52.855Z",
+  "verdict": "pass",
+  "summary": "Calc ODS retains native cache formats and source filter metadata.",
+  "evaluated_sha": "5a6146604c2d69d5d54d29593bf4ab487434f993",
+  "blueprint_digest": "346cae7f12ded2af0ab6ed0c9ec364d8db611b6af026c3472e8ce4235d2702e1",
+  "findings": [
+    "Styled date caches and numeric durations pass ODS and Worker round trips, and the original relative XLSX link survives an ODS reopen."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611270654-F36CFN/README.md",
+    "output/playwright/F36CFN/verification.md",
+    "a890e2055a2b",
+    "d3e2478eeedb"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
