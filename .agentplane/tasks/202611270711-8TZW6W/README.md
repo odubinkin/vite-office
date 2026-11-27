@@ -1,10 +1,11 @@
 ---
 id: "202611270711-8TZW6W"
 title: "Preserve Calc ODS threaded notes and document persons"
-status: "DOING"
+result_summary: "Extended ODS and compatible Worker snapshots preserve native Calc comment roots, replies, resolution and document persons."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - "84d2d7ba835d82e0037f17b6e4152d689c6521b2"
   findings:
     - "Source owner defaults, person deduplication, extension XML and version-one transfer preserve the represented native note contract. Implementation: 84d2d7ba835d82e0037f17b6e4152d689c6521b2."
-commit: null
+commit:
+  hash: "84d2d7ba835d82e0037f17b6e4152d689c6521b2"
+  message: "🧩 8TZW6W calc: preserve threaded ODS notes and workbook persons"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: 32 Calc ODS and Worker cases and scoped static checks pass. Implementation: 84d2d7ba835d."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "32 focused Calc ODS and Worker cases pass, including the pinned root/reply/person scenario; scoped static and registry checks pass. See output/playwright/8TZW6W/verification.md."
+  -
+    type: "status"
+    at: "2026-11-27T07:22:23.828Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: 32 Calc ODS and Worker cases and scoped static checks pass. Implementation: 84d2d7ba835d."
 doc_version: 3
-doc_updated_at: "2026-11-27T07:20:12.118Z"
+doc_updated_at: "2026-11-27T07:22:23.829Z"
 doc_updated_by: "CODER"
 description: "Port native ScPostIt threaded metadata, ordered unique document persons and the LibreOffice ODS thread extension. Retain thread data through version-one Worker transfer and verify the pinned ODS comment round-trip scenario."
 sections:
