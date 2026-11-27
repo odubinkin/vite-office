@@ -4,7 +4,7 @@ title: "Reconcile Writer and shared ODF provenance after branch integration"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -29,6 +29,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Implementation evidence: ab5ca4beff41628f9be0dadaaeacdb133fff5e3f. Verified checks are recorded in output/playwright/N5GDD4/verification.md."
 events:
   -
     type: "status"
@@ -43,8 +46,13 @@ events:
     author: "CODER"
     state: "ok"
     note: "Global provenance and both scoped invariant gates pass, and 66 scoped Writer/shared tests pass."
+  -
+    type: "comment"
+    at: "2026-11-27T06:46:24.087Z"
+    author: "CODER"
+    body: "Implementation evidence: ab5ca4beff41628f9be0dadaaeacdb133fff5e3f. Verified checks are recorded in output/playwright/N5GDD4/verification.md."
 doc_version: 3
-doc_updated_at: "2026-11-27T06:24:09.186Z"
+doc_updated_at: "2026-11-27T06:46:24.087Z"
 doc_updated_by: "CODER"
 description: "Restore traceable references to native ODT character effects, rotation, annotation and paragraph line numbering after the Writer and Calc integration. Re-run the affected existing tests and repository provenance and registry checks."
 sections:
