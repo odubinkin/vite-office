@@ -16,6 +16,15 @@ const labels = [
   "Center Vertically",
   "Align Bottom",
   "Wrap Text",
+  "Merge and Center Cells",
+  "Merge Cells",
+  "Unmerge Cells",
+  "Currency",
+  "Percent",
+  "Number",
+  "Date",
+  "Add Decimal Place",
+  "Delete Decimal Place",
   "Increase",
   "Decrease",
   "Borders (Shift to overwrite)",
@@ -44,7 +53,7 @@ for (const viewport of [
     const bar = page.getByRole("toolbar", { name: "Calc formatting toolbar" });
     await expect(bar.getByRole("combobox")).toHaveCount(2);
     const buttons = bar.locator("button:not([data-office-combobox-toggle])");
-    await expect(buttons).toHaveCount(17);
+    await expect(buttons).toHaveCount(26);
     expect(
       await bar
         .locator(
@@ -72,9 +81,11 @@ for (const viewport of [
     await expect(bar.getByRole("combobox", { name: "Font Size", exact: true })).toHaveValue(
       "10 pt",
     );
-    for (let index = 0; index < 17; index++) {
-      const button = buttons.nth(index);
-      await expect(button).toBeEnabled();
+    const unavailable = new Set(["Merge and Center Cells", "Merge Cells", "Unmerge Cells"]);
+    for (const [index, button] of (await buttons.all()).entries()) {
+      if (unavailable.has((await button.getAttribute("aria-label")) ?? ""))
+        await expect(button).toBeDisabled();
+      else await expect(button).toBeEnabled();
       if (index < 3) await expect(button).toHaveText(["B", "I", "U"][index] as string);
       else if (index === 3 || index === 4) await expect(button).toHaveText(index === 3 ? "A" : "▨");
       else await expect(button.locator("svg")).toHaveCount(1);
