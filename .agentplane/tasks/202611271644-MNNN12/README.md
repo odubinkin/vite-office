@@ -1,6 +1,6 @@
 ---
 id: "202611271644-MNNN12"
-title: "Preserve native Calc consolidation settings and sheet scenarios in ODS"
+title: "Implement native Calc ODS consolidation settings and sheet scenarios"
 status: "DOING"
 priority: "med"
 owner: "CODER"
@@ -11,6 +11,7 @@ depends_on: []
 tags:
   - "calc"
   - "odf"
+  - "code"
 verify: []
 plan_approval:
   state: "approved"
@@ -39,7 +40,7 @@ events:
 doc_version: 3
 doc_updated_at: "2026-11-27T16:45:14.865Z"
 doc_updated_by: "CODER"
-description: "Port the original ScConsolidateParam and per-sheet scenarios with their native defaults, address conversion and ScMF::Scenario cell-range marking. Connect the Calc document, ODS importer and exporter, and Worker graph. Verify the two pinned consolidation fixtures and one critical scenario transfer without adding desktop dialogs."
+description: "Implement ScConsolidateParam, native scenario range flags, ODS importer and exporter, and Worker support in apps/office/src/sc and the shared ODF token module. Verify with LibreOffice consolidation inputs and a native scenario ODS round trip."
 sections:
   Summary: |-
     Preserve native Calc consolidation settings and sheet scenarios in ODS
