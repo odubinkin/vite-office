@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "task_id": "202611271138-BPVCFM",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-27T11:53:07.603Z",
+  "verdict": "pass",
+  "summary": "Verified the pinned TOC and its original generated title and linked contents across Writer Worker and ODT reopening.",
+  "evaluated_sha": "361043929fcbc23ec34f01afc98849bfec78a449",
+  "blueprint_digest": "07d2c0bf943d31caba1c0af86c65114612dec8b25782c5e633beda96d4761a05",
+  "findings": [
+    "The filter preserves the native connected TOX and original form in the represented slice. Interactive rebuilding, other index kinds and PDF verification remain outside this task."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611271138-BPVCFM/README.md",
+    "/Users/odubinkin/Projects/vite-office/output/playwright/BPVCFM/verification.md",
+    "361043929fcbc23ec34f01afc98849bfec78a449"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
