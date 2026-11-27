@@ -4,7 +4,7 @@ title: "Preserve native Calc sheet writing direction in ODS"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 4
+revision: 6
 origin:
   system: "manual"
 depends_on: []
@@ -20,11 +20,27 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-11-27T17:55:41.384Z"
+  updated_by: "CODER"
+  note: "87 focused Calc and shared Writer tests passed, including the original mixed-direction ODS, Worker and ODS reopen. Typecheck, ESLint, Prettier, module boundaries, provenance and scoped inventories passed."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-11-27T17:55:41.899Z"
+  updated_by: "EVALUATOR"
+  note: "Calc preserves the original table-family sheet writing mode through ODS and Worker."
+  evaluated_sha: "10762f003f7af5bb21ecd39cdc3134e7e16b5e64"
+  blueprint_digest: "9f974fb95ab03d9029284800f1f263ed6ea95d6d25c94c53bfa9bd59cad8f953"
+  evidence_refs:
+    - ".agentplane/tasks/202611271749-66G2T0/README.md"
+    - ".agentplane/tasks/202611271749-66G2T0/quality/20261127-175541899-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202611271749-66G2T0/quality/20261127-175541899-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202611271749-66G2T0/quality/20261127-175541899-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202611271749-66G2T0/blueprint/resolved-snapshot.json"
+    - "output/playwright/odf-next-checkpoint/sheet-layout-verification.md"
+  findings:
+    - "Uses the pinned xmloff handler variant, native XML loading flag and canonical horizontal export tokens. Original mixed-direction ODS passed."
 commit: null
 comments:
   -
@@ -38,8 +54,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: port the native Calc ODS sheet writing direction and deferred load contract."
+  -
+    type: "verify"
+    at: "2026-11-27T17:55:41.384Z"
+    author: "CODER"
+    state: "ok"
+    note: "87 focused Calc and shared Writer tests passed, including the original mixed-direction ODS, Worker and ODS reopen. Typecheck, ESLint, Prettier, module boundaries, provenance and scoped inventories passed."
 doc_version: 3
-doc_updated_at: "2026-11-27T17:50:06.402Z"
+doc_updated_at: "2026-11-27T17:55:41.440Z"
 doc_updated_by: "CODER"
 description: "Complete native Calc table-family writing direction over ODS import and export and Worker transfer. Retain the pinned xmloff token conversion, sheet property value semantics, deferred XML import direction, and ScTable ownership. Verify the existing pinned mixed-direction ODS and the existing sheet border, settings and filter cases."
 sections:
@@ -59,6 +81,36 @@ sections:
     3. Compare the final result against ## Scope and record any residual follow-up in ## Findings. Expected: open edges are explicit rather than implicit.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-11-27T17:55:41.384Z — VERIFY — ok
+
+    By: CODER
+
+    Note: 87 focused Calc and shared Writer tests passed, including the original mixed-direction ODS, Worker and ODS reopen. Typecheck, ESLint, Prettier, module boundaries, provenance and scoped inventories passed.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-27T17:50:06.402Z, excerpt_hash=sha256:03ee4c28a3b91d028ec766ef81e87047b7c7d429c0bdf8acc19acf7c997d347f
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611271749-66G2T0/blueprint/resolved-snapshot.json
+    - old_digest: 9f974fb95ab03d9029284800f1f263ed6ea95d6d25c94c53bfa9bd59cad8f953
+    - current_digest: 9f974fb95ab03d9029284800f1f263ed6ea95d6d25c94c53bfa9bd59cad8f953
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202611271749-66G2T0
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202611271749-66G2T0
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -92,6 +144,36 @@ PLANNER fallback scaffold for "Preserve native Calc sheet writing direction in O
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-11-27T17:55:41.384Z — VERIFY — ok
+
+By: CODER
+
+Note: 87 focused Calc and shared Writer tests passed, including the original mixed-direction ODS, Worker and ODS reopen. Typecheck, ESLint, Prettier, module boundaries, provenance and scoped inventories passed.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-27T17:50:06.402Z, excerpt_hash=sha256:03ee4c28a3b91d028ec766ef81e87047b7c7d429c0bdf8acc19acf7c997d347f
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611271749-66G2T0/blueprint/resolved-snapshot.json
+- old_digest: 9f974fb95ab03d9029284800f1f263ed6ea95d6d25c94c53bfa9bd59cad8f953
+- current_digest: 9f974fb95ab03d9029284800f1f263ed6ea95d6d25c94c53bfa9bd59cad8f953
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202611271749-66G2T0
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202611271749-66G2T0
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan

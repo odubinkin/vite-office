@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202611271749-66G2T0",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-27T17:55:41.899Z",
+  "verdict": "pass",
+  "summary": "Calc preserves the original table-family sheet writing mode through ODS and Worker.",
+  "evaluated_sha": "10762f003f7af5bb21ecd39cdc3134e7e16b5e64",
+  "blueprint_digest": "9f974fb95ab03d9029284800f1f263ed6ea95d6d25c94c53bfa9bd59cad8f953",
+  "findings": [
+    "Uses the pinned xmloff handler variant, native XML loading flag and canonical horizontal export tokens. Original mixed-direction ODS passed."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611271749-66G2T0/README.md",
+    "output/playwright/odf-next-checkpoint/sheet-layout-verification.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
