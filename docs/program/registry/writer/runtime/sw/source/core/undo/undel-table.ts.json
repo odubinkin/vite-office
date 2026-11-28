@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/undo/undel-table.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "undo-redo",
+    "capabilityIds": [
+      "CAP-0102"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/undo/undel-table.ts#SwUndoDeleteTable",
+        "apps/office/src/sw/source/uibase/uiview/view-navigation.test.ts#deletes and restores the native table section with its cell bookmarks",
+        "vendor/libreoffice-reference/sw/source/core/undo/undel.cxx#SwUndoDelete::SwUndoDelete"
+      ],
+      "justification": "Retains and restores the original table section, attached content history and cursor during complete table deletion.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwUndoDeleteTable"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/undo/undel.cxx",
+      "upstreamSymbols": [
+        "SwUndoDelete::SwUndoDelete"
+      ]
+    }
+  }
+}

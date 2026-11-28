@@ -522,3 +522,53 @@ test("Writer Navigator wraps physical page scrolling without moving the caret", 
   await next.click();
   await expect(pageNumber).toHaveValue("1");
 });
+
+test("Writer Navigator selects, edits, renames and deletes a table", /** Uses the native table context commands and restores the original table with Undo. @param fixtures - Browser fixtures. @param fixtures.page - Writer page. @returns Completion. */ async ({
+  page,
+}) => {
+  await page.goto("/writer", { waitUntil: "domcontentloaded" });
+  await page.getByRole("textbox", { name: "Writer document text" }).fill("Body text");
+  await page.getByRole("button", { name: "Insert Table", exact: true }).click();
+  await page
+    .getByLabel("Table size")
+    .locator("..")
+    .getByRole("button", { name: "More Options" })
+    .click();
+  await page
+    .getByRole("dialog", { name: "Insert Table" })
+    .getByRole("button", { name: "Insert", exact: true })
+    .click();
+  const cell = page.getByLabel("Row 1 column 1 paragraph 1", { exact: true });
+  await cell.click();
+  await page.keyboard.insertText("Retained cell");
+  await page.keyboard.press("F5");
+  const navigator = page.getByRole("dialog", { name: "Navigator", exact: true });
+  const context = page.getByRole("menu", { name: "Navigator context menu" });
+  const row = navigator.getByRole("treeitem", { name: "Table1", exact: true });
+  await row.click({ button: "right" });
+  await context.getByRole("menuitem", { name: "Select", exact: true }).click();
+  const table = page.getByRole("table", { name: "Table1", exact: true });
+  await expect(table.locator('[data-writer-editor-selected="true"]').first()).toBeVisible();
+  await row.click({ button: "right" });
+  await context.getByRole("menuitem", { name: "Edit…", exact: true }).click();
+  const properties = page.getByRole("dialog", { name: "Table Properties", exact: true });
+  await expect(properties).toBeVisible();
+  await properties.getByRole("button", { name: "Cancel", exact: true }).click();
+  await row.click({ button: "right" });
+  await context.getByRole("menuitem", { name: "Rename", exact: true }).click();
+  const name = navigator.getByRole("textbox", { name: "Table name", exact: true });
+  await name.fill("Totals");
+  await name.press("Enter");
+  const renamed = navigator.getByRole("treeitem", { name: "Totals", exact: true });
+  await expect(renamed).toBeVisible();
+  await renamed.click({ button: "right" });
+  await context.getByRole("menuitem", { name: "Delete Table", exact: true }).click();
+  await expect(renamed).toHaveCount(0);
+  await expect(page.getByRole("table", { name: "Totals", exact: true })).toHaveCount(0);
+  await page
+    .getByRole("toolbar", { name: "Writer standard toolbar" })
+    .getByRole("button", { name: "Undo", exact: true })
+    .click();
+  await expect(renamed).toBeVisible();
+  await expect(cell).toHaveText("Retained cell");
+});

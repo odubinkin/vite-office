@@ -1,5 +1,7 @@
 /** @fileoverview Verifies the native Writer view slots for directional navigation. */
 import { assert, expect, it, vi } from "vitest";
+import { SvxProtectItem } from "../../../../editeng/source/items/frmitems";
+import { RES_PROTECT } from "../../../inc/hintids";
 import { SfxUInt32Item } from "../../../../svl/source/items/intitem";
 import { createWriterDocumentSession } from "../../../browser/composition/writer-module";
 import { getWriterSlotId } from "../../../sdi/swriter";
@@ -114,6 +116,109 @@ it("traverses table starts and bookmark ranges in positional order with wrapping
     range.Dispose();
     start.Dispose();
     end.Dispose();
+    session.Close();
+  }
+});
+
+it("skips protected table content and reaches the first accessible cell", /** Covers navigation past a protected table and into a partially protected table. @returns Nothing. */ () => {
+  const session = createWriterDocumentSession();
+  const shell = session.view.GetWrtShell();
+  const document = shell.GetDoc();
+  const protect = new SvxProtectItem(RES_PROTECT);
+  protect.SetContentProtect(true);
+  try {
+    const blocked = document.nodes.MakeTableNode("Protected table", { width: 6000 });
+    blocked.AddColumnWidth(6000);
+    document.nodes.AppendTableRow(blocked, 1);
+    blocked.GetFrameFormat().SetFormatAttr(protect);
+    const partial = document.nodes.MakeTableNode("Partially protected table", { width: 6000 });
+    partial.AddColumnWidth(3000);
+    partial.AddColumnWidth(3000);
+    const line = document.nodes.AppendTableRow(partial, 2);
+    const [locked, writable] = line.GetTabBoxes();
+    assert(locked);
+    assert(writable);
+    locked.GetFrameFormat().SetFormatAttr(protect);
+    expect(session.view.GetNavigator().MoveContent("table", true)).toBe(true);
+    expect(shell.GetCursor().GetPoint().GetNode().GetTableBox()).toBe(writable);
+  } finally {
+    protect.Dispose();
+    session.Close();
+  }
+});
+
+it("deletes and restores the native table section with its cell bookmarks", /** Verifies the Table Delete slot and the original model layout owners across undo and redo. @returns Nothing. */ () => {
+  const session = createWriterDocumentSession();
+  const shell = session.view.GetWrtShell();
+  const doc = shell.GetDoc();
+  const table = doc.nodes.MakeTableNode("Deletable", { width: 5000 });
+  table.AddColumnWidth(5000);
+  const line = doc.nodes.AppendTableRow(table, 1);
+  const box = line.GetTabBoxes()[0];
+  assert(box);
+  const tableCellStart = box.GetSttNd();
+  assert(tableCellStart);
+  const cell = doc.nodes.at(tableCellStart.GetIndex() + 1).GetTextNode();
+  assert(cell);
+  cell.SetText("Selected cell");
+  const following = doc.nodes.MakeTextNode("After table");
+  const marks = doc.GetIDocumentMarkAccess();
+  marks.MakeMark(cell, 3, "Cell bookmark");
+  const point = new SwPosition(cell, 5);
+  try {
+    shell.SetCursor(point);
+    expect(session.view.Execute(WRITER_COMMAND_IDS.deleteTable)).toMatchObject({
+      status: "executed",
+      value: true,
+    });
+    expect(doc.GetTables()).toEqual([]);
+    expect(marks.FindMark("Cell bookmark")).toBeUndefined();
+    expect(shell.GetCursor().GetPoint().GetNode()).toBe(following);
+    expect(shell.Undo()).toBe(true);
+    expect(doc.GetTables()[0]).toBe(table);
+    expect(box.GetSttNd()).toBe(cell.StartOfSectionNode());
+    expect(marks.FindMark("Cell bookmark")?.GetMarkStart().GetNode()).toBe(cell);
+    expect(shell.GetCursor().GetPoint().GetNode()).toBe(cell);
+    expect(shell.Redo()).toBe(true);
+    expect(doc.GetTables()).toEqual([]);
+    expect(shell.GetCursor().GetPoint().GetNode()).toBe(following);
+  } finally {
+    point.Dispose();
+    session.Close();
+  }
+});
+
+it("deletes the Navigator table category in one undo group", /** Checks adjacent table deletion, protection and exact table restoration. @returns Nothing. */ () => {
+  const session = createWriterDocumentSession();
+  const shell = session.view.GetWrtShell();
+  const doc = shell.GetDoc();
+  const navigator = session.view.GetNavigator();
+  const protect = new SvxProtectItem(RES_PROTECT);
+  protect.SetContentProtect(true);
+  try {
+    const tables = ["First", "Second", "Protected"].map(
+      /** Creates an adjacent native table. @param name - Table name. @returns Native table owner. */
+      (name) => {
+        const table = doc.nodes.MakeTableNode(name, { width: 5000 });
+        table.AddColumnWidth(5000);
+        doc.nodes.AppendTableRow(table, 1);
+        return table;
+      },
+    );
+    const protectedTable = tables[2];
+    assert(protectedTable);
+    protectedTable.GetFrameFormat().SetFormatAttr(protect);
+    const bodyBefore = doc.paragraphs.map((paragraph) => paragraph.GetText());
+    expect(navigator.DeleteTables()).toBe(true);
+    expect(doc.GetTables()).toEqual([protectedTable]);
+    expect(doc.paragraphs.map((paragraph) => paragraph.GetText())).toEqual(bodyBefore);
+    expect(navigator.CanDeleteTable()).toBe(false);
+    expect(shell.Undo()).toBe(true);
+    expect(doc.GetTables()).toEqual(tables);
+    expect(shell.Redo()).toBe(true);
+    expect(doc.GetTables()).toEqual([protectedTable]);
+  } finally {
+    protect.Dispose();
     session.Close();
   }
 });

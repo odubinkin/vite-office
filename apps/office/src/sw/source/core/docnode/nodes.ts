@@ -520,6 +520,12 @@ export class SwNodes {
 
   /** Existing complete table destructor responsibility shared by source node deletion and table history deletion. @param node - Actual table start. @returns Nothing. */
   private DestroyTableNode(node: SwTableNode): void {
+    this.DeleteTableFrames(node);
+    node.GetTable().Dispose();
+  }
+
+  /** Destroys the layout representation while leaving table model owners available for undo. @param node - Native table start. @returns Nothing. */
+  private DeleteTableFrames(node: SwTableNode): void {
     writerClients0: for (const client of new SwIterator(
       SwClient,
       node.GetTable().GetFrameFormat(),
@@ -535,7 +541,6 @@ export class SwNodes {
       }
       for (const box of row.GetTabBoxes()) this.DestroyTableBoxFrames(box);
     }
-    node.GetTable().Dispose();
   }
   /** Original DelNodes outline/frame phase, including the whole-array destructor branch which retains the five fixed sentinel pairs. @param start - Actual native start index. @param count - Original positive node count. @returns Nothing. */
   public DelNodes(start: SwNodeIndex, count = 1): void {
@@ -601,18 +606,50 @@ export class SwNodes {
       section.GetStartNodeType() !== SwStartNodeType.SwFlyStartNode
     )
       throw new Error("Writer fly history requires a fly section.");
+    return this.DetachSection(section);
+  }
+
+  /** Moves a complete table section into Writer undo storage while correcting live text positions. @param section - Connected table node. @param target - Legal caret outside the table. @returns Detached native nodes. */
+  public DetachTableSection(section: SwTableNode, target: SwTextNode): readonly SwNode[] {
+    const start = this.indexOf(section);
+    const end = section.EndOfSectionIndex();
+    const destination = this.indexOf(target);
+    if (destination >= start && destination <= end)
+      throw new Error("Writer table history needs a surviving content position.");
+    return this.DetachSection(section, target);
+  }
+
+  /** Removes the layout owners and detaches the complete logical section for undo. @param section - Connected section start. @param target - Optional corrected content position. @returns Detached native nodes. */
+  private DetachSection(section: SwStartNode, target?: SwTextNode): readonly SwNode[] {
     const start = section.GetIndex();
     const end = section.EndOfSectionNode().GetIndex();
     const detached = this.nodeArray.slice(start, end + 1);
     for (const node of detached) {
-      if (node instanceof SwTextNode) this.m_aOutlineNodes.erase(node);
+      if (node instanceof SwTableNode) this.DeleteTableFrames(node);
+      if (node instanceof SwTextNode) {
+        if (target) node.CollapseContentIndicesTo(target, 0);
+        this.m_aOutlineNodes.erase(node);
+      }
       if (node instanceof SwContentNode) node.DelFrames();
     }
     this.RemoveNode(start, detached.length, false);
     return detached;
   }
+
   /** Restores the original fly section at its saved position. @param index - Saved position. @param section - Owned detached nodes. @returns Nothing. */
   public RestoreFlySection(index: number, section: readonly SwNode[]): void {
+    this.RestoreSection(index, section);
+  }
+
+  /** Restores the original table section at its native node position. @param index - Saved position. @param section - Owned detached table nodes. @returns Nothing. */
+  public RestoreTableSection(index: number, section: readonly SwNode[]): void {
+    if (!(section[0] instanceof SwTableNode))
+      throw new Error("Writer table history requires a table section.");
+    this.RestoreSection(index, section);
+  }
+
+  /** Restores a complete section and re-registers its list and outline owners. @param index - Saved position. @param section - Actual detached nodes. @returns Nothing. */
+  private RestoreSection(index: number, section: readonly SwNode[]): void {
     for (const [offset, node] of section.entries()) this.InsertNode(node, index + offset);
     for (const node of section) {
       if (!(node instanceof SwTextNode)) continue;

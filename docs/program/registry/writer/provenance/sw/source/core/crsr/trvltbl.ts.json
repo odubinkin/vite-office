@@ -30,7 +30,8 @@
       "Iteration227 removes duplicate editing-shell layout storage and the subclass GetLayout override. Existing SwCursorShell retains the real shared view root passed through its constructor, while detached core shells retain its single lazy current-document factory. The same SwView owns the persistent edit window and editing shell; child GetView references remain their creation owner across document replacement and another active view. This is a native ownership prerequisite, not a completed SvxRuler/SvxColumnItem/slot pipeline. Original constructor inputs, list/table/cursor/history contracts and registered IO deviations are retained.",
       "Task202610112158-8V85V8 adds bounded original native context-menu selection/resource execution and browser presentation. Native selected text uses inclusive start/exclusive end and all marked rings; represented selected cell sections retain original table ownership. Actual device caret mapping stays at browser ingress. Keyboard retains original native selection and moving-endpoint device geometry. Shared popup and menubar reuse the same bindings command item and viewport/submenu renderer; native standalone popup starts without entry preselection, Enter without highlighted command dismisses, child key/pointer routes and synchronous teardown/focus precede Execute. Context surfaces select original XCU PopupLabel when present while general labels remain unchanged. Full native pixel/model/layout, cell-follow/merged/nested/RTL, drawing/spell/readonly/GCAttr, global/quiet/UNO/VCL timers/mnemonics/disabled platform styles and complete parity remain unverified. Existing states/defaults/classes and registered IO/recovery deviations preserved; changed complete modules and native/mounted/Chromium evidence pending final certification.",
       "S3HW1E HTML53: actual DocumentLayoutManager current-view/current-layout queries and SwViewShell view-ring ownership connect SwDoc.GetEditShell and global PaMCorrAbs to persistent editing shells. Source traversal captures original start/end/target values before mutation, visits every actual view stack, ordinary cursor ring and displayed table cursor, then the native weak-owned UNO branch. Source teardown chooses the first other view before unlinking; existing browser persistent-shell New/Open rebinds the same shell to its replacement document. Ring algorithms remain on one actual identity through an erased native template/primary-base constructor type; no surrogate view, copied view list or flat position registry is introduced. Existing portable SwModify event ownership remains on that same cursor-shell identity as the native view-ring facet. Native window/output/paint/print/layouter, ENABLE_YRS peer cursors and whole module/ABI behavior remain unverified or unrepresented; browser save/open/recovery deviations remain unchanged. Native DeleteSection composition, table grammar/materialization/layout, RTF direction export and final format/UI audit remain required.",
-      "Finds the native outline at or before the cursor, including its outline-level limit and document extras boundary."
+      "Finds the native outline at or before the cursor, including its outline-level limit and document extras boundary.",
+      "Uses the section and cell owners to find an eligible table cursor entry."
     ],
     "omittedResponsibilities": [
       "Full native cursor-shell and table contracts remain unverified."
@@ -84,6 +85,10 @@
         {
           "path": "apps/office/src/sw/source/core/crsr/trvltbl.ts",
           "marker": "GetOutlinePos"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/crsr/trvltbl.ts",
+          "marker": "GetTableCursorStart"
         }
       ],
       "upstream": [
@@ -158,6 +163,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/core/crsr/crstrvl.cxx",
           "marker": "SwCursorShell::GetOutlinePos"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/crsr/trvltbl.cxx",
+          "marker": "GotoNextTable"
         }
       ]
     }

@@ -2,6 +2,8 @@
 import { RES_TXTATR_ANNOTATION, RES_TXTATR_INETFMT } from "../../../inc/hintids";
 import type { SwFormatField } from "../../../inc/fmtfld";
 import { SwPaM, SwPosition } from "../../core/crsr/pam";
+import { GetTableCursorStart } from "../../core/crsr/trvltbl";
+import { SwTableNode } from "../../core/docnode/node";
 import { WRITER_MAX_LIST_LEVEL } from "../../core/doc/list";
 import { SwPostItFieldType } from "../../core/fields/docufld";
 import type { SwRootFrame } from "../../core/layout/newfrm";
@@ -139,6 +141,74 @@ export class SwContentTree {
     return this.SetCursor(target.node, target.offset, oldBookmark !== this.selectedBookmarkName);
   }
 
+  /** Applies the native Navigator table-name admission before changing the real frame format. @param id - Stable Navigator table identity. @param name - Requested tree label. @returns Whether the table was renamed. */
+  public RenameTable(id: string, name: string): boolean {
+    const doc = this.shell.GetDoc();
+    if (!name || /[ .<>]/u.test(name) || doc.FindTableFormatByName(name)) return false;
+    const table = this.FindTableTarget(id);
+    if (!table || this.shell.GetViewOptions().IsReadonly()) return false;
+    this.shell.SetTableName(table.GetTable().GetFrameFormat(), name);
+    return true;
+  }
+
+  /** Reports whether a table row or category permits a native Delete action. @param id - Specific Navigator table identity, or undefined for the category. @returns Whether a writable table can be deleted. */
+  public CanDeleteTable(id?: string): boolean {
+    if (this.shell.GetViewOptions().IsReadonly()) return false;
+    if (id !== undefined) {
+      const table = this.FindTableTarget(id);
+      return table !== undefined && GetTableCursorStart(table, false) !== undefined;
+    }
+    return this.shell
+      .GetDoc()
+      .GetTables()
+      .some(
+        /** Admits only represented tables with at least one unprotected cell. @param table - Native table. @returns Whether eligible. */
+        (table) => GetTableCursorStart(table.GetTableNode(), false) !== undefined,
+      );
+  }
+
+  /** Deletes the Navigator table category through the native shell in one undo group. @returns Whether any table was deleted. */
+  public DeleteTables(): boolean {
+    if (!this.CanDeleteTable()) return false;
+    const document = this.shell.GetDoc();
+    const tables = document.GetTables();
+    const undo = document.GetUndoManager();
+    return this.shell.RunNotificationTransaction(
+      /** Publishes deletion and history as one native action. @returns Whether any table was removed. */
+      () =>
+        document.RunModelTransaction(
+          /** Executes the ordered table removals under a single undo group. @returns Whether modified. */
+          () => {
+            let deleted = false;
+            undo.StartUndo("Delete Tables");
+            try {
+              for (const table of tables) {
+                const first = GetTableCursorStart(table.GetTableNode(), false);
+                if (first && this.SetCursor(first, 0))
+                  deleted = this.shell.DeleteTable() || deleted;
+              }
+            } finally {
+              undo.EndUndo();
+            }
+            return deleted;
+          },
+        ),
+    );
+  }
+
+  /** Resolves the still-connected table owner from a row identity. @param id - Original table row identity. @returns Current native table node. */
+  private FindTableTarget(id: string): SwTableNode | undefined {
+    return this.shell
+      .GetDoc()
+      .GetNodes()
+      .entries()
+      .find(
+        /** Matches the original table format owner by identity. @param node - Original document node. @returns Whether it owns the requested table. */
+        (node): node is SwTableNode =>
+          node instanceof SwTableNode && this.identities.get(node.GetTable()) === id,
+      );
+  }
+
   /** Selects the exact internet attribute for the existing edit or remove hyperlink slot. @param id - Navigator hyperlink identity. @returns Whether the linked span still exists. */
   public SelectHyperlink(id: string): boolean {
     const hyperlink = this.GetTargets().find(
@@ -221,9 +291,9 @@ export class SwContentTree {
     forward: boolean,
   ): boolean {
     if (type === "bookmark") return this.MoveBookmark(forward);
+    if (type === "table") return this.MoveTableContent(forward);
     const point = this.shell.GetCursor().GetPoint();
     const currentNode = point.GetNode();
-    const currentTable = currentNode.FindTableNode();
     if (type === "outline") {
       const outlines = this.shell.GetDoc().GetNodes().GetOutLineNds();
       const { found, position } = outlines.Seek_Entry(currentNode);
@@ -236,31 +306,51 @@ export class SwContentTree {
       return heading ? this.SetCursor(heading, 0) : false;
     }
     const candidates = this.GetTargets().filter(
-      /** Keeps the native table starts or visible annotation windows. @param entry - Model target. @returns Whether the target can be reached. */
-      (entry) =>
-        entry.type === type &&
-        (type === "table" ||
-          (entry.comment !== undefined && this.postIts?.IsVisible(entry.comment) === true)),
+      /** Keeps annotations with available native sidebar windows. @param entry - Model target. @returns Whether it can be reached. */
+      (entry) => entry.comment !== undefined && this.postIts?.IsVisible(entry.comment) === true,
     );
     const ordered = forward ? candidates : candidates.reverse();
     const target =
       ordered.find(
-        /** Finds the next native position, skipping the current table section. @param entry - Candidate. @returns Whether it is in the requested direction. */
+        /** Finds a comment anchor in the requested direction. @param entry - Model target. @returns Whether it is ahead or behind the current caret. */
         (entry) => {
-          const node = entry.node.GetIndex();
-          if (type === "table" && currentTable)
-            return forward
-              ? node > currentTable.EndOfSectionIndex()
-              : node < currentTable.GetIndex();
           const comparison =
-            node - currentNode.GetIndex() || entry.offset - point.GetContentIndex();
+            entry.node.GetIndex() - currentNode.GetIndex() ||
+            entry.offset - point.GetContentIndex();
           return forward ? comparison > 0 : comparison < 0;
         },
       ) ?? ordered[0];
-    if (!target) return false;
-    return type === "comment"
-      ? this.EditComment(target.id)
-      : this.SetCursor(target.node, target.offset);
+    return target ? this.EditComment(target.id) : false;
+  }
+
+  /** Traverses real table sections in node order and admits their first reachable cell. @param forward - True for next. @returns Whether the caret reached a table. */
+  private MoveTableContent(forward: boolean): boolean {
+    const point = this.shell.GetCursor().GetPoint().GetNode();
+    const current = point.FindTableNode();
+    const candidates = this.shell
+      .GetDoc()
+      .GetNodes()
+      .entries()
+      .filter(
+        /** Selects native table sections, including nested tables. @param node - Connected node. @returns Whether it owns a table. */
+        (node): node is SwTableNode => node instanceof SwTableNode,
+      );
+    const ordered = forward ? candidates : candidates.reverse();
+    const boundary = forward
+      ? (current?.EndOfSectionIndex() ?? point.GetIndex())
+      : point.GetIndex();
+    const first = ordered.findIndex(
+      /** Starts past the current section going forward, or at a preceding different table going backward. @param table - Native table start. @returns Whether it precedes wrapping. */
+      (table) =>
+        forward ? table.GetIndex() > boundary : table !== current && table.GetIndex() < boundary,
+    );
+    for (let i = 0; i < ordered.length; i++) {
+      const table = ordered[(Math.max(0, first) + i) % ordered.length];
+      if (!table) continue;
+      const target = GetTableCursorStart(table, this.shell.GetViewOptions().IsReadonly());
+      if (target) return this.SetCursor(target, 0);
+    }
+    return false;
   }
 
   /** Navigates to a bookmark range with the start as the moving end. @param forward - True for next. @returns Whether a bookmark was reached. */

@@ -12,7 +12,8 @@
     "responsibilities": [
       "Projects applicable Navigator context entries in pinned resource order, connecting local handlers, radio preferences and disabled action state.",
       "Projects the hyperlink and comment tracking, edit and delete menu entries admitted by the selected category or row.",
-      "Projects the native per-category Display Alphabetically checkbox and omits contextual chapter moves while the outline is sorted."
+      "Projects the native per-category Display Alphabetically checkbox and omits contextual chapter moves while the outline is sorted.",
+      "Projects the native table row and category actions, including deletion sensitivity."
     ],
     "evidence": {
       "local": [
@@ -39,6 +40,14 @@
         {
           "path": "apps/office/src/sw/browser/presentation/WriterNavigator.test.tsx",
           "marker": "sorts only the chosen category, flattening headings without changing their document order"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-navigator-menu.ts",
+          "marker": "canDeleteTable"
+        },
+        {
+          "path": "apps/office/e2e/writer-navigator.spec.ts",
+          "marker": "selects, edits, renames and deletes a table"
         }
       ],
       "upstream": [
@@ -69,6 +78,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx",
           "marker": "if (!pType->IsAlphabeticSort())"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx",
+          "marker": "SwContentTree::DeleteAllContentOfEntryContentType"
         }
       ]
     },

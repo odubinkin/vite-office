@@ -38,6 +38,7 @@ import { selectWriterPopupCommandResource } from "./writer-command-presentation"
 import type { SwView } from "../../source/uibase/uiview/view";
 import { SwNavigationElement } from "../../source/uibase/ribbar/workctrl";
 import { WriterNavigatorNavigation } from "./WriterNavigatorNavigation";
+import { WriterNavigatorRename } from "./WriterNavigatorRename";
 import { queueWriterCursorReveal } from "./writer-cursor-reveal";
 import { getWriterNavigatorMenuItems, navigatorOutlineLevels } from "./writer-navigator-menu";
 
@@ -163,6 +164,7 @@ export function WriterNavigator({
     () => new Set(),
   );
   const [selected, setSelected] = useState<string | null>("");
+  const [renaming, setRenaming] = useState<string>();
   const [extended, setExtended] = useState<readonly string[]>(
     /** Starts an already rooted outline at the category row. @returns Initial multi-selection. */
     () => (tree.GetRootType() === "outline" ? ["outline"] : []),
@@ -184,6 +186,7 @@ export function WriterNavigator({
     | undefined
   >();
   if (!visible && popup !== undefined) setPopup(undefined);
+  if (!visible && renaming !== undefined) setRenaming(undefined);
   /** Looks up the application's translation for a native Navigator label. @param key - Control identity. @param fallback - Source label. @returns Label. */
   function label(key: string, fallback: string): string {
     return localization.GetText(`writer.navigator.${key}`, fallback);
@@ -361,14 +364,23 @@ export function WriterNavigator({
 
   /** Routes an editable entry through the original dialog or annotation editor. @param row - Target content entry. @returns Nothing. */
   function editContent(row: NavigatorRow): void {
-    if (row.type === "hyperlink" && tree.SelectHyperlink(row.id))
+    if (row.type === "table" && tree.GotoContent(row.id))
+      view.Execute(WRITER_COMMAND_IDS.tableDialog);
+    else if (row.type === "hyperlink" && tree.SelectHyperlink(row.id))
       view.Execute(WRITER_COMMAND_IDS.editHyperlink);
     else if (row.type === "comment") tree.EditComment(row.id);
   }
 
   /** Removes a represented hyperlink attribute or annotation through its native owner. @param row - Target content or group. @returns Nothing. */
   function deleteContent(row: NavigatorRow): void {
-    if (row.type === "hyperlink" && tree.SelectHyperlink(row.id)) {
+    if (row.type === "table") {
+      if (row.group) {
+        if (tree.DeleteTables()) reveal();
+      } else if (tree.GotoContent(row.id)) {
+        const result = view.Execute(WRITER_COMMAND_IDS.deleteTable);
+        if (result.status === "executed" && result.value === true) reveal();
+      }
+    } else if (row.type === "hyperlink" && tree.SelectHyperlink(row.id)) {
       view.Execute(WRITER_COMMAND_IDS.removeHyperlink);
       reveal();
     } else if (row.type === "comment") {
@@ -585,6 +597,8 @@ export function WriterNavigator({
       allExpanded,
       canCollapseCategories: root === undefined && categories.length > 0,
       hasContents: !row.group || row.children === true,
+      readOnly: view.GetWrtShell().GetViewOptions().IsReadonly(),
+      canDeleteTable: row.type === "table" && tree.CanDeleteTable(row.group ? undefined : row.id),
       label,
       toggleOutlineBranch:
         /** Applies the native expand or collapse operation to the whole outline branch. @returns Nothing. */ () => {
@@ -596,6 +610,11 @@ export function WriterNavigator({
         },
       goTo: /** Moves the Writer cursor to the content entry. @returns Nothing. */ () =>
         activate(row),
+      selectContent:
+        /** Selects the table through the native table slot. @returns Nothing. */ () => {
+          if (!tree.GotoContent(row.id)) return;
+          if (view.Execute(WRITER_COMMAND_IDS.selectTable).status === "executed") reveal();
+        },
       runHeadingCommand:
         /** Applies a native context action with sublevels. @param command - Original heading operation. @returns Nothing. */ (
           command,
@@ -605,6 +624,8 @@ export function WriterNavigator({
           removeBookmarks(row),
       editContent: /** Opens the original editor for the selected entry. @returns Nothing. */ () =>
         editContent(row),
+      renameContent: /** Opens the native editable table label. @returns Nothing. */ () =>
+        setRenaming(row.id),
       deleteContent:
         /** Removes the selected content through its native action. @returns Nothing. */ () =>
           deleteContent(row),
@@ -855,7 +876,24 @@ export function WriterNavigator({
               ) : (
                 <span aria-hidden="true" className="w-4 shrink-0" />
               )}
-              <span className={row.group ? "truncate font-semibold" : "truncate"}>{row.title}</span>
+              {renaming === row.id ? (
+                <WriterNavigatorRename
+                  title={row.title}
+                  label={label("table-name", "Table name")}
+                  onComplete={
+                    /** Commits the native table rename and returns focus to the tree. @param name - New name or canceled edit. @returns Nothing. */
+                    (name) => {
+                      setRenaming(undefined);
+                      if (name !== undefined) tree.RenameTable(row.id, name);
+                      rowRefs.current.get(row.id)?.focus({ preventScroll: true });
+                    }
+                  }
+                />
+              ) : (
+                <span className={row.group ? "truncate font-semibold" : "truncate"}>
+                  {row.title}
+                </span>
+              )}
             </li>
           ),
         )}

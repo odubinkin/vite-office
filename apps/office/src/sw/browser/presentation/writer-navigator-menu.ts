@@ -27,9 +27,13 @@ interface NavigatorMenuOptions {
   readonly label: (key: string, fallback: string) => string;
   readonly toggleOutlineBranch: () => void;
   readonly goTo: () => void;
+  readonly selectContent: () => void;
+  readonly readOnly: boolean;
+  readonly canDeleteTable: boolean;
   readonly runHeadingCommand: (command: SwNavigatorHeadingCommand) => void;
   readonly deleteBookmarks: () => void;
   readonly editContent: () => void;
+  readonly renameContent: () => void;
   readonly deleteContent: () => void;
   readonly setOutlineLevel: (level: number) => void;
   readonly collapseCategories: () => void;
@@ -67,9 +71,13 @@ export function getWriterNavigatorMenuItems(
     label,
     toggleOutlineBranch,
     goTo,
+    selectContent,
+    readOnly,
+    canDeleteTable,
     runHeadingCommand,
     deleteBookmarks,
     editContent,
+    renameContent,
     deleteContent,
     setOutlineLevel,
     collapseCategories,
@@ -100,6 +108,14 @@ export function getWriterNavigatorMenuItems(
       semantics: "action",
       activate: goTo,
     });
+    if (type === "table" && !readOnly)
+      items.push({
+        kind: "local",
+        id: "805",
+        label: label("select", "Select"),
+        semantics: "action",
+        activate: selectContent,
+      });
     if (type === "outline" && !alphabetical)
       for (const [id, name, fallback] of headingActions)
         items.push({
@@ -112,13 +128,23 @@ export function getWriterNavigatorMenuItems(
               runHeadingCommand(name),
         });
   }
-  if (!group && (type === "hyperlink" || type === "comment"))
+  if (!group && !readOnly && (type === "table" || type === "hyperlink" || type === "comment"))
     items.push({
       kind: "local",
       id: "403",
       label: label("edit-entry", "Edit…"),
       semantics: "action",
       activate: editContent,
+    });
+  if (type === "table" && canDeleteTable)
+    items.push({
+      kind: "local",
+      id: group ? "deletealltables" : "deletetable",
+      label: group
+        ? label("delete-all-tables", "Delete All Tables")
+        : label("delete-table", "Delete Table"),
+      semantics: "action",
+      activate: deleteContent,
     });
   if (type === "bookmark" && hasContents)
     items.push({
@@ -148,6 +174,14 @@ export function getWriterNavigatorMenuItems(
         : label("delete-comment", "Delete Comment"),
       semantics: "action",
       activate: deleteContent,
+    });
+  if (!group && !readOnly && type === "table")
+    items.push({
+      kind: "local",
+      id: "502",
+      label: label("rename", "Rename"),
+      semantics: "action",
+      activate: renameContent,
     });
   if (!group || ((type === "bookmark" || type === "comment") && hasContents))
     items.push({ kind: "separator" });

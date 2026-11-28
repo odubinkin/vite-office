@@ -72,7 +72,8 @@
       "Task143 corrects the reversed XML attribute-container prerequisite instead of adding a cycle exception. Native xmloff border handlers use published UNO BorderLine2/BorderLineStyle; existing Writer importBoxProperties/exportBoxProperties/exportBorderShorthand adapters move to Writer xmlimpit/xmlexpit responsibility boundaries. All10actual consumers migrate with no old-path compatibility reexports. Three moved function bodies are unchanged; shared handler/token bodies differ only by the equivalent published enum owner. Shared pure token spelling is exposed once to avoid duplicating the source style map or inventing a native class method. The xmloff-to-editeng edge is removed and rejected; SAL/o3tl and all cycle-rejection functions stay unchanged. Native editeng-to-xmloff dependency is not added until actual XML attribute implementation. Current browser-shaped item mapping remains explicit and not certified as the full native Any/item mapper, and is not frozen as a deliberate I/O deviation. Existing statuses/classification/history and deliberate save/open/recovery exceptions retained; no broad parity promotion or native memory engine.",
       "Task ACR55N connects consumed native table sidebar typed metric/alignment state and Execute, original column geometry, module metric units, history and ODT. Horizontal flat layout projection only; complete RTL/vertical/complex-table/sidebar toolbar composition remains unverified.",
       "Task DZ4EH4 connects native cell alignment, complete default row-height reset, count-only headline toggle and typed/common/mixed row-split behavior to actual table Sfx slots. Full shell and protected/deleted-table parity remain unverified.",
-      "Task TV1H69 connects DistributeRows and SetOptimalRowHeight with native multiple-row state and literal maximum versus mean-then-maximum execution. Both source history actions are retained. Complete optimize popup, column auto-fit and shell parity remain unverified."
+      "Task TV1H69 connects DistributeRows and SetOptimalRowHeight with native multiple-row state and literal maximum versus mean-then-maximum execution. Both source history actions are retained. Complete optimize popup, column auto-fit and shell parity remain unverified.",
+      "Dispatches the native complete table-delete slot to the Writer shell."
     ],
     "omittedResponsibilities": [
       "Full native item-format,complex-table,frame-cache and UI lifecycle parity remains unverified."
@@ -430,6 +431,14 @@
         {
           "path": "apps/office/src/sw/source/uibase/shells/native-table-sidebar-slots.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/shells/tabsh.ts",
+          "marker": "DeleteTable"
+        },
+        {
+          "path": "apps/office/e2e/writer-navigator.spec.ts",
+          "marker": "selects, edits, renames and deletes a table"
         }
       ],
       "upstream": [
@@ -640,6 +649,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/core/layout/tabfrm.cxx",
           "marker": "HandleTableHeadlineChange"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/shells/tabsh.cxx",
+          "marker": "case FN_TABLE_DELETE_TABLE"
         }
       ]
     }

@@ -16,7 +16,8 @@
       "Shares outline depth between the toolbar and native context submenu, and routes contextual navigation, heading edits, bookmark deletion and expansion to the connected owners.",
       "Exposes Hyperlinks and Comments in the retained content tree and routes their contextual actions to Writer slots and annotation management.",
       "Restores the native root and projects display-sorted outlines as sibling rows while preserving their original identities.",
-      "Selects the native category corresponding to the Navigate By chooser."
+      "Selects the native category corresponding to the Navigate By chooser.",
+      "Connects native table selection, properties, inline rename and deletion in the Navigator tree."
     ],
     "evidence": {
       "local": [
@@ -63,6 +64,10 @@
         {
           "path": "apps/office/src/sw/browser/presentation/WriterNavigator.tsx",
           "marker": "WriterNavigatorNavigation"
+        },
+        {
+          "path": "apps/office/e2e/writer-navigator.spec.ts",
+          "marker": "selects, edits, renames and deletes a table"
         }
       ],
       "upstream": [
@@ -93,6 +98,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/uibase/utlui/navipi.cxx",
           "marker": "SwNavigationPI::UpdateNavigateBy"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx",
+          "marker": "SwContentTree::DeleteAllContentOfEntryContentType"
         }
       ]
     },

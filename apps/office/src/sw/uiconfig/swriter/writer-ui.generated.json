@@ -82,6 +82,7 @@
     "formatPaintbrush": ".uno:FormatPaintbrush",
     "clearDirectFormatting": ".uno:ResetAttributes",
     "tableDialog": ".uno:TableDialog",
+    "deleteTable": ".uno:DeleteTable",
     "tableRowHeight": ".uno:TableRowHeight",
     "tableColumnWidth": ".uno:TableColumWidth",
     "tableAlignment": ".uno:TableAlignment",
@@ -1621,6 +1622,23 @@
       "shortcuts": [],
       "slotId": 20460
     },
+    ".uno:DeleteTable": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0137",
+      "controlLabel": "Delete Table",
+      "label": "Delete Table",
+      "iconName": "lc_deletetable.svg",
+      "placements": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml",
+        "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
+      ],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 20529
+    },
     ".uno:SetRowHeight": {
       "browserOwned": false,
       "argumentSchema": [],
@@ -2526,6 +2544,15 @@
     {
       "classification": "supported-upstream",
       "commandUrl": ".uno:TableDialog",
+      "sources": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml",
+        "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
+      ]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:DeleteTable",
       "sources": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
         "sw/uiconfig/swriter/popupmenu/table.xml",
@@ -5332,22 +5359,6 @@
     },
     {
       "classification": "X",
-      "context": [".uno:TableMenu", ".uno:TableDeleteMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:DeleteTable",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:TableMenu"],
-      "entryKind": "menu",
-      "sourceUrl": ".uno:TableDeleteMenu",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
       "context": [".uno:TableMenu", ".uno:TableAutoFitMenu"],
       "entryKind": "command",
       "sourceUrl": ".uno:SetMinimalColumnWidth",
@@ -7380,22 +7391,6 @@
     },
     {
       "classification": "X",
-      "context": [".uno:TableDeleteMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:DeleteTable",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
-    },
-    {
-      "classification": "X",
-      "context": [],
-      "entryKind": "menu",
-      "sourceUrl": ".uno:TableDeleteMenu",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
-    },
-    {
-      "classification": "X",
       "context": [".uno:TableAutoFitMenu"],
       "entryKind": "command",
       "sourceUrl": ".uno:SetMinimalColumnWidth",
@@ -7822,14 +7817,6 @@
       "classification": "X",
       "context": [],
       "entryKind": "command",
-      "sourceUrl": ".uno:DeleteTable",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [],
-      "entryKind": "command",
       "sourceUrl": ".uno:MergeCells",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
@@ -8192,6 +8179,12 @@
             "label": "Insert"
           },
           {
+            "id": ".uno:TableDeleteMenu",
+            "items": [{ "commandUrl": ".uno:DeleteTable", "kind": "command", "visible": true }],
+            "kind": "menu",
+            "label": "Delete"
+          },
+          {
             "id": ".uno:TableSelectMenu",
             "items": [
               { "commandUrl": ".uno:EntireCell", "kind": "command", "visible": true },
@@ -8300,6 +8293,12 @@
         ],
         "kind": "menu",
         "label": "Insert"
+      },
+      {
+        "id": ".uno:TableDeleteMenu",
+        "items": [{ "commandUrl": ".uno:DeleteTable", "kind": "command", "visible": true }],
+        "kind": "menu",
+        "label": "Delete"
       },
       {
         "id": ".uno:TableAutoFitMenu",
@@ -8438,6 +8437,8 @@
       { "commandUrl": ".uno:InsertRowsAfter", "kind": "command", "visible": true },
       { "commandUrl": ".uno:InsertColumnsBefore", "kind": "command", "visible": true },
       { "commandUrl": ".uno:InsertColumnsAfter", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:DeleteTable", "kind": "command", "visible": true },
       { "kind": "separator" },
       { "commandUrl": ".uno:EntireCell", "kind": "command", "visible": true },
       { "commandUrl": ".uno:EntireRow", "kind": "command", "visible": false },
@@ -10453,18 +10454,6 @@
       },
       {
         "classification": "X",
-        "context": [".uno:TableMenu", ".uno:TableDeleteMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:DeleteTable"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:TableMenu"],
-        "entryKind": "menu",
-        "sourceUrl": ".uno:TableDeleteMenu"
-      },
-      {
-        "classification": "X",
         "context": [".uno:TableMenu", ".uno:TableAutoFitMenu"],
         "entryKind": "command",
         "sourceUrl": ".uno:SetMinimalColumnWidth"
@@ -11939,18 +11928,6 @@
       },
       {
         "classification": "X",
-        "context": [".uno:TableDeleteMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:DeleteTable"
-      },
-      {
-        "classification": "X",
-        "context": [],
-        "entryKind": "menu",
-        "sourceUrl": ".uno:TableDeleteMenu"
-      },
-      {
-        "classification": "X",
         "context": [".uno:TableAutoFitMenu"],
         "entryKind": "command",
         "sourceUrl": ".uno:SetMinimalColumnWidth"
@@ -12268,12 +12245,6 @@
         "context": [],
         "entryKind": "command",
         "sourceUrl": ".uno:DeleteColumns"
-      },
-      {
-        "classification": "X",
-        "context": [],
-        "entryKind": "command",
-        "sourceUrl": ".uno:DeleteTable"
       },
       {
         "classification": "X",

@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "localPath": "apps/office/src/sw/browser/presentation/WriterNavigatorRename.tsx",
+    "classification": "browser-adaptation",
+    "localSymbols": [
+      "WriterNavigatorRename"
+    ],
+    "status": "local-only",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterNavigatorRename.tsx",
+          "marker": "WriterNavigatorRename"
+        },
+        {
+          "path": "apps/office/e2e/writer-navigator.spec.ts",
+          "marker": "selects, edits, renames and deletes a table"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx",
+          "marker": "IMPL_LINK(SwContentTree, EditedEntryHdl"
+        }
+      ]
+    },
+    "rationale": "The Navigator table editor uses a browser input for native focus, keyboard confirmation and cancellation while the content tree owns the rename.",
+    "responsibilities": [
+      "Projects the native inline Navigator table name editor using a browser input."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "The browser input provides native DOM selection, focus and keyboard interaction for inline rename."
+    }
+  }
+}
