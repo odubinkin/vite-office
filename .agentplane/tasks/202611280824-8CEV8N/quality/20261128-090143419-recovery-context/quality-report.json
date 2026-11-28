@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202611280824-8CEV8N",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-28T09:01:43.419Z",
+  "verdict": "pass",
+  "summary": "ODT chapter fields, heading rules and chapter references follow the pinned owners and XML contracts in the represented layout.",
+  "evaluated_sha": "e3c5f2524746c3f89a24f8bc4eb235dc3e0eb82a",
+  "blueprint_digest": "e68cceb15840a5f185d535fd0b1e03dfbc8d5b4e13e0f0d087f53daf4bed114b",
+  "findings": [
+    "The original fixture and authored layout exercise header fields, heading numbering, chapter references, and Worker plus ODT roundtrips."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611280824-8CEV8N/README.md",
+    "output/playwright/odf-next-checkpoint/writer-chapter-field-verification.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
