@@ -1,10 +1,11 @@
 ---
 id: "202611281035-E2Q2ZZ"
 title: "Align Calc ODS formula search mode with native criteria evaluation"
-status: "DOING"
+result_summary: "Aligned represented Calc ODS formula search mode and documented native matrix lookup literal comparison."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "output/playwright/odf-next-checkpoint/calc-odf-regexp-verification.md"
   findings:
     - "Matrix HLOOKUP and VLOOKUP remain literal as in upstream; browser regex engine uses the existing platform binding."
-commit: null
+commit:
+  hash: "8301ef83ba1153ef61b2392776583d4f0da4f157"
+  message: "🧩 E2Q2ZZ calc: apply native ODS regex criteria"
 comments:
   -
     author: "CODER"
     body: "Start: apply the original ODS search-mode setting to represented formula criteria."
+  -
+    author: "CODER"
+    body: "Verified: ODS regex settings drive native criteria after Worker restore and save/reopen. Focused and static verification passed."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "10 focused Calc checks including ODS recalculation after Worker and save/reopen, plus TypeScript, lint, boundaries, provenance, Calc inventory and diff checks passed."
+  -
+    type: "status"
+    at: "2026-11-28T10:43:51.376Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: ODS regex settings drive native criteria after Worker restore and save/reopen. Focused and static verification passed."
 doc_version: 3
-doc_updated_at: "2026-11-28T10:42:45.475Z"
+doc_updated_at: "2026-11-28T10:43:51.377Z"
 doc_updated_by: "CODER"
 description: "Connect ODS regular-expression, wildcard and literal calculation defaults with native query-entry text search, worksheet and matrix lookup, and represented conditional and database formulas. Use the established browser regex service at workbook and Worker boundaries, keep original ODF settings and name ownership, and verify affected cases with pinned criteria assertions and ODS reopening."
 sections:
