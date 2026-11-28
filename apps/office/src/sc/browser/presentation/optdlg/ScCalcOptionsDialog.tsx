@@ -102,9 +102,12 @@ export function ScCalcOptionsDialog({
                         role="treeitem"
                         aria-selected={name === page}
                         className="block w-full rounded px-1 text-left aria-selected:bg-slate-100"
-                        onClick={() => {
-                          if (name !== page && validate()) setPage(name);
-                        }}
+                        onClick={
+                          /** Selects the requested page after validating the current draft. @returns Nothing. */
+                          () => {
+                            if (name !== page && validate()) setPage(name);
+                          }
+                        }
                       >
                         {name}
                       </button>
