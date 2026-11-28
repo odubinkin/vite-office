@@ -5,6 +5,7 @@ import { FormulaError } from "../../../formula/inc/errorcodes";
 import { FormulaGrammar } from "../../../formula/inc/grammar";
 import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { ScInterpreter } from "../../source/core/tool/interpr4";
+import { ViewOption } from "../../inc/viewopti";
 import { ScAddress } from "../../inc/address";
 import { readOdsDocument, writeOdsDocument } from "../../source/filter/xml/xmlwrap";
 import { createCalcSession } from "../composition/calc-module";
@@ -176,4 +177,60 @@ it("applies Excel A1 references and confirmed details without changing global co
   });
   expect(doc.GetValue(new ScAddress(2, 0, 0))).toBe(13);
   expect(doc.GetValue(new ScAddress(2, 1, 0))).toBe(3);
+});
+
+it("applies the View display item and restores persisted formula markers and colors from ODS", /** Checks the rendered grid and native view state. @returns Completion. */ async () => {
+  const controller = mount();
+  const doc = controller.shell.GetDocument();
+  act(
+    /** Enters cell values through the view. @returns Nothing. */ () => {
+      controller.EnterString("=1+2");
+      controller.Select(1, 0);
+      controller.EnterString("0");
+    },
+  );
+  const formula = screen.getByRole("gridcell", { name: /^A1(?:\s|$)/u });
+  const scalar = screen.getByRole("gridcell", { name: /^B1(?:\s|$)/u });
+  const mark = /** Finds the displayed formula marker. @returns Marker element. */ () =>
+    formula.querySelector("[data-calc-formula-mark]");
+  expect(mark()).toBeNull();
+  expect(formula).not.toHaveAttribute("title");
+
+  let dialog = options();
+  fireEvent.click(dialog.getByRole("treeitem", { name: "View" }));
+  fireEvent.click(dialog.getByRole("checkbox", { name: "Formula indicator and hint" }));
+  fireEvent.click(dialog.getByRole("button", { name: "Reset" }));
+  expect(dialog.getByRole("checkbox", { name: "Formula indicator and hint" })).not.toBeChecked();
+  fireEvent.click(dialog.getByRole("checkbox", { name: "Formula indicator and hint" }));
+  await act(
+    /** Closes the options dialog and waits for its response. @returns Completion. */ async () =>
+      fireEvent.click(dialog.getByRole("button", { name: "Cancel" })),
+  );
+  expect(mark()).toBeNull();
+
+  dialog = options();
+  fireEvent.click(dialog.getByRole("treeitem", { name: "View" }));
+  fireEvent.click(dialog.getByRole("checkbox", { name: "Formula indicator and hint" }));
+  fireEvent.click(dialog.getByRole("checkbox", { name: "Value highlighting" }));
+  fireEvent.click(dialog.getByRole("checkbox", { name: "Zero values" }));
+  await act(
+    /** Closes the options dialog and waits for its response. @returns Completion. */ async () =>
+      fireEvent.click(dialog.getByRole("button", { name: "OK" })),
+  );
+  expect(mark()).toBeInTheDocument();
+  expect(formula).toHaveAttribute("title", "=1+2");
+  expect(formula).toHaveTextContent(/^3$/u);
+  expect(formula.style.color).toBe("rgb(0, 128, 0)");
+  expect(scalar).not.toHaveAttribute("title");
+  expect(scalar).toHaveTextContent(/^$/u);
+  expect(controller.viewData.GetOptions().GetOption(ViewOption.FORMULAS_MARKS)).toBe(true);
+  expect(doc.GetViewOptions().GetOption(ViewOption.SYNTAX)).toBe(true);
+  const reopened = await readOdsDocument(await controller.shell.SerializeOds());
+  try {
+    expect(reopened.GetViewOptions().GetOption(ViewOption.FORMULAS_MARKS)).toBe(true);
+    expect(reopened.GetViewOptions().GetOption(ViewOption.SYNTAX)).toBe(true);
+    expect(reopened.GetViewOptions().GetOption(ViewOption.NULLVALS)).toBe(false);
+  } finally {
+    reopened.Dispose();
+  }
 });

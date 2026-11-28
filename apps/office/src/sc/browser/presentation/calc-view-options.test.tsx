@@ -214,3 +214,34 @@ it("applies persisted outline and tab visibility without removing groups or keyb
     s.Close();
   }
 });
+
+it("paints native value, text and formula syntax colors without modifying the workbook", /** Checks the rendered grid and native view state. @returns Nothing. */ () => {
+  const s = setup();
+  const { controller } = s;
+  const doc = controller.shell.GetDocument();
+  try {
+    act(
+      /** Enters cell values through the view. @returns Nothing. */ () => {
+        controller.EnterString("7");
+        controller.Select(1, 0);
+        controller.EnterString("text");
+        controller.Select(2, 0);
+        controller.EnterString('="text"');
+      },
+    );
+    const numeric = screen.getByRole("gridcell", { name: /^A1(?:\s|$)/u });
+    const plain = screen.getByRole("gridcell", { name: /^B1(?:\s|$)/u });
+    const formula = screen.getByRole("gridcell", { name: /^C1(?:\s|$)/u });
+    const colors = [numeric.style.color, plain.style.color, formula.style.color];
+    toggle("Value Highlighting");
+    expect(numeric.style.color).toBe("rgb(0, 0, 255)");
+    expect(plain.style.color).toBe("rgb(0, 0, 0)");
+    expect(formula.style.color).toBe("rgb(0, 128, 0)");
+    expect(formula).toHaveTextContent(/^text$/u);
+    expect(doc.GetViewOptions().GetOption(ViewOption.SYNTAX)).toBe(false);
+    toggle("Value Highlighting");
+    expect([numeric.style.color, plain.style.color, formula.style.color]).toEqual(colors);
+  } finally {
+    s.Close();
+  }
+});

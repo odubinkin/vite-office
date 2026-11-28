@@ -4,11 +4,17 @@ import type { SfxSlotState } from "../../sfx2/source/control/bindings";
 import type { SfxRequest } from "../../sfx2/source/control/request";
 import type { SfxSlotDefinition } from "../../sfx2/source/control/msg";
 /** Native view command identity used only to route the actual cases. */
-export type CalcViewOption = "headers" | "formulas" | "grid";
+export type CalcViewOption = "headers" | "formulas" | "grid" | "syntax";
 /** Original numeric slot identities:VIEW_MENU_START26240 and SC_RESOURCE_START25000. */
 export const calcViewCommands = [
   { id: ".uno:ViewRowColumnHeaders", slotId: 26242, label: "View Headers", option: "headers" },
   { id: ".uno:ToggleFormula", slotId: 26250, label: "Show Formulas", option: "formulas" },
+  {
+    id: ".uno:ViewValueHighlighting",
+    slotId: 26245,
+    label: "Value Highlighting",
+    option: "syntax",
+  },
   { id: ".uno:ToggleSheetGrid", slotId: 25018, label: "View Grid Lines", option: "grid" },
 ] as const;
 export const SID_STYLE_APPLY = 5552;

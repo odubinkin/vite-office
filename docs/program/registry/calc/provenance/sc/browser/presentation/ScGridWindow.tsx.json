@@ -36,7 +36,8 @@
       "Paints the native resolved color-scale background over the represented cell fill.",
       "Brackets visible-cell style resolution with the sheet conditional-format rendering lifecycle so calendar rules use one date per pass.",
       "Projects fillinfo conditional results and paints imported ODS data bars beneath cell contents. The display-only setting clips the presented value while retaining the accessible label and input value.",
-      "Paints the native conditional icon alongside the data bar and suppresses the cell paint text when either result requests it."
+      "Paints the native conditional icon alongside the data bar and suppresses the cell paint text when either result requests it.",
+      "Paints the view-owned syntax colors, protected-cell backgrounds and anchored formula markers with native browser hover hints."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",
@@ -99,6 +100,10 @@
         {
           "path": "apps/office/e2e/calc/ods-icon-sets.spec.ts",
           "marker": "paints original Calc ODS icon sets"
+        },
+        {
+          "path": "apps/office/e2e/calc/view-display.spec.ts",
+          "marker": "paints one hint marker at the merged cell edge"
         }
       ],
       "upstream": [

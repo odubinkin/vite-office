@@ -9,16 +9,19 @@
     "localSymbols": [
       "getCellTextLayout",
       "getCellTextRepeatCount",
-      "getCellTextShrinkScale"
+      "getCellTextShrinkScale",
+      "setSyntaxColor"
     ],
     "upstreamSymbols": [
       "ScOutputData::DrawRotated",
       "ScOutputData::DrawEditStacked",
-      "ScDrawStringsVars::SetShrinkScale"
+      "ScDrawStringsVars::SetShrinkScale",
+      "ScOutputData::SetSyntaxColor"
     ],
     "preservedResponsibilities": [
       "Resolves Calc cell wrapping, stacked and rotated output decisions through effective pattern attributes.",
-      "Preserves the Filled and Shrink to fit admission order, whole repeat count and bounded remeasurement."
+      "Preserves the Filled and Shrink to fit admission order, whole repeat count and bounded remeasurement.",
+      "Resolves the pinned light syntax colors for scalar, plain text, edit text and formula cells."
     ],
     "omittedResponsibilities": [
       "Native device drawing and overflow into neighboring cells are outside the browser cell box."
@@ -32,6 +35,10 @@
         {
           "path": "apps/office/src/sc/source/ui/view/output2.test.ts",
           "marker": "seven retries"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-view-options.test.tsx",
+          "marker": "paints native value, text and formula syntax colors"
         }
       ],
       "upstream": [
@@ -46,6 +53,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/ui/view/output2.cxx",
           "marker": "ScDrawStringsVars::SetShrinkScale"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/output2.cxx",
+          "marker": "ScOutputData::SetSyntaxColor"
         }
       ]
     }

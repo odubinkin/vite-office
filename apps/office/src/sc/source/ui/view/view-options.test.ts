@@ -11,6 +11,7 @@ import { ScRange } from "../../../inc/address";
 for (const [id, slot, option] of [
   [".uno:ViewRowColumnHeaders", 26242, "headers"],
   [".uno:ToggleFormula", 26250, "formulas"],
+  [".uno:ViewValueHighlighting", 26245, "syntax"],
 ] as const) {
   it(`uses original typed explicit/toggle bool requests for ${id}`, /** Checks states and recorded native arguments. @returns Nothing. */ () => {
     const s = createCalcSession(),

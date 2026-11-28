@@ -1,4 +1,5 @@
 /** @fileoverview Calc display and drawing-grid options with native defaults and value copying. */
+import { SfxPoolItem } from "../../../../svl/inc/poolitem";
 import { ScGridOptions } from "./viewopti.grid";
 
 /** Native sc::ViewOption ordinals from viewopti.hxx. */
@@ -63,6 +64,15 @@ export class ScViewOptions {
     this.aGridOpt.copy_assign(source.aGridOpt);
     return this;
   }
+  /** Compares the represented flags and drawing options. @param other - Candidate options. @returns Whether the values match. */
+  equals(other: ScViewOptions): boolean {
+    return (
+      this.aOptArr.every(
+        /** Compares the same flag in both option values. @param value - Stored flag. @param index - Flag ordinal. @returns Whether the flags match. */
+        (value, index) => value === other.aOptArr[index],
+      ) && this.aGridOpt.equals(other.aGridOpt)
+    );
+  }
   /** Original indexed option getter. @param option - Native valid ordinal. @returns Stored value. */
   GetOption(option: ViewOption): boolean {
     return this.aOptArr[option] as boolean;
@@ -80,5 +90,31 @@ export class ScViewOptions {
   /** Copies drawing-grid options into the existing owner. @param options - Native grid value. @returns Nothing. */
   SetGridOptions(options: Readonly<ScGridOptions>): void {
     this.aGridOpt.copy_assign(options);
+  }
+}
+
+/** Native SID_SCVIEWOPTIONS pool item emitted by the View page. */
+export class ScTpViewItem extends SfxPoolItem {
+  private readonly theOptions: ScViewOptions;
+
+  /** Copies the native View options payload. @param options - Original view options. @returns Item. */
+  constructor(options: ScViewOptions) {
+    super(26039);
+    this.theOptions = new ScViewOptions(options);
+  }
+
+  /** Borrows the stored view options. @returns Item payload. */
+  GetViewOptions(): ScViewOptions {
+    return this.theOptions;
+  }
+
+  /** Compares options payloads of the same item type. @param other - Candidate item. @returns Whether the values match. */
+  override equals(other: SfxPoolItem): boolean {
+    return other instanceof ScTpViewItem && this.theOptions.equals(other.theOptions);
+  }
+
+  /** Copies the item independently of a target pool. @returns A new item. */
+  override Clone(): ScTpViewItem {
+    return new ScTpViewItem(this.theOptions);
   }
 }

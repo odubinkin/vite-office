@@ -8,15 +8,18 @@
     "upstreamPath": "sc/source/core/tool/viewopti.cxx",
     "localSymbols": [
       "ScViewOptions",
-      "ViewOption"
+      "ViewOption",
+      "ScTpViewItem"
     ],
     "upstreamSymbols": [
       "ScViewOptions::SetDefaults",
-      "ScViewOptions"
+      "ScViewOptions",
+      "ScTpViewItem::ScTpViewItem"
     ],
     "preservedResponsibilities": [
       "TaskSRFT0T implements original ScViewOptions19boolean fields/defaults/copy and genuine document/view value boundaries;object modes,color,configuration/window services and full equality remain explicitly unported. Native View Headers26242 and Show Formulas26250 accept slot bools or invert;headers initially change only the view,formula copies the entire represented view options into the document. Grid25018 ignores arguments,creates selected tab-data slots,changes only current-sheet bShowGrid and marks the document modified without adding history or committing input. Genuine shared Writer View menus/Sfx bindings render native checked states;header offsets and scroll geometry disappear,implicit grid lines hide while real cell frames remain,formula output reads source before cached errors. Shared quote-key canonicalization consumes original QUOTELEFT accelerator. Browser redraw/invalidation projects native paint/resize callbacks;no fake window/modificator/configuration service or alternate model. The ODS filter handles persistence for the represented fields.",
-      "ScViewOptions owns the ScGridOptions value, resets it with the native metric or nonmetric defaults, and copies it for document and view options."
+      "ScViewOptions owns the ScGridOptions value, resets it with the native metric or nonmetric defaults, and copies it for document and view options.",
+      "Copies the represented View options into the native View page pool item."
     ],
     "omittedResponsibilities": [
       "Object modes, grid color, configuration and window services, and full equality remain unported."
@@ -40,6 +43,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/inc/viewopti.hxx",
           "marker": "GetGridOptions"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/viewopti.cxx",
+          "marker": "ScTpViewItem::ScTpViewItem"
         }
       ]
     }

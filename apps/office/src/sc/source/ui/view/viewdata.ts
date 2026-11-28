@@ -355,6 +355,14 @@ export class ScViewData {
   SetHeaderMode(visible: boolean): void {
     this.maOptions.SetOption(ViewOption.HEADER, visible);
   }
+  /** Reads the original value-highlighting flag for this view. @returns Whether syntax colors are visible. */
+  IsSyntaxMode(): boolean {
+    return this.maOptions.GetOption(ViewOption.SYNTAX);
+  }
+  /** Sets the original per-view syntax flag. @param enabled - Whether to paint syntax colors. @returns Nothing. */
+  SetSyntaxMode(enabled: boolean): void {
+    this.maOptions.SetOption(ViewOption.SYNTAX, enabled);
+  }
   /** Original current-sheet grid query. @returns Visible. */
   GetShowGrid(): boolean {
     return this.pThisTab.bShowGrid;

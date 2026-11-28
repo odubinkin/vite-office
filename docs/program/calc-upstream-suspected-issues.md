@@ -8144,3 +8144,21 @@ Calc preserves this exchange rule. The regression combines a justified cell and 
 The pinned `ScOutputData::DrawRotated` clamps angles within half a degree of horizontal to avoid excessive skew. The half-turn branch chooses the upper edge only for angles strictly above 180 degrees. An exact 180-degree cell therefore paints at 179.5 degrees with inside-cell rotation even if the cell stores a different reference edge.
 
 Calc preserves the stored angle and reference while applying the original paint decision. The mounted grid regression checks the exact half-turn.
+
+## CALC-264: Formula hints read through the cell's Hide formula flag
+
+Status: suspicious source behavior on protected sheets. Native hint behavior
+is retained.
+
+[ScGridWindow::RequestHelp](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sc/source/ui/view/gridwin5.cxx#L207)
+obtains the formula with `ScDocument::GetFormula` when Formula indicator and
+hint is enabled.
+[ScColumn::GetFormula](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sc/source/core/data/column3.cxx#L3240)
+then reads the formula cell directly. Neither path checks the sheet's cell
+protection or the Hide formula attribute. The formula marker uses the same
+lookup in `ScOutputData::DrawFormulaMarks`.
+
+For example, a protected formula cell containing `=1+2` can supply that
+expression as its hint with Hide formula enabled. The formula hint setting
+defaults to off. Whether this behavior is intentional has not been confirmed.
+The browser grid uses the same formula lookup for the indicator and hint.

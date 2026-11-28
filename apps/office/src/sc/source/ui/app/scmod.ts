@@ -1,4 +1,6 @@
 /** @fileoverview Original normal-input ScModule reference dispatch;active-view lookup is an explicit browser host borrow. Reference dialogs and edit-command services remain unported. */
+import type { ScTpViewItem } from "../../../inc/viewopti";
+import type { ScViewData } from "../inc/viewdata";
 import type { Grammar } from "../../../../formula/inc/grammar";
 import type { ScCalcConfig } from "../../../inc/calcconfig";
 import { ScDocOptions, type ScTpCalcItem } from "../../../inc/docoptio";
@@ -66,6 +68,16 @@ export class ScModule {
       doc.SetDocOptions(next);
     }
     if (recalculate) doc.CalcAll();
+    shell.SetDocumentModified();
+    return true;
+  }
+  /** Applies the view item to the active view and document. @param shell - Document shell. @param view - Active view. @param item - Changed view item. @returns Whether the item was applied. */
+  ModifyViewOptions(shell: ScDocShell, view: ScViewData, item?: ScTpViewItem): boolean {
+    if (!item) return false;
+    const options = item.GetViewOptions();
+    if (view.GetOptions().equals(options)) return false;
+    view.SetOptions(options);
+    shell.GetDocument().SetViewOptions(options);
     shell.SetDocumentModified();
     return true;
   }

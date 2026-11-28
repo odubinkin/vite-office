@@ -48,8 +48,12 @@ import {
   type PointerEvent,
   type UIEvent,
 } from "react";
+import type { ScProtectionAttr } from "../../inc/attrib";
+import { ATTR_PROTECTION } from "../../inc/scitems";
+import { text } from "../../../i18nlangtag/source/isolang/isolang.tables";
+import { setSyntaxColor } from "../../source/ui/view/output2";
 import { ViewOption } from "../../inc/viewopti";
-import { ScInputMode } from "../../inc/global";
+import { CellType, ScInputMode } from "../../inc/global";
 import {
   SvxWeightItem,
   SvxPostureItem,
@@ -71,7 +75,14 @@ import { ScCellText } from "./ScCellText";
 import { getCellTextLayout } from "../../source/ui/view/output2";
 import { calcCellTextLayoutStyle } from "./calc-cell-text-layout";
 import type { SvxBrushItem } from "../../../editeng/inc/brushitem";
-import { COL_AUTO, COL_BLACK, COL_WHITE, type Color } from "../../../tools/inc/color";
+import {
+  COL_AUTO,
+  COL_BLACK,
+  COL_LIGHTBLUE,
+  COL_LIGHTGRAY,
+  COL_WHITE,
+  type Color,
+} from "../../../tools/inc/color";
 import { browserColor } from "../../../vcl/browser/color";
 import { ScAddress, ScRange } from "../../inc/address";
 import type { ScSplitPos, ScViewData } from "../../source/ui/inc/viewdata";
@@ -265,7 +276,12 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
       );
     },
   );
-  const showGrid = viewData.GetOptions().GetOption(ViewOption.GRID) && viewData.GetShowGrid();
+  const options = viewData.GetOptions();
+  const showGrid = options.GetOption(ViewOption.GRID) && viewData.GetShowGrid();
+  const showFormulaMarks = options.GetOption(ViewOption.FORMULAS_MARKS);
+  const syntaxMode = viewData.IsSyntaxMode();
+  const showProtection = syntaxMode && document.IsTabProtected(tab);
+  const sheetRtl = showFormulaMarks && document.IsLayoutRTL(tab);
   const headers = viewData.IsHeaderMode();
   const {
     left: headerWidth,
@@ -658,9 +674,33 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                     const iconSet = conditionalInfo?.pIconSet;
                     const hideValue =
                       dataBar?.mbShowValue === false || iconSet?.mbShowValue === false;
-                    const background =
-                      conditionalInfo?.mxColorScale ??
-                      (pattern.GetItem(148, conditional) as SvxBrushItem).GetColor();
+                    let background: Readonly<Color> | undefined;
+                    if (showProtection) {
+                      const protection = pattern.GetItem(ATTR_PROTECTION) as ScProtectionAttr;
+                      if (protection.GetProtection() || protection.GetHideCell())
+                        background = COL_LIGHTGRAY;
+                    } else if (!syntaxMode) {
+                      background =
+                        conditionalInfo?.mxColorScale ??
+                        (pattern.GetItem(148, conditional) as SvxBrushItem).GetColor();
+                    }
+                    const type =
+                      syntaxMode || showFormulaMarks
+                        ? document.GetCellType(position)
+                        : CellType.CELLTYPE_NONE;
+                    let formulaHint: string | undefined;
+                    if (showFormulaMarks && type === CellType.CELLTYPE_FORMULA) {
+                      const expression = document
+                        .GetFormulaCell(position)
+                        ?.GetFormula(document.GetGrammar());
+                      if (expression) {
+                        try {
+                          formulaHint = text(expression) || undefined;
+                        } finally {
+                          expression.dispose();
+                        }
+                      }
+                    }
                     const {
                       style: fontStyle,
                       outlined,
@@ -670,7 +710,9 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                       lineColor,
                       fontColor,
                     } = cellTypography(pattern, conditional);
-                    const color = cell.color ?? fontColor.getFinalColor();
+                    const color = syntaxMode
+                      ? (setSyntaxColor(type) ?? fontColor.getFinalColor())
+                      : (cell.color ?? fontColor.getFinalColor());
                     const pane = part(x, band);
                     const cellId = idFor(firstCol, firstRow, pane, !!merge);
                     const active = cellId === activeId;
@@ -737,7 +779,9 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                           : 0,
                       ),
                       backgroundColor:
-                        background.GetAlpha() === 0 ? undefined : browserColor(background),
+                        background && background.GetAlpha() !== 0
+                          ? browserColor(background)
+                          : undefined,
                       textAlign,
                       display: "flex",
                       flexDirection: "column",
@@ -766,6 +810,7 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                         aria-rowindex={merge ? firstRow + 1 + Number(headers) : undefined}
                         aria-colspan={merge ? lastCol - firstCol + 1 : undefined}
                         aria-rowspan={merge ? lastRow - firstRow + 1 : undefined}
+                        title={formulaHint}
                         aria-selected={selected}
                         aria-label={`${columnLabel(firstCol)}${firstRow + 1}`}
                         // Upstream exposes address and text separately. ARIA composes the address
@@ -789,6 +834,27 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                         {dataBar && <ScCellDataBar info={dataBar} width={width} height={height} />}
                         {iconSet && <ScCellIconSet info={iconSet} />}
                         <ScCellDiagonalBorders pattern={pattern} width={width} height={height} />
+                        {formulaHint && !document.ColHidden(firstCol, tab) && (
+                          <span
+                            aria-hidden="true"
+                            data-calc-formula-mark=""
+                            className="pointer-events-none absolute bottom-[2px] z-[1] size-[11px] bg-white"
+                            style={{
+                              left: sheetRtl ? undefined : 0,
+                              right: sheetRtl ? 0 : undefined,
+                              transform: sheetRtl ? "scaleX(-1)" : undefined,
+                              clipPath: "polygon(0 0, 0 100%, 100% 100%)",
+                            }}
+                          >
+                            <span
+                              className="absolute inset-0"
+                              style={{
+                                backgroundColor: browserColor(COL_LIGHTBLUE),
+                                clipPath: "polygon(1px 2px, 1px 10px, 9px 10px)",
+                              }}
+                            />
+                          </span>
+                        )}
                         {props.referenceRange?.Contains(position) && (
                           <div
                             aria-hidden="true"

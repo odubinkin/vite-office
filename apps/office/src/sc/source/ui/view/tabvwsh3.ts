@@ -1,9 +1,23 @@
-/** @fileoverview Calc tab shell execution for native sheet protection. */
+/** @fileoverview Calc tab shell execution for native sheet protection and syntax view state. */
 import { SfxRequest } from "../../../../sfx2/source/control/request";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { FID_PROTECT_TABLE } from "../../../sdi/tabvwsh";
 import { ScTableProtectionDlg, type ScSheetProtectionResult } from "../miscdlgs/protectiondlg";
 import type { ScTabViewShell } from "./tabvwsh4";
+
+/** Executes the original FID_TOGGLESYNTAX request. @param view - Actual tab shell. @param request - Native request. @returns Nothing. */
+export function ToggleSyntax(view: ScTabViewShell, request: SfxRequest): void {
+  const data = view.GetViewData();
+  const slot = request.GetSlot();
+  const item = request.GetArgs().find(
+    /** Locates the original explicit bool item by slot. @param candidate - Native argument. @returns Whether it matches. */
+    (candidate) => candidate.Which() === slot,
+  );
+  const enabled = item instanceof SfxBoolItem ? item.GetValue() : !data.IsSyntaxMode();
+  data.SetSyntaxMode(enabled);
+  request.AppendItem(new SfxBoolItem(slot, enabled));
+  request.Done();
+}
 
 /** View-owned boundary for native protection prompts and host input. */
 export interface ScProtectTableHost {

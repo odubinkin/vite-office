@@ -1,4 +1,6 @@
 /** @fileoverview Calc output decisions for wrapping and orientation before positioning cell text. */
+import { CellType } from "../../../inc/global";
+import { COL_BLACK, COL_GREEN, COL_LIGHTBLUE, type Color } from "../../../../tools/inc/color";
 import type { ScAddress } from "../../../inc/address";
 import type { ScDocument } from "../../../inc/document";
 import type { ScPatternAttr } from "../../../inc/patattr";
@@ -129,4 +131,19 @@ export function getCellTextShrinkScale(
     measured = measure(percent);
   }
   return { percent, fits: measured <= available };
+}
+
+/** Applies the pinned ColorConfig light defaults to the native cell kinds. @param type - Stored cell kind. @returns The syntax color, if applicable. */
+export function setSyntaxColor(type: CellType): Readonly<Color> | undefined {
+  switch (type) {
+    case CellType.CELLTYPE_VALUE:
+      return COL_LIGHTBLUE;
+    case CellType.CELLTYPE_STRING:
+    case CellType.CELLTYPE_EDIT:
+      return COL_BLACK;
+    case CellType.CELLTYPE_FORMULA:
+      return COL_GREEN;
+    default:
+      return undefined;
+  }
 }

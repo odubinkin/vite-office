@@ -6,6 +6,8 @@ import { ScCalcConfig } from "../../../source/core/tool/calcconfig";
 import { calcNullDates, type ScTpCalcOptions } from "../../../source/ui/optdlg/tpcalc";
 import { calcFormulaSyntaxes, type ScTpFormulaOptions } from "../../../source/ui/optdlg/tpformula";
 
+import { viewDisplayOptions, type ScTpContentOptions } from "../../../source/ui/optdlg/tpview";
+
 const buttonClass = "rounded border border-slate-300 px-3 py-1";
 const inputClass = "rounded border border-slate-300 px-2 py-1";
 const groupClass = "space-y-2 rounded border border-slate-200 px-3 pb-3";
@@ -15,10 +17,11 @@ const criteria = [
   ["literal", "No wildcards or regular expressions in formulas"],
 ] as const;
 /** Pages contributed by Calc to the Options tree. */
-type Page = "Calculate" | "Formula";
+type Page = "View" | "Calculate" | "Formula";
 
 /** Options request with drafts and native modal responses. */
 interface Props {
+  readonly view: ScTpContentOptions;
   readonly calculate: ScTpCalcOptions;
   readonly formula: ScTpFormulaOptions;
   readonly onCancel: () => void;
@@ -27,6 +30,7 @@ interface Props {
 
 /** Shows the source Calc tree, page reset, and standard modal responses. @param props - Draft pages and responses. @returns Options dialog. */
 export function ScCalcOptionsDialog({
+  view,
   calculate,
   formula,
   onCancel,
@@ -89,26 +93,51 @@ export function ScCalcOptionsDialog({
               </button>
               {expanded && (
                 <div role="group" className="ml-3 space-y-1">
-                  {(["Calculate", "Formula"] as const).map((name) => (
-                    <button
-                      key={name}
-                      type="button"
-                      role="treeitem"
-                      aria-selected={name === page}
-                      className="block w-full rounded px-1 text-left aria-selected:bg-slate-100"
-                      onClick={() => {
-                        if (name !== page && validate()) setPage(name);
-                      }}
-                    >
-                      {name}
-                    </button>
-                  ))}
+                  {(["View", "Calculate", "Formula"] as const).map(
+                    /** Renders a page in the Calc options tree. @param name - Page caption. @returns Tree item. */
+                    (name) => (
+                      <button
+                        key={name}
+                        type="button"
+                        role="treeitem"
+                        aria-selected={name === page}
+                        className="block w-full rounded px-1 text-left aria-selected:bg-slate-100"
+                        onClick={() => {
+                          if (name !== page && validate()) setPage(name);
+                        }}
+                      >
+                        {name}
+                      </button>
+                    ),
+                  )}
                 </div>
               )}
             </div>
           </div>
           <div className="min-w-0 space-y-2">
-            {page === "Calculate" ? (
+            {page === "View" ? (
+              <fieldset className={groupClass}>
+                <legend className="font-medium">Display</legend>
+                {viewDisplayOptions.map(
+                  /** Binds the native draft to one Display control. @param entry - Flag and caption. @returns Checkbox. */
+                  ([flag, label]) => (
+                    <Check
+                      key={flag}
+                      checked={view.options.GetOption(flag)}
+                      set={
+                        /** Applies the checkbox value. @param checked - Selected state. @returns Nothing. */
+                        (checked) => {
+                          view.options.SetOption(flag, checked);
+                          refresh();
+                        }
+                      }
+                    >
+                      {label}
+                    </Check>
+                  ),
+                )}
+              </fieldset>
+            ) : page === "Calculate" ? (
               <CalculatePage model={calculate} refresh={refresh} error={error} />
             ) : (
               <>
@@ -182,7 +211,8 @@ export function ScCalcOptionsDialog({
             className={buttonClass}
             onClick={() => {
               if (page === "Calculate") calculate.Reset();
-              else formula.Reset();
+              else if (page === "Formula") formula.Reset();
+              else view.Reset();
               setError("");
               refresh();
             }}

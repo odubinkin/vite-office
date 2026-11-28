@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/ui/optdlg/tpview.ts",
+    "localSymbols": [
+      "ScTpContentOptions"
+    ],
+    "upstreamPath": "sc/source/ui/optdlg/tpview.cxx",
+    "upstreamSymbols": [
+      "ScTpContentOptions::Reset",
+      "ScTpContentOptions::FillItemSet"
+    ],
+    "preservedResponsibilities": [
+      "Copies the active ScViewOptions for the represented Display controls and supplies the changed view value to ScModule when accepted."
+    ],
+    "omittedResponsibilities": [
+      "Other Display, Window, Zoom and Objects controls and desktop configuration are outside the represented page."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/ui/optdlg/tpview.ts",
+          "marker": "ScTpContentOptions"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-options.test.tsx",
+          "marker": "applies the View display item"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/optdlg/tpview.cxx",
+          "marker": "ScTpContentOptions::Reset"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/optdlg/tpview.cxx",
+          "marker": "ScTpContentOptions::FillItemSet"
+        }
+      ]
+    }
+  }
+}
