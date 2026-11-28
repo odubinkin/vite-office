@@ -1,10 +1,11 @@
 ---
 id: "202611280824-8CEV8N"
 title: "Port Writer ODT heading fields and chapter references"
-status: "DOING"
+result_summary: "Aligned ODT chapter fields, chapter references and heading numbering with the pinned Writer core."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "output/playwright/odf-next-checkpoint/writer-chapter-field-verification.md"
   findings:
     - "The original fixture and authored layout exercise header fields, heading numbering, chapter references, and Worker plus ODT roundtrips."
-commit: null
+commit:
+  hash: "e3c5f2524746c3f89a24f8bc4eb235dc3e0eb82a"
+  message: "🧩 8CEV8N writer: align ODT chapter fields and outline numbering"
 comments:
   -
     author: "CODER"
     body: "Start: port the native heading lookup, Chapter field and chapter-reference presentation across the represented Writer layout and ODT path."
+  -
+    author: "CODER"
+    body: "Verified: 20 affected Writer tests and static checks passed. Writer registry reported zero semantic violations."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "20 final affected Writer tests across six files, including the corrected native unnumbered heading behavior. Scoped ESLint, formatting, typecheck, dependency and provenance checks passed. Writer registry reported zero semantic violations."
+  -
+    type: "status"
+    at: "2026-11-28T09:08:20.613Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: 20 affected Writer tests and static checks passed. Writer registry reported zero semantic violations."
 doc_version: 3
-doc_updated_at: "2026-11-28T09:01:40.429Z"
+doc_updated_at: "2026-11-28T09:08:20.615Z"
 doc_updated_by: "CODER"
 description: "Implement native SwChapterField, outline lookup and formatted heading number/title across ODT page stories and body, chapter reference fields and the Writer Worker."
 sections:
