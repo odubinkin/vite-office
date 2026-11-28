@@ -1,10 +1,11 @@
 ---
 id: "202611280534-VFAXVP"
 title: "Port native Writer ODT date and time text fields"
-status: "DOING"
+result_summary: "Writer roundtrips native date and time fields, number styles and original offset semantics."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - "output/playwright/odf-writer-redlines/datetime-verification.md"
   findings:
     - "Native date/time flags, clock semantics, serial values, format definitions and minute adjustments flow through the actual owners. WRITER-775 and WRITER-776 record the retained export conversions."
-commit: null
+commit:
+  hash: "6f964920fc8edfe335df153176b7ae586620432e"
+  message: "🧩 VFAXVP writer: roundtrip native ODT date and time fields"
 comments:
   -
     author: "CODER"
     body: "Start: preserve native Writer date/time fields and their number styles through ODT and the Worker."
+  -
+    author: "CODER"
+    body: "Verified: 25 focused tests and Office type, lint and provenance checks passed."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "25 focused Writer and shared tests passed in eight files, including the two pinned field-anchor fixtures and an ODT date/time adjustment and number-style roundtrip. Office types, formatting, lint, dependency boundaries, source provenance and Writer parity inventory passed."
+  -
+    type: "status"
+    at: "2026-11-28T05:50:07.955Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: 25 focused tests and Office type, lint and provenance checks passed."
 doc_version: 3
-doc_updated_at: "2026-11-28T05:48:24.836Z"
+doc_updated_at: "2026-11-28T05:50:07.956Z"
 doc_updated_by: "CODER"
 description: "Port the original document-owned SwDateTimeField and UNO DateTime service, ODF date and time field contexts, native date/time values, adjustment and number format semantics, and the Writer Worker transfer. Preserve actual pooled field hints and the existing Writer number style registry. Use pinned LibreOffice fixture expectations and related focused checks before the tenth-task checkpoint."
 sections:
