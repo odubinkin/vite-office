@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202611280646-M5TH2R",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-28T06:53:34.755Z",
+  "verdict": "pass",
+  "summary": "Native named Writer DocInfo fields use typed document properties and survive ODT and Worker roundtrips.",
+  "evaluated_sha": "0010c23ae7a6204c8d0b634f0f014c5aba08d85d",
+  "blueprint_digest": "d027a896c4b6c8d63536cd13fc196e31dd73d892313e06c91c85fc238f6fe578",
+  "findings": [
+    "The original classification fixture covers a first-page style field, and the existing body roundtrip covers named scalar and typed properties and the source fallback."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611280646-M5TH2R/README.md",
+    "output/playwright/odf-next-checkpoint/writer-docinfo-custom-verification.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
