@@ -11,7 +11,11 @@ import {
   getRealLanguage,
 } from "../../../i18nlangtag/source/isolang/mslangid";
 import { LocaleDataWrapper } from "../../../unotools/source/i18n/localedatawrapper";
-import type { SvNumberformatConstReference } from "../../../svl/source/numbers/zformat";
+import { OUStringBuffer } from "../../../sal/inc/rtl/ustrbuf";
+import {
+  SvNumberformat,
+  type SvNumberformatConstReference,
+} from "../../../svl/source/numbers/zformat";
 import { SvNumberformatLimitOps as O } from "../../../svl/source/numbers/zformat.prefix";
 import { Converter } from "../../../sax/source/tools/converter";
 import { doubleToString } from "../../../sal/rtl/strtmpl.math";
@@ -175,6 +179,96 @@ function writeFraction(
   }
 }
 
+/** Collects native text and fixed-width compatibility spaces before serializing one ODF element. */
+class NumberText {
+  private content = "";
+  private blankWidths = "";
+
+  /** Appends a literal or the source compatibility width of an underscore token. @param value - Literal or blank character. @param width - Whether value is a blank width control. */
+  public Add(value: string, width = false): void {
+    if (!width) {
+      this.content += value;
+      return;
+    }
+    this.blankWidths +=
+      (this.blankWidths ? "_" : "") +
+      value +
+      (this.content.length || this.blankWidths ? String(this.content.length) : "");
+    const spaces = new OUStringBuffer();
+    try {
+      this.content += " ".repeat(
+        Math.max(0, SvNumberformat.InsertBlanks(spaces, 0, value.charCodeAt(0))),
+      );
+    } finally {
+      spaces.dispose();
+    }
+  }
+
+  /** Serializes the accumulated literal and its native blank-width encoding. @param position - Optional original embedded-text position. @returns ODF element or an empty string. */
+  public Finish(position?: number): string {
+    if (!this.content) return "";
+    const localName = position === undefined ? "text" : "embedded-text";
+    const location = position === undefined ? "" : ` number:position="${position}"`;
+    const widths = this.blankWidths
+      ? ` loext:blank-width-char="${escapeXml(this.blankWidths)}"`
+      : "";
+    const output = `<number:${localName}${location}${widths}>${escapeXml(this.content)}</number:${localName}>`;
+    this.content = "";
+    this.blankWidths = "";
+    return output;
+  }
+}
+
+/** Collects positioned literals and blank widths from the native integer, mantissa and exponent token stream. @param entry - Original compiled number format. @param part - Format section. @returns Consumed source literals, XML fragments and exponent-tail placement. */
+function collectEmbeddedEntries(entry: SvNumberformatConstReference, part: number) {
+  const entries = new Map<number, NumberText>();
+  const skip = new Set<number>();
+  let integer = 0;
+  let total = 0;
+  let fraction = false;
+  for (let index = 0; ; ++index) {
+    const token = entry.GetNumForString(part, index);
+    if (!token) break;
+    const kind = entry.GetNumForType(part, index);
+    if (kind === S.DECSEP || kind === S.EXP) {
+      ++total;
+      fraction = true;
+    } else if (kind === S.DIGIT) {
+      const length = token.getLength();
+      total += length;
+      if (!fraction) integer += length;
+    }
+  }
+  let passed = 0;
+  let inExponent = false;
+  let exponentText = false;
+  for (let index = 0; ; ++index) {
+    const token = entry.GetNumForString(part, index);
+    if (!token) break;
+    const kind = entry.GetNumForType(part, index);
+    if (kind === S.EXP) inExponent = true;
+    if (kind === S.EXP || kind === S.DECSEP) ++passed;
+    else if (kind === S.DIGIT) passed += token.getLength();
+    else if (
+      passed > 0 &&
+      passed < total &&
+      (kind === S.BLANK || kind === S.STRING || kind === S.PERCENT)
+    ) {
+      const value = text(token);
+      if (kind === S.BLANK && value.length < 2) continue;
+      const position = integer - passed;
+      const group = entries.get(position) ?? new NumberText();
+      group.Add(kind === S.BLANK ? value.charAt(1) : value, kind === S.BLANK);
+      entries.set(position, group);
+      skip.add(index);
+      exponentText ||= inExponent;
+    }
+  }
+  let xml = "";
+  for (const [position, group] of entries) xml += group.Finish(position);
+  return { skip, xml, exponentText };
+}
+
 /** Emits one native part under its generated primary or volatile style name. @param entry - Actual compiled number format. @param builtin - Original format index. @param part - Section index. @param name - Main style identifier. @param defaultPart - Whether this is the last section. @param maps - Conditions on the last section. @returns XML or null for unsupported tokens. */
 function exportPart(
   entry: SvNumberformatConstReference,
@@ -208,11 +302,18 @@ function exportPart(
   if (!tag) return null;
   const parts: string[] = [];
   const fields = new Set<string>();
-  const embedded: { value: string; position: number; integer: boolean }[] = [];
-  let lastDigit = -1;
-  for (let pos = 0, symbol: number; (symbol = entry.GetNumForType(part, pos)) !== 0; ++pos) {
-    if (symbol === S.EXP) break;
-    if (symbol === S.DIGIT) lastDigit = pos;
+  const supportsEmbedded =
+    type === T.ALL ||
+    type === T.NUMBER ||
+    type === T.CURRENCY ||
+    type === T.SCIENTIFIC ||
+    type === T.PERCENT;
+  const embedded = supportsEmbedded ? collectEmbeddedEntries(entry, part) : undefined;
+  const literal = new NumberText();
+  /** Flushes the current original literal text group before other elements. */
+  function flushText(): void {
+    const value = literal.Finish();
+    if (value) parts.push(value);
   }
   const time = type === T.TIME || type === T.DATETIME;
   let fractionAt = -1;
@@ -225,13 +326,31 @@ function exportPart(
     integerDigits = 0,
     digits = 0,
     decimals = 0,
+    blankInteger = 0,
+    blankExponent = 0,
     exponentDigits = 0;
+  let decimalReplacement = "";
   let exponent: string | undefined;
   for (let pos = 0; ; ++pos) {
     const raw = entry.GetNumForString(part, pos);
     if (!raw) break;
     const symbol = entry.GetNumForType(part, pos);
+    if (embedded?.skip.has(pos)) continue;
     const value = text(raw);
+    if (
+      symbol === S.STRING ||
+      symbol === S.PERCENT ||
+      symbol === S.DATESEP ||
+      symbol === S.TIMESEP
+    ) {
+      literal.Add(value);
+      continue;
+    }
+    if (symbol === S.BLANK) {
+      if (value.length === 2) literal.Add(value.charAt(1), true);
+      continue;
+    }
+    if (symbol !== S.THSEP && symbol !== S.DECSEP && symbol !== S.EXP) flushText();
     if (type === T.FRACTION) {
       if (symbol === S.DIGIT) {
         if (fractionAt < 0) fractionAt = parts.push("") - 1;
@@ -269,16 +388,21 @@ function exportPart(
     else if (symbol === K.GENERAL) parts.push('<number:number number:min-integer-digits="1"/>');
     else if (symbol === S.DIGIT) {
       if (time) continue;
-      if (!/^[#0]+$/.test(value)) return null;
+      if (!/^[#0?-]+$/.test(value)) return null;
       if (numberAt < 0) numberAt = parts.push("") - 1;
       if (numberAt !== parts.length - 1) return null;
-      if (exponent) exponentDigits += value.length;
-      else if (beforeDecimal) {
+      if (exponent) {
+        exponentDigits += value.length;
+        blankExponent += value.replace(/[^?]/g, "").length;
+      } else if (beforeDecimal) {
         integerDigits += value.length;
         required += value.replace(/#/g, "").length;
+        blankInteger += value.replace(/[^?]/g, "").length;
       } else {
         digits += value.length;
-        decimals += value.replace(/#/g, "").length;
+        decimals += value.replace(/[^0]/g, "").length;
+        if (value.includes("-")) decimalReplacement = "-";
+        else if (value.includes("?") && decimalReplacement === "") decimalReplacement = " ";
       }
     } else if (symbol === S.THSEP) {
       if (entry.GetNumForType(part, pos + 1) !== S.DIGIT) return null;
@@ -286,19 +410,6 @@ function exportPart(
     } else if (symbol === S.DECSEP) beforeDecimal = false;
     else if (symbol === S.EXP) exponent = value;
     else if (
-      symbol === S.STRING ||
-      symbol === S.PERCENT ||
-      symbol === S.DATESEP ||
-      symbol === S.TIMESEP
-    ) {
-      if (symbol === S.STRING && numberAt >= 0 && pos < lastDigit)
-        embedded.push({
-          value,
-          position: beforeDecimal ? integerDigits : digits,
-          integer: beforeDecimal,
-        });
-      else parts.push(`<number:text>${escapeXml(value)}</number:text>`);
-    } else if (
       time &&
       (symbol === S.TIME100SECSEP || (symbol === S.DEL && (value === "[" || value === "]")))
     ) {
@@ -317,6 +428,7 @@ function exportPart(
       );
     } else if (symbol !== S.CURRDEL && symbol !== S.CURREXT) return null;
   }
+  flushText();
   if (fractionAt >= 0) {
     parts[fractionAt] = writeFraction(
       entry,
@@ -328,17 +440,20 @@ function exportPart(
   if (numberAt >= 0) {
     const element = exponent ? "scientific-number" : "number";
     const scientific = exponent
-      ? ` number:min-exponent-digits="${exponentDigits}" number:exponent-interval="${integerDigits}" number:forced-exponent-sign="${exponent.includes("+")}"`
+      ? ` number:min-exponent-digits="${exponentDigits}" number:exponent-interval="${integerDigits}" number:forced-exponent-sign="${exponent.includes("+") || embedded?.exponentText === true}"` +
+        (exponent.startsWith("e") ? ' loext:exponent-lowercase="true"' : "") +
+        (blankExponent > 0
+          ? ` loext:blank-exponent-digits="${Math.max(0, Math.min(blankExponent, exponentDigits - 1))}"`
+          : "")
       : "";
-    const body = embedded
-      .map(
-        /** Emits literal text at its source position relative to the decimal point. @param item - Embedded token. @returns ODF element. */
-        (item) =>
-          `<number:embedded-text number:position="${item.integer ? integerDigits - item.position : -item.position}">${escapeXml(item.value)}</number:embedded-text>`,
-      )
-      .join("");
+    const replacement =
+      !exponent && (decimalReplacement || digits !== decimals)
+        ? ` number:decimal-replacement="${decimalReplacement}"`
+        : "";
+    const blank = blankInteger ? ` loext:max-blank-integer-digits="${blankInteger}"` : "";
+    const body = embedded?.xml;
     parts[numberAt] =
-      `<number:${element} number:min-integer-digits="${required}" number:decimal-places="${digits}"${digits !== decimals ? ` number:min-decimal-places="${decimals}"` : ""}${grouping ? ' number:grouping="true"' : ""}${scientific}${body ? `>${body}</number:${element}>` : "/>"}`;
+      `<number:${element} number:min-integer-digits="${required}"${blank} number:decimal-places="${digits}"${digits !== decimals ? ` number:min-decimal-places="${decimals}"` : ""}${replacement}${grouping ? ' number:grouping="true"' : ""}${scientific}${body ? `>${body}</number:${element}>` : "/>"}`;
   }
   if (parts.length === 0) parts.push("<number:text/>");
   const longDate = fields.has("day-of-week");

@@ -8441,3 +8441,14 @@ existing deleted action ID. Calc follows both native paths.
 - [Original deletion context](../../vendor/libreoffice-reference/sc/source/filter/xml/XMLTrackedChangesContext.cxx#L1223)
 - [Original generated snapshot branch](../../vendor/libreoffice-reference/sc/source/filter/xml/XMLChangeTrackingImportHelper.cxx#L345)
 - [Original deletion dependency dispatch](../../vendor/libreoffice-reference/sc/source/filter/xml/XMLChangeTrackingImportHelper.cxx#L625)
+
+### CALC-879 — ODS normalizes an exponent made only of blank digits
+
+The ODF number-style exporter saves at least one mandatory zero digit in an
+exponent. A native format ending in `E+??` therefore reopens as `E+?0`
+after an ODS save. The importer also applies this limit to an authored
+blank-exponent digit count. Calc preserves the original normalization.
+
+- [Original scientific export](../../vendor/libreoffice-reference/xmloff/source/style/xmlnumfe.cxx#L757)
+- [Original scientific import](../../vendor/libreoffice-reference/xmloff/source/style/xmlnumfi.cxx#L807)
+- [Original regression](../../vendor/libreoffice-reference/sc/qa/unit/subsequent_export_test5.cxx#L560)

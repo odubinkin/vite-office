@@ -15,13 +15,15 @@
       "SvXMLNumFmtExport::Export",
       "WriteBooleanElement_Impl",
       "SvXMLNumFmtExport::ExportFormat_Impl",
-      "SvXMLNumFmtExport::WriteMapElement_Impl"
+      "SvXMLNumFmtExport::WriteMapElement_Impl",
+      "SvXMLNumFmtExport::WriteScientificElement_Impl"
     ],
     "preservedResponsibilities": [
       "Recognized native compiled sections emit standard ODF numeric, percentage, date, time and scientific declarations with positioned literals.",
       "The ODF exporter resolves the real native system format while retaining the original style identity. It emits automatic-order and language source for the represented short and long date shapes.",
       "Exports the builtin Boolean number format as the original boolean-style with a boolean element.",
-      "Writes supported numeric format sections as volatile substyles with ordered conditions and places their maps on the primary style. Exports section colors through style:text-properties."
+      "Writes supported numeric format sections as volatile substyles with ordered conditions and places their maps on the primary style. Exports section colors through style:text-properties.",
+      "Writes fixed-width blanks, required and optional digits, exponent case and original literal positions through number-style elements."
     ],
     "omittedResponsibilities": [
       "Full locale, calendar and numeric token coverage remains open."
@@ -47,6 +49,10 @@
         {
           "path": "apps/office/src/sc/source/filter/xml/ods.test.ts",
           "marker": "resolves the original ODF-style number maps"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-number-format-placeholders.test.ts",
+          "marker": "tdf156449-Blank-In-Exponent.ods"
         }
       ],
       "upstream": [
@@ -73,6 +79,14 @@
         {
           "path": "vendor/libreoffice-reference/sc/qa/unit/data/fods/tdf161483_CellTextRotation.fods",
           "marker": "N114P0"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/style/xmlnumfe.cxx",
+          "marker": "SvXMLNumFmtExport::WriteScientificElement_Impl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/subsequent_export_test5.cxx",
+          "marker": "testBlankInExponent"
         }
       ]
     }

@@ -26,9 +26,11 @@
         "apps/office/src/sc/source/filter/xml/ods.test.ts",
         "vendor/libreoffice-reference/xmloff/source/style/xmlnumfi.cxx#SvXMLNumFormatContext::AddCondition",
         "vendor/libreoffice-reference/xmloff/source/style/xmlnumfi.cxx#SvXMLNumFormatContext::AddColor",
-        "vendor/libreoffice-reference/sc/qa/unit/data/fods/tdf161483_CellTextRotation.fods"
+        "vendor/libreoffice-reference/sc/qa/unit/data/fods/tdf161483_CellTextRotation.fods",
+        "apps/office/src/sc/source/filter/xml/ods-number-format-placeholders.test.ts",
+        "vendor/libreoffice-reference/sc/qa/unit/subsequent_export_test5.cxx#testBlankInExponent"
       ],
-      "justification": "XML numeric declarations and positioned literals compile in the actual Calc number formatter, including styles referred to by the primary browser record. Resolves conditional maps by data-style name after declarations are available so forward references compile in document order. Reconstructs the default numeric and text sections and maps the original palette colors to native format keywords. Full locale, calendar and numeric token coverage remains open. The ODF date-style context selects original system short or long date keys for matching automatic language-derived date fields. Nonmatching and explicit styles use the normal scanner. Resolves the unadorned ODF boolean-style to the original builtin logical format.",
+      "justification": "XML numeric declarations and positioned literals compile in the actual Calc number formatter, including styles referred to by the primary browser record. Resolves conditional maps by data-style name after declarations are available so forward references compile in document order. Reconstructs the default numeric and text sections and maps the original palette colors to native format keywords. Full locale, calendar and numeric token coverage remains open. The ODF date-style context selects original system short or long date keys for matching automatic language-derived date fields. Nonmatching and explicit styles use the normal scanner. Resolves the unadorned ODF boolean-style to the original builtin logical format. Reconstructs source blank widths, integer and exponent placeholders, exponent case and embedded literal positions in the native formatter.",
       "knownViolations": [],
       "localSymbols": [
         "SvXMLNumFormatContext",
@@ -42,7 +44,8 @@
         "SvXMLNumFmtDefaults::GetDefaultDateFormat",
         "NF_BOOLEAN",
         "SvXMLNumFormatContext::AddCondition",
-        "SvXMLNumFormatContext::AddColor"
+        "SvXMLNumFormatContext::AddColor",
+        "lcl_InsertBlankWidthChars"
       ]
     }
   }

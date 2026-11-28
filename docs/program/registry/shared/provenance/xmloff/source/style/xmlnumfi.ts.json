@@ -16,13 +16,15 @@
       "SvXMLNumFmtDefaults::GetDefaultDateFormat",
       "NF_BOOLEAN",
       "SvXMLNumFormatContext::AddCondition",
-      "SvXMLNumFormatContext::AddColor"
+      "SvXMLNumFormatContext::AddColor",
+      "lcl_InsertBlankWidthChars"
     ],
     "preservedResponsibilities": [
       "XML numeric declarations and positioned literals compile in the actual Calc number formatter, including styles referred to by the primary browser record.",
       "The ODF date-style context selects original system short or long date keys for matching automatic language-derived date fields. Nonmatching and explicit styles use the normal scanner.",
       "Resolves the unadorned ODF boolean-style to the original builtin logical format.",
-      "Resolves conditional maps by data-style name after declarations are available so forward references compile in document order. Reconstructs the default numeric and text sections and maps the original palette colors to native format keywords."
+      "Resolves conditional maps by data-style name after declarations are available so forward references compile in document order. Reconstructs the default numeric and text sections and maps the original palette colors to native format keywords.",
+      "Reconstructs source blank widths, integer and exponent placeholders, exponent case and embedded literal positions in the native formatter."
     ],
     "omittedResponsibilities": [
       "Full locale, calendar and numeric token coverage remains open."
@@ -48,6 +50,10 @@
         {
           "path": "apps/office/src/sc/source/filter/xml/ods.test.ts",
           "marker": "resolves the original ODF-style number maps"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-number-format-placeholders.test.ts",
+          "marker": "tdf156449-Blank-In-Exponent.ods"
         }
       ],
       "upstream": [
@@ -74,6 +80,14 @@
         {
           "path": "vendor/libreoffice-reference/sc/qa/unit/data/fods/tdf161483_CellTextRotation.fods",
           "marker": "N114P0"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/style/xmlnumfi.cxx",
+          "marker": "lcl_InsertBlankWidthChars"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/subsequent_export_test5.cxx",
+          "marker": "testBlankInExponent"
         }
       ]
     }

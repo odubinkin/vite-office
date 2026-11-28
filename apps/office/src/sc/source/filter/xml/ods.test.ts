@@ -105,7 +105,7 @@ it("maps optional ODF numeric digits, named months and positioned decimal text",
       const entry = formatter.GetEntry(key);
       return entry ? text(entry.GetFormatstring()) : "";
     }
-    expect(code(0)).toContain('0"x"##');
+    expect(code(0)).toBe('#,###."x"0##');
     expect(code(1)).toContain("MMM MMMM");
     expect(code(2)).toBe("0E-0");
     expect(code(3)).toBe('0"x"');

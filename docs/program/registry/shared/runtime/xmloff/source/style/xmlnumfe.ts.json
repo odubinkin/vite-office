@@ -26,9 +26,11 @@
         "apps/office/src/sc/source/filter/xml/ods.test.ts",
         "vendor/libreoffice-reference/xmloff/source/style/xmlnumfe.cxx#SvXMLNumFmtExport::ExportFormat_Impl",
         "vendor/libreoffice-reference/xmloff/source/style/xmlnumfe.cxx#SvXMLNumFmtExport::WriteMapElement_Impl",
-        "vendor/libreoffice-reference/sc/qa/unit/data/fods/tdf161483_CellTextRotation.fods"
+        "vendor/libreoffice-reference/sc/qa/unit/data/fods/tdf161483_CellTextRotation.fods",
+        "apps/office/src/sc/source/filter/xml/ods-number-format-placeholders.test.ts",
+        "vendor/libreoffice-reference/sc/qa/unit/subsequent_export_test5.cxx#testBlankInExponent"
       ],
-      "justification": "Recognized native compiled sections emit standard ODF numeric, percentage, date, time and scientific declarations with positioned literals. Writes supported numeric format sections as volatile substyles with ordered conditions and places their maps on the primary style. Exports section colors through style:text-properties. Full locale, calendar and numeric token coverage remains open. The ODF exporter resolves the real native system format while retaining the original style identity. It emits automatic-order and language source for the represented short and long date shapes. Exports the builtin Boolean number format as the original boolean-style with a boolean element.",
+      "justification": "Recognized native compiled sections emit standard ODF numeric, percentage, date, time and scientific declarations with positioned literals. Writes supported numeric format sections as volatile substyles with ordered conditions and places their maps on the primary style. Exports section colors through style:text-properties. Full locale, calendar and numeric token coverage remains open. The ODF exporter resolves the real native system format while retaining the original style identity. It emits automatic-order and language source for the represented short and long date shapes. Exports the builtin Boolean number format as the original boolean-style with a boolean element. Writes fixed-width blanks, required and optional digits, exponent case and original literal positions through number-style elements.",
       "knownViolations": [],
       "localSymbols": [
         "ExportNumberFormat"
@@ -41,7 +43,8 @@
         "SvXMLNumFmtExport::Export",
         "WriteBooleanElement_Impl",
         "SvXMLNumFmtExport::ExportFormat_Impl",
-        "SvXMLNumFmtExport::WriteMapElement_Impl"
+        "SvXMLNumFmtExport::WriteMapElement_Impl",
+        "SvXMLNumFmtExport::WriteScientificElement_Impl"
       ]
     }
   }

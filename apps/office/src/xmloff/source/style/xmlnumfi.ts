@@ -15,6 +15,8 @@ import { NfKeywordIndex as K } from "../../../svl/inc/nfkeytab";
 import { ImpSvNumberformatScan } from "../../../svl/source/numbers/zforscan";
 import { sEnglishKeyword } from "../../../svl/source/numbers/zforscan.keywords";
 import { Converter } from "../../../sax/source/tools/converter";
+import { OUStringBuffer } from "../../../sal/inc/rtl/ustrbuf";
+import { SvNumberformat } from "../../../svl/source/numbers/zformat";
 import type { SvNumberFormatter } from "../../../svl/source/numbers/zforlist.formatter";
 import { SvXMLIgnoreContext, SvXMLImportContext, type FastAttributeList } from "../core/xmlimp";
 import { XMLToken as X } from "../core/xmltoken";
@@ -179,7 +181,14 @@ export class SvXMLNumFormatContext extends SvXMLImportContext {
             const symbol = /[-\]]/.test(value) ? '"' + value + '"' : value;
             this.parts.push("[$" + symbol + extension + "]");
           } else if (!value) this.emptyText = true;
-          else this.parts.push(this.EnquoteIfNecessary(value));
+          else {
+            const blanks = attributes.get(X.NUMBER_BLANK_WIDTH_CHAR);
+            this.parts.push(
+              blanks
+                ? InsertBlankWidthChars(blanks, '"' + value.replaceAll('"', '"\\""') + '"')
+                : this.EnquoteIfNecessary(value),
+            );
+          }
         },
       );
     }
@@ -194,51 +203,19 @@ export class SvXMLNumFormatContext extends SvXMLImportContext {
       return new SvXMLIgnoreContext(true);
     }
     if (element === X.NUMBER_NUMBER || element === X.NUMBER_SCIENTIFIC_NUMBER) {
-      const sourceDigits = attributes.getAsInteger(X.NUMBER_DECIMAL_PLACES);
-      const sourceLeading = attributes.getAsInteger(X.NUMBER_MIN_INTEGER_DIGITS);
-      const explicitDecimals = sourceDigits !== null && sourceDigits >= 0;
-      if (element === X.NUMBER_NUMBER) {
-        this.autoDecimal = !explicitDecimals;
-        this.autoInteger = sourceLeading === null || sourceLeading < 0;
-      }
-      const leading = Math.max(0, Math.min(NF_MAX_FORMAT_SYMBOLS, sourceLeading ?? 0));
-      const digits = explicitDecimals
-        ? Math.min(NF_MAX_FORMAT_SYMBOLS, sourceDigits)
-        : this.formatter.GetLocaleData().getCurrDigits();
-      const required = Math.max(
-        0,
-        Math.min(digits, attributes.getAsInteger(X.NUMBER_MIN_DECIMAL_PLACES) ?? digits),
-      );
-      const grouping = attributes.get(X.NUMBER_GROUPING);
-      let integer = "0".repeat(leading) || "#";
-      const exponentDigits = attributes.getAsInteger(X.NUMBER_MIN_EXPONENT_DIGITS) ?? 0;
-      if (element === X.NUMBER_SCIENTIFIC_NUMBER) {
-        const interval = Math.min(
-          NF_MAX_FORMAT_SYMBOLS,
-          attributes.getAsInteger(X.NUMBER_EXPONENT_INTERVAL) ?? 0,
-        );
-        if (exponentDigits > 0 && leading === 0 && grouping !== "true" && grouping !== "1")
-          integer = "";
-        integer = integer.padStart(interval, "#");
-      }
-      if (grouping === "true" || grouping === "1") {
-        integer = integer.padStart(4, "#");
-        integer = integer.slice(0, -3) + "," + integer.slice(-3);
-      }
-      let code =
-        explicitDecimals || this.element === X.NUMBER_CURRENCY_STYLE
-          ? integer + (digits ? "." + "0".repeat(required) + "#".repeat(digits - required) : "")
-          : "General";
-      if (explicitDecimals && element === X.NUMBER_SCIENTIFIC_NUMBER && exponentDigits > 0) {
-        const length = Math.min(NF_MAX_FORMAT_SYMBOLS, exponentDigits);
-        const sign = attributes.get(X.NUMBER_FORCED_EXPONENT_SIGN);
-        code += (sign === "false" || sign === "0" ? "E-" : "E+") + "0".repeat(length);
-      }
-      return new SvXMLNumFmtElementContext(
-        code,
-        /** Appends the completed number and its embedded text. @param value - Compiled format code. @returns Nothing. */
+      const number = new SvXMLNumFmtElementContext(
+        attributes,
+        this.element === X.NUMBER_CURRENCY_STYLE
+          ? this.formatter.GetLocaleData().getCurrDigits()
+          : undefined,
+        /** Appends the completed number and its embedded text. @param value - Compiled format code. */
         (value) => this.parts.push(value),
       );
+      if (element === X.NUMBER_NUMBER) {
+        this.autoDecimal = number.HasAutomaticDecimals();
+        this.autoInteger = number.HasAutomaticInteger();
+      }
+      return number;
     } else if (element === X.NUMBER_AM_PM) this.parts.push("AM/PM");
     else if (element === X.NUMBER_TEXT_CONTENT) this.parts.push("@");
     else {
@@ -437,16 +414,62 @@ export class SvXMLNumFormatContext extends SvXMLImportContext {
   }
 }
 
-/** Collects original embedded text positions before finishing the number field. */
+/** Replaces the source compatibility spaces with native underscore-width tokens. @param encoded - Original blank-width-char encoding. @param quoted - Quoted element text. @returns Format source. */
+function InsertBlankWidthChars(encoded: string, quoted: string): string {
+  let shift = 1;
+  for (let index = 0; index < encoded.length; ++index) {
+    const character = encoded[index] as string;
+    const separator = encoded.indexOf("_", ++index);
+    const indexEnd = separator > index ? separator : encoded.length;
+    const offset = Number.parseInt(encoded.slice(index, indexEnd), 10) || 0;
+    index = indexEnd;
+    const position = offset + shift;
+    if (position < 0 || position > quoted.length) continue;
+    const spaces = new OUStringBuffer();
+    let width: number;
+    try {
+      width = SvNumberformat.InsertBlanks(spaces, 0, character.charCodeAt(0));
+    } finally {
+      spaces.dispose();
+    }
+    quoted = quoted.slice(0, position) + quoted.slice(position + width);
+    if (position > 0 && quoted[position - 1] === '"') {
+      quoted = quoted.slice(0, position - 1) + "_" + character + quoted.slice(position - 1);
+    } else {
+      quoted = quoted.slice(0, position) + '"_' + character + '"' + quoted.slice(position);
+      shift += 2;
+    }
+    shift += 2 - width;
+  }
+  return quoted.length >= 3 && quoted.endsWith('""') && quoted[quoted.length - 3] !== "\\"
+    ? quoted.slice(0, -2)
+    : quoted;
+}
+
+/** Collects the native attributes and positioned literals before constructing the number code. */
 class SvXMLNumFmtElementContext extends SvXMLImportContext {
   private readonly embedded = new Map<number, string>();
 
-  /** Binds a native digit pattern to this XML number element. @param code - Digit pattern. @param receive - Parent style recipient. @returns Context. */
+  /** Binds a native digit pattern to this XML number element. @param attributes - Native number attributes. @param currencyDecimals - Native default precision of a currency style. @param receive - Parent style recipient. */
   constructor(
-    private readonly code: string,
+    private readonly attributes: FastAttributeList,
+    private readonly currencyDecimals: number | undefined,
     private readonly receive: (code: string) => void,
   ) {
     super();
+  }
+
+  /** Reads the native dynamic decimal precision flag. @returns Whether precision is automatic. */
+  public HasAutomaticDecimals(): boolean {
+    return (this.attributes.getAsInteger(X.NUMBER_DECIMAL_PLACES) ?? -1) < 0;
+  }
+
+  /** Reads the native dynamic integer precision flag. @returns Whether precision is automatic. */
+  public HasAutomaticInteger(): boolean {
+    return (
+      (this.attributes.getAsInteger(X.NUMBER_MIN_INTEGER_DIGITS) ?? -1) < 0 &&
+      (this.attributes.getAsInteger(X.NUMBER_MAX_BLANK_INTEGER_DIGITS) ?? -1) < 0
+    );
   }
 
   /** Reads the original position measured from the decimal point. @param element - Child token. @param attributes - Actual attributes. @returns Child context. */
@@ -454,36 +477,100 @@ class SvXMLNumFmtElementContext extends SvXMLImportContext {
     const position = attributes.getAsInteger(X.NUMBER_POSITION);
     if (element !== X.NUMBER_EMBEDDED_TEXT || position === null)
       return new SvXMLIgnoreContext(true);
+    const blanks = attributes.get(X.NUMBER_BLANK_WIDTH_CHAR);
     return new NumberTextContext(
-      /** Collects source text in the same-position group. @param value - Literal payload. @returns Nothing. */
-      (value) => this.embedded.set(position, (this.embedded.get(position) ?? "") + value),
+      /** Joins native quoted source elements in source order at this position. @param value - Literal payload. */
+      (value) => {
+        if (!value) return;
+        const quoted = '"' + value.replaceAll('"', '"\\""') + '"';
+        const next = blanks ? InsertBlankWidthChars(blanks, quoted) : quoted;
+        const prior = this.embedded.get(position) ?? "";
+        this.embedded.set(
+          position,
+          prior.endsWith('"') && next.startsWith('"')
+            ? prior.slice(0, -1) + next.slice(1)
+            : prior + next,
+        );
+      },
     );
   }
 
-  /** Maps positioned XML literals back onto the native digit pattern. @returns Nothing. */
+  /** Reconstructs core number notation including the exponent's logical single separator. */
   override endFastElement(): void {
-    const integerEnd = this.code.search(/[.E]/);
-    const boundary = integerEnd < 0 ? this.code.length : integerEnd;
-    const decimal = this.code[boundary] === "." ? boundary : -1;
-    const integerDigits = [...this.code.slice(0, boundary).matchAll(/[0#]/g)];
-    const offsets = new Map<number, string>();
-    for (const [position, value] of this.embedded) {
-      const index =
-        position === 0
-          ? boundary
-          : position > 0
-            ? integerDigits[integerDigits.length - position]?.index
-            : decimal < 0
-              ? undefined
-              : decimal + 1 - position;
-      if (index === undefined || (position < 0 && !/[0#]/.test(this.code[index - 1] ?? "")))
-        continue;
-      offsets.set(index, '"' + value.replace(/"/g, '\\"') + '"');
+    const attrs = this.attributes;
+    const automatic = this.HasAutomaticDecimals();
+    if (automatic && this.currencyDecimals === undefined) {
+      this.receive("General");
+      return;
     }
-    let out = "";
-    for (let index = 0; index <= this.code.length; ++index)
-      out += (offsets.get(index) ?? "") + (this.code[index] ?? "");
-    this.receive(out);
+    /** Reads the native nonnegative placeholder count. @param token - Source attribute. @param fallback - Used when absent or invalid. @returns Bounded count. */
+    function count(token: X, fallback = 0): number {
+      const value = attrs.getAsInteger(token);
+      return value === null || value < 0 ? fallback : Math.min(NF_MAX_FORMAT_SYMBOLS, value);
+    }
+    const digits = automatic ? (this.currencyDecimals as number) : count(X.NUMBER_DECIMAL_PLACES);
+    const replacement = attrs.get(X.NUMBER_DECIMAL_REPLACEMENT);
+    const align = replacement === " ";
+    const dashes = replacement !== null && replacement !== "" && !align;
+    const required = dashes
+      ? 0
+      : Math.min(digits, count(X.NUMBER_MIN_DECIMAL_PLACES, replacement === null ? digits : 0));
+    const blanks = count(X.NUMBER_MAX_BLANK_INTEGER_DIGITS);
+    const leading = Math.max(blanks, count(X.NUMBER_MIN_INTEGER_DIGITS));
+    const exponentDigits = count(X.NUMBER_MIN_EXPONENT_DIGITS);
+    const positions = [...this.embedded.keys()].sort(
+      /** Processes the original map from right to left in the format. @param left - First position. @param right - Second position. @returns Relative order. */
+      (left, right) => left - right,
+    );
+    const grouping =
+      (attrs.get(X.NUMBER_GROUPING) === "true" || attrs.get(X.NUMBER_GROUPING) === "1") &&
+      (positions.at(-1) ?? 0) <= 0;
+    let integer = "?".repeat(blanks) + "0".repeat(leading - blanks);
+    if (!integer && (!exponentDigits || grouping || positions.length)) integer = "#";
+    if (grouping) {
+      integer = integer.padStart(4, "#");
+      integer = integer.slice(0, -3) + "," + integer.slice(-3);
+    }
+    const interval = count(X.NUMBER_EXPONENT_INTERVAL);
+    if (exponentDigits && (!grouping || interval > leading)) {
+      const used = integer.replaceAll(",", "").length;
+      if (interval > used) integer = "#".repeat(interval - used) + integer;
+    }
+    let code =
+      integer +
+      (digits
+        ? "." + "0".repeat(required) + (dashes ? "-" : align ? "?" : "#").repeat(digits - required)
+        : "");
+    let exponent = -1;
+    if (exponentDigits) {
+      exponent = code.length;
+      const sign = attrs.get(X.NUMBER_FORCED_EXPONENT_SIGN);
+      const lowercase = attrs.get(X.NUMBER_EXPONENT_LOWERCASE);
+      const blankExponent = Math.min(exponentDigits - 1, count(X.NUMBER_BLANK_EXPONENT_DIGITS));
+      code +=
+        (lowercase === "true" || lowercase === "1" ? "e" : "E") +
+        ((sign === "false" || sign === "0") && digits + 1 >= -(positions[0] ?? 0) ? "-" : "+") +
+        "?".repeat(blankExponent) +
+        "0".repeat(exponentDigits - blankExponent);
+    }
+    if (positions.length) {
+      const decimal = code.indexOf(".");
+      let zero = decimal < 0 ? code.length : decimal;
+      const leftmost = positions.at(-1) as number;
+      if (leftmost >= zero) {
+        const extra = Math.min(NF_MAX_FORMAT_SYMBOLS, leftmost + 1 - zero);
+        code = "#".repeat(extra) + code;
+        zero += extra;
+        if (exponent > 0) exponent += extra;
+      }
+      for (const position of positions) {
+        let index = zero - position;
+        if (exponent > 0 && index > exponent) ++index;
+        if (index >= 0 && index <= code.length)
+          code = code.slice(0, index) + this.embedded.get(position) + code.slice(index);
+      }
+    }
+    this.receive(code);
   }
 }
 
