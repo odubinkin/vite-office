@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202611280534-VFAXVP",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-28T05:48:25.361Z",
+  "verdict": "pass",
+  "summary": "Writer preserves native dates and times as real text fields in ODT and Worker transport.",
+  "evaluated_sha": "6f964920fc8edfe335df153176b7ae586620432e",
+  "blueprint_digest": "a5ed48b07e19e39f5f179116fdb53be1d901e4fcfb5f16092a7d4ea0ab45e6bb",
+  "findings": [
+    "Native date/time flags, clock semantics, serial values, format definitions and minute adjustments flow through the actual owners. WRITER-775 and WRITER-776 record the retained export conversions."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611280534-VFAXVP/README.md",
+    "output/playwright/odf-writer-redlines/datetime-verification.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
