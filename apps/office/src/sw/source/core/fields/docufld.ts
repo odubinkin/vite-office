@@ -5,14 +5,36 @@ import { isAnnotationTextField } from "../../../inc/txtfld";
 import type { SwDoc } from "../doc/doc";
 import type { EditTextObject } from "../../../../editeng/source/editeng/editobj";
 import { DateTime } from "../../../../tools/source/datetime/datetime";
+import { Date as ToolsDate } from "../../../../tools/source/datetime/tdate";
 import { Time } from "../../../../tools/source/datetime/ttime";
-import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { LANGUAGE_SYSTEM } from "../../../../i18nlangtag/inc/lang";
 import { convertLanguageToLocale } from "../../../../i18nlangtag/source/isolang/mslangid";
 import { LocaleDataWrapper } from "../../../../unotools/source/i18n/localedatawrapper";
+import { getProcessComponentContext } from "../../../../comphelper/inc/processfactory";
+import { Exception } from "../../../../cppu/inc/com/sun/star/uno/Exception";
+import { Reference, UNO_QUERY_THROW } from "../../../../cppu/inc/com/sun/star/uno/Reference";
+import type { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
+import { XPropertySet } from "../../../../udkapi/com/sun/star/beans/XPropertySet";
+import { Converter } from "../../../../udkapi/com/sun/star/script/Converter";
+import { TypeClass } from "../../../../udkapi/com/sun/star/uno/TypeClass";
+import type { XComponentContext } from "../../../../udkapi/com/sun/star/uno/XComponentContext";
+import {
+  Date as UnoDate,
+  cppu_detail_getUnoType_Date,
+} from "../../../../offapi/com/sun/star/util/Date";
+import {
+  DateTime as UnoDateTime,
+  cppu_detail_getUnoType_DateTime,
+} from "../../../../offapi/com/sun/star/util/DateTime";
+import {
+  Duration,
+  cppu_detail_getUnoType_Duration,
+} from "../../../../offapi/com/sun/star/util/Duration";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
 import type { rtl_uStringSlot } from "../../../../sal/inc/rtl/ustring.h";
 import type { SwField } from "../../../inc/fldbas";
+import { STR_DURATION_FORMAT } from "../../../inc/strings";
 import { SwDateTimeField } from "./flddat";
 import { SwValueFieldType } from "./fldbas";
 
@@ -27,6 +49,7 @@ export enum SwDocInfoSubType {
   Print = 6,
   DocNo = 7,
   Edit = 8,
+  Custom = 9,
   LowerMask = 0x00ff,
   SubMask = 0x0f00,
   SubAuthor = 0x0100,
@@ -49,6 +72,7 @@ export const docInfoServiceSubTypes = {
   "DocInfo.ChangeDateTime": SwDocInfoSubType.Change | SwDocInfoSubType.SubDate,
   "DocInfo.PrintDateTime": SwDocInfoSubType.Print | SwDocInfoSubType.SubDate,
   "DocInfo.EditTime": SwDocInfoSubType.Edit | SwDocInfoSubType.SubTime,
+  "DocInfo.Custom": SwDocInfoSubType.Custom,
 } as const;
 
 /** Converts an owned string from the native document properties service. @param value - Owned result. @returns Text. */
@@ -60,10 +84,28 @@ function readDocInfoString(value: OUString): string {
   }
 }
 
+/** Converts the custom property through Writer's original UNO service. @param value - Borrowed value. @returns Presentation text. */
+function convertCustomProperty(value: Any): string {
+  const converter = Converter.create(getProcessComponentContext() as Reference<XComponentContext>);
+  try {
+    const converted = converter.operatorStar().convertToSimpleType(value, TypeClass.STRING);
+    const string = new OUString();
+    try {
+      converted.extract(string, "OUString");
+      return text(string);
+    } finally {
+      string.dispose();
+      converted.dispose();
+    }
+  } finally {
+    converter.dispose();
+  }
+}
+
 /** System field type that expands metadata through its actual document owner. */
 export class SwDocInfoFieldType extends SwValueFieldType {
-  /** Expands the original property identified by the subtype. @param subtype - Native subtype and flags. @param format - Document number format. @param language - Field language. @returns Property presentation. */
-  public Expand(subtype: number, format = 0, language = LANGUAGE_SYSTEM): string {
+  /** Expands the original property identified by the subtype. @param subtype - Native subtype and flags. @param format - Document number format. @param language - Field language. @param name - Custom property name. @returns Property presentation. */
+  public Expand(subtype: number, format = 0, language = LANGUAGE_SYSTEM, name = ""): string {
     const properties = this.GetDoc().documentProperties.GetDocumentProperties();
     switch (subtype & SwDocInfoSubType.LowerMask) {
       case SwDocInfoSubType.Title:
@@ -85,6 +127,8 @@ export class SwDocInfoFieldType extends SwValueFieldType {
           language,
         );
       }
+      case SwDocInfoSubType.Custom:
+        return this.ReadCustomProperty(name, convertCustomProperty) ?? "";
       case SwDocInfoSubType.Keys: {
         const keywords = properties.getKeywords();
         try {
@@ -127,6 +171,88 @@ export class SwDocInfoFieldType extends SwValueFieldType {
       default:
         return "";
     }
+  }
+
+  /** Updates a live field from its typed property. @param name - Custom property name. @param format - Document format. @param language - Field language. @returns Updated presentation when a value is available. */
+  public ExpandCustom(
+    name: string,
+    format: number,
+    language = LANGUAGE_SYSTEM,
+  ): string | undefined {
+    return this.ReadCustomProperty(name, (value) => {
+      const date = new UnoDate();
+      if (value.extract(date, cppu_detail_getUnoType_Date))
+        return this.ExpandValue(this.DateToDays(date), format, language);
+      const stamp = new UnoDateTime();
+      if (value.extract(stamp, cppu_detail_getUnoType_DateTime))
+        return this.ExpandValue(
+          this.DateToDays(stamp) + new Time(stamp).GetTimeInDays(),
+          format,
+          language,
+        );
+      const duration = new Duration();
+      if (value.extract(duration, cppu_detail_getUnoType_Duration)) {
+        const components = [
+          duration.Years,
+          duration.Months,
+          duration.Days,
+          duration.Hours,
+          duration.Minutes,
+          duration.Seconds,
+        ];
+        return (
+          (duration.Negative ? "-" : "+") +
+          STR_DURATION_FORMAT.replace(/%([1-6])/gu, (_, index: string) =>
+            String(components[Number(index) - 1]),
+          )
+        );
+      }
+      return convertCustomProperty(value);
+    });
+  }
+
+  /** Resolves the actual UNO document property, retaining the caller's cache on a missing or unavailable value. @param name - Authored field name. @param present - Property conversion. @returns Presentation, if available. */
+  private ReadCustomProperty(name: string, present: (value: Any) => string): string | undefined {
+    const key = unicode(name);
+    try {
+      const bag = this.GetDoc()
+        .documentProperties.GetDocumentProperties()
+        .getUserDefinedProperties();
+      try {
+        const set = new Reference<XPropertySet>(bag, UNO_QUERY_THROW, XPropertySet.static_type);
+        try {
+          const info = set.operatorStar().getPropertySetInfo();
+          try {
+            if (!info.operatorStar().hasPropertyByName(key)) return undefined;
+          } finally {
+            info.dispose();
+          }
+          const value = set.operatorStar().getPropertyValue(key);
+          try {
+            return value.hasValue() ? present(value) : undefined;
+          } finally {
+            value.dispose();
+          }
+        } finally {
+          set.dispose();
+        }
+      } finally {
+        bag.dispose();
+      }
+    } catch (error) {
+      if (!(error instanceof Exception)) throw error;
+      return undefined;
+    } finally {
+      key.dispose();
+    }
+  }
+
+  /** Returns the native day count relative to the document formatter's null date. @param value - UNO calendar fields. @returns Serial day. */
+  private DateToDays(value: UnoDate | UnoDateTime): number {
+    return (
+      new ToolsDate(value.Day, value.Month, value.Year).GetAsNormalizedDays() -
+      this.GetDoc().GetNumberFormatter().GetNullDate().GetAsNormalizedDays()
+    );
   }
 
   /** Expands a valid timestamp or its author according to the original subtype. @param subtype - Native flags. @param stamp - Calendar value. @param format - Number format. @param language - Field language. @param author - Owned author property. @returns Field text. */
@@ -174,14 +300,15 @@ export class SwDocInfoField implements SwField<SwDocInfoField> {
   private content: string;
   private automaticLanguage = true;
 
-  /** Initializes the original expansion from document properties. @param type - System field type. @param subtype - Native subtype and flags. @param content - Stored presentation. @param format - Document number-format key. */
+  /** Initializes the original expansion from document properties. @param type - System field type. @param subtype - Native subtype and flags. @param content - Stored presentation. @param format - Document number-format key. @param name - Custom property name. */
   public constructor(
     private readonly type: SwDocInfoFieldType,
     private readonly subtype: number,
     content?: string,
     private readonly format = 0,
+    private readonly name = "",
   ) {
-    this.content = content ?? type.Expand(subtype, format);
+    this.content = content ?? type.Expand(subtype, format, LANGUAGE_SYSTEM, name);
   }
 
   /** Borrows the original system field type. @returns Field type. */
@@ -204,6 +331,11 @@ export class SwDocInfoField implements SwField<SwDocInfoField> {
     return this.format;
   }
 
+  /** Returns the native custom property name. @returns Name. */
+  public GetName(): string {
+    return this.name;
+  }
+
   /** Reads whether the field follows automatic language selection. @returns Native flag. */
   public IsAutomaticLanguage(): boolean {
     return this.automaticLanguage;
@@ -221,8 +353,12 @@ export class SwDocInfoField implements SwField<SwDocInfoField> {
 
   /** Expands live metadata and retains the presentation of fixed fields. @returns Current text. */
   public Expand(): string {
-    if (!this.IsFixed() && this.type.GetDoc().documentProperties.GetPendingXml() === undefined)
-      this.content = this.type.Expand(this.subtype, this.format);
+    if (!this.IsFixed() && this.type.GetDoc().documentProperties.GetPendingXml() === undefined) {
+      this.content =
+        (this.subtype & SwDocInfoSubType.LowerMask) === SwDocInfoSubType.Custom
+          ? (this.type.ExpandCustom(this.name, this.format) ?? this.content)
+          : this.type.Expand(this.subtype, this.format);
+    }
     return this.content;
   }
 
@@ -245,7 +381,7 @@ export class SwDocInfoField implements SwField<SwDocInfoField> {
 
   /** Copies native state after choosing the destination type and format. @param type - Destination system type. @param format - Destination format. @returns Detached field. */
   private CopyWithType(type: SwDocInfoFieldType, format: number): SwDocInfoField {
-    const result = new SwDocInfoField(type, this.subtype, this.content, format);
+    const result = new SwDocInfoField(type, this.subtype, this.content, format, this.name);
     result.SetAutomaticLanguage(this.automaticLanguage);
     return result;
   }

@@ -19,6 +19,7 @@ import {
   XMLReferenceFieldImportContext,
   XMLRevisionDocInfoImportContext,
   XMLDateTimeDocInfoImportContext,
+  XMLUserDocInfoImportContext,
   XMLSimpleDocInfoImportContext,
   XMLDateFieldImportContext,
   XMLTimeFieldImportContext,
@@ -458,11 +459,13 @@ function createInlineContext(
   if (docInfo) {
     if (annotation) return null;
     const Context =
-      element === XMLToken.TEXT_EDITING_CYCLES
-        ? XMLRevisionDocInfoImportContext
-        : docInfo[4] !== undefined || element === XMLToken.TEXT_EDITING_DURATION
-          ? XMLDateTimeDocInfoImportContext
-          : XMLSimpleDocInfoImportContext;
+      element === XMLToken.TEXT_USER_DEFINED
+        ? XMLUserDocInfoImportContext
+        : element === XMLToken.TEXT_EDITING_CYCLES
+          ? XMLRevisionDocInfoImportContext
+          : docInfo[4] !== undefined || element === XMLToken.TEXT_EDITING_DURATION
+            ? XMLDateTimeDocInfoImportContext
+            : XMLSimpleDocInfoImportContext;
     return new Context(paragraph, docInfo, properties, hyperlink, namedStyles);
   }
   if (element === XMLToken.TEXT_SOFT_PAGE_BREAK) {

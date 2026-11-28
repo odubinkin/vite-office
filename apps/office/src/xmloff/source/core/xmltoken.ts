@@ -91,6 +91,7 @@ const entries: readonly (readonly [string, string, XMLToken])[] = [
   [ODF_NAMESPACES.text, "print-date", XMLToken.TEXT_PRINT_DATE],
   [ODF_NAMESPACES.text, "print-time", XMLToken.TEXT_PRINT_TIME],
   [ODF_NAMESPACES.text, "editing-duration", XMLToken.TEXT_EDITING_DURATION],
+  [ODF_NAMESPACES.text, "user-defined", XMLToken.TEXT_USER_DEFINED],
   [ODF_NAMESPACES.text, "time", XMLToken.TEXT_TIME],
   [ODF_NAMESPACES.text, "date", XMLToken.TEXT_DATE],
   [ODF_NAMESPACES.text, "file-name", XMLToken.TEXT_FILE_NAME],

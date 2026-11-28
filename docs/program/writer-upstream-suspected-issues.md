@@ -6475,3 +6475,24 @@ Writer preserves the default and formatted paths.
 
 - [Original editing-duration expansion](../../vendor/libreoffice-reference/sw/source/core/fields/docufld.cxx#L965)
 - [Original locale time formatting](../../vendor/libreoffice-reference/unotools/source/i18n/localedatawrapper.cxx#L1173)
+
+### WRITER-779 — A custom duration field drops fractional seconds in its presentation
+
+The custom document information field expands a typed duration using the
+signed Writer duration resource for years, months, days, hours, minutes,
+and seconds. It omits the nanosecond member even when the custom property
+retains it. Writer follows the original display behavior.
+
+- [Original duration presentation](../../vendor/libreoffice-reference/sw/source/core/fields/docufld.cxx#L1152)
+- [Original message resource](../../vendor/libreoffice-reference/sw/inc/strings.hrc#L792)
+
+### WRITER-780 — The live custom-property fallback lasts for the current field instance
+
+A live custom field retains its previous presentation when its document
+property is missing or unavailable. On ODT load, the field importer applies
+the authored presentation only for fixed fields. A live field reopened
+with the same missing property therefore has an empty presentation.
+Writer preserves these two behaviors.
+
+- [Original custom field update](../../vendor/libreoffice-reference/sw/source/core/fields/docufld.cxx#L1130)
+- [Original fixed-only presentation import](../../vendor/libreoffice-reference/xmloff/source/text/txtfldi.cxx#L1455)

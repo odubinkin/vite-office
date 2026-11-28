@@ -131,7 +131,8 @@ export function projectParagraphMarkers(
           },
         );
         if (!mapping) throw new Error("Unsupported Writer document information field subtype.");
-        const numeric = mapping[4] !== undefined || mapping[2] === "DocInfo.EditTime";
+        const custom = subtype === SwDocInfoSubType.Custom;
+        const numeric = custom || mapping[4] !== undefined || mapping[2] === "DocInfo.EditTime";
         const styleName = numeric
           ? anchored?.exportNumberStyle?.(field.GetFormat(), field.IsAutomaticLanguage())
           : undefined;
@@ -142,6 +143,7 @@ export function projectParagraphMarkers(
           fixed: field.IsFixed(),
           presentation: field.Expand(),
           ...(styleName ? { styleName } : {}),
+          ...(custom ? { name: field.GetName() } : {}),
         };
       },
     ),

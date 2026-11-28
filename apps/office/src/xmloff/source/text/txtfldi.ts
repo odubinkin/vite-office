@@ -125,6 +125,7 @@ export class XMLDateFieldImportContext extends XMLTimeFieldImportContext {
 export class XMLSimpleDocInfoImportContext extends SvXMLImportContext {
   protected readonly fixed: [boolean] = [false];
   protected content = "";
+  private format: { key: number; systemLanguage: boolean } | undefined;
 
   /** Binds the native field service chosen by the element. @param helper - Text importer. @param field - Original service mapping. @param properties - Direct formatting. @param hyperlink - Optional link. @param characterStyles - Applied styles. */
   public constructor(
@@ -167,6 +168,24 @@ export class XMLSimpleDocInfoImportContext extends SvXMLImportContext {
     if (property) this.helper.SetProperty(field, property, this.content);
     this.helper.SetProperty(field, "CurrentPresentation", this.content);
   }
+
+  /** Inserts the original presentation when a field has no valid descriptor. */
+  protected InsertFallback(): void {
+    this.helper.InsertString(this.content, this.properties, this.hyperlink, this.characterStyles);
+  }
+
+  /** Resolves the authored number style for a numeric DocInfo service. @param attributes - Field attributes. */
+  protected ReadNumberFormat(attributes: FastAttributeList): void {
+    const style = attributes.get(XMLToken.STYLE_DATA_STYLE_NAME);
+    if (style !== null) this.format = this.helper.GetDataStyleKey(style);
+  }
+
+  /** Applies an admitted number style to a numeric DocInfo service. @param field - Detached field. */
+  protected PrepareNumberFormat(field: XMLTextContent): void {
+    if (!this.format) return;
+    this.helper.SetProperty(field, "NumberFormat", this.format.key, "sal_Int32");
+    this.helper.SetProperty(field, "IsFixedLanguage", !this.format.systemLanguage);
+  }
 }
 
 /** Native revision field importer also supplies a parsed revision to the descriptor. */
@@ -183,13 +202,10 @@ export class XMLRevisionDocInfoImportContext extends XMLSimpleDocInfoImportConte
 
 /** Original DocInfo calendar and duration importer. The native descriptor accepts a presentation and format. */
 export class XMLDateTimeDocInfoImportContext extends XMLSimpleDocInfoImportContext {
-  private format: { key: number; systemLanguage: boolean } | undefined;
-
   /** Collects native fixed and data style attributes. @param element - Field token. @param attributes - Source field attributes. */
   public override startFastElement(element: XMLToken, attributes: FastAttributeList): void {
     super.startFastElement(element, attributes);
-    const style = attributes.get(XMLToken.STYLE_DATA_STYLE_NAME);
-    if (style !== null) this.format = this.helper.GetDataStyleKey(style);
+    this.ReadNumberFormat(attributes);
   }
 
   /** Prepares the format and date discriminator for the detached field. @param field - Native UNO descriptor. */
@@ -197,10 +213,32 @@ export class XMLDateTimeDocInfoImportContext extends XMLSimpleDocInfoImportConte
     super.PrepareField(field);
     const date = this.field[4];
     if (date !== undefined) this.helper.SetProperty(field, "IsDate", date);
-    if (this.format) {
-      this.helper.SetProperty(field, "NumberFormat", this.format.key, "sal_Int32");
-      this.helper.SetProperty(field, "IsFixedLanguage", !this.format.systemLanguage);
-    }
+    this.PrepareNumberFormat(field);
+  }
+}
+
+/** Original named document information import over the custom field service. */
+export class XMLUserDocInfoImportContext extends XMLSimpleDocInfoImportContext {
+  private name: string | null = null;
+
+  /** Reads the required name alongside the original format and fixed flag. @param element - Field token. @param attributes - Field attributes. */
+  public override startFastElement(element: XMLToken, attributes: FastAttributeList): void {
+    super.startFastElement(element, attributes);
+    this.name = attributes.get(XMLToken.TEXT_NAME);
+    this.ReadNumberFormat(attributes);
+  }
+
+  /** Leaves the original text in place when there is no authored property name. */
+  public override endFastElement(): void {
+    if (this.name === null) this.InsertFallback();
+    else super.endFastElement();
+  }
+
+  /** Binds the native property name before applying the field's authored presentation. @param field - Detached UNO field. */
+  protected override PrepareField(field: XMLTextContent): void {
+    if (this.name) this.helper.SetProperty(field, "Name", this.name);
+    this.PrepareNumberFormat(field);
+    super.PrepareField(field);
   }
 }
 

@@ -77,8 +77,8 @@ it("roundtrips live metadata and fixed presentations through the Worker", async 
   const bytes = await packXmlPackage({
     mimetype: mime,
     "META-INF/manifest.xml": manifest,
-    "meta.xml": `<office:document-meta ${ns}><office:meta><dc:title>Live title</dc:title><dc:subject>Live subject</dc:subject><dc:description>Summary</dc:description><meta:keyword>one</meta:keyword><meta:keyword>two</meta:keyword><meta:initial-creator>Creator</meta:initial-creator><meta:creation-date>2020-02-07T13:06:45</meta:creation-date><dc:creator>Editor</dc:creator><dc:date>2020-02-07T14:00:00</dc:date><meta:printed-by>Print author without date</meta:printed-by><meta:editing-cycles>3</meta:editing-cycles><meta:editing-duration>PT25H2M3S</meta:editing-duration></office:meta></office:document-meta>`,
-    "content.xml": `<office:document-content ${ns}><office:automatic-styles><style:style style:name="T1" style:family="text"><style:text-properties fo:font-weight="bold"/></style:style><number:date-style style:name="D" fo:language="en" fo:country="US"><number:year number:style="long"/><number:text>-</number:text><number:month number:style="long"/><number:text>-</number:text><number:day number:style="long"/></number:date-style></office:automatic-styles><office:body><office:text><text:p><text:span text:style-name="T1"><text:title>Stale title</text:title></text:span>|<text:subject text:fixed="true">Fixed subject</text:subject>|<text:description/>|<text:keywords/>|<text:initial-creator/>|<text:creator/>|<text:printed-by>Stale</text:printed-by>|<text:editing-cycles text:fixed="true">0007</text:editing-cycles>|<text:creation-date style:data-style-name="D" text:date-value="1999-01-01T00:00:00">Stale</text:creation-date>|<text:creation-time/>|<text:modification-time/>|<text:print-date text:fixed="true">Fixed date</text:print-date>|<text:editing-duration/></text:p></office:text></office:body></office:document-content>`,
+    "meta.xml": `<office:document-meta ${ns}><office:meta><dc:title>Live title</dc:title><dc:subject>Live subject</dc:subject><dc:description>Summary</dc:description><meta:keyword>one</meta:keyword><meta:keyword>two</meta:keyword><meta:initial-creator>Creator</meta:initial-creator><meta:creation-date>2020-02-07T13:06:45</meta:creation-date><dc:creator>Editor</dc:creator><dc:date>2020-02-07T14:00:00</dc:date><meta:printed-by>Print author without date</meta:printed-by><meta:editing-cycles>3</meta:editing-cycles><meta:editing-duration>PT25H2M3S</meta:editing-duration><meta:user-defined meta:name="Build">Release &amp; Next</meta:user-defined><meta:user-defined meta:name="Score" meta:value-type="float">12.5</meta:user-defined><meta:user-defined meta:name="Delivery" meta:value-type="date">2020-02-08</meta:user-defined><meta:user-defined meta:name="Span" meta:value-type="time">PT1H2M3.123S</meta:user-defined></office:meta></office:document-meta>`,
+    "content.xml": `<office:document-content ${ns}><office:automatic-styles><style:style style:name="T1" style:family="text"><style:text-properties fo:font-weight="bold"/></style:style><number:date-style style:name="D" fo:language="en" fo:country="US"><number:year number:style="long"/><number:text>-</number:text><number:month number:style="long"/><number:text>-</number:text><number:day number:style="long"/></number:date-style></office:automatic-styles><office:body><office:text><text:p><text:span text:style-name="T1"><text:title>Stale title</text:title></text:span>|<text:subject text:fixed="true">Fixed subject</text:subject>|<text:description/>|<text:keywords/>|<text:initial-creator/>|<text:creator/>|<text:printed-by>Stale</text:printed-by>|<text:editing-cycles text:fixed="true">0007</text:editing-cycles>|<text:creation-date style:data-style-name="D" text:date-value="1999-01-01T00:00:00">Stale</text:creation-date>|<text:creation-time/>|<text:modification-time/>|<text:print-date text:fixed="true">Fixed date</text:print-date>|<text:editing-duration/>|<text:user-defined text:name="Build"/>|<text:user-defined text:name="Score"/>|<text:user-defined text:name="Delivery" style:data-style-name="D"/>|<text:user-defined text:name="Span"/>|<text:user-defined text:name="Build" text:fixed="true">Fixed build</text:user-defined>|<text:user-defined>Unnamed display</text:user-defined></text:p></office:text></office:body></office:document-content>`,
   });
   const source = await readOdtDocument(bytes, metadata);
   let restored: SwDoc | undefined;
@@ -104,6 +104,11 @@ it("roundtrips live metadata and fixed presentations through the Worker", async 
       "14:00",
       "Fixed date",
       "01:02:03",
+      "Release & Next",
+      "12.5",
+      "2020-02-08",
+      "+ Y: 0 M: 0 D: 0 H: 1 M: 2 S: 3",
+      "Fixed build",
     ];
     expect(fields(restored).map((hint) => hint.GetAttr().GetField().Expand())).toEqual(old);
     const title = unicode("Changed title");
@@ -122,6 +127,10 @@ it("roundtrips live metadata and fixed presentations through the Worker", async 
     expect(content).toMatch(
       /<text:print-date style:data-style-name="[^"]+" text:fixed="true">Fixed date<\/text:print-date>/,
     );
+    expect(content).toMatch(
+      /<text:user-defined style:data-style-name="[^"]+" text:name="Delivery">2020-02-08<\/text:user-defined>/,
+    );
+    expect(content).toContain("Unnamed<text:s/>display");
     expect(content).not.toContain(CH_TXTATR_BREAKWORD);
     reopened = (await readOdtDocument(saved, metadata)).document;
     expect(fields(reopened).map((hint) => hint.GetAttr().GetField().Expand())).toEqual([
@@ -155,5 +164,33 @@ it("reads the native modification fields from the LibreOffice testBadSplitSectio
     expect(time?.Expand()).toBe("15:14");
   } finally {
     document.Dispose();
+  }
+});
+
+it("exports the native first-page classification property from LibreOffice testTdf160877", async () => {
+  const fixture = readFileSync(
+    "../../vendor/libreoffice-reference/sw/qa/extras/odfexport/data/tdf160877.odt",
+  );
+  const loaded = await readOdtDocument(new Uint8Array(fixture), metadata);
+  let worker: SwDoc | undefined;
+  try {
+    const result = await restoreOdtWorkerDocumentAsync(
+      structuredClone(createOdtWorkerDocument(loaded)),
+      undefined,
+      () => false,
+    );
+    worker = result.document;
+    const property = "urn:bails:IntellectualProperty:Marking:document-header";
+    const original = fields(worker).map((hint) => hint.GetAttr().GetField());
+    const marking = original.find((field) => field.GetName() === property);
+    expect(marking?.Expand()).toBe("Classification: General Business");
+    const archive = await DocumentArchive.open(await writeOdtDocument(worker, metadata));
+    const styles = await archive.readTextEntry("styles.xml");
+    expect(styles).toContain(
+      `text:name="${property}">Classification: General Business</text:user-defined>`,
+    );
+  } finally {
+    worker?.Dispose();
+    loaded.document.Dispose();
   }
 });

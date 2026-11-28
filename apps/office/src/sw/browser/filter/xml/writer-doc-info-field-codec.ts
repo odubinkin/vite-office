@@ -20,6 +20,7 @@ export interface WriterDocInfoFieldRecord {
   readonly offset: number;
   readonly subtype: number;
   readonly presentation: string;
+  readonly name?: string;
   readonly numberFormat?: WriterNumberFormatRecord;
   readonly automaticLanguage?: boolean;
 }
@@ -40,6 +41,7 @@ export function encodeDocInfoFields(node: SwTextNode): readonly WriterDocInfoFie
         offset: hint.GetStart(),
         subtype: field.GetSubType(),
         presentation: field.Expand(),
+        ...(field.GetName() ? { name: field.GetName() } : {}),
         ...(numberFormat ? { numberFormat } : {}),
         ...(!field.IsAutomaticLanguage() ? { automaticLanguage: false } : {}),
       };
@@ -63,6 +65,7 @@ export function decodeDocInfoFields(
       record.offset < 0 ||
       node.GetText()[record.offset] !== CH_TXTATR_BREAKWORD ||
       typeof record.presentation !== "string" ||
+      (record.name !== undefined && typeof record.name !== "string") ||
       (record.automaticLanguage !== undefined && typeof record.automaticLanguage !== "boolean") ||
       !Number.isInteger(record.subtype) ||
       record.subtype < 0 ||
@@ -74,7 +77,13 @@ export function decodeDocInfoFields(
       record.numberFormat === undefined
         ? 0
         : decodeNumberFormat(node.GetDoc(), record.numberFormat);
-    const field = new SwDocInfoField(type, record.subtype, record.presentation, format);
+    const field = new SwDocInfoField(
+      type,
+      record.subtype,
+      record.presentation,
+      format,
+      record.name,
+    );
     field.SetAutomaticLanguage(record.automaticLanguage ?? true);
     const hint = new SwTextField(new SwFormatField(field, RES_TXTATR_FIELD), record.offset);
     if (!node.InsertHint(hint, SetAttrMode.NOTXTATRCHR))

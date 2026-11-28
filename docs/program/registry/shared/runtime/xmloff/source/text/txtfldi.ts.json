@@ -22,13 +22,14 @@
         "apps/office/src/sw/source/filter/xml/odt-doc-info-fields.test.ts",
         "vendor/libreoffice-reference/xmloff/source/text/txtfldi.cxx#XMLSimpleDocInfoImportContext::XMLSimpleDocInfoImportContext"
       ],
-      "justification": "Imports annotation metadata, delegates editable text to the shared paragraph importer using the annotation TextRange cursor, and completes named annotation ranges. Uses the shared shape text child dispatcher with isolated annotation list state and completes named ranges through the TextRange cursor. Imports the native simple document information services and the fixed revision descriptor. Imports DocInfo date, time and edit-duration fields through native date selection, data style and fixed presentation properties.",
+      "justification": "Imports annotation metadata, delegates editable text to the shared paragraph importer using the annotation TextRange cursor, and completes named annotation ranges. Uses the shared shape text child dispatcher with isolated annotation list state and completes named ranges through the TextRange cursor. Imports the native simple document information services and the fixed revision descriptor. Imports DocInfo date, time and edit-duration fields through native date selection, data style and fixed presentation properties. Imports native named custom fields, their number style and fixed presentation, with plain-text fallback when no name is authored.",
       "knownViolations": [],
       "localSymbols": [
         "XMLAnnotationImportContext",
         "XMLSimpleDocInfoImportContext",
         "XMLRevisionDocInfoImportContext",
-        "XMLDateTimeDocInfoImportContext"
+        "XMLDateTimeDocInfoImportContext",
+        "XMLUserDocInfoImportContext"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "xmloff/source/text/txtfldi.cxx",
@@ -37,7 +38,8 @@
         "XMLAnnotationImportContext::endFastElement",
         "XMLSimpleDocInfoImportContext",
         "XMLRevisionDocInfoImportContext",
-        "XMLDateTimeDocInfoImportContext"
+        "XMLDateTimeDocInfoImportContext",
+        "XMLUserDocInfoImportContext"
       ]
     }
   }

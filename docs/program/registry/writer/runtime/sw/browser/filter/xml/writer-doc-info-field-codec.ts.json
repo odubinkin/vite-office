@@ -19,7 +19,7 @@
         "apps/office/src/sw/browser/filter/xml/writer-doc-info-field-codec.ts",
         "apps/office/src/sw/source/filter/xml/odt-doc-info-fields.test.ts"
       ],
-      "justification": "Transfers the native document information subtype, presentation and paragraph offset through the Worker.",
+      "justification": "Transfers the native document information subtype, presentation and paragraph offset through the Worker. Transfers original custom property names and native document number formats with the detached Writer model.",
       "knownViolations": [],
       "localSymbols": [
         "encodeDocInfoFields",

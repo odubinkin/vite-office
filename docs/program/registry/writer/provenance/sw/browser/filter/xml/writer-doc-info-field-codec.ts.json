@@ -7,7 +7,8 @@
     "status": "local-only",
     "rationale": "Transfers the native document information subtype, presentation and paragraph offset through the Worker.",
     "responsibilities": [
-      "Transfers the native document information subtype, presentation and paragraph offset through the Worker."
+      "Transfers the native document information subtype, presentation and paragraph offset through the Worker.",
+      "Transfers original custom property names and native document number formats with the detached Writer model."
     ],
     "stackDivergence": {
       "kind": "local-infrastructure",

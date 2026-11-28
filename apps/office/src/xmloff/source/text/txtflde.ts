@@ -74,6 +74,7 @@ export const docInfoFields = [
   [XMLToken.TEXT_PRINT_DATE, "print-date", "DocInfo.PrintDateTime", undefined, true],
   [XMLToken.TEXT_PRINT_TIME, "print-time", "DocInfo.PrintDateTime", undefined, false],
   [XMLToken.TEXT_EDITING_DURATION, "editing-duration", "DocInfo.EditTime", undefined],
+  [XMLToken.TEXT_USER_DEFINED, "user-defined", "DocInfo.Custom", undefined],
 ] as const;
 
 /** One native simple DocInfo service mapping. */
@@ -87,6 +88,7 @@ export interface XMLDocInfoExportMarker {
   readonly fixed: boolean;
   readonly presentation: string;
   readonly styleName?: string;
+  readonly name?: string;
 }
 
 /** Exports the native XMLTextFieldExport element and nondefault fixed flag. @param marker - Model portion. @param escapeXml - XML escaping. @returns Xml text field. */
@@ -96,7 +98,8 @@ export function exportDocInfoField(
 ): string {
   const fixed = marker.fixed ? ' text:fixed="true"' : "";
   const style = marker.styleName ? ` style:data-style-name="${escapeXml(marker.styleName)}"` : "";
-  return `<text:${marker.element}${style}${fixed}>${escapeXml(marker.presentation)}</text:${marker.element}>`;
+  const name = marker.name === undefined ? "" : ` text:name="${escapeXml(marker.name)}"`;
+  return `<text:${marker.element}${style}${name}${fixed}>${escapeXml(marker.presentation)}</text:${marker.element}>`;
 }
 
 /** Original ODF mapping of reference field parts. */

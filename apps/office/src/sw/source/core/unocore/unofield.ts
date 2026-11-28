@@ -265,6 +265,7 @@ export class SwXGetReferenceField {
 /** Native descriptor for the represented document information services. */
 export class SwXDocInfoField {
   private fixed = false;
+  private name = "";
   private date = false;
   private automaticLanguage = true;
   private format = 0;
@@ -291,6 +292,10 @@ export class SwXDocInfoField {
         break;
       case "Revision":
         scalar(input, "sal_Int32");
+        break;
+      case "Name":
+        if (this.subtype !== SwDocInfoSubType.Custom) unknown(property);
+        this.name = stringValue(input);
         break;
       case "IsDate":
         if (!this.HasDateTime()) unknown(property);
@@ -326,6 +331,7 @@ export class SwXDocInfoField {
       subtype | (this.fixed ? SwDocInfoSubType.SubFixed : 0),
       undefined,
       this.format,
+      this.name,
     );
     if (this.presentation) field.SetExpansion(this.presentation);
     field.SetAutomaticLanguage(this.automaticLanguage);
@@ -352,7 +358,9 @@ export class SwXDocInfoField {
   /** Tests whether the original service exposes numeric formatting. @returns Format property availability. */
   private HasNumberFormat(): boolean {
     return (
-      this.HasDateTime() || (this.subtype & SwDocInfoSubType.LowerMask) === SwDocInfoSubType.Edit
+      this.HasDateTime() ||
+      (this.subtype & SwDocInfoSubType.LowerMask) === SwDocInfoSubType.Edit ||
+      this.subtype === SwDocInfoSubType.Custom
     );
   }
 }
