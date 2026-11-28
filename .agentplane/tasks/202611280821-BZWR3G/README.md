@@ -4,7 +4,7 @@ title: "Paint Calc Filled alignment and Shrink to fit in the grid"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,29 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-11-28T08:31:38.954Z"
+  updated_by: "CODER"
+  note: "26 targeted tests passed. Three Chromium scenarios passed across the main run and exact narrow-column retry. Scoped source and structural checks passed with inherited global registry and provenance diagnostics."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-11-28T08:31:40.118Z"
+  updated_by: "EVALUATOR"
+  note: "Existing Calc Filled and Shrink to fit item values drive the real grid through bounded native decisions."
+  evaluated_sha: "5b8d7a448a998655ee5d97beff50b38823658f90"
+  blueprint_digest: "73f1052d275418c5b52a65ad98ed9485f8c2cb926ab5eba9895eca31b6a7d825"
+  evidence_refs:
+    - ".agentplane/tasks/202611280821-BZWR3G/README.md"
+    - ".agentplane/tasks/202611280821-BZWR3G/quality/20261128-083140118-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202611280821-BZWR3G/quality/20261128-083140118-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202611280821-BZWR3G/quality/20261128-083140118-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202611280821-BZWR3G/blueprint/resolved-snapshot.json"
+    - "output/calc-next/BZWR3G-targeted.log"
+    - "output/calc-next/BZWR3G-browser-final.log"
+    - "output/calc-next/BZWR3G-browser-narrow.log"
+  findings:
+    - "Chromium confirmed resize and merge, Undo, wrap priority, and non-fitting numeric display and accessible value."
 commit: null
 comments:
   -
@@ -35,8 +53,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-28T08:31:38.954Z"
+    author: "CODER"
+    state: "ok"
+    note: "26 targeted tests passed. Three Chromium scenarios passed across the main run and exact narrow-column retry. Scoped source and structural checks passed with inherited global registry and provenance diagnostics."
 doc_version: 3
-doc_updated_at: "2026-11-28T08:31:20.141Z"
+doc_updated_at: "2026-11-28T08:31:39.012Z"
 doc_updated_by: "CODER"
 description: "Connect Calc's Filled alignment and Shrink to fit attributes to the existing grid text painter. Preserve the ScOutputData admission order for wrapping, repetition and shrinking. Resolve text extent from the rendered script font runs in the browser content box, including margin and merged geometry. Apply the pinned repeat count and bounded scaling decisions, keeping the actual stored/displayed cell value, accessibility, in-cell editor and history contracts. Keep the resulting browser text layout under its existing drawing and clipping boundaries."
 sections:
@@ -53,6 +77,36 @@ sections:
     - Run changed-source lint, format, JSDoc, types, dependency boundaries, scoped provenance and AgentPlane checks. Record verified inherited diagnostics.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-11-28T08:31:38.954Z — VERIFY — ok
+
+    By: CODER
+
+    Note: 26 targeted tests passed. Three Chromium scenarios passed across the main run and exact narrow-column retry. Scoped source and structural checks passed with inherited global registry and provenance diagnostics.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-28T08:31:20.141Z, excerpt_hash=sha256:b6a4eb2dbbdf31115ae9839947997b180fff357b14d270bc4f2d4e3f697b8fb7
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202611280821-BZWR3G/blueprint/resolved-snapshot.json
+    - old_digest: 73f1052d275418c5b52a65ad98ed9485f8c2cb926ab5eba9895eca31b6a7d825
+    - current_digest: 73f1052d275418c5b52a65ad98ed9485f8c2cb926ab5eba9895eca31b6a7d825
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202611280821-BZWR3G
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202611280821-BZWR3G
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -89,6 +143,36 @@ Connect native fit-mode admission, measure actual script runs, render whole repe
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-11-28T08:31:38.954Z — VERIFY — ok
+
+By: CODER
+
+Note: 26 targeted tests passed. Three Chromium scenarios passed across the main run and exact narrow-column retry. Scoped source and structural checks passed with inherited global registry and provenance diagnostics.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-28T08:31:20.141Z, excerpt_hash=sha256:b6a4eb2dbbdf31115ae9839947997b180fff357b14d270bc4f2d4e3f697b8fb7
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202611280821-BZWR3G/blueprint/resolved-snapshot.json
+- old_digest: 73f1052d275418c5b52a65ad98ed9485f8c2cb926ab5eba9895eca31b6a7d825
+- current_digest: 73f1052d275418c5b52a65ad98ed9485f8c2cb926ab5eba9895eca31b6a7d825
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202611280821-BZWR3G
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202611280821-BZWR3G
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
