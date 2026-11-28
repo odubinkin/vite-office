@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202611280550-5KK1Q8",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-28T06:10:54.255Z",
+  "verdict": "pass",
+  "summary": "Native Calc scalar content tracking imports and exports through the workbook and the ODS Worker.",
+  "evaluated_sha": "a4cc0df5cf7029770e186acec2b4204cd0681fa7",
+  "blueprint_digest": "02025b477df8b3470e8944a8e03c4ae478035da7bd6b164e123ce08bdd158f87",
+  "findings": [
+    "The pinned change-tracking.ods and focused settings and workbook tests exercise action metadata, previous scalar values, privacy preferences and protection."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611280550-5KK1Q8/README.md",
+    "output/playwright/odf-next-checkpoint/change-track-verification.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
