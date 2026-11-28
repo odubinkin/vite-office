@@ -1,5 +1,7 @@
 /** @fileoverview Native document ownership of Writer system field types. */
 import { SwDocInfoFieldType, SwDocStatFieldType, SwPostItFieldType } from "../fields/docufld";
+import { SwJumpEditFieldType } from "../fields/docufld.jumpedit";
+import { SwDropDownFieldType } from "../fields/flddropdown";
 import { SwChapterFieldType } from "../fields/chpfld";
 import { SwPageNumberFieldType } from "../fields/docufld.pagenumber";
 import { SwGetRefFieldType } from "../fields/reffld";
@@ -8,6 +10,8 @@ import type { SwDoc } from "./doc";
 
 /** Document-owned system fields for the represented Writer field families. */
 export class DocumentFieldsManager {
+  private readonly jumpEdit: SwJumpEditFieldType;
+  private readonly dropDown: SwDropDownFieldType;
   private readonly chapter: SwChapterFieldType;
   private readonly pageNumber: SwPageNumberFieldType;
   private readonly docStat: SwDocStatFieldType;
@@ -18,6 +22,8 @@ export class DocumentFieldsManager {
 
   /** Creates the system field types for this document. @param document - Actual Writer model. */
   public constructor(document: SwDoc) {
+    this.jumpEdit = new SwJumpEditFieldType(document);
+    this.dropDown = new SwDropDownFieldType(document);
     this.chapter = new SwChapterFieldType(document);
     this.pageNumber = new SwPageNumberFieldType(document);
     this.docStat = new SwDocStatFieldType(document);
@@ -25,6 +31,16 @@ export class DocumentFieldsManager {
     this.getRef = new SwGetRefFieldType(document);
     this.docInfo = new SwDocInfoFieldType(document);
     this.dateTime = new SwDateTimeFieldType(document);
+  }
+
+  /** Borrows the original JumpEdit system type. @returns Field type. */
+  public GetJumpEditFieldType(): SwJumpEditFieldType {
+    return this.jumpEdit;
+  }
+
+  /** Borrows the original DropDown system type. @returns Field type. */
+  public GetDropDownFieldType(): SwDropDownFieldType {
+    return this.dropDown;
   }
 
   /** Borrows the original Chapter system type. @returns Field type. */

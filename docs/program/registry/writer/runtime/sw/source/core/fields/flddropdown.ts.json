@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/fields/flddropdown.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "document-core",
+    "capabilityIds": [
+      "CAP-0128",
+      "CAP-0129"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/core/fields/flddropdown.ts",
+        "apps/office/src/sw/source/filter/xml/odt-choice-fields.test.ts",
+        "vendor/libreoffice-reference/sw/source/core/fields/flddropdown.cxx"
+      ],
+      "justification": "Owns the original choices, membership-based selected item, metadata and native default expansion.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwDropDownField",
+        "SwDropDownFieldType"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/fields/flddropdown.cxx",
+      "upstreamSymbols": [
+        "SwDropDownField::ExpandImpl",
+        "SwDropDownField::SetItems",
+        "SwDropDownField::SetSelectedItem"
+      ]
+    }
+  }
+}

@@ -20,6 +20,11 @@ import {
   type WriterDocInfoFieldRecord,
 } from "./writer-doc-info-field-codec";
 import {
+  decodeChoiceFields,
+  encodeChoiceFields,
+  type WriterChoiceFieldRecord,
+} from "./writer-choice-field-codec";
+import {
   decodeChapterFields,
   encodeChapterFields,
   type WriterChapterFieldRecord,
@@ -108,6 +113,7 @@ export interface WriterTextNodeRecord {
   readonly referenceMarks?: readonly WriterReferenceMarkRecord[];
   readonly referenceFields?: readonly WriterReferenceFieldRecord[];
   readonly docInfoFields?: readonly WriterDocInfoFieldRecord[];
+  readonly choiceFields?: readonly WriterChoiceFieldRecord[];
   readonly chapterFields?: readonly WriterChapterFieldRecord[];
   readonly pageNumberFields?: readonly WriterPageNumberFieldRecord[];
   readonly docStatFields?: readonly WriterDocStatFieldRecord[];
@@ -380,6 +386,7 @@ export function encodeTextNode(document: SwDoc, node: SwTextNode): WriterTextNod
   const docInfoFields = encodeDocInfoFields(node);
   const dateTimeFields = encodeDateTimeFields(node);
   const docStatFields = encodeDocStatFields(node);
+  const choiceFields = encodeChoiceFields(node);
   const chapterFields = encodeChapterFields(node);
   const pageNumberFields = encodePageNumberFields(node);
   return {
@@ -389,6 +396,7 @@ export function encodeTextNode(document: SwDoc, node: SwTextNode): WriterTextNod
     ...(docInfoFields.length ? { docInfoFields } : {}),
     ...(dateTimeFields.length ? { dateTimeFields } : {}),
     ...(docStatFields.length ? { docStatFields } : {}),
+    ...(choiceFields.length ? { choiceFields } : {}),
     ...(chapterFields.length ? { chapterFields } : {}),
     ...(pageNumberFields.length ? { pageNumberFields } : {}),
     autoAttributes: direct === undefined ? [] : encodeSfxItemSet(direct),
@@ -470,6 +478,7 @@ export function decodeTextNode(
   decodeDocInfoFields(node, nodeRecord.docInfoFields);
   decodeDateTimeFields(node, nodeRecord.dateTimeFields);
   decodeDocStatFields(node, nodeRecord.docStatFields);
+  decodeChoiceFields(node, nodeRecord.choiceFields);
   decodeChapterFields(node, nodeRecord.chapterFields);
   decodePageNumberFields(node, nodeRecord.pageNumberFields);
   if (nodeRecord.annotations) decodeLegacyAnnotations(node, nodeRecord.annotations);

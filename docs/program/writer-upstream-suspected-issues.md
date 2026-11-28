@@ -6529,3 +6529,13 @@ also use it if the two share a physical page or the frames are unavailable.
 Writer preserves those fallback conditions.
 
 - [Original outline lookup and first-entry fallback](../../vendor/libreoffice-reference/sw/source/core/docnode/node.cxx#L799)
+
+### WRITER-784 — Duplicate drop-down labels reopen with the first equal value selected
+
+The drop-down service stores the selected string. If multiple labels have
+that value, export marks the first equal label as selected even if the
+authored ODT marked a later label. Writer retains the original choice order
+and selects by value.
+
+- [Original selection handling](../../vendor/libreoffice-reference/sw/source/core/fields/flddropdown.cxx#L124)
+- [Original selection in ODF export](../../vendor/libreoffice-reference/xmloff/source/text/txtflde.cxx#L2823)

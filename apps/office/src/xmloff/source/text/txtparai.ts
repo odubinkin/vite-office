@@ -19,6 +19,8 @@ import {
   XMLCountFieldImportContext,
   XMLPageNumberImportContext,
   XMLChapterImportContext,
+  XMLPlaceholderFieldImportContext,
+  XMLDropDownFieldImportContext,
   XMLReferenceFieldImportContext,
   XMLRevisionDocInfoImportContext,
   XMLDateTimeDocInfoImportContext,
@@ -471,6 +473,14 @@ function createInlineContext(
     if (annotation) return null;
     const Context =
       element === XMLToken.TEXT_DATE ? XMLDateFieldImportContext : XMLTimeFieldImportContext;
+    return new Context(paragraph, properties, hyperlink, namedStyles);
+  }
+  if (element === XMLToken.TEXT_PLACEHOLDER || element === XMLToken.TEXT_DROP_DOWN) {
+    if (annotation) return null;
+    const Context =
+      element === XMLToken.TEXT_PLACEHOLDER
+        ? XMLPlaceholderFieldImportContext
+        : XMLDropDownFieldImportContext;
     return new Context(paragraph, properties, hyperlink, namedStyles);
   }
   if (element === XMLToken.TEXT_CHAPTER)

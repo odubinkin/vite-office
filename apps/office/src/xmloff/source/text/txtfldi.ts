@@ -1,4 +1,7 @@
 /** @fileoverview Imports the ODF annotation field and range end through Writer's text content service. */
+import { Sequence } from "../../../cppu/inc/com/sun/star/uno/Sequence";
+import type { rtl_uStringSlot } from "../../../sal/inc/rtl/ustring.h";
+import type { PlaceholderType } from "../../../offapi/com/sun/star/text/PlaceholderType";
 import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
 import {
   DateTime,
@@ -15,6 +18,7 @@ import { ChapterFormat } from "../../../offapi/com/sun/star/text/ChapterFormat";
 import { ReferenceFieldPart } from "../../../offapi/com/sun/star/text/ReferenceFieldPart";
 import {
   chapterDisplays,
+  placeholderTypes,
   referenceFieldFormats,
   type XMLDocInfoField,
   type XMLReferenceField,
@@ -29,6 +33,143 @@ import {
 import * as NumberingType from "../../../offapi/com/sun/star/style/NumberingType";
 import { SvXMLUnitConverter } from "../core/xmluconv";
 import type { XMLCountField } from "./txtflde";
+
+/** Imports the original JumpEdit service and fallback text. */
+export class XMLPlaceholderFieldImportContext extends SvXMLImportContext {
+  private type: PlaceholderType | undefined;
+  private description = "";
+  private content = "";
+
+  /** Binds the styled text point. @param helper - Native text importer. @param properties - Character properties. @param hyperlink - Surrounding link. @param characterStyles - Applied character styles. */
+  public constructor(
+    private readonly helper: XMLTextImportHelper,
+    private readonly properties: OdfCharacterProperties,
+    private readonly hyperlink: OdfHyperlink | undefined,
+    private readonly characterStyles: readonly XMLCharacterStyleLayer[],
+  ) {
+    super();
+  }
+
+  /** Decodes the required placeholder type and optional description. @param _element - Element token. @param attributes - Source attributes. */
+  public override startFastElement(_element: XMLToken, attributes: FastAttributeList): void {
+    const type = attributes.get(XMLToken.TEXT_PLACEHOLDER_TYPE);
+    for (const [value, name] of Object.entries(placeholderTypes))
+      if (type === name) this.type = Number(value) as PlaceholderType;
+    this.description = attributes.get(XMLToken.TEXT_DESCRIPTION) ?? "";
+  }
+
+  /** Retains the source presentation. @param content - Decoded text. */
+  public override characters(content: string): void {
+    this.content += content;
+  }
+
+  /** Attaches a placeholder for valid input and inserts its presentation otherwise. */
+  public override endFastElement(): void {
+    const type = this.type;
+    if (type === undefined) {
+      this.helper.InsertString(this.content, this.properties, this.hyperlink, this.characterStyles);
+      return;
+    }
+    const text = this.content.slice(
+      this.content.startsWith("<") ? 1 : 0,
+      this.content.endsWith(">") ? -1 : undefined,
+    );
+    this.helper.InsertTextField(
+      "JumpEdit",
+      /** Writes the original typed properties. @param field - Detached placeholder. */
+      (field) => {
+        this.helper.SetProperty(field, "Hint", this.description);
+        this.helper.SetProperty(field, "Placeholder", text);
+        this.helper.SetProperty(field, "PlaceholderType", type, "sal_Int16");
+      },
+      this.properties,
+      this.hyperlink,
+      this.characterStyles,
+    );
+  }
+}
+
+const DropDownItems = Sequence.specialize<rtl_uStringSlot>("OUString", 8);
+
+/** Imports the original ordered ODF drop-down options. */
+export class XMLDropDownFieldImportContext extends SvXMLImportContext {
+  private readonly items: string[] = [];
+  private selected = -1;
+  private name: string | null = null;
+  private help: string | null = null;
+  private toolTip: string | null = null;
+
+  /** Binds the styled text point. @param helper - Native text importer. @param properties - Character properties. @param hyperlink - Surrounding link. @param characterStyles - Applied character styles. */
+  public constructor(
+    private readonly helper: XMLTextImportHelper,
+    private readonly properties: OdfCharacterProperties,
+    private readonly hyperlink: OdfHyperlink | undefined,
+    private readonly characterStyles: readonly XMLCharacterStyleLayer[],
+  ) {
+    super();
+  }
+
+  /** Reads the original optional descriptor properties. @param _element - Element token. @param attributes - Source attributes. */
+  public override startFastElement(_element: XMLToken, attributes: FastAttributeList): void {
+    this.name = attributes.get(XMLToken.TEXT_NAME);
+    this.help = attributes.get(XMLToken.TEXT_HELP);
+    this.toolTip = attributes.get(XMLToken.TEXT_HINT);
+  }
+
+  /** Retains valid labels in source order and uses the last selected label. @param element - Child element. @param attributes - Source label attributes. @returns Inert child context. */
+  public override createFastChildContext(
+    element: XMLToken,
+    attributes: FastAttributeList,
+  ): SvXMLImportContext {
+    if (element === XMLToken.TEXT_LABEL) {
+      const item = attributes.get(XMLToken.TEXT_VALUE);
+      if (item !== null) {
+        if (attributes.get(XMLToken.TEXT_CURRENT_SELECTED) === "true")
+          this.selected = this.items.length;
+        this.items.push(item);
+      }
+    }
+    return new SvXMLImportContext();
+  }
+
+  /** Attaches the original DropDown service. */
+  public override endFastElement(): void {
+    this.helper.InsertTextField(
+      "DropDown",
+      this.PrepareField.bind(this),
+      this.properties,
+      this.hyperlink,
+      this.characterStyles,
+    );
+  }
+
+  /** Writes the native string sequence and selected value. @param field - Detached native field. */
+  private PrepareField(field: XMLTextContent): void {
+    const strings = this.items.map(xmlTextString);
+    const sequence = new DropDownItems(
+      {
+        /** Borrows native UTF-16 string slots. @param offset - Byte offset of the string item. @returns Native string slot. */
+        get: (offset) => strings[offset / 8]?.getDataAddress(),
+      },
+      strings.length,
+    );
+    const items = new Any(sequence.getAddress(), ["Sequence", "OUString"]);
+    const name = xmlTextString("Items");
+    try {
+      field.setPropertyValue(name, items);
+    } finally {
+      name.dispose();
+      items.dispose();
+      sequence.dispose();
+      for (const item of strings) item.dispose();
+    }
+    const selected = this.items[this.selected];
+    if (selected !== undefined) this.helper.SetProperty(field, "SelectedItem", selected);
+    if (this.name !== null) this.helper.SetProperty(field, "Name", this.name);
+    if (this.help !== null) this.helper.SetProperty(field, "Help", this.help);
+    if (this.toolTip !== null) this.helper.SetProperty(field, "Tooltip", this.toolTip);
+  }
+}
 
 /** Imports an ODF heading field through the original Chapter service. */
 export class XMLChapterImportContext extends SvXMLImportContext {

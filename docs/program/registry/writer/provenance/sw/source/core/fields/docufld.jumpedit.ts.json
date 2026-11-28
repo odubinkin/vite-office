@@ -1,0 +1,61 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/core/fields/docufld.jumpedit.ts",
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/fields/docufld.cxx",
+    "localSymbols": [
+      "SwJumpEditField",
+      "SwJumpEditFieldType",
+      "SwJumpEditFormat"
+    ],
+    "upstreamSymbols": [
+      "SwJumpEditFieldType::GetCharFormat",
+      "SwJumpEditField::ExpandImpl",
+      "SwJumpEditField::QueryValue"
+    ],
+    "preservedResponsibilities": [
+      "Owns the native placeholder type, pool character style, authored help and angle-bracketed expansion."
+    ],
+    "omittedResponsibilities": [
+      "A live layout client and editor placeholder navigation are beyond this field and ODT filter transfer."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/core/fields/docufld.jumpedit.ts",
+      "rationale": "Separates the original JumpEdit field and its system type from unrelated docufld field families at the same Writer native core boundary.",
+      "stackNecessity": "responsibility-split"
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/fields/docufld.jumpedit.ts",
+          "marker": "SwJumpEditField"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-choice-fields.test.ts",
+          "marker": "testTdf106663HeaderTextFrameGoToNextPlacemarker"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/fields/docufld.cxx",
+          "marker": "SwJumpEditFieldType::GetCharFormat"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/fields/docufld.cxx",
+          "marker": "SwJumpEditField::ExpandImpl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/fields/docufld.cxx",
+          "marker": "SwJumpEditField::QueryValue"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/qa/extras/uiwriter/uiwriter6.cxx",
+          "marker": "testTdf106663HeaderTextFrameGoToNextPlacemarker"
+        }
+      ]
+    }
+  }
+}

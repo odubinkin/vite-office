@@ -1,4 +1,7 @@
 /** @fileoverview Writer's UNO Annotation descriptor and attachment to the native text field. */
+import { Sequence } from "../../../../cppu/inc/com/sun/star/uno/Sequence";
+import { OUString } from "../../../../sal/inc/rtl/ustring";
+import type { rtl_uStringSlot } from "../../../../sal/inc/rtl/ustring.h";
 import type { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import {
   DateTime as UnoDateTime,
@@ -14,6 +17,8 @@ import {
   type SwTextReferenceField,
   type SwTextPageNumberField,
   type SwTextChapterField,
+  type SwTextDropDownField,
+  type SwTextJumpEditField,
 } from "../../../inc/txtfld";
 import { SwFormatField } from "../../../inc/fmtfld";
 import { SwDateTimeSubType } from "../../../inc/fldbas";
@@ -22,6 +27,8 @@ import {
   cppu_detail_getUnoType_PageNumberType,
 } from "../../../../offapi/com/sun/star/text/PageNumberType";
 import { ChapterFormat } from "../../../../offapi/com/sun/star/text/ChapterFormat";
+import { SwJumpEditField, SwJumpEditFormat } from "../fields/docufld.jumpedit";
+import { SwDropDownField, type SwDropDownFieldData } from "../fields/flddropdown";
 import { PutChapterFormat, SwChapterField } from "../fields/chpfld";
 import { SwPageNumberField, SwPageNumSubType } from "../fields/docufld.pagenumber";
 import { SvxNumType } from "../../../../editeng/inc/svxenum";
@@ -375,6 +382,129 @@ export class SwXDocInfoField {
       (this.subtype & SwDocInfoSubType.LowerMask) === SwDocInfoSubType.Edit ||
       this.subtype === SwDocInfoSubType.Custom
     );
+  }
+}
+
+/** UNO JumpEdit descriptor and its text attribute attachment. */
+export class SwXJumpEditField {
+  private format = SwJumpEditFormat.Text;
+  private placeholder = "";
+  private help = "";
+  private hint: SwTextJumpEditField | undefined;
+
+  /** Sets the typed native descriptor properties. @param name - UNO property. @param input - Typed value. */
+  public setPropertyValue(name: OUStringConstReference, input: Any): void {
+    if (this.hint) invalid("Writer placeholder is attached.");
+    const property = text(name);
+    switch (property) {
+      case "PlaceholderType":
+        this.format = scalar(input, "sal_Int16") as SwJumpEditFormat;
+        break;
+      case "Placeholder":
+        this.placeholder = stringValue(input);
+        break;
+      case "Hint":
+        this.help = stringValue(input);
+        break;
+      default:
+        unknown(property);
+    }
+  }
+
+  /** Attaches the original field dummy. @param range - Writer range. */
+  public attach(range: SwXTextRange): void {
+    if (this.hint) invalid("Writer placeholder is already attached.");
+    const position = range.GetPaM().Start();
+    const node = position.GetNode().GetTextNode();
+    if (!node) illegal("Writer placeholder must be in text.");
+    const type = node.GetDoc().getIDocumentFieldsAccess().GetJumpEditFieldType();
+    const field = new SwJumpEditField(type, this.format, this.placeholder, this.help);
+    const hint = new SwTextField(
+      new SwFormatField(field, RES_TXTATR_FIELD),
+      position.GetContentIndex(),
+    );
+    if (!node.InsertHint(hint)) invalid("Writer placeholder could not be inserted.");
+    this.hint = hint;
+  }
+
+  /** Removes the attached point. */
+  public dispose(): void {
+    const hint = this.hint;
+    this.hint = undefined;
+    if (hint) hint.GetTextNode()?.EraseText(hint.GetStart(), 1);
+  }
+}
+
+const DropDownItems = Sequence.specialize<rtl_uStringSlot>("OUString", 8);
+
+/** UNO DropDown descriptor and its text attribute attachment. */
+export class SwXDropDownField {
+  private data: SwDropDownFieldData = {
+    items: [],
+    selectedItem: "",
+    name: "",
+    help: "",
+    toolTip: "",
+  };
+  private hint: SwTextDropDownField | undefined;
+
+  /** Sets the typed native descriptor properties. @param name - UNO property. @param input - Typed value. */
+  public setPropertyValue(name: OUStringConstReference, input: Any): void {
+    if (this.hint) invalid("Writer drop-down is attached.");
+    const property = text(name);
+    switch (property) {
+      case "Items": {
+        const sequence = new DropDownItems();
+        const items: string[] = [];
+        try {
+          if (!input.extract(sequence.getAddress(), ["Sequence", "OUString"]))
+            illegal("Expected a sequence of Writer drop-down items.");
+          for (let index = 0; index < sequence.getLength(); index++)
+            items.push(text(OUString.unacquired(sequence.operatorIndex(index))));
+        } finally {
+          sequence.dispose();
+        }
+        this.data = { ...this.data, items };
+        break;
+      }
+      case "SelectedItem":
+        this.data = { ...this.data, selectedItem: stringValue(input) };
+        break;
+      case "Name":
+        this.data = { ...this.data, name: stringValue(input) };
+        break;
+      case "Help":
+        this.data = { ...this.data, help: stringValue(input) };
+        break;
+      case "Tooltip":
+        this.data = { ...this.data, toolTip: stringValue(input) };
+        break;
+      default:
+        unknown(property);
+    }
+  }
+
+  /** Attaches the original field dummy. @param range - Writer range. */
+  public attach(range: SwXTextRange): void {
+    if (this.hint) invalid("Writer drop-down is already attached.");
+    const position = range.GetPaM().Start();
+    const node = position.GetNode().GetTextNode();
+    if (!node) illegal("Writer drop-down must be in text.");
+    const type = node.GetDoc().getIDocumentFieldsAccess().GetDropDownFieldType();
+    const field = new SwDropDownField(type, this.data);
+    const hint = new SwTextField(
+      new SwFormatField(field, RES_TXTATR_FIELD),
+      position.GetContentIndex(),
+    );
+    if (!node.InsertHint(hint)) invalid("Writer drop-down could not be inserted.");
+    this.hint = hint;
+  }
+
+  /** Removes the attached point. */
+  public dispose(): void {
+    const hint = this.hint;
+    this.hint = undefined;
+    if (hint) hint.GetTextNode()?.EraseText(hint.GetStart(), 1);
   }
 }
 

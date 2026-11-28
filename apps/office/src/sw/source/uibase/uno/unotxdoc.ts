@@ -13,6 +13,8 @@ import {
   SwXDocStatField,
   SwXPageNumberField,
   SwXChapterField,
+  SwXDropDownField,
+  SwXJumpEditField,
   SwXGetReferenceField,
   SwXTextField,
 } from "../../core/unocore/unofield";
@@ -131,6 +133,8 @@ export class SwXTextDocument {
     | SwXDocInfoField
     | SwXDocStatField
     | SwXChapterField
+    | SwXDropDownField
+    | SwXJumpEditField
     | SwXPageNumberField
     | SwXDateTimeField {
     const n = text(name),
@@ -142,6 +146,12 @@ export class SwXTextDocument {
       case "com.sun.star.text.TextField.GetReference":
       case "com.sun.star.text.textfield.GetReference":
         return new SwXGetReferenceField();
+      case "com.sun.star.text.TextField.JumpEdit":
+      case "com.sun.star.text.textfield.JumpEdit":
+        return new SwXJumpEditField();
+      case "com.sun.star.text.TextField.DropDown":
+      case "com.sun.star.text.textfield.DropDown":
+        return new SwXDropDownField();
       case "com.sun.star.text.TextField.Chapter":
       case "com.sun.star.text.textfield.Chapter":
         return new SwXChapterField();

@@ -4,10 +4,72 @@ import type { XMLTextParagraphSource } from "./txtparae";
 import { ReferenceFieldPart } from "../../../offapi/com/sun/star/text/ReferenceFieldPart";
 import { ReferenceFieldSource } from "../../../offapi/com/sun/star/text/ReferenceFieldSource";
 import { XMLToken } from "../core/xmltoken";
+import { PlaceholderType } from "../../../offapi/com/sun/star/text/PlaceholderType";
 import { ChapterFormat } from "../../../offapi/com/sun/star/text/ChapterFormat";
 import { PageNumberType } from "../../../offapi/com/sun/star/text/PageNumberType";
 import * as NumberingType from "../../../offapi/com/sun/star/style/NumberingType";
 import { SvXMLUnitConverter } from "../core/xmluconv";
+
+/** Original ODF placeholder types indexed by the published UNO short. */
+export const placeholderTypes = {
+  [PlaceholderType.TEXT]: "text",
+  [PlaceholderType.TABLE]: "table",
+  [PlaceholderType.TEXTFRAME]: "text-box",
+  [PlaceholderType.GRAPHIC]: "image",
+  [PlaceholderType.OBJECT]: "object",
+} as const;
+
+/** Native JumpEdit field portion. */
+export interface XMLPlaceholderExportMarker {
+  readonly kind: "placeholder-field";
+  readonly offset: number;
+  readonly type: PlaceholderType;
+  readonly description: string;
+  readonly presentation: string;
+}
+
+/** Native DropDown field portion. */
+export interface XMLDropDownExportMarker {
+  readonly kind: "drop-down-field";
+  readonly offset: number;
+  readonly items: readonly string[];
+  readonly selectedItem: string;
+  readonly name: string;
+  readonly help: string;
+  readonly toolTip: string;
+  readonly presentation: string;
+}
+
+/** Writes the original ODF placeholder type, hint and displayed content. @param field - Native field portion. @param escapeXml - XML escaping. @returns Serialized point. */
+export function exportPlaceholderField(
+  field: XMLPlaceholderExportMarker,
+  escapeXml: (value: string) => string,
+): string {
+  const description = field.description
+    ? ` text:description="${escapeXml(field.description)}"`
+    : "";
+  return `<text:placeholder text:placeholder-type="${placeholderTypes[field.type]}"${description}>${escapeXml(field.presentation)}</text:placeholder>`;
+}
+
+/** Writes the ordered native labels and the selected value. @param field - Native field portion. @param escapeXml - XML escaping. @returns Serialized point. */
+export function exportDropDownField(
+  field: XMLDropDownExportMarker,
+  escapeXml: (value: string) => string,
+): string {
+  const help = field.help ? ` text:help="${escapeXml(field.help)}"` : "";
+  const hint = field.toolTip ? ` text:hint="${escapeXml(field.toolTip)}"` : "";
+  const selectedIndex = field.items.indexOf(field.selectedItem);
+  const labels = field.items
+    .map(
+      /** Writes one native choice. @param item - Authored value. @param index - Source order. @returns Label markup. */
+      (item, index) => {
+        const selected = index === selectedIndex ? ' text:current-selected="true"' : "";
+        return `<text:label text:value="${escapeXml(item)}"${selected}/>`;
+      },
+    )
+    .join("");
+  return `<text:drop-down text:name="${escapeXml(field.name)}"${help}${hint}>${labels}${escapeXml(field.presentation)}</text:drop-down>`;
+}
 
 /** Original lexical chapter displays indexed by the UNO ChapterFormat value. */
 export const chapterDisplays = {

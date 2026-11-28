@@ -13,9 +13,13 @@ import {
   type SwTextDocStatField,
   type SwTextPageNumberField,
   type SwTextChapterField,
+  type SwTextJumpEditField,
+  type SwTextDropDownField,
   type SwTextOrdinaryField,
   type SwTextReferenceField,
 } from "../../../inc/txtfld";
+import { SwJumpEditField } from "../fields/docufld.jumpedit";
+import { SwDropDownField } from "../fields/flddropdown";
 import { SwChapterField } from "../fields/chpfld";
 import { SwGetRefField } from "../fields/reffld";
 import { SwPageNumberField } from "../fields/docufld.pagenumber";
@@ -422,6 +426,24 @@ export class SwpHints {
       /** Selects the represented ordinary field type. @param hint - Indexed hint. @returns Whether a reference field. */
       (hint): hint is SwTextReferenceField =>
         hint instanceof SwTextField && hint.GetAttr().GetField() instanceof SwGetRefField,
+    );
+  }
+
+  /** Returns native placeholders at their original text anchors. @returns Ordered fields. */
+  public GetJumpEditFields(): readonly SwTextJumpEditField[] {
+    return this.hintsByStart.filter(
+      /** Identifies a native placeholder. @param hint - Text attribute. @returns Whether this is a JumpEdit field. */
+      (hint): hint is SwTextJumpEditField =>
+        hint instanceof SwTextField && hint.GetAttr().GetField() instanceof SwJumpEditField,
+    );
+  }
+
+  /** Returns native drop-downs at their original text anchors. @returns Ordered fields. */
+  public GetDropDownFields(): readonly SwTextDropDownField[] {
+    return this.hintsByStart.filter(
+      /** Identifies a native drop-down. @param hint - Text attribute. @returns Whether this is a DropDown field. */
+      (hint): hint is SwTextDropDownField =>
+        hint instanceof SwTextField && hint.GetAttr().GetField() instanceof SwDropDownField,
     );
   }
 

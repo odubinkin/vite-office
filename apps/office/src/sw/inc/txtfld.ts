@@ -2,6 +2,8 @@
 import { SwTextAttr } from "../source/core/txtnode/txatbase";
 import type { SwDocInfoField, SwDocStatField, SwPostItField } from "../source/core/fields/docufld";
 import type { SwGetRefField } from "../source/core/fields/reffld";
+import type { SwJumpEditField } from "../source/core/fields/docufld.jumpedit";
+import type { SwDropDownField } from "../source/core/fields/flddropdown";
 import type { SwChapterField } from "../source/core/fields/chpfld";
 import type { SwPageNumberField } from "../source/core/fields/docufld.pagenumber";
 import type { SwDateTimeField } from "../source/core/fields/flddat";
@@ -61,6 +63,12 @@ export type SwTextPageNumberField = SwTextField<SwPageNumberField>;
 /** Text attribute carrying the original Chapter field. */
 export type SwTextChapterField = SwTextField<SwChapterField>;
 
+/** Text attribute carrying a native placeholder. */
+export type SwTextJumpEditField = SwTextField<SwJumpEditField>;
+
+/** Text attribute carrying a native drop-down. */
+export type SwTextDropDownField = SwTextField<SwDropDownField>;
+
 /** Represented native ordinary text fields. */
 export type SwTextOrdinaryField =
   | SwTextReferenceField
@@ -68,7 +76,9 @@ export type SwTextOrdinaryField =
   | SwTextDateTimeField
   | SwTextDocStatField
   | SwTextPageNumberField
-  | SwTextChapterField;
+  | SwTextChapterField
+  | SwTextJumpEditField
+  | SwTextDropDownField;
 
 /** Identifies the original annotation subclass contract without treating other fields as comments. @param hint - Indexed hint. @returns Whether this is an attached annotation attribute. */
 export function isAnnotationTextField(hint: unknown): hint is SwTextField {

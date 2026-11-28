@@ -121,6 +121,31 @@ export function projectParagraphMarkers(
         };
       },
     ),
+    ...(node.GetpSwpHints()?.GetJumpEditFields() ?? []).map(
+      /** Exports the native placeholder. @param hint - Attached placeholder. @returns ODF portion. */
+      (hint): XMLTextParagraphMarker => {
+        const field = hint.GetAttr().GetField();
+        return {
+          kind: "placeholder-field",
+          offset: hint.GetStart(),
+          type: field.GetPlaceholderType(),
+          description: field.GetPar1(),
+          presentation: field.Expand(),
+        };
+      },
+    ),
+    ...(node.GetpSwpHints()?.GetDropDownFields() ?? []).map(
+      /** Exports the native drop-down options. @param hint - Attached drop-down. @returns ODF portion. */
+      (hint): XMLTextParagraphMarker => {
+        const field = hint.GetAttr().GetField();
+        return {
+          kind: "drop-down-field",
+          offset: hint.GetStart(),
+          ...field.GetData(),
+          presentation: field.Expand(),
+        };
+      },
+    ),
     ...(node.GetpSwpHints()?.GetChapterFields() ?? []).map(
       /** Projects the original Chapter field. @param hint - Native chapter point. @returns ODF portion. */
       (hint): XMLTextParagraphMarker => {
