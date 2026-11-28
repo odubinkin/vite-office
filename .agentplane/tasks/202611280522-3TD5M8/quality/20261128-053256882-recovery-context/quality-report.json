@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202611280522-3TD5M8",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-28T05:32:56.882Z",
+  "verdict": "pass",
+  "summary": "Calc preserves native workbook structure protection across ODS and Worker transport.",
+  "evaluated_sha": "30a3b85ab93c743277c318e8ef45f1aa99684e85",
+  "blueprint_digest": "6cf0b87458912691cb8ccbf642222af7f5c27966766adecaa8640e5118909ce9",
+  "findings": [
+    "The original verifier families and workbook-versus-sheet ownership are retained. All five source-backed protection fixtures roundtrip their expected digest."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611280522-3TD5M8/README.md",
+    "output/playwright/odf-next-checkpoint/workbook-protection-verification.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
