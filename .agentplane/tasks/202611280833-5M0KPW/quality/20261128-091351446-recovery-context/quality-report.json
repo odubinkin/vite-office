@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "task_id": "202611280833-5M0KPW",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-28T09:13:51.446Z",
+  "verdict": "pass",
+  "summary": "The approved Calc View command and options page are verified through the grid and ODS.",
+  "evaluated_sha": "bb91f4620b6048448608900872fc54c0df7ca4af",
+  "blueprint_digest": "a4c4dc4939463aa6f4ffcc2f4358a5eabd5f604d85d1ec6e42584fd7417d944e",
+  "findings": [
+    "The production Chromium scenario confirms the real menu dispatch, a formula syntax color and one anchored formula mark with the correct hint."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611280833-5M0KPW/README.md",
+    "output/calc-next/5M0KPW-browser.log",
+    "output/calc-next/5M0KPW-vitest.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "The Calc inventory still reports the inherited shared XML style evidence marker. Desktop-wide view defaults are outside the browser View page scope."
+  ]
+}
