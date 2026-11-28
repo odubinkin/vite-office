@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202611281054-0HRQHN",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-28T11:00:43.218Z",
+  "verdict": "pass",
+  "summary": "Native text search and position formulas recalculate through original opcodes and the ODS model.",
+  "evaluated_sha": "5301227c3932655f9f860db68b4c345930e1ea57",
+  "blueprint_digest": "cb74e83708164e9b676a4003de70657f9cfcb095d017463dec19fc11c6dfa212",
+  "findings": [
+    "Documented the original mixed UTF-16 and code-point positions. The browser search service continues to bind the represented regex dialect."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611281054-0HRQHN/README.md",
+    "output/playwright/odf-next-checkpoint/calc-text-position-verification.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
