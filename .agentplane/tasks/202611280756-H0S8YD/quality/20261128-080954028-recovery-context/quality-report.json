@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202611280756-H0S8YD",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-28T08:09:54.028Z",
+  "verdict": "pass",
+  "summary": "Writer native page number and continuation fields round trip with page layout and Worker state.",
+  "evaluated_sha": "ea23a94dec5a80772eaea30c0a8cc52682a7b1b6",
+  "blueprint_digest": "12b7c12d786a44f1fba150508c61d0fd4c32043388e1f1f53efee6b2e549eaed",
+  "findings": [
+    "Original ODT keeps its PageNumber text field and the two-page case verifies Roman format, authored adjustment, and the absent next page."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611280756-H0S8YD/README.md",
+    "output/playwright/odf-next-checkpoint/writer-page-number-verification.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
