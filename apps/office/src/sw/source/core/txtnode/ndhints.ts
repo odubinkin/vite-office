@@ -12,9 +12,11 @@ import {
   type SwTextDocInfoField,
   type SwTextDocStatField,
   type SwTextPageNumberField,
+  type SwTextChapterField,
   type SwTextOrdinaryField,
   type SwTextReferenceField,
 } from "../../../inc/txtfld";
+import { SwChapterField } from "../fields/chpfld";
 import { SwGetRefField } from "../fields/reffld";
 import { SwPageNumberField } from "../fields/docufld.pagenumber";
 import { SwDocInfoField, SwDocStatField } from "../fields/docufld";
@@ -420,6 +422,15 @@ export class SwpHints {
       /** Selects the represented ordinary field type. @param hint - Indexed hint. @returns Whether a reference field. */
       (hint): hint is SwTextReferenceField =>
         hint instanceof SwTextField && hint.GetAttr().GetField() instanceof SwGetRefField,
+    );
+  }
+
+  /** Returns native Chapter fields at their original text anchors. @returns Ordered fields. */
+  public GetChapterFields(): readonly SwTextChapterField[] {
+    return this.hintsByStart.filter(
+      /** Identifies a native Chapter field. @param hint - Text attribute. @returns Whether this is a chapter field. */
+      (hint): hint is SwTextChapterField =>
+        hint instanceof SwTextField && hint.GetAttr().GetField() instanceof SwChapterField,
     );
   }
 

@@ -4,9 +4,37 @@ import type { XMLTextParagraphSource } from "./txtparae";
 import { ReferenceFieldPart } from "../../../offapi/com/sun/star/text/ReferenceFieldPart";
 import { ReferenceFieldSource } from "../../../offapi/com/sun/star/text/ReferenceFieldSource";
 import { XMLToken } from "../core/xmltoken";
+import { ChapterFormat } from "../../../offapi/com/sun/star/text/ChapterFormat";
 import { PageNumberType } from "../../../offapi/com/sun/star/text/PageNumberType";
 import * as NumberingType from "../../../offapi/com/sun/star/style/NumberingType";
 import { SvXMLUnitConverter } from "../core/xmluconv";
+
+/** Original lexical chapter displays indexed by the UNO ChapterFormat value. */
+export const chapterDisplays = {
+  [ChapterFormat.NAME]: "name",
+  [ChapterFormat.NUMBER]: "number",
+  [ChapterFormat.NAME_NUMBER]: "number-and-name",
+  [ChapterFormat.NO_PREFIX_SUFFIX]: "plain-number-and-name",
+  [ChapterFormat.DIGIT]: "plain-number",
+} as const;
+
+/** Native heading field portion. */
+export interface XMLChapterExportMarker {
+  readonly kind: "chapter-field";
+  readonly offset: number;
+  readonly format: ChapterFormat;
+  readonly level: number;
+  readonly presentation: string;
+}
+
+/** Writes the chapter display, one-based level and field expansion. @param field - Original field portion. @param escapeXml - XML escaping. @returns ODF field. */
+export function exportChapterField(
+  field: XMLChapterExportMarker,
+  escapeXml: (value: string) => string,
+): string {
+  const display = chapterDisplays[field.format];
+  return `<text:chapter text:display="${display}" text:outline-level="${field.level + 1}">${escapeXml(field.presentation)}</text:chapter>`;
+}
 
 /** Original page number and continuation field portion. */
 export interface XMLPageNumberExportMarker {

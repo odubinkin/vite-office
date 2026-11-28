@@ -21,6 +21,8 @@ export interface XMLListLevelExport extends OdfListLevelLayout {
   readonly suffix?: string;
   readonly startWith?: number;
   readonly parentNumbering?: number;
+  readonly charStyleName?: string;
+  readonly listFormat?: string;
 }
 
 /** Source-owned standard ODF numbering exporter with an XML attribute encoding port. */
@@ -31,10 +33,14 @@ export class SvxXMLNumRuleExport {
     private readonly fontFaceName?: (familyName: string) => string | undefined,
     private readonly graphicHelper?: SvXMLGraphicHelper,
   ) {}
-  /** Exports one native numbering property sequence. @param level - Zero-based level. @param properties - Level properties. @returns Standard ODF 1.3 XML. */
-  public exportLevelStyle(level: number, properties: XMLListLevelExport): string {
+  /** Exports one native numbering property sequence. @param level - Zero-based level. @param properties - Level properties. @param outline - Whether this is the document chapter rule. @returns ODF level XML. */
+  public exportLevelStyle(level: number, properties: XMLListLevelExport, outline = false): string {
     const attributes = [`text:level="${level + 1}"`];
     const type = properties.numberingType ?? (properties.kind === "bullet" ? 6 : 4);
+    if (outline && properties.charStyleName)
+      attributes.push(`text:style-name="${this.escapeValue(properties.charStyleName)}"`);
+    if (outline && properties.listFormat)
+      attributes.push(`loext:num-list-format="${this.escapeValue(properties.listFormat)}"`);
     if (properties.prefix)
       attributes.push(`style:num-prefix="${this.escapeValue(properties.prefix)}"`);
     if (properties.suffix)
@@ -44,7 +50,9 @@ export class SvxXMLNumRuleExport {
         ? "text:list-level-style-bullet"
         : type === 8
           ? "text:list-level-style-image"
-          : "text:list-level-style-number";
+          : outline
+            ? "text:outline-level-style"
+            : "text:list-level-style-number";
     let inline = "";
     const imageGeometry: string[] = [];
     if (type === 8) {

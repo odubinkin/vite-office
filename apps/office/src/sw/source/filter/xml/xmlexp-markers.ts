@@ -40,6 +40,7 @@ import { getParagraphOdfStyleName } from "./xmlexp-style-names";
 import { AnnotationMark } from "../../core/crsr/annotationmark";
 import { SwBookmark } from "../../core/doc/docbm";
 import { PageNumberType } from "../../../../offapi/com/sun/star/text/PageNumberType";
+import { QueryChapterFormat } from "../../core/fields/chpfld";
 import { SwPageNumSubType } from "../../core/fields/docufld.pagenumber";
 import { ReferenceFieldSource } from "../../../../offapi/com/sun/star/text/ReferenceFieldSource";
 import { ReferencesSubtype } from "../../../inc/reffldsubtype";
@@ -117,6 +118,19 @@ export function projectParagraphMarkers(
           value: field.GetDateTimeValue(),
           presentation: field.Expand(),
           ...(styleName ? { styleName } : {}),
+        };
+      },
+    ),
+    ...(node.GetpSwpHints()?.GetChapterFields() ?? []).map(
+      /** Projects the original Chapter field. @param hint - Native chapter point. @returns ODF portion. */
+      (hint): XMLTextParagraphMarker => {
+        const field = hint.GetAttr().GetField();
+        return {
+          kind: "chapter-field",
+          offset: hint.GetStart(),
+          format: QueryChapterFormat(field.GetFormat()),
+          level: field.GetLevel(),
+          presentation: field.Expand(),
         };
       },
     ),

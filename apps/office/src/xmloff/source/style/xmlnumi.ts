@@ -80,6 +80,7 @@ export class SvxXMLListLevelStyleContext_Impl extends SvXMLImportContext {
   private readonly prefix: string;
   private readonly startWith: number;
   private readonly parentNumbering: number;
+  private readonly charStyleName: string | undefined;
   private listFormat: string | undefined;
   private bulletFontName = "";
   /** Retains native declaration defaults before property children. @param element - Level family. @param attributes - Declaration fields. @param fontDeclarations - Borrowed existing font declarations. @returns Context. */
@@ -93,12 +94,17 @@ export class SvxXMLListLevelStyleContext_Impl extends SvXMLImportContext {
   ) {
     super();
     this.xmlImport = fontDeclarations instanceof SvXMLImport ? fontDeclarations : new SvXMLImport();
+    this.charStyleName =
+      element === XMLToken.TEXT_OUTLINE_LEVEL_STYLE
+        ? (attributes.get(XMLToken.TEXT_STYLE_NAME) ?? "")
+        : undefined;
     this.kind = element === XMLToken.TEXT_LIST_LEVEL_STYLE_BULLET ? "bullet" : "numbered";
     this.isImage = element === XMLToken.TEXT_LIST_LEVEL_STYLE_IMAGE;
     this.href = attributes.get(XMLToken.XLINK_HREF) ?? "";
     attributes.assertOnly(
       [
         XMLToken.TEXT_LEVEL,
+        ...(this.charStyleName === undefined ? [] : [XMLToken.TEXT_STYLE_NAME]),
         XMLToken.TEXT_BULLET_CHAR,
         ...(this.isImage
           ? [XMLToken.XLINK_HREF, XMLToken.XLINK_TYPE, XMLToken.XLINK_SHOW, XMLToken.XLINK_ACTUATE]
@@ -238,6 +244,7 @@ export class SvxXMLListLevelStyleContext_Impl extends SvXMLImportContext {
         ? {}
         : { startWith: this.startWith, parentNumbering: this.parentNumbering }),
       listFormat: this.listFormat,
+      ...(this.charStyleName === undefined ? {} : { charStyleName: this.charStyleName }),
       position: {
         measureUnit: "mm100",
         values: {
@@ -310,6 +317,7 @@ class SvxXMLListLevelStyleAttrContext_Impl extends SvXMLImportContext {
 
 /** Model-facing numbering publication port used by the source-owned list context. */
 export interface XMLListStyleImportTarget {
+  registerOutlineStyle?(rule: XMLTextListRule): void;
   registerListStyle(styleName: string, rule: XMLTextListRule, automatic?: boolean): void;
   loadListGraphic?(source: XMLGraphicSource): XGraphic | undefined;
   /** Resolves an existing declaration; missing faces retain the level's prior font. */
@@ -326,10 +334,13 @@ export class SvxXMLListStyleContext extends SvXMLImportContext {
     private readonly target: XMLListStyleImportTarget,
     attributes: FastAttributeList,
     private readonly automatic = false,
+    private readonly outline = false,
   ) {
     super();
     attributes.assertOnly([XMLToken.STYLE_NAME, XMLToken.STYLE_DISPLAY_NAME], "style property");
-    this.name = attributes.require(XMLToken.STYLE_NAME, "list style name");
+    this.name = outline
+      ? (attributes.get(XMLToken.STYLE_NAME) ?? "")
+      : attributes.require(XMLToken.STYLE_NAME, "list style name");
     this.ruleName = attributes.get(XMLToken.STYLE_DISPLAY_NAME) ?? this.name;
   }
 
@@ -339,9 +350,11 @@ export class SvxXMLListStyleContext extends SvXMLImportContext {
     attributes: FastAttributeList,
   ): SvXMLImportContext | null {
     if (
-      element !== XMLToken.TEXT_LIST_LEVEL_STYLE_NUMBER &&
-      element !== XMLToken.TEXT_LIST_LEVEL_STYLE_BULLET &&
-      element !== XMLToken.TEXT_LIST_LEVEL_STYLE_IMAGE
+      this.outline
+        ? element !== XMLToken.TEXT_OUTLINE_LEVEL_STYLE
+        : element !== XMLToken.TEXT_LIST_LEVEL_STYLE_NUMBER &&
+          element !== XMLToken.TEXT_LIST_LEVEL_STYLE_BULLET &&
+          element !== XMLToken.TEXT_LIST_LEVEL_STYLE_IMAGE
     )
       return null;
     const context = new SvxXMLListLevelStyleContext_Impl(element, attributes, this.target);
@@ -356,11 +369,9 @@ export class SvxXMLListStyleContext extends SvXMLImportContext {
       const level = context.GetLevel();
       if (level >= 0 && level < 10) levels.push(context.GetProperties());
     }
-    this.target.registerListStyle(
-      this.name,
-      { name: this.ruleName, levelCount: 10, levels },
-      this.automatic,
-    );
+    const rule = { name: this.ruleName, levelCount: 10, levels };
+    if (this.outline) this.target.registerOutlineStyle?.(rule);
+    else this.target.registerListStyle(this.name, rule, this.automatic);
   }
 }
 
@@ -414,6 +425,7 @@ export function FillUnoNumRule(rules: XMLNumberingRules, declaration: XMLTextLis
         add("VertOrient", new Any([level.vertOrient], "sal_Int16"));
       addString("Prefix", level.prefix);
       addString("Suffix", level.suffix);
+      if (level.charStyleName !== undefined) addString("CharStyleName", level.charStyleName);
       if (level.startWith !== undefined)
         add("StartWith", new Any([(level.startWith << 16) >> 16], "sal_Int16"));
       if (level.parentNumbering !== undefined)

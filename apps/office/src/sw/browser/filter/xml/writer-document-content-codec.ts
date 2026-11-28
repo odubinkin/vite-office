@@ -20,6 +20,11 @@ import {
   type WriterDocInfoFieldRecord,
 } from "./writer-doc-info-field-codec";
 import {
+  decodeChapterFields,
+  encodeChapterFields,
+  type WriterChapterFieldRecord,
+} from "./writer-chapter-field-codec";
+import {
   decodePageNumberFields,
   encodePageNumberFields,
   type WriterPageNumberFieldRecord,
@@ -103,6 +108,7 @@ export interface WriterTextNodeRecord {
   readonly referenceMarks?: readonly WriterReferenceMarkRecord[];
   readonly referenceFields?: readonly WriterReferenceFieldRecord[];
   readonly docInfoFields?: readonly WriterDocInfoFieldRecord[];
+  readonly chapterFields?: readonly WriterChapterFieldRecord[];
   readonly pageNumberFields?: readonly WriterPageNumberFieldRecord[];
   readonly docStatFields?: readonly WriterDocStatFieldRecord[];
   readonly dateTimeFields?: readonly WriterDateTimeFieldRecord[];
@@ -374,6 +380,7 @@ export function encodeTextNode(document: SwDoc, node: SwTextNode): WriterTextNod
   const docInfoFields = encodeDocInfoFields(node);
   const dateTimeFields = encodeDateTimeFields(node);
   const docStatFields = encodeDocStatFields(node);
+  const chapterFields = encodeChapterFields(node);
   const pageNumberFields = encodePageNumberFields(node);
   return {
     ...(indexMarks.length ? { indexMarks } : {}),
@@ -382,6 +389,7 @@ export function encodeTextNode(document: SwDoc, node: SwTextNode): WriterTextNod
     ...(docInfoFields.length ? { docInfoFields } : {}),
     ...(dateTimeFields.length ? { dateTimeFields } : {}),
     ...(docStatFields.length ? { docStatFields } : {}),
+    ...(chapterFields.length ? { chapterFields } : {}),
     ...(pageNumberFields.length ? { pageNumberFields } : {}),
     autoAttributes: direct === undefined ? [] : encodeSfxItemSet(direct),
     formatCollId: node.GetTextFormatColl().id,
@@ -462,6 +470,7 @@ export function decodeTextNode(
   decodeDocInfoFields(node, nodeRecord.docInfoFields);
   decodeDateTimeFields(node, nodeRecord.dateTimeFields);
   decodeDocStatFields(node, nodeRecord.docStatFields);
+  decodeChapterFields(node, nodeRecord.chapterFields);
   decodePageNumberFields(node, nodeRecord.pageNumberFields);
   if (nodeRecord.annotations) decodeLegacyAnnotations(node, nodeRecord.annotations);
   node.AddToList();

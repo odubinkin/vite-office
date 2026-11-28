@@ -562,9 +562,9 @@ export class SwTextNode extends SwContentNode {
   public HasBullet(): boolean {
     return this.GetActualNumFormat()?.IsItemize() ?? false;
   }
-  /** Returns native default formatted numbering, excluding bullet formats and uncounted nodes. @returns Number string or empty. */
-  public GetNumString(): string {
-    return GetSwTextNodeNumString(this);
+  /** Returns native formatted numbering. @param includeStrings - Whether to include prefix and suffix. @returns Number string or empty. */
+  public GetNumString(includeStrings = true): string {
+    return GetSwTextNodeNumString(this, includeStrings);
   }
   /** Reports visible native numbering with the pinned default follow-by compatibility behavior. @returns Native label visibility. */
   public HasVisibleNumberingOrBullet(): boolean {

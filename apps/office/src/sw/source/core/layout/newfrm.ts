@@ -516,6 +516,8 @@ export class SwRootFrame extends SwLayoutFrame {
       });
       document.getIDocumentFieldsAccess().GetDocStatFieldType().UpdateRangeFields(this);
       document.getIDocumentFieldsAccess().GetPageNumberFieldType().UpdateFields(this);
+      document.getIDocumentFieldsAccess().GetChapterFieldType().UpdateFields(this);
+      document.getIDocumentFieldsAccess().GetReferenceFieldType().UpdateChapterFields(this);
       return this.snapshot;
     } catch (error) {
       for (const frame of tableFrames)

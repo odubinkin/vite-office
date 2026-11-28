@@ -11,8 +11,14 @@ import { XMLToken } from "../core/xmltoken";
 import type { XMLCharacterStyleLayer, XMLTextImportHelper } from "./txtimp";
 import type { OdfCharacterProperties, OdfHyperlink } from "./txtparae";
 import { xmlTextString } from "./txtprmap";
+import { ChapterFormat } from "../../../offapi/com/sun/star/text/ChapterFormat";
 import { ReferenceFieldPart } from "../../../offapi/com/sun/star/text/ReferenceFieldPart";
-import { referenceFieldFormats, type XMLDocInfoField, type XMLReferenceField } from "./txtflde";
+import {
+  chapterDisplays,
+  referenceFieldFormats,
+  type XMLDocInfoField,
+  type XMLReferenceField,
+} from "./txtflde";
 import { toBoolean } from "../../../sal/rtl/strtmpl";
 import { approxFloor } from "../../../sal/inc/rtl/math";
 import { convertDurationToDays } from "../../../sax/source/tools/converter.duration";
@@ -23,6 +29,51 @@ import {
 import * as NumberingType from "../../../offapi/com/sun/star/style/NumberingType";
 import { SvXMLUnitConverter } from "../core/xmluconv";
 import type { XMLCountField } from "./txtflde";
+
+/** Imports an ODF heading field through the original Chapter service. */
+export class XMLChapterImportContext extends SvXMLImportContext {
+  private format: number = ChapterFormat.NAME_NUMBER;
+  private level = 0;
+
+  /** Binds the chapter field to the styled text position. @param helper - Text import owner. @param properties - Character properties. @param hyperlink - Surrounding link. @param characterStyles - Applied character styles. */
+  public constructor(
+    private readonly helper: XMLTextImportHelper,
+    private readonly properties: OdfCharacterProperties,
+    private readonly hyperlink: OdfHyperlink | undefined,
+    private readonly characterStyles: readonly XMLCharacterStyleLayer[],
+  ) {
+    super();
+  }
+
+  /** Reads the native chapter display selection and outline depth. @param _element - Source token. @param attributes - Authored attributes. */
+  public override startFastElement(_element: XMLToken, attributes: FastAttributeList): void {
+    const display = attributes.get(XMLToken.TEXT_DISPLAY);
+    for (const [format, name] of Object.entries(chapterDisplays))
+      if (display === name) this.format = Number(format);
+    const level = attributes.get(XMLToken.TEXT_OUTLINE_LEVEL);
+    const parsed: [number] = [0];
+    if (
+      level !== null &&
+      Converter.convertNumber(parsed, level, 1, this.helper.GetIndexOutlineLevelCount())
+    )
+      this.level = parsed[0] - 1;
+  }
+
+  /** Inserts the Chapter service at the original text position. */
+  public override endFastElement(): void {
+    this.helper.InsertTextField(
+      "Chapter",
+      /** Writes the original typed properties. @param field - Detached Chapter service. */
+      (field) => {
+        this.helper.SetProperty(field, "ChapterFormat", this.format, "sal_Int16");
+        this.helper.SetProperty(field, "Level", this.level, "sal_Int8");
+      },
+      this.properties,
+      this.hyperlink,
+      this.characterStyles,
+    );
+  }
+}
 
 /** Imports either of the two original ODF elements backed by the PageNumber service. */
 export class XMLPageNumberImportContext extends SvXMLImportContext {

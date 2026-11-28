@@ -152,14 +152,14 @@ export function resolveSwListFirstLineIndent(node: SwTextNode): number {
   return (value << 16) >> 16;
 }
 
-/** Native text-node GetNumString body extracted under the physical-line budget. @param node - Actual native owner. @returns Native result. */
-export function GetSwTextNodeNumString(node: SwTextNode): string {
+/** Native text-node GetNumString body extracted under the physical-line budget. @param node - Actual native owner. @param includeStrings - Whether to include the native prefix and suffix. @returns Native result. */
+export function GetSwTextNodeNumString(node: SwTextNode, includeStrings = true): string {
   const rule = node.GetNum()?.GetNumRule();
   if (rule === undefined || !node.IsCountedInList()) return "";
   const level = Math.max(0, Math.min(9, node.GetActualListLevel())),
     format = rule.Get(level);
   return format.IsTextFormat() || format.GetNumberingType() === SvxNumType.SVX_NUM_NUMBER_NONE
-    ? rule.MakeNumString(node.GetNumberVector(), level)
+    ? rule.MakeNumString(node.GetNumberVector(), level, includeStrings)
     : "";
 }
 

@@ -642,15 +642,15 @@ export class SwNumRule {
   public SetPoolHlpFileId(value: number): void {
     this.poolHlpFileId = value & 0xff;
   }
-  /** Formats a validated Writer number vector using native patterns or legacy joining; visible bullet glyphs are projected by SwTextNode. @param numbers - Root-to-current counters. @param level - Current zero-based level. @returns Numeric string. */
-  public MakeNumString(numbers: readonly number[], level: number): string {
+  /** Formats a validated Writer number vector using native patterns or legacy joining; visible bullet glyphs are projected by SwTextNode. @param numbers - Root-to-current counters. @param level - Current zero-based level. @param includeStrings - Whether to include the native prefix and suffix. @returns Numeric string. */
+  public MakeNumString(numbers: readonly number[], level: number, includeStrings = true): string {
     const format = this.Get(level);
     if (numbers.length <= level || numbers[level] === undefined)
       throw new Error("SwNumRule number vector does not contain the requested level.");
     if (format.GetNumberingType() === SvxNumType.SVX_NUM_NUMBER_NONE)
-      return format.GetPrefix() + format.GetSuffix();
+      return includeStrings ? format.GetPrefix() + format.GetSuffix() : "";
     if (format.HasListFormat()) {
-      let pattern = format.GetListFormat();
+      let pattern = format.GetListFormat(includeStrings);
       for (let position = 0; position < pattern.length - 2;) {
         if (pattern[position] !== "%") {
           position++;
@@ -700,7 +700,7 @@ export class SwNumRule {
       marker += value === 0 ? "0" : this.Get(index).GetNumStr(value);
       if (index !== level && marker.length !== 0) marker += ".";
     }
-    return format.GetNumberingType() === SvxNumType.SVX_NUM_CHAR_SPECIAL
+    return !includeStrings || format.GetNumberingType() === SvxNumType.SVX_NUM_CHAR_SPECIAL
       ? marker
       : `${format.GetPrefix()}${marker}${format.GetSuffix()}`;
   }

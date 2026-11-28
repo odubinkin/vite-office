@@ -6519,3 +6519,13 @@ format zero. The represented Arabic numbering path preserves this behavior.
 
 - [Original UNO selection contract](../../vendor/libreoffice-reference/offapi/com/sun/star/text/PageNumberType.idl#L26)
 - [Original page number bound and expansion](../../vendor/libreoffice-reference/sw/source/core/fields/docufld.cxx#L105)
+
+### WRITER-783 — A chapter field can select the first heading at a deeper level
+
+The original outline lookup normally limits earlier headings to the requested
+level or above. It deliberately accepts the first outline entry even when its
+level is deeper. When the first heading follows the field, the lookup can
+also use it if the two share a physical page or the frames are unavailable.
+Writer preserves those fallback conditions.
+
+- [Original outline lookup and first-entry fallback](../../vendor/libreoffice-reference/sw/source/core/docnode/node.cxx#L799)

@@ -1,0 +1,54 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/offapi/com/sun/star/text/ChapterFormat.ts",
+    "status": "mapped",
+    "upstreamPath": "offapi/com/sun/star/text/ChapterFormat.idl",
+    "localSymbols": [
+      "ChapterFormat"
+    ],
+    "upstreamSymbols": [
+      "ChapterFormat",
+      "NAME_NUMBER",
+      "DIGIT"
+    ],
+    "preservedResponsibilities": [
+      "Retains the published UNO short constants for the five chapter formats."
+    ],
+    "omittedResponsibilities": [
+      "Generated C++ component bridge and ABI are outside the TypeScript binding."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/text/ChapterFormat.ts",
+          "marker": "ChapterFormat"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-chapter-fields.test.ts",
+          "marker": "testTdf167774"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/offapi/com/sun/star/text/ChapterFormat.idl",
+          "marker": "ChapterFormat"
+        },
+        {
+          "path": "vendor/libreoffice-reference/offapi/com/sun/star/text/ChapterFormat.idl",
+          "marker": "NAME_NUMBER"
+        },
+        {
+          "path": "vendor/libreoffice-reference/offapi/com/sun/star/text/ChapterFormat.idl",
+          "marker": "DIGIT"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/qa/extras/odfimport/odfimport.cxx",
+          "marker": "testTdf167774"
+        }
+      ]
+    }
+  }
+}

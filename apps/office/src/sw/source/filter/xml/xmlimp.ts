@@ -388,6 +388,7 @@ class SwXMLImport
   private autoStyles: XMLStylesContext | undefined;
   private defaultParagraphStyle: OdfStyleDefinition | undefined;
   private styleDefinitionsApplied = false;
+  private outlineStyle: XMLTextListRule | undefined;
   private readonly automaticListRules = new Map<string, XMLTextListRule>();
   private readonly listRules = new Map<string, XMLTextListRule>();
   private readonly fontFaces = new Map<string, string>();
@@ -875,6 +876,16 @@ class SwXMLImport
     );
   }
 
+  /** Defers the chapter numbering declaration until its referenced named styles exist. @param rule - Parsed outline levels. */
+  public registerOutlineStyle(rule: XMLTextListRule): void {
+    this.outlineStyle = rule;
+  }
+
+  /** Borrows the document's chapter numbering service, including its initial defaults. @returns Native chapter numbering. */
+  public getChapterNumbering(): SwXNumberingRules {
+    return this.model.getChapterNumberingRules();
+  }
+
   /** Registers one numbering definition in Writer. @param styleName - ODF style name. @param rule - Parsed rule. @returns Nothing.  @param automatic - Native operation input. */
   public registerListStyle(styleName: string, rule: XMLTextListRule, automatic = false): void {
     const declarations = automatic ? this.automaticListRules : this.listRules;
@@ -967,6 +978,20 @@ class SwXMLImport
         this.paragraphPageStyleReferences.push([style, name]);
       },
     );
+    if (this.outlineStyle) {
+      const rule = this.outlineStyle;
+      const levels = rule.levels.map(
+        /** Resolves a label's ODF character style through the named style declarations. @param level - Outline level. @returns Level with native character style name. */
+        (level) => {
+          const name = level.charStyleName;
+          const definition = name ? this.getStyle("text", name) : undefined;
+          return name === undefined
+            ? level
+            : { ...level, charStyleName: definition?.displayName ?? name };
+        },
+      );
+      FillUnoNumRule(this.model.getChapterNumberingRules(), { ...rule, levels });
+    }
     this.styleDefinitionsApplied = true;
   }
 

@@ -1,0 +1,56 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/core/fields/chpfld.ts",
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/fields/chpfld.cxx",
+    "localSymbols": [
+      "SwChapterFieldType",
+      "SwChapterField",
+      "SwChapterFormat"
+    ],
+    "upstreamSymbols": [
+      "SwChapterField::ChangeExpansion",
+      "SwChapterField::ExpandImpl",
+      "SwChapterField::PutValue"
+    ],
+    "preservedResponsibilities": [
+      "Owns the chapter field, its outline lookup, title and number formats, and expansion from represented body and page-story positions."
+    ],
+    "omittedResponsibilities": [
+      "Merged redline text and native frame types beyond the represented layout are outside this binding."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/fields/chpfld.ts",
+          "marker": "SwChapterFieldType"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-chapter-fields.test.ts",
+          "marker": "testTdf167774"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/fields/chpfld.cxx",
+          "marker": "SwChapterField::ChangeExpansion"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/fields/chpfld.cxx",
+          "marker": "SwChapterField::ExpandImpl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/fields/chpfld.cxx",
+          "marker": "SwChapterField::PutValue"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/qa/extras/odfimport/odfimport.cxx",
+          "marker": "testTdf167774"
+        }
+      ]
+    }
+  }
+}

@@ -146,7 +146,8 @@ it("exports assigned heading levels without numbering and retains the direct sou
   const reopened = (await readOdtDocument(bytes, { title: "Heading" })).document;
   expect(firstParagraph(reopened).GetAttrListLevel()).toBe(3);
   expect(firstParagraph(reopened).GetAttrOutlineLevel()).toBe(4);
-  expect(firstParagraph(reopened).IsInList()).toBe(false);
+  expect(firstParagraph(reopened).GetNumRule()?.IsOutlineRule()).toBe(true);
+  expect(firstParagraph(reopened).GetNumString()).toBe("");
   doc.GetTextFormatColl("text-body").SetFormatAttr(new SwNumRuleItem("Unknown"));
   await expect(
     /** Rejects an unresolved named numbering reference. @returns Package if unexpectedly accepted. */ async () =>

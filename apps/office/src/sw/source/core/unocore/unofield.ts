@@ -13,6 +13,7 @@ import {
   type SwTextDocStatField,
   type SwTextReferenceField,
   type SwTextPageNumberField,
+  type SwTextChapterField,
 } from "../../../inc/txtfld";
 import { SwFormatField } from "../../../inc/fmtfld";
 import { SwDateTimeSubType } from "../../../inc/fldbas";
@@ -20,6 +21,8 @@ import {
   PageNumberType,
   cppu_detail_getUnoType_PageNumberType,
 } from "../../../../offapi/com/sun/star/text/PageNumberType";
+import { ChapterFormat } from "../../../../offapi/com/sun/star/text/ChapterFormat";
+import { PutChapterFormat, SwChapterField } from "../fields/chpfld";
 import { SwPageNumberField, SwPageNumSubType } from "../fields/docufld.pagenumber";
 import { SvxNumType } from "../../../../editeng/inc/svxenum";
 import { SwDateTimeField } from "../fields/flddat";
@@ -372,6 +375,52 @@ export class SwXDocInfoField {
       (this.subtype & SwDocInfoSubType.LowerMask) === SwDocInfoSubType.Edit ||
       this.subtype === SwDocInfoSubType.Custom
     );
+  }
+}
+
+/** Original Chapter UNO descriptor and native text field attachment. */
+export class SwXChapterField {
+  private format: number = ChapterFormat.NAME;
+  private level = 0;
+  private hint: SwTextChapterField | undefined;
+
+  /** Sets the original typed chapter properties. @param name - UNO property name. @param input - Typed value. */
+  public setPropertyValue(name: OUStringConstReference, input: Any): void {
+    if (this.hint) invalid("Writer chapter field is attached.");
+    const property = text(name);
+    switch (property) {
+      case "ChapterFormat":
+        this.format = scalar(input, "sal_Int16") as number;
+        break;
+      case "Level":
+        this.level = (scalar(input, "sal_Int8") as number) & 0xff;
+        break;
+      default:
+        unknown(property);
+    }
+  }
+
+  /** Attaches the native field and its dummy character. @param range - Writer range. */
+  public attach(range: SwXTextRange): void {
+    if (this.hint) invalid("Writer chapter field is already attached.");
+    const position = range.GetPaM().Start();
+    const node = position.GetNode().GetTextNode();
+    if (!node) illegal("Writer chapter field must be in text.");
+    const type = node.GetDoc().getIDocumentFieldsAccess().GetChapterFieldType();
+    const field = new SwChapterField(type, PutChapterFormat(this.format), this.level);
+    const hint = new SwTextField(
+      new SwFormatField(field, RES_TXTATR_FIELD),
+      position.GetContentIndex(),
+    );
+    if (!node.InsertHint(hint)) invalid("Writer chapter field could not be inserted.");
+    this.hint = hint;
+  }
+
+  /** Removes the attached native point. */
+  public dispose(): void {
+    const hint = this.hint;
+    this.hint = undefined;
+    if (hint) hint.GetTextNode()?.EraseText(hint.GetStart(), 1);
   }
 }
 

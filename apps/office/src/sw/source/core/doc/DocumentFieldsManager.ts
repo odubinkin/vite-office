@@ -1,5 +1,6 @@
 /** @fileoverview Native document ownership of Writer system field types. */
 import { SwDocInfoFieldType, SwDocStatFieldType, SwPostItFieldType } from "../fields/docufld";
+import { SwChapterFieldType } from "../fields/chpfld";
 import { SwPageNumberFieldType } from "../fields/docufld.pagenumber";
 import { SwGetRefFieldType } from "../fields/reffld";
 import { SwDateTimeFieldType } from "../fields/flddat";
@@ -7,6 +8,7 @@ import type { SwDoc } from "./doc";
 
 /** Document-owned system fields for the represented Writer field families. */
 export class DocumentFieldsManager {
+  private readonly chapter: SwChapterFieldType;
   private readonly pageNumber: SwPageNumberFieldType;
   private readonly docStat: SwDocStatFieldType;
   private readonly postIt: SwPostItFieldType;
@@ -16,12 +18,18 @@ export class DocumentFieldsManager {
 
   /** Creates the system field types for this document. @param document - Actual Writer model. */
   public constructor(document: SwDoc) {
+    this.chapter = new SwChapterFieldType(document);
     this.pageNumber = new SwPageNumberFieldType(document);
     this.docStat = new SwDocStatFieldType(document);
     this.postIt = new SwPostItFieldType(document);
     this.getRef = new SwGetRefFieldType(document);
     this.docInfo = new SwDocInfoFieldType(document);
     this.dateTime = new SwDateTimeFieldType(document);
+  }
+
+  /** Borrows the original Chapter system type. @returns Field type. */
+  public GetChapterFieldType(): SwChapterFieldType {
+    return this.chapter;
   }
 
   /** Borrows the original PageNumber system type. @returns Field type. */

@@ -54,10 +54,7 @@ import { XMLBitmapStyleContext } from "./FillStyleContext";
 import type { Theme } from "../../../docmodel/inc/theme/Theme";
 import { XMLNumberWithAutoForVoidPropHdl } from "./xmlbahdl";
 import { SvxXMLListStyleContext, type XMLListStyleImportTarget } from "./xmlnumi";
-const ignoredStyleDefinitions = new Set([
-  XMLToken.TEXT_OUTLINE_STYLE,
-  XMLToken.TEXT_NOTES_CONFIGURATION,
-]);
+const ignoredStyleDefinitions = new Set([XMLToken.TEXT_NOTES_CONFIGURATION]);
 
 /** Consumer of completed style definitions; Writer stores canonical results. */
 export interface XMLStyleImportTarget extends XMLListStyleImportTarget {
@@ -207,6 +204,10 @@ export class XMLStylesContext extends SvXMLImportContext {
       if (context.IsSupportedStyle()) this.AddStyle(context);
       return context;
     }
+    if (element === XMLToken.TEXT_OUTLINE_STYLE)
+      return !this.automatic && this.target.registerOutlineStyle
+        ? new SvxXMLListStyleContext(this.target, attributes, false, true)
+        : new SvXMLIgnoreContext();
     if (element === XMLToken.TEXT_LIST_STYLE)
       return new SvxXMLListStyleContext(this.target, attributes, this.automatic);
     if (element === XMLToken.STYLE_PAGE_LAYOUT)

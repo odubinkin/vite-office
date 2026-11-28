@@ -4,6 +4,7 @@
 
 import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import type { SwContentIndex } from "../bastyp/index";
+import { WRITER_MAX_LIST_LEVEL } from "../doc/list";
 import type { SwTextNode } from "../txtnode/ndtxt";
 import type { SwGrfNode } from "../graphic/ndgrf";
 import { SwStartNodeType } from "../../../inc/ndtyp";
@@ -130,6 +131,30 @@ export abstract class SwNode extends SwContentIndexRegistry {
   public GetSectionNode(): SwSectionNode | null {
     return null;
   }
+  /** Searches the original outline index relative to this node and its formatted page. @param level - Zero-based heading level. @param layout - Current formatted root. @returns Native heading when found. */
+  public FindOutlineNodeOfLevel(level: number, layout?: SwRootFrame): SwTextNode | undefined {
+    if (level < 0 || level > WRITER_MAX_LIST_LEVEL) return undefined;
+    const outline = this.GetNodes().GetOutLineNds();
+    const position = outline.Seek_Entry(this);
+    const entries = outline.entries();
+    if (entries.length === 0) return undefined;
+    if (position.position === 0 && !position.found) {
+      const first = entries[0];
+      const anchor = this.GetTextNode();
+      if (layout && first && anchor) {
+        const headingPage = layout.FindPageIndexAt(first, 0);
+        const anchorPage = layout.FindPageIndexAt(anchor, 0);
+        if (headingPage >= 0 && anchorPage >= 0 && headingPage > anchorPage) return undefined;
+      }
+      return first;
+    }
+    for (let index = position.position - Number(!position.found); index >= 0; --index) {
+      const heading = entries[index];
+      if (heading && (index === 0 || heading.GetAttrOutlineLevel() - 1 <= level)) return heading;
+    }
+    return undefined;
+  }
+
   /** Follows the actual parents to the nearest named section. @returns Native enclosing section or null. */
   public FindSectionNode(): SwSectionNode | null {
     const ownSection = this.GetSectionNode();

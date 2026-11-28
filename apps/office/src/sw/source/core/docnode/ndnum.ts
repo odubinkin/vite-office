@@ -1,11 +1,12 @@
 /** @fileoverview Owns the pinned ndnum.cxx sorted normal-document outline index without inline-heading adapters. */
+import type { SwNode } from "./node";
 import type { SwTextNode } from "../txtnode/ndtxt";
 
 /** Maintains native document-index ordering and index-equivalent membership. */
 export class SwOutlineNodes {
   private readonly nodes: SwTextNode[] = [];
   /** Finds the first index at least the candidate's index. @param node - Candidate paragraph. @returns Found state and insertion position. */
-  public Seek_Entry(node: SwTextNode): Readonly<{ found: boolean; position: number }> {
+  public Seek_Entry(node: SwNode): Readonly<{ found: boolean; position: number }> {
     let first = 0;
     let last = this.nodes.length;
     while (first < last) {

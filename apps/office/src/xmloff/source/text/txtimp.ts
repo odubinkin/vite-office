@@ -266,7 +266,7 @@ export class XMLTextImportHelper {
     this.hints.length = 0;
     this.clearParagraphMarks();
   }
-  /** Starts a paragraph and defers its native style application until after the break. @param style - Paragraph style. @param alignment - Direct alignment. @param left - Direct margin. @param paragraph - Paragraph properties. @param properties - Direct character map. @param list - Native list state. @param listGeometryWins - Legacy parser precedence. @param forceListRule - Explicit automatic list declaration. @param markerProperties - Direct text properties of the paragraph mark. @param applyStyle - Whether the paragraph supplies its own style. @param outlineLevel - Native text heading level or zero for a plain paragraph. @returns Nothing. */
+  /** Starts a paragraph and defers its native style application until after the break. @param style - Paragraph style. @param alignment - Direct alignment. @param left - Direct margin. @param paragraph - Paragraph properties. @param properties - Direct character map. @param list - Native list state. @param listGeometryWins - Legacy parser precedence. @param forceListRule - Explicit automatic list declaration. @param markerProperties - Direct text properties of the paragraph mark. @param applyStyle - Whether the paragraph supplies its own style. @param outlineLevel - Native text heading level or zero for a plain paragraph. @param chapter - Authored heading numbering attributes. @returns Nothing. */
   public BeginParagraph(
     style: string,
     alignment: OdfParagraphAlignment | undefined,
@@ -279,6 +279,12 @@ export class XMLTextImportHelper {
     markerProperties?: Partial<OdfCharacterProperties>,
     applyStyle = true,
     outlineLevel?: number,
+    chapter?: Readonly<{
+      applyRule: boolean;
+      listHeader: boolean;
+      restart: boolean;
+      startValue: number;
+    }>,
   ): void {
     const cellStyle = this.cellParaStyleDefault;
     this.start = this.GetCursor().getStart();
@@ -293,8 +299,31 @@ export class XMLTextImportHelper {
         const paragraphTarget = cursor.getParagraphPropertySet?.() ?? cursor;
         if (this.IsAnnotationText() && list)
           this.SetProperty(paragraphTarget, "NumberingLevel", list.level, "sal_Int16");
-        if (outlineLevel !== undefined && !this.IsAnnotationText())
+        if (outlineLevel !== undefined && !this.IsAnnotationText()) {
           applyParagraphOutlineLevel(paragraphTarget, outlineLevel);
+          const rule = chapter?.applyRule ? this.target.getChapterNumbering?.() : undefined;
+          if (rule) {
+            const key = xmlTextString("NumberingRules");
+            const value = new Any([rule], ["Reference", indexReplaceType]);
+            try {
+              paragraphTarget.setPropertyValue(key, value);
+            } finally {
+              key.dispose();
+              value.dispose();
+            }
+            this.SetProperty(paragraphTarget, "NumberingLevel", outlineLevel - 1, "sal_Int16");
+          }
+          if (chapter?.listHeader) this.SetProperty(paragraphTarget, "NumberingIsNumber", false);
+          if (chapter?.restart) {
+            this.SetProperty(paragraphTarget, "ParaIsNumberingRestart", true);
+            this.SetProperty(
+              paragraphTarget,
+              "NumberingStartValue",
+              chapter.startValue,
+              "sal_Int16",
+            );
+          }
+        }
         applyTextImportProperties(paragraphTarget, properties, paragraph, alignment, left);
         if (markerProperties && !this.IsAnnotationText()) {
           const name = xmlTextString("CharacterStyles");
@@ -400,7 +429,7 @@ export class XMLTextImportHelper {
     cursor: Pick<XMLPropertySet, "setPropertyValue">,
     name: string,
     value: string | boolean | number,
-    numeric?: "sal_Int16" | "sal_Int32",
+    numeric?: "sal_Int8" | "sal_Int16" | "sal_Int32",
   ): void {
     const key = xmlTextString(name),
       string = typeof value === "string" ? xmlTextString(value) : undefined,

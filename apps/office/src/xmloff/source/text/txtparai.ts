@@ -18,6 +18,7 @@ import { XMLTextMarkImportContext } from "./XMLTextMarkImportContext";
 import {
   XMLCountFieldImportContext,
   XMLPageNumberImportContext,
+  XMLChapterImportContext,
   XMLReferenceFieldImportContext,
   XMLRevisionDocInfoImportContext,
   XMLDateTimeDocInfoImportContext,
@@ -96,6 +97,7 @@ export interface XMLListLevelImport {
   readonly startWith?: number;
   readonly parentNumbering?: number;
   readonly listFormat: string;
+  readonly charStyleName?: string;
   readonly position: XMLListLevelImportProperties;
 }
 
@@ -131,6 +133,7 @@ export interface XMLTextImportTarget extends Partial<XMLTextFrameImportTarget> {
   ): import("./XMLIndexTOCContext").XMLIndexImport;
   insertIndexMark?(properties: XMLIndexMarkProperties, range: XMLTextCursor): void;
   getIndexOutlineLevelCount?(): number;
+  getChapterNumbering?(): XMLNumberingRules | undefined;
   GetTextImport(): XMLTextImportHelper;
   getListRule(styleName: string): XMLTextListRule | undefined;
   createNumberingRule?(): XMLTextListRule;
@@ -187,7 +190,14 @@ export class XMLParaContext extends SvXMLImportContext {
     super();
     attributes.assertOnly(
       element === XMLToken.TEXT_H
-        ? [XMLToken.TEXT_STYLE_NAME, XMLToken.TEXT_OUTLINE_LEVEL, XMLToken.LOEXT_MARKER_STYLE_NAME]
+        ? [
+            XMLToken.TEXT_STYLE_NAME,
+            XMLToken.TEXT_OUTLINE_LEVEL,
+            XMLToken.LOEXT_MARKER_STYLE_NAME,
+            XMLToken.TEXT_IS_LIST_HEADER,
+            XMLToken.TEXT_RESTART_NUMBERING,
+            XMLToken.TEXT_START_VALUE,
+          ]
         : [XMLToken.TEXT_STYLE_NAME, XMLToken.LOEXT_MARKER_STYLE_NAME],
       "paragraph",
     );
@@ -205,6 +215,14 @@ export class XMLParaContext extends SvXMLImportContext {
     this.paragraph = target.GetTextImport();
     const marker = attributes.get(XMLToken.LOEXT_MARKER_STYLE_NAME);
     const annotation = this.paragraph.IsAnnotationText();
+    const chapter = heading
+      ? {
+          applyRule: !resolved.hasListStyle && !list,
+          listHeader: attributes.get(XMLToken.TEXT_IS_LIST_HEADER) === "true",
+          restart: attributes.get(XMLToken.TEXT_RESTART_NUMBERING) === "true",
+          startValue: ((attributes.getAsInteger(XMLToken.TEXT_START_VALUE) ?? 0) << 16) >> 16,
+        }
+      : undefined;
     const noteStyle = annotation && automatic && !automatic.parentStyleName ? automatic : undefined;
     this.paragraph.BeginParagraph(
       resolved.style,
@@ -225,6 +243,7 @@ export class XMLParaContext extends SvXMLImportContext {
           (target.resolveNamedParagraphStyle?.(parent) !== undefined ||
             target.resolveBuiltInParagraphStyle?.(parent) !== undefined)),
       outlineLevel,
+      chapter,
     );
     this.inherited = DEFAULT_PROPERTIES;
   }
@@ -454,6 +473,10 @@ function createInlineContext(
       element === XMLToken.TEXT_DATE ? XMLDateFieldImportContext : XMLTimeFieldImportContext;
     return new Context(paragraph, properties, hyperlink, namedStyles);
   }
+  if (element === XMLToken.TEXT_CHAPTER)
+    return annotation
+      ? null
+      : new XMLChapterImportContext(paragraph, properties, hyperlink, namedStyles);
   if (element === XMLToken.TEXT_PAGE_NUMBER || element === XMLToken.TEXT_PAGE_CONTINUATION)
     return annotation
       ? null
@@ -599,6 +622,7 @@ class XMLCharacterContext extends SvXMLImportContext {
 
 /** Resolved Writer paragraph style state. */
 interface ResolvedParagraphStyle {
+  readonly hasListStyle?: boolean;
   readonly forceListRule?: boolean;
   readonly alignment?: OdfParagraphAlignment;
   readonly effectiveProperties?: Partial<OdfCharacterProperties>;
@@ -666,6 +690,7 @@ export function resolveParagraphStyle(
       (definition?.leftMargin === undefined && parent.leftMargin === undefined)
         ? {}
         : { leftMargin: definition?.leftMargin ?? parent.leftMargin }),
+      hasListStyle: definition?.listStyleName !== undefined || parent.hasListStyle === true,
       listGeometryWins:
         definition?.listStyleName === undefined
           ? parent.listGeometryWins
@@ -707,6 +732,7 @@ function applyParagraphDefinition(
     ...(definition.leftMargin === undefined && parent.leftMargin === undefined
       ? {}
       : { leftMargin: definition.leftMargin ?? parent.leftMargin }),
+    hasListStyle: definition.listStyleName !== undefined || parent.hasListStyle === true,
     listGeometryWins:
       definition.listStyleName === undefined
         ? parent.listGeometryWins

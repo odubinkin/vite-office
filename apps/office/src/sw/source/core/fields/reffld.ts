@@ -3,6 +3,9 @@ import { RedlineType } from "../../../../svx/inc/ctredlin";
 import type { SwField } from "../../../inc/fldbas";
 import { RefFieldFormat } from "../../../inc/reffld";
 import { ReferencesSubtype } from "../../../inc/reffldsubtype";
+import { SwChapterField, SwChapterFormat } from "./chpfld";
+import { WRITER_MAX_LIST_LEVEL } from "../doc/list";
+import type { SwRootFrame } from "../layout/newfrm";
 import type { SwDoc } from "../doc/doc";
 import type { SwTextNode } from "../txtnode/ndtxt";
 import { GetTextNodeExpandedText } from "../txtnode/ndtxt-hints";
@@ -45,6 +48,17 @@ export class SwGetRefFieldType {
           kind: "node-content-changed",
           nodeIndex: node.GetIndex(),
         });
+    }
+  }
+
+  /** Updates chapter references after their target frames have been formatted. @param layout - Current Writer root. */
+  public UpdateChapterFields(layout: SwRootFrame): void {
+    for (const node of this.document.GetNodes().entries()) {
+      const fields = node.GetTextNode()?.GetpSwpHints()?.GetReferenceFields() ?? [];
+      for (const hint of fields) {
+        const field = hint.GetAttr().GetField();
+        if (field.GetFormat() === RefFieldFormat.Chapter) field.UpdateField(layout);
+      }
     }
   }
 
@@ -95,6 +109,11 @@ export class SwGetRefField implements SwField<SwGetRefField> {
     return this.m_sText;
   }
 
+  /** Returns the original reference presentation format. @returns Native format. */
+  public GetFormat(): RefFieldFormat {
+    return this.data.format;
+  }
+
   /** Returns independent native field data for the filter. @returns Field settings and presentation. */
   public GetData(): SwGetRefFieldData {
     return { ...this.data, presentation: this.m_sText };
@@ -113,9 +132,10 @@ export class SwGetRefField implements SwField<SwGetRefField> {
     );
   }
 
-  /** Applies native text-reference expansion to the represented, unpaginated source. */
-  public UpdateField(): void {
-    if (this.data.format !== RefFieldFormat.Content) return;
+  /** Updates the requested native reference expansion. @param layout - Formatted root for chapter references. */
+  public UpdateField(layout?: SwRootFrame): void {
+    const chapter = this.data.format === RefFieldFormat.Chapter;
+    if (this.data.format !== RefFieldFormat.Content && !(chapter && layout)) return;
     const anchor = this.type.FindAnchor(this.data.name, this.data.source);
     if (!anchor) {
       this.m_sText = "Error: Reference source not found";
@@ -123,6 +143,19 @@ export class SwGetRefField implements SwField<SwGetRefField> {
     }
     const { node, start, end } = anchor;
     const document = this.type.GetDoc();
+    if (chapter && layout) {
+      this.m_sText = "";
+      if (node.getLayoutFrame(layout)) {
+        const field = new SwChapterField(
+          document.getIDocumentFieldsAccess().GetChapterFieldType(),
+          SwChapterFormat.Number,
+          WRITER_MAX_LIST_LEVEL,
+        );
+        field.ChangeExpansion(node, true, layout);
+        this.m_sText = field.GetNumber();
+      }
+      return;
+    }
     let from = start;
     let result = "";
     for (const change of document.GetIDocumentRedlineAccess().GetRedlineTable().entries()) {

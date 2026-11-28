@@ -455,6 +455,25 @@ export function exportStylesXml(
       ) || undefined,
     graphicHelper,
   );
+  const outline = document.GetOutlineNumRule();
+  const chapterStyles = projectNumberingRule(outline)
+    .levels.map(
+      /** Emits a chapter level and its connected label character style. @param properties - Native level properties. @param level - Original level. @returns ODF outline level. */
+      (properties, level) => {
+        const charStyle = outline.Get(level).GetCharFormat();
+        return exporter.exportLevelStyle(
+          level,
+          {
+            ...properties,
+            ...(charStyle ? { charStyleName: getCharacterOdfStyleName(charStyle) } : {}),
+          },
+          true,
+        );
+      },
+    )
+    .join("");
+  const outlineName = outline.GetName();
+  const outlineStyle = `<text:outline-style${exportStyleNameAttributes(outlineName, encodeStyleName(outlineName))}>${chapterStyles}</text:outline-style>`;
   const numberingStyles = [...namedRules.values()]
     .map(
       /** Emits the referenced named numbering definition, including rules absent from the current body. @param rule - Owned rule. @returns Definition XML. */
@@ -489,7 +508,7 @@ export function exportStylesXml(
   const defaultPageLayout = IsSquaredPageMode(document)
     ? ""
     : '<style:default-page-layout><style:page-layout-properties style:layout-grid-standard-mode="true"/></style:default-page-layout>';
-  return `<?xml version="1.0" encoding="UTF-8"?><office:document-styles ${OFFICE_NAMESPACES} office:version="1.3">${fonts.exportXML()}<office:styles>${defaultPageLayout}${defaults}${styles.join("")}${characterStyles.join("")}${numberingStyles}${inheritedStyles.namedStyles}${lineNumbering}${bitmapStyles.exportStyles()}${ExportThemeElement(document.theme)}</office:styles><office:automatic-styles>${pageLayouts.join("")}${sections.length ? inheritedStyles.automaticStyles : ""}</office:automatic-styles><office:master-styles>${masterPages.join("")}</office:master-styles></office:document-styles>`;
+  return `<?xml version="1.0" encoding="UTF-8"?><office:document-styles ${OFFICE_NAMESPACES} office:version="1.3">${fonts.exportXML()}<office:styles>${defaultPageLayout}${defaults}${styles.join("")}${characterStyles.join("")}${outlineStyle}${numberingStyles}${inheritedStyles.namedStyles}${lineNumbering}${bitmapStyles.exportStyles()}${ExportThemeElement(document.theme)}</office:styles><office:automatic-styles>${pageLayouts.join("")}${sections.length ? inheritedStyles.automaticStyles : ""}</office:automatic-styles><office:master-styles>${masterPages.join("")}</office:master-styles></office:document-styles>`;
 }
 
 /** Exports the page margin and independently converted binding allowance in UNO units. @param twips - Base margin in Twips. @param gutter - Gutter in hundredths of a millimetre. @returns XML measure. */
@@ -899,6 +918,7 @@ function projectParagraph(
   const rule = node.GetNumRule();
   if (ruleName.length > 0 && rule === undefined)
     throw new Error(`ODT export cannot resolve SwNumRule ${ruleName} on node ${node.GetIndex()}.`);
+  const outline = rule?.IsOutlineRule() === true;
   const listId = node.GetListId();
   const level = node.GetAttrListLevel();
   if (
@@ -946,6 +966,7 @@ function projectParagraph(
     ...(ruby.length === 0 ? {} : { ruby }),
     ...(markerProperties === undefined ? {} : { markerProperties }),
     ...(rule !== undefined &&
+    !outline &&
     node.GetpSwAttrSet()?.GetItemIfSet(RES_PARATR_NUMRULE, false) !== undefined
       ? { directListRule: rule.GetName() }
       : {}),
@@ -953,7 +974,7 @@ function projectParagraph(
       node.GetSwAttrSet(),
       true,
     ) as OdfCharacterProperties,
-    ...(rule === undefined
+    ...(rule === undefined || outline
       ? {}
       : {
           list: {
@@ -969,6 +990,11 @@ function projectParagraph(
         }),
     ...(directCharacterProperties === undefined ? {} : { properties: directCharacterProperties }),
     outlineLevel: node.GetAttrOutlineLevel(),
+    ...(outline && !node.IsCountedInList() ? { outlineListHeader: true } : {}),
+    ...(node.IsListRestart() ? { outlineRestart: true } : {}),
+    ...(node.IsListRestart() && node.HasAttrListRestartValue()
+      ? { outlineStartValue: node.GetAttrListRestartValue() }
+      : {}),
     runs: projectXmlTextRuns(node),
     style: node.GetParagraphStyle(),
     styleName: getParagraphOdfStyleName(node.GetDoc(), node.GetParagraphStyle()),

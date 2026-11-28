@@ -13,12 +13,14 @@ import {
   exportDateTimeField,
   exportDocInfoField,
   exportPageNumberField,
+  exportChapterField,
   exportReferenceField,
   type XMLAnnotationExportMarker,
   type XMLCountExportMarker,
   type XMLDateTimeExportMarker,
   type XMLDocInfoExportMarker,
   type XMLPageNumberExportMarker,
+  type XMLChapterExportMarker,
   type XMLReferenceFieldExportMarker,
 } from "./txtflde";
 import type { XMLTextFrameExportSource } from "./XMLTextFrameExport";
@@ -137,6 +139,9 @@ export interface XMLTextParagraphSource {
   readonly ruby?: readonly XMLRubyRange[];
   readonly alignment?: OdfParagraphAlignment;
   readonly outlineLevel?: number;
+  readonly outlineListHeader?: boolean;
+  readonly outlineRestart?: boolean;
+  readonly outlineStartValue?: number;
   readonly inheritedProperties?: OdfCharacterProperties;
   /** Direct text-left margin in twips. */
   readonly leftMargin?: number;
@@ -174,6 +179,7 @@ export type XMLTextParagraphMarker =
   | XMLReferenceFieldExportMarker
   | XMLDocInfoExportMarker
   | XMLPageNumberExportMarker
+  | XMLChapterExportMarker
   | XMLCountExportMarker
   | XMLDateTimeExportMarker
   | XMLRedlineExportMarker
@@ -647,6 +653,7 @@ function exportParagraphElement(
               marker.kind === "doc-info-field" ||
               marker.kind === "count-field" ||
               marker.kind === "page-number-field" ||
+              marker.kind === "chapter-field" ||
               marker.kind === "date-time-field" ||
               (marker.kind === "annotation" && marker.consumesMarker),
           );
@@ -724,8 +731,14 @@ function exportParagraphElement(
   const marker = markerStyle ? ` loext:marker-style-name="${markerStyle}"` : "";
   const style = styleName ? ` text:style-name="${escapeXml(styleName)}"` : "";
   const outline = paragraph.outlineLevel ?? (paragraph.style === "heading-1" ? 1 : 0);
+  const listHeader = paragraph.outlineListHeader ? ' text:is-list-header="true"' : "";
+  const restart = paragraph.outlineRestart ? ' text:restart-numbering="true"' : "";
+  const start =
+    paragraph.outlineStartValue === undefined
+      ? ""
+      : ` text:start-value="${paragraph.outlineStartValue}"`;
   return outline > 0
-    ? `<text:h text:outline-level="${outline}"${style}${marker}>${content}</text:h>`
+    ? `<text:h text:outline-level="${outline}"${listHeader}${restart}${start}${style}${marker}>${content}</text:h>`
     : `<text:p${style}${marker}>${content}</text:p>`;
 }
 
@@ -742,6 +755,7 @@ function exportMarker(
   if (marker.kind === "annotation" || marker.kind === "annotation-end")
     return exportAnnotation(marker, escapeXml, exportText, exportAnnotationParagraph);
   if (marker.kind === "reference-field") return exportReferenceField(marker, escapeXml);
+  if (marker.kind === "chapter-field") return exportChapterField(marker, escapeXml);
   if (marker.kind === "page-number-field") return exportPageNumberField(marker, escapeXml);
   if (marker.kind === "count-field") return exportCountField(marker, escapeXml);
   if (marker.kind === "doc-info-field") return exportDocInfoField(marker, escapeXml);
