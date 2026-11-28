@@ -56,9 +56,13 @@ const arithmetic = new Set<OpCode>([
   OpCode.ocMatRef,
   OpCode.ocSqrt,
   OpCode.ocIsError,
+  OpCode.ocIsErr,
+  OpCode.ocIsNA,
   OpCode.ocIsString,
   OpCode.ocFrequency,
   OpCode.ocIf,
+  OpCode.ocIfError,
+  OpCode.ocIfNA,
   OpCode.ocAnd,
   OpCode.ocOffset,
   OpCode.ocCountIf,
@@ -535,7 +539,7 @@ export class FormulaCompiler {
     } else if (op === OpCode.ocMissing) {
       this.PutCode(this.mpToken);
       this.NextToken();
-    } else if (op === OpCode.ocIf) {
+    } else if (op === OpCode.ocIf || op === OpCode.ocIfError || op === OpCode.ocIfNA) {
       this.CompileIf(this.mpToken as FormulaJumpToken);
     } else if (
       logical ||
@@ -558,6 +562,8 @@ export class FormulaCompiler {
     } else if (
       op === OpCode.ocSqrt ||
       op === OpCode.ocIsError ||
+      op === OpCode.ocIsErr ||
+      op === OpCode.ocIsNA ||
       op === OpCode.ocIsString ||
       op === OpCode.ocFrequency ||
       op === OpCode.ocAnd ||
@@ -632,7 +638,7 @@ export class FormulaCompiler {
         op === OpCode.ocClose ? FormulaError.ParameterExpected : FormulaError.UnknownToken,
       );
   }
-  /** Emits the scalar IF jump table and branch terminators in native RPN order. @param token - Original jump token. @returns Nothing. */
+  /** Emits the scalar IF-family jump table and branch terminators in native RPN order. @param token - Original jump token. @returns Nothing. */
   private CompileIf(token: FormulaJumpToken): void {
     if (this.NextToken() !== OpCode.ocOpen) {
       this.SetError(FormulaError.PairExpected);
@@ -644,7 +650,8 @@ export class FormulaCompiler {
     const jumps = branch.GetJump();
     this.PutCode(branch);
     let count = 1;
-    while (terminal === OpCode.ocSep && count < 3) {
+    const limit = token.GetOpCode() === OpCode.ocIf ? 3 : 2;
+    while (terminal === OpCode.ocSep && count < limit) {
       jumps[count++] = this.mpCode.length - 1;
       this.NextToken();
       terminal = this.Expression();

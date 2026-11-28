@@ -1,5 +1,6 @@
 /** @fileoverview Calc scalar information functions and OFFSET over native local reference tokens. */
 import { FormulaError } from "../../../../formula/inc/errorcodes";
+import { OpCode } from "../../../../formula/inc/opcode";
 import { FormulaErrorToken, StackVar } from "../../../../formula/inc/token";
 import { SvNumFormatType } from "../../../../svl/inc/zforlist";
 import { ScAddress, ScRange } from "../../../inc/address";
@@ -177,8 +178,8 @@ export function ScIsString(this: ScInterpreter): void {
   this["PushDouble"](Number(result));
 }
 
-/** Tests error state without coercing text to numbers. @param this - Active interpreter. @returns Nothing. */
-export function ScIsError(this: ScInterpreter): void {
+/** Pops the tested scalar or original reference and reads its error without numeric coercion. @param this - Active interpreter. @returns Original error. */
+export function PopErrorOperand(this: ScInterpreter): FormulaError {
   const type = this["pStack"].at(-1)?.GetType();
   let error = FormulaError.NONE;
   if (type === StackVar.svSingleRef || type === StackVar.svDoubleRef) {
@@ -201,8 +202,41 @@ export function ScIsError(this: ScInterpreter): void {
     const token = this["pStack"].pop();
     if (token instanceof FormulaErrorToken) error = token.GetError();
   }
-  const result = error !== FormulaError.NONE || this["nGlobalError"] !== FormulaError.NONE;
+  return this.GetError() !== FormulaError.NONE ? this.GetError() : error;
+}
+
+/** Applies the original ISERROR, ISERR or ISNA predicate. @param this - Active interpreter. @param opcode - Original predicate. @param count - Compiled argument count. */
+export function ScIsError(this: ScInterpreter, opcode: OpCode, count: number): void {
+  if (!hasCount(this, count, 1)) return;
+  const error = PopErrorOperand.call(this);
   this["nGlobalError"] = FormulaError.NONE;
   this["nRetFmtType"] = SvNumFormatType.LOGICAL;
+  const result =
+    opcode === OpCode.ocIsNA
+      ? error === FormulaError.NotAvailable
+      : error !== FormulaError.NONE &&
+        (opcode === OpCode.ocIsError || error !== FormulaError.NotAvailable);
   this["PushDouble"](Number(result));
+}
+
+/** Tests the first IFERROR or IFNA operand while preserving the original token on the successful path. @param this - Active interpreter. @param naOnly - Whether only #N/A selects the fallback. @param count - Native jump argument count. @returns Whether to evaluate the fallback. */
+export function ScIfError(this: ScInterpreter, naOnly: boolean, count: number): boolean {
+  const token = this["pStack"].at(-1);
+  if (!token || count !== 2) {
+    this["nGlobalError"] = token
+      ? FormulaError.ParameterExpected
+      : FormulaError.UnknownStackVariable;
+    return false;
+  }
+  const previousError = this.GetError();
+  this["nGlobalError"] = FormulaError.NONE;
+  const operandError = PopErrorOperand.call(this);
+  const error = operandError === FormulaError.NONE ? previousError : operandError;
+  if (error !== FormulaError.NONE && (!naOnly || error === FormulaError.NotAvailable)) {
+    this["nGlobalError"] = FormulaError.NONE;
+    return true;
+  }
+  this["nGlobalError"] = previousError;
+  this["PushWithoutError"](token);
+  return false;
 }

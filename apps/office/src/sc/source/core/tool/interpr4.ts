@@ -53,11 +53,28 @@ import { CompareScalar } from "./compare";
 import { InterpretDateOpcode, ScIntersect, ScRangeFunc } from "./interpr2";
 import { ScFrequency, ScMatRef } from "./interpr5";
 import { InterpretAnalysisAddIn } from "./addincol.analysis";
-import { ScIsEmpty, ScIsError, ScIsString, ScNot, ScOffset } from "./interpr1.reference";
+import { ScIfError, ScIsEmpty, ScIsError, ScIsString, ScNot, ScOffset } from "./interpr1.reference";
 import { ScColRowNameAuto } from "./interpr4.colrowname";
 import { isComparison } from "../../../../formula/inc/FormulaCompiler";
 import { ScQueryEntry, type ScQueryItem } from "./queryentry";
 import { ScQueryCellIteratorDirect } from "../data/queryiter";
+/** Admits the error-evaluating functions represented by this interpreter. @param opcode - Current opcode. @returns Whether it inspects errors. */
+function IsErrFunc(opcode: OpCode): boolean {
+  switch (opcode) {
+    case OpCode.ocIsEmpty:
+    case OpCode.ocIsErr:
+    case OpCode.ocIsError:
+    case OpCode.ocIsFormula:
+    case OpCode.ocIsNA:
+    case OpCode.ocIsString:
+    case OpCode.ocIfError:
+    case OpCode.ocIfNA:
+      return true;
+    default:
+      return false;
+  }
+}
+
 /** Actual initialized numeric interpreter state, with token references owned by JS GC. */
 export class ScInterpreter {
   private static mpGlobalConfig: ScCalcConfig | null = null;
@@ -909,14 +926,52 @@ export class ScInterpreter {
     this.nRetFmtIndex = 0;
     const code = [...this.pArr.RPNTokens()];
     const branchEnds: number[] = [];
+    let errorFunctions = 0;
+    let errorFunctionCount: number | undefined;
+    /** Preserves a pending error result for its later error-evaluating function. @param stackBase - Stack position before the current opcode's arguments. @returns Whether to continue with the next RPN token. */
+    const continueAfterError = (stackBase: number): boolean => {
+      if (this.nGlobalError === FormulaError.NONE) return true;
+      errorFunctionCount ??= code.reduce(
+        /** Counts the native error-evaluating commands in the original RPN. @param count - Previous count. @param instruction - RPN token. @returns Updated count. */
+        (count, instruction) => count + Number(IsErrFunc(instruction.GetOpCode())),
+        0,
+      );
+      if (errorFunctions >= errorFunctionCount) return false;
+      const top = this.pStack.length > stackBase ? this.pStack.at(-1) : undefined;
+      this.pStack.length = Math.min(this.pStack.length, stackBase);
+      this.PushWithoutError(
+        top instanceof FormulaErrorToken ? top : new FormulaErrorToken(this.nGlobalError),
+      );
+      this.nGlobalError = FormulaError.NONE;
+      return true;
+    };
     for (let pc = 0; pc < code.length; ++pc) {
       const token = code[pc] as FormulaToken;
       const op = token.GetOpCode();
+      const stackSize = this.pStack.length;
+      if (IsErrFunc(op)) ++errorFunctions;
+      if (token instanceof FormulaJumpToken && (op === OpCode.ocIfError || op === OpCode.ocIfNA)) {
+        const jump = token.GetJump();
+        const count = jump[0] as number;
+        const end = jump[count] as number;
+        if (ScIfError.call(this, op === OpCode.ocIfNA, count)) {
+          branchEnds.push(end);
+          pc = jump[1] as number;
+        } else {
+          if (!continueAfterError(Math.max(0, stackSize - 1))) break;
+          pc = end;
+        }
+        continue;
+      }
       if (token instanceof FormulaJumpToken && op === OpCode.ocIf) {
         const jump = token.GetJump();
         const count = jump[0] as number;
         const condition = this.GetDouble() !== 0;
-        if (this.nGlobalError !== FormulaError.NONE) break;
+        if (this.nGlobalError !== FormulaError.NONE) {
+          if (!continueAfterError(Math.max(0, stackSize - 1))) break;
+          pc = jump[count] as number;
+          continue;
+        }
         if (condition ? count >= 2 : count === 3) {
           branchEnds.push(jump[count] as number);
           pc = jump[condition ? 1 : 2] as number;
@@ -951,14 +1006,17 @@ export class ScInterpreter {
       else if (op === OpCode.ocMissing) this.PushWithoutError(token);
       else if (op === OpCode.ocPi) this.PushDouble(Math.PI);
       else if (op === OpCode.ocRandom || op === OpCode.ocRandomNV) this.PushDouble(Math.random());
-      else if (op === OpCode.ocNotAvail) this.SetError(FormulaError.NotAvailable);
-      else if (op === OpCode.ocFrequency)
+      else if (op === OpCode.ocNotAvail) {
+        this.SetError(FormulaError.NotAvailable);
+        this.PushWithoutError(new FormulaErrorToken(FormulaError.NotAvailable));
+      } else if (op === OpCode.ocFrequency)
         ScFrequency.call(this, (token as FormulaByteToken).GetByte());
       else if (op === OpCode.ocSqrt) {
         const number = this.GetDouble();
         if (number < 0) this.SetError(FormulaError.IllegalArgument);
         else this.PushDouble(Math.sqrt(number));
-      } else if (op === OpCode.ocIsError) ScIsError.call(this);
+      } else if (op === OpCode.ocIsError || op === OpCode.ocIsErr || op === OpCode.ocIsNA)
+        ScIsError.call(this, op, (token as FormulaByteToken).GetByte());
       else if (op === OpCode.ocIsString) ScIsString.call(this);
       else if (op === OpCode.ocAnd) ScAnd.call(this, (token as FormulaByteToken).GetByte());
       else if (op === OpCode.ocNot) ScNot.call(this, (token as FormulaByteToken).GetByte());
@@ -1009,7 +1067,11 @@ export class ScInterpreter {
         !InterpretAnalysisAddIn.call(this, token)
       )
         throw new Error("Interpreter opcode is not implemented");
-      if (this.nGlobalError !== FormulaError.NONE) break;
+      if (
+        this.nGlobalError !== FormulaError.NONE &&
+        !continueAfterError(Math.max(0, stackSize - token.GetParamCount()))
+      )
+        break;
     }
     if (
       this.pStack.length === 1 &&
@@ -1054,6 +1116,8 @@ export class ScInterpreter {
       this.SetError(this.pStack.length > 1 ? FormulaError.OperatorExpected : FormulaError.NoCode);
     else if ((this.pStack[0] as FormulaToken).GetType() === StackVar.svError)
       this.nGlobalError = (this.pStack[0] as FormulaErrorToken).GetError();
+    else if ((this.pStack[0] as FormulaToken).GetType() === StackVar.svMissing)
+      this.SetError(FormulaError.ParameterExpected);
     this.xResult =
       this.nGlobalError !== FormulaError.NONE
         ? new FormulaErrorToken(this.nGlobalError)

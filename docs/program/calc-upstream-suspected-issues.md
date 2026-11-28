@@ -8515,3 +8515,11 @@ argument conversion paths.
 
 - [Original ScFind](../../vendor/libreoffice-reference/sc/source/core/tool/interpr1.cxx#L11759)
 - [Original ScSearch](../../vendor/libreoffice-reference/sc/source/core/tool/interpr1.cxx#L12095)
+
+### CALC-886 — The IFNA fixture disagrees with its expected value for an omitted first operand
+
+The pinned fixture saves `Err:511` (parameter expected) for
+`IFNA(;[.J19])`, while the adjacent expected-value cell contains zero.
+Calc preserves the error recorded for the omitted first operand.
+
+- [Original FODS fixture](../../vendor/libreoffice-reference/sc/qa/unit/data/functions/logical/fods/ifna.fods#L2148)

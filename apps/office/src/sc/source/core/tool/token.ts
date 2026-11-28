@@ -495,6 +495,8 @@ const operators = new Set<OpCode>([
   OpCode.ocNotAvail,
   OpCode.ocSqrt,
   OpCode.ocIsError,
+  OpCode.ocIsErr,
+  OpCode.ocIsNA,
   OpCode.ocIsString,
   OpCode.ocFrequency,
   OpCode.ocAnd,
@@ -909,6 +911,8 @@ export class ScTokenArray extends FormulaTokenArray {
       return this.Add(new FormulaToken(StackVar.svSep, code));
     if (code === OpCode.ocIf)
       return this.Add(new FormulaJumpToken(code, Int16Array.of(3, 0, 0, 0)));
+    if (code === OpCode.ocIfError || code === OpCode.ocIfNA)
+      return this.Add(new FormulaJumpToken(code, Int16Array.of(2, 0, 0)));
     if (!operators.has(code)) throw new Error("Calc opcode construction is not implemented");
     return this.Add(new FormulaByteToken(code));
   }
