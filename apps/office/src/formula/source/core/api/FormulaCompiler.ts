@@ -69,6 +69,10 @@ const arithmetic = new Set<OpCode>([
   OpCode.ocIsFormula,
   OpCode.ocGetMonth,
   OpCode.ocGetActDate,
+  OpCode.ocGetActTime,
+  OpCode.ocRandom,
+  OpCode.ocRandomNV,
+  OpCode.ocMatch,
   OpCode.ocExternal,
   OpCode.ocRow,
   OpCode.ocColumn,
@@ -343,12 +347,6 @@ export class FormulaCompiler {
     this.PostProcessCode();
     this.nameFrames.length = 0;
     if (this.mpCode.length) this.mpArr.CreateNewRPNArrayFromData(this.mpCode, this.mpCode.length);
-    if (
-      this.mpArr.HasOpCodeRPN(OpCode.ocIndirect) ||
-      this.mpArr.HasOpCodeRPN(OpCode.ocOffset) ||
-      this.mpArr.HasOpCodeRPN(OpCode.ocGetActDate)
-    )
-      this.mpArr.SetExclusiveRecalcModeAlways();
     if (this.mpArr.GetCodeError() !== FormulaError.NONE) {
       this.mpArr.DelRPN();
       this.mpArr.SetHyperLink(false);
@@ -504,6 +502,7 @@ export class FormulaCompiler {
   private Factor(): void {
     if (this.mpArr.GetCodeError() !== FormulaError.NONE) return;
     const op = this.mpToken.GetOpCode();
+    if (FormulaCompiler.IsOpCodeVolatile(op)) this.mpArr.SetExclusiveRecalcModeAlways();
     const logical = op === OpCode.ocTrue || op === OpCode.ocFalse;
     const logicalResult =
       logical ||
@@ -517,9 +516,11 @@ export class FormulaCompiler {
         ? SvNumFormatType.LOGICAL
         : op === OpCode.ocGetActDate
           ? SvNumFormatType.DATE
-          : op === OpCode.ocPercentSign
-            ? SvNumFormatType.PERCENT
-            : SvNumFormatType.NUMBER;
+          : op === OpCode.ocGetActTime
+            ? SvNumFormatType.DATETIME
+            : op === OpCode.ocPercentSign
+              ? SvNumFormatType.PERCENT
+              : SvNumFormatType.NUMBER;
     if (op === OpCode.ocPush || op === OpCode.ocMatRef || op === OpCode.ocColRowNameAuto) {
       this.PutCode(this.mpToken);
       if (this.NextToken() === OpCode.ocOpen) this.SetError(FormulaError.OperatorExpected);
@@ -532,7 +533,10 @@ export class FormulaCompiler {
       logical ||
       op === OpCode.ocPi ||
       op === OpCode.ocNotAvail ||
-      op === OpCode.ocGetActDate
+      op === OpCode.ocGetActDate ||
+      op === OpCode.ocGetActTime ||
+      op === OpCode.ocRandom ||
+      op === OpCode.ocRandomNV
     ) {
       const factor = this.mpToken;
       if (this.NextToken() !== OpCode.ocOpen) {
@@ -553,6 +557,7 @@ export class FormulaCompiler {
       op === OpCode.ocIsEmpty ||
       op === OpCode.ocIsFormula ||
       op === OpCode.ocGetMonth ||
+      op === OpCode.ocMatch ||
       op === OpCode.ocOffset ||
       op === OpCode.ocCountIf ||
       op === OpCode.ocDBCount ||
@@ -779,6 +784,24 @@ export class FormulaCompiler {
       --this.mnRecursion;
     }
   }
+  /** Tests the original volatile opcode family. @param eOp - Compiled opcode. @returns Whether to keep the formula in the calculation tree. */
+  static IsOpCodeVolatile(eOp: OpCode): boolean {
+    switch (eOp) {
+      case OpCode.ocRandom:
+      case OpCode.ocGetActDate:
+      case OpCode.ocGetActTime:
+      case OpCode.ocFormula:
+      case OpCode.ocInfo:
+      case OpCode.ocIndirect:
+      case OpCode.ocOffset:
+      case OpCode.ocDebugVar:
+      case OpCode.ocRandArray:
+        return true;
+      default:
+        return false;
+    }
+  }
+
   /** Original jump command switch. @param eOp - Original opcode. @returns Whether this is a jump command. */
   static IsOpCodeJumpCommand(eOp: OpCode): boolean {
     switch (eOp & 0xffff) {

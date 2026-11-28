@@ -13,8 +13,57 @@ import { SvNumFormatType as T } from "../../../../svl/inc/zforlist";
 import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { ODF_NAMESPACES } from "../../../../xmloff/source/core/xmltoken";
 import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
+import { FormulaError } from "../../../../formula/inc/errorcodes";
 import { ScXMLImport } from "./xmlimprt";
 import { readOdsDocument, writeOdsDocument } from "./xmlwrap";
+
+it("recalculates the original ODS volatile value and its cached dependent", /** Replays the volatile and typed-error assertions of testCachedFormulaResultsODS_cachedValue. @returns Completion. */ async () => {
+  const fixture = "../../vendor/libreoffice-reference/sc/qa/unit/data/ods/cachedValue.ods";
+  const source = await readOdsDocument(new Uint8Array(readFileSync(fixture)));
+  const worker = decodeCalcDocument(structuredClone(encodeCalcDocument(source)));
+  try {
+    const reopened = await readOdsDocument(await writeOdsDocument(worker));
+    try {
+      for (const doc of [source, worker, reopened]) {
+        const now = doc.GetFormulaCell(new ScAddress(0, 0, 1));
+        const dependent = doc.GetFormulaCell(new ScAddress(1, 0, 1));
+        expect(now?.GetCode().IsRecalcModeAlways()).toBe(true);
+        expect(now?.GetValue()).toBeGreaterThan(45000);
+        expect(dependent?.GetValue()).toBe(now?.GetValue());
+        expect(doc.GetFormatTable().GetType(doc.GetNumberFormat(0, 0, 1)) & T.DATETIME).toBe(
+          T.DATETIME,
+        );
+        expect(doc.GetNumberFormat(1, 0, 1)).toBe(doc.GetNumberFormat(0, 0, 1));
+        for (let col = 0; col < 4; ++col) {
+          for (let row = 0; row < 2; ++row) {
+            const cell = doc.GetFormulaCell(new ScAddress(col, row, 2));
+            assert(cell);
+            expect(cell.GetErrCode()).not.toBe(FormulaError.NONE);
+            expect(text(cell.GetString().getString())).toBe("");
+          }
+        }
+      }
+    } finally {
+      reopened.Dispose();
+    }
+  } finally {
+    worker.Dispose();
+    source.Dispose();
+  }
+});
+
+it("matches the original hybrid shared-string formula after a native recalculation", /** Replays testHybridSharedStringODS. @returns Completion. */ async () => {
+  const fixture = "../../vendor/libreoffice-reference/sc/qa/unit/data/ods/hybrid-shared-string.ods";
+  const document = await readOdsDocument(new Uint8Array(readFileSync(fixture)));
+  try {
+    const value = document.GetFormulaCell(new ScAddress(0, 1, 0));
+    expect(value?.GetValue()).toBe(2);
+    document.CalcAll();
+    expect(value?.GetValue()).toBe(2);
+  } finally {
+    document.Dispose();
+  }
+});
 
 const namespaces = Object.entries(ODF_NAMESPACES)
   .map(

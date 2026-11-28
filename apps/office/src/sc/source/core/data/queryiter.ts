@@ -45,8 +45,8 @@ export class ScQueryCellIteratorDirect {
     return undefined;
   }
 
-  /** Stops at the first ordered mismatch and advances to the last equal entry if found. @returns Position or absence. */
-  FindEqualOrSortedLastInRange(): ScAddress | undefined {
+  /** Stops at the first ordered mismatch and advances to the last equal entry if found. @param descending - Whether the vector is sorted largest first. @returns Position or absence. */
+  FindEqualOrSortedLastInRange(descending = false): ScAddress | undefined {
     const patterned = this.entry.searchType !== SearchParam.SearchType.Normal;
     let found: ScAddress | undefined;
     let equal = false;
@@ -64,7 +64,7 @@ export class ScQueryCellIteratorDirect {
         found = address;
       } else if (equal) break;
       else if (!stoppedOnMismatch && result.order !== undefined) {
-        if (result.order < 0) found = address;
+        if (descending ? result.order > 0 : result.order < 0) found = address;
         else if (typeof this.entry.item === "number" || !address.equals(this.range.aStart)) {
           if (!patterned) break;
           stoppedOnMismatch = true;

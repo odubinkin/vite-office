@@ -28,7 +28,149 @@ import { QuoteTabName } from "./address.ooo";
 import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { ScMatValType } from "../../../inc/types";
 import { ScMatrix, type ScMatrixValue } from "../../../inc/scmatrix";
-import { GetCollator, type ScQueryItem } from "./queryentry";
+import { GetCollator, ScQueryEntry, type ScQueryItem } from "./queryentry";
+import { ScQueryCellIteratorDirect } from "../data/queryiter";
+
+/** Searches a matrix vector with the native forward or binary MATCH mode. @param matrix - Search vector. @param columns - Column count. @param rows - Row count. @param entry - Native search criterion. @param mode - Original MATCH option. @returns One-based position or absence. */
+function SearchMatchMatrix(
+  matrix: ScMatrix,
+  columns: number,
+  rows: number,
+  entry: ScQueryEntry,
+  mode: number,
+): number | undefined {
+  const horizontal = columns > 1;
+  const end = horizontal ? columns : rows;
+  const key = entry.item;
+  /** Reads an owned scalar from the search vector. @param offset - Vector position. @returns Matrix scalar. */
+  const get = (offset: number) => matrix.Get(horizontal ? offset : 0, horizontal ? 0 : offset);
+  /** Orders one matrix value against the query result. @param offset - Candidate position. @returns Order relative to the search key. */
+  const compare = (offset: number): number => {
+    const item = get(offset);
+    try {
+      if (item.nType === ScMatValType.Empty) return -1;
+      if (ScMatrix.IsValueType(item.nType)) {
+        if (!Number.isFinite(item.fVal)) return 1;
+        if (typeof key !== "number") return -1;
+        return item.fVal === key ? 0 : item.fVal < key ? -1 : 1;
+      }
+      if (typeof key === "number") return 1;
+      const value = item.GetString();
+      if (mode === 0 && entry.matchesText(value.getString(), text(value.getIgnoreCaseString())))
+        return 0;
+      return GetCollator().compare(text(value.getString()), key.text);
+    } finally {
+      item.dispose();
+    }
+  };
+  if (end === 0) return undefined;
+  if (mode === 0) {
+    for (let offset = 0; offset < end; ++offset) if (compare(offset) === 0) return offset + 1;
+    return undefined;
+  }
+  let first = 0;
+  let last = end - 1;
+  let hit = 0;
+  while (last > first) {
+    const middle = first + Math.floor((last - first) / 2);
+    const comparison = compare(middle);
+    if (comparison === 0) {
+      const matched = get(middle);
+      try {
+        let index = middle;
+        while (index + 1 < end) {
+          const next = get(index + 1);
+          try {
+            const numeric = ScMatrix.IsValueType(matched.nType);
+            if (numeric !== ScMatrix.IsValueType(next.nType)) break;
+            if (
+              numeric
+                ? next.fVal !== matched.fVal
+                : next.nType !== matched.nType ||
+                  text(next.GetString().getString()) !== text(matched.GetString().getString())
+            )
+              break;
+            ++index;
+          } finally {
+            next.dispose();
+          }
+        }
+        return index + 1;
+      } finally {
+        matched.dispose();
+      }
+    }
+    if (last - first === 1) {
+      hit = comparison * mode < 0 ? last : first;
+      break;
+    }
+    if (comparison * mode < 0) first = middle;
+    else last = middle;
+  }
+  if (hit === end - 1 && compare(hit) * mode <= 0) return hit + 1;
+  if (hit === 0) return undefined;
+  const result = get(hit - 1);
+  try {
+    return ScMatrix.IsValueType(result.nType) === (typeof key === "number") ? hit : undefined;
+  } finally {
+    result.dispose();
+  }
+}
+
+/** Resolves the original zero/one-dimensional MATCH vector and comparison mode. @param this - Active interpreter. @param count - Native argument count. */
+function ScMatch(this: ScInterpreter, count: number): void {
+  if (!checkParameterCount(this, count, 2, 3)) return;
+  const mode = count === 3 ? Math.trunc(this["GetDouble"]()) : 1;
+  if (mode !== -1 && mode !== 0 && mode !== 1) {
+    this.SetError(FormulaError.IllegalParameter);
+    return;
+  }
+  const source = this["pStack"].at(-1);
+  let range: ScRange | undefined;
+  let matrix: ScMatrix | undefined;
+  if (source instanceof ScDoubleRefToken) range = this["PopDoubleRef"]();
+  else if (source instanceof ScSingleRefToken) {
+    const address = this["PopSingleRef"]();
+    range = new ScRange(address, address);
+  } else matrix = this["GetLookupMatrix"]();
+  if (this.GetError() !== FormulaError.NONE) return;
+  if (
+    range &&
+    (range.aStart.Tab() !== range.aEnd.Tab() ||
+      (range.aStart.Col() !== range.aEnd.Col() && range.aStart.Row() !== range.aEnd.Row()))
+  ) {
+    this.SetError(FormulaError.IllegalParameter);
+    return;
+  }
+  const key = this["FillLookupEntry"]();
+  if (key === undefined || this.GetError() !== FormulaError.NONE) return;
+  const entry = new ScQueryEntry(key, this.mrDoc.GetDocOptions());
+  if (range) {
+    const horizontal = range.aStart.Row() === range.aEnd.Row();
+    const iterator = new ScQueryCellIteratorDirect(this.mrDoc, range, horizontal, entry);
+    const found =
+      mode === 0 ? iterator.GetFirst() : iterator.FindEqualOrSortedLastInRange(mode === -1);
+    if (found)
+      this["PushDouble"](
+        horizontal ? found.Col() - range.aStart.Col() + 1 : found.Row() - range.aStart.Row() + 1,
+      );
+    else this.SetError(FormulaError.NotAvailable);
+    return;
+  }
+  if (!matrix) {
+    this.SetError(FormulaError.IllegalParameter);
+    return;
+  }
+  const dimensions = { column: 0, row: 0 };
+  matrix.GetDimensions(dimensions);
+  if (dimensions.column > 1 && dimensions.row > 1) {
+    this.SetError(FormulaError.IllegalParameter);
+    return;
+  }
+  const found = SearchMatchMatrix(matrix, dimensions.column, dimensions.row, entry, mode);
+  if (found === undefined) this.SetError(FormulaError.NotAvailable);
+  else this["PushDouble"](found);
+}
 
 /** Searches the first matrix column or row, with native sorted and exact rules. @param matrix - Lookup table. @param count - Length of the search axis. @param index - Result row or column offset. @param horizontal - Search across the first row. @param sorted - Selects the ordered search. @param key - Query entry value. @returns Owned matched result or absence. */
 export function CalculateMatrixLookup(
@@ -86,6 +228,7 @@ export function InterpretReferenceOpcode(this: ScInterpreter, token: FormulaToke
   } else if (op === OpCode.ocAddress)
     ScAddressFunc.call(this, (token as FormulaByteToken).GetByte());
   else if (op === OpCode.ocIndirect) ScIndirect.call(this, (token as FormulaByteToken).GetByte());
+  else if (op === OpCode.ocMatch) ScMatch.call(this, (token as FormulaByteToken).GetByte());
   else if (op === OpCode.ocIsFormula) ScIsFormula.call(this);
   else return false;
   return true;

@@ -43,7 +43,7 @@ import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { unicode, text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import type { ScConstMatrixRef } from "../../../inc/types";
 import { ScFormulaCellGroup } from "./formulacellgroup";
-import { NfIndexTableOffset, SvNumFormatType } from "../../../../svl/inc/zforlist";
+import { SV_COUNTRY_LANGUAGE_OFFSET, SvNumFormatType } from "../../../../svl/inc/zforlist";
 import { OpCode } from "../../../../formula/inc/opcode";
 import { SC_LISTENER_QUERY_FORMULA_GROUP_POS } from "../../../inc/listenerqueryids";
 import { RefQueryFormulaGroup } from "../../../inc/listenerquery";
@@ -763,12 +763,17 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
           interpreter.Interpret();
           this.aResult.SetToken(interpreter.GetResultToken());
           const format = interpreter.GetRetFormatType();
-          if (format === SvNumFormatType.LOGICAL && this.mbNeedsNumberFormat) {
-            const index = this.rDocument
-              .GetFormatTable()
-              .GetFormatIndex(NfIndexTableOffset.NF_BOOLEAN);
-            this.rDocument.SetNumberFormat(this.aPos, index);
+          if (this.mbNeedsNumberFormat) {
+            let index = interpreter.GetRetFormatIndex();
+            if (format !== SvNumFormatType.TEXT) {
+              const formatter = this.rDocument.GetFormatTable();
+              if (index % SV_COUNTRY_LANGUAGE_OFFSET === 0)
+                index = formatter.GetStandardFormat(index, format, ScGlobal.eLnge);
+              if (index % SV_COUNTRY_LANGUAGE_OFFSET !== 0)
+                this.rDocument.SetNumberFormat(this.aPos, index);
+            }
             this.mbNeedsNumberFormat = false;
+            this.nFormatType = format;
           }
           if (format === SvNumFormatType.LOGICAL || this.nFormatType === SvNumFormatType.LOGICAL)
             this.nFormatType = format;
@@ -777,6 +782,7 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
         }
       }
       this.bDirty = false;
+      this.pCode.ClearRecalcModeMustAfterImport();
       if (!this.pCode.IsRecalcModeAlways()) this.rDocument.RemoveFromFormulaTree(this);
       return true;
     } finally {

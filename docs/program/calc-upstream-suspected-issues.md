@@ -8483,3 +8483,13 @@ Calc preserves the same representation and interpretation.
 - [Original scanner and source comment](../../vendor/libreoffice-reference/sc/source/core/tool/compiler.cxx#L2389)
 - [Original label intersection compilation](../../vendor/libreoffice-reference/formula/source/core/api/FormulaCompiler.cxx#L1534)
 - [Original OpenFormula serialization](../../vendor/libreoffice-reference/formula/source/core/api/FormulaCompiler.cxx#L2660)
+
+### CALC-883 — The ODS recalc prompt checks the OOXML preference's read-only status
+
+The desktop ODS load path reads `ODFRecalcMode` to decide whether to prompt,
+but checks whether `OOXMLRecalcMode` is read-only before hiding the option
+to remember the answer. The native noninteractive path broadcasts to
+volatile cells and does not use either prompt control. The browser ODS
+loader follows that noninteractive path.
+
+- [Original ODS load and preference checks](../../vendor/libreoffice-reference/sc/source/ui/docshell/docsh.cxx#L584)

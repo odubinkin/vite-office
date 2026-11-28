@@ -20,6 +20,9 @@ import {
   createManifestProperty,
 } from "../../../../package/source/manifest/ManifestWriter";
 import { ScDocument } from "../../../inc/document";
+import { BCA_BRDCST_ALWAYS } from "../../../inc/address";
+import { ScHint } from "../../../inc/brdcst";
+import { SfxHintId } from "../../../../svl/inc/hint";
 import { ScXMLImport, type ScXMLImportOptions } from "./xmlimprt";
 import { ScXMLExport, type ScXMLExportOptions } from "./xmlexprt";
 import { prepareDocProtection, prepareTableProtection } from "./xmlexprt.protection";
@@ -160,6 +163,8 @@ export class ScXMLImportWrapper {
       importer.NotifyContainsEmbeddedFont();
     }
     if (views !== undefined) ReadUserDataSequence(this.document, views);
+    this.document.Broadcast(new ScHint(SfxHintId.ScDataChanged, BCA_BRDCST_ALWAYS()));
+    this.document.CalcFormulaTree(false);
   }
   /** Writes an external ODS package. @param options - Controls. @returns Package bytes. */
   async Export(options: ScXMLExportOptions = {}): Promise<Uint8Array> {

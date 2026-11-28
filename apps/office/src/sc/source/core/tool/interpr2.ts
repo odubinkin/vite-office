@@ -5,6 +5,7 @@ import { approxFloor } from "../../../../sal/inc/rtl/math";
 import { SAL_MAX_INT32, SAL_MIN_INT32 } from "../../../../sal/inc/types";
 import { SvNumFormatType } from "../../../../svl/inc/zforlist";
 import { Date } from "../../../../tools/source/datetime/tdate";
+import { DateTime } from "../../../../tools/source/datetime/datetime";
 import { FormulaError } from "../../../../formula/inc/errorcodes";
 import { ScRange } from "../../../inc/address";
 import { ScComplexRefData, ScSingleRefData } from "../../../inc/refdata";
@@ -65,6 +66,19 @@ export function InterpretDateOpcode(this: ScInterpreter, token: FormulaToken): b
           this.mrContext.NFGetNullDate().GetAsNormalizedDays(),
       );
       return true;
+    case OpCode.ocGetActTime: {
+      this["nRetFmtType"] = SvNumFormatType.DATETIME;
+      const current = new DateTime(DateTime.SYSTEM);
+      const day =
+        current.GetAsNormalizedDays() - this.mrContext.NFGetNullDate().GetAsNormalizedDays();
+      const time =
+        current.GetHour() / 24 +
+        current.GetMin() / 1440 +
+        current.GetSec() / 86400 +
+        current.GetNanoSec() / 86400000000000;
+      this["PushDouble"](day + time);
+      return true;
+    }
     case OpCode.ocGetMonth: {
       const count = (token as FormulaByteToken).GetByte();
       if (count !== 1) {

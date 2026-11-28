@@ -77,6 +77,7 @@ export class ScInterpreter {
   private readonly maCalcConfig = new ScCalcConfig();
   private nCurFmtType: number = SvNumFormatType.ALL;
   private nRetFmtType: SvNumFormatType = SvNumFormatType.NUMBER;
+  private nRetFmtIndex = 0;
   private mnStringNoValueError: FormulaError = FormulaError.NoValue;
   /** Original implicit calculation-value teardown. @returns Nothing. */
   Dispose(): void {
@@ -792,7 +793,10 @@ export class ScInterpreter {
       this.PushString(this.GetCellString(cell));
       return;
     }
-    this.PushDouble(this.GetCellValue(address, cell));
+    const value = this.GetCellValue(address, cell);
+    this.nRetFmtIndex = this.mrDoc.GetNumberFormat(address.Col(), address.Row(), address.Tab());
+    this.nRetFmtType = this.mrContext.GetFormatTable().GetType(this.nRetFmtIndex);
+    this.PushDouble(value);
   }
   /** Pushes an actual token with the source stack limit; no token lifetime engine is introduced. @param token - Token. @returns Nothing. */
   private PushWithoutError(token: FormulaToken): void {
@@ -890,6 +894,7 @@ export class ScInterpreter {
   /** Executes the represented arithmetic token stream, preserving native result/error cardinality. @returns Final type. */
   Interpret(): StackVar {
     this.nRetFmtType = SvNumFormatType.NUMBER;
+    this.nRetFmtIndex = 0;
     const code = [...this.pArr.RPNTokens()];
     const branchEnds: number[] = [];
     for (let pc = 0; pc < code.length; ++pc) {
@@ -919,8 +924,10 @@ export class ScInterpreter {
         continue;
       }
       const logical = op === OpCode.ocTrue || op === OpCode.ocFalse;
-      if (op !== OpCode.ocPush && op !== OpCode.ocMissing)
+      if (op !== OpCode.ocPush && op !== OpCode.ocMissing) {
         this.nRetFmtType = logical ? SvNumFormatType.LOGICAL : SvNumFormatType.NUMBER;
+        this.nRetFmtIndex = 0;
+      }
       if (op === OpCode.ocPush) {
         if (token.GetType() === StackVar.svDouble)
           this.PushDouble((token as FormulaDoubleToken).GetDouble());
@@ -931,6 +938,7 @@ export class ScInterpreter {
         ScColRowNameAuto.call(this, token);
       else if (op === OpCode.ocMissing) this.PushWithoutError(token);
       else if (op === OpCode.ocPi) this.PushDouble(Math.PI);
+      else if (op === OpCode.ocRandom || op === OpCode.ocRandomNV) this.PushDouble(Math.random());
       else if (op === OpCode.ocNotAvail) this.SetError(FormulaError.NotAvailable);
       else if (op === OpCode.ocFrequency)
         ScFrequency.call(this, (token as FormulaByteToken).GetByte());
@@ -1044,5 +1052,10 @@ export class ScInterpreter {
   /** Returns the outer expression's represented result format. @returns Native format flags. */
   GetRetFormatType(): SvNumFormatType {
     return this.nRetFmtType;
+  }
+
+  /** Returns a format inherited from the interpreted cell reference. @returns Native format key. */
+  GetRetFormatIndex(): number {
+    return this.nRetFmtIndex;
   }
 }
