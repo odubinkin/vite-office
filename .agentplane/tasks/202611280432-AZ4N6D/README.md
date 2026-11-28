@@ -1,10 +1,11 @@
 ---
 id: "202611280432-AZ4N6D"
 title: "Port native Writer ODT document information text fields"
-status: "DOING"
+result_summary: "Writer preserves native textual document information fields through ODT and Worker transport."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - "output/playwright/odf-writer-redlines/docinfo-verification.md"
   findings:
     - "The native metadata owner drives live fields and Gregorian author handling. Original fixed presentation and revision descriptor behavior is retained and recorded as WRITER-774."
-commit: null
+commit:
+  hash: "32865a99445272fc2d3b28be83f01d65c72af9b2"
+  message: "🧩 AZ4N6D writer: roundtrip native ODT document information fields"
 comments:
   -
     author: "CODER"
     body: "Start: port document information text fields and native ODT and Worker roundtrip."
+  -
+    author: "CODER"
+    body: "Verified: 35 focused tests, Office typing, formatting, lint and provenance passed."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "All 35 focused Writer and shared tests passed, including the pinned title-field presentation and fixed/live metadata through Worker and saved ODT. Office types, lint, formatting, dependency boundaries, source provenance and parity inventory passed."
+  -
+    type: "status"
+    at: "2026-11-28T05:22:04.844Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: 35 focused tests, Office typing, formatting, lint and provenance passed."
 doc_version: 3
-doc_updated_at: "2026-11-28T05:20:21.165Z"
+doc_updated_at: "2026-11-28T05:22:04.846Z"
 doc_updated_by: "CODER"
 description: "Port the document-owned SwDocInfoField family for title, subject, keywords, description, creation and change and print authors, and revision through native text hints, UNO descriptor attachment, ODF text contexts, and Worker transport. Use the existing metadata owner and retain fixed-value handling. Verify with pinned source fixtures and focused related tests."
 sections:
