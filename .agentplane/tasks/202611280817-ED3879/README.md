@@ -1,10 +1,11 @@
 ---
 id: "202611280817-ED3879"
 title: "Connect the native Writer Navigator Navigate By controls"
-status: "DOING"
+result_summary: "Connected the native Navigate By controls and physical viewport movement."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - "output/playwright/writer-navigator-movement-chromium-recheck.log"
   findings:
     - "Direction, bookmark ranges, heading edge behavior, browser focus, page wrapping and caret preservation were exercised."
-commit: null
+commit:
+  hash: "e649f15cbb14e426828d37130fd4fb3ca3e5393e"
+  message: "🧩 ED3879 code: Connect Writer Navigator movement"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: affected Writer suites, eleven Chromium cases and production build."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: 35 focused Vitest cases, nine existing Chromium cases and two new focused Chromium scenarios. TypeScript, production Vite, scoped lint, formatting, Writer resources, module boundaries, source tree, routing and eight scoped provenance checks passed."
+  -
+    type: "status"
+    at: "2026-11-28T08:29:07.139Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: affected Writer suites, eleven Chromium cases and production build."
 doc_version: 3
-doc_updated_at: "2026-11-28T08:27:38.467Z"
+doc_updated_at: "2026-11-28T08:29:07.141Z"
 doc_updated_by: "CODER"
 description: "Expose the native Navigate By selector and previous and next controls for represented document targets. Connect the view slots, physical page viewport movement with wrapping, and model traversal for headings, tables, bookmarks, comments and repeat search."
 sections:
