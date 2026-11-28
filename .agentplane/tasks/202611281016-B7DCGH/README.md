@@ -1,10 +1,11 @@
 ---
 id: "202611281016-B7DCGH"
 title: "Align Calc ODS formula result caches and volatile load recalculation"
-status: "DOING"
+result_summary: "Aligned volatile ODS recalculation, formula cache formats and the represented native MATCH queries."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "output/playwright/odf-next-checkpoint/calc-formula-cache-verification.md"
   findings:
     - "The ODS packages and Worker retain current datetime formats, typed errors and cached matrix results; focused gates passed."
-commit: null
+commit:
+  hash: "b817eb068107cca626b61211155512d631d5e6ec"
+  message: "🧩 B7DCGH calc: recalculate volatile ODS formula caches"
 comments:
   -
     author: "CODER"
     body: "Start: align cached formula results and the native Calc volatile load pass."
+  -
+    author: "CODER"
+    body: "Verified: original ODS volatile, hybrid shared-string and matrix cache cases. Thirty-four focused Calc and shared tests and static gates passed."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Passed 22 targeted Calc and 12 shared compiler/token tests. The unchanged cachedValue, hybrid shared-string and matrix ODS fixtures passed. TypeScript, scoped ESLint, dependency rules, provenance and Calc inventory passed."
+  -
+    type: "status"
+    at: "2026-11-28T10:26:35.453Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original ODS volatile, hybrid shared-string and matrix cache cases. Thirty-four focused Calc and shared tests and static gates passed."
 doc_version: 3
-doc_updated_at: "2026-11-28T10:25:34.817Z"
+doc_updated_at: "2026-11-28T10:26:35.454Z"
 doc_updated_by: "CODER"
 description: "Align native ODS formula-result cache admission and volatile recalc after package load. Implement represented time and random volatility, propagate invalidation through existing listener owners and preserve scalar, shared string, formatted and matrix caches. Replay the pinned cachedValue and hybrid shared string cases with focused Calc checks."
 sections:
