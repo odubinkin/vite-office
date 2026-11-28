@@ -193,7 +193,7 @@ export function* decodeRedlineSections(
   return sections;
 }
 
-/** Rebinds range owners and their layered metadata to the restored document. @param document - Destination. @param owners - Complete text ordering. @param sections - Restored deletion owners. @param record - Redline record. */
+/** Rebinds range owners and their layered metadata to the restored document. @param document - Destination. @param owners - Complete text ordering. @param sections - Restored deletion owners. @param record - Redline record. @returns Nothing. */
 export function restoreRedlines(
   document: SwDoc,
   owners: readonly SwTextNode[],
@@ -283,7 +283,7 @@ export function restoreRedlines(
   access.SetRedlineFlags(record.flags);
 }
 
-/** Restores pool items and the named-character style reference from the graph. @param document - Destination. @param data - Native change. @param change - Encoded formatting. */
+/** Restores pool items and the named-character style reference from the graph. @param document - Destination. @param data - Native change. @param change - Encoded formatting. @returns Nothing. */
 function restorePreviousFormat(document: SwDoc, data: SwRedlineData, change: Change): void {
   const items = new SfxItemSet(document.GetAttrPool(), REDLINE_FORMAT_RANGES);
   try {

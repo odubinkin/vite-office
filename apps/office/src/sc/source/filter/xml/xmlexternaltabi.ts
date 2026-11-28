@@ -75,7 +75,7 @@ class ScXMLExternalRefTabSourceContext extends SvXMLImportContext {
   private readonly filterName: string;
   private readonly filterOptions: string;
 
-  /** Reads the external table source attributes. @param owner - ODF importer. @param file - Native file ID. @param attributes - Source attributes. */
+  /** Reads the external table source attributes. @param owner - ODF importer. @param file - Native file ID. @param attributes - Source attributes. @returns The initialized ScXMLExternalRefTabSourceContext instance. */
   constructor(
     private readonly owner: ScXMLImport,
     private readonly file: number,
@@ -87,7 +87,7 @@ class ScXMLExternalRefTabSourceContext extends SvXMLImportContext {
     this.filterOptions = attributes.get(XMLToken.TABLE_FILTER_OPTIONS) ?? "";
   }
 
-  /** Publishes source metadata without loading the linked workbook. */
+  /** Publishes source metadata without loading the linked workbook. @returns Nothing. */
   override endFastElement(): void {
     const manager = this.owner.GetDocument().GetExternalRefManager();
     manager.setRelativeFileName(this.file, this.relativeUrl);

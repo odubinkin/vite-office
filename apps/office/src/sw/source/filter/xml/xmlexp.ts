@@ -755,7 +755,7 @@ function exportWriterText(
                   const used = new Set<string>();
                   const currentStory: XMLBoundWriterFrames = {
                     ...anchored,
-                    /** Collects the actual dependent master of this story, including tables and anchored text. @param family - Native master family. @param name - Master name. */
+                    /** Collects the actual dependent master of this story, including tables and anchored text. @param family - Native master family. @param name - Master name. @returns Nothing. */
                     collectFieldMaster: (family, name) => {
                       used.add(family + "\0" + name);
                     },

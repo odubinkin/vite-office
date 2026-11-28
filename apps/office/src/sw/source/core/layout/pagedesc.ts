@@ -141,7 +141,7 @@ export class SwPageDesc extends BroadcastingModify {
     return this.m_NumType;
   }
 
-  /** Applies the descriptor's original format independently of physical geometry. @param value - Native numbering type. */
+  /** Applies the descriptor's original format independently of physical geometry. @param value - Native numbering type. @returns Nothing. */
   public SetNumType(value: SvxNumType): void {
     this.m_NumType.SetNumberingType(value);
   }

@@ -13,7 +13,7 @@ export class SwSetExpFieldType extends SwValueFieldType {
   private outlineLevel = 0xff;
   private delimiter = ".";
 
-  /** Binds a sequence type to the native document. @param document - Writer owner. @param name - Field master name. */
+  /** Binds a sequence type to the native document. @param document - Writer owner. @param name - Field master name. @returns The initialized SwSetExpFieldType instance. */
   public constructor(
     document: SwDoc,
     private readonly name: string,
@@ -27,7 +27,7 @@ export class SwSetExpFieldType extends SwValueFieldType {
     return this.type;
   }
 
-  /** Assigns the original variable subtype. @param type - Native type. */
+  /** Assigns the original variable subtype. @param type - Native type. @returns Nothing. */
   public SetType(type: SwGetSetExpType): void {
     this.type = type;
   }
@@ -42,7 +42,7 @@ export class SwSetExpFieldType extends SwValueFieldType {
     return this.outlineLevel;
   }
 
-  /** Sets the native sequence outline level. @param level - UNO signed depth or native unsigned value. */
+  /** Sets the native sequence outline level. @param level - UNO signed depth or native unsigned value. @returns Nothing. */
   public SetOutlineLvl(level: number): void {
     this.outlineLevel = level & 0xff;
   }
@@ -52,12 +52,12 @@ export class SwSetExpFieldType extends SwValueFieldType {
     return this.delimiter;
   }
 
-  /** Assigns the original sequence numbering separator. @param delimiter - Authored separator. */
+  /** Assigns the original sequence numbering separator. @param delimiter - Authored separator. @returns Nothing. */
   public SetDelimiter(delimiter: string): void {
     this.delimiter = delimiter;
   }
 
-  /** Keeps an unused existing reference number or assigns the first unused index. @param field - Field that needs its stable reference number. */
+  /** Keeps an unused existing reference number or assigns the first unused index. @param field - Field that needs its stable reference number. @returns Nothing. */
   public SetSeqRefNo(field: SwSetExpField): void {
     const used = new Set<number>();
     for (const node of this.GetDoc().GetNodes().entries()) {
@@ -85,7 +85,7 @@ export class SwSetExpField implements SwField<SwSetExpField> {
   private input = false;
   private prompt = "";
 
-  /** Creates a sequence field with its original default increment. @param type - Document sequence master. @param formula - Writer formula. @param format - Native numbering format. @param expansion - Existing field presentation. */
+  /** Creates a sequence field with its original default increment. @param type - Document sequence master. @param formula - Writer formula. @param format - Native numbering format. @param expansion - Existing field presentation. @returns The initialized SwSetExpField instance. */
   public constructor(
     private readonly type: SwSetExpFieldType,
     formula: string,
@@ -109,12 +109,12 @@ export class SwSetExpField implements SwField<SwSetExpField> {
     return this.formula;
   }
 
-  /** Assigns the source expression. @param formula - Writer formula. */
+  /** Assigns the source expression. @param formula - Writer formula. @returns Nothing. */
   public SetFormula(formula: string): void {
     this.formula = formula;
   }
 
-  /** Assigns the native presentation format. @param format - Numbering format. */
+  /** Assigns the native presentation format. @param format - Numbering format. @returns Nothing. */
   public SetFormat(format: number): void {
     this.format = format;
   }
@@ -129,7 +129,7 @@ export class SwSetExpField implements SwField<SwSetExpField> {
     return this.sequenceNumber;
   }
 
-  /** Assigns a sequence reference identity. @param value - Unsigned field reference number. */
+  /** Assigns a sequence reference identity. @param value - Unsigned field reference number. @returns Nothing. */
   public SetSeqNumber(value: number): void {
     this.sequenceNumber = value & 0xffff;
   }
@@ -139,7 +139,7 @@ export class SwSetExpField implements SwField<SwSetExpField> {
     return this.numericValue;
   }
 
-  /** Sets the numeric sequence value and native numbering expansion. @param value - Calculated value. */
+  /** Sets the numeric sequence value and native numbering expansion. @param value - Calculated value. @returns Nothing. */
   public SetValue(value: number): void {
     this.numericValue = value;
     if (!this.IsSequenceField()) {
@@ -153,12 +153,12 @@ export class SwSetExpField implements SwField<SwSetExpField> {
         : new SvxNumberType(this.format).GetNumStr(number);
   }
 
-  /** Sets the full presentation, including any chapter prefix. @param expansion - Source expansion. */
+  /** Sets the full presentation, including any chapter prefix. @param expansion - Source expansion. @returns Nothing. */
   public ChgExpStr(expansion: string): void {
     this.expansion = expansion;
   }
 
-  /** Sets the native command-display switch. @param show - Whether to show the formula. */
+  /** Sets the native command-display switch. @param show - Whether to show the formula. @returns Nothing. */
   public SetShowFormula(show: boolean): void {
     this.displayFormula = show;
   }
@@ -173,7 +173,7 @@ export class SwSetExpField implements SwField<SwSetExpField> {
     return this.type.GetType() === SwGetSetExpType.Sequence;
   }
 
-  /** Sets the original field visibility. @param visible - Whether the value appears in text. */
+  /** Sets the original field visibility. @param visible - Whether the value appears in text. @returns Nothing. */
   public SetVisible(visible: boolean): void {
     this.visible = visible;
   }
@@ -183,7 +183,7 @@ export class SwSetExpField implements SwField<SwSetExpField> {
     return this.visible;
   }
 
-  /** Sets the variable-input occurrence mode. @param input - Whether this is an input occurrence. */
+  /** Sets the variable-input occurrence mode. @param input - Whether this is an input occurrence. @returns Nothing. */
   public SetInput(input: boolean): void {
     this.input = input;
   }
@@ -193,7 +193,7 @@ export class SwSetExpField implements SwField<SwSetExpField> {
     return this.input;
   }
 
-  /** Sets the original input prompt. @param prompt - Description text. */
+  /** Sets the original input prompt. @param prompt - Description text. @returns Nothing. */
   public SetPromptText(prompt: string): void {
     this.prompt = prompt;
   }
@@ -242,7 +242,7 @@ export class SwSetExpField implements SwField<SwSetExpField> {
     return field;
   }
 
-  /** Releases the represented value-only field. */
+  /** Releases the represented value-only field. @returns Nothing. */
   public Dispose(): void {}
 }
 
@@ -259,7 +259,7 @@ export class SwGetExpFieldType extends SwValueFieldType {}
 
 /** Original expression reader or formula at a Writer text point. */
 export class SwGetExpField implements SwField<SwGetExpField> {
-  /** Constructs the field and its imported presentation. @param type - Document field type. @param formula - Name or formula. @param subtype - Native subtype. @param format - Document format key. @param showFormula - Command display. @param presentation - Imported presentation. */
+  /** Constructs the field and its imported presentation. @param type - Document field type. @param formula - Name or formula. @param subtype - Native subtype. @param format - Document format key. @param showFormula - Command display. @param presentation - Imported presentation. @returns The initialized SwGetExpField instance. */
   public constructor(
     private readonly type: SwGetExpFieldType,
     public readonly formula: string,
@@ -275,7 +275,7 @@ export class SwGetExpField implements SwField<SwGetExpField> {
     return this.type;
   }
 
-  /** Keeps the native calculated presentation. @param value - Resolved expression value. */
+  /** Keeps the native calculated presentation. @param value - Resolved expression value. @returns Nothing. */
   public SetValue(value: number | string): void {
     if (typeof value === "number") this.value = value;
     this.presentation =
@@ -318,6 +318,6 @@ export class SwGetExpField implements SwField<SwGetExpField> {
     );
   }
 
-  /** Releases the value-only field. */
+  /** Releases the value-only field. @returns Nothing. */
   public Dispose(): void {}
 }

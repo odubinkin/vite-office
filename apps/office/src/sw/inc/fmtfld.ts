@@ -11,7 +11,7 @@ export class SwFormatField<Field extends SwField<Field> = SwPostItField> extends
   private textField: SwTextField<Field> | undefined;
   private readonly field: Field | undefined;
 
-  /** Creates the native empty default or copies a real field into its own item. @param fieldOrWhich - Borrowed field or native default identity. @param which - Identity of the attached field family. @param destination - Optional target document. */
+  /** Creates the native empty default or copies a real field into its own item. @param fieldOrWhich - Borrowed field or native default identity. @param which - Identity of the attached field family. @param destination - Optional target document. @returns The initialized SwFormatField instance. */
   constructor(
     fieldOrWhich: Field | number,
     which: number = RES_TXTATR_ANNOTATION,

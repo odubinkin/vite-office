@@ -32,7 +32,7 @@ function options() {
   return within(screen.getByRole("dialog", { name: "Options" }));
 }
 
-it("validates Calculate before leaving the page, resets controls and applies document options", async () => {
+it("validates Calculate before leaving the page, resets controls and applies document options", /** Validates Calculate before leaving the page, resets controls and applies document options. @returns Completion. */ async () => {
   const controller = mount(),
     doc = controller.shell.GetDocument();
   const target = new ScAddress(1, 0, 0);
@@ -82,7 +82,7 @@ it("validates Calculate before leaving the page, resets controls and applies doc
   }
 });
 
-it("uses the automatic label switch for formula admission and the connected data range", async () => {
+it("uses the automatic label switch for formula admission and the connected data range", /** Uses the automatic label switch for formula admission and the connected data range. @returns Completion. */ async () => {
   const controller = mount(),
     doc = controller.shell.GetDocument();
   act(() => {
@@ -130,7 +130,7 @@ it("uses the automatic label switch for formula admission and the connected data
   expect(doc.GetErrCode(new ScAddress(2, 2, 0))).toBe(FormulaError.NoName);
 });
 
-it("applies Excel A1 references and confirmed details without changing global conversion", async () => {
+it("applies Excel A1 references and confirmed details without changing global conversion", /** Applies Excel A1 references and confirmed details without changing global conversion. @returns Completion. */ async () => {
   const controller = mount(),
     doc = controller.shell.GetDocument();
   const name = unicode("Source Data");

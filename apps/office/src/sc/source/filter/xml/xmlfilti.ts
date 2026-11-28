@@ -104,7 +104,7 @@ export class ScXMLFilterContext extends ScXMLImportContext {
   private readonly target: string;
   private readonly conditionSource: string;
 
-  /** Captures destination and advanced-condition addresses before the workbook is finalized. @param owner - Native importer. @param attributes - Filter flags. @param query - Original query. */
+  /** Captures destination and advanced-condition addresses before the workbook is finalized. @param owner - Native importer. @param attributes - Filter flags. @param query - Original query. @returns The initialized ScXMLFilterContext instance. */
   constructor(
     owner: ScXMLImport,
     attributes: FastAttributeList,
@@ -141,17 +141,17 @@ export class ScXMLFilterContext extends ScXMLImportContext {
     return new SvXMLIgnoreContext(true);
   }
 
-  /** Opens a native boolean group. @param connect - Group connector. */
+  /** Opens a native boolean group. @param connect - Group connector. @returns Nothing. */
   OpenConnection(connect: ScQueryConnect): void {
     this.connections.push({ connect, hasCondition: false });
   }
 
-  /** Drops the active group at its end. */
+  /** Drops the active group at its end. @returns Nothing. */
   CloseConnection(): void {
     this.connections.pop();
   }
 
-  /** Appends a condition in document order using the original connection and shared case/search options. @param attributes - Condition scope. @param items - Explicit set items. */
+  /** Appends a condition in document order using the original connection and shared case/search options. @param attributes - Condition scope. @param items - Explicit set items. @returns Nothing. */
   AppendCondition(attributes: FastAttributeList, items: readonly ScDBQueryItem[]): void {
     const group = this.connections.at(-1);
     const connect = !group
@@ -225,7 +225,7 @@ export class ScXMLFilterContext extends ScXMLImportContext {
 
 /** Original AND and OR filter contexts share the same flat query owner. */
 class ScXMLFilterGroupContext extends ScXMLImportContext {
-  /** Opens the enclosing query connection. @param owner - Importer. @param filter - Query owner. @param connect - Group kind. */
+  /** Opens the enclosing query connection. @param owner - Importer. @param filter - Query owner. @param connect - Group kind. @returns The initialized ScXMLFilterGroupContext instance. */
   constructor(
     owner: ScXMLImport,
     private readonly filter: ScXMLFilterContext,
@@ -243,7 +243,7 @@ class ScXMLFilterGroupContext extends ScXMLImportContext {
     return this.filter.CreateFilterChild(token, attributes, this.connect);
   }
 
-  /** Restores the preceding connection. */
+  /** Restores the preceding connection. @returns Nothing. */
   override endFastElement(): void {
     this.filter.CloseConnection();
   }
@@ -253,7 +253,7 @@ class ScXMLFilterGroupContext extends ScXMLImportContext {
 class ScXMLConditionContext extends ScXMLImportContext {
   private readonly items: ScDBQueryItem[] = [];
 
-  /** Keeps original attributes until the condition closes. @param owner - Importer. @param filter - Query owner. @param attributes - Condition attributes. */
+  /** Keeps original attributes until the condition closes. @param owner - Importer. @param filter - Query owner. @param attributes - Condition attributes. @returns The initialized ScXMLConditionContext instance. */
   constructor(
     owner: ScXMLImport,
     private readonly filter: ScXMLFilterContext,
@@ -271,7 +271,7 @@ class ScXMLConditionContext extends ScXMLImportContext {
     return new SvXMLIgnoreContext(true);
   }
 
-  /** Adopts this condition in query order. */
+  /** Adopts this condition in query order. @returns Nothing. */
   override endFastElement(): void {
     this.filter.AppendCondition(this.attributes, this.items);
   }

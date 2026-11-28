@@ -12,12 +12,12 @@ export interface XMLChangeInfo {
 
 /** Appends the native SAX character data for one change-info property. */
 class XMLStringBufferImportContext extends SvXMLImportContext {
-  /** Receives the character buffer append operation. @param append - Property buffer. */
+  /** Receives the character buffer append operation. @param append - Property buffer. @returns The initialized XMLStringBufferImportContext instance. */
   constructor(private readonly append: (data: string) => void) {
     super();
   }
 
-  /** Appends XML character data. @param data - Characters. */
+  /** Appends XML character data. @param data - Characters. @returns Nothing. */
   override characters(data: string): void {
     this.append(data);
   }
@@ -30,7 +30,7 @@ export class XMLChangeInfoContext extends SvXMLImportContext {
   private date = "";
   private movedId = "";
 
-  /** Binds this change's metadata consumer. @param commit - Receiver of the original buffers. */
+  /** Binds this change's metadata consumer. @param commit - Receiver of the original buffers. @returns The initialized XMLChangeInfoContext instance. */
   constructor(private readonly commit: (info: XMLChangeInfo) => void) {
     super();
   }
@@ -40,26 +40,28 @@ export class XMLChangeInfoContext extends SvXMLImportContext {
     switch (element) {
       case XMLToken.DC_CREATOR:
         return new XMLStringBufferImportContext(
-          /** Appends the author. @param data - Characters. */ (data) => {
+          /** Appends the author. @param data - Characters. @returns Nothing. */ (data) => {
             this.author += data;
           },
         );
       case XMLToken.DC_DATE:
         return new XMLStringBufferImportContext(
-          /** Appends the date. @param data - Characters. */ (data) => {
+          /** Appends the date. @param data - Characters. @returns Nothing. */ (data) => {
             this.date += data;
           },
         );
       case XMLToken.LOEXT_MOVE_ID:
         return new XMLStringBufferImportContext(
-          /** Appends the move identifier. @param data - Characters. */ (data) => {
+          /** Appends the move identifier. @param data - Characters. @returns Nothing. */ (
+            data,
+          ) => {
             this.movedId += data;
           },
         );
       case XMLToken.TEXT_P:
       case XMLToken.LOEXT_P:
         return new XMLStringBufferImportContext(
-          /** Appends original comment text without a manufactured paragraph separator. @param data - Characters. */ (
+          /** Appends original comment text without a manufactured paragraph separator. @param data - Characters. @returns Nothing. */ (
             data,
           ) => {
             this.comment += data;
@@ -70,7 +72,7 @@ export class XMLChangeInfoContext extends SvXMLImportContext {
     }
   }
 
-  /** Delivers the completed change-info buffers. */
+  /** Delivers the completed change-info buffers. @returns Nothing. */
   override endFastElement(): void {
     this.commit({
       author: this.author,

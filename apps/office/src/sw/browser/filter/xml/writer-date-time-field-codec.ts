@@ -41,7 +41,7 @@ export function encodeDateTimeFields(node: SwTextNode): readonly WriterDateTimeF
   );
 }
 
-/** Reattaches native fields at the transported dummy characters. @param node - Restored paragraph. @param records - Portable fields. */
+/** Reattaches native fields at the transported dummy characters. @param node - Restored paragraph. @param records - Portable fields. @returns Nothing. */
 export function decodeDateTimeFields(
   node: SwTextNode,
   records: readonly WriterDateTimeFieldRecord[] | undefined,

@@ -8,7 +8,7 @@ import { SwTextAttrEnd } from "./txatbase";
 export class SwFormatRefMark extends SfxPoolItem {
   private m_pTextAttr: SwTextRefMark | undefined;
 
-  /** Initializes the native item or its unnamed pool default. @param name - Original reference name. */
+  /** Initializes the native item or its unnamed pool default. @param name - Original reference name. @returns The initialized SwFormatRefMark instance. */
   public constructor(private readonly name = "") {
     super(RES_TXTATR_REFMARK);
     this.setNonShareable();
@@ -24,7 +24,7 @@ export class SwFormatRefMark extends SfxPoolItem {
     return this.m_pTextAttr;
   }
 
-  /** Binds or releases the text attribute backlink. @param hint - Associated mark. */
+  /** Binds or releases the text attribute backlink. @param hint - Associated mark. @returns Nothing. */
   public SetTextRefMark(hint: SwTextRefMark | undefined): void {
     this.m_pTextAttr = hint;
   }
@@ -44,7 +44,7 @@ export class SwFormatRefMark extends SfxPoolItem {
 export class SwTextRefMark extends SwTextAttrEnd<SwFormatRefMark> {
   private m_pTextNode: SwTextNode | undefined;
 
-  /** Sets the native endpoint and flags. @param format - Owned reference item. @param start - Original start. @param end - Original end for a ranged mark. */
+  /** Sets the native endpoint and flags. @param format - Owned reference item. @param start - Original start. @param end - Original end for a ranged mark. @returns The initialized SwTextRefMark instance. */
   public constructor(format: SwFormatRefMark, start: number, end?: number) {
     super(format, start, end ?? start);
     format.SetTextRefMark(this);
@@ -58,7 +58,7 @@ export class SwTextRefMark extends SwTextAttrEnd<SwFormatRefMark> {
     return this.HasDummyChar() ? undefined : this.m_nEnd;
   }
 
-  /** Binds or releases the native text node backlink. @param node - Owning node. */
+  /** Binds or releases the native text node backlink. @param node - Owning node. @returns Nothing. */
   public ChgTextNode(node: SwTextNode | undefined): void {
     this.m_pTextNode = node;
   }

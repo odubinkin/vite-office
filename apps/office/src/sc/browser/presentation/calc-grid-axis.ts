@@ -180,3 +180,35 @@ export class CalcGridAxis {
     );
   }
 }
+
+/** Determines the amount of a cell clipped by a neighboring pane. @param band - Pane along the axis. @param start - Cell edge in body pixels. @param size - Cell extent. @returns Inset distances. */
+export function cellInsets(
+  band: CalcPaintBand,
+  start: number,
+  size: number,
+): readonly [number, number] {
+  const near =
+    band.clipStart || band.clipEnd !== undefined ? Math.max(0, band.clipStart - start) : 0;
+  const far = band.clipEnd === undefined ? 0 : Math.max(0, start + size - band.clipEnd);
+  return [near, far];
+}
+
+/** Formats a nonempty clipping rectangle. @param top - Top inset. @param right - Right inset. @param bottom - Bottom inset. @param left - Left inset. @returns Optional CSS clipping rectangle. */
+export function paneClip(
+  top: number,
+  right: number,
+  bottom: number,
+  left: number,
+): string | undefined {
+  return top || right || bottom || left
+    ? `inset(${top}px ${right}px ${bottom}px ${left}px)`
+    : undefined;
+}
+
+/** Finds the first visible representative of the source span in this pane. @param band - Native paint band. @param first - Source range start. @param last - Source range end. @returns Visible coordinate. */
+export function firstVisible(band: CalcPaintBand, first: number, last: number): number | undefined {
+  return band.cells.find(
+    /** Checks the intersection with the span. @param index - Visible coordinate. @returns Whether the coordinate is in range. */
+    (index) => index >= first && index <= last,
+  );
+}

@@ -41,7 +41,7 @@ export class XMLHiddenParagraphImportContext extends SvXMLImportContext {
   private hidden = false;
   private content = "";
 
-  /** Binds the styled field point. @param helper - Native text importer. @param properties - Run properties. @param hyperlink - Surrounding link. @param characterStyles - Applied style names. */
+  /** Binds the styled field point. @param helper - Native text importer. @param properties - Run properties. @param hyperlink - Surrounding link. @param characterStyles - Applied style names. @returns The initialized XMLHiddenParagraphImportContext instance. */
   public constructor(
     private readonly helper: XMLTextImportHelper,
     private readonly properties: OdfCharacterProperties,
@@ -51,7 +51,7 @@ export class XMLHiddenParagraphImportContext extends SvXMLImportContext {
     super();
   }
 
-  /** Admits only a condition in the original Writer formula namespace. @param _element - Field element. @param attributes - Source attributes. */
+  /** Admits only a condition in the original Writer formula namespace. @param _element - Field element. @param attributes - Source attributes. @returns Nothing. */
   public override startFastElement(_element: XMLToken, attributes: FastAttributeList): void {
     const condition = attributes.get(XMLToken.TEXT_CONDITION);
     const colon = condition?.indexOf(":") ?? -1;
@@ -66,12 +66,12 @@ export class XMLHiddenParagraphImportContext extends SvXMLImportContext {
     if (raw !== null && Converter.convertBool(value, raw)) this.hidden = value[0];
   }
 
-  /** Retains the source presentation for the invalid-field fallback. @param value - Decoded text. */
+  /** Retains the source presentation for the invalid-field fallback. @param value - Decoded text. @returns Nothing. */
   public override characters(value: string): void {
     this.content += value;
   }
 
-  /** Attaches the native field or retains authored characters. */
+  /** Attaches the native field or retains authored characters. @returns Nothing. */
   public override endFastElement(): void {
     const condition = this.condition;
     if (condition === undefined) {
@@ -80,7 +80,7 @@ export class XMLHiddenParagraphImportContext extends SvXMLImportContext {
     }
     this.helper.InsertTextField(
       "HiddenParagraph",
-      /** Writes the original native field properties. @param field - Detached descriptor. */
+      /** Writes the original native field properties. @param field - Detached descriptor. @returns Nothing. */
       (field) => {
         this.helper.SetProperty(field, "Condition", condition);
         this.helper.SetProperty(field, "IsHidden", this.hidden);
@@ -100,7 +100,7 @@ export class XMLHiddenTextImportContext extends SvXMLImportContext {
   private hidden: [boolean] = [false];
   private presentation = "";
 
-  /** Binds the styled text point. @param helper - Native text importer. @param conditional - ConditionalText service selector. @param properties - Run properties. @param hyperlink - Surrounding link. @param characterStyles - Applied character styles. */
+  /** Binds the styled text point. @param helper - Native text importer. @param conditional - ConditionalText service selector. @param properties - Run properties. @param hyperlink - Surrounding link. @param characterStyles - Applied character styles. @returns The initialized XMLHiddenTextImportContext instance. */
   public constructor(
     private readonly helper: XMLTextImportHelper,
     private readonly conditional: boolean,
@@ -111,7 +111,7 @@ export class XMLHiddenTextImportContext extends SvXMLImportContext {
     super();
   }
 
-  /** Parses the original condition namespace, branch attributes and native boolean. @param _element - Field element. @param attributes - Authored values. */
+  /** Parses the original condition namespace, branch attributes and native boolean. @param _element - Field element. @param attributes - Authored values. @returns Nothing. */
   public override startFastElement(_element: XMLToken, attributes: FastAttributeList): void {
     const condition = attributes.get(XMLToken.TEXT_CONDITION);
     const colon = condition?.indexOf(":") ?? -1;
@@ -134,12 +134,12 @@ export class XMLHiddenTextImportContext extends SvXMLImportContext {
     }
   }
 
-  /** Collects the authored cached presentation. @param value - Decoded text. */
+  /** Collects the authored cached presentation. @param value - Decoded text. @returns Nothing. */
   public override characters(value: string): void {
     this.presentation += value;
   }
 
-  /** Inserts the native field or the authored presentation when required attributes are absent. */
+  /** Inserts the native field or the authored presentation when required attributes are absent. @returns Nothing. */
   public override endFastElement(): void {
     const { conditional, condition, trueContent, falseContent } = this;
     if (condition === undefined || trueContent === null || (conditional && falseContent === null)) {
@@ -153,7 +153,7 @@ export class XMLHiddenTextImportContext extends SvXMLImportContext {
     }
     this.helper.InsertTextField(
       conditional ? "ConditionalText" : "HiddenText",
-      /** Writes the corresponding service properties. @param field - Detached UNO descriptor. */
+      /** Writes the corresponding service properties. @param field - Detached UNO descriptor. @returns Nothing. */
       (field) => {
         this.helper.SetProperty(field, "Condition", condition);
         if (conditional && falseContent !== null) {
@@ -179,7 +179,7 @@ export class XMLPlaceholderFieldImportContext extends SvXMLImportContext {
   private description = "";
   private content = "";
 
-  /** Binds the styled text point. @param helper - Native text importer. @param properties - Character properties. @param hyperlink - Surrounding link. @param characterStyles - Applied character styles. */
+  /** Binds the styled text point. @param helper - Native text importer. @param properties - Character properties. @param hyperlink - Surrounding link. @param characterStyles - Applied character styles. @returns The initialized XMLPlaceholderFieldImportContext instance. */
   public constructor(
     private readonly helper: XMLTextImportHelper,
     private readonly properties: OdfCharacterProperties,
@@ -189,7 +189,7 @@ export class XMLPlaceholderFieldImportContext extends SvXMLImportContext {
     super();
   }
 
-  /** Decodes the required placeholder type and optional description. @param _element - Element token. @param attributes - Source attributes. */
+  /** Decodes the required placeholder type and optional description. @param _element - Element token. @param attributes - Source attributes. @returns Nothing. */
   public override startFastElement(_element: XMLToken, attributes: FastAttributeList): void {
     const type = attributes.get(XMLToken.TEXT_PLACEHOLDER_TYPE);
     for (const [value, name] of Object.entries(placeholderTypes))
@@ -197,12 +197,12 @@ export class XMLPlaceholderFieldImportContext extends SvXMLImportContext {
     this.description = attributes.get(XMLToken.TEXT_DESCRIPTION) ?? "";
   }
 
-  /** Retains the source presentation. @param content - Decoded text. */
+  /** Retains the source presentation. @param content - Decoded text. @returns Nothing. */
   public override characters(content: string): void {
     this.content += content;
   }
 
-  /** Attaches a placeholder for valid input and inserts its presentation otherwise. */
+  /** Attaches a placeholder for valid input and inserts its presentation otherwise. @returns Nothing. */
   public override endFastElement(): void {
     const type = this.type;
     if (type === undefined) {
@@ -215,7 +215,7 @@ export class XMLPlaceholderFieldImportContext extends SvXMLImportContext {
     );
     this.helper.InsertTextField(
       "JumpEdit",
-      /** Writes the original typed properties. @param field - Detached placeholder. */
+      /** Writes the original typed properties. @param field - Detached placeholder. @returns Nothing. */
       (field) => {
         this.helper.SetProperty(field, "Hint", this.description);
         this.helper.SetProperty(field, "Placeholder", text);
@@ -238,7 +238,7 @@ export class XMLDropDownFieldImportContext extends SvXMLImportContext {
   private help: string | null = null;
   private toolTip: string | null = null;
 
-  /** Binds the styled text point. @param helper - Native text importer. @param properties - Character properties. @param hyperlink - Surrounding link. @param characterStyles - Applied character styles. */
+  /** Binds the styled text point. @param helper - Native text importer. @param properties - Character properties. @param hyperlink - Surrounding link. @param characterStyles - Applied character styles. @returns The initialized XMLDropDownFieldImportContext instance. */
   public constructor(
     private readonly helper: XMLTextImportHelper,
     private readonly properties: OdfCharacterProperties,
@@ -248,7 +248,7 @@ export class XMLDropDownFieldImportContext extends SvXMLImportContext {
     super();
   }
 
-  /** Reads the original optional descriptor properties. @param _element - Element token. @param attributes - Source attributes. */
+  /** Reads the original optional descriptor properties. @param _element - Element token. @param attributes - Source attributes. @returns Nothing. */
   public override startFastElement(_element: XMLToken, attributes: FastAttributeList): void {
     this.name = attributes.get(XMLToken.TEXT_NAME);
     this.help = attributes.get(XMLToken.TEXT_HELP);
@@ -271,7 +271,7 @@ export class XMLDropDownFieldImportContext extends SvXMLImportContext {
     return new SvXMLImportContext();
   }
 
-  /** Attaches the original DropDown service. */
+  /** Attaches the original DropDown service. @returns Nothing. */
   public override endFastElement(): void {
     this.helper.InsertTextField(
       "DropDown",
@@ -282,7 +282,7 @@ export class XMLDropDownFieldImportContext extends SvXMLImportContext {
     );
   }
 
-  /** Writes the native string sequence and selected value. @param field - Detached native field. */
+  /** Writes the native string sequence and selected value. @param field - Detached native field. @returns Nothing. */
   private PrepareField(field: XMLTextContent): void {
     const strings = this.items.map(xmlTextString);
     const sequence = new DropDownItems(
@@ -315,7 +315,7 @@ export class XMLChapterImportContext extends SvXMLImportContext {
   private format: number = ChapterFormat.NAME_NUMBER;
   private level = 0;
 
-  /** Binds the chapter field to the styled text position. @param helper - Text import owner. @param properties - Character properties. @param hyperlink - Surrounding link. @param characterStyles - Applied character styles. */
+  /** Binds the chapter field to the styled text position. @param helper - Text import owner. @param properties - Character properties. @param hyperlink - Surrounding link. @param characterStyles - Applied character styles. @returns The initialized XMLChapterImportContext instance. */
   public constructor(
     private readonly helper: XMLTextImportHelper,
     private readonly properties: OdfCharacterProperties,
@@ -325,7 +325,7 @@ export class XMLChapterImportContext extends SvXMLImportContext {
     super();
   }
 
-  /** Reads the native chapter display selection and outline depth. @param _element - Source token. @param attributes - Authored attributes. */
+  /** Reads the native chapter display selection and outline depth. @param _element - Source token. @param attributes - Authored attributes. @returns Nothing. */
   public override startFastElement(_element: XMLToken, attributes: FastAttributeList): void {
     const display = attributes.get(XMLToken.TEXT_DISPLAY);
     for (const [format, name] of Object.entries(chapterDisplays))
@@ -339,11 +339,11 @@ export class XMLChapterImportContext extends SvXMLImportContext {
       this.level = parsed[0] - 1;
   }
 
-  /** Inserts the Chapter service at the original text position. */
+  /** Inserts the Chapter service at the original text position. @returns Nothing. */
   public override endFastElement(): void {
     this.helper.InsertTextField(
       "Chapter",
-      /** Writes the original typed properties. @param field - Detached Chapter service. */
+      /** Writes the original typed properties. @param field - Detached Chapter service. @returns Nothing. */
       (field) => {
         this.helper.SetProperty(field, "ChapterFormat", this.format, "sal_Int16");
         this.helper.SetProperty(field, "Level", this.level, "sal_Int8");
@@ -363,7 +363,7 @@ export class XMLPageNumberImportContext extends SvXMLImportContext {
   private continuation: string | undefined;
   private presentation = "";
 
-  /** Binds the count field to the styled text position. @param helper - Text import owner. @param isContinuation - Whether to load authored continuation text. @param properties - Character properties. @param hyperlink - Surrounding link. @param characterStyles - Applied character styles. */
+  /** Binds the count field to the styled text position. @param helper - Text import owner. @param isContinuation - Whether to load authored continuation text. @param properties - Character properties. @param hyperlink - Surrounding link. @param characterStyles - Applied character styles. @returns The initialized XMLPageNumberImportContext instance. */
   public constructor(
     private readonly helper: XMLTextImportHelper,
     private readonly isContinuation: boolean,
@@ -374,7 +374,7 @@ export class XMLPageNumberImportContext extends SvXMLImportContext {
     super();
   }
 
-  /** Decodes the original select-page, numbering, and signed page adjustment. @param _element - Source token. @param attributes - Authored attributes. */
+  /** Decodes the original select-page, numbering, and signed page adjustment. @param _element - Source token. @param attributes - Authored attributes. @returns Nothing. */
   public override startFastElement(_element: XMLToken, attributes: FastAttributeList): void {
     const page = attributes.get(XMLToken.TEXT_SELECT_PAGE);
     if (page === "previous") this.selection = PageNumberType.PREV;
@@ -391,12 +391,12 @@ export class XMLPageNumberImportContext extends SvXMLImportContext {
     this.offset = ((adjust + this.selection - PageNumberType.CURRENT) << 16) >> 16;
   }
 
-  /** Retains source display only as the fallback authored continuation string. @param value - SAX string. */
+  /** Retains source display only as the fallback authored continuation string. @param value - SAX string. @returns Nothing. */
   public override characters(value: string): void {
     if (this.isContinuation) this.presentation += value;
   }
 
-  /** Attaches the original PageNumber service descriptor. */
+  /** Attaches the original PageNumber service descriptor. @returns Nothing. */
   public override endFastElement(): void {
     this.helper.InsertTextField(
       "PageNumber",
@@ -407,7 +407,7 @@ export class XMLPageNumberImportContext extends SvXMLImportContext {
     );
   }
 
-  /** Populates the original typed UNO page selection and related properties. @param field - Detached field. */
+  /** Populates the original typed UNO page selection and related properties. @param field - Detached field. @returns Nothing. */
   private PrepareField(field: XMLTextContent): void {
     const name = xmlTextString("SubType");
     const value = new Any([this.selection], cppu_detail_getUnoType_PageNumberType);
@@ -442,7 +442,7 @@ function readFieldNumberingType(attributes: FastAttributeList): number {
 export class XMLCountFieldImportContext extends SvXMLImportContext {
   private numberingType = NumberingType.PAGE_DESCRIPTOR as number;
 
-  /** Binds the count service and styled point. @param helper - Text import owner. @param field - Element mapping. @param properties - Point formatting. @param hyperlink - Enclosing link. @param characterStyles - Named styles. */
+  /** Binds the count service and styled point. @param helper - Text import owner. @param field - Element mapping. @param properties - Point formatting. @param hyperlink - Enclosing link. @param characterStyles - Named styles. @returns The initialized XMLCountFieldImportContext instance. */
   public constructor(
     private readonly helper: XMLTextImportHelper,
     private readonly field: XMLCountField,
@@ -453,12 +453,12 @@ export class XMLCountFieldImportContext extends SvXMLImportContext {
     super();
   }
 
-  /** Decodes the optional numbering style and its alphabetic repetition flag. @param _element - Count element. @param attributes - Native attributes. */
+  /** Decodes the optional numbering style and its alphabetic repetition flag. @param _element - Count element. @param attributes - Native attributes. @returns Nothing. */
   public override startFastElement(_element: XMLToken, attributes: FastAttributeList): void {
     this.numberingType = readFieldNumberingType(attributes);
   }
 
-  /** Attaches the live count field. */
+  /** Attaches the live count field. @returns Nothing. */
   public override endFastElement(): void {
     this.helper.InsertTextField(
       this.field[2],
@@ -480,7 +480,7 @@ export class XMLTimeFieldImportContext extends SvXMLImportContext {
   private adjust = 0;
   private format: { key: number; systemLanguage: boolean } | undefined;
 
-  /** Binds the date/time service to the active styled text range. @param helper - Import owner. @param properties - Direct formatting. @param hyperlink - Optional link. @param characterStyles - Applied styles. */
+  /** Binds the date/time service to the active styled text range. @param helper - Import owner. @param properties - Direct formatting. @param hyperlink - Optional link. @param characterStyles - Applied styles. @returns The initialized XMLTimeFieldImportContext instance. */
   public constructor(
     private readonly helper: XMLTextImportHelper,
     private readonly properties: OdfCharacterProperties,
@@ -490,12 +490,12 @@ export class XMLTimeFieldImportContext extends SvXMLImportContext {
     super();
   }
 
-  /** Collects the source field properties in authored order. @param _element - Field token. @param attributes - Source field attributes. */
+  /** Collects the source field properties in authored order. @param _element - Field token. @param attributes - Source field attributes. @returns Nothing. */
   public override startFastElement(_element: XMLToken, attributes: FastAttributeList): void {
     for (const [token, value] of attributes) this.ProcessAttribute(token, value);
   }
 
-  /** Processes time properties or those shared with date fields. @param token - Attribute token. @param value - Lexical value. */
+  /** Processes time properties or those shared with date fields. @param token - Attribute token. @param value - Lexical value. @returns Nothing. */
   protected ProcessAttribute(token: XMLToken, value: string): void {
     switch (token) {
       case XMLToken.TEXT_TIME_VALUE:
@@ -518,7 +518,7 @@ export class XMLTimeFieldImportContext extends SvXMLImportContext {
     }
   }
 
-  /** Initializes the original fixed state, calendar value, adjustment and data style. @param field - Detached native descriptor. */
+  /** Initializes the original fixed state, calendar value, adjustment and data style. @param field - Detached native descriptor. @returns Nothing. */
   private PrepareField(field: XMLTextContent): void {
     this.helper.SetProperty(field, "IsFixed", this.fixed[0]);
     this.helper.SetProperty(field, "IsDate", this.isDate);
@@ -539,7 +539,7 @@ export class XMLTimeFieldImportContext extends SvXMLImportContext {
     }
   }
 
-  /** Attaches the original system field, leaving source presentation to its value owner. */
+  /** Attaches the original system field, leaving source presentation to its value owner. @returns Nothing. */
   public override endFastElement(): void {
     this.helper.InsertTextField(
       "DateTime",
@@ -555,7 +555,7 @@ export class XMLTimeFieldImportContext extends SvXMLImportContext {
 export class XMLDateFieldImportContext extends XMLTimeFieldImportContext {
   protected override isDate = true;
 
-  /** Uses the original strict date-time parser and ignores time-only attributes. @param token - Attribute token. @param value - Lexical value. */
+  /** Uses the original strict date-time parser and ignores time-only attributes. @param token - Attribute token. @param value - Lexical value. @returns Nothing. */
   protected override ProcessAttribute(token: XMLToken, value: string): void {
     switch (token) {
       case XMLToken.TEXT_DATE_VALUE:
@@ -581,7 +581,7 @@ export class XMLSimpleDocInfoImportContext extends SvXMLImportContext {
   protected content = "";
   private format: { key: number; systemLanguage: boolean } | undefined;
 
-  /** Binds the native field service chosen by the element. @param helper - Text importer. @param field - Original service mapping. @param properties - Direct formatting. @param hyperlink - Optional link. @param characterStyles - Applied styles. */
+  /** Binds the native field service chosen by the element. @param helper - Text importer. @param field - Original service mapping. @param properties - Direct formatting. @param hyperlink - Optional link. @param characterStyles - Applied styles. @returns The initialized XMLSimpleDocInfoImportContext instance. */
   public constructor(
     protected readonly helper: XMLTextImportHelper,
     protected readonly field: XMLDocInfoField,
@@ -592,18 +592,18 @@ export class XMLSimpleDocInfoImportContext extends SvXMLImportContext {
     super();
   }
 
-  /** Reads text:fixed with the original converter. @param _element - Opening token. @param attributes - Field attributes. */
+  /** Reads text:fixed with the original converter. @param _element - Opening token. @param attributes - Field attributes. @returns Nothing. */
   public override startFastElement(_element: XMLToken, attributes: FastAttributeList): void {
     const fixed = attributes.get(XMLToken.TEXT_FIXED);
     if (fixed !== null) Converter.convertBool(this.fixed, fixed);
   }
 
-  /** Appends original field presentation text. @param value - Character data. */
+  /** Appends original field presentation text. @param value - Character data. @returns Nothing. */
   public override characters(value: string): void {
     this.content += value;
   }
 
-  /** Prepares the fixed presentation before attaching the native field. */
+  /** Prepares the fixed presentation before attaching the native field. @returns Nothing. */
   public override endFastElement(): void {
     this.helper.InsertTextField(
       this.field[2],
@@ -614,7 +614,7 @@ export class XMLSimpleDocInfoImportContext extends SvXMLImportContext {
     );
   }
 
-  /** Sets the native simple DocInfo properties. @param field - Detached UNO text field. */
+  /** Sets the native simple DocInfo properties. @param field - Detached UNO text field. @returns Nothing. */
   protected PrepareField(field: XMLTextContent): void {
     this.helper.SetProperty(field, "IsFixed", this.fixed[0]);
     if (!this.fixed[0]) return;
@@ -623,18 +623,18 @@ export class XMLSimpleDocInfoImportContext extends SvXMLImportContext {
     this.helper.SetProperty(field, "CurrentPresentation", this.content);
   }
 
-  /** Inserts the original presentation when a field has no valid descriptor. */
+  /** Inserts the original presentation when a field has no valid descriptor. @returns Nothing. */
   protected InsertFallback(): void {
     this.helper.InsertString(this.content, this.properties, this.hyperlink, this.characterStyles);
   }
 
-  /** Resolves the authored number style for a numeric DocInfo service. @param attributes - Field attributes. */
+  /** Resolves the authored number style for a numeric DocInfo service. @param attributes - Field attributes. @returns Nothing. */
   protected ReadNumberFormat(attributes: FastAttributeList): void {
     const style = attributes.get(XMLToken.STYLE_DATA_STYLE_NAME);
     if (style !== null) this.format = this.helper.GetDataStyleKey(style);
   }
 
-  /** Applies an admitted number style to a numeric DocInfo service. @param field - Detached field. */
+  /** Applies an admitted number style to a numeric DocInfo service. @param field - Detached field. @returns Nothing. */
   protected PrepareNumberFormat(field: XMLTextContent): void {
     if (!this.format) return;
     this.helper.SetProperty(field, "NumberFormat", this.format.key, "sal_Int32");
@@ -644,7 +644,7 @@ export class XMLSimpleDocInfoImportContext extends SvXMLImportContext {
 
 /** Native revision field importer also supplies a parsed revision to the descriptor. */
 export class XMLRevisionDocInfoImportContext extends XMLSimpleDocInfoImportContext {
-  /** Prepares the fixed revision's additional numeric value. @param field - Detached UNO text field. */
+  /** Prepares the fixed revision's additional numeric value. @param field - Detached UNO text field. @returns Nothing. */
   protected override PrepareField(field: XMLTextContent): void {
     super.PrepareField(field);
     if (!this.fixed[0]) return;
@@ -656,13 +656,13 @@ export class XMLRevisionDocInfoImportContext extends XMLSimpleDocInfoImportConte
 
 /** Original DocInfo calendar and duration importer. The native descriptor accepts a presentation and format. */
 export class XMLDateTimeDocInfoImportContext extends XMLSimpleDocInfoImportContext {
-  /** Collects native fixed and data style attributes. @param element - Field token. @param attributes - Source field attributes. */
+  /** Collects native fixed and data style attributes. @param element - Field token. @param attributes - Source field attributes. @returns Nothing. */
   public override startFastElement(element: XMLToken, attributes: FastAttributeList): void {
     super.startFastElement(element, attributes);
     this.ReadNumberFormat(attributes);
   }
 
-  /** Prepares the format and date discriminator for the detached field. @param field - Native UNO descriptor. */
+  /** Prepares the format and date discriminator for the detached field. @param field - Native UNO descriptor. @returns Nothing. */
   protected override PrepareField(field: XMLTextContent): void {
     super.PrepareField(field);
     const date = this.field[4];
@@ -675,20 +675,20 @@ export class XMLDateTimeDocInfoImportContext extends XMLSimpleDocInfoImportConte
 export class XMLUserDocInfoImportContext extends XMLSimpleDocInfoImportContext {
   private name: string | null = null;
 
-  /** Reads the required name alongside the original format and fixed flag. @param element - Field token. @param attributes - Field attributes. */
+  /** Reads the required name alongside the original format and fixed flag. @param element - Field token. @param attributes - Field attributes. @returns Nothing. */
   public override startFastElement(element: XMLToken, attributes: FastAttributeList): void {
     super.startFastElement(element, attributes);
     this.name = attributes.get(XMLToken.TEXT_NAME);
     this.ReadNumberFormat(attributes);
   }
 
-  /** Leaves the original text in place when there is no authored property name. */
+  /** Leaves the original text in place when there is no authored property name. @returns Nothing. */
   public override endFastElement(): void {
     if (this.name === null) this.InsertFallback();
     else super.endFastElement();
   }
 
-  /** Binds the native property name before applying the field's authored presentation. @param field - Detached UNO field. */
+  /** Binds the native property name before applying the field's authored presentation. @param field - Detached UNO field. @returns Nothing. */
   protected override PrepareField(field: XMLTextContent): void {
     if (this.name) this.helper.SetProperty(field, "Name", this.name);
     this.PrepareNumberFormat(field);
@@ -704,7 +704,7 @@ export class XMLReferenceFieldImportContext extends SvXMLImportContext {
   private flags = 0;
   private presentation = "";
 
-  /** Binds the original field context to the active text stream. @param helper - Text importer. @param source - Named field source. */
+  /** Binds the original field context to the active text stream. @param helper - Text importer. @param source - Named field source. @returns The initialized XMLReferenceFieldImportContext instance. */
   constructor(
     private readonly helper: XMLTextImportHelper,
     private readonly source: XMLReferenceField["source"],
@@ -712,7 +712,7 @@ export class XMLReferenceFieldImportContext extends SvXMLImportContext {
     super();
   }
 
-  /** Collects the named reference properties. @param _element - Opening token. @param attributes - Authored ODF attributes. */
+  /** Collects the named reference properties. @param _element - Opening token. @param attributes - Authored ODF attributes. @returns Nothing. */
   override startFastElement(_element: XMLToken, attributes: FastAttributeList): void {
     for (const [token, value] of attributes) {
       switch (token) {
@@ -759,12 +759,12 @@ export class XMLReferenceFieldImportContext extends SvXMLImportContext {
     }
   }
 
-  /** Appends a presentation text callback. @param value - Original characters. */
+  /** Appends a presentation text callback. @param value - Original characters. @returns Nothing. */
   override characters(value: string): void {
     this.presentation += value;
   }
 
-  /** Attaches the field or inserts its fallback text for a missing source name. */
+  /** Attaches the field or inserts its fallback text for a missing source name. @returns Nothing. */
   override endFastElement(): void {
     if (this.name === null) this.helper.InsertString(this.presentation);
     else

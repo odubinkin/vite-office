@@ -41,20 +41,20 @@ interface RedlineInfo {
 export class XMLRedlineImportHelper implements XMLRedlineImportTarget {
   private readonly m_aRedlineMap = new Map<string, RedlineInfo>();
 
-  /** Binds the original import document. @param document - Actual Writer owner. @param resolveStyle - Loaded ODF character-style owners. */
+  /** Binds the original import document. @param document - Actual Writer owner. @param resolveStyle - Loaded ODF character-style owners. @returns The initialized XMLRedlineImportHelper instance. */
   constructor(
     private readonly document: SwDoc,
     private readonly resolveStyle: (name: string) => SwRedlineExtraData_FormatColl | undefined,
   ) {}
 
-  /** Applies the original record-changes flag without changing display mode. @param enabled - Source setting. */
+  /** Applies the original record-changes flag without changing display mode. @param enabled - Source setting. @returns Nothing. */
   SetRecordChanges(enabled: boolean): void {
     const owner = this.document.GetIDocumentRedlineAccess();
     const flags = owner.GetRedlineFlags();
     owner.SetRedlineFlags(enabled ? flags | RedlineFlags.On : flags & ~RedlineFlags.On);
   }
 
-  /** Adds a change definition and retains its source-layer order. @param change - Parsed metadata. */
+  /** Adds a change definition and retains its source-layer order. @param change - Parsed metadata. @returns Nothing. */
   RedlineAdd(change: XMLRedlineInfo): void {
     const existing = this.m_aRedlineMap.get(change.id);
     if (existing) existing.changes.push(change);
@@ -74,7 +74,7 @@ export class XMLRedlineImportHelper implements XMLRedlineImportTarget {
     return new SwXRedlineText(this.document, entry.content).createTextCursor();
   }
 
-  /** Removes the unused trailing importer paragraph before reusing the body cursor. @param id - Source change ID. */
+  /** Removes the unused trailing importer paragraph before reusing the body cursor. @param id - Source change ID. @returns Nothing. */
   RedlineFinishText(id: string): void {
     const content = this.m_aRedlineMap.get(id)?.content;
     if (!content) return;
@@ -84,7 +84,7 @@ export class XMLRedlineImportHelper implements XMLRedlineImportTarget {
       nodes.removeTextNode(last);
   }
 
-  /** Captures a real document position using the original change identifier. @param id - Declared change ID. @param start - Use the leading endpoint. @param range - Actual UNO range. @param outside - Whether a structural boundary needs deferred completion. @param collapsed - Whether both endpoints are the same source marker. */
+  /** Captures a real document position using the original change identifier. @param id - Declared change ID. @param start - Use the leading endpoint. @param range - Actual UNO range. @param outside - Whether a structural boundary needs deferred completion. @param collapsed - Whether both endpoints are the same source marker. @returns Nothing. */
   RedlineSetCursor(
     id: string,
     start: boolean,
@@ -111,7 +111,7 @@ export class XMLRedlineImportHelper implements XMLRedlineImportTarget {
     if (entry.start && entry.end && !entry.outside) this.InsertIntoDocument(id, entry);
   }
 
-  /** Completes an open structural redline after its target node exists. @param id - Source change identity. */
+  /** Completes an open structural redline after its target node exists. @param id - Source change identity. @returns Nothing. */
   RedlineAdjustStartNodeCursor(id: string): void {
     const entry = this.m_aRedlineMap.get(id);
     if (!entry) return;
@@ -119,7 +119,7 @@ export class XMLRedlineImportHelper implements XMLRedlineImportTarget {
     if (entry.start && entry.end) this.InsertIntoDocument(id, entry);
   }
 
-  /** Completes recorded structural boundaries and drops incomplete definitions. */
+  /** Completes recorded structural boundaries and drops incomplete definitions. @returns Nothing. */
   Finish(): void {
     for (const [id, entry] of this.m_aRedlineMap) {
       if (entry.start && entry.end) this.InsertIntoDocument(id, entry);
@@ -128,7 +128,7 @@ export class XMLRedlineImportHelper implements XMLRedlineImportTarget {
     this.document.GetIDocumentRedlineAccess().ShowChanges();
   }
 
-  /** Releases incomplete import anchors after parsing fails. */
+  /** Releases incomplete import anchors after parsing fails. @returns Nothing. */
   Dispose(): void {
     for (const [id, entry] of this.m_aRedlineMap) this.RemovePending(id, entry, false);
   }
@@ -166,7 +166,7 @@ export class XMLRedlineImportHelper implements XMLRedlineImportTarget {
     }
   }
 
-  /** Promotes the ranged or saved change into the native document table. @param id - Source identity. @param entry - Completed import state. */
+  /** Promotes the ranged or saved change into the native document table. @param id - Source identity. @param entry - Completed import state. @returns Nothing. */
   private InsertIntoDocument(id: string, entry: RedlineInfo): void {
     const change = entry.changes[0];
     if (!entry.start || !entry.end || !change) return;
@@ -201,7 +201,7 @@ export class XMLRedlineImportHelper implements XMLRedlineImportTarget {
       : new SwPosition(anchor.GetNodes().at(anchor.GetIndex() + 1), 0, "redline", "before");
   }
 
-  /** Releases borrowed importer positions and an abandoned deletion section. @param id - Source identity. @param entry - Import state. @param removeContent - Whether the section has no surviving owner. */
+  /** Releases borrowed importer positions and an abandoned deletion section. @param id - Source identity. @param entry - Import state. @param removeContent - Whether the section has no surviving owner. @returns Nothing. */
   private RemovePending(id: string, entry: RedlineInfo, removeContent: boolean): void {
     entry.start?.Dispose();
     entry.end?.Dispose();

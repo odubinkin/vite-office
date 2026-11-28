@@ -93,7 +93,7 @@ export class ScDocument {
   IsEmbedFonts(): boolean {
     return this.mbEmbedFonts;
   }
-  /** Assigns original embedding setting. @param value - Whether enabled. */
+  /** Assigns original embedding setting. @param value - Whether enabled. @returns Nothing. */
   SetEmbedFonts(value: boolean): void {
     this.mbEmbedFonts = value;
   }
@@ -101,7 +101,7 @@ export class ScDocument {
   IsEmbedUsedFontsOnly(): boolean {
     return this.mbEmbedUsedFontsOnly;
   }
-  /** Assigns original used-font setting. @param value - Whether used fonts are selected. */
+  /** Assigns original used-font setting. @param value - Whether used fonts are selected. @returns Nothing. */
   SetEmbedUsedFontsOnly(value: boolean): void {
     this.mbEmbedUsedFontsOnly = value;
   }
@@ -109,7 +109,7 @@ export class ScDocument {
   IsEmbedFontScriptLatin(): boolean {
     return this.mbEmbedFontScriptLatin;
   }
-  /** Assigns the Latin script selection. @param value - Script flag. */
+  /** Assigns the Latin script selection. @param value - Script flag. @returns Nothing. */
   SetEmbedFontScriptLatin(value: boolean): void {
     this.mbEmbedFontScriptLatin = value;
   }
@@ -117,7 +117,7 @@ export class ScDocument {
   IsEmbedFontScriptAsian(): boolean {
     return this.mbEmbedFontScriptAsian;
   }
-  /** Assigns the Asian script selection. @param value - Script flag. */
+  /** Assigns the Asian script selection. @param value - Script flag. @returns Nothing. */
   SetEmbedFontScriptAsian(value: boolean): void {
     this.mbEmbedFontScriptAsian = value;
   }
@@ -125,15 +125,15 @@ export class ScDocument {
   IsEmbedFontScriptComplex(): boolean {
     return this.mbEmbedFontScriptComplex;
   }
-  /** Assigns the complex script selection. @param value - Script flag. */
+  /** Assigns the complex script selection. @param value - Script flag. @returns Nothing. */
   SetEmbedFontScriptComplex(value: boolean): void {
     this.mbEmbedFontScriptComplex = value;
   }
-  /** Claims an existing package font declaration. @param font - Original declaration. */
+  /** Claims an existing package font declaration. @param font - Original declaration. @returns Nothing. */
   RegisterEmbeddedFont(font: OdfFontResource): void {
     this.embeddedFonts.Register(font);
   }
-  /** Attaches validated package font bytes. @param path - Original package entry. @param bytes - Binary font. @param canLoad - Viewing permission. */
+  /** Attaches validated package font bytes. @param path - Original package entry. @param bytes - Binary font. @param canLoad - Viewing permission. @returns Nothing. */
   SetEmbeddedFontBytes(path: string, bytes: Uint8Array, canLoad: boolean): void {
     this.embeddedFonts.SetBytes(path, bytes, canLoad);
   }
@@ -164,7 +164,7 @@ export class ScDocument {
     return this.pChangeTrack;
   }
 
-  /** Adopts a track owned by this workbook. @param track - Candidate owner. */
+  /** Adopts a track owned by this workbook. @param track - Candidate owner. @returns Nothing. */
   SetChangeTrack(track: ScChangeTrack): void {
     if (track === this.pChangeTrack || track.GetDocument() !== this) return;
     this.pChangeTrack?.Dispose();
@@ -176,7 +176,7 @@ export class ScDocument {
     return this.pDocProtection;
   }
 
-  /** Copies or clears the native workbook protection owner. @param protection - Source protection. */
+  /** Copies or clears the native workbook protection owner. @param protection - Source protection. @returns Nothing. */
   SetDocProtection(protection?: ScDocProtection): void {
     this.pDocProtection = protection?.Clone();
   }
@@ -227,7 +227,7 @@ export class ScDocument {
     return this.pConsolidateDlgData;
   }
 
-  /** Takes ownership of the native saved consolidation parameters. @param data - Imported parameters. */
+  /** Takes ownership of the native saved consolidation parameters. @param data - Imported parameters. @returns Nothing. */
   SetConsolidateDlgData(data: ScConsolidateParam | undefined): void {
     this.pConsolidateDlgData = data;
   }
@@ -239,7 +239,7 @@ export class ScDocument {
   GetAnonymousDBData(tab: number): ScDBData | null {
     return this.FetchTable(tab)?.GetAnonymousDBData() ?? null;
   }
-  /** Transfers the anonymous range to its native sheet owner. @param tab - Sheet index. @param data - Database range. */
+  /** Transfers the anonymous range to its native sheet owner. @param tab - Sheet index. @param data - Database range. @returns Nothing. */
   SetAnonymousDBData(tab: number, data: ScDBData): void {
     this.FetchTable(tab)?.SetAnonymousDBData(data);
   }
@@ -742,7 +742,7 @@ export class ScDocument {
   IsImportingXML(): boolean {
     return this.bImportingXML;
   }
-  /** Ends XML loading before applying each sheet's deferred right-to-left layout. @param importing - Original loading flag. */
+  /** Ends XML loading before applying each sheet's deferred right-to-left layout. @param importing - Original loading flag. @returns Nothing. */
   SetImportingXML(importing: boolean): void {
     this.bImportingXML = importing;
     if (importing) return;
@@ -900,17 +900,17 @@ export class ScDocument {
 
   private maSubTotalCells = new Set<ScFormulaCell>();
 
-  /** Registers a formula that consumes the native subtotal data selection. @param cell - Formula owner. */
+  /** Registers a formula that consumes the native subtotal data selection. @param cell - Formula owner. @returns Nothing. */
   AddSubTotalCell(cell: ScFormulaCell): void {
     this.maSubTotalCells.add(cell);
   }
 
-  /** Releases a subtotal registration when the formula owner is destroyed. @param cell - Formula owner. */
+  /** Releases a subtotal registration when the formula owner is destroyed. @param cell - Formula owner. @returns Nothing. */
   RemoveSubTotalCell(cell: ScFormulaCell): void {
     this.maSubTotalCells.delete(cell);
   }
 
-  /** Dirties subtotal formulas referring to a filtered area and removes obsolete registrations. @param dirtyRange - Query operation's changed range. */
+  /** Dirties subtotal formulas referring to a filtered area and removes obsolete registrations. @param dirtyRange - Query operation's changed range. @returns Nothing. */
   SetSubTotalCellsDirty(dirtyRange: ScRange): void {
     const live = new Set<ScFormulaCell>();
     const autoCalc = this.GetAutoCalc();
@@ -1150,7 +1150,7 @@ export class ScDocument {
   HasNote(position: ScAddress): boolean {
     return this.GetNote(position) !== null;
   }
-  /** Places a note in the sheet's native column store. @param position - Cell address. @param note - Owned note. */
+  /** Places a note in the sheet's native column store. @param position - Cell address. @param note - Owned note. @returns Nothing. */
   SetNote(position: ScAddress, note: ScPostIt | null): void {
     const table = this.FetchTable(position.Tab());
     if (table) table.SetNote(position.Col(), position.Row(), note);
@@ -1166,7 +1166,7 @@ export class ScDocument {
     this.SetNote(position, note);
     return note;
   }
-  /** Keeps the first native document person with an authored ID. @param person - Person data. */
+  /** Keeps the first native document person with an authored ID. @param person - Person data. @returns Nothing. */
   AddPerson(person: ScPersonData): void {
     if (!this.GetPersonById(person.maId)) this.maPersonList.push({ ...person });
   }
@@ -1186,7 +1186,7 @@ export class ScDocument {
     return this.maPersonList;
   }
 
-  /** Collects borrowed native note entries for a sheet. @param tab - Sheet. @param notes - Output vector. */
+  /** Collects borrowed native note entries for a sheet. @param tab - Sheet. @param notes - Output vector. @returns Nothing. */
   GetAllNoteEntries(tab: number, notes: NoteEntry[]): void {
     this.FetchTable(tab)?.GetAllNoteEntries(notes);
   }

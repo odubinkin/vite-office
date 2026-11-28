@@ -21,7 +21,7 @@ export class SvBaseLink {
   private m_sLinkName = "";
   private m_pLinkMgr: LinkManager | undefined;
 
-  /** Constructs a client with the original update and content types. @param mode - Update mode. @param content - Clipboard content type. */
+  /** Constructs a client with the original update and content types. @param mode - Update mode. @param content - Clipboard content type. @returns The initialized SvBaseLink instance. */
   constructor(
     private mode: SfxLinkUpdateMode,
     private readonly content: SotClipboardFormatId,
@@ -52,22 +52,22 @@ export class SvBaseLink {
     return this.content;
   }
 
-  /** Sets the native client type. @param type - Client type. */
+  /** Sets the native client type. @param type - Client type. @returns Nothing. */
   SetObjType(type: SvBaseLinkObjectType): void {
     this.mnObjType = type;
   }
 
-  /** Sets the client update mode. @param mode - Persisted update mode. */
+  /** Sets the client update mode. @param mode - Persisted update mode. @returns Nothing. */
   SetUpdateMode(mode: SfxLinkUpdateMode): void {
     this.mode = mode;
   }
 
-  /** Sets the encoded source name for the client. @param name - Encoded source. */
+  /** Sets the encoded source name for the client. @param name - Encoded source. @returns Nothing. */
   SetLinkSourceName(name: string): void {
     this.m_sLinkName = name;
   }
 
-  /** Sets the original owner backlink. @param owner - Current manager, if assigned. */
+  /** Sets the original owner backlink. @param owner - Current manager, if assigned. @returns Nothing. */
   SetLinkManager(owner: LinkManager | undefined): void {
     this.m_pLinkMgr = owner;
   }

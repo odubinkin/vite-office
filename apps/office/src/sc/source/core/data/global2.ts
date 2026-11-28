@@ -23,7 +23,7 @@ export class ScConsolidateParam {
   bByRow = false;
   bReferenceData = false;
 
-  /** Original copy construction duplicates each source area. @param source - Copied parameters. */
+  /** Original copy construction duplicates each source area. @param source - Copied parameters. @returns The initialized ScConsolidateParam instance. */
   constructor(source?: ScConsolidateParam) {
     if (!source) return;
     this.nCol = source.nCol;
@@ -46,7 +46,7 @@ export class ScConsolidateParam {
     return this.pDataAreas.length;
   }
 
-  /** Takes ownership of the importer's ordered area values. @param areas - Owned source areas. */
+  /** Takes ownership of the importer's ordered area values. @param areas - Owned source areas. @returns Nothing. */
   SetAreas(areas: ScArea[]): void {
     this.pDataAreas = areas;
   }

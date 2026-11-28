@@ -104,7 +104,7 @@ it("forces the cursor cell as in tdf97897 and hard-recalculates clean formulas o
   expect(doc.GetAutoCalc()).toBe(false);
 });
 
-it("recalculates clean volatile formulas with ordinary F9 in manual mode", () => {
+it("recalculates clean volatile formulas with ordinary F9 in manual mode", /** Recalculates clean volatile formulas with ordinary F9 in manual mode. @returns Nothing. */ () => {
   const { controller } = mount();
   const doc = controller.shell.GetDocument();
   act(() => {
@@ -142,7 +142,7 @@ it("previews the selected formula fragment and accepts it into the edit before c
   expect(controller.shell.GetDocument().GetValue(new ScAddress())).toBe(14);
 });
 
-it("keeps the numeric F9 preview for an expression with an Excel A1 sheet qualifier", () => {
+it("keeps the numeric F9 preview for an expression with an Excel A1 sheet qualifier", /** Keeps the numeric F9 preview for an expression with an Excel A1 sheet qualifier. @returns Nothing. */ () => {
   const { controller } = mount(),
     doc = controller.shell.GetDocument();
   const sheetName = unicode("Source Data");
@@ -164,7 +164,7 @@ it("keeps the numeric F9 preview for an expression with an Excel A1 sheet qualif
   expect(doc.GetFormulaCell(new ScAddress())).toBeNull();
 });
 
-it("ports tdf131326 and the source Formula to Value dependency, result and undo scenarios", () => {
+it("ports tdf131326 and the source Formula to Value dependency, result and undo scenarios", /** Ports tdf131326 and the source Formula to Value dependency, result and undo scenarios. @returns Nothing. */ () => {
   const { controller } = mount();
   const doc = controller.shell.GetDocument();
   const a1 = new ScAddress(),
@@ -209,7 +209,7 @@ it("ports tdf131326 and the source Formula to Value dependency, result and undo 
   expect(doc.GetValue(b1)).toBe(0);
 });
 
-it("ports the middle-of-group conversion from ucalc and restores dependent formulas on undo", () => {
+it("ports the middle-of-group conversion from ucalc and restores dependent formulas on undo", /** Ports the middle-of-group conversion from ucalc and restores dependent formulas on undo. @returns Nothing. */ () => {
   const { controller } = mount();
   const doc = controller.shell.GetDocument();
   const grammar = FormulaGrammar.Grammar.GRAM_ENGLISH_XL_R1C1;

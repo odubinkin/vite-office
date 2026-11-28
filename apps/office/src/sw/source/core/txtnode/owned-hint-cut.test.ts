@@ -1,3 +1,4 @@
+/** @fileoverview Verifies that Writer text cuts transfer owned inline hints and preserve their ranges. */
 import { isTextFormatHint } from "./txatbase";
 /** @fileoverview Verifies native cut hint identity and consumable container ownership independently of node snapshots. */
 import { assert, describe, expect, it } from "vitest";

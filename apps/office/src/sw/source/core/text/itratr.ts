@@ -1,3 +1,4 @@
+/** @fileoverview Iterates Writer text attributes when applying paragraph and character formatting. */
 import { isTextFormatHint } from "../txtnode/txatbase";
 /** @fileoverview Represents native itratr.cxx hint traversal for one unmerged text node without a filter-run conversion. */
 import { DICTIONARY_WORD } from "../../../../offapi/com/sun/star/i18n/WordType";

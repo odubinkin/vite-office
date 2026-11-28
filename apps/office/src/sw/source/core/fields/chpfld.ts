@@ -69,7 +69,7 @@ function removeControlChars(value: string): string {
 
 /** Document-owned chapter system field and layout field update. */
 export class SwChapterFieldType {
-  /** Binds the actual Writer document. @param document - Field owner. */
+  /** Binds the actual Writer document. @param document - Field owner. @returns The initialized SwChapterFieldType instance. */
   constructor(private readonly document: SwDoc) {}
 
   /** Borrows the Writer model. @returns Original document. */
@@ -77,7 +77,7 @@ export class SwChapterFieldType {
     return this.document;
   }
 
-  /** Refreshes the body fields and page-story fields using actual formatted body anchors. @param layout - Newly formatted Writer root. */
+  /** Refreshes the body fields and page-story fields using actual formatted body anchors. @param layout - Newly formatted Writer root. @returns Nothing. */
   public UpdateFields(layout: SwRootFrame): void {
     let storyAnchors: ReadonlyMap<number, SwTextNode> | undefined;
     for (const node of this.document.GetNodes().entries()) {
@@ -117,7 +117,7 @@ export class SwChapterFieldType {
 
 /** Native Chapter field and its current outline-derived presentation. */
 export class SwChapterField implements SwField<SwChapterField> {
-  /** Creates the original field and optional formatted state. @param type - Native system field type. @param format - Native display format. @param level - Zero-based outline level. @param state - Last expansion. */
+  /** Creates the original field and optional formatted state. @param type - Native system field type. @param format - Native display format. @param level - Zero-based outline level. @param state - Last expansion. @returns The initialized SwChapterField instance. */
   public constructor(
     private readonly type: SwChapterFieldType,
     private readonly format: SwChapterFormat,
@@ -150,7 +150,7 @@ export class SwChapterField implements SwField<SwChapterField> {
     return { ...this.state };
   }
 
-  /** Updates the original chapter projection relative to a body paragraph. @param node - Actual body anchor. @param searchNumber - Climb to a numbered level for a chapter reference. @param layout - Current layout. */
+  /** Updates the original chapter projection relative to a body paragraph. @param node - Actual body anchor. @param searchNumber - Climb to a numbered level for a chapter reference. @param layout - Current layout. @returns Nothing. */
   public ChangeExpansion(node: SwTextNode, searchNumber: boolean, layout?: SwRootFrame): void {
     this.state = emptyState;
     let heading = node.FindOutlineNodeOfLevel(this.level, layout);
@@ -223,6 +223,6 @@ export class SwChapterField implements SwField<SwChapterField> {
     );
   }
 
-  /** Releases the managed chapter state. */
+  /** Releases the managed chapter state. @returns Nothing. */
   public Dispose(): void {}
 }

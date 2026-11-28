@@ -66,7 +66,7 @@ function items(workbook: ScDocument, tab = 0): SfxItemSet {
   return style.GetItemSet();
 }
 
-it("ports tdf123508 dimension fitting and reloads the accepted Sheet controls", async () => {
+it("ports tdf123508 dimension fitting and reloads the accepted Sheet controls", /** Ports tdf123508 dimension fitting and reloads the accepted Sheet controls. @returns Completion. */ async () => {
   const workbook = await readOdsDocument(
     new Uint8Array(
       readFileSync("../../vendor/libreoffice-reference/sc/qa/uitest/data/tdf123508.ods"),
@@ -103,7 +103,7 @@ it("ports tdf123508 dimension fitting and reloads the accepted Sheet controls", 
   session.Close();
 });
 
-it("ports tdf144940 first-page sharing and keeps common geometry, printing and header state through ODS", async () => {
+it("ports tdf144940 first-page sharing and keeps common geometry, printing and header state through ODS", /** Ports tdf144940 first-page sharing and keeps common geometry, printing and header state through ODS. @returns Completion. */ async () => {
   const session = mount();
   const controller = session.controller;
   const doc = controller.shell.GetDocument();
@@ -184,7 +184,7 @@ it("cancels an edited page style without changing the workbook or its history", 
   session.Close();
 });
 
-it("renames a shared custom page style and persists its border and fill", async () => {
+it("renames a shared custom page style and persists its border and fill", /** Renames a shared custom page style and persists its border and fill. @returns Completion. */ async () => {
   const session = mount();
   const controller = session.controller;
   const doc = controller.shell.GetDocument();
@@ -235,7 +235,7 @@ it("renames a shared custom page style and persists its border and fill", async 
   }
 });
 
-it("preserves the native default-backed fit comparison against both saved dimensions", () => {
+it("preserves the native default-backed fit comparison against both saved dimensions", /** Preserves the native default-backed fit comparison against both saved dimensions. @returns Nothing. */ () => {
   const session = createCalcSession();
   const doc = session.controller.shell.GetDocument();
   assert(doc.GetStyleSheetPool()?.GetPageStyle(doc.GetPageStyle(0), true));

@@ -45,7 +45,7 @@ export class SwTableBoxFormula extends SfxPoolItem {
   public IsValid(): boolean {
     return this.formula.IsValid();
   }
-  /** Updates the native cached validity. @param valid - Whether the value is current. */
+  /** Updates the native cached validity. @param valid - Whether the value is current. @returns Nothing. */
   public ChgValid(valid: boolean): void {
     this.formula.ChgValid(valid);
   }

@@ -57,7 +57,7 @@ export interface SwGetRefFieldData {
 
 /** Original document field type and named target lookup. */
 export class SwGetRefFieldType {
-  /** Binds the field type to the original document. @param document - Writer model. */
+  /** Binds the field type to the original document. @param document - Writer model. @returns The initialized SwGetRefFieldType instance. */
   public constructor(private readonly document: SwDoc) {}
 
   /** Borrows the actual field type owner. @returns Writer document. */
@@ -65,7 +65,7 @@ export class SwGetRefFieldType {
     return this.document;
   }
 
-  /** Updates the native reference instances in document order. */
+  /** Updates the native reference instances in document order. @returns Nothing. */
   public UpdateGetReferences(): void {
     for (const node of this.document.GetNodes().entries()) {
       const text = node.GetTextNode();
@@ -86,7 +86,7 @@ export class SwGetRefFieldType {
     }
   }
 
-  /** Updates references after their target frames and sequence fields have been formatted. @param layout - Current Writer root. */
+  /** Updates references after their target frames and sequence fields have been formatted. @param layout - Current Writer root. @returns Nothing. */
   public UpdateLayoutFields(layout: SwRootFrame): void {
     for (const node of this.document.GetNodes().entries()) {
       const text = node.GetTextNode();
@@ -145,7 +145,7 @@ export class SwGetRefFieldType {
 export class SwGetRefField implements SwField<SwGetRefField> {
   private m_sText: string;
 
-  /** Initializes the original named source and imported expansion. @param type - Native document field type. @param data - Imported values. */
+  /** Initializes the original named source and imported expansion. @param type - Native document field type. @param data - Imported values. @returns The initialized SwGetRefField instance. */
   public constructor(
     private readonly type: SwGetRefFieldType,
     private data: SwGetRefFieldData,
@@ -168,12 +168,12 @@ export class SwGetRefField implements SwField<SwGetRefField> {
     return this.data.format;
   }
 
-  /** Sets the native name of a resolved sequence target. @param name - Native sequence master name. */
+  /** Sets the native name of a resolved sequence target. @param name - Native sequence master name. @returns Nothing. */
   public SetSetRefName(name: string): void {
     this.data = { ...this.data, name };
   }
 
-  /** Sets the source identity of a resolved sequence target. @param id - UNO sequence identity. */
+  /** Sets the source identity of a resolved sequence target. @param id - UNO sequence identity. @returns Nothing. */
   public SetSeqNo(id: number): void {
     this.data = { ...this.data, sequenceNumber: id & 0xffff };
   }
@@ -196,7 +196,7 @@ export class SwGetRefField implements SwField<SwGetRefField> {
     );
   }
 
-  /** Updates the requested native reference expansion. @param layout - Formatted root for layout-dependent references. @param language - Native language of the reference field anchor. */
+  /** Updates the requested native reference expansion. @param layout - Formatted root for layout-dependent references. @param language - Native language of the reference field anchor. @returns Nothing. */
   public UpdateField(layout?: SwRootFrame, language = 0): void {
     const chapter = this.data.format === RefFieldFormat.Chapter;
     const sequence = this.data.source === ReferencesSubtype.SequenceField;
@@ -301,6 +301,6 @@ export class SwGetRefField implements SwField<SwGetRefField> {
     if (result) this.m_sText = formatReferenceLanguage(this.m_sText, language, this.data.language);
   }
 
-  /** Releases the value-only native field. */
+  /** Releases the value-only native field. @returns Nothing. */
   public Dispose(): void {}
 }

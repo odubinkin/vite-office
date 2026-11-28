@@ -18,12 +18,12 @@ export class DocumentRedlineManager {
     return this.meRedlineFlags;
   }
 
-  /** Stores the represented document flags. @param flags - Original flag mask. */
+  /** Stores the represented document flags. @param flags - Original flag mask. @returns Nothing. */
   SetRedlineFlags(flags: RedlineFlags): void {
     this.meRedlineFlags = flags;
   }
 
-  /** Shows represented saved deletions in their original redline table order. */
+  /** Shows represented saved deletions in their original redline table order. @returns Nothing. */
   ShowChanges(): void {
     const ranges = this.redlines.entries();
     for (const [index, range] of ranges.entries()) range.MoveFromSection(ranges, index);
@@ -66,7 +66,7 @@ export class DocumentRedlineManager {
     );
   }
 
-  /** Releases the document's tracked ranges. */
+  /** Releases the document's tracked ranges. @returns Nothing. */
   Dispose(): void {
     this.redlines.Dispose();
   }

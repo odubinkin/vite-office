@@ -23,7 +23,7 @@ import { ScFlatBoolRowSegments } from "./segmenttree";
 
 /** Native selected-row height pass over the document's actual sheet ranges. */
 export class ScDocRowHeightUpdater {
-  /** Binds the original document, device scale and selected ranges. @param document - Actual Calc model. @param device - Reference device. @param pixelsPerTwipX - Horizontal density. @param pixelsPerTwipY - Vertical density. @param ranges - Native marked spans by sheet. */
+  /** Binds the original document, device scale and selected ranges. @param document - Actual Calc model. @param device - Reference device. @param pixelsPerTwipX - Horizontal density. @param pixelsPerTwipY - Vertical density. @param ranges - Native marked spans by sheet. @returns The initialized ScDocRowHeightUpdater instance. */
   public constructor(
     private readonly document: ScDocument,
     private readonly device: object | null,
@@ -32,7 +32,7 @@ export class ScDocRowHeightUpdater {
     private readonly ranges: ReadonlyMap<number, ScFlatBoolRowSegments>,
   ) {}
 
-  /** Updates each selected range using the original shared context within its sheet. */
+  /** Updates each selected range using the original shared context within its sheet. @returns Nothing. */
   public update(): void {
     for (const [tab, selected] of this.ranges) {
       if (!ValidTab(tab) || tab >= this.document.GetTableCount()) continue;

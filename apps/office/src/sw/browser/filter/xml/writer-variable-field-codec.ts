@@ -67,7 +67,7 @@ export function encodeVariableMasters(document: SwDoc): WriterVariableMasterReco
   return records;
 }
 
-/** Restores the native named master registry before its text occurrences. @param document - Writer owner. @param records - Detached Worker records. */
+/** Restores the native named master registry before its text occurrences. @param document - Writer owner. @param records - Detached Worker records. @returns Nothing. */
 export function decodeVariableMasters(
   document: SwDoc,
   records: readonly WriterVariableMasterRecord[] | undefined,
@@ -146,7 +146,7 @@ export function encodeVariableFields(node: SwTextNode): WriterVariableFieldRecor
   return records;
 }
 
-/** Reconnects fields at their original text points. @param node - Restored text owner. @param records - Detached Worker records. */
+/** Reconnects fields at their original text points. @param node - Restored text owner. @param records - Detached Worker records. @returns Nothing. */
 export function decodeVariableFields(
   node: SwTextNode,
   records: readonly WriterVariableFieldRecord[] | undefined,

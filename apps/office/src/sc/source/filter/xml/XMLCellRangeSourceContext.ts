@@ -19,7 +19,7 @@ export class ScMyImpCellRangeSource {
 
 /** Reads properties into the owning XML cell's range source. */
 export class ScXMLCellRangeSourceContext extends ScXMLImportContext {
-  /** Parses attributes with the native present/absent distinction for dimensions. @param owner - Calc XML importer. @param attributes - ODF attributes. @param source - Owning cell data. */
+  /** Parses attributes with the native present/absent distinction for dimensions. @param owner - Calc XML importer. @param attributes - ODF attributes. @param source - Owning cell data. @returns The initialized ScXMLCellRangeSourceContext instance. */
   constructor(owner: ScXMLImport, attributes: FastAttributeList, source: ScMyImpCellRangeSource) {
     super(owner);
     const number: [number] = [0];

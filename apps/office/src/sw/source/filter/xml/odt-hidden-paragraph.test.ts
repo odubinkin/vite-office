@@ -66,7 +66,7 @@ it("preserves the pinned hidden paragraph in its native text fly", /** Replays t
         point.Dispose();
         try {
           const options = new SwViewOption(
-            /** Ignores binding changes in this view fixture. */ () => {},
+            /** Ignores binding changes in this view fixture. @returns Nothing. */ () => {},
           );
           const projection = new WriterViewProjection();
           const state = createDocument({
@@ -102,7 +102,7 @@ it("preserves the pinned hidden paragraph in its native text fly", /** Replays t
   }
 });
 
-it("keeps original hidden body frames at zero height and preserves a visible caret frame", /** Checks field precedence and the first body paragraph exception. */ () => {
+it("keeps original hidden body frames at zero height and preserves a visible caret frame", /** Checks field precedence and the first body paragraph exception. @returns Nothing. */ () => {
   const ns = `xmlns:office="${ODF_NAMESPACES.office}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:ooow="${ODF_NAMESPACES.ooow}"`;
   const hide = '<text:hidden-paragraph text:condition="ooow:TRUE"/>';
   const document = importWriterXml(

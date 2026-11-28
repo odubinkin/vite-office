@@ -78,7 +78,7 @@
           "marker": "ports the Calc Asian Typography"
         },
         {
-          "path": "apps/office/src/sc/source/filter/xml/ods.test.ts",
+          "path": "apps/office/src/sc/source/filter/xml/ods-native-alignment.test.ts",
           "marker": "maps the three original Asian typography"
         }
       ],

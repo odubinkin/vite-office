@@ -1,3 +1,4 @@
+/** @fileoverview Resolves the effective Writer text attributes and item states over a paragraph range. */
 import type { SwFormatRuby } from "./fmtatr2";
 import { isTextFormatHint } from "./txatbase";
 /** @fileoverview Implements the ranged pointer branch of ndtxt.cxx text-attribute lookup. */

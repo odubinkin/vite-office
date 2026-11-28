@@ -13,7 +13,7 @@ export class SwXReferenceMark {
   private mark: SwTextRefMark | undefined;
   private parent: SwXTextOwner | undefined;
 
-  /** Sets the original name, using the native deletion and reinsertion for an attached mark. @param name - Native name. */
+  /** Sets the original name, using the native deletion and reinsertion for an attached mark. @param name - Native name. @returns Nothing. */
   public setName(name: OUStringConstReference): void {
     const next = text(name);
     if (this.isDescriptor) {
@@ -27,7 +27,7 @@ export class SwXReferenceMark {
     if (document.GetRefMark(this.name) !== hint.GetAttr()) return;
     this.DeleteRefMark(
       hint,
-      /** Reinserts the renamed mark at the range left after native deletion. @param range - Updated native selection. */
+      /** Reinserts the renamed mark at the range left after native deletion. @param range - Updated native selection. @returns Nothing. */
       (range) => {
         this.name = next;
         this.InsertRefMark(range);
@@ -47,7 +47,7 @@ export class SwXReferenceMark {
     return unicode(this.name);
   }
 
-  /** Inserts the actual native hint at the selected text. @param range - Original Writer range. */
+  /** Inserts the actual native hint at the selected text. @param range - Original Writer range. @returns Nothing. */
   public attach(range: SwXTextRange): void {
     if (!this.isDescriptor) invalid("Writer reference mark is already attached.");
     this.InsertRefMark(range.GetPaM());
@@ -55,7 +55,7 @@ export class SwXReferenceMark {
     this.isDescriptor = false;
   }
 
-  /** Inserts the actual native point or range at the selected text. @param selection - Registered Writer selection. */
+  /** Inserts the actual native point or range at the selected text. @param selection - Registered Writer selection. @returns Nothing. */
   private InsertRefMark(selection: SwPaM): void {
     const start = selection.Start();
     const end = selection.End();
@@ -91,7 +91,7 @@ export class SwXReferenceMark {
     }
   }
 
-  /** Releases the descriptor or applies native deletion of the attached mark text. */
+  /** Releases the descriptor or applies native deletion of the attached mark text. @returns Nothing. */
   public dispose(): void {
     const hint = this.mark;
     const node = hint?.GetTextNode();
@@ -102,7 +102,7 @@ export class SwXReferenceMark {
       this.DeleteRefMark(hint);
   }
 
-  /** Deletes the selected mark and its text through the original content operations owner. @param hint - Attached mark. @param after - Optional operation on the resulting selection. */
+  /** Deletes the selected mark and its text through the original content operations owner. @param hint - Attached mark. @param after - Optional operation on the resulting selection. @returns Nothing. */
   private DeleteRefMark(hint: SwTextRefMark, after?: (range: SwPaM) => void): void {
     const node = hint.GetTextNode();
     if (!node) return;

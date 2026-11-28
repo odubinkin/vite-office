@@ -58,7 +58,7 @@ export abstract class ScChangeAction<Type extends ScChangeActionType = ScChangeA
   private readonly deleted: ScChangeAction[] = [];
   private readonly deletedIn: ScChangeAction[] = [];
 
-  /** Copies the action position and UTC time. @param type - Original action type. @param info - Original action metadata. */
+  /** Copies the action position and UTC time. @param type - Original action type. @param info - Original action metadata. @returns The initialized ScChangeAction instance. */
   public constructor(
     private readonly type: Type,
     info: ScChangeActionInfo,
@@ -114,7 +114,7 @@ export abstract class ScChangeAction<Type extends ScChangeActionType = ScChangeA
     return this.info.comment;
   }
 
-  /** Adds a dependent in the original link-list order. @param action - Resolved dependent action. */
+  /** Adds a dependent in the original link-list order. @param action - Resolved dependent action. @returns Nothing. */
   public AddDependent(action: ScChangeAction): void {
     this.dependents.unshift(action);
   }
@@ -129,12 +129,12 @@ export abstract class ScChangeAction<Type extends ScChangeActionType = ScChangeA
     return this.nextAction;
   }
 
-  /** Updates the following action on append. @param action - Following action. */
+  /** Updates the following action on append. @param action - Following action. @returns Nothing. */
   public SetNext(action: ScChangeAction): void {
     this.nextAction = action;
   }
 
-  /** Links one deleted action in both directions. @param action - Deleted action from the track. */
+  /** Links one deleted action in both directions. @param action - Deleted action from the track. @returns Nothing. */
   public SetDeletedInThis(action: ScChangeAction): void {
     const deleted = action instanceof ScChangeActionContent ? action.GetTopContent() : action;
     deleted.deletedIn.unshift(this);
@@ -156,7 +156,7 @@ export abstract class ScChangeAction<Type extends ScChangeActionType = ScChangeA
     return this.GetDeletedIn().length !== 0;
   }
 
-  /** Releases relationships when the originating track is disposed. */
+  /** Releases relationships when the originating track is disposed. @returns Nothing. */
   public Dispose(): void {
     this.nextAction = undefined;
     this.dependents.length = 0;
@@ -167,7 +167,7 @@ export abstract class ScChangeAction<Type extends ScChangeActionType = ScChangeA
 
 /** Original loaded row, column or sheet insertion with its whole-axis range. */
 export class ScChangeActionIns extends ScChangeAction<ScChangeActionInsertionType> {
-  /** Creates a loaded insertion action. @param type - Inserted axis. @param info - Action metadata and range. @param endOfList - Whether the insertion extends the list. */
+  /** Creates a loaded insertion action. @param type - Inserted axis. @param info - Action metadata and range. @param endOfList - Whether the insertion extends the list. @returns The initialized ScChangeActionIns instance. */
   public constructor(
     type: ScChangeActionInsertionType,
     info: ScChangeActionInfo,
@@ -186,7 +186,7 @@ export class ScChangeActionIns extends ScChangeAction<ScChangeActionInsertionTyp
 export class ScChangeActionMove extends ScChangeAction<ScChangeActionType.SC_CAT_MOVE> {
   private readonly from: ScBigRange;
 
-  /** Stores the two independent ranges of a movement. @param info - Target range and metadata. @param from - Source range. */
+  /** Stores the two independent ranges of a movement. @param info - Target range and metadata. @param from - Source range. @returns The initialized ScChangeActionMove instance. */
   public constructor(info: ScChangeActionInfo, from: ScBigRange) {
     super(ScChangeActionType.SC_CAT_MOVE, info);
     this.from = new ScBigRange(from);
@@ -203,7 +203,7 @@ export class ScChangeActionDel extends ScChangeAction<ScChangeActionDeletionType
   private insertCutOff: { action: ScChangeActionIns; count: number } | undefined;
   private readonly moveCutOffs: { action: ScChangeActionMove; from: number; to: number }[] = [];
 
-  /** Retains the axis-specific member of an original multi-deletion. @param type - Deleted axis. @param info - Original action data. @param offset - Multi-deletion slave offset. */
+  /** Retains the axis-specific member of an original multi-deletion. @param type - Deleted axis. @param info - Original action data. @param offset - Multi-deletion slave offset. @returns The initialized ScChangeActionDel instance. */
   public constructor(
     type: ScChangeActionDeletionType,
     info: ScChangeActionInfo,
@@ -222,7 +222,7 @@ export class ScChangeActionDel extends ScChangeAction<ScChangeActionDeletionType
     return this.GetType() === ScChangeActionType.SC_CAT_DELETE_ROWS ? this.offset : 0;
   }
 
-  /** Sets the original insertion cutoff after resolving its action. @param action - Referenced insertion. @param count - Signed-short displacement. */
+  /** Sets the original insertion cutoff after resolving its action. @param action - Referenced insertion. @param count - Signed-short displacement. @returns Nothing. */
   public SetCutOffInsert(action: ScChangeActionIns, count: number): void {
     this.insertCutOff = { action, count };
   }
@@ -232,7 +232,7 @@ export class ScChangeActionDel extends ScChangeAction<ScChangeActionDeletionType
     return this.insertCutOff;
   }
 
-  /** Inserts the original movement cutoff at the head of its list. @param action - Referenced movement. @param from - First displacement. @param to - Last displacement. */
+  /** Inserts the original movement cutoff at the head of its list. @param action - Referenced movement. @param from - First displacement. @param to - Last displacement. @returns Nothing. */
   public AddCutOffMove(action: ScChangeActionMove, from: number, to: number): void {
     this.moveCutOffs.unshift({ action, from, to });
   }
@@ -246,7 +246,7 @@ export class ScChangeActionDel extends ScChangeAction<ScChangeActionDeletionType
     return this.moveCutOffs;
   }
 
-  /** Releases inherited relationships and typed cutoff links. */
+  /** Releases inherited relationships and typed cutoff links. @returns Nothing. */
   public override Dispose(): void {
     super.Dispose();
     this.insertCutOff = undefined;
@@ -263,7 +263,7 @@ export class ScChangeActionContent extends ScChangeAction<ScChangeActionType.SC_
   private previous: ScChangeActionContent | undefined;
   private next: ScChangeActionContent | undefined;
 
-  /** Takes ownership of the loaded previous cell. @param info - Action metadata. @param oldCell - Detachable cell snapshot. @param document - Formatting owner. @param oldValue - Original numeric input text. */
+  /** Takes ownership of the loaded previous cell. @param info - Action metadata. @param oldCell - Detachable cell snapshot. @param document - Formatting owner. @param oldValue - Original numeric input text. @returns The initialized ScChangeActionContent instance. */
   public constructor(
     info: ScChangeActionInfo,
     oldCell: ScCellValue,
@@ -297,7 +297,7 @@ export class ScChangeActionContent extends ScChangeAction<ScChangeActionType.SC_
     return this.newValue;
   }
 
-  /** Copies the cell value supplied by another action or current sheet. @param cell - Source snapshot. @param input - Optional original spelling. @param format - Original document number format. */
+  /** Copies the cell value supplied by another action or current sheet. @param cell - Source snapshot. @param input - Optional original spelling. @param format - Original document number format. @returns Nothing. */
   public SetNewCell(cell: ScCellValue, input = "", format = 0): void {
     const value = input || this.GetInputString(cell, format);
     const copy = new ScCellValue(cell);
@@ -312,7 +312,7 @@ export class ScChangeActionContent extends ScChangeAction<ScChangeActionType.SC_
     return this.previous;
   }
 
-  /** Connects the preceding action in both directions. @param action - Resolved previous content. */
+  /** Connects the preceding action in both directions. @param action - Resolved previous content. @returns Nothing. */
   public SetPrevContent(action: ScChangeActionContent): void {
     this.previous = action;
     action.next = this;
@@ -336,7 +336,7 @@ export class ScChangeActionContent extends ScChangeAction<ScChangeActionType.SC_
     return this.next ? this.GetTopContent().GetDeletedIn() : super.GetDeletedIn();
   }
 
-  /** Releases native owned cell snapshots. */
+  /** Releases native owned cell snapshots. @returns Nothing. */
   public override Dispose(): void {
     super.Dispose();
     this.oldCell.clear();
@@ -367,7 +367,7 @@ export class ScChangeTrack {
   private actionMax = 0;
   private lastSavedAction = 0;
 
-  /** Binds the track to its actual workbook. @param document - Canonical owner. */
+  /** Binds the track to its actual workbook. @param document - Canonical owner. @returns The initialized ScChangeTrack instance. */
   public constructor(private readonly document: ScDocument) {}
 
   /** Reads the track's owner. @returns Workbook. */
@@ -449,7 +449,7 @@ export class ScChangeTrack {
     return this.actionMax;
   }
 
-  /** Updates the native action-number ceiling. @param value - Original action number. */
+  /** Updates the native action-number ceiling. @param value - Original action number. @returns Nothing. */
   public SetActionMax(value: number): void {
     this.actionMax = value;
   }
@@ -459,12 +459,12 @@ export class ScChangeTrack {
     return this.lastSavedAction;
   }
 
-  /** Records the last action adopted from the package. @param value - Original action number. */
+  /** Records the last action adopted from the package. @param value - Original action number. @returns Nothing. */
   public SetLastSavedActionNumber(value: number): void {
     this.lastSavedAction = value;
   }
 
-  /** Replaces the original track protection key. @param protection - Source bytes. */
+  /** Replaces the original track protection key. @param protection - Source bytes. @returns Nothing. */
   public SetProtection(protection: Uint8Array): void {
     this.protection = new Uint8Array(protection);
   }
@@ -474,7 +474,7 @@ export class ScChangeTrack {
     return this.protection.slice();
   }
 
-  /** Releases all tracked cell snapshots with the owner. */
+  /** Releases all tracked cell snapshots with the owner. @returns Nothing. */
   public Dispose(): void {
     for (const action of this.actions.values()) action.Dispose();
     for (const action of this.generated.values()) action.Dispose();

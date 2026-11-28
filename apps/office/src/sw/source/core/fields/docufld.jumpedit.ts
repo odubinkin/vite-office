@@ -24,7 +24,7 @@ const placeholderTypes = [
 
 /** Document-owned placeholder field type. */
 export class SwJumpEditFieldType {
-  /** Binds the Writer document. @param document - Native owner. */
+  /** Binds the Writer document. @param document - Native owner. @returns The initialized SwJumpEditFieldType instance. */
   public constructor(private readonly document: SwDoc) {}
 
   /** Returns the native field's document owner. @returns Writer document. */
@@ -40,7 +40,7 @@ export class SwJumpEditFieldType {
 
 /** Original placeholder text and contextual help. */
 export class SwJumpEditField implements SwField<SwJumpEditField> {
-  /** Creates the native field. @param type - Document field type. @param format - Placeholder kind. @param text - Content between angle brackets. @param help - Placeholder description. */
+  /** Creates the native field. @param type - Document field type. @param format - Placeholder kind. @param text - Content between angle brackets. @param help - Placeholder description. @returns The initialized SwJumpEditField instance. */
   public constructor(
     private readonly type: SwJumpEditFieldType,
     private readonly format: SwJumpEditFormat,
@@ -93,6 +93,6 @@ export class SwJumpEditField implements SwField<SwJumpEditField> {
     );
   }
 
-  /** Releases the value-only field. */
+  /** Releases the value-only field. @returns Nothing. */
   public Dispose(): void {}
 }

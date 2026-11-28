@@ -39,7 +39,7 @@ export function encodePageNumberFields(node: SwTextNode): readonly WriterPageNum
   );
 }
 
-/** Reattaches the detached field points over existing dummy characters. @param node - Restored text owner. @param records - Worker records. */
+/** Reattaches the detached field points over existing dummy characters. @param node - Restored text owner. @param records - Worker records. @returns Nothing. */
 export function decodePageNumberFields(
   node: SwTextNode,
   records: readonly WriterPageNumberFieldRecord[] | undefined,

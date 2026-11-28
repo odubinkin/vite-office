@@ -400,7 +400,7 @@ export class SwDoc {
   public RegisterEmbeddedFont(font: WriterEmbeddedFont): void {
     this.embeddedFonts.Register(font);
   }
-  /** Attaches validated package bytes and embedding permission. @param path - ZIP entry name. @param bytes - Bounded font data. @param canLoad - Whether the font permits viewing. */
+  /** Attaches validated package bytes and embedding permission. @param path - ZIP entry name. @param bytes - Bounded font data. @param canLoad - Whether the font permits viewing. @returns Nothing. */
   public SetEmbeddedFontBytes(path: string, bytes: Uint8Array, canLoad: boolean): void {
     this.embeddedFonts.SetBytes(path, bytes, canLoad);
   }

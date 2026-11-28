@@ -158,6 +158,25 @@ describe("privacy-safe ODT import diagnostics", /** Groups package diagnostic as
     expect(JSON.stringify(report)).not.toContain("Cell");
   });
 
+  it("classifies an unknown settings attribute as metadata and omits its value", /** Checks metadata loss classification through actual package import. @returns Completion after import. */ async () => {
+    const settings = `<office:document-settings xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:foreign="urn:foreign">
+      <office:settings foreign:private="PRIVATE_METADATA_VALUE"/>
+    </office:document-settings>`;
+    const report = await diagnoseOdtImport(
+      await replaceFixtureEntry("settings.xml", new TextEncoder().encode(settings)),
+    );
+    expect(report.imported).toBe(true);
+    expect(report.diagnostics).toContainEqual(
+      expect.objectContaining({
+        kind: "unknown-attribute",
+        loss: "metadata",
+        name: "foreign:private",
+        stream: "settings.xml",
+      }),
+    );
+    expect(JSON.stringify(report)).not.toContain("PRIVATE_METADATA_VALUE");
+  });
+
   it("records import failures without exposing package or XML error values", /** Checks sanitized failure reports. @returns Completion after import. */ async () => {
     const malformed = await diagnoseOdtImport(
       await replaceFixtureEntry(

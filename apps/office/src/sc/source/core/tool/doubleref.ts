@@ -19,7 +19,7 @@ interface DatabaseCriterion {
 
 /** Spreadsheet implementation of the database double-reference range. */
 export class ScDBInternalRange {
-  /** Binds the source document and range. @param document - Workbook. @param range - Native area. */
+  /** Binds the source document and range. @param document - Workbook. @param range - Native area. @returns The initialized ScDBInternalRange instance. */
   constructor(
     private readonly document: ScDocument,
     readonly range: ScRange,

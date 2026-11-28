@@ -25,7 +25,7 @@ export function ScRangeFunc(this: ScInterpreter): void {
   else this.SetError(FormulaError.IllegalArgument);
 }
 
-/** Intersects two single or double references using their absolute native endpoints. @param this - Active interpreter. */
+/** Intersects two single or double references using their absolute native endpoints. @param this - Active interpreter. @returns Nothing. */
 export function ScIntersect(this: ScInterpreter): void {
   const right = this["pStack"].pop();
   const left = this["pStack"].pop();

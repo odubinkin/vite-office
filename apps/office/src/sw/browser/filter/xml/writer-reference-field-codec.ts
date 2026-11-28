@@ -21,7 +21,7 @@ export function encodeReferenceFields(node: SwTextNode): readonly WriterReferenc
   );
 }
 
-/** Reattaches the original reference fields to restored text. @param node - Destination paragraph. @param records - Optional native field records. */
+/** Reattaches the original reference fields to restored text. @param node - Destination paragraph. @param records - Optional native field records. @returns Nothing. */
 export function decodeReferenceFields(
   node: SwTextNode,
   records: readonly WriterReferenceFieldRecord[] | undefined,

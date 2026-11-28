@@ -327,7 +327,7 @@ export class ScXMLTableRowCellContext extends ScXMLImportContext {
     }
   }
 
-  /** Registers the external area without opening its source workbook. @param position - Actual destination cell. */
+  /** Registers the external area without opening its source workbook. @param position - Actual destination cell. @returns Nothing. */
   private SetCellRangeSource(position: ScAddress): void {
     const source = this.pCellRangeSource;
     if (!source?.sSourceStr || !source.sFilterName || !source.sURL) return;

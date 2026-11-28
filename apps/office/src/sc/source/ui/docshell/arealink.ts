@@ -7,7 +7,7 @@ import { ScRange } from "../../../inc/address";
 export class ScAreaLink extends SvBaseLink {
   private readonly aDestArea: ScRange;
 
-  /** Constructs the original client range and refresh delay. @param aFileName - Source URL. @param aFilterName - Source filter. @param aOptions - Source filter options. @param aSourceArea - External range expression. @param destination - Native destination. @param nRefreshDelaySeconds - Refresh interval in seconds. */
+  /** Constructs the original client range and refresh delay. @param aFileName - Source URL. @param aFilterName - Source filter. @param aOptions - Source filter options. @param aSourceArea - External range expression. @param destination - Native destination. @param nRefreshDelaySeconds - Refresh interval in seconds. @returns The initialized ScAreaLink instance. */
   constructor(
     private readonly aFileName: string,
     private readonly aFilterName: string,
@@ -45,7 +45,7 @@ export class ScAreaLink extends SvBaseLink {
     return this.aDestArea;
   }
 
-  /** Replaces the destination rectangle's endpoints. @param destination - Native rectangle. */
+  /** Replaces the destination rectangle's endpoints. @param destination - Native rectangle. @returns Nothing. */
   SetDestArea(destination: ScRange): void {
     this.aDestArea.assign(destination);
   }

@@ -42,7 +42,7 @@ function fields(document: SwDoc) {
     );
 }
 
-it("retains the title field presentation from LibreOffice testFieldRotation", async () => {
+it("retains the title field presentation from LibreOffice testFieldRotation", /** Retains the title field presentation from LibreOffice testFieldRotation. @returns Completion. */ async () => {
   const fixture = readFileSync(
     "../../vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/data/field-rotated.fodt",
     "utf8",
@@ -144,7 +144,7 @@ it("roundtrips live metadata and fixed presentations through the Worker", async 
   }
 });
 
-it("reads the native modification fields from the LibreOffice testBadSplitSection fixture", async () => {
+it("reads the native modification fields from the LibreOffice testBadSplitSection fixture", /** Reads the native modification fields from the LibreOffice testBadSplitSection fixture. @returns Completion. */ async () => {
   const fixture = readFileSync(
     "../../vendor/libreoffice-reference/sw/qa/core/layout/data/bad-split-section.odt",
   );
@@ -167,7 +167,7 @@ it("reads the native modification fields from the LibreOffice testBadSplitSectio
   }
 });
 
-it("exports the native first-page classification property from LibreOffice testTdf160877", async () => {
+it("exports the native first-page classification property from LibreOffice testTdf160877", /** Exports the native first-page classification property from LibreOffice testTdf160877. @returns Completion. */ async () => {
   const fixture = readFileSync(
     "../../vendor/libreoffice-reference/sw/qa/extras/odfexport/data/tdf160877.odt",
   );

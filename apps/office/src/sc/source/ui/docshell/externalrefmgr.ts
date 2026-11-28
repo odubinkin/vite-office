@@ -217,7 +217,7 @@ export class ScExternalRefManager {
     if (file && href.startsWith("../")) file.relativeName = href.slice(3);
   }
 
-  /** Retains the original source filter data without opening the external workbook. @param fileId - Native file ID. @param filterName - Source filter. @param filterOptions - Filter options. */
+  /** Retains the original source filter data without opening the external workbook. @param fileId - Native file ID. @param filterName - Source filter. @param filterOptions - Filter options. @returns Nothing. */
   setFilterData(fileId: number, filterName: string, filterOptions: string): void {
     const file = this.files[fileId];
     if (!file) return;

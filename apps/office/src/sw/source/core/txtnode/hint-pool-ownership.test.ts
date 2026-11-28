@@ -1,3 +1,4 @@
+/** @fileoverview Verifies Writer text-hint ownership when attributes are shared through the item pool. */
 import { isTextFormatHint } from "./txatbase";
 /** @fileoverview Checks destination hint ownership and separates native copying from retained state snapshots. */
 import { assert, describe, expect, it } from "vitest";

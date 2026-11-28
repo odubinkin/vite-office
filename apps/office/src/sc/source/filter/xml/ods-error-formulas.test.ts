@@ -26,7 +26,7 @@ function createDocument(): ScDocument {
   }
 }
 
-/** Assigns a native formula to the given cell. @param document - Actual model. @param address - Original position. @param source - ODFF expression. */
+/** Assigns a native formula to the given cell. @param document - Actual model. @param address - Original position. @param source - ODFF expression. @returns Nothing. */
 function setFormula(document: ScDocument, address: ScAddress, source: string): void {
   const value = unicode(source);
   try {
@@ -57,7 +57,7 @@ const nativeChecks = [
   ["=IFERROR(NA();)", 0],
 ] as const;
 
-/** Checks the native typed results after hard recalc. @param document - Workbook. */
+/** Checks the native typed results after hard recalc. @param document - Workbook. @returns Nothing. */
 function checkFallbacks(document: ScDocument): void {
   document.CalcAll();
   for (const [row, [source, expected, isError]] of nativeChecks.entries()) {
@@ -134,7 +134,7 @@ it.each([
   ["isna", [2, 5, 6, 7, 8]],
 ] as const)(
   "replays the scalar error predicates from %s.fods",
-  /** Reuses the exact source expressions and expected booleans in pinned information fixtures. @param file - Fixture stem. @param selectedRows - Native fixture rows. */ (
+  /** Reuses the exact source expressions and expected booleans in pinned information fixtures. @param file - Fixture stem. @param selectedRows - Native fixture rows. @returns Nothing. */ (
     file,
     selectedRows,
   ) => {

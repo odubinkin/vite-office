@@ -40,7 +40,7 @@ export class ScXMLBodyContext extends ScXMLImportContext {
       version.dispose();
     }
   }
-  /** Reads the original protection attributes for adoption after the sheets. @param _element - Spreadsheet token. @param attributes - Spreadsheet attributes. */
+  /** Reads the original protection attributes for adoption after the sheets. @param _element - Spreadsheet token. @param attributes - Spreadsheet attributes. @returns Nothing. */
   override startFastElement(_element: XMLToken, attributes: FastAttributeList): void {
     if (attributes.get(XMLToken.TABLE_STRUCTURE_PROTECTED) !== "true") return;
     const protection = new ScDocProtection();

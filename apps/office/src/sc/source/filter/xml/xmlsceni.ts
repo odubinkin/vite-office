@@ -19,7 +19,7 @@ export class ScXMLTableScenarioContext extends ScXMLImportContext {
   private readonly comment: string;
   private readonly ranges = new ScRangeList();
 
-  /** Reads original scenario defaults and ranges in the active sheet. @param owner - ODF import owner. @param tab - Current table number. @param attributes - Original scenario attributes. */
+  /** Reads original scenario defaults and ranges in the active sheet. @param owner - ODF import owner. @param tab - Current table number. @param attributes - Original scenario attributes. @returns The initialized ScXMLTableScenarioContext instance. */
   constructor(
     owner: ScXMLImport,
     private readonly tab: number,
@@ -54,7 +54,7 @@ export class ScXMLTableScenarioContext extends ScXMLImportContext {
     );
   }
 
-  /** Assigns native scenario ranges to the current sheet's pattern flags. */
+  /** Assigns native scenario ranges to the current sheet's pattern flags. @returns Nothing. */
   override endFastElement(): void {
     const document = this.GetScImport().GetDocument();
     document.SetScenario(this.tab, true);

@@ -45,7 +45,7 @@ function open() {
   return screen.getByRole("dialog", { name: "Define Label Range" });
 }
 
-it("ports tdf131170 deletion from the pinned ODS fixture and keeps Cancel transactional", async () => {
+it("ports tdf131170 deletion from the pinned ODS fixture and keeps Cancel transactional", /** Ports tdf131170 deletion from the pinned ODS fixture and keeps Cancel transactional. @returns Completion. */ async () => {
   const bytes = readFileSync("../../vendor/libreoffice-reference/sc/qa/uitest/data/tdf131170.ods");
   const fixture = await DocumentArchive.open(new Uint8Array(bytes));
   const archive = new DocumentArchiveWriter();
@@ -187,7 +187,7 @@ it("connects both sheet reference edits to label formulas and persists their lex
   }
 });
 
-it("resolves a row label and relocates the document pair when preceding sheets change", async () => {
+it("resolves a row label and relocates the document pair when preceding sheets change", /** Resolves a row label and relocates the document pair when preceding sheets change. @returns Completion. */ async () => {
   const controller = mount();
   const doc = controller.shell.GetDocument();
   act(() => {

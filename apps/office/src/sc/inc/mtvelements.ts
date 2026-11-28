@@ -225,7 +225,7 @@ export type CellStoreType = InstanceType<typeof CellStoreType>;
 
 /** Native noncopyable note block owns each represented cell note. */
 export const cellnote_block = noncopyable_managed_element_block<ScPostIt>(element_type_cellnote, {
-  /** Releases the retained edit text. @param note - Removed note. */
+  /** Releases the retained edit text. @param note - Removed note. @returns Nothing. */
   delete(note) {
     note.Dispose();
   },

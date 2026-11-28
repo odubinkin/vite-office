@@ -20,7 +20,7 @@ import type { ScXMLImport } from "./xmlimprt";
 import { ScXMLSortContext } from "./xmlsorti";
 import { subtotalFunctions } from "./XMLConverter";
 
-/** Applies the original sparse AutoFilter header flags. @param document - Workbook. @param range - Native range. */
+/** Applies the original sparse AutoFilter header flags. @param document - Workbook. @param range - Native range. @returns Nothing. */
 export function SetDatabaseRangeAutoFilterFlags(document: ScDocument, range: ScDBData): void {
   if (!range.HasAutoFilter()) return;
   const { aStart, aEnd } = range.GetArea();
@@ -34,7 +34,7 @@ export function SetDatabaseRangeAutoFilterFlags(document: ScDocument, range: ScD
   );
 }
 
-/** Transfers ownership to the original range container. @param document - Workbook. @param range - New data. @param type - Original ownership category. */
+/** Transfers ownership to the original range container. @param document - Workbook. @param range - New data. @param type - Original ownership category. @returns Nothing. */
 export function AdoptDatabaseRange(
   document: ScDocument,
   range: ScDBData,
@@ -84,7 +84,7 @@ export class ScXMLDatabaseRangeContext extends ScXMLImportContext {
   private sort: ScXMLSortContext | undefined;
   private subtotal: ScXMLSubTotalRulesContext | undefined;
 
-  /** Reads the original range flags and scope name. @param owner - Importer. @param attributes - Original range attributes. */
+  /** Reads the original range flags and scope name. @param owner - Importer. @param attributes - Original range attributes. @returns The initialized ScXMLDatabaseRangeContext instance. */
   constructor(owner: ScXMLImport, attributes: FastAttributeList) {
     super(owner);
     this.name = attributes.get(XMLToken.TABLE_NAME) ?? STR_DB_LOCAL_NONAME;
@@ -114,12 +114,12 @@ export class ScXMLDatabaseRangeContext extends ScXMLImportContext {
     return new SvXMLIgnoreContext(true);
   }
 
-  /** Defers native ownership transfer until sheet address resolution is available. */
+  /** Defers native ownership transfer until sheet address resolution is available. @returns Nothing. */
   override endFastElement(): void {
     this.GetScImport().AddDatabaseRange(this);
   }
 
-  /** Creates and adopts the completed original native database range. @param document - Completed workbook. */
+  /** Creates and adopts the completed original native database range. @param document - Completed workbook. @returns Nothing. */
   Apply(document: ScDocument): void {
     const area =
       this.address === null ? new ScRange() : readDatabaseRangeAddress(document, this.address);

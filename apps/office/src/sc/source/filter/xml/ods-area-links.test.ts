@@ -17,7 +17,7 @@ import { readOdsDocument, writeOdsDocument, writeOdsXml } from "./xmlwrap";
 const baseUrl = "file:///fixtures/main/tdf124829.ods";
 const sourceUrl = "file:///fixtures/bug-link-to-external-data-better.ods";
 
-/** Verifies the two original independent external ranges and worksheet values. @param document - Imported Calc model. */
+/** Verifies the two original independent external ranges and worksheet values. @param document - Imported Calc model. @returns Nothing. */
 function expectAreaLinks(document: ScDocument): void {
   expect(document.GetTableCount()).toBe(6);
   const links = document.GetLinkManager().GetLinks();

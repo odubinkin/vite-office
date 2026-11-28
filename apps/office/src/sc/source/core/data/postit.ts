@@ -35,7 +35,7 @@ class ScCaptionInitData {
   mxEditTextObject: EditTextObject | null;
   maSimpleText: string;
 
-  /** Initializes the native simple or rich caption content. @param text - Owned caption contents. */
+  /** Initializes the native simple or rich caption content. @param text - Owned caption contents. @returns The initialized ScCaptionInitData instance. */
   constructor(text: string | EditTextObject) {
     this.mxEditTextObject = typeof text === "string" ? null : text;
     this.maSimpleText = typeof text === "string" ? text : "";
@@ -48,7 +48,7 @@ class ScNoteData {
   maAuthor = "";
   readonly mxInitData: ScCaptionInitData;
 
-  /** Initializes source note data. @param mbShown - Caption visibility. @param caption - Owned caption contents. */
+  /** Initializes source note data. @param mbShown - Caption visibility. @param caption - Owned caption contents. @returns The initialized ScNoteData instance. */
   constructor(
     readonly mbShown: boolean,
     caption: string | EditTextObject,
@@ -64,20 +64,20 @@ export class ScPostIt {
   private readonly mnPostItId: number;
   private mpThreadedCommentData: ScThreadedCommentData | null = null;
 
-  /** Initializes a new Calc note and its stamp. @param shown - Initial caption visibility. @param caption - Owned caption contents. @param id - Explicit note identity, or zero to allocate. */
+  /** Initializes a new Calc note and its stamp. @param shown - Initial caption visibility. @param caption - Owned caption contents. @param id - Explicit note identity, or zero to allocate. @returns The initialized ScPostIt instance. */
   constructor(shown = false, caption: string | EditTextObject = "", id = 0) {
     this.mnPostItId = id || ScPostIt.mnLastPostItId++;
     this.maNoteData = new ScNoteData(shown, caption);
     this.AutoStamp();
   }
 
-  /** Stamps the native creation date and default author. @param create - Set the creation date. */
+  /** Stamps the native creation date and default author. @param create - Set the creation date. @returns Nothing. */
   AutoStamp(create = true): void {
     if (create) this.StampDate();
     if (!this.maNoteData.maAuthor) this.maNoteData.maAuthor = "Unknown Author";
   }
 
-  /** Formats the represented creation stamp with the shared ODF converter. */
+  /** Formats the represented creation stamp with the shared ODF converter. @returns Nothing. */
   private StampDate(): void {
     const buffer = new OUStringBuffer();
     try {
@@ -103,7 +103,7 @@ export class ScPostIt {
     return this.maNoteData.maDate;
   }
 
-  /** Updates the creation stamp. @param date - Date text. */
+  /** Updates the creation stamp. @param date - Date text. @returns Nothing. */
   SetDate(date: string): void {
     this.maNoteData.maDate = date;
   }
@@ -113,7 +113,7 @@ export class ScPostIt {
     return this.maNoteData.maAuthor;
   }
 
-  /** Updates the note author. @param author - Author. */
+  /** Updates the note author. @param author - Author. @returns Nothing. */
   SetAuthor(author: string): void {
     this.maNoteData.maAuthor = author;
   }
@@ -140,7 +140,7 @@ export class ScPostIt {
     }
   }
 
-  /** Replaces the entire caption with plain text. @param position - Cell address. @param value - Note text. */
+  /** Replaces the entire caption with plain text. @param position - Cell address. @param value - Note text. @returns Nothing. */
   SetText(position: ScAddress, value: string): void {
     void position;
     const init = this.maNoteData.mxInitData;
@@ -154,7 +154,7 @@ export class ScPostIt {
     return this.mpThreadedCommentData?.mbDone ?? false;
   }
 
-  /** Applies the native resolved flag and initializes thread state if absent. @param resolved - Resolved state. */
+  /** Applies the native resolved flag and initializes thread state if absent. @param resolved - Resolved state. @returns Nothing. */
   SetResolved(resolved: boolean): void {
     (this.mpThreadedCommentData ??= new ScThreadedCommentData()).mbDone = resolved;
   }
@@ -164,12 +164,12 @@ export class ScPostIt {
     return this.mpThreadedCommentData;
   }
 
-  /** Replaces the note's owned thread metadata. @param data - Thread metadata or null. */
+  /** Replaces the note's owned thread metadata. @param data - Thread metadata or null. @returns Nothing. */
   SetThreadedCommentData(data: ScThreadedCommentData | null): void {
     this.mpThreadedCommentData = data;
   }
 
-  /** Releases the native edit payload when the note leaves storage. */
+  /** Releases the native edit payload when the note leaves storage. @returns Nothing. */
   Dispose(): void {
     const init = this.maNoteData.mxInitData;
     init.mxEditTextObject?.dispose();
@@ -212,7 +212,7 @@ export const ScNoteUtil = {
 
 /** Borrowed note and its position from the native note store. */
 export class NoteEntry {
-  /** Associates a note with its column-owned address. @param maPos - Cell address. @param mpNote - Borrowed note. */
+  /** Associates a note with its column-owned address. @param maPos - Cell address. @param mpNote - Borrowed note. @returns The initialized NoteEntry instance. */
   constructor(
     readonly maPos: ScAddress,
     readonly mpNote: ScPostIt,

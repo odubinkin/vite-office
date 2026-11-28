@@ -29,7 +29,7 @@ export function encodeCalcAreaLink(link: ScAreaLink): CalcAreaLinkRecord {
   };
 }
 
-/** Restores the original registration at an already-created destination sheet. @param document - Workbook. @param record - Transport data. */
+/** Restores the original registration at an already-created destination sheet. @param document - Workbook. @param record - Transport data. @returns Nothing. */
 export function decodeCalcAreaLink(document: ScDocument, record: CalcAreaLinkRecord): void {
   if (
     !record ||

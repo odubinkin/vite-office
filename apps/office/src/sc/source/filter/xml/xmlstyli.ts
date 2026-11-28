@@ -565,7 +565,7 @@ class XMLTableRowStyleContext extends ScXMLImportContext {
     ).Clone());
   }
 
-  /** Transfers parsed row properties. */
+  /** Transfers parsed row properties. @returns Nothing. */
   override endFastElement(): void {
     this.owner.AddRowStyle(this.name, this.height, this.optimal, this.pageBreak, this.background);
   }

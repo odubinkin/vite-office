@@ -54,7 +54,7 @@ function put(row: number, input: string): void {
   }
 }
 
-it("ports tdf51700 whole-column selection and restores the entire transformation in one Undo", async () => {
+it("ports tdf51700 whole-column selection and restores the entire transformation in one Undo", /** Ports tdf51700 whole-column selection and restores the entire transformation in one Undo. @returns Completion. */ async () => {
   const controller = mount();
   const doc = controller.shell.GetDocument();
   expect(command()).toBeDisabled();
@@ -119,7 +119,7 @@ it("warns about occupied columns to the right and leaves a declined conversion i
   expect(doc.GetValue(target)).toBe(88);
 });
 
-it("ports the original tdf69981 workbook and preserves explicit empty and trailing fields", async () => {
+it("ports the original tdf69981 workbook and preserves explicit empty and trailing fields", /** Ports the original tdf69981 workbook and preserves explicit empty and trailing fields. @returns Completion. */ async () => {
   const data = await readFile("../../vendor/libreoffice-reference/sc/qa/uitest/data/tdf69981.ods");
   const doc = await readOdsDocument(new Uint8Array(data));
   const controller = mount();
@@ -155,7 +155,7 @@ it("ports the original tdf69981 workbook and preserves explicit empty and traili
   );
 });
 
-it("ports tdf92423 and applies Text to Columns to the selection created by paste", async () => {
+it("ports tdf92423 and applies Text to Columns to the selection created by paste", /** Ports tdf92423 and applies Text to Columns to the selection created by paste. @returns Completion. */ async () => {
   const controller = mount();
   const doc = controller.shell.GetDocument();
   act(() => {
@@ -190,7 +190,7 @@ it("ports tdf92423 and applies Text to Columns to the selection created by paste
   }
 });
 
-it("ports tdf82398 custom separators on a date-formatted input range", async () => {
+it("ports tdf82398 custom separators on a date-formatted input range", /** Ports tdf82398 custom separators on a date-formatted input range. @returns Completion. */ async () => {
   const controller = mount();
   const doc = controller.shell.GetDocument();
   act(() => {

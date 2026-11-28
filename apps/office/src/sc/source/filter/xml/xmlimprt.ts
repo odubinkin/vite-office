@@ -1,3 +1,4 @@
+/** @fileoverview Coordinates native Calc ODF import contexts and applies parsed workbook settings and content. */
 import {
   SvXMLUnitConverter,
   type ConfigurationProperties,
@@ -228,7 +229,7 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
 
   private readonly databaseRanges: ScXMLDatabaseRangeContext[] = [];
 
-  /** Queues a database range until all source sheets are available. @param context - Native database context. */
+  /** Queues a database range until all source sheets are available. @param context - Native database context. @returns Nothing. */
   AddDatabaseRange(context: ScXMLDatabaseRangeContext): void {
     this.databaseRanges.push(context);
   }
@@ -496,11 +497,11 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
       ),
     );
   }
-  /** Registers the original declaration before the package wrapper reads its bytes. @param font - Shared declaration. */
+  /** Registers the original declaration before the package wrapper reads its bytes. @param font - Shared declaration. @returns Nothing. */
   registerEmbeddedFont(font: OdfEmbeddedFont): void {
     this.document.RegisterEmbeddedFont(font);
   }
-  /** Applies the original Calc notification after a font has been admitted. */
+  /** Applies the original Calc notification after a font has been admitted. @returns Nothing. */
   NotifyContainsEmbeddedFont(): void {
     this.document.SetEmbedFonts(true);
   }
@@ -604,7 +605,7 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
     }
   >();
   private readonly recalcRows = new Map<number, ScFlatBoolRowSegments>();
-  /** Registers imported row-style properties. @param name - Style. @param height - Original UNO hundredths of a millimeter. @param optimal - Automatic flag. @param pageBreak - Manual break before the row. @param background - Owned original row background. */
+  /** Registers imported row-style properties. @param name - Style. @param height - Original UNO hundredths of a millimeter. @param optimal - Automatic flag. @param pageBreak - Manual break before the row. @param background - Owned original row background. @returns Nothing. */
   AddRowStyle(
     name: string,
     height: number | null,

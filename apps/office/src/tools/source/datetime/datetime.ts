@@ -63,7 +63,7 @@ export class DateTime
     if (first.GetTime() !== second.GetTime()) return new Duration(second, first).GetInDays();
     return first.GetAsNormalizedDays() - second.GetAsNormalizedDays();
   }
-  /** Adds the native rounded duration and normalizes the time remainder into the current date. @param days - Serial duration in days. */
+  /** Adds the native rounded duration and normalizes the time remainder into the current date. @param days - Serial duration in days. @returns Nothing. */
   AddTime(days: number): void {
     const duration = new Duration(days);
     this.AddDays(duration.GetDays());

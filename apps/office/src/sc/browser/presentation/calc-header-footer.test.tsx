@@ -132,7 +132,7 @@ it.each([
   },
 );
 
-it("ports tdf166756 and expands the title and decoded file fields in both imported regions", async () => {
+it("ports tdf166756 and expands the title and decoded file fields in both imported regions", /** Ports tdf166756 and expands the title and decoded file fields in both imported regions. @returns Completion. */ async () => {
   mount(
     await readOdsDocument(
       new Uint8Array(
@@ -154,7 +154,7 @@ it("ports tdf166756 and expands the title and decoded file fields in both import
   }
 });
 
-it("opens the standalone source dialog and persists field edits through ODS and XLSX", async () => {
+it("opens the standalone source dialog and persists field edits through ODS and XLSX", /** Opens the standalone source dialog and persists field edits through ODS and XLSX. @returns Completion. */ async () => {
   const workbook = mount();
   fireEvent.click(screen.getByRole("menuitem", { name: "Insert" }));
   fireEvent.click(screen.getByRole("menuitem", { name: /^Headers and Footers/ }));

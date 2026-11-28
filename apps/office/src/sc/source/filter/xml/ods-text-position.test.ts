@@ -48,7 +48,7 @@ function fixtureContent(source: string, rows: readonly number[]): string {
   return new XMLSerializer().serializeToString(xml);
 }
 
-/** Replays result column A against expected column B in Sheet2. @param document - Opened Calc document. @param rows - Native one-based fixture rows. */
+/** Replays result column A against expected column B in Sheet2. @param document - Opened Calc document. @param rows - Native one-based fixture rows. @returns Nothing. */
 function checkRows(document: ScDocument, rows: readonly number[]): void {
   document.CalcAll();
   for (const row of rows) {

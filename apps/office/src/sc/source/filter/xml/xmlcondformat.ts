@@ -186,7 +186,7 @@ class ScXMLColorScaleFormatContext extends ScXMLImportContext {
 class ScXMLDataBarFormatContext extends ScXMLImportContext {
   private readonly limits: FastAttributeList[] = [];
 
-  /** Retains the ODF attributes until formula compilation has a complete document. @param owner - Importer. @param attributes - Native rule attributes. */
+  /** Retains the ODF attributes until formula compilation has a complete document. @param owner - Importer. @param attributes - Native rule attributes. @returns The initialized ScXMLDataBarFormatContext instance. */
   constructor(
     owner: ScXMLImport,
     private readonly attributes: FastAttributeList,
@@ -242,7 +242,7 @@ class ScXMLDataBarFormatContext extends ScXMLImportContext {
 /** Native icon-set context with its ordered formatting entries. */
 class ScXMLIconSetFormatContext extends ScXMLImportContext {
   private readonly entries: FastAttributeList[] = [];
-  /** Retains icon-set attributes until threshold formulas can be compiled. @param owner - Importer. @param attributes - Rule attributes. */
+  /** Retains icon-set attributes until threshold formulas can be compiled. @param owner - Importer. @param attributes - Rule attributes. @returns The initialized ScXMLIconSetFormatContext instance. */
   constructor(
     owner: ScXMLImport,
     private readonly attributes: FastAttributeList,

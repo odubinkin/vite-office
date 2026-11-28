@@ -28,7 +28,7 @@ export class ScDBData {
   private bStripData = false;
   private bDBSelection = false;
 
-  /** Creates the original range with its orientation and header flags. @param name - Database name. @param range - Area. @param byRow - Row-oriented data. @param hasHeader - Header flag. @param hasTotals - Totals flag. */
+  /** Creates the original range with its orientation and header flags. @param name - Database name. @param range - Area. @param byRow - Row-oriented data. @param hasHeader - Header flag. @param hasTotals - Totals flag. @returns The initialized ScDBData instance. */
   constructor(
     private readonly name: string,
     range: ScRange,
@@ -61,7 +61,7 @@ export class ScDBData {
     return this.nIndex;
   }
 
-  /** Sets the original unsigned16 index. @param index - Formula token index. */
+  /** Sets the original unsigned16 index. @param index - Formula token index. @returns Nothing. */
   SetIndex(index: number): void {
     this.nIndex = index & 0xffff;
   }
@@ -80,7 +80,7 @@ export class ScDBData {
     return copy;
   }
 
-  /** Stores independent query data. @param query - Source query. */
+  /** Stores independent query data. @param query - Source query. @returns Nothing. */
   SetQueryParam(query: ScQueryParam): void {
     this.query = query.Clone();
     this.advancedSource = null;
@@ -124,7 +124,7 @@ export class ScDBData {
     return this.advancedSource && new ScRange(this.advancedSource);
   }
 
-  /** Sets the advanced filter source. @param source - Optional source. */
+  /** Sets the advanced filter source. @param source - Optional source. @returns Nothing. */
   SetAdvancedQuerySource(source: ScRange | null): void {
     this.advancedSource = source && new ScRange(source);
   }
@@ -133,7 +133,7 @@ export class ScDBData {
   HasAutoFilter(): boolean {
     return this.bAutoFilter;
   }
-  /** Sets auto-filter button visibility. @param flag - Source flag. */
+  /** Sets auto-filter button visibility. @param flag - Source flag. @returns Nothing. */
   SetAutoFilter(flag: boolean): void {
     this.bAutoFilter = flag;
   }
@@ -141,7 +141,7 @@ export class ScDBData {
   IsKeepFmt(): boolean {
     return this.bKeepFmt;
   }
-  /** Sets format retention. @param flag - Source flag. */
+  /** Sets format retention. @param flag - Source flag. @returns Nothing. */
   SetKeepFmt(flag: boolean): void {
     this.bKeepFmt = flag;
   }
@@ -149,7 +149,7 @@ export class ScDBData {
   IsDoSize(): boolean {
     return this.bDoSize;
   }
-  /** Sets the move-on-size flag. @param flag - Source flag. */
+  /** Sets the move-on-size flag. @param flag - Source flag. @returns Nothing. */
   SetDoSize(flag: boolean): void {
     this.bDoSize = flag;
   }
@@ -157,7 +157,7 @@ export class ScDBData {
   IsStripData(): boolean {
     return this.bStripData;
   }
-  /** Sets the transient database data flag. @param flag - Source flag. */
+  /** Sets the transient database data flag. @param flag - Source flag. @returns Nothing. */
   SetStripData(flag: boolean): void {
     this.bStripData = flag;
   }
@@ -165,7 +165,7 @@ export class ScDBData {
   HasImportSelection(): boolean {
     return this.bDBSelection;
   }
-  /** Sets the import selection flag. @param flag - Source flag. */
+  /** Sets the import selection flag. @param flag - Source flag. @returns Nothing. */
   SetImportSelection(flag: boolean): void {
     this.bDBSelection = flag;
   }
@@ -229,12 +229,12 @@ class NamedDBs {
     return this.nEntryIndex;
   }
 
-  /** Restores the native index counter with the document. @param index - Snapshot index. */
+  /** Restores the native index counter with the document. @param index - Snapshot index. @returns Nothing. */
   SetNextIndex(index: number): void {
     this.nEntryIndex = index;
   }
 
-  /** Releases the named ranges. */
+  /** Releases the named ranges. @returns Nothing. */
   clear(): void {
     for (const range of this.ranges) range.Dispose();
     this.ranges.length = 0;
@@ -245,7 +245,7 @@ class NamedDBs {
 class AnonDBs {
   private readonly ranges: ScDBData[] = [];
 
-  /** Adopts an anonymous definition. @param range - Range data. */
+  /** Adopts an anonymous definition. @param range - Range data. @returns Nothing. */
   insert(range: ScDBData): void {
     this.ranges.push(range);
   }
@@ -255,7 +255,7 @@ class AnonDBs {
     return this.ranges.values();
   }
 
-  /** Releases the anonymous ranges. */
+  /** Releases the anonymous ranges. @returns Nothing. */
   clear(): void {
     for (const range of this.ranges) range.Dispose();
     this.ranges.length = 0;
@@ -296,7 +296,7 @@ export class ScDBCollection {
     return this.maAnonDBs;
   }
 
-  /** Releases contained data at document teardown. */
+  /** Releases contained data at document teardown. @returns Nothing. */
   clear(): void {
     this.maNamedDBs.clear();
     this.maAnonDBs.clear();

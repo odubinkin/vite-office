@@ -1,5 +1,4 @@
 /** @fileoverview Controlled browser rendering of ScGridWindow headers, visible cells and inline input; canonical cell/selection/input state stays with the view controller. */
-import type { SfxItemSet } from "../../../svl/source/items/itemset";
 import type { SyntheticEvent } from "react";
 import { useWindowTracking } from "../../../vcl/browser/use-window-tracking";
 import {
@@ -21,24 +20,22 @@ import type { ScDocument } from "../../inc/document";
 import type { SvxBoxItem } from "../../../editeng/source/items/frmitems";
 import { SvxMarginItem } from "../../../svx/source/items/algitem";
 import { SvxCellHorJustify } from "../../../editeng/inc/svxenum";
-import { SvxContourItem } from "../../../editeng/inc/contouritem";
 import { SpecialText } from "../../../vcl/browser/special-text";
-import { SvxShadowedItem, SvxCharReliefItem } from "../../../editeng/source/items/textitem";
-import type { SvxWordLineModeItem } from "../../../editeng/source/items/textitem";
 import type { SvxShadowItem } from "../../../editeng/source/items/frmitems.shadow";
 import type { SvxHorJustifyItem } from "../../../editeng/inc/justifyitem";
 import type { ScTable } from "../../inc/table";
 import {
   CALC_SPLIT_HANDLE_SIZE,
   calcGridInsets,
+  cellInsets,
+  firstVisible,
+  paneClip,
   CalcGridAxis,
   type CalcGridViewport,
   type CalcPaintBand,
 } from "./calc-grid-axis";
 import { ScViewData as NativeViewData } from "../../source/ui/inc/viewdata";
-import { ScPatternAttr } from "../../inc/patattr";
-import { ScAutoFontColorMode } from "../../source/core/data/patattr";
-import { ComplexColor } from "../../../docmodel/inc/color/ComplexColor";
+import type { ScPatternAttr } from "../../inc/patattr";
 import {
   useLayoutEffect,
   useRef,
@@ -54,35 +51,15 @@ import { text } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { setSyntaxColor } from "../../source/ui/view/output2";
 import { ViewOption } from "../../inc/viewopti";
 import { CellType, ScInputMode } from "../../inc/global";
-import {
-  SvxWeightItem,
-  SvxPostureItem,
-  SvxUnderlineItem,
-} from "../../../editeng/source/items/textitem";
 import { FontLineStyle } from "../../../tools/inc/fontenum";
-import { SvxFontHeightItem } from "../../../editeng/inc/fhgtitem";
 import { SvxFrameDirection as D } from "../../../editeng/inc/frmdir";
 import type { SvxFrameDirectionItem } from "../../../editeng/source/items/frmitems.direction";
-import {
-  ATTR_BORDER,
-  ATTR_FONT_HEIGHT,
-  ATTR_MERGE,
-  ATTR_MERGE_FLAG,
-  ATTR_WRITINGDIR,
-} from "../../inc/scitems";
-import type { SvxFontItem } from "../../../editeng/inc/fontitem";
+import { ATTR_BORDER, ATTR_MERGE, ATTR_MERGE_FLAG, ATTR_WRITINGDIR } from "../../inc/scitems";
 import { ScCellText } from "./ScCellText";
 import { getCellTextLayout } from "../../source/ui/view/output2";
-import { calcCellTextLayoutStyle } from "./calc-cell-text-layout";
+import { calcCellTextLayoutStyle, cellTypography } from "./calc-cell-text-layout";
 import type { SvxBrushItem } from "../../../editeng/inc/brushitem";
-import {
-  COL_AUTO,
-  COL_BLACK,
-  COL_LIGHTBLUE,
-  COL_LIGHTGRAY,
-  COL_WHITE,
-  type Color,
-} from "../../../tools/inc/color";
+import { COL_LIGHTBLUE, COL_LIGHTGRAY, type Color } from "../../../tools/inc/color";
 import { browserColor } from "../../../vcl/browser/color";
 import { ScAddress, ScRange } from "../../inc/address";
 import type { ScSplitPos, ScViewData } from "../../source/ui/inc/viewdata";
@@ -132,69 +109,6 @@ function columnLabel(column: number): string {
     label = String.fromCharCode(65 + ((value - 1) % 26)) + label;
   return label;
 }
-/** Projects one actual source cell's typography identically for paint and the independent edit view. @param pattern - Actual native cell attributes. @param conditional - Matching conditional style. @returns Read-only render projection. */
-function cellTypography(pattern: ScPatternAttr, conditional?: SfxItemSet) {
-  const weight = (pattern.GetItem(102, conditional) as SvxWeightItem).GetWeight();
-  const posture = (pattern.GetItem(103, conditional) as SvxPostureItem).GetPosture();
-  const outlined = (pattern.GetItem(107, conditional) as SvxContourItem).GetValue(),
-    shadowed = (pattern.GetItem(108, conditional) as SvxShadowedItem).GetValue(),
-    relief = (pattern.GetItem(124, conditional) as SvxCharReliefItem).GetValue(),
-    special = outlined || shadowed || relief !== 0;
-  const lineItem = pattern.GetItem(104, conditional) as SvxUnderlineItem;
-  const underline = (pattern.GetItem(123, conditional) as SvxWordLineModeItem).GetValue()
-      ? FontLineStyle.LINESTYLE_NONE
-      : lineItem.GetLineStyle(),
-    lineColor = lineItem.GetColor();
-  const fontColor = new ComplexColor();
-  ScPatternAttr.fillColor(
-    fontColor,
-    pattern.GetItemSet(),
-    ScAutoFontColorMode.Display,
-    conditional,
-    undefined,
-    COL_WHITE,
-    COL_BLACK,
-    {
-      isKitActive: false,
-      hasCurrentView: true,
-      currentCalcViewDocumentColor: undefined,
-      documentColor: COL_WHITE,
-      systemTextColor: COL_BLACK,
-      rawSystemTextColor: COL_AUTO,
-    },
-  );
-  const style: CSSProperties = {
-    color: browserColor(fontColor.getFinalColor()),
-    fontFamily: (pattern.GetItem(100, conditional) as SvxFontItem).GetFamilyName(),
-    fontWeight: [400, 100, 200, 300, 350, 400, 500, 600, 700, 800, 900][weight],
-    fontStyle: ["normal", "oblique", "italic"][posture],
-    textDecorationColor:
-      lineColor.GetAlpha() === 255
-        ? `rgb(${lineColor.GetRed()}, ${lineColor.GetGreen()}, ${lineColor.GetBlue()})`
-        : "currentColor",
-    textDecorationStyle: underline === FontLineStyle.LINESTYLE_DOUBLE ? "double" : "solid",
-    textDecorationLine:
-      special || underline === FontLineStyle.LINESTYLE_NONE ? "none" : "underline",
-    fontSize: `${(pattern.GetItem(ATTR_FONT_HEIGHT, conditional) as SvxFontHeightItem).GetHeight() / 20}pt`,
-    lineHeight: "normal",
-  };
-  return { style, outlined, shadowed, relief, underline, lineColor, fontColor };
-}
-/** Determines the amount of a cell clipped by a neighboring pane. @param band - Pane along the axis. @param start - Cell edge in body pixels. @param size - Cell extent. @returns Inset distances. */
-function cellInsets(band: CalcPaintBand, start: number, size: number): readonly [number, number] {
-  const near =
-    band.clipStart || band.clipEnd !== undefined ? Math.max(0, band.clipStart - start) : 0;
-  const far = band.clipEnd === undefined ? 0 : Math.max(0, start + size - band.clipEnd);
-  return [near, far];
-}
-
-/** Formats a nonempty clipping rectangle. @param top - Top inset. @param right - Right inset. @param bottom - Bottom inset. @param left - Left inset. @returns Optional CSS clipping rectangle. */
-function paneClip(top: number, right: number, bottom: number, left: number): string | undefined {
-  return top || right || bottom || left
-    ? `inset(${top}px ${right}px ${bottom}px ${left}px)`
-    : undefined;
-}
-
 /** Resolves the original merge rectangle, including a hidden origin, from the document attributes. @param document - Actual Calc document. @param cell - Visible candidate. @param pattern - Actual candidate attributes. @returns Complete source range, if merged. */
 function mergeRange(
   document: ScDocument,
@@ -216,14 +130,6 @@ function mergeRange(
     col + merge.GetColMerge() - 1,
     row + merge.GetRowMerge() - 1,
     tab,
-  );
-}
-
-/** Finds the first visible representative of the source span in this pane. @param band - Native paint band. @param first - Source range start. @param last - Source range end. @returns Visible coordinate. */
-function firstVisible(band: CalcPaintBand, first: number, last: number): number | undefined {
-  return band.cells.find(
-    /** Checks the intersection with the span. @param index - Visible coordinate. @returns Whether the coordinate is in range. */
-    (index) => index >= first && index <= last,
   );
 }
 

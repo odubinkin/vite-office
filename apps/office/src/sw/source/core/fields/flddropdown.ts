@@ -4,7 +4,7 @@ import type { SwDoc } from "../doc/doc";
 
 /** Native document system type for a DropDown field. */
 export class SwDropDownFieldType {
-  /** Binds the document-owned system type. @param document - Writer document. */
+  /** Binds the document-owned system type. @param document - Writer document. @returns The initialized SwDropDownFieldType instance. */
   public constructor(private readonly document: SwDoc) {}
 
   /** Returns the native field's document owner. @returns Writer document. */
@@ -32,7 +32,7 @@ export class SwDropDownField implements SwField<SwDropDownField> {
   private items: readonly string[] = [];
   private selectedItem = "";
 
-  /** Creates native choices and applies the original membership check. @param type - Document field type. @param data - Authored data. */
+  /** Creates native choices and applies the original membership check. @param type - Document field type. @param data - Authored data. @returns The initialized SwDropDownField instance. */
   public constructor(
     private readonly type: SwDropDownFieldType,
     private readonly data: SwDropDownFieldData,
@@ -46,13 +46,13 @@ export class SwDropDownField implements SwField<SwDropDownField> {
     return this.type;
   }
 
-  /** Replaces the choices and clears the selection. @param items - Authored item order. */
+  /** Replaces the choices and clears the selection. @param items - Authored item order. @returns Nothing. */
   public SetItems(items: readonly string[]): void {
     this.items = [...items];
     this.selectedItem = "";
   }
 
-  /** Selects a matching item or clears the selection. @param item - Requested item. */
+  /** Selects a matching item or clears the selection. @param item - Requested item. @returns Nothing. */
   public SetSelectedItem(item: string): void {
     this.selectedItem = this.items.includes(item) ? item : "";
   }
@@ -80,6 +80,6 @@ export class SwDropDownField implements SwField<SwDropDownField> {
     );
   }
 
-  /** Releases the value-only field. */
+  /** Releases the value-only field. @returns Nothing. */
   public Dispose(): void {}
 }

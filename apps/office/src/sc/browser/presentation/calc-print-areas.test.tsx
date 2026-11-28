@@ -42,7 +42,7 @@ function areaPreset(): string | null | undefined {
     .selectedOptions[0]?.textContent;
 }
 
-it("ports the upstream Define, edit repeat titles and clear scenario", async () => {
+it("ports the upstream Define, edit repeat titles and clear scenario", /** Ports the upstream Define, edit repeat titles and clear scenario. @returns Completion. */ async () => {
   const session = mountPrintAreas();
   const controller = session.controller;
   const sheet = controller.shell.GetDocument().FetchTable(0);
@@ -92,7 +92,7 @@ it("ports the upstream Define, edit repeat titles and clear scenario", async () 
   session.Close();
 });
 
-it("applies typed areas to marked sheets and restores workbook print history", () => {
+it("applies typed areas to marked sheets and restores workbook print history", /** Applies typed areas to marked sheets and restores workbook print history. @returns Nothing. */ () => {
   const session = createCalcSession();
   const controller = session.controller;
   const doc = controller.shell.GetDocument();
@@ -178,7 +178,7 @@ it("captures a grid reference without moving the cell cursor and validates the f
   session.Close();
 });
 
-it("retains the native A1 repeat separator and length rules and R1C1 bounds", () => {
+it("retains the native A1 repeat separator and length rules and R1C1 bounds", /** Retains the native A1 repeat separator and length rules and R1C1 bounds. @returns Nothing. */ () => {
   const session = createCalcSession();
   const document = session.controller.shell.GetDocument();
   const range = ParseRepeatRange("12345:", document, "rows");

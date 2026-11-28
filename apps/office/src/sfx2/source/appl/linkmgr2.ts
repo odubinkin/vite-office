@@ -12,7 +12,7 @@ export class LinkManager {
     return this.aLinkTbl;
   }
 
-  /** Inserts a file client using the native source name representation. @param link - Actual link. @param type - File client type. @param file - Source document URL. @param filter - Filter name. @param range - Source range. */
+  /** Inserts a file client using the native source name representation. @param link - Actual link. @param type - File client type. @param file - Source document URL. @param filter - Filter name. @param range - Source range. @returns Nothing. */
   InsertFileLink(
     link: SvBaseLink,
     type: SvBaseLinkObjectType.ClientFile,
@@ -34,7 +34,7 @@ export class LinkManager {
     this.aLinkTbl.push(link);
   }
 
-  /** Detaches the links when their document closes. */
+  /** Detaches the links when their document closes. @returns Nothing. */
   Dispose(): void {
     for (const link of this.aLinkTbl) link.SetLinkManager(undefined);
     this.aLinkTbl.length = 0;

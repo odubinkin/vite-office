@@ -31,7 +31,7 @@ export function encodeDocStatFields(node: SwTextNode): readonly WriterDocStatFie
   );
 }
 
-/** Reconnects transferred native count fields at the original dummy characters. @param node - Restored paragraph. @param records - Stored fields. */
+/** Reconnects transferred native count fields at the original dummy characters. @param node - Restored paragraph. @param records - Stored fields. @returns Nothing. */
 export function decodeDocStatFields(
   node: SwTextNode,
   records: readonly WriterDocStatFieldRecord[] | undefined,

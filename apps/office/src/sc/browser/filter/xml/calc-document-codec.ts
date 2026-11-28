@@ -1,3 +1,4 @@
+/** @fileoverview Serializes the Calc document model for browser worker transfer and restores its sheets, cells and workbook settings. */
 import {
   isOdfFontBytes,
   type OdfFontResource,
@@ -212,7 +213,7 @@ function encodeLabelRanges(list: ScRangePairList): readonly LabelRangeRecord[] {
   return records;
 }
 
-/** Restores native pair values without rejoining them before formula compilation. @param document - Workbook with sheets already created. @param list - Column or row owner. @param records - Transferred pairs. */
+/** Restores native pair values without rejoining them before formula compilation. @param document - Workbook with sheets already created. @param list - Column or row owner. @param records - Transferred pairs. @returns Nothing. */
 function decodeLabelRanges(
   document: ScDocument,
   list: ScRangePairList,
@@ -266,7 +267,7 @@ function encodeProtection(
   };
 }
 
-/** Validates and restores the native state before it is adopted. @param protection - Detached protection owner. @param record - Realm-neutral state. @param optionCount - Native option count. @param owner - Error label. */
+/** Validates and restores the native state before it is adopted. @param protection - Detached protection owner. @param record - Realm-neutral state. @param optionCount - Native option count. @param owner - Error label. @returns Nothing. */
 function decodeProtection(
   protection: ScDocProtection | ScTableProtection,
   record: ProtectionRecord,

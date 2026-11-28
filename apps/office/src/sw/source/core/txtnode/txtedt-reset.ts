@@ -1,3 +1,4 @@
+/** @fileoverview Removes direct Writer text formatting while preserving applicable inline hints. */
 import type { SwFormatRuby } from "./fmtatr2";
 import { isTextFormatHint } from "./txatbase";
 /** @fileoverview Original ranged RstTextAttr geometry and selective automatic-style reset from txtedt.cxx for registered hint families. */

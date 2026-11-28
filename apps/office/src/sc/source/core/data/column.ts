@@ -629,7 +629,7 @@ export class ScColumn extends ScColumnData {
     this.maCellNotes.get(row, cellnote_element_callbacks, result);
     return result[0];
   }
-  /** Transfers note ownership into the independent column store. @param row - Cell row. @param note - Owned note or null to clear. */
+  /** Transfers note ownership into the independent column store. @param row - Cell row. @param note - Owned note or null to clear. @returns Nothing. */
   SetCellNote(row: number, note: ScPostIt | null): void {
     if (!this.rDocument.ValidRow(row)) {
       note?.Dispose();
@@ -639,7 +639,7 @@ export class ScColumn extends ScColumnData {
     if (note) this.maCellNotes.set(row, note, cellnote_element_callbacks);
     else this.maCellNotes.set_empty(row, row);
   }
-  /** Deletes independent notes in the requested row span. @param position - Cached native note iterator. @param first - First row. @param last - Last row. */
+  /** Deletes independent notes in the requested row span. @param position - Cached native note iterator. @param first - First row. @param last - Last row. @returns Nothing. */
   DeleteCellNotes(position: ColumnBlockPosition, first: number, last: number): void {
     if (!this.mnBlkCountCellNotes) return;
     position.miCellNotePos = this.maCellNotes.set_empty(
@@ -648,7 +648,7 @@ export class ScColumn extends ScColumnData {
       last,
     );
   }
-  /** Collects actual note blocks, including rows with no scalar cell. @param notes - Native note entries. */
+  /** Collects actual note blocks, including rows with no scalar cell. @param notes - Native note entries. @returns Nothing. */
   GetAllNoteEntries(notes: NoteEntry[]): void {
     if (!this.mnBlkCountCellNotes) return;
     for (

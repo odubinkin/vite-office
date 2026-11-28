@@ -115,7 +115,7 @@ export class SearchParam {
   GetWildEscChar(): number {
     return this.m_cWildEscChar | 0;
   }
-  /** Releases the search string owned by this parameter. */
+  /** Releases the search string owned by this parameter. @returns Nothing. */
   dispose(): void {
     this.sSrchStr.dispose();
   }
@@ -308,15 +308,15 @@ export class TextSearch {
     similarityScore[1] = second;
     return true;
   }
-  /** Borrows the native options-based cache entry. @param options - Complete native search options. @param createRegex - Regex constructor supplied by the owning realm. */
+  /** Borrows the native options-based cache entry. @param options - Complete native search options. @param createRegex - Regex constructor supplied by the owning realm. @returns The initialized TextSearch instance. */
   public constructor(options: SearchOptions2, createRegex?: RegexMatcherFactory);
-  /** Converts the original search parameters using the character classifier's locale. @param parameters - Original search parameters. @param classifier - Native character classifier. @param createRegex - Regex constructor supplied by the owning realm. */
+  /** Converts the original search parameters using the character classifier's locale. @param parameters - Original search parameters. @param classifier - Native character classifier. @param createRegex - Regex constructor supplied by the owning realm. @returns The initialized TextSearch instance. */
   public constructor(
     parameters: SearchParam,
     classifier: CharClass,
     createRegex?: RegexMatcherFactory,
   );
-  /** Admits either native constructor and acquires the shared search backend. @param source - Options or parameters. @param classifierOrFactory - Locale source or regex constructor. @param createRegex - Regex constructor for the parameter overload. */
+  /** Admits either native constructor and acquires the shared search backend. @param source - Options or parameters. @param classifierOrFactory - Locale source or regex constructor. @param createRegex - Regex constructor for the parameter overload. @returns The initialized TextSearch instance. */
   public constructor(
     source: SearchOptions2 | SearchParam,
     classifierOrFactory?: CharClass | RegexMatcherFactory,

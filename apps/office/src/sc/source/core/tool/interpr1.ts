@@ -122,7 +122,7 @@ function SearchMatchMatrix(
   }
 }
 
-/** Resolves the original zero/one-dimensional MATCH vector and comparison mode. @param this - Active interpreter. @param count - Native argument count. */
+/** Resolves the original zero/one-dimensional MATCH vector and comparison mode. @param this - Active interpreter. @param count - Native argument count. @returns Nothing. */
 function ScMatch(this: ScInterpreter, count: number): void {
   if (!checkParameterCount(this, count, 2, 3)) return;
   const mode = count === 3 ? Math.trunc(this["GetDouble"]()) : 1;

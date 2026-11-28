@@ -15,7 +15,7 @@ export class ScDetectiveRefIter {
   private readonly aPos: ScAddress;
   private readonly maIter: Iterator<FormulaToken>;
 
-  /** Captures the source formula code and its current position. @param mrDoc - Native reference limits. @param cell - Source formula. */
+  /** Captures the source formula code and its current position. @param mrDoc - Native reference limits. @param cell - Source formula. @returns The initialized ScDetectiveRefIter instance. */
   constructor(
     private readonly mrDoc: ScDocument,
     cell: ScFormulaCell,

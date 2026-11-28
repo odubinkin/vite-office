@@ -105,7 +105,7 @@ class ScTableProtectionImpl {
   private ooxHash: Readonly<ScOoxPasswordHash> | undefined;
   private storedHash: ScStoredPasswordHash | undefined;
 
-  /** Copies native state or builds the original false-initialized option vector. @param optionCount - Native option count. @param source - Optional protection state to copy. */
+  /** Copies native state or builds the original false-initialized option vector. @param optionCount - Native option count. @param source - Optional protection state to copy. @returns The initialized ScTableProtectionImpl instance. */
   constructor(optionCount: number, source?: ScTableProtectionImpl) {
     this.options = source ? [...source.options] : Array<boolean>(optionCount).fill(false);
     this.protected = source?.protected ?? false;
@@ -240,7 +240,7 @@ class ScTableProtectionImpl {
 
 /** Native workbook protection state stored by ScDocument. */
 export class ScDocProtection extends ScTableProtectionImpl {
-  /** Initializes or copies the original document options. @param source - State to copy. */
+  /** Initializes or copies the original document options. @param source - State to copy. @returns The initialized ScDocProtection instance. */
   constructor(source?: ScDocProtection) {
     super(DocOption.NONE, source);
   }
@@ -250,7 +250,7 @@ export class ScDocProtection extends ScTableProtectionImpl {
     return new ScDocProtection(this);
   }
 
-  /** Updates workbook protection and its original linked structure option. @param enabled - Protection state. */
+  /** Updates workbook protection and its original linked structure option. @param enabled - Protection state. @returns Nothing. */
   override setProtected(enabled: boolean): void {
     super.setProtected(enabled);
     this.setOption(DocOption.STRUCTURE, enabled);
@@ -261,7 +261,7 @@ export class ScDocProtection extends ScTableProtectionImpl {
 export class ScTableProtection extends ScTableProtectionImpl {
   private enhancedProtection: readonly ScEnhancedProtection[];
 
-  /** Copies the native state or constructs the default permissions. @param source - Optional state to copy. */
+  /** Copies the native state or constructs the default permissions. @param source - Optional state to copy. @returns The initialized ScTableProtection instance. */
   constructor(source?: ScTableProtection) {
     super(Option.NONE, source);
     this.enhancedProtection = source?.enhancedProtection ?? [];

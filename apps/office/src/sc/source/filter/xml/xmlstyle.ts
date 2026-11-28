@@ -660,7 +660,7 @@ export function importCellProperties(
   }
 }
 
-/** Imports the native color and transparency properties shared by cell and sheet styles. @param brush - Writable background item. @param source - ODF color attribute. @param unsupported - Original importer diagnostic. */
+/** Imports the native color and transparency properties shared by cell and sheet styles. @param brush - Writable background item. @param source - ODF color attribute. @param unsupported - Original importer diagnostic. @returns Nothing. */
 export function importCellBackgroundColor(
   brush: SvxBrushItem,
   source: string,

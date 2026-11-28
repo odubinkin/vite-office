@@ -15,7 +15,7 @@ export class DocumentLinkManager {
     return this.mpLinkManager;
   }
 
-  /** Releases registered links when the owning document closes. */
+  /** Releases registered links when the owning document closes. @returns Nothing. */
   Dispose(): void {
     this.mpLinkManager?.Dispose();
     this.mpLinkManager = undefined;

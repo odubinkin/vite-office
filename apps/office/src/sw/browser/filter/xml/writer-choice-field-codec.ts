@@ -41,7 +41,7 @@ export function encodeChoiceFields(node: SwTextNode): readonly WriterChoiceField
   return records;
 }
 
-/** Reconnects the native fields over the serialized text dummies. @param node - Text owner. @param records - Worker records. */
+/** Reconnects the native fields over the serialized text dummies. @param node - Text owner. @param records - Worker records. @returns Nothing. */
 export function decodeChoiceFields(
   node: SwTextNode,
   records: readonly WriterChoiceFieldRecord[] | undefined,

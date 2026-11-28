@@ -11,7 +11,7 @@ import type { SwDoc } from "../../core/doc/doc";
 import { readOdtDocument } from "./swxml";
 import { writeOdtDocument } from "./wrtxml";
 
-/** Ports the two original reference mark portions and their surrounding whitespace. @param document - Original Writer model. */
+/** Ports the two original reference mark portions and their surrounding whitespace. @param document - Original Writer model. @returns Nothing. */
 function checkReferenceMarks(document: SwDoc): void {
   const point = document.GetRefMark("bar")?.GetTextRefMark();
   const range = document.GetRefMark("foo")?.GetTextRefMark();

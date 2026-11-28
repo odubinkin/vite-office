@@ -186,7 +186,7 @@ it("keeps Writer list-rule overrides and numbered paragraphs in their native lis
     decimal + alpha,
   );
   const expected = ["Decimal", "Alpha", "Alpha", "Decimal", "Alpha"];
-  /** Captures native rule identities without depending on generated list IDs. @param document - Native Writer document. */
+  /** Captures native rule identities without depending on generated list IDs. @param document - Native Writer document. @returns Nothing. */
   function expectListRules(document: ReturnType<typeof createWriterDocument>): void {
     expect(
       document.paragraphs.map(

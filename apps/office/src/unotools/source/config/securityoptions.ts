@@ -25,7 +25,7 @@ export function IsOptionSet(option: EOption): boolean {
     : settings.keepRedlineInfoOnSaving;
 }
 
-/** Original option mutation on the active configuration store. @param option - Supported original option ID. @param enabled - Configured preference. */
+/** Original option mutation on the active configuration store. @param option - Supported original option ID. @param enabled - Configured preference. @returns Nothing. */
 export function SetOption(option: EOption, enabled: boolean): void {
   if (option === EOption.DocWarnRemovePersonalInfo) settings.removePersonalInfoOnSaving = enabled;
   else settings.keepRedlineInfoOnSaving = enabled;

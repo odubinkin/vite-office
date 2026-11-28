@@ -49,7 +49,7 @@ export class DocumentFieldsManager {
   private readonly docInfo: SwDocInfoFieldType;
   private readonly dateTime: SwDateTimeFieldType;
 
-  /** Creates the system field types for this document. @param document - Actual Writer model. */
+  /** Creates the system field types for this document. @param document - Actual Writer model. @returns The initialized DocumentFieldsManager instance. */
   public constructor(private readonly document: SwDoc) {
     this.getExpression = new SwGetExpFieldType(document);
     this.jumpEdit = new SwJumpEditFieldType(document);
@@ -178,7 +178,7 @@ export class DocumentFieldsManager {
     return this.getRef;
   }
 
-  /** Updates the native expression fields in document order. @param layout - Current Writer layout. */
+  /** Updates the native expression fields in document order. @param layout - Current Writer layout. @returns Nothing. */
   public UpdateExpFields(layout?: SwRootFrame): void {
     const calculator = new SwCalc();
     const strings = new Map<string, string>();
@@ -239,7 +239,7 @@ export class DocumentFieldsManager {
     }
   }
 
-  /** Updates native reference fields through their system type. */
+  /** Updates native reference fields through their system type. @returns Nothing. */
   public UpdateRefFields(): void {
     this.UpdateExpFields();
     this.getRef.UpdateGetReferences();
@@ -272,7 +272,7 @@ export class DocumentFieldsManager {
     return calculator;
   }
 
-  /** Invalidates and calculates the original table box items in the document. @param selected - Optional table to refresh. */
+  /** Invalidates and calculates the original table box items in the document. @param selected - Optional table to refresh. @returns Nothing. */
   public UpdateTableFields(selected?: SwTable): void {
     const tables = new Map<string, SwTable>();
     const formulas: SwTableBoxFormula[] = [];

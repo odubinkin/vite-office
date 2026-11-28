@@ -83,7 +83,7 @@ export class ScTable {
     return this.bScenario;
   }
 
-  /** Assigns original sheet scenario state. @param scenario - Whether this is a scenario sheet. */
+  /** Assigns original sheet scenario state. @param scenario - Whether this is a scenario sheet. @returns Nothing. */
   SetScenario(scenario: boolean): void {
     this.bScenario = scenario;
   }
@@ -93,12 +93,12 @@ export class ScTable {
     return this.bActiveScenario;
   }
 
-  /** Stores the scenario activation written by ODF. @param active - Whether active. */
+  /** Stores the scenario activation written by ODF. @param active - Whether active. @returns Nothing. */
   SetActiveScenario(active: boolean): void {
     this.bActiveScenario = active;
   }
 
-  /** Assigns native scenario attributes. @param comment - Description. @param color - Frame color. @param flags - Original option bits. */
+  /** Assigns native scenario attributes. @param comment - Description. @param color - Frame color. @param flags - Original option bits. @returns Nothing. */
   SetScenarioData(comment: string, color: Color, flags: ScScenarioFlags): void {
     this.aScenarioComment = comment;
     this.aScenarioColor = new Color(color.toUInt32());
@@ -203,7 +203,7 @@ export class ScTable {
   GetAnonymousDBData(): ScDBData | null {
     return this.mpDBDataNoName;
   }
-  /** Replaces the anonymous database range. @param data - New owner. */
+  /** Replaces the anonymous database range. @param data - New owner. @returns Nothing. */
   SetAnonymousDBData(data: ScDBData): void {
     if (this.mpDBDataNoName !== data) this.mpDBDataNoName?.Dispose();
     this.mpDBDataNoName = data;
@@ -405,7 +405,7 @@ export class ScTable {
     return this.bLoadingRTL;
   }
 
-  /** Stores the pending layout while XML objects are loaded in normal orientation. @param set - Deferred direction. */
+  /** Stores the pending layout while XML objects are loaded in normal orientation. @param set - Deferred direction. @returns Nothing. */
   SetLoadingRTL(set: boolean): void {
     this.bLoadingRTL = set;
   }
@@ -1124,7 +1124,7 @@ export class ScTable {
   GetNote(col: number, row: number): ScPostIt | null {
     return this.aCol[col]?.GetCellNote(row) ?? null;
   }
-  /** Transfers the note to the actual cell column. @param col - Column. @param row - Row. @param note - Owned note. */
+  /** Transfers the note to the actual cell column. @param col - Column. @param row - Row. @param note - Owned note. @returns Nothing. */
   SetNote(col: number, row: number, note: ScPostIt | null): void {
     if (!this.rDocument.ValidColRow(col, row)) {
       note?.Dispose();
@@ -1132,7 +1132,7 @@ export class ScTable {
     }
     this.CreateColumnIfNotExists(col).SetCellNote(row, note);
   }
-  /** Appends each allocated column's notes to the native note list. @param notes - Output note list. */
+  /** Appends each allocated column's notes to the native note list. @param notes - Output note list. @returns Nothing. */
   GetAllNoteEntries(notes: NoteEntry[]): void {
     for (const column of this.aCol) column.GetAllNoteEntries(notes);
   }

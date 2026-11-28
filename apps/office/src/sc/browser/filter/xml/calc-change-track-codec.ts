@@ -309,7 +309,7 @@ function decodeCell(importer: ScXMLImport, value: ChangeCell): ScCellValue {
   throw new Error("Calc worker change cell is invalid");
 }
 
-/** Restores owned change actions and then resolves original dependency links. @param importer - Workbook and style owner. @param record - Detached track. */
+/** Restores owned change actions and then resolves original dependency links. @param importer - Workbook and style owner. @param record - Detached track. @returns Nothing. */
 export function decodeCalcChangeTrack(importer: ScXMLImport, record: CalcChangeTrackRecord): void {
   const document = importer.GetDocument();
   if (
@@ -471,7 +471,7 @@ function decodeStructuralAction(
   throw new Error("Calc worker structural change action is invalid");
 }
 
-/** Restores cutoff links after all action identifiers exist. @param action - Native deletion. @param data - Original cutoff record. @param track - Existing action lookup. */
+/** Restores cutoff links after all action identifiers exist. @param action - Native deletion. @param data - Original cutoff record. @param track - Existing action lookup. @returns Nothing. */
 function decodeCutOffs(
   action: ScChangeActionDel,
   data: DeleteActionRecord,

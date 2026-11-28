@@ -68,7 +68,7 @@ async function loadOds(filename: string) {
   return { ...session, doc };
 }
 
-it("ports tdf117367 and keeps the three merge policies mutually exclusive", async () => {
+it("ports tdf117367 and keeps the three merge policies mutually exclusive", /** Ports tdf117367 and keeps the three merge policies mutually exclusive. @returns Completion. */ async () => {
   const { controller, frame } = mount();
   const doc = controller.shell.GetDocument();
   const a1 = new ScAddress(0, 0),
@@ -110,7 +110,7 @@ it("ports tdf117367 and keeps the three merge policies mutually exclusive", asyn
   expect(doc.IsMerged(a1)).toBe(true);
 });
 
-it("ports tdf51368 and recalculates the original workbook after move, keep and empty", async () => {
+it("ports tdf51368 and recalculates the original workbook after move, keep and empty", /** Ports tdf51368 and recalculates the original workbook after move, keep and empty. @returns Completion. */ async () => {
   const { controller, doc } = await loadOds("tdf51368.ods");
   const a11 = new ScAddress(0, 10),
     a12 = new ScAddress(0, 11),
@@ -135,7 +135,7 @@ it("ports tdf51368 and recalculates the original workbook after move, keep and e
   }
 });
 
-it("ports the tdf37901 merge block and restores Key# from both merge commands", async () => {
+it("ports the tdf37901 merge block and restores Key# from both merge commands", /** Ports the tdf37901 merge block and restores Key# from both merge commands. @returns Completion. */ async () => {
   const { controller } = mount();
   const doc = controller.shell.GetDocument();
   const key = new ScAddress(1, 1);

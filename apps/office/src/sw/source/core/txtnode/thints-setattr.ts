@@ -1,3 +1,4 @@
+/** @fileoverview Applies Writer text attributes to hint ranges and reconciles overlapping hints. */
 import { isTextFormatHint } from "./txatbase";
 /** @fileoverview Original SwTextNode::SetAttr item-set/range decisions and DontExpandFormat from thints.cxx/ndtxt.cxx. */
 import type { SwTextNode } from "./ndtxt";

@@ -1,3 +1,4 @@
+/** @fileoverview Maintains the Writer paragraph hint collection during inline attribute changes. */
 import { SwTextTOXMark } from "./atrtox";
 import { SwTextRefMark } from "./atrref";
 import { RES_TXTATR_REFMARK, RES_TXTATR_TOXMARK } from "../../../inc/hintids";

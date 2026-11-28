@@ -9,7 +9,7 @@ export const SW_TABLE_FORMULA_ERROR = Number.MAX_VALUE;
 export class SwTableCalcPara {
   private readonly stack = new Set<SwTableBox>();
 
-  /** Binds the native calculator and the table for cross-table name lookup. @param calculator - Calculation variable and expression owner. @param tables - Document table owners. */
+  /** Binds the native calculator and the table for cross-table name lookup. @param calculator - Calculation variable and expression owner. @param tables - Document table owners. @returns The initialized SwTableCalcPara instance. */
   public constructor(
     public readonly calculator: SwCalc,
     private readonly tables: ReadonlyMap<string, SwTable>,
@@ -36,7 +36,7 @@ export class SwTableCalcPara {
 export class SwTableFormula {
   private valid = false;
 
-  /** Creates a formula from its native external spelling. @param source - Authored formula. */
+  /** Creates a formula from its native external spelling. @param source - Authored formula. @returns The initialized SwTableFormula instance. */
   public constructor(public readonly source: string) {}
 
   /** Reports whether its current result is valid. @returns Native valid flag. */
@@ -44,7 +44,7 @@ export class SwTableFormula {
     return this.valid;
   }
 
-  /** Sets the original validity flag. @param valid - Whether the cached value may be reused. */
+  /** Sets the original validity flag. @param valid - Whether the cached value may be reused. @returns Nothing. */
   public ChgValid(valid: boolean): void {
     this.valid = valid;
   }

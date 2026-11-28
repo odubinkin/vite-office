@@ -34,7 +34,7 @@ function enterNameBox(value: string): void {
   fireEvent.keyDown(input, { key: "Enter" });
 }
 
-it("ports create_range_name.py by naming a selection in the position box and using it in a formula", () => {
+it("ports create_range_name.py by naming a selection in the position box and using it in a formula", /** Ports create_range_name.py by naming a selection in the position box and using it in a formula. @returns Nothing. */ () => {
   const { controller } = mount();
   const doc = controller.shell.GetDocument();
   for (let column = 0; column < 3; column++) doc.SetValue(new ScAddress(column, 0, 0), 1);
@@ -53,7 +53,7 @@ it("ports create_range_name.py by naming a selection in the position box and usi
   expect(controller.viewData.GetMarkData().IsCellMarked(2, 0)).toBe(true);
 });
 
-it("ports tdf86214 validation and saves a sheet-local name after choosing its range from the grid", async () => {
+it("ports tdf86214 validation and saves a sheet-local name after choosing its range from the grid", /** Ports tdf86214 validation and saves a sheet-local name after choosing its range from the grid. @returns Completion. */ async () => {
   const { controller } = mount();
   const document = controller.shell.GetDocument();
   fireEvent.click(screen.getByRole("menuitem", { name: "Sheet" }));
@@ -122,7 +122,7 @@ function openNameMenu(name: RegExp): void {
   fireEvent.click(within(popup).getByRole("menuitem", { name }));
 }
 
-it("ports tdf87474 with manager rename, formula updates, cancellation and atomic undo", async () => {
+it("ports tdf87474 with manager rename, formula updates, cancellation and atomic undo", /** Ports tdf87474 with manager rename, formula updates, cancellation and atomic undo. @returns Completion. */ async () => {
   const { controller } = mount();
   const document = controller.shell.GetDocument(),
     position = new ScAddress(0, 1, 0),
@@ -227,7 +227,7 @@ it("pastes a selected name into input and writes an undoable name list from the 
   expect(bounds.map((at) => readText(at))).toEqual(["Revenue", "=$Sheet1.$A$1"]);
 });
 
-it("keeps nested Add and Delete staged and restores all scopes with one Undo", async () => {
+it("keeps nested Add and Delete staged and restores all scopes with one Undo", /** Keeps nested Add and Delete staged and restores all scopes with one Undo. @returns Completion. */ async () => {
   const { controller } = mount();
   const document = controller.shell.GetDocument();
   enterNameBox("OriginalName");
@@ -262,7 +262,7 @@ it("keeps nested Add and Delete staged and restores all scopes with one Undo", a
   expect(document.GetRangeName(0)?.findByUpperName("NESTEDNAME")).toBeUndefined();
 });
 
-it("ports tdf137617 Create Names defaults and named position text in Calc A1 and Excel R1C1", async () => {
+it("ports tdf137617 Create Names defaults and named position text in Calc A1 and Excel R1C1", /** Ports tdf137617 Create Names defaults and named position text in Calc A1 and Excel R1C1. @returns Completion. */ async () => {
   const { controller } = mount();
   const document = controller.shell.GetDocument();
   act(() => {
@@ -329,7 +329,7 @@ it("ports tdf137617 Create Names defaults and named position text in Calc A1 and
   expect(document.GetGrammar()).toBe(FormulaGrammar.Grammar.GRAM_NATIVE);
 });
 
-it("creates names in edge order and stops at Cancel while preserving earlier accepted entries", async () => {
+it("creates names in edge order and stops at Cancel while preserving earlier accepted entries", /** Creates names in edge order and stops at Cancel while preserving earlier accepted entries. @returns Completion. */ async () => {
   const { controller } = mount();
   const document = controller.shell.GetDocument();
   enterNameBox("ToReplace");
@@ -360,7 +360,7 @@ it("creates names in edge order and stops at Cancel while preserving earlier acc
   expect(document.GetRangeName()?.findByUpperName("GROSS_PROFIT")).toBeUndefined();
 });
 
-it("applies Yes and No to separate name conflicts and recalculates formulas through history", async () => {
+it("applies Yes and No to separate name conflicts and recalculates formulas through history", /** Applies Yes and No to separate name conflicts and recalculates formulas through history. @returns Completion. */ async () => {
   const { controller } = mount();
   const document = controller.shell.GetDocument();
   document.SetValue(new ScAddress(3, 0, 0), 11);

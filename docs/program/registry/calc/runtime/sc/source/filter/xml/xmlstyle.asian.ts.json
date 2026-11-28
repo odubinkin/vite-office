@@ -22,7 +22,7 @@
         "vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx#XML_TYPE_TEXT_PUNCTUATION_WRAP",
         "vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx#XML_TYPE_TEXT_LINE_BREAK",
         "apps/office/src/sc/browser/presentation/calc-format-cells.test.tsx",
-        "apps/office/src/sc/source/filter/xml/ods.test.ts"
+        "apps/office/src/sc/source/filter/xml/ods-native-alignment.test.ts"
       ],
       "justification": "Maps the original Calc UNO paragraph booleans to the three EditEngine ODF lexical pairs using native pooled items and the named-boolean handler.",
       "knownViolations": [],

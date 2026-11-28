@@ -83,7 +83,7 @@ export class SwViewOption {
     return this.showHiddenPara;
   }
 
-  /** Updates native hidden paragraph visibility. @param visible - Current view setting. */
+  /** Updates native hidden paragraph visibility. @param visible - Current view setting. @returns Nothing. */
   public SetShowHiddenPara(visible: boolean): void {
     if (visible === this.showHiddenPara) return;
     this.showHiddenPara = visible;
@@ -95,7 +95,7 @@ export class SwViewOption {
     return this.fieldName;
   }
 
-  /** Updates the view mode that exposes hidden paragraphs. @param visible - Whether field names are shown. */
+  /** Updates the view mode that exposes hidden paragraphs. @param visible - Whether field names are shown. @returns Nothing. */
   public SetFieldName(visible: boolean): void {
     if (visible === this.fieldName) return;
     this.fieldName = visible;

@@ -34,7 +34,7 @@ export function encodeChapterFields(node: SwTextNode): readonly WriterChapterFie
   );
 }
 
-/** Reconnects chapter fields to the target model over its existing dummy characters. @param node - Restored text owner. @param records - Worker records. */
+/** Reconnects chapter fields to the target model over its existing dummy characters. @param node - Restored text owner. @param records - Worker records. @returns Nothing. */
 export function decodeChapterFields(
   node: SwTextNode,
   records: readonly WriterChapterFieldRecord[] | undefined,

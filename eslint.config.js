@@ -13,6 +13,8 @@ export default tseslint.config(
   {
     ignores: [
       ".agentplane/**",
+      ".graphify/**",
+      "graphify-out/**",
       "**/coverage/**",
       "**/dist/**",
       "**/node_modules/**",

@@ -877,7 +877,7 @@ class SwXMLImport
     );
   }
 
-  /** Defers the chapter numbering declaration until its referenced named styles exist. @param rule - Parsed outline levels. */
+  /** Defers the chapter numbering declaration until its referenced named styles exist. @param rule - Parsed outline levels. @returns Nothing. */
   public registerOutlineStyle(rule: XMLTextListRule): void {
     this.outlineStyle = rule;
   }
@@ -974,7 +974,7 @@ class SwXMLImport
         const id = getWriterStyleIdFromOdfName(name);
         return id && getWriterMaterializedParagraphStyleDefinition(id) ? id : undefined;
       },
-      /** Defers the paragraph PageDescName until the master page styles have been declared. @param style - Paragraph style. @param name - Original master name. */
+      /** Defers the paragraph PageDescName until the master page styles have been declared. @param style - Paragraph style. @param name - Original master name. @returns Nothing. */
       (style, name) => {
         this.paragraphPageStyleReferences.push([style, name]);
       },

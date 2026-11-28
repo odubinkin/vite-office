@@ -71,7 +71,7 @@ export class XMLVariableDeclsImportContext extends SvXMLImportContext {
     }
   }
 
-  /** Binds the text importer and original declaration family. @param helper - Shared text import helper. @param family - Named field family. */
+  /** Binds the text importer and original declaration family. @param helper - Shared text import helper. @param family - Named field family. @returns The initialized XMLVariableDeclsImportContext instance. */
   public constructor(
     private readonly helper: XMLTextImportHelper,
     private readonly family: XMLTextFieldMasterFamily,
@@ -133,7 +133,7 @@ export class XMLSequenceFieldImportContext extends SvXMLImportContext {
   private numbering: number = ARABIC;
   private text = "";
 
-  /** Binds the field's original styled text point. @param helper - Text import helper. @param properties - Character formatting. @param hyperlink - Surrounding link. @param characterStyles - Named styles. */
+  /** Binds the field's original styled text point. @param helper - Text import helper. @param properties - Character formatting. @param hyperlink - Surrounding link. @param characterStyles - Named styles. @returns The initialized XMLSequenceFieldImportContext instance. */
   public constructor(
     private readonly helper: XMLTextImportHelper,
     private readonly properties: OdfCharacterProperties,
@@ -143,7 +143,7 @@ export class XMLSequenceFieldImportContext extends SvXMLImportContext {
     super();
   }
 
-  /** Reads the sequence name, Writer formula QName and native numbering style. @param _element - Source token. @param attributes - Authored values. */
+  /** Reads the sequence name, Writer formula QName and native numbering style. @param _element - Source token. @param attributes - Authored values. @returns Nothing. */
   public override startFastElement(_element: XMLToken, attributes: FastAttributeList): void {
     this.name = attributes.get(XMLToken.TEXT_NAME);
     this.referenceName = attributes.get(XMLToken.TEXT_REF_NAME);
@@ -163,12 +163,12 @@ export class XMLSequenceFieldImportContext extends SvXMLImportContext {
     this.numbering = type.value;
   }
 
-  /** Retains imported field text for the original formula and presentation fallbacks. @param text - Decoded content. */
+  /** Retains imported field text for the original formula and presentation fallbacks. @param text - Decoded content. @returns Nothing. */
   public override characters(text: string): void {
     this.text += text;
   }
 
-  /** Inserts the dependent field before assigning its original properties. */
+  /** Inserts the dependent field before assigning its original properties. @returns Nothing. */
   public override endFastElement(): void {
     const master =
       this.name === null ? undefined : this.helper.FindFieldMaster(this.name, "sequence");
@@ -226,7 +226,7 @@ export class XMLVarFieldImportContext extends SvXMLImportContext {
     );
   }
 
-  /** Binds the original text point and field variant. @param token - Original field. @param helper - Native text importer. @param properties - Character properties. @param hyperlink - Link context. @param characterStyles - Native character style layers. */
+  /** Binds the original text point and field variant. @param token - Original field. @param helper - Native text importer. @param properties - Character properties. @param hyperlink - Link context. @param characterStyles - Native character style layers. @returns The initialized XMLVarFieldImportContext instance. */
   public constructor(
     private readonly token: XMLToken,
     private readonly helper: XMLTextImportHelper,
@@ -237,7 +237,7 @@ export class XMLVarFieldImportContext extends SvXMLImportContext {
     super();
   }
 
-  /** Reads the field's authored values. @param _element - Element token. @param attributes - Field attributes. */
+  /** Reads the field's authored values. @param _element - Element token. @param attributes - Field attributes. @returns Nothing. */
   public override startFastElement(_element: XMLToken, attributes: FastAttributeList): void {
     this.name = attributes.get(XMLToken.TEXT_NAME);
     this.hint = attributes.get(XMLToken.TEXT_DESCRIPTION);
@@ -257,12 +257,12 @@ export class XMLVarFieldImportContext extends SvXMLImportContext {
     this.visible = display !== "none";
   }
 
-  /** Retains authored presentation and original formula fallback. @param text - Text characters. */
+  /** Retains authored presentation and original formula fallback. @param text - Text characters. @returns Nothing. */
   public override characters(text: string): void {
     this.content += text;
   }
 
-  /** Attaches the original service and assigns its typed field properties in native order. */
+  /** Attaches the original service and assigns its typed field properties in native order. @returns Nothing. */
   public override endFastElement(): void {
     const expression = this.token === XMLToken.TEXT_EXPRESSION;
     if (!expression && this.name === null) {
@@ -312,7 +312,7 @@ export class XMLVarFieldImportContext extends SvXMLImportContext {
     );
   }
 
-  /** Supplies the native descriptor before insertion. @param field - Detached GetExpression. */
+  /** Supplies the native descriptor before insertion. @param field - Detached GetExpression. @returns Nothing. */
   private PrepareGetField(field: XMLTextContent): void {
     const expression = this.token === XMLToken.TEXT_EXPRESSION;
     this.helper.SetProperty(

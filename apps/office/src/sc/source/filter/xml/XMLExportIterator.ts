@@ -11,7 +11,7 @@ import { ScAreaLink } from "../../ui/docshell/arealink";
 export class ScMyAreaLinksContainer {
   private readonly sheets = new Map<number, ScAreaLink[]>();
 
-  /** Collects actual area links from the original manager in registration order. @param document - Calc document. */
+  /** Collects actual area links from the original manager in registration order. @param document - Calc document. @returns The initialized ScMyAreaLinksContainer instance. */
   constructor(document: ScDocument) {
     const manager = document.GetDocLinkManager().getExistingLinkManager();
     for (const link of manager?.GetLinks() ?? []) {
@@ -57,7 +57,7 @@ export class ScMyNotEmptyCellsIterator {
   note: ScPostIt | null = null;
   areaLink: ScAreaLink | null = null;
 
-  /** Opens the sparse streams for one sheet. @param document - Native model. @param tab - Sheet. @param areaLinks - Area links ordered by native destination. */
+  /** Opens the sparse streams for one sheet. @param document - Native model. @param tab - Sheet. @param areaLinks - Area links ordered by native destination. @returns The initialized ScMyNotEmptyCellsIterator instance. */
   constructor(
     document: ScDocument,
     tab: number,

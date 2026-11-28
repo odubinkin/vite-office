@@ -119,7 +119,7 @@ async function openPasteSpecial() {
   return within(screen.getByRole("dialog", { name: "Paste Special" }));
 }
 
-it("copies cells and their formats, then pastes relative formulas through one native Undo action", async () => {
+it("copies cells and their formats, then pastes relative formulas through one native Undo action", /** Copies cells and their formats, then pastes relative formulas through one native Undo action. @returns Completion. */ async () => {
   const controller = mount(),
     doc = controller.shell.GetDocument();
   const a1 = new ScAddress(),
@@ -156,7 +156,7 @@ it("copies cells and their formats, then pastes relative formulas through one na
   expect((doc.GetPattern(c3)?.GetItem(101) as SvxFontHeightItem).GetHeight()).toBe(320);
 });
 
-it("ports tdf119343 by recalculating the pasted reference against the next row", async () => {
+it("ports tdf119343 by recalculating the pasted reference against the next row", /** Ports tdf119343 by recalculating the pasted reference against the next row. @returns Completion. */ async () => {
   const controller = mount();
   act(() => {
     for (const [row, value] of [
@@ -189,7 +189,7 @@ it("ports tdf119343 by recalculating the pasted reference against the next row",
   }
 });
 
-it("ports CalcPasteOnly through the Text, Number and Formula menu commands", async () => {
+it("ports CalcPasteOnly through the Text, Number and Formula menu commands", /** Ports CalcPasteOnly through the Text, Number and Formula menu commands. @returns Completion. */ async () => {
   const clipboard = transfer();
   browserClipboard(clipboard);
   const controller = mount(),
@@ -215,7 +215,7 @@ it("ports CalcPasteOnly through the Text, Number and Formula menu commands", asy
   formula.dispose();
 });
 
-it("ports testCopyPasteTranspose across sheets with rotated borders and native history", async () => {
+it("ports testCopyPasteTranspose across sheets with rotated borders and native history", /** Ports testCopyPasteTranspose across sheets with rotated borders and native history. @returns Completion. */ async () => {
   const clipboard = transfer();
   browserClipboard(clipboard);
   const controller = mount(),
@@ -268,7 +268,7 @@ it("ports testCopyPasteTranspose across sheets with rotated borders and native h
   expect((doc.GetPattern(d3)?.GetItem(ATTR_BORDER) as SvxBoxItem).GetLeft()?.GetWidth()).toBe(30);
 });
 
-it("rotates only fully relative references and repeats the same clipboard without changing its orientation", async () => {
+it("rotates only fully relative references and repeats the same clipboard without changing its orientation", /** Rotates only fully relative references and repeats the same clipboard without changing its orientation. @returns Completion. */ async () => {
   const clipboard = transfer();
   browserClipboard(clipboard);
   const controller = mount(),
@@ -340,7 +340,7 @@ it("confirms the transposed selection size and preserves rich cells and styled e
   expect(doc.GetValue(cleared)).toBe(50);
 });
 
-it("ports tdf69450 by pasting formats from populated and empty cells without deleting text", async () => {
+it("ports tdf69450 by pasting formats from populated and empty cells without deleting text", /** Ports tdf69450 by pasting formats from populated and empty cells without deleting text. @returns Completion. */ async () => {
   const clipboard = transfer();
   browserClipboard(clipboard);
   const controller = mount(),
@@ -385,7 +385,7 @@ it("ports tdf69450 by pasting formats from populated and empty cells without del
   expect((doc.GetPattern(b1)?.GetItem(101) as SvxFontHeightItem).GetHeight()).toBe(320);
 });
 
-it("applies a preset draft with Skip Empty Cells to values and formats", async () => {
+it("applies a preset draft with Skip Empty Cells to values and formats", /** Applies a preset draft with Skip Empty Cells to values and formats. @returns Completion. */ async () => {
   const clipboard = transfer();
   browserClipboard(clipboard);
   const controller = mount(),
@@ -420,7 +420,7 @@ it("applies a preset draft with Skip Empty Cells to values and formats", async (
   expect((doc.GetPattern(hole)?.GetItem(101) as SvxFontHeightItem).GetHeight()).not.toBe(320);
 });
 
-it("uses the available external text format and then opens the existing import controls", async () => {
+it("uses the available external text format and then opens the existing import controls", /** Uses the available external text format and then opens the existing import controls. @returns Completion. */ async () => {
   browserClipboard(transfer("1\t2\n3\t4"));
   const controller = mount(),
     doc = controller.shell.GetDocument();
@@ -432,7 +432,7 @@ it("uses the available external text format and then opens the existing import c
   expect(doc.GetValue(new ScAddress(1, 1, 0))).toBe(4);
 });
 
-it("dispatches the explicit text import command for a single clipboard line and keeps it undoable", async () => {
+it("dispatches the explicit text import command for a single clipboard line and keeps it undoable", /** Dispatches the explicit text import command for a single clipboard line and keeps it undoable. @returns Completion. */ async () => {
   const clipboard = browserClipboard(transfer("14\t28"));
   const controller = mount(),
     doc = controller.shell.GetDocument();
@@ -465,7 +465,7 @@ it("dispatches the explicit text import command for a single clipboard line and 
   expect(doc.GetCellType(end)).toBe(CellType.CELLTYPE_NONE);
 });
 
-it("rejects a text import if its active cell changes while options are open", async () => {
+it("rejects a text import if its active cell changes while options are open", /** Rejects a text import if its active cell changes while options are open. @returns Completion. */ async () => {
   const controller = mount();
   const doc = controller.shell.GetDocument();
   await act(async () => fireEvent.paste(grid(), { clipboardData: transfer("10\t20\n30\t40") }));
@@ -476,7 +476,7 @@ it("rejects a text import if its active cell changes while options are open", as
   expect(doc.GetCellType(new ScAddress(2, 2, 0))).toBe(CellType.CELLTYPE_NONE);
 });
 
-it("ports tdf117868 pipe detection to the clipboard text import dialog", async () => {
+it("ports tdf117868 pipe detection to the clipboard text import dialog", /** Ports tdf117868 pipe detection to the clipboard text import dialog. @returns Completion. */ async () => {
   const controller = mount();
   const doc = controller.shell.GetDocument();
   const source = 'sep=|\n"LETTER"|"ANIMAL"\n"a"|"aardvark"\n"b"|"bear"\n"c"|"cow"\n';
@@ -507,7 +507,7 @@ it("ports tdf117868 pipe detection to the clipboard text import dialog", async (
   );
 });
 
-it("ports tdf92503 fixed-width DMY timestamps through the clipboard column type", async () => {
+it("ports tdf92503 fixed-width DMY timestamps through the clipboard column type", /** Ports tdf92503 fixed-width DMY timestamps through the clipboard column type. @returns Completion. */ async () => {
   const controller = mount();
   const doc = controller.shell.GetDocument();
   const source = [
@@ -546,7 +546,7 @@ it("ports tdf92503 fixed-width DMY timestamps through the clipboard column type"
   expect(doc.GetCellType(new ScAddress(1, 0, 0))).toBe(CellType.CELLTYPE_NONE);
 });
 
-it("uses the selected clipboard locale and remembers the manual separator only after acceptance", async () => {
+it("uses the selected clipboard locale and remembers the manual separator only after acceptance", /** Uses the selected clipboard locale and remembers the manual separator only after acceptance. @returns Completion. */ async () => {
   const controller = mount();
   const doc = controller.shell.GetDocument();
   const clipboard = transfer("1,5;2,5\n3,5;4,5");
@@ -575,7 +575,7 @@ it("uses the selected clipboard locale and remembers the manual separator only a
   expect(afterCancel.getByRole("radio", { name: "Separated by" })).toBeChecked();
 });
 
-it("keeps Unicode fixed-width preview and pasted columns on the same ruler positions", async () => {
+it("keeps Unicode fixed-width preview and pasted columns on the same ruler positions", /** Keeps Unicode fixed-width preview and pasted columns on the same ruler positions. @returns Completion. */ async () => {
   const controller = mount();
   const doc = controller.shell.GetDocument();
   const source = transfer("A漢B\nC字D");
@@ -789,7 +789,7 @@ it("asks to extend a short selection and then to replace existing cells before c
   expect(doc.GetValue(existing)).toBe(41);
 });
 
-it("uses the native menu for browser text Copy and Paste Unformatted without reusing a matching formula clip", async () => {
+it("uses the native menu for browser text Copy and Paste Unformatted without reusing a matching formula clip", /** Uses the native menu for browser text Copy and Paste Unformatted without reusing a matching formula clip. @returns Completion. */ async () => {
   const clipboard = browserClipboard();
   const controller = mount(),
     doc = controller.shell.GetDocument();
@@ -807,7 +807,7 @@ it("uses the native menu for browser text Copy and Paste Unformatted without reu
   expect(doc.GetFormulaCell(new ScAddress(1, 1, 0))).toBeNull();
 });
 
-it("keeps editable input clipboard events native and imports external formula addresses at the actual destination", async () => {
+it("keeps editable input clipboard events native and imports external formula addresses at the actual destination", /** Keeps editable input clipboard events native and imports external formula addresses at the actual destination. @returns Completion. */ async () => {
   const controller = mount(),
     doc = controller.shell.GetDocument();
   const input = screen.getByRole("textbox", { name: "Input line" });
@@ -830,7 +830,7 @@ it("keeps editable input clipboard events native and imports external formula ad
   expected.dispose();
 });
 
-it("imports quoted multiline cells and detected dates with number-format undo", async () => {
+it("imports quoted multiline cells and detected dates with number-format undo", /** Imports quoted multiline cells and detected dates with number-format undo. @returns Completion. */ async () => {
   const controller = mount(),
     doc = controller.shell.GetDocument();
   select("B2");
@@ -867,7 +867,7 @@ it("imports quoted multiline cells and detected dates with number-format undo", 
   expect(doc.GetFormatTable().GetType(format()) & SvNumFormatType.DATE).not.toBe(0);
 });
 
-it("reports clipboard overflow at the sheet boundary and can undo the imported portion", async () => {
+it("reports clipboard overflow at the sheet boundary and can undo the imported portion", /** Reports clipboard overflow at the sheet boundary and can undo the imported portion. @returns Completion. */ async () => {
   const controller = mount(),
     doc = controller.shell.GetDocument();
   const bottom = new ScAddress(0, doc.MaxRow(), 0);

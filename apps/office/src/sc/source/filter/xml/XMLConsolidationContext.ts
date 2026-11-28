@@ -11,7 +11,7 @@ import type { ScXMLImport } from "./xmlimprt";
 
 /** Reads the original document-level consolidation parameters. */
 export class ScXMLConsolidationContext extends ScXMLImportContext {
-  /** Retains attributes until the source areas can be assigned together. @param owner - Calc ODF import owner. @param attributes - Original attributes. */
+  /** Retains attributes until the source areas can be assigned together. @param owner - Calc ODF import owner. @param attributes - Original attributes. @returns The initialized ScXMLConsolidationContext instance. */
   constructor(
     owner: ScXMLImport,
     private readonly attributes: FastAttributeList,
@@ -19,7 +19,7 @@ export class ScXMLConsolidationContext extends ScXMLImportContext {
     super(owner);
   }
 
-  /** Applies the saved dialog data when the original target address is valid. */
+  /** Applies the saved dialog data when the original target address is valid. @returns Nothing. */
   override endFastElement(): void {
     const document = this.GetScImport().GetDocument();
     const convention = FormulaGrammar.AddressConvention.CONV_OOO;

@@ -106,7 +106,7 @@ export class SwCalc {
   private error = false;
   private list: { operator: string; length: number; hasNumber: boolean } | undefined;
 
-  /** Changes the original case-insensitive scalar variable table. @param name - Writer variable name. @param value - Native scalar value. */
+  /** Changes the original case-insensitive scalar variable table. @param name - Writer variable name. @param value - Native scalar value. @returns Nothing. */
   public VarChange(name: string, value: CalcValue): void {
     this.variables.set(name.toLowerCase(), value);
   }
@@ -145,7 +145,7 @@ export class SwCalc {
       : result;
   }
 
-  /** Reads the next scalar token of the original expression. */
+  /** Reads the next scalar token of the original expression. @returns Nothing. */
   private GetToken(): void {
     if (this.index >= this.expression.length) {
       this.current = { kind: "end" };

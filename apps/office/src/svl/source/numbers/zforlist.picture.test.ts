@@ -22,7 +22,7 @@ function put(formatter: SvNumberFormatter, picture: string, language: number): n
   }
 }
 
-it("reads grouping and negative red and keeps parenthesis spacing from compiled tokens", () => {
+it("reads grouping and negative red and keeps parenthesis spacing from compiled tokens", /** Reads grouping and negative red and keeps parenthesis spacing from compiled tokens. @returns Nothing. */ () => {
   const formatter = new SvNumberFormatter(en);
   try {
     const key = put(formatter, "#,##0.00_);[RED](#,##0.00)", en);

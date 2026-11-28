@@ -34,6 +34,14 @@ import {
   RES_PARATR_AUTOFRAMEDIR,
   RES_PARATR_WIDOWS,
 } from "../../../inc/hintids";
+
+/** Converts a native packed color to a CSS color or the automatic sentinel. @param color - Original packed color. @param automatic - External sentinel spelling. @returns CSS color or sentinel. */
+export function writerColorValue(color: Readonly<Color>, automatic = "auto"): string {
+  if (color.equals(COL_AUTO)) return automatic;
+  if (color.GetAlpha() !== 255)
+    return `rgba(${color.GetRed()}, ${color.GetGreen()}, ${color.GetBlue()}, ${color.GetAlpha() / 255})`;
+  return `#${(color.toUInt32() & 0xffffff).toString(16).padStart(6, "0")}`;
+}
 /** Paragraph and adjacent frame settings restored through the same native item factory. */
 export const paragraphControlItems = [
   RES_PARATR_HYPHENZONE,

@@ -17,7 +17,7 @@ export class SwPageNumberFieldType {
   private numbering = SvxNumType.SVX_NUM_ARABIC;
   private virtual = false;
 
-  /** Binds the system type to its text owner document. @param document - Original document. */
+  /** Binds the system type to its text owner document. @param document - Original document. @returns The initialized SwPageNumberFieldType instance. */
   public constructor(private readonly document: SwDoc) {}
 
   /** Reads the native field owner. @returns Writer document. */
@@ -45,7 +45,7 @@ export class SwPageNumberFieldType {
     return new SvxNumberType(numbering).GetNumStr(number);
   }
 
-  /** Updates the system defaults and original field cache from the real layout frame. @param layout - Formatted root. */
+  /** Updates the system defaults and original field cache from the real layout frame. @param layout - Formatted root. @returns Nothing. */
   public UpdateFields(layout: SwRootFrame): void {
     const pages = layout.GetFormattedPages();
     const virtual = pages.some(
@@ -77,7 +77,7 @@ export class SwPageNumberField implements SwField<SwPageNumberField> {
   private page = 0;
   private maximum = 0;
 
-  /** Creates a page number or continuation field. @param type - Original field type. @param subtype - Current, next or previous page. @param format - Original numbering format. @param offset - Adjusted native offset. @param userText - Original continuation text. @param expansion - Formatted occurrence cache. */
+  /** Creates a page number or continuation field. @param type - Original field type. @param subtype - Current, next or previous page. @param format - Original numbering format. @param offset - Adjusted native offset. @param userText - Original continuation text. @param expansion - Formatted occurrence cache. @returns The initialized SwPageNumberField instance. */
   public constructor(
     private readonly type: SwPageNumberFieldType,
     private readonly subtype: SwPageNumSubType,
@@ -117,7 +117,7 @@ export class SwPageNumberField implements SwField<SwPageNumberField> {
     return this.expansion;
   }
 
-  /** Recalculates the original cached layout presentation. @param page - Virtual page. @param maximum - Physical page limit. */
+  /** Recalculates the original cached layout presentation. @param page - Virtual page. @param maximum - Physical page limit. @returns Nothing. */
   public ChangeExpansion(page: number, maximum: number): void {
     this.page = page;
     this.maximum = maximum;
@@ -163,6 +163,6 @@ export class SwPageNumberField implements SwField<SwPageNumberField> {
     );
   }
 
-  /** Releases represented field-specific state. */
+  /** Releases represented field-specific state. @returns Nothing. */
   public Dispose(): void {}
 }

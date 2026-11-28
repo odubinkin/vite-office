@@ -8,7 +8,7 @@ import type { AddressConvention } from "../../../../formula/inc/grammar";
 
 /** Original single-sheet source area used by Calc consolidation. */
 export class ScArea {
-  /** Initializes the native coordinates. @param nTab - Sheet. @param nColStart - First column. @param nRowStart - First row. @param nColEnd - Last column. @param nRowEnd - Last row. */
+  /** Initializes the native coordinates. @param nTab - Sheet. @param nColStart - First column. @param nRowStart - First row. @param nColEnd - Last column. @param nRowEnd - Last row. @returns The initialized ScArea instance. */
   constructor(
     public nTab = 0,
     public nColStart = 0,

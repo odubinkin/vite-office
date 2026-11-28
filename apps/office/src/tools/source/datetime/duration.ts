@@ -8,7 +8,7 @@ export class Duration {
   static readonly kAccuracyEpsilonNanoseconds = 300n;
   private mnDays = 0;
   private readonly maTime = new Time(Time.EMPTY);
-  /** Original floating day constructor. @param days - Serial duration in days. @param epsilon - Nanosecond rounding tolerance. */
+  /** Original floating day constructor. @param days - Serial duration in days. @param epsilon - Nanosecond rounding tolerance. @returns The initialized Duration instance. */
   constructor(days: number, epsilon?: bigint);
   /** Original normalized DateTime difference constructor. @param start - Starting date-time. @param end - Ending date-time. @returns Initialized value. */
   constructor(start: DateTimeConstReference, end: DateTimeConstReference);
@@ -46,7 +46,7 @@ export class Duration {
     }
   }
 
-  /** Separates whole days and reconciles near-second floating-point error. @param days - Serial days. @param epsilon - Nanosecond tolerance. */
+  /** Separates whole days and reconciles near-second floating-point error. @param days - Serial days. @param epsilon - Nanosecond tolerance. @returns Nothing. */
   private SetDays(days: number, epsilon: bigint): void {
     const whole = days < 0 ? approxCeil(days) : approxFloor(days);
     this.mnDays = whole | 0;

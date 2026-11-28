@@ -68,10 +68,9 @@ export function WriterNavigatorNavigation({
       const host = editingHost.current;
       if (!host) return;
       const window = host.ownerDocument.defaultView;
-      /** Reads the physical page range from the active editing host. @returns Visible pages. */
-      function getPages() {
-        return getVisiblePages(host);
-      }
+      const getPages =
+        /** Reads the physical page range from the active editing host. @returns Visible pages. */ () =>
+          getVisiblePages(host);
       /** Refreshes the page control after the document viewport changes. @returns Nothing. */
       function sync(): void {
         if (visible) setVisiblePage(getPages()?.first);

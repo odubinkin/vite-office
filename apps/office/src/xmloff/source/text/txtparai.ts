@@ -1,3 +1,4 @@
+/** @fileoverview Imports ODF paragraph text, inline elements and document markers through Writer text contexts. */
 import { XMLSequenceFieldImportContext, XMLVarFieldImportContext } from "./txtvfldi";
 import { XMLChangeImportContext } from "./XMLChangeImportContext";
 import type { XMLRedlineImportTarget } from "./XMLChangedRegionImportContext";
@@ -559,12 +560,12 @@ function createInlineContext(
 
 /** Retains a paragraph-local reference mark start. */
 class XMLStartReferenceContext extends SvXMLImportContext {
-  /** Binds the current paragraph's original hints. @param paragraph - Shared text owner. */
+  /** Binds the current paragraph's original hints. @param paragraph - Shared text owner. @returns The initialized XMLStartReferenceContext instance. */
   constructor(private readonly paragraph: XMLTextImportHelper) {
     super();
   }
 
-  /** Reads the original name and start position. @param _element - Opening token. @param attributes - Source attributes. */
+  /** Reads the original name and start position. @param _element - Opening token. @param attributes - Source attributes. @returns Nothing. */
   override startFastElement(_element: XMLToken, attributes: FastAttributeList): void {
     const name = attributes.get(XMLToken.TEXT_NAME);
     if (name !== null) this.paragraph.StartReferenceMark(name);
@@ -573,12 +574,12 @@ class XMLStartReferenceContext extends SvXMLImportContext {
 
 /** Resolves the first matching reference mark start in the current paragraph. */
 class XMLEndReferenceContext extends SvXMLImportContext {
-  /** Binds the current paragraph's original hints. @param paragraph - Shared text owner. */
+  /** Binds the current paragraph's original hints. @param paragraph - Shared text owner. @returns The initialized XMLEndReferenceContext instance. */
   constructor(private readonly paragraph: XMLTextImportHelper) {
     super();
   }
 
-  /** Reads the original name and end position. @param _element - Opening token. @param attributes - Source attributes. */
+  /** Reads the original name and end position. @param _element - Opening token. @param attributes - Source attributes. @returns Nothing. */
   override startFastElement(_element: XMLToken, attributes: FastAttributeList): void {
     const name = attributes.get(XMLToken.TEXT_NAME);
     if (name !== null) this.paragraph.EndReferenceMark(name);
@@ -835,7 +836,7 @@ function significantSpaces(attributes: FastAttributeList): string {
 export class XMLNumberedParaContext extends SvXMLImportContext {
   private readonly state: XMLParagraphListState;
 
-  /** Parses native numeric bounds and resolves list identity before the child paragraph. @param target - Numbering-rule owner. @param attributes - Wrapper attributes. @param lists - Stream list state. */
+  /** Parses native numeric bounds and resolves list identity before the child paragraph. @param target - Numbering-rule owner. @param attributes - Wrapper attributes. @param lists - Stream list state. @returns The initialized XMLNumberedParaContext instance. */
   constructor(
     private readonly target: XMLTextImportTarget,
     attributes: FastAttributeList,

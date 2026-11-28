@@ -9,6 +9,7 @@ import {
 } from "../../../package/source/zippackage/document-archive";
 import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { createDocument } from "../../../sfx2/source/doc/objsh";
+import { COL_BLACK, COL_RED } from "../../../tools/inc/color";
 import { ScAddress } from "../../inc/address";
 import { ScColorScaleEntryType, ScDataBarFormat, ScIconSetFormat } from "../../inc/colorscale";
 import { ATTR_BACKGROUND } from "../../inc/scitems";
@@ -20,12 +21,36 @@ import { exportXlsx } from "../../source/filter/excel/xetable";
 import { ExcelFilter } from "../../source/filter/oox/excelfilter";
 import { createCalcSession } from "../composition/calc-module";
 import { CalcWorkbench } from "./calc-workbench";
+import { ScCellDataBar } from "./ScCellDataBar";
 
 let session: ReturnType<typeof createCalcSession> | undefined;
 afterEach(() => {
   cleanup();
   session?.Close();
   session = undefined;
+});
+
+it("paints a solid negative data bar to the left of an interior zero axis", /** Checks the rendered color and geometry of the solid fill. @returns Nothing. */ () => {
+  const { container } = render(
+    <ScCellDataBar
+      info={{
+        maAxisColor: COL_BLACK,
+        maColor: COL_RED,
+        mbGradient: false,
+        mbShowValue: true,
+        mnLength: -50,
+        mnZero: 50,
+      }}
+      width={100}
+      height={20}
+    />,
+  );
+  expect(container.querySelector("[data-calc-data-bar]")).toHaveStyle({
+    backgroundColor: "rgb(128, 0, 0)",
+    left: "26px",
+    width: "24px",
+  });
+  expect(container.querySelector("[data-calc-data-bar-axis]")).toHaveStyle({ left: "49px" });
 });
 
 /** Mounts the original controller and Sfx frame. @param workbook - Optional native fixture. @returns Live document. */
@@ -59,7 +84,7 @@ async function respond(dialog: HTMLElement, caption: string): Promise<void> {
     expect(dispatcher.GetLastCommandError()).toBeUndefined();
 }
 
-it("applies a quick rule to the edited range, paints the native style, and round-trips both formats", async () => {
+it("applies a quick rule to the edited range, paints the native style, and round-trips both formats", /** Applies a quick rule to the edited range, paints the native style, and round-trips both formats. @returns Completion. */ async () => {
   const doc = mount();
   const point = new ScAddress(1, 0, 0);
   doc.SetValue(point, 9);
@@ -100,7 +125,7 @@ it("applies a quick rule to the edited range, paints the native style, and round
   }
 });
 
-it("ports tdf163897 by retaining staged deletions across the editor and undoing the committed manager change", async () => {
+it("ports tdf163897 by retaining staged deletions across the editor and undoing the committed manager change", /** Ports tdf163897 by retaining staged deletions across the editor and undoing the committed manager change. @returns Completion. */ async () => {
   const bytes = readFileSync("../../vendor/libreoffice-reference/sc/qa/uitest/data/tdf105544.ods");
   const fixture = await DocumentArchive.open(new Uint8Array(bytes));
   const archive = new DocumentArchiveWriter();
@@ -138,7 +163,7 @@ it("ports tdf163897 by retaining staged deletions across the editor and undoing 
   expect(list()?.size()).toBe(0);
 });
 
-it("keeps rule order and supports changing the active source rule to a date", async () => {
+it("keeps rule order and supports changing the active source rule to a date", /** Keeps rule order and supports changing the active source rule to a date. @returns Completion. */ async () => {
   const doc = mount();
   open(".uno:ColorScaleFormatDialog");
   const editor = screen.getByRole("dialog", { name: /^Conditional Formatting for/ });
@@ -159,7 +184,7 @@ it("keeps rule order and supports changing the active source rule to a date", as
   expect(format?.GetEntry(1)?.GetType()).toBe(ScFormatEntryType.Colorscale);
 });
 
-it("edits an imported ODS data-bar limit through the manager and preserves the rest of the rule", async () => {
+it("edits an imported ODS data-bar limit through the manager and preserves the rest of the rule", /** Edits an imported ODS data-bar limit through the manager and preserves the rest of the rule. @returns Completion. */ async () => {
   const fixture = readFileSync(
     "../../vendor/libreoffice-reference/sc/qa/unit/data/ods/databar.ods",
   );
@@ -253,7 +278,7 @@ it("projects the original conditional commands into the formatting toolbar menu"
   await respond(screen.getByRole("dialog", { name: "Manage Conditional Formatting" }), "Cancel");
 });
 
-it("ports tdf119178 by compiling a new formula at the final range selected in the grid", async () => {
+it("ports tdf119178 by compiling a new formula at the final range selected in the grid", /** Ports tdf119178 by compiling a new formula at the final range selected in the grid. @returns Completion. */ async () => {
   const doc = mount();
   const value = unicode("test");
   try {

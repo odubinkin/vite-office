@@ -38,7 +38,7 @@ export function encodeSequenceFields(node: SwTextNode): readonly WriterSequenceF
   );
 }
 
-/** Reconnects sequence points to the document's named masters. @param node - Restored text owner. @param records - Worker field records. */
+/** Reconnects sequence points to the document's named masters. @param node - Restored text owner. @param records - Worker field records. @returns Nothing. */
 export function decodeSequenceFields(
   node: SwTextNode,
   records: readonly WriterSequenceFieldRecord[] | undefined,

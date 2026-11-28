@@ -25,7 +25,7 @@ import { SvxCellHorJustify, SvxCellVerJustify } from "../../../../editeng/inc/sv
 import type { ScMarkData } from "../../../inc/markdata";
 import type { ScPatternStyleReference } from "../../../inc/patattr";
 
-/** Sets the document's scenario marker on an existing sheet. @param this - Workbook. @param tab - Sheet index. @param scenario - Original marker. */
+/** Sets the document's scenario marker on an existing sheet. @param this - Workbook. @param tab - Sheet index. @param scenario - Original marker. @returns Nothing. */
 export function SetScenario(this: ScDocument, tab: number, scenario: boolean): void {
   this.FetchTable(tab)?.SetScenario(scenario);
 }
@@ -35,7 +35,7 @@ export function IsScenario(this: ScDocument, tab: number): boolean {
   return this.FetchTable(tab)?.IsScenario() ?? false;
 }
 
-/** Assigns scenario values through the original document boundary. @param this - Workbook. @param tab - Scenario sheet. @param comment - Description. @param color - Border color. @param flags - Native option bits. */
+/** Assigns scenario values through the original document boundary. @param this - Workbook. @param tab - Scenario sheet. @param comment - Description. @param color - Border color. @param flags - Native option bits. @returns Nothing. */
 export function SetScenarioData(
   this: ScDocument,
   tab: number,
@@ -47,7 +47,7 @@ export function SetScenarioData(
   if (table?.IsScenario()) table.SetScenarioData(comment, color, flags);
 }
 
-/** Assigns the original active flag on an existing sheet. @param this - Workbook. @param tab - Sheet index. @param active - Active scenario. */
+/** Assigns the original active flag on an existing sheet. @param this - Workbook. @param tab - Sheet index. @param active - Active scenario. @returns Nothing. */
 export function SetActiveScenario(this: ScDocument, tab: number, active: boolean): void {
   this.FetchTable(tab)?.SetActiveScenario(active);
 }

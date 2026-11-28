@@ -87,7 +87,7 @@ it("removes line breaks from XLSX cell references while preserving literal and f
   }
 });
 
-it("takes a UTF-16 search start and returns a code-point position", /** Preserves native FIND and SEARCH coordinates around a supplementary character. */ () => {
+it("takes a UTF-16 search start and returns a code-point position", /** Preserves native FIND and SEARCH coordinates around a supplementary character. @returns Nothing. */ () => {
   const document = new ScDocument();
   const name = unicode("Sheet");
   const address = new ScAddress(0, 0, 0);

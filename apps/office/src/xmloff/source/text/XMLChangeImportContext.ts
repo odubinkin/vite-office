@@ -6,7 +6,7 @@ import type { XMLTextImportHelper } from "./txtimp";
 
 /** Forwards a source redline marker to the original cursor owner. */
 export class XMLChangeImportContext extends SvXMLImportContext {
-  /** Binds the original text cursor and outside-paragraph state. @param helper - Active XML text importer. @param redlines - Native range owner. @param outside - Marker occurs outside a paragraph. */
+  /** Binds the original text cursor and outside-paragraph state. @param helper - Active XML text importer. @param redlines - Native range owner. @param outside - Marker occurs outside a paragraph. @returns The initialized XMLChangeImportContext instance. */
   constructor(
     private readonly helper: XMLTextImportHelper,
     private readonly redlines: XMLRedlineImportTarget,
@@ -24,7 +24,7 @@ export class XMLChangeImportContext extends SvXMLImportContext {
     );
   }
 
-  /** Applies the source anchor at the active text cursor. @param element - Source marker kind. @param attributes - Marker ID. */
+  /** Applies the source anchor at the active text cursor. @param element - Source marker kind. @param attributes - Marker ID. @returns Nothing. */
   override startFastElement(element: XMLToken, attributes: FastAttributeList): void {
     const id = attributes.get(XMLToken.TEXT_CHANGE_ID);
     if (!id) return;

@@ -208,7 +208,7 @@ it("restores the original visible deletion when ODT export is cancelled", /** Ve
     expect(() =>
       writeOdtXml(document, metadata, {
         isCancelled: () => cancelled,
-        /** Cancels once the exporter has entered the temporary native visibility state. @param stage - Filter stage. */
+        /** Cancels once the exporter has entered the temporary native visibility state. @param stage - Filter stage. @returns Nothing. */
         onProgress(stage) {
           if (stage !== "styles") return;
           expect(paragraph.GetText()).toBe("");

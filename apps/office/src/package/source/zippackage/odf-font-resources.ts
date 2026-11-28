@@ -23,7 +23,7 @@ export function isOdfFontBytes(value: unknown): value is Uint8Array {
 export class OdfFontResources {
   private readonly fonts = new Map<string, OdfFontResource>();
 
-  /** Registers an authored face or the identical reference to a known resource. @param font - Package font. */
+  /** Registers an authored face or the identical reference to a known resource. @param font - Package font. @returns Nothing. */
   Register(font: OdfFontResource): void {
     const previous = this.fonts.get(font.path);
     if (previous) {
@@ -42,7 +42,7 @@ export class OdfFontResources {
     });
   }
 
-  /** Attaches validated bytes. @param path - Registered path. @param bytes - Validated font. @param canLoad - Viewing permission. */
+  /** Attaches validated bytes. @param path - Registered path. @param bytes - Validated font. @param canLoad - Viewing permission. @returns Nothing. */
   SetBytes(path: string, bytes: Uint8Array, canLoad: boolean): void {
     const font = this.fonts.get(path);
     if (!font) throw new Error(`Unknown ODF embedded font: ${path}`);

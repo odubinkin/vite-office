@@ -67,7 +67,7 @@ export function encodeCalcCellNote(
     : base;
 }
 
-/** Restores the original entry fields on an actual native owner. @param record - Wire entry. @param entry - Target entry. */
+/** Restores the original entry fields on an actual native owner. @param record - Wire entry. @param entry - Target entry. @returns Nothing. */
 function decodeThreadEntry(record: ThreadEntry, entry: ScThreadedCommentEntry): void {
   if (
     !Array.isArray(record) ||
@@ -81,7 +81,7 @@ function decodeThreadEntry(record: ThreadEntry, entry: ScThreadedCommentEntry): 
   [entry.maGuid, entry.maPersonId, entry.maDateTime, entry.maText] = record;
 }
 
-/** Restores a version-one note into its owning cell column. @param importer - Transfer import owner. @param tab - Sheet. @param record - Wire note. */
+/** Restores a version-one note into its owning cell column. @param importer - Transfer import owner. @param tab - Sheet. @param record - Wire note. @returns Nothing. */
 export function decodeCalcCellNote(
   importer: ScXMLImport,
   tab: number,

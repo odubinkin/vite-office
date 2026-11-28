@@ -33,7 +33,7 @@ const subtotalCases = [
 /** The address and expected native evaluation of one original case. */
 type SubtotalCase = (typeof subtotalCases)[number];
 
-/** Compares the native AutoSum subtotal result and stored formula. @param document - Workbook under test. @param scenario - Original scenario. */
+/** Compares the native AutoSum subtotal result and stored formula. @param document - Workbook under test. @param scenario - Original scenario. @returns Nothing. */
 function verifySubtotal(document: ScDocument, { cell, source, value }: SubtotalCase): void {
   const formula = document.GetFormulaCell(cell);
   assert(formula);

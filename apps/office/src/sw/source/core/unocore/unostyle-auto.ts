@@ -60,7 +60,7 @@ export class SwXAutoStyle {
   GetItemSet(): SfxItemSet {
     return this.set;
   }
-  /** Releases the original automatic-style reference. */
+  /** Releases the original automatic-style reference. @returns Nothing. */
   Dispose(): void {
     releaseStyleHandle(this.set);
   }

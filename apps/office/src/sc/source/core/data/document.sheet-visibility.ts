@@ -2,6 +2,7 @@
 import type { ScDocument } from "../../../inc/document";
 import { ValidTab } from "../../../inc/address";
 import type { ScTable } from "../../../inc/table";
+import type { OUString } from "../../../../sal/inc/rtl/ustring";
 
 /** View settings held by the detached document until the view is constructed. */
 export interface SheetViewState {
@@ -16,6 +17,17 @@ const defaultSheetView: SheetViewState = { showGrid: true, cursor: [0, 0] };
 /** Borrows an existing sheet or returns the native null result. @param this - Native document. @param tab - Native tab. @returns Sheet or null. */
 export function FetchTable(this: ScDocument, tab: number): ScTable | null {
   return ValidTab(tab) ? (this["maTabs"][tab] ?? null) : null;
+}
+
+/** Reads a sheet name into a caller-owned string. @param this - Actual document. @param tab - Sheet index. @param output - Unicode output. @returns Whether the sheet exists. */
+export function GetName(this: ScDocument, tab: number, output: OUString): boolean {
+  const table = this.FetchTable(tab);
+  if (!table) {
+    output.clear();
+    return false;
+  }
+  output.assign(table.GetName());
+  return true;
 }
 
 /** Reports native sheet visibility, returning false for a missing tab. @param this - Native document. @param tab - Native tab. @returns Whether the sheet is visible. */

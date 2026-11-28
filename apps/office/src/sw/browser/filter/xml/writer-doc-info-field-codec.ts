@@ -49,7 +49,7 @@ export function encodeDocInfoFields(node: SwTextNode): readonly WriterDocInfoFie
   );
 }
 
-/** Reattaches original fields at their existing markers. @param node - Destination paragraph. @param records - Optional fields. */
+/** Reattaches original fields at their existing markers. @param node - Destination paragraph. @param records - Optional fields. @returns Nothing. */
 export function decodeDocInfoFields(
   node: SwTextNode,
   records: readonly WriterDocInfoFieldRecord[] | undefined,

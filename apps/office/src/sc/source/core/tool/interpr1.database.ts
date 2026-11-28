@@ -28,7 +28,7 @@ export function InterpretDatabaseCount(this: ScInterpreter, token: FormulaToken)
   return true;
 }
 
-/** Resolves criteria, field and result iterator as in GetDBParams and ScDBCount. @param this - Interpreter. @param count - Arity. @param countText - Whether to admit text result cells. */
+/** Resolves criteria, field and result iterator as in GetDBParams and ScDBCount. @param this - Interpreter. @param count - Arity. @param countText - Whether to admit text result cells. @returns Nothing. */
 function ScDBCount(this: ScInterpreter, count: number, countText: boolean): void {
   if (count !== 3) {
     this.SetError(FormulaError.IllegalParameter);

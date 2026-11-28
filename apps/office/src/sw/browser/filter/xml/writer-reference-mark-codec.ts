@@ -27,7 +27,7 @@ export function encodeReferenceMarks(node: SwTextNode): readonly WriterReference
   return records;
 }
 
-/** Reattaches each mark against the already restored text. @param node - Actual paragraph. @param records - Optional reference marks. */
+/** Reattaches each mark against the already restored text. @param node - Actual paragraph. @param records - Optional reference marks. @returns Nothing. */
 export function decodeReferenceMarks(
   node: SwTextNode,
   records: readonly WriterReferenceMarkRecord[] | undefined,

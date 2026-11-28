@@ -83,7 +83,7 @@ function ResetTextHintItem(
   }
 }
 
-/** Counts one native paragraph for document statistics after the export redline visibility transition. @param node - Original text owner. @param stat - Current document accumulator. */
+/** Counts one native paragraph for document statistics after the export redline visibility transition. @param node - Original text owner. @param stat - Current document accumulator. @returns Nothing. */
 export function CountWords(node: SwTextNode, stat: SwDocStat): void {
   ++stat.nAllPara;
   for (let section = node.FindSectionNode(); section;) {
@@ -155,7 +155,7 @@ function GetCountedText(
   return { text: parts.join(""), model };
 }
 
-/** Runs the original WORD_COUNT scanner over the represented text or numbering label. @param node - Language owner. @param original - Text before dash replacement. @param stat - Original accumulator. @param language - Fixed numbering language, when present. @param model - View-to-model positions. */
+/** Runs the original WORD_COUNT scanner over the represented text or numbering label. @param node - Language owner. @param original - Text before dash replacement. @param stat - Original accumulator. @param language - Fixed numbering language, when present. @param model - View-to-model positions. @returns Nothing. */
 function CountText(
   node: SwTextNode,
   original: string,

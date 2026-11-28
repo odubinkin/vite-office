@@ -1,3 +1,4 @@
+/** @fileoverview Restores Writer node and attribute state from edit history. */
 import type { SwFormatRuby } from "../txtnode/fmtatr2";
 import { isTextFormatHint } from "../txtnode/txatbase";
 /** @fileoverview Restores bounded native text-attribute history from sw/source/core/undo/rolbck.cxx. */

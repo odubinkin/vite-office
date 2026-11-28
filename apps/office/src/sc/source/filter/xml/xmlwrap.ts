@@ -155,7 +155,7 @@ export class ScXMLImportWrapper {
       names,
       metadata.streamMediaTypes,
       zip.readEntry.bind(zip),
-      /** Checks cancellation while reading package resources. */
+      /** Checks cancellation while reading package resources. @returns Nothing. */
       () => {
         if (options.isCancelled?.()) throw new Error("ODS operation was cancelled");
       },

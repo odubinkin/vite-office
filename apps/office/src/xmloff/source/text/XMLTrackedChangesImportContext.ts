@@ -10,7 +10,7 @@ import type { XMLTextImportHelper } from "./txtimp";
 
 /** The original tracked-change definitions attached to a text stream. */
 export class XMLTrackedChangesImportContext extends SvXMLImportContext {
-  /** Binds the application's redline and shared XML text import owners. @param helper - Shared text filter. @param redlines - Native model target. */
+  /** Binds the application's redline and shared XML text import owners. @param helper - Shared text filter. @param redlines - Native model target. @returns The initialized XMLTrackedChangesImportContext instance. */
   constructor(
     private readonly helper: XMLTextImportHelper,
     private readonly redlines: XMLRedlineImportTarget,
@@ -18,7 +18,7 @@ export class XMLTrackedChangesImportContext extends SvXMLImportContext {
     super();
   }
 
-  /** Applies the original in-container recording default. @param _element - Container token. @param attributes - Source attributes. */
+  /** Applies the original in-container recording default. @param _element - Container token. @param attributes - Source attributes. @returns Nothing. */
   override startFastElement(_element: XMLToken, attributes: FastAttributeList): void {
     const track = attributes.get(XMLToken.TEXT_TRACK_CHANGES);
     const enabled: [boolean] = [true];

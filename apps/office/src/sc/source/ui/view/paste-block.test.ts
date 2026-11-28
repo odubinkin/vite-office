@@ -248,7 +248,7 @@ it("keeps nondefault paste families explicit and reports actual sheet overflow t
   shell.Close();
 });
 
-it("rejects transpose wider than the sheet before generating a paste history entry", () => {
+it("rejects transpose wider than the sheet before generating a paste history entry", /** Rejects transpose wider than the sheet before generating a paste history entry. @returns Nothing. */ () => {
   const shell = new ScDocShell();
   const doc = shell.GetDocument();
   const view = new ScTabViewShell(shell);

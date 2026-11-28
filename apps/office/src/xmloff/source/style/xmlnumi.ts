@@ -461,7 +461,7 @@ export function FillUnoNumRule(rules: XMLNumberingRules, declaration: XMLTextLis
   }
 }
 
-/** Initializes the supplied fallback level using the native default marker properties. @param rules - Native rule service. @param level - Zero-based level. @param ordered - Selects the Arabic or bullet default. */
+/** Initializes the supplied fallback level using the native default marker properties. @param rules - Native rule service. @param level - Zero-based level. @param ordered - Selects the Arabic or bullet default. @returns Nothing. */
 export function SetDefaultStyle(rules: XMLNumberingRules, level: number, ordered: boolean): void {
   const data: [string, string | number][] = [["NumberingType", ordered ? ARABIC : CHAR_SPECIAL]];
   if (!ordered)
@@ -490,7 +490,7 @@ export function SetDefaultStyle(rules: XMLNumberingRules, level: number, ordered
   replaceLevelProperties(rules, level, properties);
 }
 
-/** Sends a source-ordered property sequence to the actual numbering service. @param rules - Native numbering owner. @param level - Zero-based level. @param properties - Owned property sequence values. */
+/** Sends a source-ordered property sequence to the actual numbering service. @param rules - Native numbering owner. @param level - Zero-based level. @param properties - Owned property sequence values. @returns Nothing. */
 function replaceLevelProperties(
   rules: XMLNumberingRules,
   level: number,

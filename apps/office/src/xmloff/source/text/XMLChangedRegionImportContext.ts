@@ -37,7 +37,7 @@ export interface XMLRedlineImportTarget {
 
 /** Dispatches the native change-info child and the ordinary deleted text context. */
 class XMLChangeElementImportContext extends SvXMLImportContext {
-  /** Binds the owning changed region and change type. @param owner - Region. @param kind - Original change. */
+  /** Binds the owning changed region and change type. @param owner - Region. @param kind - Original change. @returns The initialized XMLChangeElementImportContext instance. */
   constructor(
     private readonly owner: XMLChangedRegionImportContext,
     private readonly kind: XMLRedlineKind,
@@ -66,7 +66,7 @@ export class XMLChangedRegionImportContext extends SvXMLImportContext {
   private styleName = "";
   private hasDeletionText = false;
 
-  /** Reads the original ID precedence and merge-last-paragraph property. @param helper - Paragraph and cursor importer. @param redlines - Model target. @param attributes - Original region attributes. */
+  /** Reads the original ID precedence and merge-last-paragraph property. @param helper - Paragraph and cursor importer. @param redlines - Model target. @param attributes - Original region attributes. @returns The initialized XMLChangedRegionImportContext instance. */
   constructor(
     private readonly helper: XMLTextImportHelper,
     private readonly redlines: XMLRedlineImportTarget,
@@ -97,7 +97,7 @@ export class XMLChangedRegionImportContext extends SvXMLImportContext {
     return new XMLChangeElementImportContext(this, kind);
   }
 
-  /** Admits the native change only when its timestamp parses. @param type - Change element. @param info - Source metadata. */
+  /** Admits the native change only when its timestamp parses. @param type - Change element. @param info - Source metadata. @returns Nothing. */
   SetChangeInfo(type: XMLRedlineKind, info: XMLChangeInfo): void {
     const date = new DateTime();
     if (!Converter.parseDateTime(date, info.date)) return;
@@ -122,7 +122,7 @@ export class XMLChangedRegionImportContext extends SvXMLImportContext {
     return this.helper.CreateTextChildContext(element, attributes, "Redline");
   }
 
-  /** Restores the original cursor after the redline text is complete. */
+  /** Restores the original cursor after the redline text is complete. @returns Nothing. */
   override endFastElement(): void {
     if (!this.hasDeletionText) return;
     this.helper.PopTextFrameCursor();

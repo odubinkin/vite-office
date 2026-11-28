@@ -65,7 +65,7 @@ it("projects category and native option controls, formatting color and undo acro
   expect(doc.GetValue(new ScAddress())).toBe(-1234.5);
 });
 
-it("uses the source scientific, fraction, time, date and mixed selection control states", () => {
+it("uses the source scientific, fraction, time, date and mixed selection control states", /** Uses the source scientific, fraction, time, date and mixed selection control states. @returns Nothing. */ () => {
   const { controller, frame } = mount();
   const sidebar = properties();
   const category = sidebar.getByRole("combobox", { name: "Category" });
@@ -110,7 +110,7 @@ it("uses the source scientific, fraction, time, date and mixed selection control
   ).toBe(T.TEXT);
 });
 
-it("keeps dock visibility and collapse separate and cancels popup focus to the existing owner", () => {
+it("keeps dock visibility and collapse separate and cancels popup focus to the existing owner", /** Keeps dock visibility and collapse separate and cancels popup focus to the existing owner. @returns Nothing. */ () => {
   const { frame } = mount();
   const sidebar = properties();
   sidebar.getByRole("combobox", { name: "Category" }).focus();
@@ -155,7 +155,7 @@ it("activates formatter-owned currency rows and repeats the chosen typed key on 
   expect(doc.GetFormatTable().GetType(doc.GetNumberFormat(1, 0, 0))).toBe(T.NUMBER);
 });
 
-it("retains the native options request's comma termination and incomplete completion record", () => {
+it("retains the native options request's comma termination and incomplete completion record", /** Retains the native options request's comma termination and incomplete completion record. @returns Nothing. */ () => {
   const { controller } = mount();
   const format = new ScFormatShell(controller.viewData, controller.shell);
   const request = new SfxRequest(SID_NUMBER_FORMAT, [
@@ -170,7 +170,7 @@ it("retains the native options request's comma termination and incomplete comple
   });
 });
 
-it("ports testDocumentModelAccessor_getDocumentCurrencies and deduplicates the actual assigned format", () => {
+it("ports testDocumentModelAccessor_getDocumentCurrencies and deduplicates the actual assigned format", /** Ports testDocumentModelAccessor_getDocumentCurrencies and deduplicates the actual assigned format. @returns Nothing. */ () => {
   const { controller } = mount();
   const doc = controller.shell.GetDocument();
   const accessor = controller.shell.GetDocumentModelAccessor();

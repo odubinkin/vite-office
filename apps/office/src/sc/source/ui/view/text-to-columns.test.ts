@@ -43,7 +43,7 @@ it("admits only the native cursor or populated single-column mark and shrinks wh
   }
 });
 
-it("exports the selected data with raw delimiters, internal empty rows and the source line ending", () => {
+it("exports the selected data with raw delimiters, internal empty rows and the source line ending", /** Exports the selected data with raw delimiters, internal empty rows and the source line ending. @returns Nothing. */ () => {
   const shell = new ScDocShell();
   const first = unicode('alpha\t"beta"'),
     last = unicode("gamma;delta");
@@ -63,7 +63,7 @@ it("exports the selected data with raw delimiters, internal empty rows and the s
   }
 });
 
-it("uses native editing setters for overwriting without clearing cells outside parsed fields", () => {
+it("uses native editing setters for overwriting without clearing cells outside parsed fields", /** Uses native editing setters for overwriting without clearing cells outside parsed fields. @returns Nothing. */ () => {
   const shell = new ScDocShell();
   const formula = unicode("=A1+1");
   try {

@@ -32,7 +32,7 @@ function getLanguageOfFormat(language: number, format: number): number {
 
 /** Original document-owned value field type for represented date and time fields. */
 export class SwValueFieldType {
-  /** Binds calculation and formatting to the original document. @param document - Owning Writer model. */
+  /** Binds calculation and formatting to the original document. @param document - Owning Writer model. @returns The initialized SwValueFieldType instance. */
   public constructor(private readonly document: SwDoc) {}
 
   /** Borrows the owning document. @returns Native document. */

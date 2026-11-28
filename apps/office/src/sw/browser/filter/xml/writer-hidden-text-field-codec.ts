@@ -38,7 +38,7 @@ export function encodeHiddenTextFields(node: SwTextNode): readonly WriterHiddenT
   return fields;
 }
 
-/** Reattaches the fields to the restored text dummies. @param node - Text node. @param fields - Worker records. */
+/** Reattaches the fields to the restored text dummies. @param node - Text node. @param fields - Worker records. @returns Nothing. */
 export function decodeHiddenTextFields(
   node: SwTextNode,
   fields: readonly WriterHiddenTextFieldRecord[] | undefined,

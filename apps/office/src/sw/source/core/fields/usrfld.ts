@@ -5,7 +5,7 @@ import { SwValueFieldType } from "./fldbas";
 
 /** Document-owned value shared by all occurrences of a named user field. */
 export class SwUserFieldType extends SwValueFieldType {
-  /** Creates the original string field with an empty content. @param document - Writer document. @param name - Field master name. */
+  /** Creates the original string field with an empty content. @param document - Writer document. @param name - Field master name. @returns The initialized SwUserFieldType instance. */
   public constructor(
     document: SwDoc,
     public readonly name: string,
@@ -17,7 +17,7 @@ export class SwUserFieldType extends SwValueFieldType {
   public content = "";
   public value = 0;
 
-  /** Assigns the numeric value and its formula source together. @param value - Original numeric UNO value. */
+  /** Assigns the numeric value and its formula source together. @param value - Original numeric UNO value. @returns Nothing. */
   public SetValue(value: number): void {
     this.value = value;
     this.content = String(value);
@@ -38,7 +38,7 @@ export class SwUserFieldType extends SwValueFieldType {
 
 /** Displays the user field's current value, its authored command or an empty invisible field. */
 export class SwUserField implements SwField<SwUserField> {
-  /** Creates a dependent user field. @param type - Document field master. @param format - Native number format. @param visible - Occurrence visibility. @param showFormula - Command display. */
+  /** Creates a dependent user field. @param type - Document field master. @param format - Native number format. @param visible - Occurrence visibility. @param showFormula - Command display. @returns The initialized SwUserField instance. */
   public constructor(
     public readonly type: SwUserFieldType,
     public format: number,
@@ -74,6 +74,6 @@ export class SwUserField implements SwField<SwUserField> {
     );
   }
 
-  /** Releases the occurrence while its document retains the field master. */
+  /** Releases the occurrence while its document retains the field master. @returns Nothing. */
   public Dispose(): void {}
 }

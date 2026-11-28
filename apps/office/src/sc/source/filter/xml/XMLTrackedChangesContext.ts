@@ -33,7 +33,7 @@ import type { CellTextParagraph } from "./xmlexprt.celltext";
 
 /** Dispatches the represented original tracked actions. */
 export class ScXMLTrackedChangesContext extends ScXMLImportContext {
-  /** Binds the native helper and reads the track key. @param owner - Workbook importer. @param attributes - Collection attributes. @param helper - Deferred track owner. */
+  /** Binds the native helper and reads the track key. @param owner - Workbook importer. @param attributes - Collection attributes. @param helper - Deferred track owner. @returns The initialized ScXMLTrackedChangesContext instance. */
   public constructor(
     owner: ScXMLImport,
     attributes: FastAttributeList,
@@ -83,7 +83,7 @@ abstract class ScXMLChangeActionContext extends ScXMLImportContext {
   private readonly dependencies: number[] = [];
   private readonly deleted: ScMyDeleted[] = [];
 
-  /** Reads the original action ID and acceptance. @param owner - Workbook importer. @param attributes - Action attributes. @param helper - Deferred track owner. */
+  /** Reads the original action ID and acceptance. @param owner - Workbook importer. @param attributes - Action attributes. @param helper - Deferred track owner. @returns The initialized ScXMLChangeActionContext instance. */
   public constructor(
     owner: ScXMLImport,
     attributes: FastAttributeList,
@@ -174,7 +174,7 @@ class ScXMLContentChangeContext extends ScXMLChangeActionContext {
     return super.createFastChildContext(element, attributes);
   }
 
-  /** Publishes the original completed content action. */
+  /** Publishes the original completed content action. @returns Nothing. */
   public override endFastElement(): void {
     this.helper.EndChangeAction({
       ...this.GetActionInfo(),
@@ -189,7 +189,7 @@ class ScXMLContentChangeContext extends ScXMLChangeActionContext {
 class ScXMLInsertionContext extends ScXMLChangeActionContext {
   private readonly type: ScChangeActionInsertionType;
 
-  /** Parses the inserted axis and original default coordinates. @param owner - Workbook importer. @param attributes - Insertion attributes. @param helper - Deferred track owner. */
+  /** Parses the inserted axis and original default coordinates. @param owner - Workbook importer. @param attributes - Insertion attributes. @param helper - Deferred track owner. @returns The initialized ScXMLInsertionContext instance. */
   public constructor(
     owner: ScXMLImport,
     attributes: FastAttributeList,
@@ -210,7 +210,7 @@ class ScXMLInsertionContext extends ScXMLChangeActionContext {
     this.range = helper.SetPosition(this.type, position, count, table);
   }
 
-  /** Publishes the original completed insertion. */
+  /** Publishes the original completed insertion. @returns Nothing. */
   public override endFastElement(): void {
     this.helper.EndChangeAction({ ...this.GetActionInfo(), type: this.type });
   }
@@ -223,7 +223,7 @@ class ScXMLDeletionContext extends ScXMLChangeActionContext {
   private insertCutOff: { id: number; count: number } | undefined;
   private readonly moveCutOffs: { id: number; from: number; to: number }[] = [];
 
-  /** Reads the original deleted axis and one-row, column or sheet range. @param owner - Workbook importer. @param attributes - Action attributes. @param helper - Deferred track owner. */
+  /** Reads the original deleted axis and one-row, column or sheet range. @param owner - Workbook importer. @param attributes - Action attributes. @param helper - Deferred track owner. @returns The initialized ScXMLDeletionContext instance. */
   public constructor(
     owner: ScXMLImport,
     attributes: FastAttributeList,
@@ -262,7 +262,7 @@ class ScXMLDeletionContext extends ScXMLChangeActionContext {
     );
   }
 
-  /** Publishes the original completed deletion. */
+  /** Publishes the original completed deletion. @returns Nothing. */
   public override endFastElement(): void {
     this.helper.EndChangeAction({
       ...this.GetActionInfo(),
@@ -294,7 +294,7 @@ class ScXMLMovementContext extends ScXMLChangeActionContext {
     return super.createFastChildContext(element, attributes);
   }
 
-  /** Publishes the native movement ranges. */
+  /** Publishes the native movement ranges. @returns Nothing. */
   public override endFastElement(): void {
     this.helper.EndChangeAction({
       ...this.GetActionInfo(),
@@ -306,7 +306,7 @@ class ScXMLMovementContext extends ScXMLChangeActionContext {
 
 /** Original cutoff list under a tracked deletion. */
 class ScXMLCutOffsContext extends SvXMLImportContext {
-  /** Binds insertion and movement cutoff receivers. @param insert - Insertion cutoff receiver. @param move - Movement cutoff receiver. */
+  /** Binds insertion and movement cutoff receivers. @param insert - Insertion cutoff receiver. @param move - Movement cutoff receiver. @returns The initialized ScXMLCutOffsContext instance. */
   public constructor(
     private readonly insert: (id: number, count: number) => void,
     private readonly move: (id: number, from: number, to: number) => void,
@@ -337,7 +337,7 @@ class ScXMLCutOffsContext extends SvXMLImportContext {
 
 /** Original references and historical snapshots inside the deletion list. */
 class ScXMLDeletionsContext extends ScXMLImportContext {
-  /** Shares the action's ordered deleted-data list. @param owner - Workbook importer. @param deleted - Parsed deletion target. */
+  /** Shares the action's ordered deleted-data list. @param owner - Workbook importer. @param deleted - Parsed deletion target. @returns The initialized ScXMLDeletionsContext instance. */
   public constructor(
     owner: ScXMLImport,
     private readonly deleted: ScMyDeleted[],
@@ -363,7 +363,7 @@ class ScXMLCellContentDeletionContext extends ScXMLImportContext {
   private range = new ScBigRange();
   private cell = new ScMyCellInfo();
 
-  /** Binds a deleted cell to its original optional action ID. @param owner - Workbook importer. @param id - Referenced action. @param deleted - Parsed deletion target. */
+  /** Binds a deleted cell to its original optional action ID. @param owner - Workbook importer. @param id - Referenced action. @param deleted - Parsed deletion target. @returns The initialized ScXMLCellContentDeletionContext instance. */
   public constructor(
     owner: ScXMLImport,
     private readonly id: number,
@@ -390,7 +390,7 @@ class ScXMLCellContentDeletionContext extends ScXMLImportContext {
     return new SvXMLIgnoreContext(true);
   }
 
-  /** Adds the completed parsed snapshot to the containing action. */
+  /** Adds the completed parsed snapshot to the containing action. @returns Nothing. */
   public override endFastElement(): void {
     this.deleted.push({ id: this.id, range: this.range, cell: this.cell });
   }
@@ -398,7 +398,7 @@ class ScXMLCellContentDeletionContext extends ScXMLImportContext {
 
 /** Original rejection context queues an action in the move branch without movement ranges. */
 class ScXMLRejectionContext extends ScXMLChangeActionContext {
-  /** Publishes the malformed move action for the native loader to discard. */
+  /** Publishes the malformed move action for the native loader to discard. @returns Nothing. */
   public override endFastElement(): void {
     this.helper.EndChangeAction({ ...this.GetActionInfo(), type: Type.SC_CAT_MOVE });
   }
@@ -421,11 +421,11 @@ function readBigRange(attributes: FastAttributeList): ScBigRange {
 
 /** Accumulates the original direct character callbacks. */
 class ScXMLContentContext extends SvXMLImportContext {
-  /** Captures text without another owner. @param append - Character receiver. */
+  /** Captures text without another owner. @param append - Character receiver. @returns The initialized ScXMLContentContext instance. */
   public constructor(private readonly append: (text: string) => void) {
     super();
   }
-  /** Appends source characters. @param value - Source text. */
+  /** Appends source characters. @param value - Source text. @returns Nothing. */
   public override characters(value: string): void {
     this.append(value);
   }
@@ -438,7 +438,7 @@ class ScXMLChangeInfoContext extends SvXMLImportContext {
   private comment = "";
   private paragraphs = 0;
 
-  /** Admits legacy author/date attributes as the initial values. @param attributes - Change info attributes. @param receive - Action callback. */
+  /** Admits legacy author/date attributes as the initial values. @param attributes - Change info attributes. @param receive - Action callback. @returns The initialized ScXMLChangeInfoContext instance. */
   public constructor(
     attributes: FastAttributeList,
     private readonly receive: (user: string, timestamp: DateTime, comment: string) => void,
@@ -469,7 +469,7 @@ class ScXMLChangeInfoContext extends SvXMLImportContext {
     }
   }
 
-  /** Publishes native change info after parsing its date. */
+  /** Publishes native change info after parsing its date. @returns Nothing. */
   public override endFastElement(): void {
     const timestamp = new UnoDateTime();
     Converter.parseDateTime(timestamp, this.date);
@@ -479,7 +479,7 @@ class ScXMLChangeInfoContext extends SvXMLImportContext {
 
 /** Reads original action dependency IDs. */
 class ScXMLDependingsContext extends SvXMLImportContext {
-  /** Borrows the action's dependent ID list. @param dependencies - Target list. */
+  /** Borrows the action's dependent ID list. @param dependencies - Target list. @returns The initialized ScXMLDependingsContext instance. */
   public constructor(private readonly dependencies: number[]) {
     super();
   }
@@ -497,7 +497,7 @@ class ScXMLDependingsContext extends SvXMLImportContext {
 
 /** Reads the native previous cell wrapper. */
 class ScXMLPreviousContext extends ScXMLImportContext {
-  /** Binds the old cell to the current action. @param owner - Workbook importer. @param receive - Cell callback. */
+  /** Binds the old cell to the current action. @param owner - Workbook importer. @param receive - Cell callback. @returns The initialized ScXMLPreviousContext instance. */
   public constructor(
     owner: ScXMLImport,
     private readonly tab: number,
@@ -525,7 +525,7 @@ class ScXMLChangeCellContext extends ScXMLImportContext {
   private readonly paragraphs: CellTextParagraph[] = [];
   private readonly formula: ScMyFormulaInfo | undefined;
 
-  /** Reads the original previous-cell attributes. @param owner - Workbook importer. @param attributes - Previous cell attributes. @param tab - Sheet of the tracked action. @param receive - Cell callback. */
+  /** Reads the original previous-cell attributes. @param owner - Workbook importer. @param attributes - Previous cell attributes. @param tab - Sheet of the tracked action. @param receive - Cell callback. @returns The initialized ScXMLChangeCellContext instance. */
   public constructor(
     owner: ScXMLImport,
     attributes: FastAttributeList,
@@ -593,12 +593,12 @@ class ScXMLChangeCellContext extends ScXMLImportContext {
     });
   }
 
-  /** Receives the actual cell edit spans from one paragraph. @param paragraph - Parsed paragraph. */
+  /** Receives the actual cell edit spans from one paragraph. @param paragraph - Parsed paragraph. @returns Nothing. */
   private SetParagraph(paragraph: CellTextParagraph): void {
     this.paragraphs.push(paragraph);
   }
 
-  /** Publishes the original empty, scalar, formula or edit-text result. */
+  /** Publishes the original empty, scalar, formula or edit-text result. @returns Nothing. */
   public override endFastElement(): void {
     if (this.richText) {
       this.receive(new ScMyCellInfo({ paragraphs: this.paragraphs }));
@@ -621,7 +621,7 @@ class ScXMLChangeCellContext extends ScXMLImportContext {
 class ScXMLChangeTextPContext extends ScXMLCellTextParaContext {
   private edit = false;
 
-  /** Captures the first paragraph and the callback that creates the edit cell. @param owner - Cell paragraph owner. @param tab - Sheet index. @param attributes - First paragraph attributes. @param enterEdit - Marks the cell as edit text. */
+  /** Captures the first paragraph and the callback that creates the edit cell. @param owner - Cell paragraph owner. @param tab - Sheet index. @param attributes - First paragraph attributes. @param enterEdit - Marks the cell as edit text. @returns The initialized ScXMLChangeTextPContext instance. */
   public constructor(
     owner: ConstructorParameters<typeof ScXMLCellTextParaContext>[0],
     tab: number,

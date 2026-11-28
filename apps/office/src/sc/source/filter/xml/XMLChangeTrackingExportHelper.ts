@@ -32,7 +32,7 @@ export class ScChangeTrackingExportHelper {
   private readonly userIds = new Map<string, number>();
   private readonly anonymize: boolean;
 
-  /** Binds workbook, the shared text style pool and original security preferences. @param document - Native owner. @param textStyles - Workbook text styles. @param options - Active security flags. */
+  /** Binds workbook, the shared text style pool and original security preferences. @param document - Native owner. @param textStyles - Workbook text styles. @param options - Active security flags. @returns The initialized ScChangeTrackingExportHelper instance. */
   public constructor(
     private readonly document: ScDocument,
     private readonly textStyles: CellTextStylePool,

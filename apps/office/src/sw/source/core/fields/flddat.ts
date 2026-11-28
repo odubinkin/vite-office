@@ -18,7 +18,7 @@ export class SwDateTimeField implements SwField<SwDateTimeField> {
   private automaticLanguage = true;
   private readonly format: number;
 
-  /** Resolves native zero-format defaults and captures the clock for fixed fields. @param type - Owning system type. @param subtype - Flags. @param format - Existing formatter key, or zero for the native default. */
+  /** Resolves native zero-format defaults and captures the clock for fixed fields. @param type - Owning system type. @param subtype - Flags. @param format - Existing formatter key, or zero for the native default. @returns The initialized SwDateTimeField instance. */
   public constructor(
     private readonly type: SwDateTimeFieldType,
     private readonly subtype = SwDateTimeSubType.Date,
@@ -68,7 +68,7 @@ export class SwDateTimeField implements SwField<SwDateTimeField> {
     return this.offset;
   }
 
-  /** Sets the original adjustment in minutes. @param minutes - Offset. */
+  /** Sets the original adjustment in minutes. @param minutes - Offset. @returns Nothing. */
   public SetOffset(minutes: number): void {
     this.offset = minutes;
   }
@@ -78,17 +78,17 @@ export class SwDateTimeField implements SwField<SwDateTimeField> {
     return this.automaticLanguage;
   }
 
-  /** Updates the original language-selection flag. @param automatic - Whether system language is allowed. */
+  /** Updates the original language-selection flag. @param automatic - Whether system language is allowed. @returns Nothing. */
   public SetAutomaticLanguage(automatic: boolean): void {
     this.automaticLanguage = automatic;
   }
 
-  /** Sets the stored serial date/time. @param value - Days since the document null date. */
+  /** Sets the stored serial date/time. @param value - Days since the document null date. @returns Nothing. */
   public SetValue(value: number): void {
     this.value = value;
   }
 
-  /** Stores a date/time relative to the actual document null date. @param dateTime - Native value. */
+  /** Stores a date/time relative to the actual document null date. @param dateTime - Native value. @returns Nothing. */
   public SetDateTime(dateTime: DateTime): void {
     this.SetValue(SwDateTimeField.GetDateTime(this.type.GetDoc(), dateTime));
   }
@@ -135,7 +135,7 @@ export class SwDateTimeField implements SwField<SwDateTimeField> {
     );
   }
 
-  /** Releases field-specific state. The formatter remains owned by the document. */
+  /** Releases field-specific state. The formatter remains owned by the document. @returns Nothing. */
   public Dispose(): void {}
 
   /** Copies the source field state after selecting the native owner and its formatter key. @param type - Destination field type. @param format - Destination format key. @returns Detached field. */

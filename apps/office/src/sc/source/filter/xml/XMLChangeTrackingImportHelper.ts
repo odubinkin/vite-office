@@ -34,7 +34,7 @@ export interface ScMyFormulaInfo extends ScXMLFormula {
 
 /** Original native loader state for a previous cell and its optional input spelling. */
 export class ScMyCellInfo {
-  /** Stores parsed data until the original document and formula references are ready. @param value - Parsed previous snapshot. @param inputString - Original input spelling. */
+  /** Stores parsed data until the original document and formula references are ready. @param value - Parsed previous snapshot. @param inputString - Original input spelling. @returns The initialized ScMyCellInfo instance. */
   public constructor(
     private readonly value?:
       number | string | ScMyFormulaInfo | { paragraphs: CellTextParagraph[] },
@@ -123,12 +123,12 @@ export class ScXMLChangeTrackingImportHelper {
     return number[0];
   }
 
-  /** Retains protection after the tracked-changes wrapper is read. @param value - Imported bytes. */
+  /** Retains protection after the tracked-changes wrapper is read. @param value - Imported bytes. @returns Nothing. */
   public SetProtection(value: Uint8Array): void {
     this.protection = new Uint8Array(value);
   }
 
-  /** Records the completed native action if its identity is valid. @param action - Loaded action. */
+  /** Records the completed native action if its identity is valid. @param action - Loaded action. @returns Nothing. */
   public EndChangeAction(action: ScMyAction): void {
     if (action.actionNumber > 0) this.actions.push(action);
   }
@@ -174,7 +174,7 @@ export class ScXMLChangeTrackingImportHelper {
     return offset;
   }
 
-  /** Reconstructs the native actions in their original three import passes. @param importer - Importer for the fully populated workbook. */
+  /** Reconstructs the native actions in their original three import passes. @param importer - Importer for the fully populated workbook. @returns Nothing. */
   public CreateChangeTrack(importer: ScXMLImport): void {
     const document = importer.GetDocument();
     const track = new ScChangeTrack(document);
@@ -280,7 +280,7 @@ export class ScXMLChangeTrackingImportHelper {
     return generated;
   }
 
-  /** Resolves original action deletions and restores a deleted cell's newer content. @param action - Native deleting action. @param deleted - Deferred references. @param importer - Workbook importer. @param track - Track lookup. */
+  /** Resolves original action deletions and restores a deleted cell's newer content. @param action - Native deleting action. @param deleted - Deferred references. @param importer - Workbook importer. @param track - Track lookup. @returns Nothing. */
   private SetDeletedActions(
     action: ScChangeAction,
     deleted: readonly ScMyDeleted[],
@@ -304,7 +304,7 @@ export class ScXMLChangeTrackingImportHelper {
     }
   }
 
-  /** Resolves cutoff action types after the original load pass. @param deletion - Native deletion. @param info - Parsed cutoff references. @param track - Track lookup. */
+  /** Resolves cutoff action types after the original load pass. @param deletion - Native deletion. @param info - Parsed cutoff references. @param track - Track lookup. @returns Nothing. */
   private SetDeletionDependencies(
     deletion: ScChangeActionDel,
     info: ScMyDelAction,

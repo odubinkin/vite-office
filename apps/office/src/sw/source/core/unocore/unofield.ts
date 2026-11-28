@@ -220,7 +220,7 @@ export class SwXGetReferenceField {
   };
   private hint: SwTextReferenceField | undefined;
 
-  /** Assigns original UNO reference field properties on the descriptor. @param name - Native property. @param input - Typed UNO value. */
+  /** Assigns original UNO reference field properties on the descriptor. @param name - Native property. @param input - Typed UNO value. @returns Nothing. */
   public setPropertyValue(name: OUStringConstReference, input: Any): void {
     const property = text(name);
     if (this.hint) {
@@ -281,7 +281,7 @@ export class SwXGetReferenceField {
     }
   }
 
-  /** Attaches the native field to the current text position. @param range - Actual Writer range. */
+  /** Attaches the native field to the current text position. @param range - Actual Writer range. @returns Nothing. */
   public attach(range: SwXTextRange): void {
     if (this.hint) invalid("Writer reference field is already attached.");
     const position = range.GetPaM().Start();
@@ -304,7 +304,7 @@ export class SwXGetReferenceField {
     return unicode(showCommand ? `Reference ${field.GetData().name}` : field.Expand());
   }
 
-  /** Removes the attached native field point. */
+  /** Removes the attached native field point. @returns Nothing. */
   public dispose(): void {
     const hint = this.hint;
     this.hint = undefined;
@@ -322,10 +322,10 @@ export class SwXDocInfoField {
   private presentation = "";
   private hint: SwTextDocInfoField | undefined;
 
-  /** Binds the subtype selected by the UNO service. @param subtype - Native document information subtype. */
+  /** Binds the subtype selected by the UNO service. @param subtype - Native document information subtype. @returns The initialized SwXDocInfoField instance. */
   public constructor(private readonly subtype: number) {}
 
-  /** Assigns the original importer properties on the detached descriptor. @param name - UNO property name. @param input - Typed UNO property value. */
+  /** Assigns the original importer properties on the detached descriptor. @param name - UNO property name. @param input - Typed UNO property value. @returns Nothing. */
   public setPropertyValue(name: OUStringConstReference, input: Any): void {
     if (this.hint) invalid("Writer document information field is attached.");
     const property = text(name);
@@ -364,7 +364,7 @@ export class SwXDocInfoField {
     }
   }
 
-  /** Attaches the document's native field to the current text point. @param range - Writer text range. */
+  /** Attaches the document's native field to the current text point. @param range - Writer text range. @returns Nothing. */
   public attach(range: SwXTextRange): void {
     if (this.hint) invalid("Writer document information field is already attached.");
     const position = range.GetPaM().Start();
@@ -393,7 +393,7 @@ export class SwXDocInfoField {
     this.hint = hint;
   }
 
-  /** Disposes the native field by removing its point from the document. */
+  /** Disposes the native field by removing its point from the document. @returns Nothing. */
   public dispose(): void {
     const hint = this.hint;
     this.hint = undefined;
@@ -417,7 +417,7 @@ export class SwXDocInfoField {
 
 /** UNO property owner for a text sequence master. */
 export class SwXSetExpFieldMaster {
-  /** Borrows the document's native field type. @param type - Numbered sequence master. */
+  /** Borrows the document's native field type. @param type - Numbered sequence master. @returns The initialized SwXSetExpFieldMaster instance. */
   public constructor(private readonly type: SwSetExpFieldType) {}
 
   /** Borrows the actual named field type. @returns Sequence master. */
@@ -425,7 +425,7 @@ export class SwXSetExpFieldMaster {
     return this.type;
   }
 
-  /** Updates the typed sequence master properties. @param name - UNO property name. @param input - Typed value. */
+  /** Updates the typed sequence master properties. @param name - UNO property name. @param input - Typed value. @returns Nothing. */
   public setPropertyValue(name: OUStringConstReference, input: Any): void {
     const property = text(name);
     switch (property) {
@@ -451,7 +451,7 @@ export class SwXSetExpField {
   private master: SwSetExpFieldType | undefined;
   private hint: SwTextSequenceField | undefined;
 
-  /** Binds the original dependent field to its sequence master. @param master - Native field master. */
+  /** Binds the original dependent field to its sequence master. @param master - Native field master. @returns Nothing. */
   public attachTextFieldMaster(master: unknown): void {
     if (this.hint) invalid("Writer sequence field is already attached.");
     if (!(master instanceof SwXSetExpFieldMaster))
@@ -459,7 +459,7 @@ export class SwXSetExpField {
     this.master = master.GetType();
   }
 
-  /** Sets sequence properties after native field attachment. @param name - UNO property name. @param input - Typed value. */
+  /** Sets sequence properties after native field attachment. @param name - UNO property name. @param input - Typed value. @returns Nothing. */
   public setPropertyValue(name: OUStringConstReference, input: Any): void {
     const field = this.hint?.GetAttr().GetField();
     if (!field) invalid("Writer sequence field is detached.");
@@ -509,7 +509,7 @@ export class SwXSetExpField {
     return new Any([(field.GetSeqNumber() << 16) >> 16], "sal_Int16");
   }
 
-  /** Attaches the original owned field point to its document. @param range - Writer range. */
+  /** Attaches the original owned field point to its document. @param range - Writer range. @returns Nothing. */
   public attach(range: SwXTextRange): void {
     if (this.hint) invalid("Writer sequence field is already attached.");
     const position = range.GetPaM().Start();
@@ -525,7 +525,7 @@ export class SwXSetExpField {
     this.hint = hint;
   }
 
-  /** Removes the attached native point. */
+  /** Removes the attached native point. @returns Nothing. */
   public dispose(): void {
     const hint = this.hint;
     this.hint = undefined;
@@ -535,10 +535,10 @@ export class SwXSetExpField {
 
 /** UNO master properties for a document-owned User field. */
 export class SwXUserFieldMaster {
-  /** Borrows the native field master. @param type - Named document field type. */
+  /** Borrows the native field master. @param type - Named document field type. @returns The initialized SwXUserFieldMaster instance. */
   public constructor(public readonly type: SwUserFieldType) {}
 
-  /** Applies the original master properties. @param name - UNO property name. @param input - Typed property. */
+  /** Applies the original master properties. @param name - UNO property name. @param input - Typed property. @returns Nothing. */
   public setPropertyValue(name: OUStringConstReference, input: Any): void {
     const property = text(name);
     switch (property) {
@@ -562,14 +562,14 @@ export class SwXUserField {
   private master: SwUserFieldType | undefined;
   private hint: SwTextUserField | undefined;
 
-  /** Binds the original dependent field to its named master. @param master - Native master. */
+  /** Binds the original dependent field to its named master. @param master - Native master. @returns Nothing. */
   public attachTextFieldMaster(master: unknown): void {
     if (this.hint) invalid("Writer User field is already attached.");
     if (!(master instanceof SwXUserFieldMaster)) illegal("Writer User field master is invalid.");
     this.master = master.type;
   }
 
-  /** Sets occurrence properties after attachment. @param name - UNO property name. @param input - Typed property. */
+  /** Sets occurrence properties after attachment. @param name - UNO property name. @param input - Typed property. @returns Nothing. */
   public setPropertyValue(name: OUStringConstReference, input: Any): void {
     const field = this.hint?.GetAttr().GetField();
     if (!field) invalid("Writer User field is detached.");
@@ -589,7 +589,7 @@ export class SwXUserField {
     }
   }
 
-  /** Attaches a User field to its actual text object. @param range - Writer range. */
+  /** Attaches a User field to its actual text object. @param range - Writer range. @returns Nothing. */
   public attach(range: SwXTextRange): void {
     if (this.hint) invalid("Writer User field is already attached.");
     const position = range.GetPaM().Start();
@@ -605,7 +605,7 @@ export class SwXUserField {
     this.hint = hint;
   }
 
-  /** Removes the attached native text point. */
+  /** Removes the attached native text point. @returns Nothing. */
   public dispose(): void {
     const hint = this.hint;
     this.hint = undefined;
@@ -623,7 +623,7 @@ export class SwXGetExpField {
   private value = 0;
   private hint: SwTextGetExpField | undefined;
 
-  /** Sets the original expression descriptor properties. @param name - UNO property name. @param input - Typed property. */
+  /** Sets the original expression descriptor properties. @param name - UNO property name. @param input - Typed property. @returns Nothing. */
   public setPropertyValue(name: OUStringConstReference, input: Any): void {
     if (this.hint) invalid("Writer GetExpression field is already attached.");
     const property = text(name);
@@ -658,7 +658,7 @@ export class SwXGetExpField {
     }
   }
 
-  /** Attaches the expression occurrence using the document's native system owner. @param range - Writer range. */
+  /** Attaches the expression occurrence using the document's native system owner. @param range - Writer range. @returns Nothing. */
   public attach(range: SwXTextRange): void {
     if (this.hint) invalid("Writer GetExpression field is already attached.");
     const position = range.GetPaM().Start();
@@ -687,7 +687,7 @@ export class SwXGetExpField {
     this.hint = hint;
   }
 
-  /** Removes the attached native point. */
+  /** Removes the attached native point. @returns Nothing. */
   public dispose(): void {
     const hint = this.hint;
     this.hint = undefined;
@@ -701,7 +701,7 @@ export class SwXHiddenParaField {
   private hidden = false;
   private hint: SwTextHiddenParaField | undefined;
 
-  /** Sets the original paragraph condition or cached visibility. @param name - UNO property. @param input - Typed value. */
+  /** Sets the original paragraph condition or cached visibility. @param name - UNO property. @param input - Typed value. @returns Nothing. */
   public setPropertyValue(name: OUStringConstReference, input: Any): void {
     if (this.hint) invalid("Writer hidden paragraph field is attached.");
     const property = text(name);
@@ -710,7 +710,7 @@ export class SwXHiddenParaField {
     else unknown(property);
   }
 
-  /** Attaches the original field dummy. @param range - Writer range. */
+  /** Attaches the original field dummy. @param range - Writer range. @returns Nothing. */
   public attach(range: SwXTextRange): void {
     if (this.hint) invalid("Writer hidden paragraph field is already attached.");
     const position = range.GetPaM().Start();
@@ -726,7 +726,7 @@ export class SwXHiddenParaField {
     this.hint = hint;
   }
 
-  /** Removes the attached point. */
+  /** Removes the attached point. @returns Nothing. */
   public dispose(): void {
     const hint = this.hint;
     this.hint = undefined;
@@ -739,12 +739,12 @@ export class SwXHiddenTextField {
   private data: SwHiddenTextFieldData;
   private hint: SwTextHiddenTextField | undefined;
 
-  /** Selects the native UNO service. @param conditional - Whether to use ConditionalText. */
+  /** Selects the native UNO service. @param conditional - Whether to use ConditionalText. @returns The initialized SwXHiddenTextField instance. */
   public constructor(conditional: boolean) {
     this.data = { conditional, condition: "", trueContent: "", falseContent: "", hidden: false };
   }
 
-  /** Sets the original field properties before attaching. @param name - UNO property name. @param input - Typed UNO value. */
+  /** Sets the original field properties before attaching. @param name - UNO property name. @param input - Typed UNO value. @returns Nothing. */
   public setPropertyValue(name: OUStringConstReference, input: Any): void {
     if (this.hint) invalid("Writer condition field is attached.");
     const property = text(name);
@@ -774,7 +774,7 @@ export class SwXHiddenTextField {
     unknown(property);
   }
 
-  /** Attaches the original point field. @param range - Writer insertion range. */
+  /** Attaches the original point field. @param range - Writer insertion range. @returns Nothing. */
   public attach(range: SwXTextRange): void {
     if (this.hint) invalid("Writer condition field is already attached.");
     const position = range.GetPaM().Start();
@@ -790,7 +790,7 @@ export class SwXHiddenTextField {
     this.hint = hint;
   }
 
-  /** Removes the attached point. */
+  /** Removes the attached point. @returns Nothing. */
   public dispose(): void {
     const hint = this.hint;
     this.hint = undefined;
@@ -805,7 +805,7 @@ export class SwXJumpEditField {
   private help = "";
   private hint: SwTextJumpEditField | undefined;
 
-  /** Sets the typed native descriptor properties. @param name - UNO property. @param input - Typed value. */
+  /** Sets the typed native descriptor properties. @param name - UNO property. @param input - Typed value. @returns Nothing. */
   public setPropertyValue(name: OUStringConstReference, input: Any): void {
     if (this.hint) invalid("Writer placeholder is attached.");
     const property = text(name);
@@ -824,7 +824,7 @@ export class SwXJumpEditField {
     }
   }
 
-  /** Attaches the original field dummy. @param range - Writer range. */
+  /** Attaches the original field dummy. @param range - Writer range. @returns Nothing. */
   public attach(range: SwXTextRange): void {
     if (this.hint) invalid("Writer placeholder is already attached.");
     const position = range.GetPaM().Start();
@@ -840,7 +840,7 @@ export class SwXJumpEditField {
     this.hint = hint;
   }
 
-  /** Removes the attached point. */
+  /** Removes the attached point. @returns Nothing. */
   public dispose(): void {
     const hint = this.hint;
     this.hint = undefined;
@@ -861,7 +861,7 @@ export class SwXDropDownField {
   };
   private hint: SwTextDropDownField | undefined;
 
-  /** Sets the typed native descriptor properties. @param name - UNO property. @param input - Typed value. */
+  /** Sets the typed native descriptor properties. @param name - UNO property. @param input - Typed value. @returns Nothing. */
   public setPropertyValue(name: OUStringConstReference, input: Any): void {
     if (this.hint) invalid("Writer drop-down is attached.");
     const property = text(name);
@@ -897,7 +897,7 @@ export class SwXDropDownField {
     }
   }
 
-  /** Attaches the original field dummy. @param range - Writer range. */
+  /** Attaches the original field dummy. @param range - Writer range. @returns Nothing. */
   public attach(range: SwXTextRange): void {
     if (this.hint) invalid("Writer drop-down is already attached.");
     const position = range.GetPaM().Start();
@@ -913,7 +913,7 @@ export class SwXDropDownField {
     this.hint = hint;
   }
 
-  /** Removes the attached point. */
+  /** Removes the attached point. @returns Nothing. */
   public dispose(): void {
     const hint = this.hint;
     this.hint = undefined;
@@ -927,7 +927,7 @@ export class SwXChapterField {
   private level = 0;
   private hint: SwTextChapterField | undefined;
 
-  /** Sets the original typed chapter properties. @param name - UNO property name. @param input - Typed value. */
+  /** Sets the original typed chapter properties. @param name - UNO property name. @param input - Typed value. @returns Nothing. */
   public setPropertyValue(name: OUStringConstReference, input: Any): void {
     if (this.hint) invalid("Writer chapter field is attached.");
     const property = text(name);
@@ -943,7 +943,7 @@ export class SwXChapterField {
     }
   }
 
-  /** Attaches the native field and its dummy character. @param range - Writer range. */
+  /** Attaches the native field and its dummy character. @param range - Writer range. @returns Nothing. */
   public attach(range: SwXTextRange): void {
     if (this.hint) invalid("Writer chapter field is already attached.");
     const position = range.GetPaM().Start();
@@ -959,7 +959,7 @@ export class SwXChapterField {
     this.hint = hint;
   }
 
-  /** Removes the attached native point. */
+  /** Removes the attached native point. @returns Nothing. */
   public dispose(): void {
     const hint = this.hint;
     this.hint = undefined;
@@ -975,7 +975,7 @@ export class SwXPageNumberField {
   private userText = "";
   private hint: SwTextPageNumberField | undefined;
 
-  /** Reads the original PageNumber descriptor properties. @param name - UNO field property. @param input - Typed value. */
+  /** Reads the original PageNumber descriptor properties. @param name - UNO field property. @param input - Typed value. @returns Nothing. */
   public setPropertyValue(name: OUStringConstReference, input: Any): void {
     if (this.hint) invalid("Writer page number field is attached.");
     const property = text(name);
@@ -1016,7 +1016,7 @@ export class SwXPageNumberField {
     }
   }
 
-  /** Attaches the original native field and its dummy character. @param range - Writer range. */
+  /** Attaches the original native field and its dummy character. @param range - Writer range. @returns Nothing. */
   public attach(range: SwXTextRange): void {
     if (this.hint) invalid("Writer page number field is already attached.");
     const position = range.GetPaM().Start();
@@ -1038,7 +1038,7 @@ export class SwXPageNumberField {
     this.hint = hint;
   }
 
-  /** Removes the attached native point. */
+  /** Removes the attached native point. @returns Nothing. */
   public dispose(): void {
     const hint = this.hint;
     this.hint = undefined;
@@ -1051,17 +1051,17 @@ export class SwXDocStatField {
   private format = SvxNumType.SVX_NUM_CHARS_UPPER_LETTER;
   private hint: SwTextDocStatField | undefined;
 
-  /** Selects the native subtype for this service. @param subtype - Count kind. */
+  /** Selects the native subtype for this service. @param subtype - Count kind. @returns The initialized SwXDocStatField instance. */
   public constructor(private readonly subtype: SwDocStatSubType) {}
 
-  /** Sets the original sal_Int16 NumberingType. @param name - UNO property name. @param input - Typed source value. */
+  /** Sets the original sal_Int16 NumberingType. @param name - UNO property name. @param input - Typed source value. @returns Nothing. */
   public setPropertyValue(name: OUStringConstReference, input: Any): void {
     const property = text(name);
     if (property !== "NumberingType") unknown(property);
     this.format = scalar(input, "sal_Int16") as SvxNumType;
   }
 
-  /** Attaches the original count field to its document and text point. @param range - Native text range. */
+  /** Attaches the original count field to its document and text point. @param range - Native text range. @returns Nothing. */
   public attach(range: SwXTextRange): void {
     if (this.hint) invalid("Writer statistic field is already attached.");
     const position = range.GetPaM().Start();
@@ -1077,7 +1077,7 @@ export class SwXDocStatField {
     this.hint = hint;
   }
 
-  /** Removes the attached text point. */
+  /** Removes the attached text point. @returns Nothing. */
   public dispose(): void {
     const hint = this.hint;
     this.hint = undefined;
@@ -1094,7 +1094,7 @@ export class SwXDateTimeField {
   private value: DateTime | undefined;
   private hint: SwTextDateTimeField | undefined;
 
-  /** Assigns original date/time properties. @param name - UNO property name. @param input - Typed property value. */
+  /** Assigns original date/time properties. @param name - UNO property name. @param input - Typed property value. @returns Nothing. */
   public setPropertyValue(name: OUStringConstReference, input: Any): void {
     if (this.hint) invalid("Writer date/time field is attached.");
     const property = text(name);
@@ -1129,7 +1129,7 @@ export class SwXDateTimeField {
     }
   }
 
-  /** Attaches the date/time field at the original dummy position. @param range - Current range. */
+  /** Attaches the date/time field at the original dummy position. @param range - Current range. @returns Nothing. */
   public attach(range: SwXTextRange): void {
     if (this.hint) invalid("Writer date/time field is already attached.");
     const position = range.GetPaM().Start();
@@ -1151,7 +1151,7 @@ export class SwXDateTimeField {
     this.hint = hint;
   }
 
-  /** Removes the attached point through the document text model. */
+  /** Removes the attached point through the document text model. @returns Nothing. */
   public dispose(): void {
     const hint = this.hint;
     this.hint = undefined;

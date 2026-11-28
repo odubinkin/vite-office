@@ -44,7 +44,7 @@ export class ScXMLTableRowContext extends ScXMLImportContext {
       element === XMLToken.TABLE_COVERED_TABLE_CELL,
     );
   }
-  /** Applies row properties at native close and advances the repeated row span. */
+  /** Applies row properties at native close and advances the repeated row span. @returns Nothing. */
   override endFastElement(): void {
     const document = this.table.owner.GetDocument();
     const tab = this.table.tab;

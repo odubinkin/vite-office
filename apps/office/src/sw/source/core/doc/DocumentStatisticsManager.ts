@@ -32,7 +32,7 @@ export class DocumentStatisticsManager {
   private transferPageCount: number | undefined;
   private revision = -1;
 
-  /** Binds the original document node and layout owners. @param document - Canonical Writer model. */
+  /** Binds the original document node and layout owners. @param document - Canonical Writer model. @returns The initialized DocumentStatisticsManager instance. */
   public constructor(private readonly document: SwDoc) {}
 
   /** Borrows the latest native counts without forcing calculation. @returns Native cache. */
@@ -48,19 +48,19 @@ export class DocumentStatisticsManager {
     );
   }
 
-  /** Restores the originating view's physical count in a DOM-free Worker. @param count - Measured originating page count. */
+  /** Restores the originating view's physical count in a DOM-free Worker. @param count - Measured originating page count. @returns Nothing. */
   public SetLayoutPageCount(count: number): void {
     this.transferPageCount = count;
   }
 
-  /** Sets the original native counts from document properties or transfer. @param stat - Original count state. */
+  /** Sets the original native counts from document properties or transfer. @param stat - Original count state. @returns Nothing. */
   public SetDocStat(stat: Readonly<SwDocStat>): void {
     this.stat = { ...stat };
     this.initialized = true;
     this.revision = this.document.GetDocumentStateManager().GetModelRevision();
   }
 
-  /** Imports the accepted UNO document statistics in their original unsigned storage. @param owner - Loaded properties. */
+  /** Imports the accepted UNO document statistics in their original unsigned storage. @param owner - Loaded properties. @returns Nothing. */
   public SetStatistics(owner: SfxDocumentMetaData): void {
     const sequence = owner.getDocumentStatistics();
     const next = { ...this.stat };
@@ -135,7 +135,7 @@ export class DocumentStatisticsManager {
     return this.stat.nPage;
   }
 
-  /** Updates the UNO document properties without marking the Writer model modified. @param owner - Existing Sfx metadata. */
+  /** Updates the UNO document properties without marking the Writer model modified. @param owner - Existing Sfx metadata. @returns Nothing. */
   public StoreStatistics(owner: SfxDocumentMetaData): void {
     const values: NamedValue[] = [];
     try {

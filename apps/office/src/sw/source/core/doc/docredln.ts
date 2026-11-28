@@ -41,7 +41,7 @@ export function GetRedlineAuthor(index: number): string {
 export class SwRedlineExtraData_FormatColl {
   private readonly pSet: SfxItemSet;
 
-  /** Copies the native style handle. @param items - Interned previous character formatting. */
+  /** Copies the native style handle. @param items - Interned previous character formatting. @returns The initialized SwRedlineExtraData_FormatColl instance. */
   constructor(items: SfxItemSet) {
     this.pSet = acquireStyleHandle(items);
   }
@@ -56,7 +56,7 @@ export class SwRedlineExtraData_FormatColl {
     return new SwRedlineExtraData_FormatColl(this.pSet);
   }
 
-  /** Releases the native automatic style handle. */
+  /** Releases the native automatic style handle. @returns Nothing. */
   Dispose(): void {
     releaseStyleHandle(this.pSet);
   }
@@ -67,7 +67,7 @@ export class SwRedlineData {
   private readonly m_aStamp: DateTime;
   private m_pExtraData: SwRedlineExtraData_FormatColl | undefined;
 
-  /** Stores the native change metadata. @param m_eType - Change type. @param m_nAuthor - Module author index. @param stamp - Native time. @param m_nMovedID - Move identifier. @param m_sComment - Authored comment. @param m_pNext - Layered successor. */
+  /** Stores the native change metadata. @param m_eType - Change type. @param m_nAuthor - Module author index. @param stamp - Native time. @param m_nMovedID - Move identifier. @param m_sComment - Authored comment. @param m_pNext - Layered successor. @returns The initialized SwRedlineData instance. */
   constructor(
     private readonly m_eType: RedlineType,
     private readonly m_nAuthor: number,
@@ -109,7 +109,7 @@ export class SwRedlineData {
     return this.m_pNext;
   }
 
-  /** Assigns a clone of the native previous-format payload. @param extra - New source payload. */
+  /** Assigns a clone of the native previous-format payload. @param extra - New source payload. @returns Nothing. */
   SetExtraData(extra: SwRedlineExtraData_FormatColl): void {
     const next = extra.CreateNew();
     this.m_pExtraData?.Dispose();
@@ -121,7 +121,7 @@ export class SwRedlineData {
     return this.m_pExtraData;
   }
 
-  /** Releases this change and its complete successor chain. */
+  /** Releases this change and its complete successor chain. @returns Nothing. */
   Dispose(): void {
     this.m_pExtraData?.Dispose();
     this.m_pExtraData = undefined;
@@ -135,7 +135,7 @@ export class SwRangeRedline extends SwPaM {
   private readonly identifier = SwRangeRedline.nextId++;
   private m_pContentNode: SwNodeIndex | undefined;
 
-  /** Binds native endpoints and optional saved deletion text. @param data - Native metadata. @param point - Active position. @param mark - Paired endpoint, if expanded. @param deleteLastPara - Original inverse merge-last-paragraph flag. */
+  /** Binds native endpoints and optional saved deletion text. @param data - Native metadata. @param point - Active position. @param mark - Paired endpoint, if expanded. @param deleteLastPara - Original inverse merge-last-paragraph flag. @returns The initialized SwRangeRedline instance. */
   constructor(
     private readonly data: SwRedlineData,
     point: SwPosition,
@@ -178,7 +178,7 @@ export class SwRangeRedline extends SwPaM {
     return node?.IsStartNode() ? node : undefined;
   }
 
-  /** Registers an owned index for the deletion section. @param start - Original section start. */
+  /** Registers an owned index for the deletion section. @param start - Original section start. @returns Nothing. */
   SetContentIdx(start: SwStartNode): void {
     this.m_pContentNode?.Dispose();
     this.m_pContentNode = new SwNodeIndex(start);
@@ -247,7 +247,7 @@ export class SwRangeRedline extends SwPaM {
     }
   }
 
-  /** Removes the original text after all deletions have been copied. */
+  /** Removes the original text after all deletions have been copied. @returns Nothing. */
   DelCopyOfSection(): void {
     const section = this.GetContentStart();
     const start = this.Start();
@@ -267,7 +267,7 @@ export class SwRangeRedline extends SwPaM {
     this.DeleteMark();
   }
 
-  /** Releases a prepared deletion if the save stops before removing its original text. */
+  /** Releases a prepared deletion if the save stops before removing its original text. @returns Nothing. */
   DiscardContentSection(): void {
     const section = this.GetContentStart();
     if (!section) return;
@@ -276,7 +276,7 @@ export class SwRangeRedline extends SwPaM {
     section.GetNodes().GetDoc().GetDocumentContentOperationsManager().DeleteSection(section);
   }
 
-  /** Restores a saved single-paragraph deletion through the document's range move. @param ranges - Ordered redline table. @param index - This redline's table position. */
+  /** Restores a saved single-paragraph deletion through the document's range move. @param ranges - Ordered redline table. @param index - This redline's table position. @returns Nothing. */
   MoveFromSection(ranges: readonly SwRangeRedline[], index: number): void {
     const section = this.GetContentStart();
     const point = this.GetPoint();
@@ -338,7 +338,7 @@ export class SwRangeRedline extends SwPaM {
     operations.DeleteSection(section);
   }
 
-  /** Releases retained positions before document nodes are destroyed. */
+  /** Releases retained positions before document nodes are destroyed. @returns Nothing. */
   override Dispose(): void {
     this.m_pContentNode?.Dispose();
     this.m_pContentNode = undefined;
@@ -351,7 +351,7 @@ export class SwRangeRedline extends SwPaM {
 export class SwRedlineTable {
   private readonly maVector: SwRangeRedline[] = [];
 
-  /** Adds a range in original start-then-end order. @param range - Tracked change owner. */
+  /** Adds a range in original start-then-end order. @param range - Tracked change owner. @returns Nothing. */
   Insert(range: SwRangeRedline): void {
     const position = this.maVector.findIndex(
       /** Finds the first change following these positions. @param current - Existing range. @returns Whether it follows. */
@@ -367,7 +367,7 @@ export class SwRedlineTable {
     return this.maVector;
   }
 
-  /** Releases the ordered tracked coordinates at document disposal. */
+  /** Releases the ordered tracked coordinates at document disposal. @returns Nothing. */
   Dispose(): void {
     for (const range of this.maVector) range.Dispose();
     this.maVector.length = 0;

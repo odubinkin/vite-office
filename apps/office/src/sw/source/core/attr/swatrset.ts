@@ -45,7 +45,7 @@ import { SvxEscapementItem } from "../../../../editeng/inc/escapementitem";
 import { SvxInterLineSpaceRule, SvxLineSpaceRule } from "../../../../editeng/inc/svxenum";
 import { SvxWordLineModeItem } from "../../../../editeng/inc/wrlmitem";
 import { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
-import { COL_AUTO, Color, ColorTransparency } from "../../../../tools/inc/color";
+import { Color, ColorTransparency } from "../../../../tools/inc/color";
 import { FontStrikeout } from "../../../../tools/inc/fontenum";
 import { RES_CHRATR_CROSSEDOUT, RES_CHRATR_ESCAPEMENT, RES_PROTECT } from "../../../inc/hintids";
 
@@ -78,9 +78,10 @@ import {
   paragraphControlItems,
   restoreParagraphControlItem,
   writerColorFromPrimitive,
+  writerColorValue,
 } from "./swatrset.paragraph";
 import { writerCharacterItemFactory } from "./swatrset.character";
-export { writerColorFromPrimitive } from "./swatrset.paragraph";
+export { writerColorFromPrimitive, writerColorValue } from "./swatrset.paragraph";
 import { SfxInt16Item, SfxUInt16Item } from "../../../../svl/source/items/intitem";
 import { SfxItemPool } from "../../../../svl/source/items/itempool";
 import { SfxItemSet, type WhichRangesContainer } from "../../../../svl/source/items/itemset";
@@ -974,14 +975,6 @@ export function createWriterTextColorItem(value: unknown): SvxColorItem {
 /** Projects a real native color to the existing Writer primitive text/worker/DOM boundary. Automatic and source alpha are retained;the item itself remains native. @param item - Actual native character color. @returns Existing external color value. */
 export function writerTextColorValue(item: Readonly<SvxColorItem>): string {
   return writerColorValue(item.GetValue());
-}
-
-/** Projects a native color only at an existing primitive boundary. @param color - Original packed color. @param automatic - External sentinel spelling. @returns Primitive color. */
-export function writerColorValue(color: Readonly<Color>, automatic = "auto"): string {
-  if (color.equals(COL_AUTO)) return automatic;
-  if (color.GetAlpha() !== 255)
-    return `rgba(${color.GetRed()}, ${color.GetGreen()}, ${color.GetBlue()}, ${color.GetAlpha() / 255})`;
-  return `#${(color.toUInt32() & 0xffffff).toString(16).padStart(6, "0")}`;
 }
 
 /** Converts the Writer highlight request or full packed worker color to its native brush item. @param value - Requested or persisted color. @returns Native highlight item. */

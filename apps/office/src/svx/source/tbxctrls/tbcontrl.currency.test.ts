@@ -7,7 +7,7 @@ import { SvNumberFormatter } from "../../../svl/source/numbers/zforlist";
 import { LookupCurrencyEntry } from "../../../svl/source/numbers/zforlist.picture";
 import { GetCurrencyFormatKey, GetCurrencySymbols } from "./tbcontrl.currency";
 
-it("retains the system row, prioritizes document currencies and appends unique ISO codes", () => {
+it("retains the system row, prioritizes document currencies and appends unique ISO codes", /** Retains the system row, prioritizes document currencies and appends unique ISO codes. @returns Nothing. */ () => {
   const found = LookupCurrencyEntry("€", "-424", 0x0424);
   if (!found) throw new Error("Missing source Slovenian locale currency");
   const entries = GetCurrencySymbols(new Set([found.entry]), 0x0409);
@@ -26,7 +26,7 @@ it("retains the system row, prioritizes document currencies and appends unique I
   expect(bank).toContain(ApplyLreOrRleEmbedding("EUR"));
 });
 
-it("copies the native system currency row before resolving the explicit locale and reuses the compiled key", () => {
+it("copies the native system currency row before resolving the explicit locale and reuses the compiled key", /** Copies the native system currency row before resolving the explicit locale and reuses the compiled key. @returns Nothing. */ () => {
   const formatter = new SvNumberFormatter(LANGUAGE_SYSTEM);
   try {
     const [system] = GetCurrencySymbols(new Set());

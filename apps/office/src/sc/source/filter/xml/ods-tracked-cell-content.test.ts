@@ -236,7 +236,7 @@ it("roundtrips historical formulas and formatted text with their original action
   }
 });
 
-it("keeps the native tracked insertion from LibreOffice test_tdf131907 through ODS and Worker", async () => {
+it("keeps the native tracked insertion from LibreOffice test_tdf131907 through ODS and Worker", /** Keeps the native tracked insertion from LibreOffice test_tdf131907 through ODS and Worker. @returns Completion. */ async () => {
   const bytes = readFileSync("../../vendor/libreoffice-reference/sc/qa/uitest/data/tdf131907.ods");
   const original = await readOdsDocument(new Uint8Array(bytes));
   const documents = [original];

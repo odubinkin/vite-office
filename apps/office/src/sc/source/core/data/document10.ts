@@ -1,6 +1,6 @@
 /** @fileoverview Original document10.cxx delayed formula-group ownership and regroup routing. */
 import { UpdateLabelRangesOnTab } from "./documen4";
-import type { OUString, OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
+import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { SfxHintId } from "../../../../svl/inc/hint";
 import type { SfxPoolItem } from "../../../../svl/inc/poolitem";
 import { MAXTAB, SC_TAB_APPEND, ValidTab } from "../../../inc/address";
@@ -710,16 +710,7 @@ export function ApplyAttr(
   this.FetchTable(tab)?.ApplyAttr(col, row, attr);
 }
 
-/** Original sheet-name query moved unchanged from the size-bounded facade. @param this - Actual document. @param tab - Sheet. @param output - Unicode output. @returns Found. */
-export function GetName(this: ScDocument, tab: number, output: OUString): boolean {
-  const table = this.FetchTable(tab);
-  if (!table) {
-    output.clear();
-    return false;
-  }
-  output.assign(table.GetName());
-  return true;
-}
+export { GetName } from "./document.sheet-visibility";
 
 /** Original GetClipStart only assigns outputs for a real nonempty clipboard. @param this - Actual document. @param col - Column output. @param row - Row output. @returns Nothing. */
 export function GetClipStart(this: ScDocument, col: [number], row: [number]): void {

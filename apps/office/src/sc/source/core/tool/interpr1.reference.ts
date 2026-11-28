@@ -205,7 +205,7 @@ export function PopErrorOperand(this: ScInterpreter): FormulaError {
   return this.GetError() !== FormulaError.NONE ? this.GetError() : error;
 }
 
-/** Applies the original ISERROR, ISERR or ISNA predicate. @param this - Active interpreter. @param opcode - Original predicate. @param count - Compiled argument count. */
+/** Applies the original ISERROR, ISERR or ISNA predicate. @param this - Active interpreter. @param opcode - Original predicate. @param count - Compiled argument count. @returns Nothing. */
 export function ScIsError(this: ScInterpreter, opcode: OpCode, count: number): void {
   if (!hasCount(this, count, 1)) return;
   const error = PopErrorOperand.call(this);

@@ -67,7 +67,7 @@ export const docStatServiceSubTypes = {
 
 /** Document-owned type for all count fields. */
 export class SwDocStatFieldType {
-  /** Binds the original statistic owner. @param document - Actual Writer document. */
+  /** Binds the original statistic owner. @param document - Actual Writer document. @returns The initialized SwDocStatFieldType instance. */
   public constructor(private readonly document: SwDoc) {}
 
   /** Borrows the original document for native point insertion. @returns Writer document. */
@@ -75,7 +75,7 @@ export class SwDocStatFieldType {
     return this.document;
   }
 
-  /** Updates range fields from the first body frame of each anchor. @param layout - Newly formatted Writer root. */
+  /** Updates range fields from the first body frame of each anchor. @param layout - Newly formatted Writer root. @returns Nothing. */
   public UpdateRangeFields(layout: SwRootFrame): void {
     for (const node of this.document.GetNodes().entries()) {
       const paragraph = node.GetTextNode();
@@ -113,7 +113,7 @@ export class SwDocStatFieldType {
 
 /** Native count field and the layout-supplied state for a virtual page range. */
 export class SwDocStatField implements SwField<SwDocStatField> {
-  /** Initializes the count or virtual page field. @param type - Original system type. @param subtype - Statistic kind. @param format - Numbering type. @param virtualPages - Last calculated range count. */
+  /** Initializes the count or virtual page field. @param type - Original system type. @param subtype - Statistic kind. @param format - Numbering type. @param virtualPages - Last calculated range count. @returns The initialized SwDocStatField instance. */
   public constructor(
     private readonly type: SwDocStatFieldType,
     private readonly subtype: SwDocStatSubType,
@@ -141,7 +141,7 @@ export class SwDocStatField implements SwField<SwDocStatField> {
     return this.virtualPages;
   }
 
-  /** Receives the actual first body frame’s count. @param count - Layout count. */
+  /** Receives the actual first body frame’s count. @param count - Layout count. @returns Nothing. */
   public ChangeExpansion(count: number): void {
     this.virtualPages = count;
   }
@@ -166,7 +166,7 @@ export class SwDocStatField implements SwField<SwDocStatField> {
     );
   }
 
-  /** Releases field-specific state. */
+  /** Releases field-specific state. @returns Nothing. */
   public Dispose(): void {}
 }
 
@@ -432,7 +432,7 @@ export class SwDocInfoField implements SwField<SwDocInfoField> {
   private content: string;
   private automaticLanguage = true;
 
-  /** Initializes the original expansion from document properties. @param type - System field type. @param subtype - Native subtype and flags. @param content - Stored presentation. @param format - Document number-format key. @param name - Custom property name. */
+  /** Initializes the original expansion from document properties. @param type - System field type. @param subtype - Native subtype and flags. @param content - Stored presentation. @param format - Document number-format key. @param name - Custom property name. @returns The initialized SwDocInfoField instance. */
   public constructor(
     private readonly type: SwDocInfoFieldType,
     private readonly subtype: number,
@@ -473,12 +473,12 @@ export class SwDocInfoField implements SwField<SwDocInfoField> {
     return this.automaticLanguage;
   }
 
-  /** Sets the native automatic language flag. @param automatic - Whether language follows the field context. */
+  /** Sets the native automatic language flag. @param automatic - Whether language follows the field context. @returns Nothing. */
   public SetAutomaticLanguage(automatic: boolean): void {
     this.automaticLanguage = automatic;
   }
 
-  /** Updates the native stored presentation. @param content - Current presentation. */
+  /** Updates the native stored presentation. @param content - Current presentation. @returns Nothing. */
   public SetExpansion(content: string): void {
     this.content = content;
   }
@@ -508,7 +508,7 @@ export class SwDocInfoField implements SwField<SwDocInfoField> {
     );
   }
 
-  /** Releases field-specific state. */
+  /** Releases field-specific state. @returns Nothing. */
   public Dispose(): void {}
 
   /** Copies native state after choosing the destination type and format. @param type - Destination system type. @param format - Destination format. @returns Detached field. */
@@ -697,7 +697,7 @@ export class SwPostItField {
 
 /** Native system type shared by conditional text and hidden text. */
 export class SwHiddenTextFieldType {
-  /** Initializes the document-wide hidden-text setting. @param document - Native document. @param hidden - Hide text according to its condition. */
+  /** Initializes the document-wide hidden-text setting. @param document - Native document. @param hidden - Hide text according to its condition. @returns The initialized SwHiddenTextFieldType instance. */
   public constructor(
     private readonly document: SwDoc,
     private readonly hidden = true,
@@ -729,7 +729,7 @@ export class SwHiddenTextField implements SwField<SwHiddenTextField> {
   private hidden: boolean;
   private currentPresentation: string | undefined;
 
-  /** Constructs a detached field from its original parameters. @param type - Document system type. @param data - Native field parameters. */
+  /** Constructs a detached field from its original parameters. @param type - Document system type. @param data - Native field parameters. @returns The initialized SwHiddenTextField instance. */
   public constructor(
     private readonly type: SwHiddenTextFieldType,
     private readonly data: SwHiddenTextFieldData,
@@ -748,12 +748,12 @@ export class SwHiddenTextField implements SwField<SwHiddenTextField> {
     return this.data.condition;
   }
 
-  /** Stores the original inverse of the calculated boolean. @param hidden - Native field flag. */
+  /** Stores the original inverse of the calculated boolean. @param hidden - Native field flag. @returns Nothing. */
   public SetValue(hidden: boolean): void {
     this.hidden = hidden;
   }
 
-  /** Refreshes the conditional presentation for quoted literal branches. */
+  /** Refreshes the conditional presentation for quoted literal branches. @returns Nothing. */
   public Evaluate(): void {
     if (!this.data.conditional) return;
     const value = this.GetBranch();
@@ -804,13 +804,13 @@ export class SwHiddenTextField implements SwField<SwHiddenTextField> {
     );
   }
 
-  /** Disposes the field, whose parameter storage is owned by JavaScript. */
+  /** Disposes the field, whose parameter storage is owned by JavaScript. @returns Nothing. */
   public Dispose(): void {}
 }
 
 /** Native document-owned hidden paragraph field type. */
 export class SwHiddenParaFieldType {
-  /** Binds the canonical document. @param document - Source model. */
+  /** Binds the canonical document. @param document - Source model. @returns The initialized SwHiddenParaFieldType instance. */
   public constructor(private readonly document: SwDoc) {}
 
   /** Borrows the original document owner. @returns Native document. */
@@ -821,7 +821,7 @@ export class SwHiddenParaFieldType {
 
 /** Original paragraph condition and its current hidden flag. */
 export class SwHiddenParaField implements SwField<SwHiddenParaField> {
-  /** Creates a native hidden paragraph field. @param type - Document type. @param condition - Writer expression. @param hidden - Hidden value. */
+  /** Creates a native hidden paragraph field. @param type - Document type. @param condition - Writer expression. @param hidden - Hidden value. @returns The initialized SwHiddenParaField instance. */
   public constructor(
     private readonly type: SwHiddenParaFieldType,
     private readonly condition: string,
@@ -843,7 +843,7 @@ export class SwHiddenParaField implements SwField<SwHiddenParaField> {
     return this.hidden;
   }
 
-  /** Updates the original cached visibility. @param hidden - Calculated state. */
+  /** Updates the original cached visibility. @param hidden - Calculated state. @returns Nothing. */
   public SetHidden(hidden: boolean): void {
     this.hidden = hidden;
   }
@@ -867,6 +867,6 @@ export class SwHiddenParaField implements SwField<SwHiddenParaField> {
     );
   }
 
-  /** Disposes the scalar field parameters. */
+  /** Disposes the scalar field parameters. @returns Nothing. */
   public Dispose(): void {}
 }

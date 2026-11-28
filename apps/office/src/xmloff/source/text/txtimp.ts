@@ -188,12 +188,12 @@ export class XMLTextImportHelper {
 
   private openRedlineId = "";
 
-  /** Remembers the source structural redline waiting for its node. @param id - Original change ID. */
+  /** Remembers the source structural redline waiting for its node. @param id - Original change ID. @returns Nothing. */
   public SetOpenRedlineId(id: string): void {
     this.openRedlineId = id;
   }
 
-  /** Commits the pending structural boundary once its text owner has connected. */
+  /** Commits the pending structural boundary once its text owner has connected. @returns Nothing. */
   public RedlineAdjustStartNodeCursor(): void {
     if (!this.openRedlineId) return;
     this.target.redlineImport?.RedlineAdjustStartNodeCursor(this.openRedlineId);
@@ -473,7 +473,7 @@ export class XMLTextImportHelper {
     }
   }
 
-  /** Records formatting over the range just inserted by the active text cursor. @param start - Owned starting range. @param properties - Direct formatting. @param hyperlink - Optional link. @param characterStyles - Applied named styles. */
+  /** Records formatting over the range just inserted by the active text cursor. @param start - Owned starting range. @param properties - Direct formatting. @param hyperlink - Optional link. @param characterStyles - Applied named styles. @returns Nothing. */
   private AddCharacterHint(
     start: XMLTextRange,
     properties: OdfCharacterProperties,
@@ -586,12 +586,12 @@ export class XMLTextImportHelper {
     mark.end = this.GetCursor().getStart();
   }
 
-  /** Records the original paragraph-local reference start. @param name - Source name. */
+  /** Records the original paragraph-local reference start. @param name - Source name. @returns Nothing. */
   public StartReferenceMark(name: string): void {
     this.paragraphMarks.push({ name, start: this.GetCursor().getStart() });
   }
 
-  /** Closes the first matching start in this paragraph. @param name - Source name. */
+  /** Closes the first matching start in this paragraph. @param name - Source name. @returns Nothing. */
   public EndReferenceMark(name: string): void {
     for (const mark of this.paragraphMarks) {
       if (!("name" in mark) || mark.name !== name) continue;
@@ -601,7 +601,7 @@ export class XMLTextImportHelper {
     }
   }
 
-  /** Creates and attaches the original ReferenceMark service. @param name - Authored name. @param range - Completed range or current point. */
+  /** Creates and attaches the original ReferenceMark service. @param name - Authored name. @param range - Completed range or current point. @returns Nothing. */
   public InsertReferenceMark(name: string, range?: XMLTextRange): void {
     if (!name) return;
     const cursor = this.GetCursor();
@@ -619,7 +619,7 @@ export class XMLTextImportHelper {
     }
   }
 
-  /** Releases the paragraph-scoped native mark positions. */
+  /** Releases the paragraph-scoped native mark positions. @returns Nothing. */
   private clearParagraphMarks(): void {
     for (const mark of this.paragraphMarks) {
       mark.end?.dispose();
@@ -660,13 +660,13 @@ export class XMLTextImportHelper {
     (field, name) => this.SetProperty(field, "SourceName", name),
   );
 
-  /** Publishes a native sequence target and patches forward references. @param refName - Original XML ID. @param name - Native master name. @param id - Signed UNO sequence identity. */
+  /** Publishes a native sequence target and patches forward references. @param refName - Original XML ID. @param name - Native master name. @param id - Signed UNO sequence identity. @returns Nothing. */
   public InsertSequenceID(refName: string, name: string, id: number): void {
     this.sequenceIds.ResolveId(refName, id);
     this.sequenceNames.ResolveId(refName, name);
   }
 
-  /** Creates and attaches an original GetReference field. @param value - Named reference data. */
+  /** Creates and attaches an original GetReference field. @param value - Named reference data. @returns Nothing. */
   public InsertReferenceField(value: XMLReferenceField): void {
     const service = xmlTextString("com.sun.star.text.TextField.GetReference");
     try {
