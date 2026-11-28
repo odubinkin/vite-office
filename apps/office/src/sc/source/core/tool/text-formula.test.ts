@@ -86,3 +86,20 @@ it("removes line breaks from XLSX cell references while preserving literal and f
     document.Dispose();
   }
 });
+
+it("takes a UTF-16 search start and returns a code-point position", /** Preserves native FIND and SEARCH coordinates around a supplementary character. */ () => {
+  const document = new ScDocument();
+  const name = unicode("Sheet");
+  const address = new ScAddress(0, 0, 0);
+  try {
+    document.InsertTab(0, name);
+    for (const expression of ['=FIND("x","😀x",3)', '=SEARCH("X","😀x",3)']) {
+      const cell = setFormula(document, address, expression);
+      expect(cell.GetErrCode()).toBe(FormulaError.NONE);
+      expect(cell.GetValue()).toBe(2);
+    }
+  } finally {
+    name.dispose();
+    document.Dispose();
+  }
+});

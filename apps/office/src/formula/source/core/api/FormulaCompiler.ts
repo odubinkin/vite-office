@@ -89,6 +89,14 @@ const arithmetic = new Set<OpCode>([
   OpCode.ocAverageIf,
   OpCode.ocMinIfs_MS,
   OpCode.ocMaxIfs_MS,
+  OpCode.ocFind,
+  OpCode.ocSearch,
+  OpCode.ocLen,
+  OpCode.ocExact,
+  OpCode.ocLeft,
+  OpCode.ocRight,
+  OpCode.ocMid,
+  OpCode.ocReplace,
   OpCode.ocConcat,
   OpCode.ocVLookup,
   OpCode.ocHLookup,
@@ -575,6 +583,14 @@ export class FormulaCompiler {
       op === OpCode.ocAverageIf ||
       op === OpCode.ocMinIfs_MS ||
       op === OpCode.ocMaxIfs_MS ||
+      op === OpCode.ocFind ||
+      op === OpCode.ocSearch ||
+      op === OpCode.ocLen ||
+      op === OpCode.ocExact ||
+      op === OpCode.ocLeft ||
+      op === OpCode.ocRight ||
+      op === OpCode.ocMid ||
+      op === OpCode.ocReplace ||
       op === OpCode.ocConcat ||
       op === OpCode.ocVLookup ||
       op === OpCode.ocHLookup

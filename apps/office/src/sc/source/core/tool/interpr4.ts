@@ -46,6 +46,7 @@ import { GetString as GetEditString } from "./editutil";
 import { ScMatValType } from "../../../inc/types";
 import type { ScExternalCacheToken } from "../../ui/docshell/externalrefmgr";
 import { CalculateMatrixLookup, InterpretReferenceOpcode, ScAnd } from "./interpr1";
+import { InterpretTextOpcode, kScInterpreterMaxStrLen } from "./interpr1.text";
 import { InterpretConditionalAggregate } from "./interpr1.conditional";
 import { InterpretDatabaseCount } from "./interpr1.database";
 import { CompareScalar } from "./compare";
@@ -57,7 +58,6 @@ import { ScColRowNameAuto } from "./interpr4.colrowname";
 import { isComparison } from "../../../../formula/inc/FormulaCompiler";
 import { ScQueryEntry, type ScQueryItem } from "./queryentry";
 import { ScQueryCellIteratorDirect } from "../data/queryiter";
-const kScInterpreterMaxStrLen = Math.trunc(SAL_MAX_INT32 / 8);
 /** Actual initialized numeric interpreter state, with token references owned by JS GC. */
 export class ScInterpreter {
   private static mpGlobalConfig: ScCalcConfig | null = null;
@@ -305,6 +305,15 @@ export class ScInterpreter {
     } finally {
       source.dispose();
     }
+  }
+  /** Rounds down and checks the native signed string-position argument. @returns Position or minus one on error. */
+  private GetStringPositionArgument(): number {
+    const value = approxFloor(this.GetDouble());
+    if (!Number.isFinite(value) || value < 0 || value > SAL_MAX_INT32) {
+      this.SetError(FormulaError.IllegalArgument);
+      return -1;
+    }
+    return value;
   }
   /** Original string-result size check. @param length - Current UTF16 length. @param increase - Appended UTF16 length. @returns Whether the result fits. */
   private CheckStringResultLen(length: number, increase: number): boolean {
@@ -992,6 +1001,7 @@ export class ScInterpreter {
       } else if (op === OpCode.ocRange) ScRangeFunc.call(this);
       else if (op === OpCode.ocIntersect) ScIntersect.call(this);
       else if (
+        !InterpretTextOpcode.call(this, token) &&
         !InterpretConditionalAggregate.call(this, token) &&
         !InterpretDatabaseCount.call(this, token) &&
         !InterpretReferenceOpcode.call(this, token) &&

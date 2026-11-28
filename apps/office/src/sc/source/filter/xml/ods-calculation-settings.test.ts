@@ -41,9 +41,7 @@ it("applies the historical ODF regex default even when the settings element is a
       expect(options.IsFormulaWildcardsEnabled()).toBe(false);
       expect(options.GetIterCount()).toBe(100);
       expect(options.GetIterEps()).toBe(0.001);
-      expect(DetectSearchType({ text: "a.*", ignoreCase: "a.*" }, options)).toBe(
-        SearchParam.SearchType.Regexp,
-      );
+      expect(DetectSearchType("a.*", options)).toBe(SearchParam.SearchType.Regexp);
       const xml = await (
         await DocumentArchive.open(await writeOdsDocument(document))
       ).readTextEntry("content.xml");

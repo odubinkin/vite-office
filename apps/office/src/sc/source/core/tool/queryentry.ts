@@ -2,13 +2,7 @@
 import { LANGUAGE_SYSTEM } from "../../../../i18nlangtag/inc/lang";
 import { LanguageTag } from "../../../../i18nlangtag/inc/languagetag";
 import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
-import { SearchOptions2 } from "../../../../i18nutil/inc/searchopt";
-import { TransliterationModules } from "../../../../offapi/com/sun/star/i18n/TransliterationModules";
-import { REGEXP, WILDCARD } from "../../../../offapi/com/sun/star/util/SearchAlgorithms2";
-import {
-  ALL_IGNORE_CASE,
-  WILD_MATCH_SELECTION,
-} from "../../../../offapi/com/sun/star/util/SearchFlags";
+import { ScGlobal } from "../../../inc/global";
 import {
   SearchParam,
   TextSearch,
@@ -38,16 +32,15 @@ export function GetCollator(ignoreCase = true): Intl.Collator {
   return collator;
 }
 
-/** Original lookup search mode permits patterns only when enabled and present. @param item - Query criterion. @param options - Current document defaults. @returns Search type. */
-export function DetectSearchType(item: ScQueryItem, options: ScDocOptionsConstReference): number {
-  if (typeof item === "number") return SearchParam.SearchType.Normal;
+/** Original lookup search mode permits patterns only when enabled and present. @param spelling - Query text. @param options - Current document defaults. @returns Search type. */
+export function DetectSearchType(spelling: string, options: ScDocOptionsConstReference): number {
   const mode = options.GetFormulaSearchType();
-  if (mode === SearchParam.SearchType.Wildcard && /[*?~]/u.test(item.text)) return mode;
+  if (mode === SearchParam.SearchType.Wildcard && /[*?~]/u.test(spelling)) return mode;
   if (
     mode === SearchParam.SearchType.Regexp &&
-    (item.text === "." ||
-      (item.text.length > 1 &&
-        [...item.text].some(
+    (spelling === "." ||
+      (spelling.length > 1 &&
+        [...spelling].some(
           /** Matches LibreOffice's set of regex metacharacters. @param value - Character. @returns Whether special. */
           (value) => "?*+.[]^$\\<>()|".includes(value),
         )))
@@ -68,7 +61,10 @@ export class ScQueryEntry {
     options: ScDocOptionsConstReference,
     private readonly regexMatcherFactory?: RegexMatcherFactory,
   ) {
-    this.searchType = DetectSearchType(item, options);
+    this.searchType =
+      typeof item === "number"
+        ? SearchParam.SearchType.Normal
+        : DetectSearchType(item.text, options);
     this.wholeCell = options.IsMatchWholeCell();
   }
 
@@ -86,24 +82,13 @@ export class ScQueryEntry {
       return this.wholeCell ? folded === item.ignoreCase : folded.includes(item.ignoreCase);
     if (!this.CanSearch()) return false;
     if (!this.search) {
-      const options = new SearchOptions2();
       const searchValue = unicode(item.text);
-      const locale = new LanguageTag(LANGUAGE_SYSTEM);
+      const parameters = new SearchParam(searchValue, this.searchType, false, 126, this.wholeCell);
       try {
-        options.searchString = searchValue;
-        options.Locale = locale.getLocale();
-        const wildcard = this.searchType === SearchParam.SearchType.Wildcard;
-        options.AlgorithmType2 = wildcard ? WILDCARD : REGEXP;
-        if (wildcard) options.WildcardEscapeCharacter = 126;
-        options.transliterateFlags = TransliterationModules.IGNORE_CASE;
-        options.searchFlag =
-          ALL_IGNORE_CASE | (wildcard && this.wholeCell ? WILD_MATCH_SELECTION : 0);
-        this.search = new TextSearch(options, this.regexMatcherFactory);
+        this.search = new TextSearch(parameters, ScGlobal.getCharClass(), this.regexMatcherFactory);
       } finally {
-        options.searchString.clear();
-        options.Locale.dispose();
+        parameters.dispose();
         searchValue.dispose();
-        locale.dispose();
       }
     }
     const start: [number] = [0];

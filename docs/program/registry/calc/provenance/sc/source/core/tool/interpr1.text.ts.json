@@ -1,0 +1,84 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/tool/interpr1.text.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/tool/interpr1.cxx",
+    "localSymbols": [
+      "InterpretTextOpcode",
+      "ScFind",
+      "ScSearch",
+      "ScLeftRight",
+      "ScMidReplace"
+    ],
+    "upstreamSymbols": [
+      "ScInterpreter::ScFind",
+      "ScInterpreter::ScSearch",
+      "ScInterpreter::ScLen",
+      "ScInterpreter::ScExact",
+      "ScInterpreter::ScLeft",
+      "ScInterpreter::ScRight",
+      "ScInterpreter::ScMid",
+      "ScInterpreter::ScReplace"
+    ],
+    "preservedResponsibilities": [
+      "Evaluates the original scalar search and character-position formulas through Calc interpreter tokens and native TextSearch."
+    ],
+    "omittedResponsibilities": [
+      "CJK byte positions, array lifting and browser regex syntax beyond the existing realm search binding remain outside this scalar fragment."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/interpr1.text.ts",
+          "marker": "InterpretTextOpcode"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-text-position.test.ts",
+          "marker": "recalculates the native scalar results"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sc/source/core/tool/interpr1.cxx",
+          "marker": "ScInterpreter::ScFind"
+        },
+        {
+          "path": "sc/source/core/tool/interpr1.cxx",
+          "marker": "ScInterpreter::ScSearch"
+        },
+        {
+          "path": "sc/source/core/tool/interpr1.cxx",
+          "marker": "ScInterpreter::ScLen"
+        },
+        {
+          "path": "sc/source/core/tool/interpr1.cxx",
+          "marker": "ScInterpreter::ScExact"
+        },
+        {
+          "path": "sc/source/core/tool/interpr1.cxx",
+          "marker": "ScInterpreter::ScLeft"
+        },
+        {
+          "path": "sc/source/core/tool/interpr1.cxx",
+          "marker": "ScInterpreter::ScRight"
+        },
+        {
+          "path": "sc/source/core/tool/interpr1.cxx",
+          "marker": "ScInterpreter::ScMid"
+        },
+        {
+          "path": "sc/source/core/tool/interpr1.cxx",
+          "marker": "ScInterpreter::ScReplace"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/core/tool/interpr1.text.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Keeps the native scalar text functions of interpr1 in the interpreter text source fragment."
+    }
+  }
+}

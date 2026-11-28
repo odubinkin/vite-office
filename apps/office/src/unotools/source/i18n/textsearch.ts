@@ -1,5 +1,12 @@
 /** @fileoverview Original shared SearchParam values and search-mode conversions from textsearch.hxx/textsearch.cxx; search engine responsibilities remain with TextSearch. */
 import { SearchOptions2 } from "../../../i18nutil/inc/searchopt";
+import { TransliterationModules } from "../../../offapi/com/sun/star/i18n/TransliterationModules";
+import { ABSOLUTE, REGEXP, WILDCARD } from "../../../offapi/com/sun/star/util/SearchAlgorithms2";
+import {
+  ALL_IGNORE_CASE,
+  WILD_MATCH_SELECTION,
+} from "../../../offapi/com/sun/star/util/SearchFlags";
+import type { CharClass } from "./charclass";
 import {
   TextSearch as TextSearchService,
   type RegexMatcherFactory,
@@ -108,6 +115,10 @@ export class SearchParam {
   GetWildEscChar(): number {
     return this.m_cWildEscChar | 0;
   }
+  /** Releases the search string owned by this parameter. */
+  dispose(): void {
+    this.sSrchStr.dispose();
+  }
   /** Original wildcard precedence and conditional regex output adaptation. @param wildcard - Wildcard flag. @param regexp - Caller regex reference. @returns Search mode. */
   static ConvertToSearchType(wildcard: boolean, regexp: SearchParamBooleanReference): SearchType {
     if (wildcard) {
@@ -164,6 +175,7 @@ function equalSearchOptions(left: SearchOptions2, right: SearchOptions2): boolea
 /** Original utl::TextSearch option constructor and direction-normalizing wrapper over XTextSearch2. */
 export class TextSearch {
   private xTextSearch: TextSearchService;
+  private readonly createRegex: RegexMatcherFactory | undefined;
   /** Original replacement mini-language, without executing a regular expression. Ampersand intentionally retains raw forward offsets; dollar captures normalize direction. @param replacement - In/out owned value. @param text - Original borrowed UTF16 view. @param result - Native result with valid capture sequences. @returns Nothing. */
   public static ReplaceBackReferences(
     replacement: OUString,
@@ -296,12 +308,54 @@ export class TextSearch {
     similarityScore[1] = second;
     return true;
   }
-  /** Borrows the native options-based cache entry; SearchParam/LanguageTag constructors are not yet implemented. @param options - Complete native search options. @param createRegex - ICU constructor supplied by the owning realm. @returns Wrapper value. */
+  /** Borrows the native options-based cache entry. @param options - Complete native search options. @param createRegex - Regex constructor supplied by the owning realm. */
+  public constructor(options: SearchOptions2, createRegex?: RegexMatcherFactory);
+  /** Converts the original search parameters using the character classifier's locale. @param parameters - Original search parameters. @param classifier - Native character classifier. @param createRegex - Regex constructor supplied by the owning realm. */
   public constructor(
-    options: SearchOptions2,
-    private readonly createRegex?: RegexMatcherFactory,
+    parameters: SearchParam,
+    classifier: CharClass,
+    createRegex?: RegexMatcherFactory,
+  );
+  /** Admits either native constructor and acquires the shared search backend. @param source - Options or parameters. @param classifierOrFactory - Locale source or regex constructor. @param createRegex - Regex constructor for the parameter overload. */
+  public constructor(
+    source: SearchOptions2 | SearchParam,
+    classifierOrFactory?: CharClass | RegexMatcherFactory,
+    createRegex?: RegexMatcherFactory,
   ) {
-    this.xTextSearch = TextSearch.getXTextSearch(options, createRegex);
+    if (source instanceof SearchOptions2) {
+      this.createRegex = classifierOrFactory as RegexMatcherFactory | undefined;
+      this.xTextSearch = TextSearch.getXTextSearch(source, this.createRegex);
+      return;
+    }
+    this.createRegex = createRegex;
+    const options = new SearchOptions2();
+    switch (source.GetSrchType()) {
+      case SearchParam.SearchType.Wildcard:
+        options.AlgorithmType2 = WILDCARD;
+        options.WildcardEscapeCharacter = source.GetWildEscChar();
+        if (source.IsWildMatchSel()) options.searchFlag |= WILD_MATCH_SELECTION;
+        break;
+      case SearchParam.SearchType.Regexp:
+        options.AlgorithmType2 = REGEXP;
+        break;
+      case SearchParam.SearchType.Normal:
+        options.AlgorithmType2 = ABSOLUTE;
+        break;
+      default:
+        throw new Error("Invalid TextSearch search type.");
+    }
+    options.searchString = source.GetSrchStr();
+    options.Locale = (classifierOrFactory as CharClass).getMyLocale();
+    if (!source.IsCaseSensitive()) {
+      options.searchFlag |= ALL_IGNORE_CASE;
+      options.transliterateFlags = TransliterationModules.IGNORE_CASE;
+    }
+    try {
+      this.xTextSearch = TextSearch.getXTextSearch(options, createRegex);
+    } finally {
+      options.searchString.clear();
+      options.Locale.dispose();
+    }
   }
   /** Native cache replaces its backend rather than mutating the previously borrowed instance. @param options - New option value. @param createRegex - ICU constructor in the current realm. @returns Prepared backend. */
   private static getXTextSearch(

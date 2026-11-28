@@ -8502,3 +8502,16 @@ literal string comparison even in exact mode. The upstream source has a
 TODO for regex on matrix strings. Calc preserves the same distinction.
 
 - [Original worksheet and matrix lookup branches](../../vendor/libreoffice-reference/sc/source/core/tool/interpr1.cxx#L7664)
+
+### CALC-885 — FIND and SEARCH use UTF-16 input offsets and return code-point positions
+
+The optional start argument is checked against the string's UTF-16 length
+and applied as a one-based code-unit offset. The resulting match starts
+at a code-unit offset, which the function converts to a one-based
+code-point position for the result. A match after a supplementary
+character can therefore have a returned position smaller than the
+supplied start. Calc preserves both units and the distinct FIND and SEARCH
+argument conversion paths.
+
+- [Original ScFind](../../vendor/libreoffice-reference/sc/source/core/tool/interpr1.cxx#L11759)
+- [Original ScSearch](../../vendor/libreoffice-reference/sc/source/core/tool/interpr1.cxx#L12095)

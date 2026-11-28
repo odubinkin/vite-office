@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/core/tool/interpr1.text.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "range-formula-execution",
+    "capabilityIds": [
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/core/tool/interpr1.text.ts",
+        "sc/source/core/tool/interpr1.cxx",
+        "apps/office/src/sc/source/filter/xml/ods-text-position.test.ts"
+      ],
+      "justification": "Evaluates the original scalar search and character-position formulas through Calc interpreter tokens and native TextSearch. CJK byte positions, array lifting and browser regex syntax beyond the existing realm search binding remain outside this scalar fragment.",
+      "knownViolations": [],
+      "localSymbols": [
+        "InterpretTextOpcode",
+        "ScFind",
+        "ScSearch",
+        "ScLeftRight",
+        "ScMidReplace"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/source/core/tool/interpr1.cxx",
+      "upstreamSymbols": [
+        "ScInterpreter::ScFind",
+        "ScInterpreter::ScSearch",
+        "ScInterpreter::ScLen",
+        "ScInterpreter::ScExact",
+        "ScInterpreter::ScLeft",
+        "ScInterpreter::ScRight",
+        "ScInterpreter::ScMid",
+        "ScInterpreter::ScReplace"
+      ]
+    }
+  }
+}
