@@ -81,7 +81,7 @@ export function unknown(name: string): never {
 /** Extracts through the actual Any conversion engine, retaining typed failure. @param value - Declared native value. @param type - Original type input. @returns The represented native operation result. */
 export function scalar(
   value: Any,
-  type: "sal_Int32" | "sal_Int16" | "sal_Int8" | "float" | "bool",
+  type: "sal_Int32" | "sal_Int16" | "sal_Int8" | "float" | "double" | "bool",
 ): number | boolean {
   const out: [number | boolean] = [0];
   if (!value.extract(out, type)) illegal("Property value has an incompatible type");

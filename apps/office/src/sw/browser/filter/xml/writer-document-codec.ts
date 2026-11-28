@@ -1,6 +1,11 @@
 /** @fileoverview Internal canonical Writer graph codec used behind boundary-specific envelopes. */
 import { isOdfFontBytes } from "../../../../package/source/zippackage/odf-font-resources";
 import {
+  decodeVariableMasters,
+  encodeVariableMasters,
+  type WriterVariableMasterRecord,
+} from "./writer-variable-field-codec";
+import {
   decodeRedlineSections,
   encodeRedlineSections,
   encodeRedlines,
@@ -172,6 +177,7 @@ interface WriterAnnotationMarkRecord {
 /** Internal graph record. Paragraph identity is array order, never a stored UI key. */
 export interface WriterDocumentRecord {
   readonly redlines?: WriterRedlineRecord;
+  readonly variableFieldMasters?: readonly WriterVariableMasterRecord[];
   readonly sequenceFieldTypes?: readonly Readonly<{
     name: string;
     level: number;
@@ -277,7 +283,9 @@ export function* encodeWriterDocumentSteps(document: SwDoc): Generator<void, Wri
   );
   const documentMetaXml = document.documentProperties.GetTransferXml();
   const layoutPageCount = document.getIDocumentStatistics().GetLayoutPageCount();
+  const variableFieldMasters = encodeVariableMasters(document);
   return {
+    ...(variableFieldMasters.length ? { variableFieldMasters } : {}),
     ...(redlines === undefined ? {} : { redlines }),
     ...(layoutPageCount === undefined ? {} : { layoutPageCount }),
     ...(documentProtection === undefined ? {} : { documentProtection }),
@@ -464,6 +472,7 @@ export function* decodeWriterDocumentSteps(
         type.SetDelimiter(value.separator);
       }
     }
+    decodeVariableMasters(document, record.variableFieldMasters);
     if (record.documentMetaXml !== undefined)
       document.documentProperties.SetTransferXml(record.documentMetaXml);
     if (record.layoutPageCount !== undefined) {

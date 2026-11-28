@@ -8,7 +8,9 @@
     "upstreamPath": "sw/source/core/fields/expfld.cxx",
     "localSymbols": [
       "SwSetExpFieldType",
-      "SwSetExpField"
+      "SwSetExpField",
+      "SwGetExpFieldType",
+      "SwGetExpField"
     ],
     "upstreamSymbols": [
       "SwSetExpFieldType::SetSeqRefNo",
@@ -16,10 +18,11 @@
       "SwSetExpField::SetValue"
     ],
     "preservedResponsibilities": [
-      "Owns Writer sequence masters, numbering, chapter settings, presentation and stable reference allocation."
+      "Owns Writer sequence masters, numbering, chapter settings, presentation and stable reference allocation.",
+      "Retains named SetExpression subtypes, string and numeric variable values, expression readers and their display settings."
     ],
     "omittedResponsibilities": [
-      "SetExpression string and interactive input variants and redline-specific field states are outside this sequence slice."
+      "Redline-specific field states and interactive input editing remain outside the represented ODT slice."
     ],
     "evidence": {
       "local": [

@@ -1,0 +1,30 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "local-infrastructure",
+    "localPath": "apps/office/src/sw/browser/filter/xml/writer-variable-field-codec.ts",
+    "status": "local-only",
+    "rationale": "Transfers native Writer named field masters and their dependent or standalone expression field occurrences through structured Worker records.",
+    "responsibilities": [
+      "Transfers native Writer named field masters and their dependent or standalone expression field occurrences through structured Worker records."
+    ],
+    "stackDivergence": {
+      "kind": "local-infrastructure",
+      "rationale": "Restores named field owners and portable number formats before reattaching text hints from structured Worker records."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/filter/xml/writer-variable-field-codec.ts",
+          "marker": "decodeVariableFields"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-variable-fields.test.ts",
+          "marker": "testUserFieldDecl"
+        }
+      ],
+      "upstream": []
+    }
+  }
+}

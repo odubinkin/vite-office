@@ -13,6 +13,8 @@ import type { OdfCharacterProperties, OdfHyperlink, OdfParagraphAlignment } from
 import type { XMLParagraphImportProperties, XMLParagraphListState } from "./txtparai";
 import type {
   XMLTextModel,
+  XMLTextFieldMaster,
+  XMLTextFieldMasterFamily,
   XMLAnnotationTextContent,
   XMLTextCursor,
   XMLTextRange,
@@ -37,6 +39,8 @@ import { XMLTextFrameContext } from "./XMLTextFrameContext";
 import { XMLTextListBlockContext } from "./XMLTextListBlockContext";
 import { XMLSectionImportContext } from "./XMLSectionImportContext";
 import { XMLIndexTOCContext } from "./XMLIndexTOCContext";
+
+let fieldMasterCollisionCount = 0;
 
 /** Native text import locations represented by the current body/table slice. */
 export type XMLTextType =
@@ -432,7 +436,7 @@ export class XMLTextImportHelper {
     cursor: Pick<XMLPropertySet, "setPropertyValue">,
     name: string,
     value: string | boolean | number,
-    numeric?: "sal_Int8" | "sal_Int16" | "sal_Int32",
+    numeric?: "sal_Int8" | "sal_Int16" | "sal_Int32" | "double",
   ): void {
     const key = xmlTextString(name),
       string = typeof value === "string" ? xmlTextString(value) : undefined,
@@ -683,11 +687,23 @@ export class XMLTextImportHelper {
     }
   }
 
-  /** Looks up the original named sequence field master. @param name - Sequence name. @returns Native master properties. */
-  public FindSequenceFieldMaster(
+  private readonly fieldMasterRenames = new Map<string, string>();
+
+  /** Resolves the original source name, applying collision renames for this field family. @param name - Source name. @param family - Master family. @returns Resolved name and native properties. */
+  public FindFieldMaster(
     name: string,
-  ): Pick<XMLPropertySet, "setPropertyValue"> | undefined {
-    return this.model.getSequenceFieldMaster?.(name);
+    family: XMLTextFieldMasterFamily,
+  ): (XMLTextFieldMaster & { name: string }) | undefined {
+    const key = family + "\0" + name;
+    let resolved = this.fieldMasterRenames.get(key) ?? name;
+    let master = this.model.getTextFieldMaster?.(resolved);
+    while (master && master.family !== family) {
+      resolved += "_renamed_" + ++fieldMasterCollisionCount;
+      this.fieldMasterRenames.set(key, resolved);
+      master = this.model.getTextFieldMaster?.(resolved);
+    }
+    master ??= this.model.createTextFieldMaster?.(resolved, family);
+    return master && { ...master, name: resolved };
   }
 
   /** Creates and attaches a native text field. @param suffix - Native UNO service suffix. @param prepare - Field importer. @param properties - Direct formatting. @param hyperlink - Optional link. @param characterStyles - Applied styles. @returns Attached text field. */
@@ -871,10 +887,13 @@ export class XMLTextImportHelper {
         return new XMLTableContext(this.target as XMLTableImportTarget, attributes, this);
       return null;
     }
-    if (element === XMLToken.TEXT_SEQUENCE_DECLS && type === "Body")
-      return this.model.getSequenceFieldMaster
-        ? new XMLVariableDeclsImportContext(this, this.model)
-        : new SvXMLIgnoreContext(true);
+    if (type === "Body" || type === "HeaderFooter") {
+      const family = XMLVariableDeclsImportContext.GetFamily(element);
+      if (family)
+        return this.model.createTextFieldMaster
+          ? new XMLVariableDeclsImportContext(this, family)
+          : new SvXMLIgnoreContext(true);
+    }
     if (XMLIndexTOCContext.IsIndex(element) && this.target.beginDocumentIndex)
       return new XMLIndexTOCContext(this, this.target.beginDocumentIndex.bind(this.target));
     if (

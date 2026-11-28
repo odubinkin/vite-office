@@ -1,5 +1,4 @@
 /** @fileoverview Transfers native Writer sequence fields across the browser Worker boundary. */
-import type { SvxNumType } from "../../../../editeng/inc/svxenum";
 import { SwFormatField } from "../../../inc/fmtfld";
 import { CH_TXTATR_BREAKWORD, RES_TXTATR_FIELD } from "../../../inc/hintids";
 import { SetAttrMode } from "../../../inc/swtypes";
@@ -11,7 +10,7 @@ import type { SwTextNode } from "../../../source/core/txtnode/ndtxt";
 export interface WriterSequenceFieldRecord {
   readonly offset: number;
   readonly name: string;
-  readonly format: SvxNumType;
+  readonly format: number;
   readonly formula: string;
   readonly sequenceNumber: number;
   readonly value: number;

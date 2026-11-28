@@ -44,10 +44,17 @@ export interface XMLText {
 export interface XMLTextContent {
   setPropertyValue(name: OUStringConstReference, value: Any): void;
 }
-/** Original dependent text field service consumed by sequence import. */
+/** Original dependent text field service. */
 export interface XMLDependentTextField extends XMLTextContent {
   attachTextFieldMaster(master: Pick<XMLPropertySet, "setPropertyValue">): void;
   getPropertyValue(name: OUStringConstReference): Any;
+}
+/** Original named master families handled by the variable importer. */
+export type XMLTextFieldMasterFamily = "sequence" | "variable" | "user";
+/** Model-facing named master and its original property contract. */
+export interface XMLTextFieldMaster {
+  readonly family: XMLTextFieldMasterFamily;
+  readonly properties: Pick<XMLPropertySet, "setPropertyValue">;
 }
 /** The currently represented XNamed/XTextContent service. */
 export interface XMLNamedTextContent extends XMLTextContent {
@@ -75,7 +82,8 @@ export interface XMLTextModel {
   getText(): XMLText;
   getAutoStyles(): { getByName(name: OUStringConstReference): XMLAutoStyleFamily };
   getStyleFamilies(): { getByName(name: OUStringConstReference): XMLStyleFamily };
-  getSequenceFieldMaster?(name: string): Pick<XMLPropertySet, "setPropertyValue">;
+  getTextFieldMaster?(name: string): XMLTextFieldMaster | undefined;
+  createTextFieldMaster?(name: string, family: XMLTextFieldMasterFamily): XMLTextFieldMaster;
   createInstance(name: OUStringConstReference): unknown;
 }
 

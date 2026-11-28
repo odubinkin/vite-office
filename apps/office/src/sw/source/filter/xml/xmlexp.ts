@@ -213,7 +213,11 @@ import {
 } from "./xmlexp-style-names";
 import { createWriterFontAutoStylePool, registerWriterFontFace } from "./xmlfonte";
 import { LineNumberPosition } from "../../../inc/lineinfo";
-import { exportSequenceDeclarations } from "../../../../xmloff/source/text/txtflde";
+import {
+  exportSequenceDeclarations,
+  exportVariableDeclarations,
+} from "../../../../xmloff/source/text/txtflde";
+import { SwGetSetExpType } from "../../core/fields/expfld";
 import { exportLineNumberingConfiguration } from "../../../../xmloff/source/text/XMLLineNumberingExport";
 import { ExportThemeElement } from "../../../../xmloff/source/style/XMLThemeContext";
 import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
@@ -665,7 +669,25 @@ export function exportContentXml(
     ),
     escapeXml,
   );
-  return `<?xml version="1.0" encoding="UTF-8"?><office:document-content ${OFFICE_NAMESPACES} office:version="1.3">${fonts.exportXML()}<office:automatic-styles>${exported.automaticStyles}</office:automatic-styles><office:body><office:text>${changes}${sequences}${exported.body}</office:text></office:body></office:document-content>`;
+  const { variables, users } = exportWriterVariableDeclarations(document);
+  return `<?xml version="1.0" encoding="UTF-8"?><office:document-content ${OFFICE_NAMESPACES} office:version="1.3">${fonts.exportXML()}<office:automatic-styles>${exported.automaticStyles}</office:automatic-styles><office:body><office:text>${changes}${variables}${sequences}${users}${exported.body}</office:text></office:body></office:document-content>`;
+}
+
+/** Projects the original document-owned masters, optionally limited to one text story. @param document - Writer model. @param used - Named masters used by a story. @returns ODF declarations. */
+function exportWriterVariableDeclarations(document: SwDoc, used?: ReadonlySet<string>) {
+  const fields = document.getIDocumentFieldsAccess();
+  const variables = [];
+  const users = [];
+  for (const type of fields.GetSetExpFieldTypes()) {
+    const subtype = type.GetType();
+    const name = type.GetName();
+    if (subtype !== SwGetSetExpType.Sequence && (!used || used.has("variable\0" + name)))
+      variables.push({ name, string: subtype === SwGetSetExpType.String });
+  }
+  for (const type of fields.GetUserFieldTypes())
+    if (!used || used.has("user\0" + type.name))
+      users.push({ name: type.name, value: type.expression ? type.value : type.content });
+  return exportVariableDeclarations(variables, users, escapeXml);
 }
 
 /** Projects the same model source for both package streams. @param document - Writer model. @param isCancelled - Cancellation probe. @param fontFaceName - Font registry. @param existingFontFaceName - Existing face lookup. @param sections - Master-page text owners in the styles stream. @param graphicHelper - Optional package graphic owner. @param bitmapStyles - Package bitmap catalogue. @param redlineStyles - Previous formatting submitted to the same style pass. @returns Style/body fragments. */
@@ -702,6 +724,7 @@ function exportWriterText(
     ...(bitmapStyles ? { bitmapStyles } : {}),
     ...(graphicHelper ? { graphicHelper, graphics: CollectGraphicFlyFrames(document, true) } : {}),
   };
+  const sectionDeclarations: string[] = [];
   const exported = exportTextParagraphs(
     {
       exportNumberStyle,
@@ -728,11 +751,23 @@ function exportWriterText(
             sections() {
               return sections.map(
                 /** Projects one direct native text section. @param start - Section. @returns First-level XML blocks. */
-                (start) =>
-                  document.nodes.GetSectionBlocks(start).map(
+                (start, index) => {
+                  const used = new Set<string>();
+                  const currentStory: XMLBoundWriterFrames = {
+                    ...anchored,
+                    /** Collects the actual dependent master of this story, including tables and anchored text. @param family - Native master family. @param name - Master name. */
+                    collectFieldMaster: (family, name) => {
+                      used.add(family + "\0" + name);
+                    },
+                  };
+                  const blocks = document.nodes.GetSectionBlocks(start).map(
                     /** Connects paragraphs and tables to the existing exporter. @param block - Direct section block. @returns XML block source. */
-                    (block) => projectBlock(block, anchored),
-                  ),
+                    (block) => projectBlock(block, currentStory),
+                  );
+                  const { variables, users } = exportWriterVariableDeclarations(document, used);
+                  sectionDeclarations[index] = variables + users;
+                  return blocks;
+                },
               );
             },
           }),
@@ -744,7 +779,18 @@ function exportWriterText(
   );
   let automaticStyles = "";
   for (const style of dataStyles.values()) if (style) automaticStyles += style.xml;
-  return { ...exported, automaticStyles: automaticStyles + exported.automaticStyles };
+  return {
+    ...exported,
+    automaticStyles: automaticStyles + exported.automaticStyles,
+    ...(exported.sections === undefined
+      ? {}
+      : {
+          sections: exported.sections.map(
+            /** Places field declarations at the start of the original page story. @param section - Serialized story. @param index - Story position. @returns ODF story contents. */
+            (section, index) => (sectionDeclarations[index] ?? "") + section,
+          ),
+        }),
+  };
 }
 
 /** Projects one original text or table node, including interleaved cell sections. @param block - Native node. @param anchored - Actual bound frame sets. @returns Neutral ODF body block. */

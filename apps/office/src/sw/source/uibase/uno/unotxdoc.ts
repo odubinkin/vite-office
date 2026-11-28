@@ -14,13 +14,18 @@ import {
   SwXPageNumberField,
   SwXChapterField,
   SwXSetExpField,
-  SwXSequenceFieldMaster,
+  SwXSetExpFieldMaster,
+  SwXGetExpField,
+  SwXUserField,
+  SwXUserFieldMaster,
   SwXDropDownField,
   SwXJumpEditField,
   SwXGetReferenceField,
   SwXTextField,
 } from "../../core/unocore/unofield";
 import { docInfoServiceSubTypes, docStatServiceSubTypes } from "../../core/fields/docufld";
+import { SwGetSetExpType } from "../../core/fields/expfld";
+import type { XMLTextFieldMaster, XMLTextFieldMasterFamily } from "../../../../xmloff/inc/txtimp";
 import { SwXBookmark } from "../../core/unocore/unobkm";
 import { SwXReferenceMark } from "../../core/unocore/unorefmk";
 import type { SwDoc } from "../../core/doc/doc";
@@ -93,11 +98,29 @@ export class SwXTextDocument {
     this.GetDoc();
     return this.body;
   }
-  /** Looks up the native named sequence field master. @param name - Sequence identifier. @returns Field master properties. */
-  public getSequenceFieldMaster(name: string): SwXSequenceFieldMaster {
-    return new SwXSequenceFieldMaster(
-      this.GetDoc().getIDocumentFieldsAccess().GetSequenceFieldType(name),
-    );
+  /** Finds the current named field master using native SetExpression precedence. @param name - Field identifier. @returns Field family and properties when found. */
+  public getTextFieldMaster(name: string): XMLTextFieldMaster | undefined {
+    const fields = this.GetDoc().getIDocumentFieldsAccess();
+    const set = fields.FindSetExpFieldType(name);
+    if (set)
+      return {
+        family: set.GetType() === SwGetSetExpType.Sequence ? "sequence" : "variable",
+        properties: new SwXSetExpFieldMaster(set),
+      };
+    const user = fields.FindUserFieldType(name);
+    return user && { family: "user", properties: new SwXUserFieldMaster(user) };
+  }
+
+  /** Creates the original named field master. @param name - Resolved identifier. @param family - Field master family. @returns Native property owner. */
+  public createTextFieldMaster(name: string, family: XMLTextFieldMasterFamily): XMLTextFieldMaster {
+    const fields = this.GetDoc().getIDocumentFieldsAccess();
+    if (family === "user")
+      return { family, properties: new SwXUserFieldMaster(fields.GetUserFieldType(name)) };
+    const subtype = family === "sequence" ? SwGetSetExpType.Sequence : SwGetSetExpType.Expr;
+    return {
+      family,
+      properties: new SwXSetExpFieldMaster(fields.GetSetExpFieldType(name, subtype)),
+    };
   }
 
   /** Original cached chapter-numbering supplier borrows the document outline owner. @returns Native service. */
@@ -143,6 +166,8 @@ export class SwXTextDocument {
     | SwXDocStatField
     | SwXChapterField
     | SwXSetExpField
+    | SwXGetExpField
+    | SwXUserField
     | SwXDropDownField
     | SwXJumpEditField
     | SwXPageNumberField
@@ -159,6 +184,12 @@ export class SwXTextDocument {
       case "com.sun.star.text.TextField.SetExpression":
       case "com.sun.star.text.textfield.SetExpression":
         return new SwXSetExpField();
+      case "com.sun.star.text.TextField.GetExpression":
+      case "com.sun.star.text.textfield.GetExpression":
+        return new SwXGetExpField();
+      case "com.sun.star.text.TextField.User":
+      case "com.sun.star.text.textfield.User":
+        return new SwXUserField();
       case "com.sun.star.text.TextField.JumpEdit":
       case "com.sun.star.text.textfield.JumpEdit":
         return new SwXJumpEditField();

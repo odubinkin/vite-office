@@ -431,12 +431,23 @@ export class SwpHints {
     );
   }
 
+  /** Borrows the native ordinary field points in text order. @returns Ordered field hints. */
+  public GetOrdinaryFields(): readonly SwTextOrdinaryField[] {
+    return this.hintsByStart.filter(
+      /** Matches the native ordinary text field attribute. @param hint - Original attribute. @returns Whether it is an ordinary field. */
+      (hint): hint is SwTextOrdinaryField =>
+        hint instanceof SwTextField && hint.Which() === RES_TXTATR_FIELD,
+    );
+  }
+
   /** Returns native SetExpression sequence fields in text order. @returns Ordered field points. */
   public GetSequenceFields(): readonly SwTextSequenceField[] {
-    return this.hintsByStart.filter(
+    return this.GetOrdinaryFields().filter(
       /** Identifies an attached sequence field. @param hint - Original text attribute. @returns Whether this is a sequence field. */
-      (hint): hint is SwTextSequenceField =>
-        hint instanceof SwTextField && hint.GetAttr().GetField() instanceof SwSetExpField,
+      (hint): hint is SwTextSequenceField => {
+        const field = hint.GetAttr().GetField();
+        return field instanceof SwSetExpField && field.IsSequenceField();
+      },
     );
   }
 

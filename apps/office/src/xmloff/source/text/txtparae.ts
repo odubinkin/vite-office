@@ -15,6 +15,7 @@ import {
   exportPageNumberField,
   exportChapterField,
   exportSequenceField,
+  exportVariableField,
   exportPlaceholderField,
   exportDropDownField,
   exportReferenceField,
@@ -25,6 +26,7 @@ import {
   type XMLPageNumberExportMarker,
   type XMLChapterExportMarker,
   type XMLSequenceExportMarker,
+  type XMLVariableExportMarker,
   type XMLPlaceholderExportMarker,
   type XMLDropDownExportMarker,
   type XMLReferenceFieldExportMarker,
@@ -187,6 +189,7 @@ export type XMLTextParagraphMarker =
   | XMLPageNumberExportMarker
   | XMLChapterExportMarker
   | XMLSequenceExportMarker
+  | XMLVariableExportMarker
   | XMLPlaceholderExportMarker
   | XMLDropDownExportMarker
   | XMLCountExportMarker
@@ -664,6 +667,7 @@ function exportParagraphElement(
               marker.kind === "page-number-field" ||
               marker.kind === "chapter-field" ||
               marker.kind === "sequence-field" ||
+              marker.kind === "variable-field" ||
               marker.kind === "placeholder-field" ||
               marker.kind === "drop-down-field" ||
               marker.kind === "date-time-field" ||
@@ -770,6 +774,7 @@ function exportMarker(
   if (marker.kind === "placeholder-field") return exportPlaceholderField(marker, escapeXml);
   if (marker.kind === "drop-down-field") return exportDropDownField(marker, escapeXml);
   if (marker.kind === "sequence-field") return exportSequenceField(marker, escapeXml);
+  if (marker.kind === "variable-field") return exportVariableField(marker, escapeXml);
   if (marker.kind === "chapter-field") return exportChapterField(marker, escapeXml);
   if (marker.kind === "page-number-field") return exportPageNumberField(marker, escapeXml);
   if (marker.kind === "count-field") return exportCountField(marker, escapeXml);

@@ -28,6 +28,8 @@ import { OUStringBuffer } from "../../../../sal/inc/rtl/ustrbuf";
 import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { RES_TXTATR_ANNOTATION, WRITER_CHARACTER_WHICH_RANGES } from "../../../inc/hintids";
 import { isAnnotationTextField, type SwTextField } from "../../../inc/txtfld";
+import { SwGetExpField, SwGetSetExpType, SwSetExpField } from "../../core/fields/expfld";
+import { SwUserField } from "../../core/fields/usrfld";
 import { putAnnotationCharacterItems } from "../../core/fields/textapi";
 import type { SwDoc } from "../../core/doc/doc";
 import { getCharacterProperties } from "./xmlexp-character";
@@ -102,6 +104,7 @@ export function projectParagraphMarkers(
     ...projectAnnotationMarkers(node),
     ...projectIndexMarks(node),
     ...projectReferenceMarks(node),
+    ...projectVariableFields(node, anchored),
     ...(node.GetpSwpHints()?.GetDateTimeFields() ?? []).map(
       /** Projects the actual native date/time field. @param hint - Attached field hint. @returns ODF field portion. */
       (hint): XMLTextParagraphMarker => {
@@ -342,6 +345,68 @@ export function projectParagraphMarkers(
     (left, right) => compareParagraphMarkers(left, right, floatingOffsets),
   );
   return markers;
+}
+
+/** Projects native variable fields and collects used masters from the actual text traversal. @param node - Native text paragraph. @param anchored - Exporter callbacks. @returns ODF variable-field portions. */
+function* projectVariableFields(
+  node: SwTextNode,
+  anchored: XMLBoundWriterFrames | undefined,
+): Iterable<XMLTextParagraphMarker> {
+  for (const hint of node.GetpSwpHints()?.GetOrdinaryFields() ?? []) {
+    const field = hint.GetAttr().GetField();
+    const offset = hint.GetStart();
+    if (field instanceof SwUserField) {
+      const name = field.type.name;
+      anchored?.collectFieldMaster?.("user", name);
+      const styleName =
+        field.type.expression && !field.showFormula
+          ? anchored?.exportNumberStyle?.(field.format)
+          : undefined;
+      yield {
+        kind: "variable-field",
+        offset,
+        element: "user-field-get",
+        name,
+        ...(!field.visible ? { display: "none" } : field.showFormula ? { display: "formula" } : {}),
+        ...(styleName ? { styleName } : {}),
+        presentation: field.Expand(),
+      };
+    } else if (field instanceof SwGetExpField) {
+      const expression = field.subtype === SwGetSetExpType.Formula;
+      const styleName =
+        field.subtype !== SwGetSetExpType.String && !field.showFormula
+          ? anchored?.exportNumberStyle?.(field.format)
+          : undefined;
+      yield {
+        kind: "variable-field",
+        offset,
+        element: expression ? "expression" : "variable-get",
+        ...(expression ? { formula: field.formula } : { name: field.formula }),
+        ...(expression && !field.showFormula ? { value: field.value } : {}),
+        ...(field.showFormula ? { display: "formula" } : {}),
+        ...(styleName ? { styleName } : {}),
+        presentation: field.Expand(),
+      };
+    } else if (field instanceof SwSetExpField && !field.IsSequenceField()) {
+      const name = field.GetTyp().GetName();
+      anchored?.collectFieldMaster?.("variable", name);
+      const formula = field.GetFormula();
+      const string = field.GetTyp().GetType() === SwGetSetExpType.String;
+      const styleName = !string ? anchored?.exportNumberStyle?.(field.GetFormat()) : undefined;
+      yield {
+        kind: "variable-field",
+        offset,
+        element: field.IsInput() ? "variable-input" : "variable-set",
+        name,
+        formula,
+        value: string ? formula : field.GetValue(),
+        hint: field.GetPromptText(),
+        ...(field.IsVisible() ? {} : { display: "none" }),
+        ...(styleName ? { styleName } : {}),
+        presentation: field.Expand(),
+      };
+    }
+  }
 }
 
 /** Projects native index mark holds before character dummy consumption. @param node - Original paragraph. @returns Point and paired TOX portions. */

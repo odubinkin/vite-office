@@ -20,6 +20,8 @@ import {
   type SwTextDropDownField,
   type SwTextJumpEditField,
   type SwTextSequenceField,
+  type SwTextGetExpField,
+  type SwTextUserField,
 } from "../../../inc/txtfld";
 import { SwFormatField } from "../../../inc/fmtfld";
 import { SwDateTimeSubType } from "../../../inc/fldbas";
@@ -28,7 +30,13 @@ import {
   cppu_detail_getUnoType_PageNumberType,
 } from "../../../../offapi/com/sun/star/text/PageNumberType";
 import { ChapterFormat } from "../../../../offapi/com/sun/star/text/ChapterFormat";
-import { SwSetExpField, type SwSetExpFieldType } from "../fields/expfld";
+import {
+  SwGetExpField,
+  SwGetSetExpType,
+  SwSetExpField,
+  type SwSetExpFieldType,
+} from "../fields/expfld";
+import { SwUserField, type SwUserFieldType } from "../fields/usrfld";
 import { SwJumpEditField, SwJumpEditFormat } from "../fields/docufld.jumpedit";
 import { SwDropDownField, type SwDropDownFieldData } from "../fields/flddropdown";
 import { PutChapterFormat, SwChapterField } from "../fields/chpfld";
@@ -403,7 +411,7 @@ export class SwXDocInfoField {
 }
 
 /** UNO property owner for a text sequence master. */
-export class SwXSequenceFieldMaster {
+export class SwXSetExpFieldMaster {
   /** Borrows the document's native field type. @param type - Numbered sequence master. */
   public constructor(private readonly type: SwSetExpFieldType) {}
 
@@ -416,6 +424,11 @@ export class SwXSequenceFieldMaster {
   public setPropertyValue(name: OUStringConstReference, input: Any): void {
     const property = text(name);
     switch (property) {
+      case "SubType":
+        this.type.SetType(
+          scalar(input, "sal_Int16") === 3 ? SwGetSetExpType.String : SwGetSetExpType.Expr,
+        );
+        break;
       case "ChapterNumberingLevel":
         this.type.SetOutlineLvl(scalar(input, "sal_Int8") as number);
         break;
@@ -436,7 +449,8 @@ export class SwXSetExpField {
   /** Binds the original dependent field to its sequence master. @param master - Native field master. */
   public attachTextFieldMaster(master: unknown): void {
     if (this.hint) invalid("Writer sequence field is already attached.");
-    if (!(master instanceof SwXSequenceFieldMaster)) illegal("Writer sequence master is invalid.");
+    if (!(master instanceof SwXSetExpFieldMaster))
+      illegal("Writer SetExpression master is invalid.");
     this.master = master.GetType();
   }
 
@@ -454,6 +468,25 @@ export class SwXSetExpField {
         break;
       case "NumberingType":
         field.SetFormat(scalar(input, "sal_Int16") as SvxNumType);
+        break;
+      case "NumberFormat":
+        field.SetFormat(scalar(input, "sal_Int32") as number);
+        break;
+      case "SubType":
+        field
+          .GetTyp()
+          .SetType(
+            scalar(input, "sal_Int16") === 3 ? SwGetSetExpType.String : SwGetSetExpType.Expr,
+          );
+        break;
+      case "Input":
+        field.SetInput(scalar(input, "bool") as boolean);
+        break;
+      case "Hint":
+        field.SetPromptText(stringValue(input));
+        break;
+      case "IsVisible":
+        field.SetVisible(scalar(input, "bool") as boolean);
         break;
       case "IsShowFormula":
         field.SetShowFormula(scalar(input, "bool") as boolean);
@@ -484,6 +517,168 @@ export class SwXSetExpField {
       position.GetContentIndex(),
     );
     if (!node.InsertHint(hint)) invalid("Writer sequence field could not be inserted.");
+    this.hint = hint;
+  }
+
+  /** Removes the attached native point. */
+  public dispose(): void {
+    const hint = this.hint;
+    this.hint = undefined;
+    if (hint) hint.GetTextNode()?.EraseText(hint.GetStart(), 1);
+  }
+}
+
+/** UNO master properties for a document-owned User field. */
+export class SwXUserFieldMaster {
+  /** Borrows the native field master. @param type - Named document field type. */
+  public constructor(public readonly type: SwUserFieldType) {}
+
+  /** Applies the original master properties. @param name - UNO property name. @param input - Typed property. */
+  public setPropertyValue(name: OUStringConstReference, input: Any): void {
+    const property = text(name);
+    switch (property) {
+      case "IsExpression":
+        this.type.expression = scalar(input, "bool") as boolean;
+        break;
+      case "Content":
+        this.type.content = stringValue(input);
+        break;
+      case "Value":
+        this.type.SetValue(scalar(input, "double") as number);
+        break;
+      default:
+        unknown(property);
+    }
+  }
+}
+
+/** UNO User field attachment and original occurrence properties. */
+export class SwXUserField {
+  private master: SwUserFieldType | undefined;
+  private hint: SwTextUserField | undefined;
+
+  /** Binds the original dependent field to its named master. @param master - Native master. */
+  public attachTextFieldMaster(master: unknown): void {
+    if (this.hint) invalid("Writer User field is already attached.");
+    if (!(master instanceof SwXUserFieldMaster)) illegal("Writer User field master is invalid.");
+    this.master = master.type;
+  }
+
+  /** Sets occurrence properties after attachment. @param name - UNO property name. @param input - Typed property. */
+  public setPropertyValue(name: OUStringConstReference, input: Any): void {
+    const field = this.hint?.GetAttr().GetField();
+    if (!field) invalid("Writer User field is detached.");
+    const property = text(name);
+    switch (property) {
+      case "NumberFormat":
+        field.format = scalar(input, "sal_Int32") as number;
+        break;
+      case "IsVisible":
+        field.visible = scalar(input, "bool") as boolean;
+        break;
+      case "IsShowFormula":
+        field.showFormula = scalar(input, "bool") as boolean;
+        break;
+      default:
+        unknown(property);
+    }
+  }
+
+  /** Attaches a User field to its actual text object. @param range - Writer range. */
+  public attach(range: SwXTextRange): void {
+    if (this.hint) invalid("Writer User field is already attached.");
+    const position = range.GetPaM().Start();
+    const node = position.GetNode().GetTextNode();
+    if (!node || !this.master || this.master.GetDoc() !== node.GetDoc())
+      illegal("Writer User field requires a master in the same document.");
+    const field = new SwUserField(this.master, 0, true, false);
+    const hint = new SwTextField(
+      new SwFormatField(field, RES_TXTATR_FIELD),
+      position.GetContentIndex(),
+    );
+    if (!node.InsertHint(hint)) invalid("Writer User field could not be inserted.");
+    this.hint = hint;
+  }
+
+  /** Removes the attached native text point. */
+  public dispose(): void {
+    const hint = this.hint;
+    this.hint = undefined;
+    if (hint) hint.GetTextNode()?.EraseText(hint.GetStart(), 1);
+  }
+}
+
+/** UNO GetExpression descriptor before attachment to its text point. */
+export class SwXGetExpField {
+  private formula = "";
+  private subtype = SwGetSetExpType.Expr;
+  private format = 0;
+  private command = true;
+  private presentation = "";
+  private value = 0;
+  private hint: SwTextGetExpField | undefined;
+
+  /** Sets the original expression descriptor properties. @param name - UNO property name. @param input - Typed property. */
+  public setPropertyValue(name: OUStringConstReference, input: Any): void {
+    if (this.hint) invalid("Writer GetExpression field is already attached.");
+    const property = text(name);
+    switch (property) {
+      case "Content":
+        this.formula = stringValue(input);
+        break;
+      case "SubType": {
+        const value = scalar(input, "sal_Int16");
+        this.subtype =
+          value === 3
+            ? SwGetSetExpType.String
+            : value === 2
+              ? SwGetSetExpType.Formula
+              : SwGetSetExpType.Expr;
+        break;
+      }
+      case "NumberFormat":
+        this.format = scalar(input, "sal_Int32") as number;
+        break;
+      case "IsShowFormula":
+        this.command = scalar(input, "bool") as boolean;
+        break;
+      case "CurrentPresentation":
+        this.presentation = stringValue(input);
+        break;
+      case "Value":
+        this.value = scalar(input, "double") as number;
+        break;
+      default:
+        unknown(property);
+    }
+  }
+
+  /** Attaches the expression occurrence using the document's native system owner. @param range - Writer range. */
+  public attach(range: SwXTextRange): void {
+    if (this.hint) invalid("Writer GetExpression field is already attached.");
+    const position = range.GetPaM().Start();
+    const node = position.GetNode().GetTextNode();
+    if (!node) illegal("Writer GetExpression field requires a text node.");
+    const fields = node.GetDoc().getIDocumentFieldsAccess();
+    const subtype =
+      this.subtype === SwGetSetExpType.Expr &&
+      fields.FindSetExpFieldType(this.formula)?.GetType() === SwGetSetExpType.String
+        ? SwGetSetExpType.String
+        : this.subtype;
+    const field = new SwGetExpField(
+      fields.GetGetExpFieldType(),
+      this.formula,
+      subtype,
+      this.format,
+      this.command,
+      this.presentation,
+      this.value,
+    );
+    const hint = new SwTextField(
+      new SwFormatField(field, RES_TXTATR_FIELD),
+      position.GetContentIndex(),
+    );
+    if (!node.InsertHint(hint)) invalid("Writer GetExpression field could not be inserted.");
     this.hint = hint;
   }
 

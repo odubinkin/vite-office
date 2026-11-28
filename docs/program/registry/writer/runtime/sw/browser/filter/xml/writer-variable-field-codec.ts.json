@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/browser/filter/xml/writer-variable-field-codec.ts",
+    "classification": "local-infrastructure",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "document-lifecycle",
+    "capabilityIds": [
+      "CAP-0130"
+    ],
+    "semantic": {
+      "behaviorStatus": "not-applicable",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/browser/filter/xml/writer-variable-field-codec.ts",
+        "apps/office/src/sw/source/filter/xml/odt-variable-fields.test.ts"
+      ],
+      "justification": "Transfers native Writer named field masters and their dependent or standalone expression field occurrences through structured Worker records.",
+      "knownViolations": [],
+      "localSymbols": [
+        "encodeVariableMasters",
+        "decodeVariableMasters",
+        "encodeVariableFields",
+        "decodeVariableFields"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

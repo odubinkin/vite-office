@@ -48,6 +48,11 @@ export class SwCalc {
     this.variables.set(name.toLowerCase(), value);
   }
 
+  /** Reads the existing value of an original named expression. @param name - Writer variable name. @returns Last assigned numeric value. */
+  public GetVariable(name: string): number | undefined {
+    return this.variables.get(name.toLowerCase());
+  }
+
   /** Evaluates a native numeric field expression. @param formula - Writer expression. @returns Calculated value when the expression is valid and non-void. */
   public Calculate(formula: string): number | undefined {
     this.expression = formula.trim();

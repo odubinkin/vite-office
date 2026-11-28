@@ -25,6 +25,11 @@ import {
   type WriterSequenceFieldRecord,
 } from "./writer-sequence-field-codec";
 import {
+  decodeVariableFields,
+  encodeVariableFields,
+  type WriterVariableFieldRecord,
+} from "./writer-variable-field-codec";
+import {
   decodeChoiceFields,
   encodeChoiceFields,
   type WriterChoiceFieldRecord,
@@ -119,6 +124,7 @@ export interface WriterTextNodeRecord {
   readonly referenceFields?: readonly WriterReferenceFieldRecord[];
   readonly docInfoFields?: readonly WriterDocInfoFieldRecord[];
   readonly sequenceFields?: readonly WriterSequenceFieldRecord[];
+  readonly variableFields?: readonly WriterVariableFieldRecord[];
   readonly choiceFields?: readonly WriterChoiceFieldRecord[];
   readonly chapterFields?: readonly WriterChapterFieldRecord[];
   readonly pageNumberFields?: readonly WriterPageNumberFieldRecord[];
@@ -393,6 +399,7 @@ export function encodeTextNode(document: SwDoc, node: SwTextNode): WriterTextNod
   const dateTimeFields = encodeDateTimeFields(node);
   const docStatFields = encodeDocStatFields(node);
   const sequenceFields = encodeSequenceFields(node);
+  const variableFields = encodeVariableFields(node);
   const choiceFields = encodeChoiceFields(node);
   const chapterFields = encodeChapterFields(node);
   const pageNumberFields = encodePageNumberFields(node);
@@ -404,6 +411,7 @@ export function encodeTextNode(document: SwDoc, node: SwTextNode): WriterTextNod
     ...(dateTimeFields.length ? { dateTimeFields } : {}),
     ...(docStatFields.length ? { docStatFields } : {}),
     ...(sequenceFields.length ? { sequenceFields } : {}),
+    ...(variableFields.length ? { variableFields } : {}),
     ...(choiceFields.length ? { choiceFields } : {}),
     ...(chapterFields.length ? { chapterFields } : {}),
     ...(pageNumberFields.length ? { pageNumberFields } : {}),
@@ -487,6 +495,7 @@ export function decodeTextNode(
   decodeDateTimeFields(node, nodeRecord.dateTimeFields);
   decodeDocStatFields(node, nodeRecord.docStatFields);
   decodeSequenceFields(node, nodeRecord.sequenceFields);
+  decodeVariableFields(node, nodeRecord.variableFields);
   decodeChoiceFields(node, nodeRecord.choiceFields);
   decodeChapterFields(node, nodeRecord.chapterFields);
   decodePageNumberFields(node, nodeRecord.pageNumberFields);

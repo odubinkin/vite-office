@@ -1,4 +1,4 @@
-import { XMLSequenceFieldImportContext } from "./txtvfldi";
+import { XMLSequenceFieldImportContext, XMLVarFieldImportContext } from "./txtvfldi";
 import { XMLChangeImportContext } from "./XMLChangeImportContext";
 import type { XMLRedlineImportTarget } from "./XMLChangedRegionImportContext";
 import {
@@ -486,6 +486,10 @@ function createInlineContext(
     return annotation
       ? null
       : new XMLSequenceFieldImportContext(paragraph, properties, hyperlink, namedStyles);
+  if (XMLVarFieldImportContext.IsField(element))
+    return annotation
+      ? null
+      : new XMLVarFieldImportContext(element, paragraph, properties, hyperlink, namedStyles);
   if (element === XMLToken.TEXT_PLACEHOLDER || element === XMLToken.TEXT_DROP_DOWN) {
     if (annotation) return null;
     const Context =

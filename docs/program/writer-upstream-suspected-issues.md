@@ -6548,3 +6548,13 @@ master. Non-ASCII separators can change on import. Writer follows the
 signed-char conversion when widening the low byte back to UTF-16.
 
 - [Original sequence declaration separator import](../../vendor/libreoffice-reference/xmloff/source/text/txtvfldi.cxx#L721)
+
+### WRITER-786 — Named field collisions use a process-wide suffix counter
+
+When an imported master name is occupied by another field family, the
+importer adds a `_renamed_N` suffix and records the mapping for that family.
+The counter is shared across documents opened by the same process, so a
+document's generated master names can depend on prior imports. Writer
+retains the same behavior within the current import runtime.
+
+- [Original master lookup and collision counter](../../vendor/libreoffice-reference/xmloff/source/text/txtvfldi.cxx#L779)

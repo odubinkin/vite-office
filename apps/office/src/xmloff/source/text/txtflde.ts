@@ -64,6 +64,69 @@ export function exportSequenceDeclarations(
   return `<text:sequence-decls>${declarations}</text:sequence-decls>`;
 }
 
+/** Shared export data for the Writer variable and user-field portions. */
+export interface XMLVariableExportMarker {
+  readonly kind: "variable-field";
+  readonly offset: number;
+  readonly element:
+    "variable-set" | "variable-input" | "variable-get" | "expression" | "user-field-get";
+  readonly name?: string;
+  readonly formula?: string;
+  readonly value?: number | string;
+  readonly hint?: string;
+  readonly display?: "none" | "formula";
+  readonly styleName?: string;
+  readonly presentation: string;
+}
+
+/** Emits the original variable-field attributes and authored presentation. @param field - Variable field export portion. @param escapeXml - XML escaping. @returns ODF field XML. */
+export function exportVariableField(
+  field: XMLVariableExportMarker,
+  escapeXml: (value: string) => string,
+): string {
+  const name = field.name === undefined ? "" : ` text:name="${escapeXml(field.name)}"`;
+  const formula =
+    field.formula === undefined || field.formula === field.presentation
+      ? ""
+      : ` text:formula="ooow:${escapeXml(field.formula)}"`;
+  const hint = field.hint ? ` text:description="${escapeXml(field.hint)}"` : "";
+  const display = field.display ? ` text:display="${field.display}"` : "";
+  const style = field.styleName ? ` style:data-style-name="${escapeXml(field.styleName)}"` : "";
+  const value =
+    typeof field.value === "number"
+      ? ` office:value-type="float" office:value="${field.value}"`
+      : typeof field.value === "string"
+        ? ' office:value-type="string"' +
+          (field.value === field.presentation
+            ? ""
+            : ` office:string-value="${escapeXml(field.value)}"`)
+        : "";
+  return `<text:${field.element}${name}${hint}${display}${formula}${style}${value}>${escapeXml(field.presentation)}</text:${field.element}>`;
+}
+
+/** Writes the variable and user declarations around the separate sequence declarations. @param variables - Variable master names and types. @param users - User field names and values. @param escapeXml - XML escaping. @returns Original declaration groups. */
+export function exportVariableDeclarations(
+  variables: Iterable<Readonly<{ name: string; string: boolean }>>,
+  users: Iterable<Readonly<{ name: string; value: number | string }>>,
+  escapeXml: (value: string) => string,
+): { variables: string; users: string } {
+  let variableBody = "";
+  for (const variable of variables)
+    variableBody += `<text:variable-decl office:value-type="${variable.string ? "string" : "float"}" text:name="${escapeXml(variable.name)}"/>`;
+  let userBody = "";
+  for (const user of users) {
+    const value =
+      typeof user.value === "number"
+        ? `office:value-type="float" office:value="${user.value}"`
+        : `office:value-type="string" office:string-value="${escapeXml(user.value)}"`;
+    userBody += `<text:user-field-decl ${value} text:name="${escapeXml(user.name)}"/>`;
+  }
+  return {
+    variables: variableBody ? `<text:variable-decls>${variableBody}</text:variable-decls>` : "",
+    users: userBody ? `<text:user-field-decls>${userBody}</text:user-field-decls>` : "",
+  };
+}
+
 /** Original ODF placeholder types indexed by the published UNO short. */
 export const placeholderTypes = {
   [PlaceholderType.TEXT]: "text",

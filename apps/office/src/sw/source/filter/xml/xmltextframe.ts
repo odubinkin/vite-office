@@ -334,6 +334,7 @@ export interface XMLBoundWriterFrames {
   readonly graphics?: ReadonlyMap<SwTextNode, readonly BoundGraphicFrame[]>;
   readonly graphicHelper?: SvXMLGraphicHelper;
   readonly exportNumberStyle?: (key: number, systemLanguage?: boolean) => string | undefined;
+  readonly collectFieldMaster?: (family: "variable" | "user", name: string) => void;
 }
 
 /** Projects native frame portions at the original paragraph or character position. @param node - Native anchor paragraph. @param anchored - Actual bound frames. @param projectBlock - Projects direct text and table children. @returns XML frame portions. */
@@ -449,6 +450,7 @@ export function compareParagraphMarkers(
       case "page-number-field":
       case "chapter-field":
       case "sequence-field":
+      case "variable-field":
       case "placeholder-field":
       case "drop-down-field":
       case "date-time-field":

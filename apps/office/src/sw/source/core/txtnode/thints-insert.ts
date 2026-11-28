@@ -209,7 +209,8 @@ function InsertPointHint(
   node.GetOrCreateSwpHints().Insert(hint);
   if (hint instanceof SwTextField) {
     const field = hint.GetAttr().GetField();
-    if (field instanceof SwSetExpField) field.GetTyp().SetSeqRefNo(field);
+    if (field instanceof SwSetExpField && field.IsSequenceField())
+      field.GetTyp().SetSeqRefNo(field);
   }
   node.TriggerNodeUpdate(
     new UpdateAttrHint(undefined, new SwUpdateAttr(start, start, hint.Which())),

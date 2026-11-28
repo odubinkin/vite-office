@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/core/fields/usrfld.ts",
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/fields/usrfld.cxx",
+    "localSymbols": [
+      "SwUserFieldType",
+      "SwUserField"
+    ],
+    "upstreamSymbols": [
+      "SwUserFieldType::Expand",
+      "SwUserFieldType::PutValue",
+      "SwUserField::ExpandImpl"
+    ],
+    "preservedResponsibilities": [
+      "Owns the authoritative named string or numeric user-field value and uses the native Writer number formatter to expand dependent fields."
+    ],
+    "omittedResponsibilities": [
+      "Native dialog, undo broadcasts and clipboard-specific field flags remain outside the represented ODT slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/fields/usrfld.ts",
+          "marker": "SwUserFieldType"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-variable-fields.test.ts",
+          "marker": "testUserFieldDecl"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/fields/usrfld.cxx",
+          "marker": "SwUserFieldType::Expand"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/qa/extras/odfexport/odfexport.cxx",
+          "marker": "testUserFieldDecl"
+        }
+      ]
+    }
+  }
+}
