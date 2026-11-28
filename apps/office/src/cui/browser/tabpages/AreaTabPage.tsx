@@ -2,7 +2,15 @@
 import type { ReactNode } from "react";
 import { FillStyle } from "../../../offapi/com/sun/star/drawing/FillStyle";
 import { Color } from "../../../tools/inc/color";
-import PALETTES from "../../../svx/browser/tbxctrls/color-palettes.json" with { type: "json" };
+import {
+  getPaletteColors,
+  getPaletteName,
+  getRecentColors,
+  paletteNames,
+  setPaletteName,
+  type NamedColor,
+  type PaletteName,
+} from "../../../svx/browser/tbxctrls/palette-manager";
 import { useState } from "react";
 import { BitmapTabPage } from "./BitmapTabPage";
 import type { SvxAreaTabPage } from "../../source/tabpages/tparea";
@@ -37,7 +45,7 @@ export function AreaTabPage({
   changed: () => void;
   label: (key: string, fallback: string) => string;
 }>): React.JSX.Element {
-  const [palette, setPalette] = useState<keyof typeof PALETTES>("Standard");
+  const [palette, setPalette] = useState(getPaletteName);
   const selected = page.GetFillStyle();
   const modes: [FillStyle.NONE | FillStyle.SOLID | FillStyle.BITMAP, string][] = [
     [FillStyle.NONE, label("fill-none", "None")],
@@ -47,10 +55,47 @@ export function AreaTabPage({
   const color = rgb(page.GetColor());
   const previous = rgb(page.GetOriginalColor());
 
-  /** Applies either a palette or custom RGB selection through the native fill item. @param value - RGB in browser hex notation. @returns Nothing. */
-  function setColor(value: string): void {
-    page.SetColor(new Color(Number.parseInt(value.slice(1), 16)), value.toUpperCase());
+  /** Applies either a palette or custom RGB selection through the native fill item. @param value - RGB in browser hex notation. @param name - Optional preset name. @returns Nothing. */
+  function setColor(value: string, name = ""): void {
+    page.SetColor(new Color(Number.parseInt(value.slice(1), 16)), name);
     changed();
+  }
+
+  /** Displays a native named palette with browser buttons. @param entries - Palette entries. @param label - Accessible palette name. @param recent - Whether these are recent picks. @returns Palette group. */
+  function swatches(
+    entries: readonly NamedColor[],
+    label: string,
+    recent = false,
+  ): React.JSX.Element {
+    return (
+      <div
+        className="grid max-h-52 grid-cols-[repeat(auto-fill,minmax(1.5rem,1fr))] gap-1 overflow-y-auto p-1"
+        role="group"
+        aria-label={label}
+      >
+        {entries.map(
+          /** Presents one selectable named swatch. @param swatch - Native named color. @param index - Color position. @returns Swatch. */
+          ({ name, rgb }, index) => (
+            <button
+              key={index}
+              aria-label={name}
+              title={name}
+              aria-pressed={
+                rgb === color && (recent ? !page.GetColorName() : page.GetColorName() === name)
+              }
+              className="aspect-square min-h-5 rounded border border-slate-300 aria-pressed:ring-2 aria-pressed:ring-indigo-700"
+              data-rgb={rgb}
+              style={{ backgroundColor: rgb }}
+              type="button"
+              onClick={
+                /** Applies a palette color independently of document submission. @returns Nothing. */ () =>
+                  setColor(rgb, recent ? "" : name)
+              }
+            />
+          ),
+        )}
+      </div>
+    );
   }
 
   return (
@@ -88,10 +133,14 @@ export function AreaTabPage({
               value={palette}
               onChange={
                 /** Displays another existing suite palette. @param event - Palette selection. @returns Nothing. */
-                (event) => setPalette(event.currentTarget.value as keyof typeof PALETTES)
+                (event) => {
+                  const name = event.currentTarget.value as PaletteName;
+                  setPalette(name);
+                  setPaletteName(name);
+                }
               }
             >
-              {Object.keys(PALETTES).map(
+              {paletteNames.map(
                 /** Displays one suite palette. @param name - Preset collection. @returns Palette option. */
                 (name) => (
                   <option key={name}>{name}</option>
@@ -99,27 +148,10 @@ export function AreaTabPage({
               )}
             </select>
           </label>
-          <div
-            className="grid grid-cols-[repeat(auto-fit,minmax(1.5rem,1fr))] gap-1"
-            role="group"
-            aria-label={label("fill-colors", "Palette colors")}
-          >
-            {PALETTES[palette].map(
-              /** Presents one selectable opaque swatch. @param swatch - Palette RGB. @param index - Color index. @returns Swatch. */
-              (swatch, index) => (
-                <button
-                  key={index}
-                  aria-label={swatch}
-                  aria-pressed={swatch.toLowerCase() === color}
-                  className="aspect-square min-h-5 rounded border border-slate-300 aria-pressed:ring-2 aria-pressed:ring-indigo-700"
-                  style={{ backgroundColor: swatch }}
-                  type="button"
-                  onClick={
-                    /** Applies this palette color. @returns Nothing. */ () => setColor(swatch)
-                  }
-                />
-              ),
-            )}
+          {swatches(getPaletteColors(palette), label("fill-colors", "Palette colors"))}
+          <div className="grid gap-1">
+            <span className="text-sm">{label("fill-recent-colors", "Recent Colors")}</span>
+            {swatches(getRecentColors(), label("fill-recent-colors", "Recent Colors"), true)}
           </div>
           <label className="flex items-center gap-2 text-sm">
             {label("fill-custom-color", "Custom Color")}

@@ -22,6 +22,8 @@ import { CreateNames, type ConfirmCreateName } from "./docfunc.names";
 import type { CreateNameFlags } from "../inc/scui_def";
 import { ScUndoPageBreak, ScUndoRangeNames } from "../undo/undocell";
 import { ScUndoTabColor, type ScUndoTabColorInfo } from "../undo/undotab";
+import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
+import { SetNormalStringOperation } from "../operation/SetNormalStringOperation";
 import { SetFormulaOperation } from "../operation/SetFormulaOperation";
 import type { ScFormulaCell } from "../../../inc/formulacell";
 import { RowHeightContext } from "../../../inc/rowheightcontext";
@@ -319,6 +321,24 @@ export class ScDocFunc {
     sheet.SetStreamValid(false);
     if (setModified) this.shell.SetDocumentModified();
     return true;
+  }
+  /** Dispatches normal cell input and returns the source number-format overwrite flag.
+   * @param formatSet - Native output cell.
+   * @param position - Cell position.
+   * @param source - Plain input text.
+   * @param api - API invocation.
+   * @returns Whether the input was written.
+   */
+  SetNormalString(
+    formatSet: [boolean],
+    position: ScAddress,
+    source: OUStringConstReference,
+    api: boolean,
+  ): boolean {
+    const operation = new SetNormalStringOperation(this, this.shell, position, source, api);
+    const accepted = operation.run();
+    if (accepted) formatSet[0] = operation.isNumberFormatSet();
+    return accepted;
   }
   /** Original formula dispatch consumes the prepared cell through its concrete operation. @param position - Cell position. @param cell - Transferred formula. @param interaction - User interaction. @returns Success. */
   SetFormulaCell(position: ScAddress, cell: ScFormulaCell, interaction: boolean): boolean {

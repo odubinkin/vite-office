@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/ui/operation/SetNormalStringOperation.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/ui/operation/SetNormalStringOperation.cxx",
+    "localSymbols": [
+      "SetNormalStringOperation"
+    ],
+    "upstreamSymbols": [
+      "SetNormalStringOperation::runImplementation"
+    ],
+    "preservedResponsibilities": [
+      "Commits a normal string after native editability checks, retains the old owned value and format presence, holds native redo input, and uses ScDocument.SetString for number-format detection."
+    ],
+    "omittedResponsibilities": [
+      "The represented default sheet and recording profile uses the existing browser presentation for invalidation. Rich-text and matrix owner paths, validation circles, alternate sheet views, and spill synchronization are outside this slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/ui/operation/SetNormalStringOperation.ts",
+          "marker": "SetNormalStringOperation"
+        },
+        {
+          "path": "apps/office/src/sc/browser/controller/calc-view-controller.test.ts",
+          "marker": "groups native numeric input"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/operation/SetNormalStringOperation.cxx",
+          "marker": "SetNormalStringOperation::runImplementation"
+        }
+      ]
+    }
+  }
+}

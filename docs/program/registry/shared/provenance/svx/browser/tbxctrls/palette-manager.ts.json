@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/svx/browser/tbxctrls/palette-manager.ts",
+    "rationale": "Loads the original installed SOC resources with DOMParser and stores native UserColors values with the browser profile.",
+    "responsibilities": [
+      "Preserves installed palette colors and source names and records a bounded named recent-color list."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Loads the original installed SOC resources with DOMParser and stores native UserColors values with the browser profile."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svx/browser/tbxctrls/palette-manager.ts",
+          "marker": "getPaletteColors"
+        },
+        {
+          "path": "apps/office/src/svx/browser/tbxctrls/palette-manager.ts",
+          "marker": "addRecentColor"
+        }
+      ]
+    }
+  }
+}

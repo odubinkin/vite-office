@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202611270601-GE34WV",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-27T06:05:08.317Z",
+  "verdict": "pass",
+  "summary": "Scoped implementation and full affected test set reviewed after integration",
+  "evaluated_sha": "c5c929ee0b80dcfcf058cd22973bea54294d3f60",
+  "blueprint_digest": "ff6b2051f66e1e82e9046c7b0f1eb888626fd1df65b4c38f40ae7c72cee2c5d5",
+  "findings": [
+    "43 targeted tests pass. Global provenance refers to baseline markers and is documented independently."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611270601-GE34WV/README.md",
+    "output/calc-next/GE34WV-ui-retry.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

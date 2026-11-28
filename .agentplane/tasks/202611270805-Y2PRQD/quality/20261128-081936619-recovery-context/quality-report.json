@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202611270805-Y2PRQD",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-28T08:19:36.619Z",
+  "verdict": "pass",
+  "summary": "The original cell paint choices now feed the Calc grid. Scoped tests and real Chromium wrapping and ODS checks passed.",
+  "evaluated_sha": "764c31ed57ad16427170621c84be5cbc6da1e1ad",
+  "blueprint_digest": "a0dde705beedc6d42c97b501e0e1520fe816228fde211ec406576aa92f2d89d2",
+  "findings": [
+    "Conditional orientation and the exact half-turn retain the pinned paint decisions."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611270805-Y2PRQD/README.md",
+    "output/calc-next/Y2PRQD-final-tests.log",
+    "output/calc-next/Y2PRQD-layout-tests.log",
+    "output/calc-next/Y2PRQD-browser-relaxed.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Grid clipping and browser shaping bound arbitrary-angle parity. Global registry and provenance retain inherited diagnostics."
+  ]
+}

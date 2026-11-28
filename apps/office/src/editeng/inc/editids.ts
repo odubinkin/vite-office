@@ -17,6 +17,13 @@ export const SID_ATTR_PARA_MODEL = 10065 as const;
 /** Native keep-with-next slot, SID_SVX_START +66. */
 export const SID_ATTR_PARA_KEEP = 10066 as const;
 
+/** Native Asian script spacing slot, SID_SVX_START +901. */
+export const SID_ATTR_PARA_SCRIPTSPACE = 10901 as const;
+/** Native hanging punctuation slot, SID_SVX_START +902. */
+export const SID_ATTR_PARA_HANGPUNCTUATION = 10902 as const;
+/** Native forbidden character rules slot, SID_SVX_START +903. */
+export const SID_ATTR_PARA_FORBIDDEN_RULES = 10903 as const;
+
 /** Native paragraph line-spacing slot, SID_SVX_START +33. */
 export const SID_ATTR_PARA_LINESPACE = 10033 as const;
 
@@ -106,3 +113,12 @@ export const SID_ATTR_BRUSH = 10001 as const;
 
 /** Original SID_SVX_START +855 numbering rule exchange item. */
 export const SID_ATTR_NUMBERING_RULE = 10855 as const;
+
+/** Original horizontal justification method slot, SID_EDIT_START + 69. */
+export const SID_ATTR_ALIGN_HOR_JUSTIFY_METHOD = 11569 as const;
+/** Original vertical justification method slot, SID_EDIT_START + 70. */
+export const SID_ATTR_ALIGN_VER_JUSTIFY_METHOD = 11570 as const;
+/** Original horizontal alignment slot, SID_EDIT_START + 71. */
+export const SID_ATTR_ALIGN_HOR_JUSTIFY = 11571 as const;
+/** Original vertical alignment slot, SID_EDIT_START + 72. */
+export const SID_ATTR_ALIGN_VER_JUSTIFY = 11572 as const;

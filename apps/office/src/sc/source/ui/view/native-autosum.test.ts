@@ -583,18 +583,22 @@ it("retains native multi-range totals,cursor placement and grouped marks across 
   expect(shell.GetUndoManager().GetUndoActionCount()).toBe(2);
   shell.Close();
 });
-it("keeps absent-sheet row sizing and unavailable nonformula view input nonmutating", /** Native FetchTable failure and an explicit unported entry boundary operate on real public owners. @returns Nothing. */ () => {
+it("keeps absent-sheet row sizing independent of native normal text input", /** Exercises real public sizing and input owners. @returns Nothing. */ () => {
   const { doc, functions, shell } = setup(),
     count = doc.GetTableCount();
   expect(shell.GetDocFunc().AdjustRowHeight(new ScRange(0, 0, 99, 0, 1, 99), true, true)).toBe(
     false,
   );
   expect(doc.GetTableCount()).toBe(count);
-  expect(
-    /** Requests the actual unported nonformula branch without changing document state. @returns Nothing or explicit unsupported error. */ () =>
-      functions.EnterData(0, 0, 0, unicode("text")),
-  ).toThrow("Nonformula EnterData processing is not implemented");
-  expect(doc.GetCellType(new ScAddress())).toBe(CellType.CELLTYPE_NONE);
-  expect(shell.GetUndoManager().GetUndoActionCount()).toBe(0);
-  shell.Close();
+  const source = unicode("text");
+  try {
+    expect(functions.EnterData(0, 0, 0, source)).toBe(true);
+    expect(doc.GetCellType(new ScAddress())).toBe(CellType.CELLTYPE_STRING);
+    expect(shell.GetUndoManager().GetUndoActionCount()).toBe(1);
+    expect(shell.Undo()).toBe(true);
+    expect(doc.GetCellType(new ScAddress())).toBe(CellType.CELLTYPE_NONE);
+  } finally {
+    source.dispose();
+    shell.Close();
+  }
 });

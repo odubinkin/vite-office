@@ -1,6 +1,7 @@
 /** @fileoverview Native boolean view defaults and document/view value boundaries without configuration or window substitutes. */
 import { expect, it } from "vitest";
-import { ScViewOptions, ViewOption } from "../../../inc/viewopti";
+import { COL_RED } from "../../../../tools/inc/color";
+import { ScTpViewItem, ScViewOptions, ViewOption } from "../../../inc/viewopti";
 import { ScDocument } from "../../../inc/document";
 import { ScViewData } from "../../ui/inc/viewdata";
 it("retains every original boolean ordinal/default and independently copies/assigns/resets the array", /** Checks actual value owners. @returns Nothing. */ () => {
@@ -61,6 +62,14 @@ it("copies document flags into independent views and preserves borrowed document
   expect(second.GetOptions().GetOption(ViewOption.FORMULAS)).toBe(true);
   second.SetHeaderMode(true);
   expect(first.IsHeaderMode()).toBe(false);
+});
+it("distinguishes View items with different grid colors", /** Checks the native pool-item comparison. @returns Nothing. */ () => {
+  const options = new ScViewOptions();
+  const original = new ScTpViewItem(options);
+  options.SetGridColor(COL_RED);
+  const changed = new ScTpViewItem(options);
+  expect(changed.equals(original)).toBe(false);
+  expect(changed.equals(changed.Clone())).toBe(true);
 });
 it("allocates all selected tab data on SetShowGrid but only changes the current sheet", /** Replays CreateSelectedTabData and per-sheet ownership. @returns Nothing. */ () => {
   const doc = new ScDocument(),

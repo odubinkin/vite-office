@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/filter/xml/xmlstyle.asian.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "calc",
+    "subsystem": "asian-typography",
+    "capabilityIds": [
+      "CAP-1901ccb9-7fa6-41de-918c-43c0824a29fc"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sc/source/filter/xml/xmlstyle.asian.ts#importCellAsianParagraphProperties",
+        "apps/office/src/sc/source/filter/xml/xmlstyle.asian.ts#exportCellAsianParagraphProperties",
+        "vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx#XML_TYPE_TEXT_AUTOSPACE",
+        "vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx#XML_TYPE_TEXT_PUNCTUATION_WRAP",
+        "vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx#XML_TYPE_TEXT_LINE_BREAK",
+        "apps/office/src/sc/browser/presentation/calc-format-cells.test.tsx",
+        "apps/office/src/sc/source/filter/xml/ods.test.ts"
+      ],
+      "justification": "Maps the original Calc UNO paragraph booleans to the three EditEngine ODF lexical pairs using native pooled items and the named-boolean handler.",
+      "knownViolations": [],
+      "localSymbols": [
+        "importCellAsianParagraphProperties",
+        "exportCellAsianParagraphProperties"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "xmloff/source/text/txtprmap.cxx",
+      "upstreamSymbols": [
+        "XML_TYPE_TEXT_AUTOSPACE",
+        "XML_TYPE_TEXT_PUNCTUATION_WRAP",
+        "XML_TYPE_TEXT_LINE_BREAK"
+      ]
+    }
+  }
+}

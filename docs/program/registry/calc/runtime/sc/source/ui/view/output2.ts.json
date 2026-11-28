@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/ui/view/output2.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "calc",
+    "subsystem": "cell-formatting",
+    "capabilityIds": [
+      "CAP-0fca5c56-238e-49a4-b93d-9509e8a9032e",
+      "CAP-8a4781a6-166b-48bd-9ba1-3d53fd97916f",
+      "CAP-bcb73c6a-178b-4e5e-b348-1b3183bdb882"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sc/source/ui/view/output2.ts",
+        "apps/office/src/sc/browser/presentation/calc-cell-text-layout.test.tsx",
+        "vendor/libreoffice-reference/sc/source/ui/view/output2.cxx#ScOutputData::DrawRotated",
+        "apps/office/src/sc/source/ui/view/output2.test.ts",
+        "vendor/libreoffice-reference/sc/source/ui/view/output2.cxx#ScDrawStringsVars::SetShrinkScale",
+        "apps/office/src/sc/browser/presentation/calc-view-options.test.tsx",
+        "vendor/libreoffice-reference/sc/source/ui/view/output2.cxx#ScOutputData::SetSyntaxColor"
+      ],
+      "justification": "Resolves Calc cell wrapping, stacked and rotated output decisions through effective pattern attributes.",
+      "knownViolations": [],
+      "localSymbols": [
+        "getCellTextLayout",
+        "getCellTextRepeatCount",
+        "getCellTextShrinkScale",
+        "setSyntaxColor"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/source/ui/view/output2.cxx",
+      "upstreamSymbols": [
+        "ScOutputData::DrawRotated",
+        "ScOutputData::DrawEditStacked",
+        "ScDrawStringsVars::SetShrinkScale",
+        "ScOutputData::SetSyntaxColor"
+      ]
+    }
+  }
+}

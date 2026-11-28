@@ -1,0 +1,104 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-9edf9151-bbd9-46b7-96e7-a002cc8fa650",
+    "capabilityId": "CAP-9edf9151-bbd9-46b7-96e7-a002cc8fa650",
+    "suite": "calc",
+    "subsystem": "cell-formatting",
+    "type": "command",
+    "maturity": "implemented",
+    "capability": "Calc Format Cells user-defined number format catalog",
+    "assertions": [
+      "The original Format Code group admits Add, Edit Comment and Remove based on the source catalog state.",
+      "Native draft preview stays outside the user-format gallery. Add cancellation and accepted deferred removal follow the original formatter lists.",
+      "Calc receives typed number info and applies accepted deletion keys before cell attributes.",
+      "The native number:title annotation round-trips on the primary ODS style for the applied custom number format."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser inputs and buttons present the original entry and comment actions using the live shared format shell."
+    },
+    "gaps": [
+      "This slice covers user number-format catalog handling in the Calc dialog."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/svx/source/items/numfmtsh.cxx",
+          "marker": "SvxNumberFormatShell::AddFormat"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svx/source/items/numfmtsh.cxx",
+          "marker": "SvxNumberFormatShell::RemoveFormat"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/tabvwsh5.cxx",
+          "marker": "ScTabViewShell::UpdateNumberFormatter"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/style/xmlnumfe.cxx",
+          "marker": "rFormat.GetComment()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/style/xmlnumfi.cxx",
+          "marker": "pFormat->SetComment(m_sFormatTitle)"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/uitest/calc_tests4/tdf88999_scientific_number_options.py",
+          "marker": "test_tdf88999_scientific_format_decimal_value"
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/libreoffice-reference/cui/uiconfig/ui/numberingformatpage.ui",
+          "marker": "numberingformatpage|edit|tooltip_text"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/attrdlg/NumberFormatTabPage.tsx",
+          "marker": "function addFormat"
+        },
+        {
+          "path": "apps/office/src/svx/source/items/numfmtsh.ts",
+          "marker": "ValidateNewEntries"
+        },
+        {
+          "path": "apps/office/src/sc/browser/workflows/calc-cell-format-workflow.ts",
+          "marker": "GetDelFormats"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-format-cells.test.tsx",
+          "marker": "uses the native Add, Edit Comment and Remove"
+        },
+        {
+          "path": "apps/office/src/svx/source/items/numfmtsh.test.ts",
+          "marker": "preserves the native add and remove list order"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-upstream-suspected-issues.md",
+          "marker": "CALC-887"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "aspect": "command-state",
+    "atomicOperation": "calc-format-cells-number-format-catalog",
+    "scopeLimitations": [
+      "Uses the original ODS number:title contract for formatted cell styles. Existing browser storage and recovery policy remains in effect."
+    ]
+  }
+}

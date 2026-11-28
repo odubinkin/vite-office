@@ -4,7 +4,6 @@ import { DialogHeader } from "../../../../framework/browser/presentation/DialogH
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import {
   cellFormatPages,
-  alignmentWhich,
   borderWhich,
   fontPageItems,
   fontEffectsWhich,
@@ -12,12 +11,16 @@ import {
   type ScAttrDlg as ScAttrDlgModel,
   type ScAttrDlgResult,
 } from "../../../source/ui/attrdlg/attrdlg";
-import { ATTR_BACKGROUND, ATTR_PROTECTION } from "../../../inc/scitems";
+import { ATTR_PROTECTION } from "../../../inc/scitems";
 import { CellBordersTabPage } from "./CellBordersTabPage";
 import { FontTabPage } from "./FontTabPage";
 import { FontEffectsTabPage } from "./FontEffectsTabPage";
 import { NumberFormatTabPage } from "./NumberFormatTabPage";
-import { AlignmentTabPage, BackgroundTabPage, CellProtectionTabPage } from "./CellAttributePages";
+import { AlignmentTabPage } from "../../../../cui/browser/tabpages/AlignmentTabPage";
+import { AreaTabPage } from "../../../../cui/browser/tabpages/AreaTabPage";
+import { FillStyle } from "../../../../offapi/com/sun/star/drawing/FillStyle";
+import { addRecentColor } from "../../../../svx/browser/tbxctrls/palette-manager";
+import { AsianTypographyTabPage, CellProtectionTabPage } from "./CellAttributePages";
 
 /** Owns the native modal's output acknowledgement. */
 interface Props {
@@ -40,6 +43,9 @@ export function ScAttrDlg({ model, onCancel, onSubmit }: Props): React.JSX.Eleme
   const [resetNumber, setResetNumber] = useState(0);
   const [resetBorder, setResetBorder] = useState(0);
   const [resetFont, setResetFont] = useState(0);
+  const [resetBackground, setResetBackground] = useState(0);
+  const [backgroundVisited, setBackgroundVisited] = useState(false);
+  const [alignmentVisited, setAlignmentVisited] = useState(false);
   const [frameEdited, setFrameEdited] = useState(false);
   const id = useId();
   const tabs = useRef<HTMLDivElement>(null);
@@ -59,6 +65,32 @@ export function ScAttrDlg({ model, onCancel, onSubmit }: Props): React.JSX.Eleme
   function frameChanged(): void {
     setFrameEdited(true);
     setRevision(revision + 1);
+  }
+
+  /** Exchanges the active solid Color page with the browser profile on leave or acceptance. @returns Nothing. */
+  function rememberBackgroundColor(): void {
+    const area = model.background.GetAreaPage();
+    const color = area.GetColor();
+    if (area.GetFillStyle() === FillStyle.SOLID && color)
+      addRecentColor(color, area.GetColorName());
+  }
+
+  /** Opens the notebook page and records the first native Background visit. @param index - Selected page. @returns Nothing. */
+  function selectTab(index: number): void {
+    if (tab !== index && cellFormatPages[tab]?.[0] === "background") rememberBackgroundColor();
+    if (cellFormatPages[index]?.[0] === "background") setBackgroundVisited(true);
+    if (cellFormatPages[index]?.[0] === "alignment") setAlignmentVisited(true);
+    setTab(index);
+  }
+
+  /** Refreshes the native Area palette and preview after editing. @returns Nothing. */
+  function backgroundChanged(): void {
+    setRevision(revision + 1);
+  }
+
+  /** Uses the dialog's existing local Area labels. @param _key - Resource identity. @param fallback - Visible label. @returns Label. */
+  function backgroundLabel(_key: string, fallback: string): string {
+    return fallback;
   }
 
   /** Restores the active source page from its input values. @returns Nothing. */
@@ -82,10 +114,14 @@ export function ScAttrDlg({ model, onCancel, onSubmit }: Props): React.JSX.Eleme
         setResetBorder(resetBorder + 1);
         break;
       case "alignment":
-        for (const which of alignmentWhich) model.output.ClearItem(which);
+        model.alignment.Reset();
+        break;
+      case "asiantypography":
+        model.asianTypography.Reset();
         break;
       case "background":
-        model.output.ClearItem(ATTR_BACKGROUND);
+        model.background.Reset();
+        setResetBackground(resetBackground + 1);
         break;
       case "cellprotection":
         model.output.ClearItem(ATTR_PROTECTION);
@@ -123,6 +159,11 @@ export function ScAttrDlg({ model, onCancel, onSubmit }: Props): React.JSX.Eleme
             if (invalid) return;
             const items = model.output.Clone();
             if (frameEdited) model.borders.FillItemSet(items);
+            if (alignmentVisited) model.alignment.FillItemSet(items);
+            if (backgroundVisited) {
+              if (cellFormatPages[tab]?.[0] === "background") rememberBackgroundColor();
+              model.background.FillItemSet(items);
+            }
             onSubmit({ items, ...(numbers ? { format: numbers } : {}) });
           }
         }
@@ -150,7 +191,7 @@ export function ScAttrDlg({ model, onCancel, onSubmit }: Props): React.JSX.Eleme
                         : undefined;
               if (next === undefined) return;
               event.preventDefault();
-              setTab(next);
+              selectTab(next);
             }
           }
         >
@@ -174,7 +215,7 @@ export function ScAttrDlg({ model, onCancel, onSubmit }: Props): React.JSX.Eleme
                     : "text-slate-700 hover:bg-slate-100")
                 }
                 onClick={
-                  /** Selects the clicked source page. @returns Nothing. */ () => setTab(index)
+                  /** Selects the clicked source page. @returns Nothing. */ () => selectTab(index)
                 }
               >
                 {label}
@@ -214,9 +255,35 @@ export function ScAttrDlg({ model, onCancel, onSubmit }: Props): React.JSX.Eleme
                     onChangeFrame={frameChanged}
                   />
                 ) : page === "alignment" ? (
-                  <AlignmentTabPage model={model} onChange={stage} />
+                  alignmentVisited && (
+                    <AlignmentTabPage
+                      page={model.alignment}
+                      changed={
+                        /** Refreshes the pending selection and its dependent controls. @returns Nothing. */ () =>
+                          setRevision(revision + 1)
+                      }
+                    />
+                  )
+                ) : page === "asiantypography" ? (
+                  <AsianTypographyTabPage
+                    model={model.asianTypography}
+                    onChange={
+                      /** Stages the native checkbox state. @param slot - Native paragraph slot. @param checked - Control state. @returns Nothing. */
+                      (slot, checked) => {
+                        model.asianTypography.SetValue(slot, checked);
+                        setRevision(revision + 1);
+                      }
+                    }
+                  />
                 ) : page === "background" ? (
-                  <BackgroundTabPage model={model} onChange={stage} />
+                  backgroundVisited && (
+                    <AreaTabPage
+                      key={resetBackground}
+                      page={model.background.GetAreaPage()}
+                      changed={backgroundChanged}
+                      label={backgroundLabel}
+                    />
+                  )
                 ) : (
                   <CellProtectionTabPage model={model} onChange={stage} />
                 )}

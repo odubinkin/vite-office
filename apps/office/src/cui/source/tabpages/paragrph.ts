@@ -1,4 +1,12 @@
 /** @fileoverview Consumed definite-state split/widow/orphan controls of SvxExtParagraphTabPage from pinned paragrph.cxx;textflowpage.ui;definite page breaks;other controls and mixed states remain unrepresented. */
+import {
+  SID_ATTR_PARA_FORBIDDEN_RULES,
+  SID_ATTR_PARA_HANGPUNCTUATION,
+  SID_ATTR_PARA_SCRIPTSPACE,
+} from "../../../editeng/inc/editids";
+import type { SfxBoolItem } from "../../../svl/source/items/cenumitm";
+import { SfxItemState, type SfxItemSet } from "../../../svl/source/items/itemset";
+
 /** Existing paragraph attribute values at this CUI boundary. */
 export interface ParagraphSplitValue {
   readonly keepTogether?: boolean;
@@ -251,4 +259,66 @@ function boundPage(value: number): number {
 /** Original numeric widget bounds. @param value - Native spin value. @returns Clamped whole count. */
 function boundLines(value: number): number {
   return Math.max(1, Math.min(9, Math.round(value)));
+}
+
+/** Native Asian paragraph control bindings in the source page's visual order. */
+export const asianTypographyControls = [
+  [
+    SID_ATTR_PARA_FORBIDDEN_RULES,
+    "Apply list of forbidden characters to the beginning and end of lines",
+  ],
+  [SID_ATTR_PARA_HANGPUNCTUATION, "Allow hanging punctuation"],
+  [SID_ATTR_PARA_SCRIPTSPACE, "Apply spacing between Asian and non-Asian text"],
+] as const;
+
+/** Original paragraph slot identities carried by the three checkboxes. */
+export type AsianTypographySlot = (typeof asianTypographyControls)[number][0];
+
+/** Controls the original Asian typography flags through the consuming document's slot map. */
+export class SvxAsianTabPage {
+  /** Borrows the saved original and the staged output. @param input - Original items. @param output - Pending items. */
+  constructor(
+    private readonly input: SfxItemSet,
+    private readonly output: SfxItemSet,
+  ) {}
+
+  /** Resolves whether the original page can edit a checkbox and its current value.
+   * @param slot - Original paragraph slot.
+   * @returns Control sensitivity and definite or indeterminate state.
+   */
+  GetState(slot: AsianTypographySlot): { disabled: boolean; value: boolean | undefined } {
+    const which = this.input.GetPool().GetWhichIDFromSlotID(slot);
+    const state = this.input.GetItemState(which);
+    if (state === SfxItemState.UNKNOWN || state === SfxItemState.DISABLED)
+      return { disabled: true, value: false };
+    const pending = this.output.GetItemIfSet(which, false) as SfxBoolItem | undefined;
+    const source =
+      state >= SfxItemState.DEFAULT ? (this.input.Get(which) as SfxBoolItem) : undefined;
+    return { disabled: false, value: (pending ?? source)?.GetValue() };
+  }
+
+  /** Publishes a changed checkbox through the original clone and item-set contract.
+   * @param slot - Original paragraph slot.
+   * @param checked - New native checkbox value.
+   * @returns Nothing.
+   */
+  SetValue(slot: AsianTypographySlot, checked: boolean): void {
+    const which = this.input.GetPool().GetWhichIDFromSlotID(slot);
+    const state = this.input.GetItemState(which);
+    if (state === SfxItemState.UNKNOWN || state === SfxItemState.DISABLED) return;
+    const source = this.input.Get(which) as SfxBoolItem;
+    if (state >= SfxItemState.DEFAULT && source.GetValue() === checked) {
+      this.output.ClearItem(which);
+      return;
+    }
+    const updated = source.Clone();
+    updated.SetValue(checked);
+    this.output.Put(updated, true);
+  }
+
+  /** Clears staged changes so the controls read the saved native item states. @returns Nothing. */
+  Reset(): void {
+    for (const [slot] of asianTypographyControls)
+      this.output.ClearItem(this.input.GetPool().GetWhichIDFromSlotID(slot));
+  }
 }

@@ -1,0 +1,87 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-0fca5c56-238e-49a4-b93d-9509e8a9032e",
+    "capabilityId": "CAP-0fca5c56-238e-49a4-b93d-9509e8a9032e",
+    "suite": "calc",
+    "subsystem": "cell-formatting",
+    "type": "command",
+    "maturity": "implemented",
+    "capability": "Calc grid cell text orientation and wrapping",
+    "assertions": [
+      "Format Cells changes feed the existing grid text painter and its history.",
+      "Ordinary and conditional cell formats resolve stacked, Asian vertical, quarter-turn and arbitrary-angle paths.",
+      "The source NUMBER wrap exception and near-horizontal rotation clamp are retained."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser writing modes and transforms consume the original Calc paint decisions."
+    },
+    "gaps": [
+      "Browser transforms operate within the grid cell clipping model. Native cross-cell overflow and output-device text metrics remain separate."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/output2.cxx",
+          "marker": "ScOutputData::DrawRotated"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/output2.cxx",
+          "marker": "ScOutputData::DrawEditStacked"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/subsequent_filters_test2.cxx",
+          "marker": "testTdf121040"
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/libreoffice-reference/cui/uiconfig/ui/cellalignment.ui",
+          "marker": "id=\"checkAsianMode\""
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/ui/view/output2.ts",
+          "marker": "getCellTextLayout"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-cell-text-layout.ts",
+          "marker": "calcCellTextLayoutStyle"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-cell-text-layout.test.tsx",
+          "marker": "paints the stacked Asian setting from Format Cells"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-cell-text-layout.test.tsx",
+          "marker": "ports the tdf121040 source ODS row-height check"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-upstream-suspected-issues.md",
+          "marker": "CALC-890"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "aspect": "command-state",
+    "atomicOperation": "calc-grid-cell-text-layout",
+    "scopeLimitations": [
+      "Uses browser shaping and the current grid clipping geometry."
+    ]
+  }
+}

@@ -10,6 +10,7 @@ import {
   SvNumFormatType as T,
 } from "../../../svl/inc/zforlist";
 import { SvNumberFormatter } from "../../../svl/source/numbers/zforlist";
+import type { SvNumberformat } from "../../../svl/source/numbers/zformat";
 import type { FormatSpecialInfo } from "../../../svl/source/numbers/zformat.picture";
 import type { CurrencyListEntry } from "../tbxctrls/tbcontrl.currency";
 
@@ -88,9 +89,12 @@ export interface NumberFormatDescription extends FormatSpecialInfo {
   readonly spellOut: boolean;
 }
 
-/** Owns an isolated format table for uncommitted code compilation and preview. */
+/** Owns native user-format lifecycle and the browser's isolated draft preview. */
 export class SvxNumberFormatShell {
   private readonly scratch: SvNumberFormatter;
+  private readonly added = new Set<number>();
+  private readonly removed = new Set<number>();
+  private undoAdded = true;
 
   /** Borrows the document's formats and actual preview value. @param document - Existing formatter. @param sample - Current cell value. @returns Format shell. */
   constructor(
@@ -143,10 +147,9 @@ export class SvxNumberFormatShell {
               ((category === T.DATE || category === T.TIME) && type === T.DATETIME));
         if (
           matches &&
-          (formatter === this.document ||
-            SvNumberFormatter.GetIndexTableOffset(key) !==
-              NfIndexTableOffset.NF_INDEX_TABLE_ENTRIES ||
-            entry.IsAdditionalBuiltin())
+          (formatter === this.document
+            ? !this.removed.has(key)
+            : !formatter.IsUserDefined(key) || entry.IsAdditionalBuiltin())
         ) {
           const code = text(entry.GetFormatstring());
           if (rows.has(code)) continue;
@@ -267,8 +270,141 @@ export class SvxNumberFormatShell {
     }
   }
 
-  /** Releases all staged pictures. @returns Nothing. */
+  /** Finds a visible native format by picture and locale. @param picture - Code. @param language - Locale. @returns Format key or sentinel. */
+  FindEntry(picture: string, language: number): number {
+    if (!picture) return NONE;
+    const code = unicode(picture);
+    try {
+      const key = this.document.GetEntryKey(code, language);
+      return this.removed.has(key) ? NONE : key;
+    } finally {
+      code.dispose();
+    }
+  }
+
+  /** Inserts a compiled document format or reinstates an already removed entry.
+   * @param picture - Input code.
+   * @param language - Input locale.
+   * @returns Normalized code, locale and key, or absence on rejection.
+   */
+  AddFormat(
+    picture: string,
+    language: number,
+  ): { code: string; language: number; key: number } | undefined {
+    if (!picture.trim()) return undefined;
+    const code = unicode(picture);
+    try {
+      const key: [number] = [this.document.GetEntryKey(code, language)];
+      if (key[0] === NONE) {
+        if (!this.document.PutEntry(code, [0], [T.ALL], key, language)) return undefined;
+      } else if (!this.removed.delete(key[0])) return undefined;
+      const entry = this.document.GetEntry(key[0]);
+      if (!entry) return undefined;
+      this.added.add(key[0]);
+      return { code: text(entry.GetFormatstring()), language: entry.GetLanguage(), key: key[0] };
+    } finally {
+      code.dispose();
+    }
+  }
+
+  /** Stages deletion and returns the affected category's original standard replacement.
+   * @param key - Resolved gallery key.
+   * @returns The replacement picture and locale, or absence.
+   */
+  RemoveFormat(key: number): { code: string; language: number; category: number } | undefined {
+    const entry = this.document.GetEntry(key);
+    if (!entry || !this.IsUserDefined(key)) return undefined;
+    this.removed.add(key);
+    this.added.delete(key);
+    const category = entry.GetMaskedType();
+    const language = entry.GetLanguage();
+    return {
+      category: category === T.DATETIME ? T.DATE : category,
+      code: this.GetStandardCode(category, language),
+      language,
+    };
+  }
+
+  /** Checks the original user-defined type of a visible gallery entry. @param key - Resolved gallery key. @returns Editable or removable. */
+  IsUserDefined(key: number): boolean {
+    if (this.removed.has(key) || !this.document.IsUserDefined(key)) return false;
+    const entry = this.document.GetEntry(key);
+    return (
+      !!entry &&
+      (entry.GetMaskedType() !== T.CURRENCY ||
+        !this.IsInCurrencyTable(text(entry.GetFormatstring()), entry.GetLanguage()))
+    );
+  }
+
+  /** Checks original generated symbol and bank variants before admitting custom currency actions.
+   * @param picture - Format code.
+   * @param language - Format locale.
+   * @returns Whether the code belongs to the native currency table.
+   */
+  IsInCurrencyTable(picture: string, language: number): boolean {
+    if (!picture.includes("[$")) return false;
+    this.scratch.GetStandardIndex(language);
+    for (const currency of SvNumberFormatter.GetTheCurrencyTable()) {
+      for (const bank of [false, true]) {
+        const symbol = currency.BuildSymbolString(bank);
+        try {
+          if (!picture.includes(text(symbol))) continue;
+        } finally {
+          symbol.dispose();
+        }
+        const formats: OUString[] = [];
+        try {
+          this.scratch.GetCurrencyFormatStrings(formats, currency, bank);
+          if (
+            formats.some(
+              /** Compares a source currency variant with the entered code. @param format - Currency variant. @returns Exact match. */
+              (format) => text(format) === picture,
+            )
+          )
+            return true;
+        } finally {
+          for (const format of formats) format.dispose();
+        }
+      }
+    }
+    return false;
+  }
+
+  /** Reads the native format comment through its gallery key. @param key - Resolved gallery key. @returns Existing annotation. */
+  GetComment4Entry(key: number): string {
+    const entry = this.document.GetEntry(key);
+    return entry ? text(entry.GetComment()) : "";
+  }
+
+  /** Writes the comment into the actual selected format on editor completion. @param key - Resolved gallery key. @param value - Annotation. @returns Nothing. */
+  SetComment4Entry(key: number, value: string): void {
+    const entry = this.document.GetEntry(key) as SvNumberformat | null;
+    if (!entry) return;
+    const comment = unicode(value);
+    try {
+      entry.SetComment(comment);
+    } finally {
+      comment.dispose();
+    }
+  }
+
+  /** Returns original deferred deletion keys in request order. @returns Deletions. */
+  GetUpdateData(): readonly number[] {
+    return [...this.removed];
+  }
+
+  /** Commits the original add list after the calling dialog accepts. @returns Nothing. */
+  ValidateNewEntries(): void {
+    this.undoAdded = false;
+  }
+
+  /** Removes still-unvalidated additions and releases the draft preview owner. @returns Nothing. */
   Dispose(): void {
+    if (this.undoAdded) {
+      for (const key of this.added) this.document.DeleteEntry(key);
+    }
+    this.added.clear();
+    this.removed.clear();
     this.scratch.dispose();
   }
 }

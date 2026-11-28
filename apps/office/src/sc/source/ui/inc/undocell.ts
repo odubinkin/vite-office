@@ -1,2 +1,2 @@
 /** @fileoverview Native undocell.hxx typed-content Undo declaration boundary. */
-export { ScUndoSetCell, ScUndoCursorAttr } from "../undo/undocell";
+export { ScUndoSetCell, ScUndoEnterData, ScUndoCursorAttr } from "../undo/undocell";

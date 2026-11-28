@@ -435,6 +435,15 @@ export class SvNFFormatData {
   GetEntry(key: number): SvNumberformat | null {
     return this.fields.aFTable.get(key >>> 0) ?? null;
   }
+  /** Erases and releases the owned entry at the original native key. @param key - Format key. @returns Nothing. */
+  DeleteEntry(key: number): void {
+    const index = key >>> 0;
+    const entry = this.fields.aFTable.get(index);
+    if (entry) {
+      this.fields.aFTable.delete(index);
+      entry.dispose();
+    }
+  }
   /** Original public const format lookup shares the same actual entry. @param key - Format key. @returns Borrowed entry or null. */
   GetFormatEntry(key: number): SvNumberformat | null {
     return this.GetEntry(key);

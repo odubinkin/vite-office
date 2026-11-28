@@ -476,5 +476,10 @@ function exportPart(
     type === T.TIME && entry.GetFormatSpecialInfo(part).grouped
       ? ' number:truncate-on-overflow="false"'
       : "";
-  return `<number:${tag} style:name="${styleName}"${flags}${source}${overflow}${systemLanguage ? "" : numberStyleLocale(entry.GetLanguage())}>${properties}${parts.join("")}${defaultPart ? maps : ""}</number:${tag}>`;
+  const comment = text(entry.GetComment());
+  const title =
+    defaultPart && (entry.GetType() & T.DEFINED) !== 0 && comment
+      ? ` number:title="${escapeXml(comment)}"`
+      : "";
+  return `<number:${tag} style:name="${styleName}"${flags}${source}${overflow}${systemLanguage ? "" : numberStyleLocale(entry.GetLanguage())}${title}>${properties}${parts.join("")}${defaultPart ? maps : ""}</number:${tag}>`;
 }

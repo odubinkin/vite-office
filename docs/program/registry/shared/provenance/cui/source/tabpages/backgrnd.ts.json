@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/cui/source/tabpages/backgrnd.ts",
+    "upstreamPath": "cui/source/tabpages/backgrnd.cxx",
+    "localSymbols": [
+      "SvxBkgTabPage"
+    ],
+    "upstreamSymbols": [
+      "SvxBkgTabPage"
+    ],
+    "preservedResponsibilities": [
+      "Adapts the original brush slot to drawing fill items and exchanges the accepted None or Color through the original brush comparison."
+    ],
+    "omittedResponsibilities": [
+      "Optional bitmap and table/character brush destinations are outside the Calc dialog slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/cui/source/tabpages/backgrnd.ts",
+          "marker": "class SvxBkgTabPage"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/cui/source/tabpages/backgrnd.cxx",
+          "marker": "SvxBkgTabPage::FillItemSet"
+        }
+      ]
+    }
+  }
+}

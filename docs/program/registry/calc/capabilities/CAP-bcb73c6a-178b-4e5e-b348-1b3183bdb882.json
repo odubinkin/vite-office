@@ -1,0 +1,111 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-bcb73c6a-178b-4e5e-b348-1b3183bdb882",
+    "capabilityId": "CAP-bcb73c6a-178b-4e5e-b348-1b3183bdb882",
+    "suite": "calc",
+    "subsystem": "document-view-options",
+    "type": "command",
+    "maturity": "implemented",
+    "capability": "Calc value highlighting and formula indicators",
+    "assertions": [
+      "The View command switches syntax colors by stored cell kind on the active view.",
+      "The Calc View page applies changed display options to the active view and document.",
+      "Formula markers and hover hints use the actual formula expression and merged anchor."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "HTML checkboxes bind the copied view values. The grid uses CSS shapes and native HTML hover hints on its existing visible cells."
+    },
+    "gaps": [
+      "The browser grid uses the pinned light palette and fixed CSS sizing. Desktop application View preferences and native help event modes are outside the browser owner."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/optdlg/tpview.cxx",
+          "marker": "ScTpContentOptions::Reset"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/optdlg/tpview.cxx",
+          "marker": "ScTpContentOptions::FillItemSet"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/output2.cxx",
+          "marker": "ScOutputData::SetSyntaxColor"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/output.cxx",
+          "marker": "ScOutputData::DrawFormulaMarks"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/gridwin5.cxx",
+          "marker": "aFormulaText = rDoc.GetFormula"
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/libreoffice-reference/sc/uiconfig/scalc/ui/tpviewpage.ui",
+          "marker": "Formula indicator and hint"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/libreoffice-reference/test/source/sheet/spreadsheetviewsettings.cxx",
+          "marker": "Unable to set PropertyValue IsValueHighlightingEnabled"
+        },
+        {
+          "path": "vendor/libreoffice-reference/test/source/sheet/spreadsheetviewsettings.cxx",
+          "marker": "Unable to set PropertyValue ShowZeroValues"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/ui/optdlg/tpview.ts",
+          "marker": "ScTpContentOptions"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/view/output2.ts",
+          "marker": "setSyntaxColor"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/ScGridWindow.tsx",
+          "marker": "data-calc-formula-mark"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-options.test.tsx",
+          "marker": "applies the View display item"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-view-options.test.tsx",
+          "marker": "paints native value, text and formula syntax colors"
+        },
+        {
+          "path": "apps/office/e2e/calc/view-display.spec.ts",
+          "marker": "paints one hint marker at the merged cell edge"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-upstream-suspected-issues.md",
+          "marker": "CALC-891"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "aspect": "command-state",
+    "atomicOperation": "calc-view-syntax-and-formula-indicators",
+    "scopeLimitations": [
+      "Covers the four represented controls of the View page and the matching grid decisions."
+    ]
+  }
+}

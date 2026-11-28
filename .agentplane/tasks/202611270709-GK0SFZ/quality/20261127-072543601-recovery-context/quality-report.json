@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202611270709-GK0SFZ",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-27T07:25:43.601Z",
+  "verdict": "pass",
+  "summary": "The represented Background modes now use common CUI Area controls and source brush comparison. Original palette and recent-color assertions and affected Writer paths pass.",
+  "evaluated_sha": "ad14827a84ac9f67e6faab395a11db845b8c6a73",
+  "blueprint_digest": "c2c70213486e0860a2b498b46302313f2c66c26e5fffced9eeea7a810dd5ca8c",
+  "findings": [
+    "The accepted selection preserves equal opaque themed brushes and reproduces the pinned partial-opacity transfer."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611270709-GK0SFZ/README.md",
+    "output/calc-next/GK0SFZ-final-tests.log",
+    "docs/program/calc-upstream-suspected-issues.md",
+    "output/calc-next/GK0SFZ-findings.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Custom and document theme palette editors and component-based color editing remain separate shared Area work. Global registry and documentation diagnostics are inherited."
+  ]
+}

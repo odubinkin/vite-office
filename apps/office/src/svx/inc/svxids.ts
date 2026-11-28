@@ -1,6 +1,8 @@
 /** @fileoverview Declares the represented native svxids.hrc slot identity. */
 /** Native SID_SVX_START plus 23, carrying SvxBoxInfoItem. */
 export const SID_ATTR_BORDER_INNER = 10023 as const;
+/** Original SID_SVX_START +86 carrying the formatter and removed format keys. */
+export const SID_ATTR_NUMBERFORMAT_INFO = 10086 as const;
 /** Native table-column ruler item slot. */
 export const SID_RULER_BORDERS = 10080 as const;
 /** Native horizontal ruler row item slot. */
@@ -43,3 +45,27 @@ export const SID_ATTR_PAGE_FOOTERSET = 10058;
 export const SID_ATTR_PAGE_ON = 10059;
 export const SID_ATTR_PAGE_SHARED = 10061;
 export const SID_ATTR_PAGE_SHARED_FIRST = 11114;
+
+/** Original stacked text slot. */
+export const SID_ATTR_ALIGN_STACKED = 10229 as const;
+
+/** Original automatic cell line breaks slot. */
+export const SID_ATTR_ALIGN_LINEBREAK = 10230 as const;
+
+/** Original cell indent slot. */
+export const SID_ATTR_ALIGN_INDENT = 10460 as const;
+
+/** Original cell rotation angle slot. */
+export const SID_ATTR_ALIGN_DEGREES = 10577 as const;
+
+/** Original cell rotation reference edge slot. */
+export const SID_ATTR_ALIGN_LOCKPOS = 10578 as const;
+
+/** Original automatic hyphenation slot. */
+export const SID_ATTR_ALIGN_HYPHENATION = 10931 as const;
+
+/** Original Asian vertical layout slot. */
+export const SID_ATTR_ALIGN_ASIANVERTICAL = 10949 as const;
+
+/** Original shrink to fit slot. */
+export const SID_ATTR_ALIGN_SHRINKTOFIT = 11015 as const;

@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/svl/source/config/cjkoptions.ts",
+    "upstreamPath": "svl/source/config/cjkoptions.cxx",
+    "localSymbols": [
+      "IsAsianTypographyEnabled"
+    ],
+    "upstreamSymbols": [
+      "IsAsianTypographyEnabled"
+    ],
+    "preservedResponsibilities": [
+      "Reports the pinned CJK options eligibility for the Asian Typography notebook page."
+    ],
+    "omittedResponsibilities": [
+      "Other CJK option queries and persistent configuration initialization stay outside this consumed eligibility slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/source/config/cjkoptions.ts",
+          "marker": "IsAsianTypographyEnabled"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svl/source/config/cjkoptions.cxx",
+          "marker": "IsAsianTypographyEnabled"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svx/source/dialog/dialcontrol.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "cell-alignment",
+    "capabilityIds": [
+      "CAP-665e024a-e4af-4413-b428-8a86099de453"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/svx/source/dialog/dialcontrol.ts#getDialMouseAngle",
+        "vendor/libreoffice-reference/svx/source/dialog/dialcontrol.cxx#DialControl::HandleMouseEvent",
+        "apps/office/src/sc/browser/presentation/calc-format-cells.test.tsx"
+      ],
+      "justification": "Preserves native dial offset, snap and angle rounding using JavaScript numeric primitives.",
+      "knownViolations": [],
+      "localSymbols": [
+        "getDialMouseAngle"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "svx/source/dialog/dialcontrol.cxx",
+      "upstreamSymbols": [
+        "DialControl::HandleMouseEvent"
+      ]
+    }
+  }
+}

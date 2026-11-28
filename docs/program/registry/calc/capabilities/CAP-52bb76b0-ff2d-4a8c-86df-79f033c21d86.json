@@ -59,7 +59,7 @@
         },
         {
           "path": "apps/office/src/sc/browser/editor/cell-input.ts",
-          "marker": "captureCell"
+          "marker": "cellInputText"
         },
         {
           "path": "apps/office/src/sc/browser/controller/calc-view-controller.ts",

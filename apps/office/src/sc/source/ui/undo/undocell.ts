@@ -1,5 +1,5 @@
 /** @fileoverview ScUndoSetCell typed-content and ScUndoCursorAttr scalar-attribute subset from undocell.cxx. Source value/range ownership is retained;ScSimpleUndo/change tracking,format metadata,sheet views,spill resolution and VCL cursor/painting services remain unported. Browser cursor adaptation uses native getAffectedRange. */
-import { CellAttributeHolder, type ScPatternAttr } from "../../../inc/patattr";
+import { CellAttributeHolder, ScPatternAttr } from "../../../inc/patattr";
 import type { ScViewData } from "../inc/viewdata";
 import { ScMarkData } from "../../../inc/markdata";
 import { AdjustBlockHeight } from "../view/viewfun2";
@@ -15,6 +15,8 @@ import { ScAddress, ScRange } from "../../../inc/address";
 import type { ScFormulaCell } from "../../../inc/formulacell";
 import { ScCellValue } from "../../../inc/cellvalue";
 import { CellType } from "../../../inc/global";
+import { ATTR_VALUE_FORMAT } from "../../../inc/scitems";
+import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 /** Original typed cell action over actual native values and the owning document shell. */
 export class ScUndoSetCell extends SfxUndoAction<ScDocShell> {
   private readonly maPos: ScAddress;
@@ -78,6 +80,86 @@ export class ScUndoSetCell extends SfxUndoAction<ScDocShell> {
   override Dispose(): void {
     this.maOldValue.clear();
     this.maNewValue.clear();
+  }
+}
+
+/** Original normal-string history owns the prior cell, direct format and redo input. */
+export class ScUndoEnterData extends SfxUndoAction<ScDocShell> {
+  private readonly position: ScAddress;
+  private readonly source: OUString;
+  private readonly oldValue: ScCellValue;
+
+  /** Retains the consumed plain-string action and its original format-presence flag.
+   * @param shell - Native document shell.
+   * @param position - Affected cell.
+   * @param oldValue - Prior value, transferred into history.
+   * @param oldFormat - Original direct key or absence.
+   * @param source - New input to use on redo.
+   */
+  constructor(
+    private readonly shell: ScDocShell,
+    position: ScAddress,
+    oldValue: ScCellValue,
+    private readonly oldFormat: number | undefined,
+    source: OUStringConstReference,
+  ) {
+    super();
+    this.position = new ScAddress(position);
+    this.oldValue = ScCellValue.move(oldValue);
+    this.source = new OUString(source);
+  }
+
+  /** Restores a copied native value and puts back the original direct format state. @returns Nothing. */
+  override UndoWithContext(): void {
+    const doc = this.shell.GetDocument();
+    const value = new ScCellValue(this.oldValue);
+    try {
+      value.release(doc, this.position);
+    } finally {
+      value.clear();
+    }
+    if (this.oldFormat !== undefined) doc.SetNumberFormat(this.position, this.oldFormat);
+    else {
+      const current = doc.GetPattern(this.position);
+      if (current?.GetItemSet().GetItemIfSet(ATTR_VALUE_FORMAT, false)) {
+        const pattern = new ScPatternAttr(current);
+        pattern.ItemSetClearItem(ATTR_VALUE_FORMAT);
+        const holder = new CellAttributeHolder(pattern, true);
+        try {
+          doc.SetPattern(this.position.Col(), this.position.Row(), this.position.Tab(), holder);
+        } finally {
+          holder.Dispose();
+        }
+      }
+    }
+    this.adjustRowHeight();
+  }
+
+  /** Redoes normal entry through the source document recognizer. @returns Nothing. */
+  override RedoWithContext(): void {
+    this.shell.GetDocument().SetString(this.position, this.source);
+    this.adjustRowHeight();
+  }
+
+  /** Updates the affected row through its existing sizing owner. @returns Nothing. */
+  private adjustRowHeight(): void {
+    this.shell.GetDocFunc().AdjustRowHeight(new ScRange(this.position), true, true);
+  }
+
+  /** Returns a copy of the native input position for browser cursor restoration. @returns Affected range. */
+  getAffectedRange(): ScRange {
+    return new ScRange(this.position);
+  }
+
+  /** Original STR_UNDO_ENTERDATA. @returns Input comment. */
+  override GetComment(): string {
+    return "Input";
+  }
+
+  /** Releases the two history-owned source values. @returns Nothing. */
+  override Dispose(): void {
+    this.oldValue.clear();
+    this.source.dispose();
   }
 }
 

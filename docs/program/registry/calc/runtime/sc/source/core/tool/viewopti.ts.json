@@ -8,7 +8,8 @@
     "suite": "calc",
     "subsystem": "view-options",
     "capabilityIds": [
-      "CAP-17e6ea35-6788-440f-af21-d5647d785cd0"
+      "CAP-17e6ea35-6788-440f-af21-d5647d785cd0",
+      "CAP-bcb73c6a-178b-4e5e-b348-1b3183bdb882"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -26,13 +27,15 @@
       "knownViolations": [],
       "localSymbols": [
         "ScViewOptions",
-        "ViewOption"
+        "ViewOption",
+        "ScTpViewItem"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sc/source/core/tool/viewopti.cxx",
       "upstreamSymbols": [
         "ScViewOptions::SetDefaults",
-        "ScViewOptions"
+        "ScViewOptions",
+        "ScTpViewItem::ScTpViewItem"
       ]
     }
   }

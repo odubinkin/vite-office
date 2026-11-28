@@ -15,7 +15,14 @@ import { DocumentArchive } from "../../../../package/source/zippackage/document-
 import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { ScAddress } from "../../../inc/address";
 import type { ScMergeAttr, ScMergeFlagAttr } from "../../../inc/attrib";
-import { ATTR_MERGE, ATTR_MERGE_FLAG } from "../../../inc/scitems";
+import type { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
+import {
+  ATTR_MERGE,
+  ATTR_MERGE_FLAG,
+  ATTR_FORBIDDEN_RULES,
+  ATTR_HANGPUNCTUATION,
+  ATTR_SCRIPTSPACE,
+} from "../../../inc/scitems";
 import { ScDocument } from "../../../inc/document";
 import type { EECharAttrib } from "../../../../editeng/inc/editdata";
 import { EE_CHAR_ESCAPEMENT, EE_CHAR_WEIGHT } from "../../../../editeng/inc/eeitem";
@@ -967,5 +974,45 @@ it("round-trips ODF number maps with a decimal threshold or an unconditional num
     output.dispose();
     copy?.Dispose();
     first.Dispose();
+  }
+});
+
+it("maps the three original Asian typography paragraph flags in ODS styles" /** Exercises positive and negative controls from an independently written style stream. @returns Completion. */, async () => {
+  const xml = independent(
+    '<table:table-row><table:table-cell table:style-name="positive"/><table:table-cell table:style-name="negative"/><table:table-cell table:style-name="invalid"/></table:table-row>',
+  ).replace(
+    "<office:body>",
+    `<office:automatic-styles xmlns:s="urn:oasis:names:tc:opendocument:xmlns:style:1.0">
+       <s:style s:name="positive" s:family="table-cell"><s:paragraph-properties s:text-autospace="ideograph-alpha" s:punctuation-wrap="hanging" s:line-break="strict"/></s:style>
+       <s:style s:name="negative" s:family="table-cell"><s:paragraph-properties s:text-autospace="none" s:punctuation-wrap="simple" s:line-break="normal"/></s:style>
+       <s:style s:name="invalid" s:family="table-cell"><s:paragraph-properties s:text-autospace="unknown" s:punctuation-wrap="unknown" s:line-break="unknown"/></s:style>
+     </office:automatic-styles><office:body>`,
+  );
+  const doc = load(xml);
+  let reopened: ScDocument | undefined;
+  try {
+    const bytes = await writeOdsDocument(doc);
+    const archive = await DocumentArchive.open(bytes);
+    const content = await archive.readTextEntry("content.xml");
+    expect(content).toMatch(
+      /<style:paragraph-properties[^>]*style:text-autospace="ideograph-alpha"[^>]*style:punctuation-wrap="hanging"[^>]*style:line-break="strict"/,
+    );
+    expect(content).toMatch(
+      /<style:paragraph-properties[^>]*style:text-autospace="none"[^>]*style:punctuation-wrap="simple"[^>]*style:line-break="normal"/,
+    );
+    reopened = await readOdsDocument(bytes);
+    for (const book of [doc, reopened]) {
+      for (const which of [ATTR_SCRIPTSPACE, ATTR_HANGPUNCTUATION, ATTR_FORBIDDEN_RULES]) {
+        const on = book.GetPattern(new ScAddress(0, 0, 0))?.GetItemSet();
+        const off = book.GetPattern(new ScAddress(1, 0, 0))?.GetItemSet();
+        const invalid = book.GetPattern(new ScAddress(2, 0, 0))?.GetItemSet();
+        expect((on?.GetItemIfSet(which, false) as SfxBoolItem).GetValue()).toBe(true);
+        expect((off?.GetItemIfSet(which, false) as SfxBoolItem).GetValue()).toBe(false);
+        expect(invalid?.GetItemIfSet(which, false)).toBeUndefined();
+      }
+    }
+  } finally {
+    reopened?.Dispose();
+    doc.Dispose();
   }
 });

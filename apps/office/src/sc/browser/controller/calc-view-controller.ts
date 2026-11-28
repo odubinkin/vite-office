@@ -73,12 +73,14 @@ export class CalcViewController {
   GetViewOptionState(option: CalcViewOption): boolean {
     if (option === "headers") return this.viewData.IsHeaderMode();
     if (option === "grid") return this.viewData.GetShowGrid();
+    if (option === "syntax") return this.viewData.IsSyntaxMode();
     return this.viewData.GetOptions().GetOption(ViewOption.FORMULAS);
   }
   /** Routes original view cases without committing the current input draft. @param option - Command identity. @param request - Actual native request. @returns Nothing. */
   ExecuteViewOption(option: CalcViewOption, request: SfxRequest): void {
     if (option === "headers") this.viewShell.ToggleHeaders(request);
     else if (option === "grid") this.viewShell.ToggleSheetGrid(request);
+    else if (option === "syntax") this.viewShell.ToggleSyntax(request);
     else this.viewShell.ToggleFormula(request);
     this.Changed();
   }

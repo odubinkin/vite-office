@@ -1,0 +1,32 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/browser/presentation/calc-cell-text-layout.ts",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "calc",
+    "subsystem": "cell-formatting",
+    "capabilityIds": [
+      "CAP-0fca5c56-238e-49a4-b93d-9509e8a9032e"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/browser/presentation/calc-cell-text-layout.ts",
+        "apps/office/src/sc/browser/presentation/calc-cell-text-layout.test.tsx"
+      ],
+      "justification": "Projects effective Calc output decisions to CSS writing modes and transforms while browser grid positioning and clipping continue to own the text box.",
+      "knownViolations": [],
+      "localSymbols": [
+        "calcCellTextLayoutStyle"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

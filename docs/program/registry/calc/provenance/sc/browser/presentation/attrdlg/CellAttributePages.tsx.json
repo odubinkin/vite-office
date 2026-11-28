@@ -7,7 +7,7 @@
     "localPath": "apps/office/src/sc/browser/presentation/attrdlg/CellAttributePages.tsx",
     "rationale": "React and DOM present the original cell formatting commands and notebook while the Calc view and formatter retain the selection and item-set owners.",
     "responsibilities": [
-      "Binds alignment, fill and cell protection controls to pooled Calc items."
+      "Binds Asian Typography and cell protection controls to pooled Calc items."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",
@@ -17,7 +17,7 @@
       "local": [
         {
           "path": "apps/office/src/sc/browser/presentation/attrdlg/CellAttributePages.tsx",
-          "marker": "AlignmentTabPage"
+          "marker": "AsianTypographyTabPage"
         },
         {
           "path": "apps/office/src/sc/browser/presentation/calc-format-cells.test.tsx",

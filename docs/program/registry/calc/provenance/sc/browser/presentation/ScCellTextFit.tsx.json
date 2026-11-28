@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/sc/browser/presentation/ScCellTextFit.tsx",
+    "rationale": "Measures the actual browser script runs in their cell content box and updates the painted copies and font scale as the rendered dimensions change.",
+    "responsibilities": [
+      "Measures the actual browser script runs in their cell content box and updates the painted copies and font scale as the rendered dimensions change."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser text probes and ResizeObserver measure the actual shaped script runs and current content box. CSS font sizing applies the original Calc fitting decisions."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/ScCellTextFit.tsx",
+          "marker": "ScCellTextFit"
+        },
+        {
+          "path": "apps/office/e2e/calc/cell-text-fit.spec.ts",
+          "marker": "shrinks only while needed"
+        }
+      ]
+    }
+  }
+}

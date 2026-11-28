@@ -16,12 +16,7 @@ import { ScCellDiagonalBorders } from "./ScCellDiagonalBorders";
 import { ScCellDataBar } from "./ScCellDataBar";
 import { ScCellIconSet } from "./ScCellIconSet";
 import { handleConditionalFormat } from "../../source/core/data/fillinfo";
-import {
-  ScIndentItem,
-  ScLineBreakCell,
-  type ScMergeAttr,
-  type ScMergeFlagAttr,
-} from "../../inc/attrib";
+import { ScIndentItem, type ScMergeAttr, type ScMergeFlagAttr } from "../../inc/attrib";
 import type { ScDocument } from "../../inc/document";
 import type { SvxBoxItem } from "../../../editeng/source/items/frmitems";
 import { SvxMarginItem } from "../../../svx/source/items/algitem";
@@ -31,7 +26,7 @@ import { SpecialText } from "../../../vcl/browser/special-text";
 import { SvxShadowedItem, SvxCharReliefItem } from "../../../editeng/source/items/textitem";
 import type { SvxWordLineModeItem } from "../../../editeng/source/items/textitem";
 import type { SvxShadowItem } from "../../../editeng/source/items/frmitems.shadow";
-import type { SvxHorJustifyItem, SvxVerJustifyItem } from "../../../editeng/inc/justifyitem";
+import type { SvxHorJustifyItem } from "../../../editeng/inc/justifyitem";
 import type { ScTable } from "../../inc/table";
 import {
   CALC_SPLIT_HANDLE_SIZE,
@@ -53,8 +48,12 @@ import {
   type PointerEvent,
   type UIEvent,
 } from "react";
+import type { ScProtectionAttr } from "../../inc/attrib";
+import { ATTR_PROTECTION } from "../../inc/scitems";
+import { text } from "../../../i18nlangtag/source/isolang/isolang.tables";
+import { setSyntaxColor } from "../../source/ui/view/output2";
 import { ViewOption } from "../../inc/viewopti";
-import { ScInputMode } from "../../inc/global";
+import { CellType, ScInputMode } from "../../inc/global";
 import {
   SvxWeightItem,
   SvxPostureItem,
@@ -73,8 +72,17 @@ import {
 } from "../../inc/scitems";
 import type { SvxFontItem } from "../../../editeng/inc/fontitem";
 import { ScCellText } from "./ScCellText";
+import { getCellTextLayout } from "../../source/ui/view/output2";
+import { calcCellTextLayoutStyle } from "./calc-cell-text-layout";
 import type { SvxBrushItem } from "../../../editeng/inc/brushitem";
-import { COL_AUTO, COL_BLACK, COL_WHITE, type Color } from "../../../tools/inc/color";
+import {
+  COL_AUTO,
+  COL_BLACK,
+  COL_LIGHTBLUE,
+  COL_LIGHTGRAY,
+  COL_WHITE,
+  type Color,
+} from "../../../tools/inc/color";
 import { browserColor } from "../../../vcl/browser/color";
 import { ScAddress, ScRange } from "../../inc/address";
 import type { ScSplitPos, ScViewData } from "../../source/ui/inc/viewdata";
@@ -268,7 +276,12 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
       );
     },
   );
-  const showGrid = viewData.GetOptions().GetOption(ViewOption.GRID) && viewData.GetShowGrid();
+  const options = viewData.GetOptions();
+  const showGrid = options.GetOption(ViewOption.GRID) && viewData.GetShowGrid();
+  const showFormulaMarks = options.GetOption(ViewOption.FORMULAS_MARKS);
+  const syntaxMode = viewData.IsSyntaxMode();
+  const showProtection = syntaxMode && document.IsTabProtected(tab);
+  const sheetRtl = showFormulaMarks && document.IsLayoutRTL(tab);
   const headers = viewData.IsHeaderMode();
   const {
     left: headerWidth,
@@ -288,7 +301,7 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
   function part(x: CalcPaintBand, y: CalcPaintBand): ScSplitPos {
     return ((xAxis.bands.length > 1 && !x.leading ? 1 : 0) | (!y.leading ? 2 : 0)) as ScSplitPos;
   }
-  /** Produces distinct ARIA IDs when a normal split can show the same cell twice. @param col - Column. @param rowIndex - Row. @param pane - Pane. @returns Cell ID. */
+  /** Produces distinct ARIA IDs when a normal split can show the same cell twice. @param col - Column. @param rowIndex - Row. @param pane - Pane. @param merged - Whether this ID covers a merged range. @returns Cell ID. */
   function idFor(col: number, rowIndex: number, pane: ScSplitPos, merged = false): string {
     return `${props.idPrefix}-${tab}-${col}-${rowIndex}${normal || (merged && xAxis.bands.length * yAxis.bands.length > 1) ? `-${pane}` : ""}`;
   }
@@ -673,9 +686,33 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                     const iconSet = conditionalInfo?.pIconSet;
                     const hideValue =
                       dataBar?.mbShowValue === false || iconSet?.mbShowValue === false;
-                    const background =
-                      conditionalInfo?.mxColorScale ??
-                      (pattern.GetItem(148, conditional) as SvxBrushItem).GetColor();
+                    let background: Readonly<Color> | undefined;
+                    if (showProtection) {
+                      const protection = pattern.GetItem(ATTR_PROTECTION) as ScProtectionAttr;
+                      if (protection.GetProtection() || protection.GetHideCell())
+                        background = COL_LIGHTGRAY;
+                    } else if (!syntaxMode) {
+                      background =
+                        conditionalInfo?.mxColorScale ??
+                        (pattern.GetItem(148, conditional) as SvxBrushItem).GetColor();
+                    }
+                    const type =
+                      syntaxMode || showFormulaMarks
+                        ? document.GetCellType(position)
+                        : CellType.CELLTYPE_NONE;
+                    let formulaHint: string | undefined;
+                    if (showFormulaMarks && type === CellType.CELLTYPE_FORMULA) {
+                      const expression = document
+                        .GetFormulaCell(position)
+                        ?.GetFormula(document.GetGrammar());
+                      if (expression) {
+                        try {
+                          formulaHint = text(expression) || undefined;
+                        } finally {
+                          expression.dispose();
+                        }
+                      }
+                    }
                     const {
                       style: fontStyle,
                       outlined,
@@ -685,7 +722,9 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                       lineColor,
                       fontColor,
                     } = cellTypography(pattern, conditional);
-                    const color = cell.color ?? fontColor.getFinalColor();
+                    const color = syntaxMode
+                      ? (setSyntaxColor(type) ?? fontColor.getFinalColor())
+                      : (cell.color ?? fontColor.getFinalColor());
                     const pane = part(x, band);
                     const cellId = idFor(firstCol, firstRow, pane, !!merge);
                     const active = cellId === activeId;
@@ -699,7 +738,7 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                           marks.GetMarkArea().Contains(position)
                         ));
                     const writing = (
-                      pattern.GetItem(ATTR_WRITINGDIR) as SvxFrameDirectionItem
+                      pattern.GetItem(ATTR_WRITINGDIR, conditional) as SvxFrameDirectionItem
                     ).GetValue();
                     const textDirection =
                       writing === D.Horizontal_RL_TB
@@ -718,13 +757,15 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                       ? yAxis.ClipSpan(band, top, height)
                       : cellInsets(band, top, height);
                     const mergeOffset = merge ? top - yAxis.Position(band, r) : 0;
+                    const textLayout = getCellTextLayout(document, position, pattern, conditional);
+                    const textAlign =
+                      ([undefined, "left", "center", "right", "justify", "left"] as const)[
+                        textLayout.horizontal
+                      ] ?? cell.alignment;
                     const cellStyle: CSSProperties = {
                       ...fontStyle,
                       color: browserColor(color),
-                      whiteSpace: (pattern.GetItem(139) as ScLineBreakCell).GetValue()
-                        ? "pre-wrap"
-                        : "nowrap",
-                      overflowWrap: "anywhere",
+                      whiteSpace: textLayout.lineBreak ? "pre-wrap" : "nowrap",
                       ...(merge
                         ? calcMergedBorderStyle(
                             pattern.GetItem(ATTR_BORDER, conditional) as SvxBoxItem,
@@ -751,11 +792,10 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                           : 0,
                       ),
                       backgroundColor:
-                        background.GetAlpha() === 0 ? undefined : browserColor(background),
-                      textAlign:
-                        ([undefined, "left", "center", "right", "justify", "left"] as const)[
-                          (pattern.GetItem(129) as SvxHorJustifyItem).GetValue()
-                        ] ?? cell.alignment,
+                        background && background.GetAlpha() !== 0
+                          ? browserColor(background)
+                          : undefined,
+                      textAlign,
                       display: "flex",
                       flexDirection: "column",
                       justifyContent: [
@@ -764,7 +804,7 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                         "center",
                         "flex-end",
                         "flex-start",
-                      ][(pattern.GetItem(132) as SvxVerJustifyItem).GetValue()],
+                      ][textLayout.vertical],
                       left:
                         headerWidth +
                         (fixedColumn ? Math.max(0, left) : viewport.scrollLeft + left),
@@ -788,6 +828,7 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                         aria-rowindex={merge ? firstRow + 1 + Number(headers) : undefined}
                         aria-colspan={merge ? lastCol - firstCol + 1 : undefined}
                         aria-rowspan={merge ? lastRow - firstRow + 1 : undefined}
+                        title={formulaHint}
                         aria-selected={selected}
                         aria-label={`${columnLabel(firstCol)}${firstRow + 1}`}
                         // Upstream exposes address and text separately. ARIA composes the address
@@ -811,6 +852,27 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                         {dataBar && <ScCellDataBar info={dataBar} width={width} height={height} />}
                         {iconSet && <ScCellIconSet info={iconSet} />}
                         <ScCellDiagonalBorders pattern={pattern} width={width} height={height} />
+                        {formulaHint && !document.ColHidden(firstCol, tab) && (
+                          <span
+                            aria-hidden="true"
+                            data-calc-formula-mark=""
+                            className="pointer-events-none absolute bottom-[2px] z-[1] size-[11px] bg-white"
+                            style={{
+                              left: sheetRtl ? undefined : 0,
+                              right: sheetRtl ? 0 : undefined,
+                              transform: sheetRtl ? "scaleX(-1)" : undefined,
+                              clipPath: "polygon(0 0, 0 100%, 100% 100%)",
+                            }}
+                          >
+                            <span
+                              className="absolute inset-0"
+                              style={{
+                                backgroundColor: browserColor(COL_LIGHTBLUE),
+                                clipPath: "polygon(1px 2px, 1px 10px, 9px 10px)",
+                              }}
+                            />
+                          </span>
+                        )}
                         {props.referenceRange?.Contains(position) && (
                           <div
                             aria-hidden="true"
@@ -847,6 +909,7 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                               dataBar || iconSet ? "relative w-full shrink-0" : "w-full shrink-0"
                             }
                             dir={textDirection}
+                            style={calcCellTextLayoutStyle(textLayout, textAlign)}
                           >
                             <SpecialText
                               enabled={outlined}
@@ -866,6 +929,7 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                               }}
                             >
                               <ScCellText
+                                layout={textLayout}
                                 text={cell.text}
                                 pattern={pattern}
                                 conditional={conditional}

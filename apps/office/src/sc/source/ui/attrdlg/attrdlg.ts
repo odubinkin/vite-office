@@ -1,55 +1,33 @@
 /** @fileoverview Format Cells' original selection snapshot and typed output exchange. */
+import { AlignmentTabPage } from "../../../../cui/source/tabpages/align";
+import { SvxBkgTabPage } from "../../../../cui/source/tabpages/backgrnd";
 import { SvxBorderTabPage } from "../../../../cui/source/tabpages/border";
 import { SvxBorderLineStyle as Style } from "../../../../editeng/source/items/borderline";
 import {
   SvxBoxItemLine as Edge,
   SvxBoxInfoItemValidFlags as Valid,
 } from "../../../../editeng/source/items/frmitems";
+import { SID_ATTR_NUMBERFORMAT_INFO } from "../../../../svx/inc/svxids";
+import { SvxNumberInfoItem } from "../../../../svx/source/items/numinf";
 import { SvxNumberFormatShell } from "../../../../svx/source/items/numfmtsh";
 import {
   ATTR_VALUE_FORMAT,
   ATTR_BORDER,
   ATTR_BORDER_INNER,
   ATTR_MARGIN,
-  ATTR_HOR_JUSTIFY,
-  ATTR_HOR_JUSTIFY_METHOD,
-  ATTR_VER_JUSTIFY,
-  ATTR_VER_JUSTIFY_METHOD,
-  ATTR_INDENT,
-  ATTR_ROTATE_VALUE,
-  ATTR_ROTATE_MODE,
-  ATTR_STACKED,
-  ATTR_LINEBREAK,
-  ATTR_HYPHENATE,
-  ATTR_SHRINKTOFIT,
-  ATTR_WRITINGDIR,
 } from "../../../inc/scitems";
 import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { CellType } from "../../../inc/global";
 import { ScAddress } from "../../../inc/address";
 import { SfxUInt32Item } from "../../../../svl/source/items/intitem";
+import { SvxAsianTabPage } from "../../../../cui/source/tabpages/paragrph";
+import { IsAsianTypographyEnabled } from "../../../../svl/source/config/cjkoptions";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { ASIAN, COMPLEX, LATIN } from "../../../../offapi/com/sun/star/i18n/ScriptType";
 import * as attr from "../../../inc/scitems";
 import { SfxItemState, type SfxItemSet } from "../../../../svl/source/items/itemset";
 import type { ScViewData } from "../inc/viewdata";
 import { GetSelectionPattern } from "../view/viewfunc";
-
-/** Native alignment page attributes cleared by Reset. */
-export const alignmentWhich = [
-  ATTR_HOR_JUSTIFY,
-  ATTR_HOR_JUSTIFY_METHOD,
-  ATTR_VER_JUSTIFY,
-  ATTR_VER_JUSTIFY_METHOD,
-  ATTR_INDENT,
-  ATTR_ROTATE_VALUE,
-  ATTR_ROTATE_MODE,
-  ATTR_STACKED,
-  ATTR_LINEBREAK,
-  ATTR_HYPHENATE,
-  ATTR_SHRINKTOFIT,
-  ATTR_WRITINGDIR,
-] as const;
 
 /** Original Font page character items by writing system. */
 export const fontGroups = [
@@ -122,6 +100,7 @@ export const cellFormatPages = [
   ["font", "Font"],
   ["fonteffects", "Font Effects"],
   ["alignment", "Alignment"],
+  ...(IsAsianTypographyEnabled() ? ([["asiantypography", "Asian Typography"]] as const) : []),
   ["borders", "Borders"],
   ["background", "Background"],
   ["cellprotection", "Cell Protection"],
@@ -131,6 +110,7 @@ export const cellFormatPages = [
 export interface NumberFormatChange {
   readonly language: number;
   readonly code: string;
+  readonly comment?: string;
 }
 
 /** Original output item set and the staged number-format selection. */
@@ -146,6 +126,9 @@ export class ScAttrDlg {
   readonly formatter;
   readonly numbers: SvxNumberFormatShell;
   readonly borders: SvxBorderTabPage;
+  readonly background: SvxBkgTabPage;
+  readonly alignment: AlignmentTabPage;
+  readonly asianTypography: SvxAsianTabPage;
   readonly output: SfxItemSet;
 
   /** Captures the native selection format and original numeric preview sample. @param view - Actual view data. @returns Dialog input. */
@@ -186,7 +169,11 @@ export class ScAttrDlg {
       ],
     });
 
+    this.background = new SvxBkgTabPage(this.items);
+    this.alignment = new AlignmentTabPage(this.items);
     this.output = this.items.Clone(false);
+    this.output.MergeRange(SID_ATTR_NUMBERFORMAT_INFO, SID_ATTR_NUMBERFORMAT_INFO);
+    this.asianTypography = new SvxAsianTabPage(this.items, this.output);
     if (pattern.HasValidNumberFormat())
       this.items.Put(
         new SfxUInt32Item(ATTR_VALUE_FORMAT, pattern.GetNumberFormat(this.formatter)),
@@ -206,6 +193,20 @@ export class ScAttrDlg {
     this.numbers = new SvxNumberFormatShell(this.formatter, this.sample);
   }
 
+  /** Completes the original number-info exchange after successful dialog admission.
+   * @param output - Pending typed output.
+   * @returns Nothing.
+   */
+  FillNumberFormatInfo(output: SfxItemSet): void {
+    const deleted = this.numbers.GetUpdateData();
+    if (deleted.length) {
+      const info = new SvxNumberInfoItem(this.formatter, SID_ATTR_NUMBERFORMAT_INFO);
+      info.SetDelFormats(deleted);
+      output.Put(info, true);
+    }
+    this.numbers.ValidateNewEntries();
+  }
+
   /** Reads the pending or original item while preserving mixed state. @param which - Native item ID. @returns Effective item or mixed. */
   GetItem<T extends SfxPoolItem>(which: number): T | undefined {
     return (this.output.GetItemIfSet(which, false) ??
@@ -223,6 +224,7 @@ export class ScAttrDlg {
   Dispose(): void {
     this.numbers.Dispose();
     this.borders.Dispose();
+    this.background.Dispose();
     this.output.Dispose();
     this.items.Dispose();
   }

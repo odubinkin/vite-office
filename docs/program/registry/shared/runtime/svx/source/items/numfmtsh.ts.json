@@ -8,7 +8,8 @@
     "suite": "shared",
     "subsystem": "cell-formatting",
     "capabilityIds": [
-      "CAP-d618abf2-35e0-42c3-acf1-88c8a5f16811"
+      "CAP-d618abf2-35e0-42c3-acf1-88c8a5f16811",
+      "CAP-9edf9151-bbd9-46b7-96e7-a002cc8fa650"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -18,9 +19,10 @@
       "evidence": [
         "apps/office/src/svx/source/items/numfmtsh.ts",
         "apps/office/src/sc/browser/presentation/calc-format-cells.test.tsx",
-        "vendor/libreoffice-reference/svx/source/items/numfmtsh.cxx"
+        "vendor/libreoffice-reference/svx/source/items/numfmtsh.cxx",
+        "apps/office/src/svx/source/items/numfmtsh.test.ts"
       ],
-      "justification": "Lists category and locale entries and generates and previews a draft number picture using the native formatter.",
+      "justification": "Lists category and locale entries and generates and previews a draft number picture using the native formatter. The shared shell now owns live Add, deferred Remove and lost-focus comment state for the Calc number-format gallery.",
       "knownViolations": [],
       "localSymbols": [
         "SvxNumberFormatShell"

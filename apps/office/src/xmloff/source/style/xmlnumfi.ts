@@ -117,6 +117,7 @@ export class SvXMLNumFormatContext extends SvXMLImportContext {
   private readonly fields = new Set<X>();
   private readonly systemDate: boolean;
   private readonly language: number;
+  private readonly title: string;
   private readonly truncate: boolean;
   private hasTime = false;
   private unsupported = false;
@@ -136,6 +137,7 @@ export class SvXMLNumFormatContext extends SvXMLImportContext {
   ) {
     super();
     this.language = getNumberStyleLanguage(attributes);
+    this.title = attributes.get(X.NUMBER_TITLE) ?? "";
     const truncate = attributes.get(X.NUMBER_TRUNCATE_ON_OVERFLOW);
     this.truncate = truncate !== "false" && truncate !== "0";
     const automatic = attributes.get(X.NUMBER_AUTOMATIC_ORDER);
@@ -331,7 +333,18 @@ export class SvXMLNumFormatContext extends SvXMLImportContext {
       const sections = this.BuildSections(styles, stack);
       const key = sections && this.CreateAndInsert(sections.join(";"));
       this.key = key ?? null;
-      if (key !== undefined) this.sections = sections;
+      if (key !== undefined) {
+        this.sections = sections;
+        const entry = this.formatter.GetEntry(key) as SvNumberformat | null;
+        if (this.title && entry) {
+          const title = unicode(this.title);
+          try {
+            entry.SetComment(title);
+          } finally {
+            title.dispose();
+          }
+        }
+      }
       return key;
     } finally {
       stack.delete(this);

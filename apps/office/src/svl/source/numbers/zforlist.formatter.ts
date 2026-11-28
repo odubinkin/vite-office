@@ -282,6 +282,14 @@ export class SvNumberFormatter {
       replaceBoolean,
     );
   }
+  /** Original exact-key deletion without renumbering neighboring entries. @param key - Format key. @returns Nothing. */
+  DeleteEntry(key: number): void {
+    this.m_aFormatData.DeleteEntry(key);
+  }
+  /** Checks the actual type of the original user-format key. @param key - Format key. @returns Whether the entry is user-defined. */
+  IsUserDefined(key: number): boolean {
+    return ((this.GetEntry(key)?.GetType() ?? 0) & SvNumFormatType.DEFINED) !== 0;
+  }
   /** Original locale conversion uses the same parser/scanner and retains the source Boolean retry/rollback behavior. Conversion mode is reset at the original normal return point, not through an invented exception guard. @param code - In/out format code. @param check - Error position. @param type - Output category. @param key - Output key. @param language - Source locale. @param target - Destination locale. @param dateOrder - Convert date order. @param replaceBoolean - Native defaulttrue replacement. @returns Native insertion flag. */
   PutandConvertEntry(
     code: OUString,

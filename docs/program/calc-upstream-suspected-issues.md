@@ -3401,7 +3401,7 @@ Full merged/device/alternate-view paint parity remains unverified.
 ### CALC239 — Calc/EditEngine formatting transfer has asymmetric table and alignment ownership
 
 - Pinned source: `sc/source/core/data/patattr.cxx`, `ScPatternAttr::FillToEditItemSet`, `GetFromEditItemSet`, `FillEditParaItems`.
-- Observation: table-style family,height,weight and color participate in transfer,but posture,underline,overline and language ignore table styles. Script spacing is always forced off,even when the cell item is true. Forward automatic color clears a direct EditEngine color item. Reverse Left/default adjustment omits a cell alignment write,so an existing Right alignment survives.
+- Observation: table-style family,height,weight and color participate in transfer,but posture,underline,overline and language ignore table styles. Script spacing is always forced off,even when the cell item is true. Format Cells shows the script spacing and hanging punctuation controls but leaves them insensitive: the Calc item pool registers neither paragraph slot and the cell-format set excludes the EditEngine Which IDs resolved through any drawing secondary pool. Only the forbidden-character slot maps into the cell set. All three flags are exposed by the Calc UNO cell style and ranges property maps and the ODF paragraph mapper. Forward automatic color clears a direct EditEngine color item. Reverse Left/default adjustment omits a cell alignment write,so an existing Right alignment survives.
 - Impact: the transfer is not a general inverse operation;table-style bold and italic can have different transfer precedence. Reverse left alignment may retain pre-existing cell alignment. Source comments explain automatic color,script spacing and the default text/number alignment distinction;the table-style asymmetry may be deliberate or incomplete.
 - Local preservation: retain these exact source rules and test absent/default/SET states separately. Do not normalize table-style behavior or clear cell alignment to force round-trip symmetry. Native render/number/hash caches remain absent in the existing data slice;no dummy InvalidateCaches service is added.
 
@@ -8523,3 +8523,47 @@ The pinned fixture saves `Err:511` (parameter expected) for
 Calc preserves the error recorded for the omitted first operand.
 
 - [Original FODS fixture](../../vendor/libreoffice-reference/sc/qa/unit/data/functions/logical/fods/ifna.fods#L2148)
+
+### CALC-887 — Number-format cancellation follows the remaining add list
+
+- Pinned source: `svx/source/items/numfmtsh.cxx`, `~SvxNumberFormatShell`, `AddFormat` and `RemoveFormat`.
+- Observation: Add writes to the formatter immediately and records its key in the add list. Remove places the key in a deferred delete list and erases it from the add list. Re-adding a removed key clears the delete entry and places the existing key back in the add list.
+- Impact: Cancel after Add followed by Remove leaves the newly allocated format in the formatter. Cancel after Remove followed by re-adding an existing format deletes that original format. The normal single Add and single Remove cancellation paths behave as expected.
+- Local preservation: keep the original list transfers and guard on acceptance. The focused shell cases assert both observed outcomes.
+
+### CALC-888 — Visiting the Background tab can make a partial-alpha brush opaque
+
+- Pinned source: `cui/source/tabpages/backgrnd.cxx`, `SvxBkgTabPage::Reset` and `FillItemSet`, and `svx/source/unodraw/unobrushitemhelper.cxx`, `setSvxBrushItemAsFillAttributesToTargetSet`.
+- Observation: Reset splits the partial-alpha brush into an opaque RGB color and a separate drawing transparency item. The solid branch compares the RGB color with the complete prior brush color and writes a brush from the RGB color alone when they differ.
+- Impact: accepting a visited Background page can replace partial opacity with an opaque solid of the same RGB. A matching opaque brush retains its original metadata. Cancel and dialogs where Background is unvisited leave opacity alone.
+- Local preservation: use the same split and full-color comparison through the native brush exchange, with a targeted dialog and history case.
+
+### CALC-889 — Visiting Alignment can change a uniform justification method on a mixed selection
+
+The pinned `lcl_SetJustifyMethodToItemSet` in `cui/source/tabpages/align.cxx` derives the outgoing method from the active combo row even when that row was untouched. A combined selection may retain an explicit Distribute method while its horizontal alignment is mixed. The inactive row resolves to Auto, so accepting the visited page changes both cells' methods and preserves their distinct alignment values.
+
+Calc preserves this exchange rule. The regression combines a justified cell and a left-aligned cell with the same stored method, then checks the unvisited and visited acceptance paths and grouped history.
+
+### CALC-890 — Exact half-turn paints at 179.5 degrees
+
+The pinned `ScOutputData::DrawRotated` clamps angles within half a degree of horizontal to avoid excessive skew. The half-turn branch chooses the upper edge only for angles strictly above 180 degrees. An exact 180-degree cell therefore paints at 179.5 degrees with inside-cell rotation even if the cell stores a different reference edge.
+
+Calc preserves the stored angle and reference while applying the original paint decision. The mounted grid regression checks the exact half-turn.
+
+### CALC-891 — Formula hints read through the cell's Hide formula flag
+
+Status: suspicious source behavior on protected sheets. Native hint behavior
+is retained.
+
+[ScGridWindow::RequestHelp](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sc/source/ui/view/gridwin5.cxx#L207)
+obtains the formula with `ScDocument::GetFormula` when Formula indicator and
+hint is enabled.
+[ScColumn::GetFormula](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sc/source/core/data/column3.cxx#L3240)
+then reads the formula cell directly. Neither path checks the sheet's cell
+protection or the Hide formula attribute. The formula marker uses the same
+lookup in `ScOutputData::DrawFormulaMarks`.
+
+For example, a protected formula cell containing `=1+2` can supply that
+expression as its hint with Hide formula enabled. The formula hint setting
+defaults to off. Whether this behavior is intentional has not been confirmed.
+The browser grid uses the same formula lookup for the indicator and hint.

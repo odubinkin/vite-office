@@ -4,10 +4,12 @@ import { SfxInterface } from "../../../sfx2/source/control/objface";
 import { createSfxShell, type SfxShell } from "../../../sfx2/source/control/shell";
 import { ScTpCalcOptions } from "../../source/ui/optdlg/tpcalc";
 import { ScTpFormulaOptions } from "../../source/ui/optdlg/tpformula";
+import { ScTpContentOptions } from "../../source/ui/optdlg/tpview";
 import type { CalcViewController } from "../controller/calc-view-controller";
 
-/** Two native page drafts scoped to one Options request. */
+/** Native page drafts scoped to one Options request. */
 interface ScOptionsRequest {
+  readonly view: ScTpContentOptions;
   readonly calculate: ScTpCalcOptions;
   readonly formula: ScTpFormulaOptions;
 }
@@ -51,6 +53,7 @@ export class CalcOptionsWorkflow {
     if (!this.canOpen() || !this.controller.Commit()) return false;
     const { shell } = this.controller;
     const doc = shell.GetDocument();
+    const view = new ScTpContentOptions(this.controller.viewData.GetOptions());
     const calculate = new ScTpCalcOptions(doc.GetDocOptions());
     const formula = new ScTpFormulaOptions(
       doc.GetGrammar(),
@@ -58,19 +61,22 @@ export class CalcOptionsWorkflow {
       doc.GetDocOptions().IsWriteCalcConfig(),
     );
     try {
-      const response = await this.dialogs.Request({ calculate, formula });
+      const response = await this.dialogs.Request({ view, calculate, formula });
       if (response.kind !== "accepted" || !response.result || shell.GetDocument() !== doc)
         return true;
-      if (
-        this.controller.scModule.ModifyOptions(
-          shell,
-          calculate.FillItemSet(),
-          formula.GetChangedGrammar(),
-          formula.GetChangedConfig(),
-          formula.GetChangedWriteConfig(),
-        )
-      )
-        this.controller.SyncSheetView();
+      const viewChanged = this.controller.scModule.ModifyViewOptions(
+        shell,
+        this.controller.viewData,
+        view.FillItemSet(),
+      );
+      const calculationChanged = this.controller.scModule.ModifyOptions(
+        shell,
+        calculate.FillItemSet(),
+        formula.GetChangedGrammar(),
+        formula.GetChangedConfig(),
+        formula.GetChangedWriteConfig(),
+      );
+      if (viewChanged || calculationChanged) this.controller.SyncSheetView();
       return true;
     } finally {
       formula.Dispose();
