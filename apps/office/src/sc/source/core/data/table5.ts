@@ -7,6 +7,8 @@ import type { SvtListener } from "../../../../svl/source/notify/listener";
 import type { ScTable } from "../../../inc/table";
 import { ScTableProtection } from "./tabprotection";
 import { scStyleNameResourcesEnglish } from "../../../inc/globstr";
+import { ScBitMaskCompressedArray } from "../../../inc/compressedarray";
+import type { ScFlatUInt16RowSegments, ScFlatUInt16RowRangeData } from "../../../inc/segmenttree";
 
 /** Native initial and fallback page style name. */
 export const DEFAULT_PAGE_STYLE = scStyleNameResourcesEnglish.STR_STYLENAME_STANDARD;
@@ -178,4 +180,48 @@ export function EndListening(
     address.Col() < this["aCol"].length
   )
     (this["aCol"][address.Col()] as ScColumn).EndListening(listener, address.Row());
+}
+
+/** Original CopyRowHeight requires actual source/destination height stores and reads raw heights,not hidden-as-zero queries. @param this - Native sheet. @param source - Source table. @param first - Destination start. @param last - Destination end. @param offset - Source row offset. @returns Nothing. */
+export function CopyRowHeight(
+  this: ScTable,
+  source: ScTable,
+  first: number,
+  last: number,
+  offset: number,
+): void {
+  for (let row = first; row <= last;) {
+    const run: ScFlatUInt16RowRangeData = { mnRow1: 0, mnRow2: 0, mnValue: 0 };
+    if (!(source["mpRowHeights"] as ScFlatUInt16RowSegments).getRangeData(row + offset, run))
+      return;
+    const end = Math.min(last, run.mnRow2 - offset);
+    (this["mpRowHeights"] as ScFlatUInt16RowSegments).setValue(row, end, run.mnValue);
+    row = end + 1;
+  }
+}
+
+/** Borrows real compressed geometry boundaries for valid rows with allocated row information. @param this - Native sheet. @param row - Valid row. @returns Native range. */
+export function GetRowHeightRange(this: ScTable, row: number): ScFlatUInt16RowRangeData {
+  const data = { mnRow1: 0, mnRow2: 0, mnValue: 0 };
+  (this["mpRowHeights"] as ScFlatUInt16RowSegments).getRangeData(row, data);
+  return data;
+}
+
+/** Reads genuine compressed row flag bounds;allocated row information is required. @param this - Native sheet. @param row - Row. @returns Flags and range. */
+export function GetRowFlagsRange(
+  this: ScTable,
+  row: number,
+): ReturnType<ScBitMaskCompressedArray["GetRangeData"]> {
+  return (this["pRowFlags"] as ScBitMaskCompressedArray).GetRangeData(row);
+}
+
+/** Stores geometry without device pixel comparison, as used by import. @param this - Native sheet. @param first - First row. @param last - Last row. @param height - UInt16 twips. @returns Nothing. */
+export function SetRowHeightOnly(this: ScTable, first: number, last: number, height: number): void {
+  if (
+    !this["rDocument"].ValidRow(first) ||
+    !this["rDocument"].ValidRow(last) ||
+    !this["mpRowHeights"]
+  )
+    return;
+  this["mpRowHeights"].setValue(first, last, height & 0xffff || this.GetOptimalMinRowHeight());
 }

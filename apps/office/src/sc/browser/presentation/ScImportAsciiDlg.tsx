@@ -208,7 +208,12 @@ export function ScImportAsciiDlg({ request, onRespond }: Props): React.JSX.Eleme
         SC_COL_SKIP,
       ];
     } else {
-      importOptions.mvColStart = [...separatedTypes.keys()].sort((left, right) => left - right);
+      importOptions.mvColStart = [...separatedTypes.keys()].sort(
+        /** Orders values numerically in ascending order. @param left - First value. @param right - Second value. @returns Numeric comparison. */ (
+          left,
+          right,
+        ) => left - right,
+      );
       importOptions.mvColFormat = importOptions.mvColStart.map(
         (start) => separatedTypes.get(start) ?? SC_COL_STANDARD,
       );
@@ -264,7 +269,11 @@ export function ScImportAsciiDlg({ request, onRespond }: Props): React.JSX.Eleme
             <select
               className={controlClass + " min-w-0"}
               value={options.eLang}
-              onChange={(event) => update({ eLang: Number(event.currentTarget.value) })}
+              onChange={
+                /** Selects the locale used to interpret pasted values. @param event - Import control change event. @returns Nothing. */ (
+                  event,
+                ) => update({ eLang: Number(event.currentTarget.value) })
+              }
             >
               <option value={LANGUAGE_SYSTEM}>{describeLanguage(LANGUAGE_SYSTEM)}</option>
               {languages.map(({ id, name }) => (
@@ -281,8 +290,10 @@ export function ScImportAsciiDlg({ request, onRespond }: Props): React.JSX.Eleme
               min={1}
               className={controlClass + " w-20"}
               value={options.nStartRow}
-              onChange={(event) =>
-                update({ nStartRow: Math.max(1, Number(event.currentTarget.value)) })
+              onChange={
+                /** Sets the first import row with a lower bound of one. @param event - Import control change event. @returns Nothing. */ (
+                  event,
+                ) => update({ nStartRow: Math.max(1, Number(event.currentTarget.value)) })
               }
             />
           </label>
@@ -359,7 +370,11 @@ export function ScImportAsciiDlg({ request, onRespond }: Props): React.JSX.Eleme
               disabled={fixed}
               maxLength={1}
               value={options.cTextSep === "\0" ? "" : options.cTextSep}
-              onChange={(event) => update({ cTextSep: event.currentTarget.value || "\0" })}
+              onChange={
+                /** Sets the text delimiter or clears it for an empty control. @param event - Import control change event. @returns Nothing. */ (
+                  event,
+                ) => update({ cTextSep: event.currentTarget.value || "\0" })
+              }
             />
           </label>
           <label className="flex items-center gap-2">
@@ -367,7 +382,11 @@ export function ScImportAsciiDlg({ request, onRespond }: Props): React.JSX.Eleme
               type="checkbox"
               disabled={fixed}
               checked={options.bMergeFieldSeps}
-              onChange={(event) => update({ bMergeFieldSeps: event.currentTarget.checked })}
+              onChange={
+                /** Enables or disables merging adjacent separators. @param event - Import control change event. @returns Nothing. */ (
+                  event,
+                ) => update({ bMergeFieldSeps: event.currentTarget.checked })
+              }
             />
             Merge delimiters
           </label>
@@ -376,7 +395,11 @@ export function ScImportAsciiDlg({ request, onRespond }: Props): React.JSX.Eleme
               type="checkbox"
               disabled={fixed}
               checked={options.bRemoveSpace}
-              onChange={(event) => update({ bRemoveSpace: event.currentTarget.checked })}
+              onChange={
+                /** Updates trimming of leading and trailing spaces. @param event - Import control change event. @returns Nothing. */ (
+                  event,
+                ) => update({ bRemoveSpace: event.currentTarget.checked })
+              }
             />
             Trim spaces
           </label>

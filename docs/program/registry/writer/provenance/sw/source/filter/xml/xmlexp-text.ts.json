@@ -1,0 +1,61 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/filter/xml/xmlexp-text.ts",
+    "upstreamPath": "sw/source/filter/xml/xmlexp.cxx",
+    "localSymbols": [
+      "exportWriterText",
+      "projectBlock",
+      "projectParagraph",
+      "projectNumberingRule"
+    ],
+    "upstreamSymbols": [
+      "SwXMLExport::CreateTextParagraphExport",
+      "SwXMLExport::ExportContent_"
+    ],
+    "preservedResponsibilities": [
+      "Projects native Writer text blocks, marks and styles for the shared ODF serializer and the existing body and page-story export streams."
+    ],
+    "omittedResponsibilities": [
+      "Package assembly and styles.xml, content.xml and meta.xml entry points remain in the existing export module."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/filter/xml/xmlexp-text.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Projects native Writer text blocks, marks and styles for the shared ODF serializer and the existing body and page-story export streams."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/xml/xmlexp-text.ts",
+          "marker": "exportWriterText"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/xmlexp-text.ts",
+          "marker": "projectBlock"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/xmlexp-text.ts",
+          "marker": "projectParagraph"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/xmlexp-text.ts",
+          "marker": "projectNumberingRule"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlexp.cxx",
+          "marker": "SwXMLExport::CreateTextParagraphExport"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlexp.cxx",
+          "marker": "SwXMLExport::ExportContent_"
+        }
+      ]
+    }
+  }
+}

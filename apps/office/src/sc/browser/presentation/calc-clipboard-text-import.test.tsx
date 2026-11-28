@@ -62,14 +62,20 @@ it("dispatches the explicit text import command for a single clipboard line and 
       fireEvent.click(reopened.getByRole("button", { name: "OK" })),
   );
   const confirmed = within(screen.getByRole("dialog", { name: "Text Import" }));
-  act(() => controller.MeasureViewport(0, 0, 390, 600));
+  act(
+    /** Sets the viewport dimensions used by the worksheet. @returns Nothing. */ () =>
+      controller.MeasureViewport(0, 0, 390, 600),
+  );
   await act(
     /** Clicks the button named "OK". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
       fireEvent.click(confirmed.getByRole("button", { name: "OK" })),
   );
   expect(doc.GetValue(start)).toBe(14);
   expect(doc.GetValue(end)).toBe(28);
-  act(() => expect(controller.Undo()).toBe(true));
+  act(
+    /** Undoes the last Calc command and asserts success. @returns Nothing. */ () =>
+      expect(controller.Undo()).toBe(true),
+  );
   expect(doc.GetCellType(start)).toBe(CellType.CELLTYPE_NONE);
   expect(doc.GetCellType(end)).toBe(CellType.CELLTYPE_NONE);
 });
@@ -77,9 +83,15 @@ it("dispatches the explicit text import command for a single clipboard line and 
 it("rejects a text import if its active cell changes while options are open", /** Rejects a text import if its active cell changes while options are open. @returns Completion. */ async () => {
   const controller = mount();
   const doc = controller.shell.GetDocument();
-  await act(async () => fireEvent.paste(grid(), { clipboardData: transfer("10\t20\n30\t40") }));
+  await act(
+    /** Pastes into the worksheet grid. @returns Whether the default action is allowed, after dispatch. */ async () =>
+      fireEvent.paste(grid(), { clipboardData: transfer("10\t20\n30\t40") }),
+  );
   const dialog = within(screen.getByRole("dialog", { name: "Text Import" }));
-  act(() => controller.Select(2, 2));
+  act(
+    /** Moves the Calc selection to the requested cell. @returns Whether Calc accepted the selection. */ () =>
+      controller.Select(2, 2),
+  );
   await act(
     /** Clicks the button named "OK". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
       fireEvent.click(dialog.getByRole("button", { name: "OK" })),
@@ -92,7 +104,10 @@ it("ports tdf117868 pipe detection to the clipboard text import dialog", /** Por
   const controller = mount();
   const doc = controller.shell.GetDocument();
   const source = 'sep=|\n"LETTER"|"ANIMAL"\n"a"|"aardvark"\n"b"|"bear"\n"c"|"cow"\n';
-  await act(async () => fireEvent.paste(grid(), { clipboardData: transfer(source) }));
+  await act(
+    /** Pastes into the worksheet grid. @returns Whether the default action is allowed, after dispatch. */ async () =>
+      fireEvent.paste(grid(), { clipboardData: transfer(source) }),
+  );
   const dialog = within(screen.getByRole("dialog", { name: "Text Import" }));
   expect(dialog.getByRole("radio", { name: "Detected (|)" })).toBeChecked();
   expect(dialog.getByRole("checkbox", { name: "Tab" })).toBeDisabled();
@@ -136,7 +151,10 @@ it("ports tdf92503 fixed-width DMY timestamps through the clipboard column type"
     "29 Mar 2015, 02:00",
     "29 Mar 2015, 03:00",
   ].join("\n");
-  await act(async () => fireEvent.paste(grid(), { clipboardData: transfer(source) }));
+  await act(
+    /** Pastes into the worksheet grid. @returns Whether the default action is allowed, after dispatch. */ async () =>
+      fireEvent.paste(grid(), { clipboardData: transfer(source) }),
+  );
   const dialog = within(screen.getByRole("dialog", { name: "Text Import" }));
   const fixed = dialog.getByRole("radio", { name: "Fixed width" });
   fireEvent.click(fixed);
@@ -168,7 +186,10 @@ it("uses the selected clipboard locale and remembers the manual separator only a
   const controller = mount();
   const doc = controller.shell.GetDocument();
   const clipboard = transfer("1,5;2,5\n3,5;4,5");
-  await act(async () => fireEvent.paste(grid(), { clipboardData: clipboard }));
+  await act(
+    /** Pastes into the worksheet grid. @returns Whether the default action is allowed, after dispatch. */ async () =>
+      fireEvent.paste(grid(), { clipboardData: clipboard }),
+  );
   const dialog = within(screen.getByRole("dialog", { name: "Text Import" }));
   fireEvent.click(dialog.getByRole("radio", { name: "Separated by" }));
   fireEvent.click(dialog.getByRole("checkbox", { name: "Tab" }));
@@ -183,7 +204,10 @@ it("uses the selected clipboard locale and remembers the manual separator only a
   expect(doc.GetValue(new ScAddress(0, 0, 0))).toBe(1.5);
   expect(doc.GetValue(new ScAddress(1, 1, 0))).toBe(4.5);
   select("D4");
-  await act(async () => fireEvent.paste(grid(), { clipboardData: clipboard }));
+  await act(
+    /** Pastes into the worksheet grid. @returns Whether the default action is allowed, after dispatch. */ async () =>
+      fireEvent.paste(grid(), { clipboardData: clipboard }),
+  );
   const reopened = within(screen.getByRole("dialog", { name: "Text Import" }));
   expect(reopened.getByRole("radio", { name: "Separated by" })).toBeChecked();
   expect(reopened.getByRole("checkbox", { name: "Semicolon" })).toBeChecked();
@@ -194,7 +218,10 @@ it("uses the selected clipboard locale and remembers the manual separator only a
       fireEvent.click(reopened.getByRole("button", { name: "Cancel" })),
   );
   expect(doc.GetCellType(new ScAddress(3, 3, 0))).toBe(CellType.CELLTYPE_NONE);
-  await act(async () => fireEvent.paste(grid(), { clipboardData: clipboard }));
+  await act(
+    /** Pastes into the worksheet grid. @returns Whether the default action is allowed, after dispatch. */ async () =>
+      fireEvent.paste(grid(), { clipboardData: clipboard }),
+  );
   const afterCancel = within(screen.getByRole("dialog", { name: "Text Import" }));
   expect(afterCancel.getByRole("radio", { name: "Separated by" })).toBeChecked();
 });
@@ -203,7 +230,10 @@ it("keeps Unicode fixed-width preview and pasted columns on the same ruler posit
   const controller = mount();
   const doc = controller.shell.GetDocument();
   const source = transfer("A漢B\nC字D");
-  await act(async () => fireEvent.paste(grid(), { clipboardData: source }));
+  await act(
+    /** Pastes into the worksheet grid. @returns Whether the default action is allowed, after dispatch. */ async () =>
+      fireEvent.paste(grid(), { clipboardData: source }),
+  );
   const dialog = within(screen.getByRole("dialog", { name: "Text Import" }));
   fireEvent.click(dialog.getByRole("radio", { name: "Fixed width" }));
   const ruler = dialog.getByRole("button", { name: "Fixed width ruler" });
@@ -229,6 +259,9 @@ it("keeps Unicode fixed-width preview and pasted columns on the same ruler posit
   ["A", "漢", "B"].forEach((value, column) =>
     expect(text(doc.GetSharedString(new ScAddress(column, 0, 0)).getString())).toBe(value),
   );
-  act(() => expect(controller.Undo()).toBe(true));
+  act(
+    /** Undoes the last Calc command and asserts success. @returns Nothing. */ () =>
+      expect(controller.Undo()).toBe(true),
+  );
   expect(doc.GetCellType(new ScAddress(1, 0, 0))).toBe(CellType.CELLTYPE_NONE);
 });

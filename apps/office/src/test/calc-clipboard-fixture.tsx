@@ -66,21 +66,36 @@ export function createCalcClipboardFixture() {
     const descriptor = Object.getOwnPropertyDescriptor(navigator, "clipboard");
     let plain = "";
     const clipboard = {
-      writeText: vi.fn(async (value: string) => {
-        plain = value;
-      }),
-      readText: vi.fn(async () => plain),
-      read: vi.fn(async () =>
-        native
-          ? [
-              {
-                types: native.types.map((type) => (type === "text/plain" ? type : "web " + type)),
-                getType: async (type: string) => ({
-                  text: async () => native.getData(type.replace(/^web /, "")),
-                }),
-              },
-            ]
-          : [],
+      writeText: vi.fn(
+        /** Stores browser plain text independently of the native transfer. @param value - Clipboard text. @returns Completion. */ async (
+          value: string,
+        ) => {
+          plain = value;
+        },
+      ),
+      readText: vi.fn(
+        /** Reads the last plain-text write. @returns Clipboard text. */ async () => plain,
+      ),
+      read: vi.fn(
+        /** Exposes the native transfer through browser ClipboardItems. @returns Available clipboard items. */ async () =>
+          native
+            ? [
+                {
+                  types: native.types.map(
+                    /** Applies the browser custom-format prefix. @param type - Native MIME flavor. @returns A browser clipboard type. */ (
+                      type,
+                    ) => (type === "text/plain" ? type : "web " + type),
+                  ),
+                  getType:
+                    /** Resolves one clipboard flavor to its text reader. @param type - Browser clipboard type. @returns A fixture for the browser data blob. */ async (
+                      type: string,
+                    ) => ({
+                      text: /** Reads the original native MIME flavor. @returns Clipboard text. */ async () =>
+                        native.getData(type.replace(/^web /, "")),
+                    }),
+                },
+              ]
+            : [],
       ),
     };
     Object.defineProperty(navigator, "clipboard", { configurable: true, value: clipboard });

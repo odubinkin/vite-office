@@ -77,7 +77,7 @@ it("testDatabaseRangesODS preserves database ranges and filtered row runs", /** 
   }
 });
 
-it("testAutofilterColorsODF preserves RGB criteria and both automatic colors", async () => {
+it("testAutofilterColorsODF preserves RGB criteria and both automatic colors", /** TestAutofilterColorsODF preserves RGB criteria and both automatic colors. @returns Completion. */ async () => {
   const source = await readOdsDocument(
     new Uint8Array(
       readFileSync("../../vendor/libreoffice-reference/sc/qa/unit/data/ods/autofilter-colors.ods"),
@@ -103,7 +103,13 @@ it("testAutofilterColorsODF preserves RGB criteria and both automatic colors", a
       for (const document of [source, transferred]) {
         const database = document.GetAnonymousDBData(sheet);
         assert(database);
-        const items = database.GetQueryParam().entries.flatMap((entry) => entry.items);
+        const items = database
+          .GetQueryParam()
+          .entries.flatMap(
+            /** Projects the `items` of each entry. @param entry - Source entry. @returns The field value. */ (
+              entry,
+            ) => entry.items,
+          );
         expect(
           items.filter(isQueryColorItem).map((item) => [item.type, item.value.toUInt32()]),
         ).toEqual(criteria.map(([type, , packed]) => [type, packed]));
@@ -123,7 +129,7 @@ it("testAutofilterColorsODF preserves RGB criteria and both automatic colors", a
   }
 });
 
-it("testDateAutofilterODS preserves the original lexical filter values", async () => {
+it("testDateAutofilterODS preserves the original lexical filter values", /** TestDateAutofilterODS preserves the original lexical filter values. @returns Completion. */ async () => {
   const document = await readOdsDocument(
     new Uint8Array(
       readFileSync("../../vendor/libreoffice-reference/sc/qa/unit/data/ods/tdf142231.ods"),

@@ -1,4 +1,5 @@
 /** @fileoverview Calc scalar information functions and OFFSET over native local reference tokens. */
+import { GetLookupMatrix } from "./interpr1";
 import { FormulaError } from "../../../../formula/inc/errorcodes";
 import { OpCode } from "../../../../formula/inc/opcode";
 import { FormulaErrorToken, StackVar } from "../../../../formula/inc/token";
@@ -53,7 +54,7 @@ export function ScIsEmpty(this: ScInterpreter, count: number): void {
     token instanceof ScExternalSingleRefToken ||
     token instanceof ScExternalDoubleRefToken
   ) {
-    result = this["GetLookupMatrix"]()?.IsEmptyCell(0, 0) ?? false;
+    result = GetLookupMatrix.call(this)?.IsEmptyCell(0, 0) ?? false;
   } else {
     this["pStack"].pop();
     if (token instanceof ScEmptyCellToken) result = !token.IsInherited();
@@ -163,7 +164,7 @@ export function ScIsString(this: ScInterpreter): void {
     const token = this["PopExternalSingleRef"]();
     result = this.GetError() === FormulaError.NONE && token?.GetType() === StackVar.svString;
   } else if (type === StackVar.svMatrix || type === StackVar.svExternalDoubleRef) {
-    const matrix = this["GetLookupMatrix"]();
+    const matrix = GetLookupMatrix.call(this);
     result =
       matrix !== null &&
       matrix !== undefined &&
@@ -192,7 +193,7 @@ export function PopErrorOperand(this: ScInterpreter): FormulaError {
     const token = this["PopExternalSingleRef"]();
     if (token instanceof FormulaErrorToken) error = token.GetError();
   } else if (type === StackVar.svMatrix || type === StackVar.svExternalDoubleRef) {
-    const matrix = this["GetLookupMatrix"]();
+    const matrix = GetLookupMatrix.call(this);
     const item = matrix?.Get(0, 0);
     if (item) {
       error = item.GetError();

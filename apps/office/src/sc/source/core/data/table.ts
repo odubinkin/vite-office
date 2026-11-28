@@ -8,8 +8,7 @@ import type { ScTableProtection } from "./tabprotection";
 import { ScRangeName } from "../tool/rangenam";
 import { SetAllFormulasDirty as dirtyFormulas } from "./table.formula-admission";
 import type { EditTextObject } from "../../../../editeng/inc/editobj";
-import type { SvxBorderLine } from "../../../../editeng/source/items/borderline";
-import type { SvxBoxInfoItem, SvxBoxItem } from "../../../../editeng/source/items/frmitems";
+
 import { FormulaError } from "../../../../formula/inc/errorcodes";
 import type { Grammar } from "../../../../formula/inc/grammar";
 import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
@@ -19,7 +18,7 @@ import type { SfxPoolItem } from "../../../../svl/inc/poolitem";
 import { SharedString, type SharedStringConstReference } from "../../../../svl/inc/sharedstring";
 import type { SvtBroadcaster } from "../../../../svl/source/notify/broadcast";
 import { INITIALCOLCOUNT, ScAddress, ScRange } from "../../../inc/address";
-import type { ScLineFlags, ScMergePatternState } from "../../../inc/attarray";
+import type { ScMergePatternState } from "../../../inc/attarray";
 import { ScRefCellValue } from "../../../inc/cellvalue";
 import { ScColumn, ScColumnData } from "../../../inc/column";
 import {
@@ -41,10 +40,8 @@ import {
   STD_COL_WIDTH,
 } from "../../../inc/global";
 import type { EndListeningContext, StartListeningContext } from "../../../inc/listenercontext";
-import { ScMarkData } from "../../../inc/markdata";
-import { ScRangeList } from "../../../inc/rangelst";
-import { ATTR_MERGE_FLAG } from "../../../inc/scitems";
-import { ScMF, type ScMergeFlagAttr } from "./attrib";
+import type { ScMarkData } from "../../../inc/markdata";
+
 import { ScMultiSelIter } from "../../../inc/markmulti";
 import type { ColumnBlockPosition } from "../../../inc/mtvelements";
 import type {
@@ -54,10 +51,9 @@ import type {
 } from "../../../inc/patattr";
 import type { ScItemPoolCache } from "../../../inc/poolcach";
 import type { SetFormulaDirtyContext } from "../../../inc/refupdatecontext";
-import type { RowHeightContext } from "../../../inc/rowheightcontext";
-import { ATTR_FONT_HEIGHT } from "../../../inc/scitems";
-import { ScFlatUInt16RowSegments, type ScFlatUInt16RowRangeData } from "../../../inc/segmenttree";
-import { lcl_GetAttribHeight, supportsStandardRowHeight } from "./column2";
+
+import { ScFlatUInt16RowSegments } from "../../../inc/segmenttree";
+
 import {
   SetFormulaCell as adoptFormulaCell,
   GetFormulaCell as GetFormulaCellFragment,
@@ -114,25 +110,7 @@ export class ScTable {
     };
   }
 
-  /** Reconstructs scenario marks from the canonical column pattern runs. @returns Native marked ranges. */
-  GetScenarioRanges(): ScRangeList {
-    const result = new ScRangeList();
-    if (!this.bScenario) return result;
-    const marks = new ScMarkData(this.rDocument.GetSheetLimits());
-    const start: [number] = [0];
-    const end: [number] = [0];
-    for (const [col, column] of this.aCol.entries()) {
-      for (let row = 0; row <= this.rDocument.MaxRow(); row = end[0] + 1) {
-        const pattern = column.GetPatternRange(start, end, row);
-        if (!pattern) break;
-        const flags = pattern.GetItem(ATTR_MERGE_FLAG) as ScMergeFlagAttr;
-        if (flags.GetValue() & ScMF.Scenario)
-          marks.SetMultiMarkArea(new ScRange(col, start[0], this.nTab, col, end[0], this.nTab));
-      }
-    }
-    marks.FillRangeListWithMarks(result, false);
-    return result;
-  }
+  GetScenarioRanges = table2.GetScenarioRanges;
   private nLinkMode = ScLinkMode.NONE;
   private readonly aLinkDoc = new OUString();
   private readonly aLinkFlt = new OUString();
@@ -330,10 +308,7 @@ export class ScTable {
   DeleteBeforeCopyFromClip(...args: Parameters<typeof table7.DeleteBeforeCopyFromClip>): void {
     table7.DeleteBeforeCopyFromClip.apply(this, args);
   }
-  /** Original table1 cleanup visits only actual allocated columns. @returns Nothing. */
-  DeleteEmptyBroadcasters(): void {
-    for (const column of this.aCol) column.DeleteEmptyBroadcasters();
-  }
+  DeleteEmptyBroadcasters = table1.DeleteEmptyBroadcasters;
   /** Source whole-sheet listening with optional ColumnSet selection. @param context - Shared listening context. @param all - Include every formula. @returns Nothing. */
   StartListeners(context: StartListeningContext, all: boolean): void {
     table2.StartListeners.call(this, context, all);
@@ -409,71 +384,9 @@ export class ScTable {
   SetLoadingRTL(set: boolean): void {
     this.bLoadingRTL = set;
   }
-  /** Original line-style mutation visits allocated columns only. @param marks - Marks. @param line - Style or absence. @param colorOnly - Color mode. @returns Nothing. */
-  ApplySelectionLineStyle(
-    marks: ScMarkData,
-    line: SvxBorderLine | undefined,
-    colorOnly: boolean,
-  ): void {
-    if (colorOnly && !line) return;
-    for (const column of this.aCol) column.ApplySelectionLineStyle(marks, line, colorOnly);
-  }
-  /** Original query clamps its final column to allocated storage before calculating right distances. @param outer - Outer accumulator. @param inner - Inner accumulator. @param flags - Shared flags. @param firstCol - First column. @param firstRow - First row. @param lastCol - Last column. @param lastRow - Last row. @returns Nothing. */
-  MergeBlockFrame(
-    outer: SvxBoxItem,
-    inner: SvxBoxInfoItem,
-    flags: ScLineFlags,
-    firstCol: number,
-    firstRow: number,
-    lastCol: number,
-    lastRow: number,
-  ): void {
-    if (
-      this.rDocument.ValidColRow(firstCol, firstRow) &&
-      this.rDocument.ValidColRow(lastCol, lastRow)
-    ) {
-      if (firstCol > lastCol) [firstCol, lastCol] = [lastCol, firstCol];
-      if (firstRow > lastRow) [firstRow, lastRow] = [lastRow, firstRow];
-      lastCol = this.ClampToAllocatedColumns(lastCol);
-      for (let col = firstCol; col <= lastCol; col++)
-        (this.aCol[col] as ScColumn).MergeBlockFrame(
-          outer,
-          inner,
-          flags,
-          firstRow,
-          lastRow,
-          col === firstCol,
-          lastCol - col,
-        );
-    }
-  }
-  /** Original validated block frame allocates through the real last column. @param outer - Outer lines. @param inner - Inner lines. @param firstCol - First column. @param firstRow - First row. @param lastCol - Last column. @param lastRow - Last row. @returns Nothing. */
-  ApplyBlockFrame(
-    outer: SvxBoxItem,
-    inner: SvxBoxInfoItem,
-    firstCol: number,
-    firstRow: number,
-    lastCol: number,
-    lastRow: number,
-  ): void {
-    if (
-      this.rDocument.ValidColRow(firstCol, firstRow) &&
-      this.rDocument.ValidColRow(lastCol, lastRow)
-    ) {
-      if (firstCol > lastCol) [firstCol, lastCol] = [lastCol, firstCol];
-      if (firstRow > lastRow) [firstRow, lastRow] = [lastRow, firstRow];
-      this.CreateColumnIfNotExists(lastCol);
-      for (let col = firstCol; col <= lastCol; col++)
-        (this.aCol[col] as ScColumn).ApplyBlockFrame(
-          outer,
-          inner,
-          firstRow,
-          lastRow,
-          col === firstCol,
-          lastCol - col,
-        );
-    }
-  }
+  ApplySelectionLineStyle = table2.ApplySelectionLineStyle;
+  MergeBlockFrame = table2.MergeBlockFrame;
+  ApplyBlockFrame = table2.ApplyBlockFrame;
   /** Original table.hxx Apply traverses selected runs in one real column. @param marks - Marks. @param col - Column. @param apply - Mutation. @returns Nothing. */
   private Apply(marks: ScMarkData, col: number, apply: ColumnDataApply): void {
     if (marks.IsMultiMarked()) {
@@ -788,103 +701,13 @@ export class ScTable {
     this.SetRowHidden(first, last, !show);
     if (show) this.maFilterData.setRowFiltered(first, last, false);
   }
-  /** Original CopyRowHeight requires actual source/destination height stores and reads raw heights,not hidden-as-zero queries. @param source - Source table. @param first - Destination start. @param last - Destination end. @param offset - Source row offset. @returns Nothing. */
-  CopyRowHeight(source: ScTable, first: number, last: number, offset: number): void {
-    for (let row = first; row <= last;) {
-      const run: ScFlatUInt16RowRangeData = { mnRow1: 0, mnRow2: 0, mnValue: 0 };
-      if (!(source.mpRowHeights as ScFlatUInt16RowSegments).getRangeData(row + offset, run)) return;
-      const end = Math.min(last, run.mnRow2 - offset);
-      (this.mpRowHeights as ScFlatUInt16RowSegments).setValue(row, end, run.mnValue);
-      row = end + 1;
-    }
-  }
-  /** Borrows real compressed geometry boundaries for valid rows with allocated row information. @param row - Valid row. @returns Native range. */
-  GetRowHeightRange(row: number): ScFlatUInt16RowRangeData {
-    const data = { mnRow1: 0, mnRow2: 0, mnValue: 0 };
-    (this.mpRowHeights as ScFlatUInt16RowSegments).getRangeData(row, data);
-    return data;
-  }
-  /** Reads genuine compressed row flag bounds;allocated row information is required. @param row - Row. @returns Flags and range. */
-  GetRowFlagsRange(row: number): ReturnType<ScBitMaskCompressedArray["GetRangeData"]> {
-    return (this.pRowFlags as ScBitMaskCompressedArray).GetRangeData(row);
-  }
-  /** Stores geometry without device pixel comparison, as used by import. @param first - First row. @param last - Last row. @param height - UInt16 twips. @returns Nothing. */
-  SetRowHeightOnly(first: number, last: number, height: number): void {
-    if (!this.rDocument.ValidRow(first) || !this.rDocument.ValidRow(last) || !this.mpRowHeights)
-      return;
-    this.mpRowHeights.setValue(first, last, height & 0xffff || this.GetOptimalMinRowHeight());
-  }
-  /** Updates only the source manual-size bit. @param first - First row. @param last - Last row. @param manual - Flag. @returns Nothing. */
-  SetManualHeight(first: number, last: number, manual: boolean): void {
-    if (!this.rDocument.ValidRow(first) || !this.rDocument.ValidRow(last) || !this.pRowFlags)
-      return;
-    if (manual) this.pRowFlags.OrValue(first, last, CRFlags.ManualSize);
-    else this.pRowFlags.AndValue(first, last, CRFlags.All & ~CRFlags.ManualSize);
-  }
-  /** Source no-drawing-layer pixel-change path, including the interactive single-row shrink heuristic. @param first - First row. @param last - Last row. @param height - Twips. @param ppty - Pixels per twip. @param api - Allow shrinking a single row. @returns Whether stored geometry changed. */
-  SetRowHeightRange(
-    first: number,
-    last: number,
-    height: number,
-    ppty: number,
-    api: boolean,
-  ): boolean {
-    if (!this.rDocument.ValidRow(first) || !this.rDocument.ValidRow(last) || !this.mpRowHeights)
-      return false;
-    height = height & 0xffff || this.GetOptimalMinRowHeight();
-    const pixels = Math.trunc(height * ppty);
-    for (let row = first; row <= last;) {
-      const run = this.GetRowHeightRange(row),
-        oldPixels = Math.trunc(run.mnValue * ppty);
-      if (
-        run.mnValue !== height &&
-        pixels !== oldPixels &&
-        (api || last - first > 0 || pixels > oldPixels)
-      ) {
-        this.mpRowHeights.setValue(first, last, height);
-        return true;
-      }
-      row = run.mnRow2 + 1;
-    }
-    return false;
-  }
-  /** Calculates native standard attribute maxima with allocated row information;unsupported device layout retains imported geometry. @param context - Shared across selected sheets. @param first - First row. @param last - Last row. @param api - Source UI uses true. @returns Whether heights changed. */
-  SetOptimalHeight(context: RowHeightContext, first: number, last: number, api: boolean): boolean {
-    const patterns: { first: number; last: number; pattern: ScPatternAttr }[] = [];
-    const start: [number] = [0],
-      end: [number] = [0];
-    for (let col = 0; col <= Math.min(this.aCol.length, this.rDocument.MaxCol()); col++)
-      for (let row = first; row <= last;) {
-        const pattern = this.GetColumnData(col).GetPatternRange(start, end, row) as ScPatternAttr;
-        if (!supportsStandardRowHeight(pattern)) return false;
-        patterns.push({ first: row, last: Math.min(last, end[0]), pattern });
-        row = end[0] + 1;
-      }
-    const heights = context.getHeightArray();
-    for (const run of patterns) {
-      const height = lcl_GetAttribHeight(
-        run.pattern,
-        ATTR_FONT_HEIGHT,
-        this.GetOptimalMinRowHeight(),
-      );
-      for (let row = run.first; row <= run.last;) {
-        const old = heights.GetRangeData(row),
-          stop = Math.min(run.last, old.mnRow2);
-        if (height > old.maValue) heights.SetValue(row, stop, height);
-        row = stop + 1;
-      }
-    }
-    return table1.SetOptimalHeightsToRows(
-      context,
-      /** Mutates actual sheet geometry. @param startRow - First. @param endRow - Last. @param height - Twips. @param fromApi - Shrink policy. @returns Changed. */
-      (startRow, endRow, height, fromApi) =>
-        this.SetRowHeightRange(startRow, endRow, height, context.getPPTY(), fromApi),
-      this.pRowFlags as ScBitMaskCompressedArray,
-      first,
-      last,
-      api,
-    );
-  }
+  CopyRowHeight = table5.CopyRowHeight;
+  GetRowHeightRange = table5.GetRowHeightRange;
+  GetRowFlagsRange = table5.GetRowFlagsRange;
+  SetRowHeightOnly = table5.SetRowHeightOnly;
+  SetManualHeight = table2.SetManualHeight;
+  SetRowHeightRange = table2.SetRowHeightRange;
+  SetOptimalHeight = table1.SetOptimalHeight;
   /** Borrows the native default column's attribute portion. @returns Owner. */
   GetDefaultColumnData(): ScColumnData {
     return this.aDefaultColData;

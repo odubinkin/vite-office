@@ -34,7 +34,7 @@ import {
 } from "../../core/tool/chgtrack";
 import { ODS_MIMETYPE, readOdsDocument, writeOdsDocument, writeOdsXml } from "./xmlwrap";
 
-it("testChangesAuthorDate retains actual previous cells and anonymizes author and date on export", async () => {
+it("testChangesAuthorDate retains actual previous cells and anonymizes author and date on export", /** TestChangesAuthorDate retains actual previous cells and anonymizes author and date on export. @returns Completion. */ async () => {
   const fixture = readFileSync(
     "../../vendor/libreoffice-reference/sc/qa/unit/data/ods/change-tracking.ods",
   );
@@ -101,7 +101,7 @@ it("testChangesAuthorDate retains actual previous cells and anonymizes author an
   }
 });
 
-it("roundtrips loaded moves, deleted snapshots, deletion groups and cutoff links", async () => {
+it("roundtrips loaded moves, deleted snapshots, deletion groups and cutoff links", /** Roundtrips loaded moves, deleted snapshots, deletion groups and cutoff links. @returns Completion. */ async () => {
   const ns = `xmlns:office="${ODF_NAMESPACES.office}" xmlns:table="${ODF_NAMESPACES.table}" xmlns:text="${ODF_NAMESPACES.text}"`;
   const manifest = createManifestXml([
     [createManifestProperty("FullPath", "/"), createManifestProperty("MediaType", ODS_MIMETYPE)],
@@ -171,7 +171,7 @@ it("roundtrips loaded moves, deleted snapshots, deletion groups and cutoff links
   }
 });
 
-it("roundtrips historical formulas and formatted text with their original action links", async () => {
+it("roundtrips historical formulas and formatted text with their original action links", /** Roundtrips historical formulas and formatted text with their original action links. @returns Completion. */ async () => {
   const ns = `xmlns:office="${ODF_NAMESPACES.office}" xmlns:table="${ODF_NAMESPACES.table}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:of="${ODF_NAMESPACES.of}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:fo="${ODF_NAMESPACES.fo}"`;
   const manifest = createManifestXml([
     [createManifestProperty("FullPath", "/"), createManifestProperty("MediaType", ODS_MIMETYPE)],

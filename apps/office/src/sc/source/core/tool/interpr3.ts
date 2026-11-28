@@ -1,4 +1,5 @@
 /** @fileoverview Numeric operands and sort order for Calc statistical functions. */
+import { GetLookupMatrix } from "./interpr1";
 import { FormulaError } from "../../../../formula/inc/errorcodes";
 import { StackVar } from "../../../../formula/inc/token";
 import { ScRefCellValue } from "../../../inc/cellvalue";
@@ -69,7 +70,7 @@ function GetNumberSequenceArray(this: ScInterpreter): number[] {
     case StackVar.svMatrix:
     case StackVar.svExternalSingleRef:
     case StackVar.svExternalDoubleRef: {
-      const matrix = this["GetLookupMatrix"]();
+      const matrix = GetLookupMatrix.call(this);
       if (!matrix) return [];
       const values: number[] = [];
       const size = { row: 0, column: 0 };

@@ -70,7 +70,8 @@ it("roundtrips a numbered heading and its chapter fields and reference through l
     const restored = await restoreOdtWorkerDocumentAsync(
       structuredClone(createOdtWorkerDocument(source)),
       undefined,
-      () => false,
+      /** Keeps the worker restore active for the round trip. @returns False, since the operation remains active. */ () =>
+        false,
     );
     try {
       const bytes = await writeOdtDocument(restored.document, metadata);

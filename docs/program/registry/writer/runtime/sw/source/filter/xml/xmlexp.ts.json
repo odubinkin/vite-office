@@ -191,8 +191,7 @@
       "localSymbols": [
         "exportStylesXml",
         "exportContentXml",
-        "exportMetaXml",
-        "projectBlock"
+        "exportMetaXml"
       ],
       "sourceResponsibility": "aligned",
       "upstreamFile": "sw/source/filter/xml/xmlexp.cxx",

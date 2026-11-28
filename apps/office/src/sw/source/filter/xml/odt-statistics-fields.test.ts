@@ -12,8 +12,7 @@ import { SwDocStatSubType } from "../../core/fields/docufld";
 import { readOdtDocument } from "./swxml";
 import { writeOdtDocument } from "./wrtxml";
 
-it("roundtrips the original page-count-range from testTdf71583 through the Worker", /** Keeps the original namespace and numbering style from the pinned ODF regression. @returns Completion. */
-async () => {
+it("roundtrips the original page-count-range from testTdf71583 through the Worker" /** Keeps the original namespace and numbering style from the pinned ODF regression. @returns Completion. */, async () => {
   const file = readFileSync(
     "../../vendor/libreoffice-reference/sw/qa/extras/odfexport/data/tdf71583.odt",
   );
@@ -29,7 +28,8 @@ async () => {
     const restored = await restoreOdtWorkerDocumentAsync(
       structuredClone(createOdtWorkerDocument(source)),
       undefined,
-      () => false,
+      /** Keeps the worker restore active for the round trip. @returns False, since the operation remains active. */ () =>
+        false,
     );
     try {
       const field = restored.document.paragraphs[0]

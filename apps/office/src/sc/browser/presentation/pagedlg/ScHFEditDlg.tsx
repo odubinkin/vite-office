@@ -322,7 +322,12 @@ export function ScHFEditDlg({ model, onCancel, onSubmit }: Props): React.JSX.Ele
               onChange={(event) => format([heightItem(Number(event.target.value))])}
             >
               {[...new Set([...sizes, size / 20])]
-                .sort((left, right) => left - right)
+                .sort(
+                  /** Orders values numerically in ascending order. @param left - First value. @param right - Second value. @returns Numeric comparison. */ (
+                    left,
+                    right,
+                  ) => left - right,
+                )
                 .map((size) => (
                   <option key={size}>{size}</option>
                 ))}

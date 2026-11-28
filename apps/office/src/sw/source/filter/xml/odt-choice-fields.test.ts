@@ -53,7 +53,8 @@ it("keeps native placeholder and drop-down choices through the Worker and ODT" /
     const restored = await restoreOdtWorkerDocumentAsync(
       structuredClone(createOdtWorkerDocument(source)),
       undefined,
-      () => false,
+      /** Keeps the worker restore active for the round trip. @returns False, since the operation remains active. */ () =>
+        false,
     );
     try {
       const saved = await DocumentArchive.open(await writeOdtDocument(restored.document, metadata));

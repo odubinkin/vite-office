@@ -11,29 +11,23 @@ import type { XMLRubyStyle } from "../../../../xmloff/source/text/txtprhdl";
 import type { SfxDocumentProperties } from "../../../../sfx2/source/doc/sfxbasemodel";
 import { SwPoolFormatId, WRITER_CHARACTER_STYLE_POOL } from "../../../inc/poolfmt";
 import { isOpenOffice2Generator } from "../../../../xmloff/source/core/xmlimp";
-import {
-  getBuildIdFromGenerator,
-  getDocumentMetaImportInfo,
-} from "../../../../xmloff/source/meta/xmlmetai";
+import { getDocumentMetaImportInfo } from "../../../../xmloff/source/meta/xmlmetai";
 import type { OdfBitmapGeometry } from "../../../../xmloff/source/draw/fill-properties";
-import { hasDrawingFrameFill, importPageBackground, importPageLayoutBox } from "./xmlimpit";
-import { getActivePageStory, type SwFrameFormat } from "../../core/layout/atrfrm";
+import { hasDrawingFrameFill, importPageBackground } from "./xmlimpit";
+import { type SwFrameFormat } from "../../core/layout/atrfrm";
 import type { OdfPageBackground } from "../../../../xmloff/source/style/PageMasterStyleMap";
 import type { XMLImageStyleDefinition } from "../../../../xmloff/source/style/ImageStyle";
 import { XFillBitmapItem } from "../../../../svx/inc/xbtmpit";
 import { Graphic } from "../../../../vcl/source/gdi/graph";
 import { Size } from "../../../../tools/inc/gen";
 import type { XMLGraphic, XMLGraphicSource } from "../../../../xmloff/source/core/xmlgrhlp";
-import { UseOnPage } from "../../core/layout/pagedesc";
-import { cppu_detail_getUnoType_PageStyleLayout as pageLayoutType } from "../../../../offapi/com/sun/star/style/PageStyleLayout";
-import { XMLDocumentSettingsContext } from "../../../../xmloff/source/core/DocumentSettingsContext";
 import type { PropertyValue } from "../../../../udkapi/com/sun/star/beans/PropertyValue";
 import type {
   XMLTextFrameAttributes,
   XMLTextFrameStyle,
 } from "../../../../xmloff/source/text/XMLTextFrameContext";
 import type { XMLStyle, XMLTextCursor } from "../../../../xmloff/inc/txtimp";
-import { applyPageStoryGeometry, XMLTextMasterPageContext } from "./xmlpageheaderfooter";
+import { XMLTextMasterPageContext } from "./xmlpageheaderfooter";
 import type { SwXTextCursor } from "../../core/unocore/unoobj";
 import { SvXMLGraphicHelper } from "../../../../xmloff/source/core/xmlgrhlp";
 import { importGraphicFrame, importTextFrame, endTextFrame } from "./xmltextframe";
@@ -47,10 +41,7 @@ import { SwXTextDocument } from "../../uibase/uno/unotxdoc";
 import { XMLTextImportHelper } from "../../../../xmloff/source/text/txtimp";
 import { applyTextImportProperties, xmlTextString } from "../../../../xmloff/source/text/txtprmap";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
-import { convertTwipToMm100 } from "../../../../tools/inc/UnitConversion";
-
 import { SwXNumberingRules } from "../../core/unocore/unosett";
-
 import {
   applyNamedCharacterStyles,
   commonCharacterStyleName,
@@ -59,7 +50,6 @@ import {
   applyNamedParagraphStyles,
   applyParagraphTextDefaults,
 } from "../../../../xmloff/source/style/prstylei";
-
 import {
   FastAttributeList,
   parseOdfXmlStream,
@@ -72,7 +62,6 @@ import {
 import { XMLToken } from "../../../../xmloff/source/core/xmltoken";
 import { encodeStyleName } from "../../../../xmloff/source/core/xmluconv";
 import {
-  XMLFontStylesContext,
   type XMLFontStylesImportTarget,
   type OdfFontFaceMetadata,
 } from "../../../../xmloff/source/style/XMLFontStylesContext";
@@ -91,40 +80,24 @@ import type {
   XMLIndexImport,
   XMLIndexImportProperties,
 } from "../../../../xmloff/source/text/XMLIndexTOCContext";
-import { applyPageRegisterReference } from "../../core/layout/pagedesc";
 import type { Theme } from "../../../../docmodel/inc/theme/Theme";
 import type { XMLTableImportTarget } from "../../../../xmloff/source/table/XMLTableImport";
 import { SwXMLTableImport } from "./xmltbli";
-
 import {
   XMLTextBodyContext,
   type OdfStyleDefinition,
   type XMLTextListRule,
 } from "../../../../xmloff/source/text/txtparai";
 import type { OdfLineNumberingConfiguration } from "../../../../xmloff/source/text/XMLLineNumberingImportContext";
-
 import { SwDoc, type WriterEmbeddedFont } from "../../core/doc/doc";
 import type { DefaultFontDevice } from "../../core/doc/default-font";
-
 import { SwTextNode } from "../../core/txtnode/ndtxt";
-
 import {
   getWriterStyleIdFromOdfName,
   getWriterMaterializedParagraphStyleDefinition,
 } from "../../../inc/poolfmt";
-import { RTL_TEXTENCODING_UTF8 } from "../../../../sal/inc/rtl/textenc";
-const ignoredDocumentChildren = new Set([XMLToken.OFFICE_SETTINGS, XMLToken.OFFICE_SCRIPTS]);
-
-const ignoredMetadataChildren = new Set([
-  XMLToken.META_GENERATOR,
-  XMLToken.META_INITIAL_CREATOR,
-  XMLToken.META_CREATION_DATE,
-  XMLToken.META_EDITING_CYCLES,
-  XMLToken.META_EDITING_DURATION,
-  XMLToken.META_DOCUMENT_STATISTIC,
-  XMLToken.DC_CREATOR,
-  XMLToken.DC_DATE,
-]);
+import { SwXMLDocContext } from "./xmlimp-context";
+import { applyLineNumbering, applyNamedPageStyles } from "./xmlimp-styles";
 
 /** Imported model plus filter-owned metadata; lifecycle remains in SfxObjectShell. */
 export interface ImportedWriterDocument {
@@ -232,7 +205,7 @@ export function importWriterXml(
 }
 
 /** Writer import coordinator matching upstream SwXMLImport context ownership. */
-class SwXMLImport
+export class SwXMLImport
   extends SwXMLTableImport
   implements SvXMLImportContract, XMLTableImportTarget, XMLFontStylesImportTarget
 {
@@ -752,78 +725,6 @@ class SwXMLImport
     this.lineNumbering.push(value);
   }
 
-  /** Applies global ODF line numbering through the original Writer properties. @param value - Imported configuration. @returns Nothing. */
-  private applyLineNumbering(value: OdfLineNumberingConfiguration): void {
-    const properties = this.model.getLineNumberingProperties();
-    for (const [name, field] of [
-      ["CountEmptyLines", "countBlankLines"],
-      ["CountLinesInFrames", "countInFlys"],
-      ["IsOn", "paintLineNumbers"],
-      ["RestartAtEachPage", "restartEachPage"],
-    ] as const) {
-      const key = xmlTextString(name),
-        any = new Any([value[field]], "bool");
-      try {
-        properties.setPropertyValue(key, any);
-      } finally {
-        key.dispose();
-        any.dispose();
-      }
-    }
-    for (const [name, number] of [
-      ["Interval", value.countBy],
-      ["SeparatorInterval", value.dividerCountBy],
-      ["NumberingType", value.numberingType],
-      [
-        "NumberPosition",
-        value.position === "right"
-          ? 1
-          : value.position === "inside"
-            ? 2
-            : value.position === "outside"
-              ? 3
-              : 0,
-      ],
-    ] as const) {
-      if (number === undefined || (number < 0 && name !== "NumberingType")) continue;
-      const key = xmlTextString(name),
-        any = new Any([(number << 16) >> 16], "sal_Int16");
-      try {
-        properties.setPropertyValue(key, any);
-      } finally {
-        key.dispose();
-        any.dispose();
-      }
-    }
-    const distanceKey = xmlTextString("Distance"),
-      distance = new Any([value.distance], "sal_Int32");
-    try {
-      properties.setPropertyValue(distanceKey, distance);
-    } finally {
-      distanceKey.dispose();
-      distance.dispose();
-    }
-    const style = value.charStyleName
-      ? this.resolveNamedCharacterStyle(value.charStyleName)
-      : undefined;
-    for (const [name, text] of [
-      ["SeparatorText", value.divider],
-      ["CharStyleName", style],
-    ] as const) {
-      if (text === undefined) continue;
-      const key = xmlTextString(name),
-        string = xmlTextString(text),
-        any = new Any(string.getDataAddress(), "OUString");
-      try {
-        properties.setPropertyValue(key, any);
-      } finally {
-        key.dispose();
-        string.dispose();
-        any.dispose();
-      }
-    }
-  }
-
   /** Registers the paragraph-family default shared by all named paragraph styles. @param definition - Parsed default. @returns Nothing. */
   public registerDefaultStyle(definition: OdfStyleDefinition): void {
     if (this.defaultParagraphStyle !== undefined)
@@ -960,7 +861,7 @@ class SwXMLImport
     if (hyphenation) applyTextImportProperties(defaults, {}, { hyphenation });
     const paragraphs = this.styles?.GetStyleDefinitions("paragraph") ?? new Map();
     applyNamedCharacterStyles(this.model, this.styles?.GetStyleDefinitions("text") ?? new Map());
-    for (const configuration of this.lineNumbering) this.applyLineNumbering(configuration);
+    for (const configuration of this.lineNumbering) applyLineNumbering.call(this, configuration);
     this.lineNumbering.length = 0;
     applyNamedParagraphStyles(
       this.model,
@@ -996,131 +897,10 @@ class SwXMLImport
     this.styleDefinitionsApplied = true;
   }
 
-  /** Applies imported named style state and the deferred master-page layout links. @returns Nothing. */
+  /** Applies imported named style state and deferred page-layout links. @returns Nothing. */
   public finishNamedStyles(): void {
     this.finishStyleDefinitions();
-    const pages = this.model.getStyleFamilies().getByName(xmlTextString("PageStyles"));
-    /** Applies original page geometry through PageStyles property owners. @param name - Master page name. @param layout - Imported physical geometry. @returns Nothing. */
-    const applyPage =
-      /** Executes this bounded native operation. @param name - Native operation input. @param layout - Native operation input. @returns Native operation result. */ (
-        name: string,
-        layout: OdfPageLayout,
-      ): void => {
-        const key = xmlTextString(name);
-        if (!pages.hasByName(key)) {
-          const descriptor = this.model.createInstance(
-            xmlTextString("com.sun.star.style.PageStyle"),
-          );
-          pages.insertByName(key, descriptor as import("../../core/unocore/unostyle").SwXStyle);
-        }
-        const style = pages.getByName(key);
-        /** Publishes one typed property to the original Writer page-style owner. @param property - UNO name. @param type - UNO value type. @param propertyValue - Authored value. @returns Nothing. */
-        function setProperty(
-          property: string,
-          type: "bool" | "sal_Int16" | "sal_Int32" | ReturnType<typeof pageLayoutType>,
-          propertyValue: number | boolean,
-        ): void {
-          const propertyName = xmlTextString(property);
-          const value = new Any([propertyValue], type);
-          try {
-            style.setPropertyValue(propertyName, value);
-          } finally {
-            propertyName.dispose();
-            value.dispose();
-          }
-        }
-        try {
-          setProperty("Width", "sal_Int32", Number(convertTwipToMm100(BigInt(layout.width))));
-          setProperty("Height", "sal_Int32", Number(convertTwipToMm100(BigInt(layout.height))));
-          setProperty("IsLandscape", "bool", layout.landscape);
-          if (layout.numberingType !== undefined)
-            setProperty("NumberingType", "sal_Int16", layout.numberingType);
-          if (layout.direction !== undefined)
-            setProperty("WritingMode", "sal_Int16", layout.direction);
-          if (layout.rtlGutter !== undefined) setProperty("RtlGutter", "bool", layout.rtlGutter);
-          if (layout.gutter !== undefined) setProperty("GutterMargin", "sal_Int32", layout.gutter);
-          const gutterSide = this.document.GetDocumentSettingManager().get("GUTTER_AT_TOP")
-            ? "TopMargin"
-            : layout.rtlGutter
-              ? "RightMargin"
-              : "LeftMargin";
-          for (const [property, margin] of Object.entries(layout.margins))
-            setProperty(
-              property,
-              "sal_Int32",
-              margin -
-                (property === gutterSide && layout.explicitMargins.has(property)
-                  ? (layout.gutter ?? 0)
-                  : 0),
-            );
-          for (const [property, type, value] of layout.grid) setProperty(property, type, value);
-          if (layout.usage !== undefined)
-            setProperty("PageStyleLayout", pageLayoutType(), layout.usage);
-          const page = this.model.GetDoc().FindPageDesc(name);
-          if (page) importPageLayoutBox(page, layout);
-          if (page && layout.registerParagraphStyle) {
-            const styleName = layout.registerParagraphStyle;
-            const identity =
-              this.resolveNamedParagraphStyle(styleName) ?? getWriterStyleIdFromOdfName(styleName);
-            const reference =
-              identity && getWriterMaterializedParagraphStyleDefinition(identity)
-                ? this.document.GetTextFormatColl(identity)
-                : identity
-                  ? this.document.FindTextFormatColl(identity)
-                  : this.document.FindTextFormatCollByName(styleName);
-            if (reference) applyPageRegisterReference(page, reference);
-          }
-          if (page?.GetUseOn() === UseOnPage.Mirror) {
-            page.Mirror();
-            page.GetFirstLeft().SetFormatAttr(page.GetLeft().GetLRSpace());
-          }
-          applyPageStoryGeometry(style, layout);
-          if (page) {
-            const frames = [
-              page.GetMaster(),
-              page.GetLeft(),
-              page.GetFirstMaster(),
-              page.GetFirstLeft(),
-            ];
-            for (const frame of frames) this.applyBackground(frame, layout.background);
-            for (const [header, story] of [
-              [true, layout.header],
-              [false, layout.footer],
-            ] as const) {
-              for (const frame of new Set(
-                frames.map(
-                  /** Finds the effective story format for one physical page. @param owner - Page frame. @returns Story frame. */
-                  (owner) => getActivePageStory(owner, header),
-                ),
-              ))
-                this.applyBackground(frame, story?.background);
-            }
-          }
-        } finally {
-          key.dispose();
-        }
-      };
-    for (const { name, pageLayoutName, followName } of this.masterPages) {
-      const layout = this.pageLayouts.get(pageLayoutName);
-      if (layout) applyPage(name, layout);
-      const key = xmlTextString(name);
-      const property = xmlTextString("FollowStyle");
-      const value = xmlTextString(this.resolvePageStyleReference(followName) || name);
-      const any = new Any(value.getDataAddress(), "OUString");
-      try {
-        pages.getByName(key).setPropertyValue(property, any);
-      } finally {
-        any.dispose();
-        value.dispose();
-        property.dispose();
-        key.dispose();
-      }
-    }
-    for (const [style, name] of this.paragraphPageStyleReferences) {
-      const pageStyleName = this.resolvePageStyleReference(name);
-      if (pageStyleName !== undefined) applyTextImportProperties(style, {}, { pageStyleName });
-    }
-    this.paragraphPageStyleReferences.length = 0;
+    applyNamedPageStyles.call(this, this.applyBackground.bind(this));
   }
 
   /** Native endDocAdjustNodes removes only the final empty paragraph preceded by ordinary content. @returns Nothing. */
@@ -1142,161 +922,5 @@ class SwXMLImport
       this.GetTextImport().ResetCursor();
       this.document.GetNodes().removeTextNode(node);
     }
-  }
-}
-
-/** Dispatches document-level elements like upstream SwXMLDocContext_Impl. */
-class SwXMLDocContext extends SvXMLImportContext {
-  /** Creates a document dispatcher. @param xmlImport - Import owner. @param root - Current root. @returns Context. */
-  public constructor(
-    private readonly xmlImport: SwXMLImport,
-    private readonly root: XMLToken,
-  ) {
-    super();
-  }
-
-  /** Dispatches one document child. @param element - Child token. @param attributes - Child attributes. @returns Child context or null. */
-  public override createFastChildContext(
-    element: XMLToken,
-    attributes: FastAttributeList,
-  ): SvXMLImportContext | null {
-    if (
-      element === XMLToken.OFFICE_FONT_FACE_DECLS &&
-      (this.root === XMLToken.OFFICE_DOCUMENT_STYLES ||
-        this.root === XMLToken.OFFICE_DOCUMENT_CONTENT)
-    ) {
-      attributes.assertOnly([], "font face declarations");
-      return new XMLFontStylesContext(this.xmlImport, RTL_TEXTENCODING_UTF8);
-    }
-    if (
-      element === XMLToken.OFFICE_MASTER_STYLES &&
-      this.root === XMLToken.OFFICE_DOCUMENT_STYLES
-    ) {
-      attributes.assertOnly([], "master styles");
-      return new XMLMasterStylesContext(this.xmlImport);
-    }
-    if (
-      (element === XMLToken.OFFICE_STYLES || element === XMLToken.OFFICE_AUTOMATIC_STYLES) &&
-      (this.root === XMLToken.OFFICE_DOCUMENT_STYLES ||
-        this.root === XMLToken.OFFICE_DOCUMENT_CONTENT)
-    ) {
-      attributes.assertOnly([], "styles container");
-      return this.xmlImport.CreateStylesContext(element === XMLToken.OFFICE_AUTOMATIC_STYLES);
-    }
-    if (element === XMLToken.OFFICE_BODY && this.root === XMLToken.OFFICE_DOCUMENT_CONTENT) {
-      attributes.assertOnly([], "body");
-      return new SwXMLBodyContext(this.xmlImport);
-    }
-    if (element === XMLToken.OFFICE_META && this.root === XMLToken.OFFICE_DOCUMENT_META) {
-      attributes.assertOnly([], "metadata");
-      return new XMLMetaContext(this.xmlImport);
-    }
-    if (element === XMLToken.OFFICE_SETTINGS && this.root === XMLToken.OFFICE_DOCUMENT_SETTINGS) {
-      return new XMLDocumentSettingsContext(
-        /** Applies the original native configuration properties. @param properties - Borrowed properties. @returns Nothing. */
-        (properties) => this.xmlImport.SetConfigurationSettings(properties),
-      );
-    }
-    if (ignoredDocumentChildren.has(element)) return new SvXMLIgnoreContext();
-    return null;
-  }
-}
-
-/** Imports the page-layout association from Writer master pages. */
-class XMLMasterStylesContext extends SvXMLImportContext {
-  /** Creates the master-page context for one Writer XML import. @param xmlImport - Import coordinator. @returns Nothing. */
-  public constructor(private readonly xmlImport: SwXMLImport) {
-    super();
-  }
-
-  /** Imports supported master-page children and ignores their unmodeled content. @param element - Child token. @param attributes - Child attributes. @returns Import context. */
-  public override createFastChildContext(
-    element: XMLToken,
-    attributes: FastAttributeList,
-  ): SvXMLImportContext | null {
-    if (element !== XMLToken.STYLE_MASTER_PAGE) return new SvXMLIgnoreContext();
-    return this.xmlImport.registerMasterPage(attributes);
-  }
-}
-
-/** Owns the single office:text body child. */
-class SwXMLBodyContext extends SvXMLImportContext {
-  /** Creates a body context. @param xmlImport - Import owner. @returns Context. */
-  public constructor(private readonly xmlImport: SwXMLImport) {
-    super();
-  }
-
-  /** Creates the Writer text body context. @param element - Child token. @param attributes - Child attributes. @returns Child context or null. */
-  public override createFastChildContext(
-    element: XMLToken,
-    attributes: FastAttributeList,
-  ): SvXMLImportContext | null {
-    if (element === XMLToken.OFFICE_SPREADSHEET) return new SvXMLIgnoreContext();
-    if (element !== XMLToken.OFFICE_TEXT) return null;
-    attributes.assertOnly([], "text body");
-    return this.xmlImport.registerOfficeText();
-  }
-}
-
-/** Imports metadata while explicitly ignoring the known generator element. */
-class XMLMetaContext extends SvXMLImportContext {
-  /** Ignores only metadata fields without canonical Writer effect. @param element - Child token. @returns Whether metadata-only. */
-  public override ignoreUnknownAttributesForChild(element: XMLToken): boolean {
-    return ignoredMetadataChildren.has(element);
-  }
-  /** Creates a metadata context. @param xmlImport - Import owner. @returns Context. */
-  public constructor(private readonly xmlImport: SwXMLImport) {
-    super();
-  }
-
-  /** Creates a supported metadata child. @param element - Child token. @param attributes - Child attributes. @returns Child context or null. */
-  public override createFastChildContext(
-    element: XMLToken,
-    attributes: FastAttributeList,
-  ): SvXMLImportContext | null {
-    if (element === XMLToken.DC_TITLE) {
-      attributes.assertOnly([], "metadata title");
-      this.xmlImport.startTitle();
-      return new XMLTitleContext(
-        /** Commits the parsed title. @param title - Normalized title. @returns Nothing. */
-        (title) => {
-          this.xmlImport.title = title;
-        },
-      );
-    }
-    if (element === XMLToken.DC_LANGUAGE) {
-      attributes.assertOnly([], "metadata language");
-      return new XMLTitleContext(
-        /** Retains the document language for construction defaults. @param language - Parsed tag. @returns Nothing. */ (
-          language,
-        ) => {
-          this.xmlImport.language = language;
-        },
-      );
-    }
-    if (element === XMLToken.META_GENERATOR)
-      return new XMLTitleContext((generator) => {
-        this.xmlImport.buildId = getBuildIdFromGenerator(generator);
-      });
-    if (ignoredMetadataChildren.has(element)) return new SvXMLIgnoreContext(true);
-    return null;
-  }
-}
-
-/** Accumulates the bounded title element. */
-class XMLTitleContext extends SvXMLImportContext {
-  private value = "";
-  /** Creates a title accumulator. @param commit - Completion callback. @returns Context. */
-  public constructor(private readonly commit: (title: string) => void) {
-    super();
-  }
-  /** Appends title characters. @param characters - Decoded text. @returns Nothing. */
-  public override characters(characters: string): void {
-    this.value += characters;
-  }
-  /** Commits a non-empty normalized title. @returns Nothing. */
-  public override endFastElement(): void {
-    const title = this.value.trim();
-    if (title.length > 0) this.commit(title);
   }
 }

@@ -21,7 +21,8 @@ it("retains the pinned tdf99689 figures numbering through the Worker and ODT" /*
     const restored = await restoreOdtWorkerDocumentAsync(
       structuredClone(createOdtWorkerDocument(source)),
       undefined,
-      () => false,
+      /** Keeps the worker restore active for the round trip. @returns False, since the operation remains active. */ () =>
+        false,
     );
     try {
       const archive = await DocumentArchive.open(
@@ -59,7 +60,8 @@ it("backpatches the pinned forward sequence references before Worker and ODT exp
     const restored = await restoreOdtWorkerDocumentAsync(
       structuredClone(createOdtWorkerDocument(source)),
       undefined,
-      () => false,
+      /** Keeps the worker restore active for the round trip. @returns False, since the operation remains active. */ () =>
+        false,
     );
     try {
       const archive = await DocumentArchive.open(

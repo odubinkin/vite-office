@@ -135,6 +135,7 @@ function getTextSepPos(
 /** Real document shell with canonical model,medium and shared native action history. */
 export class ScDocShell extends SfxObjectShell {
   private readonly docFunc = new ScDocFunc(this);
+  private pendingDocumentModification: boolean | undefined;
   private errorMessageHandler: ((message: string) => void) | undefined;
   /** Binds the active document host for native operation errors. @param handler - Host presentation callback. @returns Nothing. */
   SetErrorMessageHandler(handler?: (message: string) => void): void {
@@ -199,8 +200,25 @@ export class ScDocShell extends SfxObjectShell {
   }
   /** Marks a committed model edit and advances the persistence race generation. @returns Nothing. */
   SetDocumentModified(): void {
+    if (this.pendingDocumentModification !== undefined) {
+      this.pendingDocumentModification = true;
+      return;
+    }
     this.SetModified(true, true);
     this.Changed();
+  }
+  /** Publishes one shell change for a synchronous group of document edits. @param edit - Grouped edit. @returns The edit result. */
+  RunDocumentEditGroup<Result>(edit: () => Result): Result {
+    this.EnsureOpen();
+    const enclosing = this.pendingDocumentModification;
+    this.pendingDocumentModification = false;
+    try {
+      return edit();
+    } finally {
+      const modified = this.pendingDocumentModification;
+      this.pendingDocumentModification = enclosing;
+      if (modified) this.SetDocumentModified();
+    }
   }
   /** Updates the shell title without replacing its model. @param title - Name. @returns Whether changed. */
   Rename(title: string): boolean {

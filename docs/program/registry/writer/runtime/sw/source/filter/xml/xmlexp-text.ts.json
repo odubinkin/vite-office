@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/filter/xml/xmlexp-text.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "odf-filter",
+    "capabilityIds": [
+      "CAP-0113",
+      "CAP-0129",
+      "CAP-0138",
+      "CAP-0139",
+      "CAP-0140",
+      "CAP-0141",
+      "CAP-0142",
+      "CAP-0143",
+      "CAP-0144",
+      "CAP-0145",
+      "CAP-b3d6ebc6-e2c7-4358-be0a-bae5a60758bc",
+      "CAP-c13ec941-1af7-4a09-810f-df267da27388",
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/filter/xml/xmlexp-text.ts#projectBlock",
+        "vendor/libreoffice-reference/sw/source/filter/xml/xmlexp.cxx#SwXMLExport::CreateTextParagraphExport"
+      ],
+      "justification": "Projects native Writer text blocks, marks and styles for the shared ODF serializer and the existing body and page-story export streams.",
+      "knownViolations": [],
+      "localSymbols": [
+        "exportWriterText",
+        "projectBlock",
+        "projectParagraph",
+        "projectNumberingRule"
+      ],
+      "upstreamSymbols": [
+        "SwXMLExport::CreateTextParagraphExport",
+        "SwXMLExport::ExportContent_"
+      ],
+      "upstreamFile": "sw/source/filter/xml/xmlexp.cxx",
+      "sourceResponsibility": "unverified"
+    }
+  }
+}

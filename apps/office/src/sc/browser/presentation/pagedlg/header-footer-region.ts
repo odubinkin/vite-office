@@ -47,7 +47,12 @@ export function paintHeaderRegion(root: HTMLElement, engine: ScHeaderEditEngine)
       points.add(attr.GetStart());
       points.add(attr.GetEnd());
     }
-    const indices = [...points].sort((a, b) => a - b);
+    const indices = [...points].sort(
+      /** Orders values numerically in ascending order. @param a - First value. @param b - Second value. @returns Numeric comparison. */ (
+        a,
+        b,
+      ) => a - b,
+    );
     for (let index = 0; index + 1 < indices.length; index++) {
       const start = indices[index] as number,
         end = indices[index + 1] as number;

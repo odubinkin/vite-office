@@ -9,7 +9,7 @@ import { ScImportExport } from "../docshell/impex";
 import { ScTabViewShell } from "../inc/tabvwsh";
 import { GetTextToColumnsRange } from "./cellsh2";
 
-it("admits only the native cursor or populated single-column mark and shrinks whole-column selection", () => {
+it("admits only the native cursor or populated single-column mark and shrinks whole-column selection", /** Admits only the native cursor or populated single-column mark and shrinks whole-column selection. @returns Nothing. */ () => {
   const shell = new ScDocShell();
   try {
     const doc = shell.GetDocument();

@@ -1,0 +1,106 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/core/txtnode/ndhints-field-query.ts",
+    "upstreamPath": "sw/source/core/txtnode/ndhints.cxx",
+    "localSymbols": [
+      "GetIndexMarks",
+      "GetReferenceMarks",
+      "GetReferenceFields",
+      "IsHiddenByParaField",
+      "GetOrdinaryFields",
+      "GetSequenceFields",
+      "GetJumpEditFields",
+      "GetDropDownFields",
+      "GetChapterFields",
+      "GetPageNumberFields",
+      "GetDocStatFields",
+      "GetDocInfoFields",
+      "GetDateTimeFields"
+    ],
+    "upstreamSymbols": [
+      "SwpHints::GetFirstPosSortedByWhichAndStart",
+      "SwpHints::GetLastPosSortedByEnd"
+    ],
+    "preservedResponsibilities": [
+      "Reads field and mark hints in the original text order and retains the represented native field type checks and visibility decisions."
+    ],
+    "omittedResponsibilities": [
+      "Hint insertion, ownership and the original three indexes remain in the existing hint container."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/core/txtnode/ndhints-field-query.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Reads field and mark hints in the original text order and retains the represented native field type checks and visibility decisions."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/ndhints-field-query.ts",
+          "marker": "GetIndexMarks"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/ndhints-field-query.ts",
+          "marker": "GetReferenceMarks"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/ndhints-field-query.ts",
+          "marker": "GetReferenceFields"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/ndhints-field-query.ts",
+          "marker": "IsHiddenByParaField"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/ndhints-field-query.ts",
+          "marker": "GetOrdinaryFields"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/ndhints-field-query.ts",
+          "marker": "GetSequenceFields"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/ndhints-field-query.ts",
+          "marker": "GetJumpEditFields"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/ndhints-field-query.ts",
+          "marker": "GetDropDownFields"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/ndhints-field-query.ts",
+          "marker": "GetChapterFields"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/ndhints-field-query.ts",
+          "marker": "GetPageNumberFields"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/ndhints-field-query.ts",
+          "marker": "GetDocStatFields"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/ndhints-field-query.ts",
+          "marker": "GetDocInfoFields"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/ndhints-field-query.ts",
+          "marker": "GetDateTimeFields"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndhints.cxx",
+          "marker": "SwpHints::GetFirstPosSortedByWhichAndStart"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndhints.cxx",
+          "marker": "SwpHints::GetLastPosSortedByEnd"
+        }
+      ]
+    }
+  }
+}

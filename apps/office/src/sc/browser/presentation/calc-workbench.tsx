@@ -47,7 +47,7 @@ import {
   useCalcCommandSource,
 } from "./calc-workbench-keys";
 import { useCalcDialog } from "./use-calc-dialog";
-import { ScPrintAreasDlg, type ScPrintReferenceInput } from "./ScPrintAreasDlg";
+import type { ScPrintReferenceInput } from "./ScPrintAreasDlg";
 import type { CalcSheetWorkflows } from "../workflows/calc-sheet-workflows";
 import { CalcFileDialog } from "./CalcFileDialog";
 import { CommandMenuBar } from "../../../framework/browser/presentation/CommandMenuBar";
@@ -971,20 +971,11 @@ export function CalcWorkbench({
           labelRanges,
           optionsDialog,
           pasteText,
+          printDialog,
         }}
         referenceInput={printInput}
         onReference={(owner, range) => setReferenceSelection({ owner, range })}
       />
-      {printDialog && (
-        <ScPrintAreasDlg
-          key={printDialog.id}
-          model={printDialog.request}
-          referenceInput={printInput}
-          onReference={(range) => setReferenceSelection({ owner: printDialog, range })}
-          onCancel={() => sheetWorkflows.printDialogs.Cancel(printDialog.id)}
-          onSubmit={(request) => sheetWorkflows.printDialogs.Complete(printDialog.id, request)}
-        />
-      )}
       {controller.error ? (
         <p
           role="alert"

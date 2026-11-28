@@ -11,11 +11,13 @@ import { createCalcSession } from "../composition/calc-module";
 import { CalcWorkbench } from "./calc-workbench";
 
 let active: ReturnType<typeof createCalcSession> | undefined;
-afterEach(() => {
-  cleanup();
-  active?.Close();
-  active = undefined;
-});
+afterEach(
+  /** Unmounts the Calc workbench and closes the test session. @returns Nothing. */ () => {
+    cleanup();
+    active?.Close();
+    active = undefined;
+  },
+);
 
 /** Mounts the actual Calc workbench. @returns Active session. */
 function mount() {
@@ -118,7 +120,10 @@ it("ports tdf117367 and keeps the three merge policies mutually exclusive", /** 
   );
   expect(doc.IsMerged(a1)).toBe(false);
   expect(screen.getByRole("gridcell", { name: "A2 BBB" })).toBeVisible();
-  act(() => expect(controller.Undo()).toBe(true));
+  act(
+    /** Undoes the last Calc command and asserts success. @returns Nothing. */ () =>
+      expect(controller.Undo()).toBe(true),
+  );
   expect(doc.IsMerged(a1)).toBe(true);
 });
 
@@ -140,7 +145,10 @@ it("ports tdf51368 and recalculates the original workbook after move, keep and e
     expect(doc.GetValue(b12)).toBe(policy.dependent);
     expect(text(doc.GetSharedString(a11).getString())).toBe(policy.anchor);
     expect(doc.GetCellType(a12)).toBe(policy.covered);
-    act(() => expect(controller.Undo()).toBe(true));
+    act(
+      /** Undoes the last Calc command and asserts success. @returns Nothing. */ () =>
+        expect(controller.Undo()).toBe(true),
+    );
     expect(doc.IsMerged(a11)).toBe(false);
     expect(doc.GetValue(a11)).toBe(2);
     expect(doc.GetValue(b12)).toBe(3);
@@ -160,13 +168,16 @@ it("ports the tdf37901 merge block and restores Key# from both merge commands", 
       await execute(toggle ? "Merge and Center Cells" : "Merge Cells", toggle);
       expect(controller.shell.GetUndoManager().GetUndoActionCount()).toBe(count + 1);
       expect(screen.queryByRole("dialog", { name: "Merge Cells" })).toBeNull();
-      act(() => expect(controller.Undo()).toBe(true));
+      act(
+        /** Undoes the last Calc command and asserts success. @returns Nothing. */ () =>
+          expect(controller.Undo()).toBe(true),
+      );
       expect(text(doc.GetSharedString(key).getString())).toBe("Key#");
     }
   }
 });
 
-it("cancels a pending merge if the originating worksheet selection changes", async () => {
+it("cancels a pending merge if the originating worksheet selection changes", /** Cancels a pending merge if the originating worksheet selection changes. @returns Completion. */ async () => {
   const { controller, frame } = mount();
   const doc = controller.shell.GetDocument();
   const a1 = new ScAddress(0, 0),
@@ -178,7 +189,10 @@ it("cancels a pending merge if the originating worksheet selection changes", asy
   select("A1:B1");
   await execute("Merge Cells");
   expect(frame.GetDispatcher().QueryState(".uno:MergeCells").enabled).toBe(false);
-  act(() => expect(controller.Select(2, 1)).toBe(true));
+  act(
+    /** Moves the Calc selection to the requested cell and asserts success. @returns Nothing. */ () =>
+      expect(controller.Select(2, 1)).toBe(true),
+  );
   await choose(/^Move the contents/);
   expect(doc.GetValue(b1)).toBe(3);
   expect(doc.IsMerged(a1)).toBe(false);

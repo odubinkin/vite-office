@@ -6,7 +6,7 @@ import { ScInsertContentsDlg } from "./ScInsertContentsDlg";
 import { ScClipboardFormatDlg } from "./ScClipboardFormatDlg";
 import type { Ref } from "react";
 import type { ScRange } from "../../inc/address";
-import type { ScPrintReferenceInput } from "./ScPrintAreasDlg";
+import { ScPrintAreasDlg, type ScPrintReferenceInput } from "./ScPrintAreasDlg";
 import { ScNameManagerDlg, ScNamePasteDlg } from "./namedlg/ScNameDialogs";
 import { ScNameCreateDlg } from "./namedlg/ScNameCreateDlg";
 import { ScColRowNameRangesDlg } from "./namedlg/ScColRowNameRangesDlg";
@@ -44,6 +44,7 @@ interface CalcSheetDialogsProps {
   readonly createNames: ReturnType<CalcSheetWorkflows["createNamesDialogs"]["GetSnapshot"]>;
   readonly namePaste: ReturnType<CalcSheetWorkflows["namePasteDialogs"]["GetSnapshot"]>;
   readonly labelRanges: ReturnType<CalcSheetWorkflows["labelRanges"]["dialogs"]["GetSnapshot"]>;
+  readonly printDialog: ReturnType<CalcSheetWorkflows["printDialogs"]["GetSnapshot"]>;
   readonly pasteText: ReturnType<CalcSheetWorkflows["clipboard"]["dialogs"]["GetSnapshot"]>;
   readonly optionsDialog: ReturnType<CalcSheetWorkflows["options"]["dialogs"]["GetSnapshot"]>;
   readonly referenceInput: Ref<ScPrintReferenceInput>;
@@ -71,6 +72,7 @@ export function CalcSheetDialogs({
   labelRanges,
   optionsDialog,
   pasteText,
+  printDialog,
   referenceInput,
   onReference,
 }: CalcSheetDialogsProps): React.JSX.Element {
@@ -80,9 +82,14 @@ export function CalcSheetDialogs({
         <ScProtectSheetDialog
           key={protectionDialog.id}
           request={protectionDialog.request}
-          onCancel={() => sheetWorkflows.protection.dialogs.Cancel(protectionDialog.id)}
-          onSubmit={(result) =>
-            sheetWorkflows.protection.dialogs.Complete(protectionDialog.id, result)
+          onCancel={
+            /** Cancels the current protection dialog. @returns Whether the request was still active. */ () =>
+              sheetWorkflows.protection.dialogs.Cancel(protectionDialog.id)
+          }
+          onSubmit={
+            /** Completes the current protection dialog. @param result - Accepted dialog values. @returns Whether the request was still active. */ (
+              result,
+            ) => sheetWorkflows.protection.dialogs.Complete(protectionDialog.id, result)
           }
         />
       )}
@@ -90,8 +97,15 @@ export function CalcSheetDialogs({
         <ScMergeCellsDialog
           key={mergeDialog.id}
           model={mergeDialog.request}
-          onCancel={() => sheetWorkflows.merge.dialogs.Cancel(mergeDialog.id)}
-          onSubmit={(result) => sheetWorkflows.merge.dialogs.Complete(mergeDialog.id, result)}
+          onCancel={
+            /** Cancels the current merge dialog. @returns Whether the request was still active. */ () =>
+              sheetWorkflows.merge.dialogs.Cancel(mergeDialog.id)
+          }
+          onSubmit={
+            /** Completes the current merge dialog. @param result - Accepted dialog values. @returns Whether the request was still active. */ (
+              result,
+            ) => sheetWorkflows.merge.dialogs.Complete(mergeDialog.id, result)
+          }
         />
       )}
       {pasteText?.request.kind === "text" && (
@@ -111,8 +125,15 @@ export function CalcSheetDialogs({
       {pasteText?.request.kind === "format" && (
         <ScClipboardFormatDlg
           key={pasteText.id}
-          onAccept={(value) => sheetWorkflows.clipboard.dialogs.Complete(pasteText.id, value)}
-          onCancel={() => sheetWorkflows.clipboard.dialogs.Cancel(pasteText.id)}
+          onAccept={
+            /** Completes the current clipboard dialog. @param value - Accepted dialog values. @returns Whether the request was still active. */ (
+              value,
+            ) => sheetWorkflows.clipboard.dialogs.Complete(pasteText.id, value)
+          }
+          onCancel={
+            /** Cancels the current clipboard dialog. @returns Whether the request was still active. */ () =>
+              sheetWorkflows.clipboard.dialogs.Cancel(pasteText.id)
+          }
         />
       )}
       {(pasteText?.request.kind === "replace" || pasteText?.request.kind === "larger") && (
@@ -126,7 +147,10 @@ export function CalcSheetDialogs({
         <ScCalcOptionsDialog
           key={optionsDialog.id}
           {...optionsDialog.request}
-          onCancel={() => sheetWorkflows.options.dialogs.Cancel(optionsDialog.id)}
+          onCancel={
+            /** Cancels the current options dialog. @returns Whether the request was still active. */ () =>
+              sheetWorkflows.options.dialogs.Cancel(optionsDialog.id)
+          }
           onAccept={() => sheetWorkflows.options.dialogs.Complete(optionsDialog.id, true)}
         />
       )}
@@ -136,7 +160,10 @@ export function CalcSheetDialogs({
           model={labelRanges.request}
           referenceInput={referenceInput}
           onReference={(range) => onReference(labelRanges, range)}
-          onCancel={() => sheetWorkflows.labelRanges.dialogs.Cancel(labelRanges.id)}
+          onCancel={
+            /** Cancels the current label ranges dialog. @returns Whether the request was still active. */ () =>
+              sheetWorkflows.labelRanges.dialogs.Cancel(labelRanges.id)
+          }
           onAccept={() => sheetWorkflows.labelRanges.dialogs.Complete(labelRanges.id, true)}
         />
       )}
@@ -144,7 +171,10 @@ export function CalcSheetDialogs({
         <ScNameCreateDlg
           key={createNames.id}
           request={createNames.request}
-          onCancel={() => sheetWorkflows.createNamesDialogs.Cancel(createNames.id)}
+          onCancel={
+            /** Cancels the open create names dialog. @returns Whether the request was still active. */ () =>
+              sheetWorkflows.createNamesDialogs.Cancel(createNames.id)
+          }
           onRespond={(result) => sheetWorkflows.createNamesDialogs.Complete(createNames.id, result)}
         />
       )}
@@ -154,7 +184,10 @@ export function CalcSheetDialogs({
           model={nameManager.request}
           referenceInput={referenceInput}
           onReference={(range) => onReference(nameManager, range)}
-          onCancel={() => sheetWorkflows.nameManagerDialogs.Cancel(nameManager.id)}
+          onCancel={
+            /** Cancels the open name manager. @returns Whether the request was still active. */ () =>
+              sheetWorkflows.nameManagerDialogs.Cancel(nameManager.id)
+          }
           onRespond={(result) => sheetWorkflows.nameManagerDialogs.Complete(nameManager.id, result)}
         />
       )}
@@ -162,7 +195,10 @@ export function CalcSheetDialogs({
         <ScNamePasteDlg
           key={namePaste.id}
           rows={namePaste.request}
-          onCancel={() => sheetWorkflows.namePasteDialogs.Cancel(namePaste.id)}
+          onCancel={
+            /** Cancels the open name paste dialog. @returns Whether the request was still active. */ () =>
+              sheetWorkflows.namePasteDialogs.Cancel(namePaste.id)
+          }
           onRespond={(result) => sheetWorkflows.namePasteDialogs.Complete(namePaste.id, result)}
         />
       )}
@@ -172,7 +208,10 @@ export function CalcSheetDialogs({
           model={nameDialog.request}
           referenceInput={referenceInput}
           onReference={(range) => onReference(nameDialog, range)}
-          onCancel={() => sheetWorkflows.nameDialogs.Cancel(nameDialog.id)}
+          onCancel={
+            /** Cancels the open name definition dialog. @returns Whether the request was still active. */ () =>
+              sheetWorkflows.nameDialogs.Cancel(nameDialog.id)
+          }
           onAdd={(data) => sheetWorkflows.AddName(nameDialog.id, data)}
         />
       )}
@@ -180,7 +219,10 @@ export function CalcSheetDialogs({
         <ScCondFormatManagerDlg
           key={condManager.id}
           model={condManager.request}
-          onCancel={() => sheetWorkflows.conditionals.managers.Cancel(condManager.id)}
+          onCancel={
+            /** Cancels the current conditionals dialog. @returns Whether the request was still active. */ () =>
+              sheetWorkflows.conditionals.managers.Cancel(condManager.id)
+          }
           onResponse={(result) =>
             sheetWorkflows.conditionals.managers.Complete(condManager.id, result)
           }
@@ -192,19 +234,30 @@ export function CalcSheetDialogs({
           model={condEditor.request}
           referenceInput={referenceInput}
           onReference={(range) => onReference(condEditor, range)}
-          onCancel={() => sheetWorkflows.conditionals.editors.Cancel(condEditor.id)}
-          onSubmit={(result) => sheetWorkflows.conditionals.editors.Complete(condEditor.id, result)}
+          onCancel={
+            /** Cancels the current conditionals dialog. @returns Whether the request was still active. */ () =>
+              sheetWorkflows.conditionals.editors.Cancel(condEditor.id)
+          }
+          onSubmit={
+            /** Completes the current conditionals dialog. @param result - Accepted dialog values. @returns Whether the request was still active. */ (
+              result,
+            ) => sheetWorkflows.conditionals.editors.Complete(condEditor.id, result)
+          }
         />
       )}
       {headerFooterDialog && (
         <ScHFEditDlg
           key={headerFooterDialog.id}
           model={headerFooterDialog.request}
-          onCancel={() =>
-            sheetWorkflows.pageStyles.headerFooterDialogs.Cancel(headerFooterDialog.id)
+          onCancel={
+            /** Cancels the current page styles dialog. @returns Whether the request was still active. */ () =>
+              sheetWorkflows.pageStyles.headerFooterDialogs.Cancel(headerFooterDialog.id)
           }
-          onSubmit={(result) =>
-            sheetWorkflows.pageStyles.headerFooterDialogs.Complete(headerFooterDialog.id, result)
+          onSubmit={
+            /** Completes the current page styles dialog. @param result - Accepted dialog values. @returns Whether the request was still active. */ (
+              result,
+            ) =>
+              sheetWorkflows.pageStyles.headerFooterDialogs.Complete(headerFooterDialog.id, result)
           }
         />
       )}
@@ -226,9 +279,14 @@ export function CalcSheetDialogs({
         <ScPageStyleDlg
           key={pageStyleDialog.id}
           model={pageStyleDialog.request}
-          onCancel={() => sheetWorkflows.pageStyles.pageStyleDialogs.Cancel(pageStyleDialog.id)}
-          onSubmit={(result) =>
-            sheetWorkflows.pageStyles.pageStyleDialogs.Complete(pageStyleDialog.id, result)
+          onCancel={
+            /** Cancels the current page styles dialog. @returns Whether the request was still active. */ () =>
+              sheetWorkflows.pageStyles.pageStyleDialogs.Cancel(pageStyleDialog.id)
+          }
+          onSubmit={
+            /** Completes the current page styles dialog. @param result - Accepted dialog values. @returns Whether the request was still active. */ (
+              result,
+            ) => sheetWorkflows.pageStyles.pageStyleDialogs.Complete(pageStyleDialog.id, result)
           }
         />
       )}
@@ -283,6 +341,27 @@ export function CalcSheetDialogs({
             ) => {
               sheetWorkflows.dialogs.Complete(sheetDialog.id, name);
             }
+          }
+        />
+      )}
+      {printDialog && (
+        <ScPrintAreasDlg
+          key={printDialog.id}
+          model={printDialog.request}
+          referenceInput={referenceInput}
+          onReference={
+            /** Keeps the print dialog as the range reference owner. @param range - Picked sheet range. @returns Nothing. */ (
+              range,
+            ) => onReference(printDialog, range)
+          }
+          onCancel={
+            /** Cancels the open print range dialog. @returns Whether the request was still active. */ () =>
+              sheetWorkflows.printDialogs.Cancel(printDialog.id)
+          }
+          onSubmit={
+            /** Completes the open print range dialog. @param request - Accepted dialog values. @returns Whether the request was still active. */ (
+              request,
+            ) => sheetWorkflows.printDialogs.Complete(printDialog.id, request)
           }
         />
       )}

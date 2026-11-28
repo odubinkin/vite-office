@@ -150,7 +150,7 @@ it("applies typed areas to marked sheets and restores workbook print history", /
   session.Close();
 });
 
-it("captures a grid reference without moving the cell cursor and validates the first invalid field", async () => {
+it("captures a grid reference without moving the cell cursor and validates the first invalid field", /** Captures a grid reference without moving the cell cursor and validates the first invalid field. @returns Completion. */ async () => {
   const session = mountPrintAreas();
   fireEvent.click(printCommand("Edit…"));
   const panel = screen.getByRole("dialog");

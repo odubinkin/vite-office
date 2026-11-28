@@ -310,7 +310,7 @@
           "marker": "@fileoverview"
         },
         {
-          "path": "apps/office/src/sw/source/filter/xml/xmlexp.ts",
+          "path": "apps/office/src/sw/source/filter/xml/xmlexp-text.ts",
           "marker": "projectBlock"
         },
         {
@@ -613,8 +613,7 @@
     "localSymbols": [
       "exportStylesXml",
       "exportContentXml",
-      "exportMetaXml",
-      "projectBlock"
+      "exportMetaXml"
     ],
     "omittedResponsibilities": [
       "Display-name mappings, same-container duplicate selection, full document named-style ownership, cycles, global null-context handling and remaining defaults/contracts are individually unverified. The named export list-base bridge is validly container-scoped but is not a claim of complete native named-style architecture."

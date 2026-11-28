@@ -17,7 +17,6 @@
       "CopyFromClip",
       "SetDirtyFromClip",
       "BroadcastBroadcasters",
-      "GetNumberFormat",
       "CopyToColumn",
       "EndListeningFormulaCells",
       "EndListening",
@@ -31,8 +30,7 @@
       "GetBlockMatrixEdges",
       "ApplyFlags",
       "RemoveFlags",
-      "ApplyPatternIfNumberformatIncompatible",
-      "SetAttrEntries"
+      "ApplyPatternIfNumberformatIncompatible"
     ],
     "upstreamSymbols": [
       "ScColumn::SetValue",

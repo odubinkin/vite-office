@@ -77,7 +77,8 @@ it("roundtrips page numbering, relative selection and continuation across layout
     const restored = await restoreOdtWorkerDocumentAsync(
       structuredClone(createOdtWorkerDocument(source)),
       undefined,
-      () => false,
+      /** Keeps the worker restore active for the round trip. @returns False, since the operation remains active. */ () =>
+        false,
     );
     try {
       const fields = restored.document.paragraphs[0]?.GetpSwpHints()?.GetPageNumberFields();

@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/unocore/unofield.document.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "odf-filter",
+    "capabilityIds": [
+      "CAP-0111"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/unocore/unofield.document.ts#SwXChapterField",
+        "vendor/libreoffice-reference/sw/source/core/unocore/unofield.cxx#SwXTextField::attach"
+      ],
+      "justification": "Keeps the four UNO descriptors for chapter, page number, document counts and date/time with their existing native field construction and attachment.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwXChapterField",
+        "SwXPageNumberField",
+        "SwXDocStatField",
+        "SwXDateTimeField"
+      ],
+      "upstreamSymbols": [
+        "SwXTextField::attach",
+        "SwServiceType::FieldTypeChapter",
+        "SwServiceType::FieldTypeDateTime"
+      ],
+      "upstreamFile": "sw/source/core/unocore/unofield.cxx",
+      "sourceResponsibility": "unverified"
+    }
+  }
+}

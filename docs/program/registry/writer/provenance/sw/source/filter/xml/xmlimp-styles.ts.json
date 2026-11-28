@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/filter/xml/xmlimp-styles.ts",
+    "upstreamPath": "sw/source/filter/xml/xmlimp.cxx",
+    "localSymbols": [
+      "applyLineNumbering",
+      "applyNamedPageStyles"
+    ],
+    "upstreamSymbols": [
+      "SwXMLDocStylesContext_Impl",
+      "SwXMLImport::CreateFastContext"
+    ],
+    "preservedResponsibilities": [
+      "Applies the existing Writer UNO page geometry and line-numbering properties and resolves style links after master-page import."
+    ],
+    "omittedResponsibilities": [
+      "The existing Writer import coordinator retains stream lifecycle and document-model ownership."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/filter/xml/xmlimp-styles.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Applies the existing Writer UNO page geometry and line-numbering properties and resolves style links after master-page import."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/xml/xmlimp-styles.ts",
+          "marker": "applyLineNumbering"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/xmlimp-styles.ts",
+          "marker": "applyNamedPageStyles"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlimp.cxx",
+          "marker": "SwXMLDocStylesContext_Impl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlimp.cxx",
+          "marker": "SwXMLImport::CreateFastContext"
+        }
+      ]
+    }
+  }
+}

@@ -12,8 +12,7 @@ import { readOdsDocument, writeOdsDocument } from "./xmlwrap";
 
 const fixtures = "../../vendor/libreoffice-reference/sc/qa/unit/data/ods";
 
-it("preserves the manual and automatic row heights from testRowHeightODS", /** Ports the original row height and ManualSize assertions through ODS save and reload. @returns Completion. */
-async () => {
+it("preserves the manual and automatic row heights from testRowHeightODS" /** Ports the original row height and ManualSize assertions through ODS save and reload. @returns Completion. */, async () => {
   const source = await readOdsDocument(
     new Uint8Array(readFileSync(fixtures + "/row-height-import.ods")),
   );
@@ -43,8 +42,7 @@ async () => {
   }
 });
 
-it("keeps a row style background as native cell attributes with explicit cell override", /** Verifies that inherited row colors survive through native cell styles upon ODS save. @returns Completion. */
-async () => {
+it("keeps a row style background as native cell attributes with explicit cell override" /** Verifies that inherited row colors survive through native cell styles upon ODS save. @returns Completion. */, async () => {
   const ns = `xmlns:office="${ODF_NAMESPACES.office}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:table="${ODF_NAMESPACES.table}" xmlns:fo="${ODF_NAMESPACES.fo}"`;
   const document = new ScDocument();
   try {

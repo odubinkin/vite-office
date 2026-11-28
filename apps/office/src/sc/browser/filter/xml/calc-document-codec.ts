@@ -118,9 +118,14 @@ export type OutlineGroup = readonly [
 /** Native addresses of both endpoints of an area. */
 export type RangeRecord = readonly [number, number, number, number, number, number];
 
-/** Reconstructs a native range from valid transfer coordinates. @param input - Transferred endpoints. @param document - Native limits. @returns Native range. */
-function decodeRange(input: RangeRecord, document: ScDocument): ScRange {
-  if (!Array.isArray(input) || input.length !== 6) throw new Error("Calc worker range is invalid.");
+/** Reconstructs a native range from valid transfer coordinates. @param input - Transferred endpoints. @param document - Native limits. @param kind - Range kind used in validation errors. @returns Native range. */
+function decodeRange(
+  input: RangeRecord,
+  document: ScDocument,
+  kind: "range" | "print range" = "range",
+): ScRange {
+  if (!Array.isArray(input) || input.length !== 6)
+    throw new Error(`Calc worker ${kind} is invalid.`);
   const [firstCol, firstRow, firstTab, lastCol, lastRow, lastTab] = input;
   if (
     !input.every(Number.isInteger) ||
@@ -131,7 +136,7 @@ function decodeRange(input: RangeRecord, document: ScDocument): ScRange {
     !document.FetchTable(firstTab) ||
     !document.FetchTable(lastTab)
   )
-    throw new Error("Calc worker range is invalid.");
+    throw new Error(`Calc worker ${kind} is invalid.`);
   return new ScRange(firstCol, firstRow, firstTab, lastCol, lastRow, lastTab);
 }
 
@@ -807,10 +812,13 @@ function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
       if (sheet.columnBreaks) table.SetColManualBreaks(new Set(sheet.columnBreaks));
       if (sheet.printRanges) {
         table.ClearPrintRanges();
-        for (const range of sheet.printRanges) table.AddPrintRange(decodeRange(range, document));
+        for (const range of sheet.printRanges)
+          table.AddPrintRange(decodeRange(range, document, "print range"));
       }
-      if (sheet.repeatColumns) table.SetRepeatColRange(decodeRange(sheet.repeatColumns, document));
-      if (sheet.repeatRows) table.SetRepeatRowRange(decodeRange(sheet.repeatRows, document));
+      if (sheet.repeatColumns)
+        table.SetRepeatColRange(decodeRange(sheet.repeatColumns, document, "print range"));
+      if (sheet.repeatRows)
+        table.SetRepeatRowRange(decodeRange(sheet.repeatRows, document, "print range"));
       for (const note of sheet.notes ?? []) {
         decodeCalcCellNote(importer, tab, note);
         yield;

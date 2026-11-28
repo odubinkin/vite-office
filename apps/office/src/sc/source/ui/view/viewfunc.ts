@@ -373,19 +373,23 @@ export class ScViewFunc extends ScTabView {
       marks = new ScMarkData(this.data.GetMarkData()),
       formula = checkFormula(doc, col, row, tab, source),
       formatSet: [boolean] = [false];
-    manager.EnterListAction("Input");
-    try {
-      for (const selected of marks.GetSelectedTabs()) {
-        const position = new ScAddress(col, row, selected);
-        if (formula) {
-          const cell = new ScFormulaCell(doc, position, source, doc.GetGrammar());
-          if (!functions.SetFormulaCell(position, cell, true)) return false;
-        } else if (!functions.SetNormalString(formatSet, position, source, false)) return false;
-      }
-      return true;
-    } finally {
-      manager.LeaveListAction();
-    }
+    return this.shell.RunDocumentEditGroup(
+      /** Writes the selected sheets in one undo action. @returns Whether every sheet accepted the input. */ () => {
+        manager.EnterListAction("Input");
+        try {
+          for (const selected of marks.GetSelectedTabs()) {
+            const position = new ScAddress(col, row, selected);
+            if (formula) {
+              const cell = new ScFormulaCell(doc, position, source, doc.GetGrammar());
+              if (!functions.SetFormulaCell(position, cell, true)) return false;
+            } else if (!functions.SetNormalString(formatSet, position, source, false)) return false;
+          }
+          return true;
+        } finally {
+          manager.LeaveListAction();
+        }
+      },
+    );
   }
   /** Applies the native selected-sheet input protection test before entering a cell. @param col - Cell column. @param row - Cell row. @returns Whether the write is allowed. */
   CheckCellInput(col: number, row: number): boolean {

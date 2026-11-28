@@ -21,11 +21,13 @@ import { createCalcSession } from "../composition/calc-module";
 import { CalcWorkbench } from "./calc-workbench";
 
 let session: ReturnType<typeof createCalcSession> | undefined;
-afterEach(() => {
-  cleanup();
-  session?.Close();
-  session = undefined;
-});
+afterEach(
+  /** Unmounts the Calc workbench and closes the test session. @returns Nothing. */ () => {
+    cleanup();
+    session?.Close();
+    session = undefined;
+  },
+);
 
 /** Attaches the actual browser workbench and optional native workbook. @param workbook - Imported fixture. @returns Live workbook. */
 function mount(workbook?: ScDocument): ScDocument {

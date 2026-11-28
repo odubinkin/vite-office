@@ -56,7 +56,10 @@ it("copies cells and their formats, then pastes relative formulas through one na
   expect(clipboard.getData("text/plain")).toBe("7\t14");
   select("C3");
   const count = controller.shell.GetUndoManager().GetUndoActionCount();
-  await act(async () => fireEvent.paste(grid(), { clipboardData: clipboard }));
+  await act(
+    /** Pastes into the worksheet grid. @returns Whether the default action is allowed, after dispatch. */ async () =>
+      fireEvent.paste(grid(), { clipboardData: clipboard }),
+  );
   expect(doc.GetValue(c3)).toBe(7);
   expect(doc.GetValue(d3)).toBe(14);
   const formula = doc.GetFormulaCell(d3)?.GetFormula(doc.GetGrammar());
@@ -64,10 +67,16 @@ it("copies cells and their formats, then pastes relative formulas through one na
   formula?.dispose();
   expect((doc.GetPattern(c3)?.GetItem(101) as SvxFontHeightItem).GetHeight()).toBe(320);
   expect(controller.shell.GetUndoManager().GetUndoActionCount()).toBe(count + 1);
-  act(() => expect(controller.Undo()).toBe(true));
+  act(
+    /** Undoes the last Calc command and asserts success. @returns Nothing. */ () =>
+      expect(controller.Undo()).toBe(true),
+  );
   expect(doc.GetFormulaCell(d3)).toBeNull();
   expect(doc.GetValue(a1)).toBe(7);
-  act(() => expect(controller.Redo()).toBe(true));
+  act(
+    /** Reapplies the last undone Calc command and asserts success. @returns Nothing. */ () =>
+      expect(controller.Redo()).toBe(true),
+  );
   expect(doc.GetValue(d3)).toBe(14);
   expect((doc.GetPattern(c3)?.GetItem(101) as SvxFontHeightItem).GetHeight()).toBe(320);
 });
@@ -92,7 +101,10 @@ it("ports tdf119343 by recalculating the pasted reference against the next row",
   const clipboard = transfer();
   fireEvent.copy(grid(), { clipboardData: clipboard });
   fireEvent.keyDown(grid(), { key: "ArrowDown" });
-  await act(async () => fireEvent.paste(grid(), { clipboardData: clipboard }));
+  await act(
+    /** Pastes into the worksheet grid. @returns Whether the default action is allowed, after dispatch. */ async () =>
+      fireEvent.paste(grid(), { clipboardData: clipboard }),
+  );
   const doc = controller.shell.GetDocument();
   for (const [row, expected] of [
     [293, "Q108420"],
@@ -110,7 +122,10 @@ it("ports CalcPasteOnly through the Text, Number and Formula menu commands", /**
   browserClipboard(clipboard);
   const controller = mount(),
     doc = controller.shell.GetDocument();
-  act(() => expect(controller.EnterString("=SUM(A2:A3)")).toBe(true));
+  act(
+    /** Enters the test value through the native Calc command and asserts success. @returns Nothing. */ () =>
+      expect(controller.EnterString("=SUM(A2:A3)")).toBe(true),
+  );
   select("A1");
   fireEvent.copy(grid(), { clipboardData: clipboard });
 
@@ -176,10 +191,16 @@ it("ports testCopyPasteTranspose across sheets with rotated borders and native h
   expect(border.GetDistance(SvxBoxItemLine.LEFT)).toBe(12);
   expect(border.GetTop()).toBeUndefined();
   expect(controller.shell.GetUndoManager().GetUndoActionCount()).toBe(count + 1);
-  act(() => expect(controller.Undo()).toBe(true));
+  act(
+    /** Undoes the last Calc command and asserts success. @returns Nothing. */ () =>
+      expect(controller.Undo()).toBe(true),
+  );
   expect(doc.GetCellType(d3)).toBe(CellType.CELLTYPE_NONE);
   expect((doc.GetPattern(d3)?.GetItem(ATTR_BORDER) as SvxBoxItem).GetLeft()).toBeUndefined();
-  act(() => expect(controller.Redo()).toBe(true));
+  act(
+    /** Reapplies the last undone Calc command and asserts success. @returns Nothing. */ () =>
+      expect(controller.Redo()).toBe(true),
+  );
   expect(doc.GetValue(d3)).toBe(2);
   expect((doc.GetPattern(d3)?.GetItem(ATTR_BORDER) as SvxBoxItem).GetLeft()?.GetWidth()).toBe(30);
 });
@@ -210,7 +231,7 @@ it("rotates only fully relative references and repeats the same clipboard withou
   }
 });
 
-it("confirms the transposed selection size and preserves rich cells and styled empty cells", async () => {
+it("confirms the transposed selection size and preserves rich cells and styled empty cells", /** Confirms the transposed selection size and preserves rich cells and styled empty cells. @returns Completion. */ async () => {
   const clipboard = transfer();
   browserClipboard(clipboard);
   const controller = mount(),
@@ -258,7 +279,10 @@ it("confirms the transposed selection size and preserves rich cells and styled e
   expect((doc.GetPattern(styledEmpty)?.GetItem(101) as SvxFontHeightItem).GetHeight()).toBe(320);
   expect(doc.GetCellType(cleared)).toBe(CellType.CELLTYPE_NONE);
   expect(undo.GetUndoActionCount()).toBe(count + 1);
-  act(() => expect(controller.Undo()).toBe(true));
+  act(
+    /** Undoes the last Calc command and asserts success. @returns Nothing. */ () =>
+      expect(controller.Undo()).toBe(true),
+  );
   expect(doc.GetValue(cleared)).toBe(50);
 });
 
@@ -306,10 +330,16 @@ it("ports tdf69450 by pasting formats from populated and empty cells without del
   assert(value);
   expect(text(value.getString())).toBe("B");
   expect((doc.GetPattern(b1)?.GetItem(101) as SvxFontHeightItem).GetHeight()).toBe(320);
-  act(() => expect(controller.Undo()).toBe(true));
+  act(
+    /** Undoes the last Calc command and asserts success. @returns Nothing. */ () =>
+      expect(controller.Undo()).toBe(true),
+  );
   expect(doc.GetCellType(b1)).toBe(CellType.CELLTYPE_STRING);
   expect((doc.GetPattern(b1)?.GetItem(101) as SvxFontHeightItem).GetHeight()).not.toBe(320);
-  act(() => expect(controller.Redo()).toBe(true));
+  act(
+    /** Reapplies the last undone Calc command and asserts success. @returns Nothing. */ () =>
+      expect(controller.Redo()).toBe(true),
+  );
   expect((doc.GetPattern(b1)?.GetItem(101) as SvxFontHeightItem).GetHeight()).toBe(320);
 });
 
@@ -354,7 +384,7 @@ it("applies a preset draft with Skip Empty Cells to values and formats", /** App
   expect((doc.GetPattern(hole)?.GetItem(101) as SvxFontHeightItem).GetHeight()).not.toBe(320);
 });
 
-it("runs Formats Only from the menu immediately and keeps the original formula owner", async () => {
+it("runs Formats Only from the menu immediately and keeps the original formula owner", /** Runs Formats Only from the menu immediately and keeps the original formula owner. @returns Completion. */ async () => {
   const clipboard = transfer();
   browserClipboard(clipboard);
   const controller = mount(),
@@ -383,12 +413,15 @@ it("runs Formats Only from the menu immediately and keeps the original formula o
   expect(screen.queryByRole("alertdialog", { name: "Paste" })).toBeNull();
   expect(doc.GetFormulaCell(target)).toBe(original);
   expect((doc.GetPattern(target)?.GetItem(101) as SvxFontHeightItem).GetHeight()).toBe(340);
-  act(() => expect(controller.Undo()).toBe(true));
+  act(
+    /** Undoes the last Calc command and asserts success. @returns Nothing. */ () =>
+      expect(controller.Undo()).toBe(true),
+  );
   expect(doc.GetFormulaCell(target)).toBe(original);
   expect((doc.GetPattern(target)?.GetItem(101) as SvxFontHeightItem).GetHeight()).not.toBe(340);
 });
 
-it("pastes numbers without dates, keeps result errors and restores overwritten cell types on Undo", async () => {
+it("pastes numbers without dates, keeps result errors and restores overwritten cell types on Undo", /** Pastes numbers without dates, keeps result errors and restores overwritten cell types on Undo. @returns Completion. */ async () => {
   const clipboard = transfer();
   browserClipboard(clipboard);
   const controller = mount(),
@@ -426,15 +459,21 @@ it("pastes numbers without dates, keeps result errors and restores overwritten c
   expect(error?.GetCode().GetLen()).toBe(0);
   expect(doc.GetValue(new ScAddress(2, 2, 0))).toBe(45002);
   expect(doc.GetCellType(new ScAddress(2, 3, 0))).toBe(CellType.CELLTYPE_NONE);
-  act(() => expect(controller.Undo()).toBe(true));
+  act(
+    /** Undoes the last Calc command and asserts success. @returns Nothing. */ () =>
+      expect(controller.Undo()).toBe(true),
+  );
   expect(doc.GetCellType(c1)).toBe(CellType.CELLTYPE_STRING);
   expect(doc.GetFormulaCell(c2)?.GetValue()).toBe(9);
   expect(doc.GetValue(new ScAddress(2, 3, 0))).toBe(42);
-  act(() => expect(controller.Redo()).toBe(true));
+  act(
+    /** Reapplies the last undone Calc command and asserts success. @returns Nothing. */ () =>
+      expect(controller.Redo()).toBe(true),
+  );
   expect(doc.GetFormulaCell(c2)?.GetErrCode()).toBe(FormulaError.DivisionByZero);
 });
 
-it("pastes a multiline formula result as rich text and refuses a later external identity", async () => {
+it("pastes a multiline formula result as rich text and refuses a later external identity", /** Pastes a multiline formula result as rich text and refuses a later external identity. @returns Completion. */ async () => {
   const clipboard = transfer();
   browserClipboard(clipboard);
   const controller = mount(),
@@ -463,7 +502,7 @@ it("pastes a multiline formula result as rich text and refuses a later external 
   expect(doc.GetCellType(new ScAddress(2, 0, 0))).toBe(CellType.CELLTYPE_NONE);
 });
 
-it("asks for Text Import settings, preserves leading zeroes and skips empty cells on confirmation", async () => {
+it("asks for Text Import settings, preserves leading zeroes and skips empty cells on confirmation", /** Asks for Text Import settings, preserves leading zeroes and skips empty cells on confirmation. @returns Completion. */ async () => {
   const controller = mount(),
     doc = controller.shell.GetDocument();
   const b2 = new ScAddress(1, 1, 0),
@@ -475,7 +514,10 @@ it("asks for Text Import settings, preserves leading zeroes and skips empty cell
   });
   const data = transfer("id\tamount\n001\t2\n\t3");
   const count = controller.shell.GetUndoManager().GetUndoActionCount();
-  await act(async () => fireEvent.paste(grid(), { clipboardData: data }));
+  await act(
+    /** Pastes into the worksheet grid. @returns Whether the default action is allowed, after dispatch. */ async () =>
+      fireEvent.paste(grid(), { clipboardData: data }),
+  );
   let dialog = screen.getByRole("dialog", { name: "Text Import" });
   expect(within(dialog).getByRole("table", { name: "Import preview" })).toHaveTextContent("amount");
   await act(
@@ -484,7 +526,10 @@ it("asks for Text Import settings, preserves leading zeroes and skips empty cell
   );
   expect(doc.GetCellType(b2)).toBe(CellType.CELLTYPE_NONE);
   expect(controller.shell.GetUndoManager().GetUndoActionCount()).toBe(count);
-  await act(async () => fireEvent.paste(grid(), { clipboardData: data }));
+  await act(
+    /** Pastes into the worksheet grid. @returns Whether the default action is allowed, after dispatch. */ async () =>
+      fireEvent.paste(grid(), { clipboardData: data }),
+  );
   dialog = screen.getByRole("dialog", { name: "Text Import" });
   expect(within(dialog).getByRole("checkbox", { name: "Skip empty cells" })).toBeChecked();
   fireEvent.change(within(dialog).getByRole("spinbutton", { name: "From row" }), {
@@ -506,12 +551,15 @@ it("asks for Text Import settings, preserves leading zeroes and skips empty cell
   expect(doc.GetValue(new ScAddress(2, 1, 0))).toBe(2);
   expect(doc.GetValue(new ScAddress(2, 2, 0))).toBe(3);
   expect(controller.shell.GetUndoManager().GetUndoActionCount()).toBe(count + 1);
-  act(() => expect(controller.Undo()).toBe(true));
+  act(
+    /** Undoes the last Calc command and asserts success. @returns Nothing. */ () =>
+      expect(controller.Undo()).toBe(true),
+  );
   expect(doc.GetCellType(b2)).toBe(CellType.CELLTYPE_NONE);
   expect(doc.GetCellType(b3)).toBe(CellType.CELLTYPE_STRING);
 });
 
-it("asks to extend a short selection and then to replace existing cells before creating Undo", async () => {
+it("asks to extend a short selection and then to replace existing cells before creating Undo", /** Asks to extend a short selection and then to replace existing cells before creating Undo. @returns Completion. */ async () => {
   const controller = mount(),
     doc = controller.shell.GetDocument();
   const first = new ScAddress(0, 0, 0),
@@ -527,7 +575,10 @@ it("asks to extend a short selection and then to replace existing cells before c
   fireEvent.copy(grid(), { clipboardData: clipboard });
   select("C1:C2");
   const count = controller.shell.GetUndoManager().GetUndoActionCount();
-  await act(async () => fireEvent.paste(grid(), { clipboardData: clipboard }));
+  await act(
+    /** Pastes into the worksheet grid. @returns Whether the default action is allowed, after dispatch. */ async () =>
+      fireEvent.paste(grid(), { clipboardData: clipboard }),
+  );
   let dialog = within(screen.getByRole("alertdialog", { name: "Paste" }));
   expect(dialog.getByText(/bigger than the range/)).toBeVisible();
   expect(dialog.getByRole("button", { name: "No" })).toHaveFocus();
@@ -538,7 +589,10 @@ it("asks to extend a short selection and then to replace existing cells before c
   expect(doc.GetValue(existing)).toBe(41);
   expect(controller.shell.GetUndoManager().GetUndoActionCount()).toBe(count);
 
-  await act(async () => fireEvent.paste(grid(), { clipboardData: clipboard }));
+  await act(
+    /** Pastes into the worksheet grid. @returns Whether the default action is allowed, after dispatch. */ async () =>
+      fireEvent.paste(grid(), { clipboardData: clipboard }),
+  );
   dialog = within(screen.getByRole("alertdialog", { name: "Paste" }));
   await act(
     /** Clicks the button named "Yes". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
@@ -556,7 +610,10 @@ it("asks to extend a short selection and then to replace existing cells before c
   expect(doc.GetValue(existing)).toBe(41);
   expect(controller.shell.GetUndoManager().GetUndoActionCount()).toBe(count);
 
-  await act(async () => fireEvent.paste(grid(), { clipboardData: clipboard }));
+  await act(
+    /** Pastes into the worksheet grid. @returns Whether the default action is allowed, after dispatch. */ async () =>
+      fireEvent.paste(grid(), { clipboardData: clipboard }),
+  );
   dialog = within(screen.getByRole("alertdialog", { name: "Paste" }));
   await act(
     /** Clicks the button named "Yes". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
@@ -565,7 +622,10 @@ it("asks to extend a short selection and then to replace existing cells before c
   expect(screen.queryByRole("alertdialog", { name: "Paste" })).toBeNull();
   expect(doc.GetValue(existing)).toBe(29);
   expect(controller.shell.GetUndoManager().GetUndoActionCount()).toBe(count + 1);
-  act(() => expect(controller.Undo()).toBe(true));
+  act(
+    /** Undoes the last Calc command and asserts success. @returns Nothing. */ () =>
+      expect(controller.Undo()).toBe(true),
+  );
   expect(doc.GetValue(existing)).toBe(41);
 });
 
@@ -573,7 +633,10 @@ it("uses the native menu for browser text Copy and Paste Unformatted without reu
   const clipboard = browserClipboard();
   const controller = mount(),
     doc = controller.shell.GetDocument();
-  act(() => expect(controller.EnterString("=2+3")).toBe(true));
+  act(
+    /** Enters the test value through the native Calc command and asserts success. @returns Nothing. */ () =>
+      expect(controller.EnterString("=2+3")).toBe(true),
+  );
   fireEvent.click(screen.getByRole("menuitem", { name: "Edit" }));
   await act(
     /** Clicks the menuitem named "Copy". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
@@ -604,7 +667,10 @@ it("keeps editable input clipboard events native and imports external formula ad
   fireEvent.keyDown(input, { key: "Escape" });
   act(() => doc.SetValue(new ScAddress(), 11));
   select("C4");
-  await act(async () => fireEvent.paste(grid(), { clipboardData: transfer("=A1+1") }));
+  await act(
+    /** Pastes into the worksheet grid. @returns Whether the default action is allowed, after dispatch. */ async () =>
+      fireEvent.paste(grid(), { clipboardData: transfer("=A1+1") }),
+  );
   const position = new ScAddress(2, 3, 0);
   expect(doc.GetValue(position)).toBe(12);
   const expected = unicode("=A1+1"),
@@ -618,10 +684,11 @@ it("imports quoted multiline cells and detected dates with number-format undo", 
   const controller = mount(),
     doc = controller.shell.GetDocument();
   select("B2");
-  await act(async () =>
-    fireEvent.paste(grid(), {
-      clipboardData: transfer('"first\nsecond"\t2024-02-03\nplain\t2024-02-04'),
-    }),
+  await act(
+    /** Pastes into the worksheet grid. @returns Whether the default action is allowed, after dispatch. */ async () =>
+      fireEvent.paste(grid(), {
+        clipboardData: transfer('"first\nsecond"\t2024-02-03\nplain\t2024-02-04'),
+      }),
   );
   const dialog = within(screen.getByRole("dialog", { name: "Text Import" }));
   await act(
@@ -646,10 +713,16 @@ it("imports quoted multiline cells and detected dates with number-format undo", 
     doc.GetPattern(date)?.GetNumberFormat(doc.GetNonThreadedContext()) ?? 0;
   expect(readRich()).toBe("first\nsecond");
   expect(doc.GetFormatTable().GetType(format()) & SvNumFormatType.DATE).not.toBe(0);
-  act(() => expect(controller.Undo()).toBe(true));
+  act(
+    /** Undoes the last Calc command and asserts success. @returns Nothing. */ () =>
+      expect(controller.Undo()).toBe(true),
+  );
   expect(doc.GetCellType(rich)).toBe(CellType.CELLTYPE_NONE);
   expect(format()).toBe(0);
-  act(() => expect(controller.Redo()).toBe(true));
+  act(
+    /** Reapplies the last undone Calc command and asserts success. @returns Nothing. */ () =>
+      expect(controller.Redo()).toBe(true),
+  );
   expect(readRich()).toBe("first\nsecond");
   expect(doc.GetFormatTable().GetType(format()) & SvNumFormatType.DATE).not.toBe(0);
 });
@@ -658,9 +731,15 @@ it("reports clipboard overflow at the sheet boundary and can undo the imported p
   const controller = mount(),
     doc = controller.shell.GetDocument();
   const bottom = new ScAddress(0, doc.MaxRow(), 0);
-  act(() => controller.Select(bottom.Col(), bottom.Row()));
+  act(
+    /** Moves the Calc selection to the requested cell. @returns Whether Calc accepted the selection. */ () =>
+      controller.Select(bottom.Col(), bottom.Row()),
+  );
   const count = controller.shell.GetUndoManager().GetUndoActionCount();
-  await act(async () => fireEvent.paste(grid(), { clipboardData: transfer("4\n5") }));
+  await act(
+    /** Pastes into the worksheet grid. @returns Whether the default action is allowed, after dispatch. */ async () =>
+      fireEvent.paste(grid(), { clipboardData: transfer("4\n5") }),
+  );
   const dialog = within(screen.getByRole("dialog", { name: "Text Import" }));
   await act(
     /** Clicks the button named "OK". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
@@ -671,7 +750,10 @@ it("reports clipboard overflow at the sheet boundary and can undo the imported p
   );
   expect(doc.GetValue(bottom)).toBe(4);
   expect(controller.shell.GetUndoManager().GetUndoActionCount()).toBe(count + 1);
-  act(() => expect(controller.Undo()).toBe(true));
+  act(
+    /** Undoes the last Calc command and asserts success. @returns Nothing. */ () =>
+      expect(controller.Undo()).toBe(true),
+  );
   expect(doc.GetCellType(bottom)).toBe(CellType.CELLTYPE_NONE);
 });
 

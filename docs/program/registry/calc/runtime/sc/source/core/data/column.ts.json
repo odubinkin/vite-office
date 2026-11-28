@@ -76,7 +76,6 @@
         "CopyFromClip",
         "SetDirtyFromClip",
         "BroadcastBroadcasters",
-        "GetNumberFormat",
         "CopyToColumn",
         "EndListeningFormulaCells",
         "EndListening",
@@ -90,8 +89,7 @@
         "GetBlockMatrixEdges",
         "ApplyFlags",
         "RemoveFlags",
-        "ApplyPatternIfNumberformatIncompatible",
-        "SetAttrEntries"
+        "ApplyPatternIfNumberformatIncompatible"
       ],
       "sourceResponsibility": "divergent",
       "upstreamFile": "sc/source/core/data/column3.cxx",

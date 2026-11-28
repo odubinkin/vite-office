@@ -1,0 +1,56 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/core/data/column.attributes.ts",
+    "upstreamPath": "sc/source/core/data/column.cxx",
+    "localSymbols": [
+      "ScColumnData",
+      "GetNumberFormat",
+      "SetAttrEntries"
+    ],
+    "upstreamSymbols": [
+      "ScColumnData::GetNumberFormat",
+      "ScColumnData::ApplyPatternArea"
+    ],
+    "preservedResponsibilities": [
+      "Keeps the original Calc column attribute owner and its default-column responsibilities together with its pattern-run queries and mutations."
+    ],
+    "omittedResponsibilities": [
+      "Cell value, formula and broadcaster storage continue to use the existing column implementation."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/core/data/column.attributes.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Keeps the original Calc column attribute owner and its default-column responsibilities together with its pattern-run queries and mutations."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/data/column.attributes.ts",
+          "marker": "class ScColumnData"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/column.attributes.ts",
+          "marker": "GetNumberFormat"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/column.attributes.ts",
+          "marker": "SetAttrEntries"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/column.cxx",
+          "marker": "ScColumnData::GetNumberFormat"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/column.cxx",
+          "marker": "ScColumnData::ApplyPatternArea"
+        }
+      ]
+    }
+  }
+}

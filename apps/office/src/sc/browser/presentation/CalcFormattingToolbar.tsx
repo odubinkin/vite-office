@@ -275,7 +275,11 @@ function CalcBorderToolbarItem({
 
 const conditionalCommand = ".uno:ConditionalFormatMenu";
 const conditionalMenu = calcMenus
-  .flatMap((menu) => menu.items)
+  .flatMap(
+    /** Projects the `items` of each entry. @param menu - Source entry. @returns The field value. */ (
+      menu,
+    ) => menu.items,
+  )
   .find((item) => item.kind === "submenu" && item.id === conditionalCommand);
 const ConditionalIcon = officeCommandIcons.get(conditionalCommand);
 

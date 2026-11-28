@@ -1,4 +1,5 @@
 /** @fileoverview Scalar worksheet-range AVERAGEIF and conditional extrema from interpr1.cxx. */
+import { FillLookupEntry } from "./interpr1";
 import { FormulaError } from "../../../../formula/inc/errorcodes";
 import { OpCode } from "../../../../formula/inc/opcode";
 import { FormulaByteToken, StackVar, type FormulaToken } from "../../../../formula/inc/token";
@@ -61,7 +62,7 @@ function popCondition(this: ScInterpreter, dimensionError: FormulaError): Condit
   const value =
     type === StackVar.svMissing || type === StackVar.svEmptyCell || type === StackVar.svError
       ? this["GetDouble"]()
-      : this["FillLookupEntry"](true);
+      : FillLookupEntry.call(this, true);
   if (value === undefined || this.GetError() !== FormulaError.NONE) return undefined;
   const range = popRange.call(this, dimensionError);
   if (!range || this.GetError() !== FormulaError.NONE) return undefined;

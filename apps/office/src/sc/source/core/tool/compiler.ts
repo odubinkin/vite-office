@@ -43,8 +43,14 @@ import type { ScMatrix } from "./scmatrix";
 import { CreateStringFromMatrix } from "./compiler.matrix";
 import { GetLabelString, GetRefColRowNames, ParseColRowName } from "./compiler.colrowname";
 import { ANALYSIS_EDATE, EDATE } from "./odffmap";
-import { QuoteTabName } from "./address.ooo";
 import { CreateStringFromExternal, parseExternalReference } from "./compiler.external";
+import {
+  createDoubleReference,
+  createSingleReference,
+  findReferenceSheet,
+  FormatSheet,
+  IsExcelReference,
+} from "./compiler.reference";
 
 /** Selects lexical symbols from the native language resource. @param resource - Actual symbols. @returns Token lookup. */
 function createSymbolMap(resource: ReadonlyMap<OpCode, string>): Readonly<Record<string, OpCode>> {
@@ -335,7 +341,7 @@ export class ScCompiler extends FormulaCompiler {
       try {
         const prefix =
           !omitSheet && (reference.IsFlag3D() || address.Tab() !== this.aPos.Tab())
-            ? this.FormatSheet(address.Tab(), true)
+            ? FormatSheet(this.rDoc, this.meGrammar, address.Tab(), true)
             : "";
         return prefix + text(value);
       } finally {
@@ -351,7 +357,7 @@ export class ScCompiler extends FormulaCompiler {
     }
     let output = odf ? "." : "";
     if (!omitSheet && (reference.IsFlag3D() || address.Tab() !== this.aPos.Tab()))
-      output = this.FormatSheet(address.Tab(), !reference.IsTabRel());
+      output = FormatSheet(this.rDoc, this.meGrammar, address.Tab(), !reference.IsTabRel());
     if (singleton !== 2)
       output +=
         (reference.IsColRel() ? "" : "$") +
@@ -363,22 +369,6 @@ export class ScCompiler extends FormulaCompiler {
           ? "#REF!"
           : address.Row() + 1);
     return output;
-  }
-  /** Formats one qualified sheet using the original formula convention. @param tab - Native sheet. @param absolute - Absolute sheet flag. @returns Prefix including delimiter. */
-  private FormatSheet(tab: number, absolute: boolean): string {
-    const source = this.rDoc.FetchTable(tab)?.GetName();
-    if (!source) return "#REF!";
-    const quoted = QuoteTabName(text(source));
-    if (this.IsExcelReference()) return quoted + "!";
-    return (absolute ? "$" : "") + quoted + ".";
-  }
-  /** Reads the separator used by the current sheet-qualified syntax. @returns Whether it uses an Excel separator. */
-  private IsExcelReference(): boolean {
-    const convention = FormulaGrammar.extractRefConvention(this.meGrammar);
-    return (
-      convention >= FormulaGrammar.AddressConvention.CONV_XL_A1 &&
-      convention <= FormulaGrammar.AddressConvention.CONV_XL_OOX
-    );
   }
   /** Admits the inline matrix operand owned by the Calc token array. @param token - Source token. @returns Whether this is a populated literal matrix. */
   protected override IsMatrixOperand(token: FormulaToken): boolean {
@@ -435,8 +425,9 @@ export class ScCompiler extends FormulaCompiler {
     const replacement = this.rangeNameUpdate?.get(tab)?.findByIndex(token.GetIndex());
     if (!range) return "#NAME?";
     return (
-      (tab !== -1 && tab !== this.aPos.Tab() ? this.FormatSheet(tab, false) : "") +
-      (replacement?.name ?? range.name)
+      (tab !== -1 && tab !== this.aPos.Tab()
+        ? FormatSheet(this.rDoc, this.meGrammar, tab, false)
+        : "") + (replacement?.name ?? range.name)
     );
   }
   /** Spells the label or emits its equivalent Excel reference. @param token - Label token. @returns Formula text. */
@@ -582,35 +573,16 @@ export class ScCompiler extends FormulaCompiler {
     absolute = false,
     deletedTab = false,
   ): boolean {
-    const origin = new ScAddress(this.aPos);
-    origin.SetTab(tab);
-    const range = new ScRange(origin, origin),
-      input = unicode(name);
-    let flags: ScRefFlags;
-    try {
-      flags = range.Parse(input, this.rDoc, this.ReferenceDetails());
-    } finally {
-      input.dispose();
-    }
-    if (!(flags & ScRefFlags.VALID)) throw new Error("Range/name fallback is not implemented");
-    range.aStart.SetTab(tab);
-    const qualifiedEnd = Boolean(flags & ScRefFlags.TAB2_3D);
-    if (!qualifiedEnd) range.aEnd.SetTab(tab);
-    const reference = new ScComplexRefData();
-    reference.InitRange(range);
-    reference.Ref1.SetColRel(!(flags & ScRefFlags.COL_ABS));
-    reference.Ref1.SetRowRel(!(flags & ScRefFlags.ROW_ABS));
-    reference.Ref1.SetTabRel(!absolute);
-    reference.Ref1.SetFlag3D(qualified);
-    reference.Ref2.SetColRel(!(flags & ScRefFlags.COL2_ABS));
-    reference.Ref2.SetRowRel(!(flags & ScRefFlags.ROW2_ABS));
-    reference.Ref2.SetTabRel(qualifiedEnd ? !(flags & ScRefFlags.TAB2_ABS) : !absolute);
-    reference.Ref2.SetFlag3D(qualifiedEnd);
-    reference.SetRange(this.rDoc.GetSheetLimits(), range, this.aPos);
-    if (deletedTab) {
-      reference.Ref1.SetTabDeleted(true);
-      reference.Ref2.SetTabDeleted(true);
-    }
+    const reference = createDoubleReference(
+      name,
+      this.rDoc,
+      this.aPos,
+      this.ReferenceDetails(),
+      tab,
+      qualified,
+      absolute,
+      deletedTab,
+    );
     if (!(this.mpArr as ScTokenArray).AddDoubleReference(reference))
       this.SetError(FormulaError.CodeOverflow);
     return true;
@@ -627,32 +599,16 @@ export class ScCompiler extends FormulaCompiler {
     absolute = false,
     deletedTab = false,
   ): boolean {
-    const address = new ScAddress(this.aPos);
-    const deletedCell = name === "#REF!";
-    let flags = ScRefFlags.ZERO;
-    if (!deletedCell) {
-      const input = unicode(name);
-      try {
-        flags = address.Parse(input, this.rDoc, this.ReferenceDetails());
-      } finally {
-        input.dispose();
-      }
-      if (!(flags & ScRefFlags.VALID))
-        throw new Error("Reference/name fallback is not implemented");
-    }
-    address.SetTab(tab);
-    const reference = new ScSingleRefData();
-    reference.InitAddress(address);
-    reference.SetColRel(!deletedCell && !(flags & ScRefFlags.COL_ABS));
-    reference.SetRowRel(!deletedCell && !(flags & ScRefFlags.ROW_ABS));
-    reference.SetTabRel(!absolute);
-    reference.SetFlag3D(qualified);
-    reference.SetAddress(this.rDoc.GetSheetLimits(), address, this.aPos);
-    if (deletedCell) {
-      reference.SetColDeleted(true);
-      reference.SetRowDeleted(true);
-    }
-    if (deletedTab) reference.SetTabDeleted(true);
+    const reference = createSingleReference(
+      name,
+      this.rDoc,
+      this.aPos,
+      this.ReferenceDetails(),
+      tab,
+      qualified,
+      absolute,
+      deletedTab,
+    );
     if (!(this.mpArr as ScTokenArray).AddSingleReference(reference))
       this.SetError(FormulaError.CodeOverflow);
     return true;
@@ -669,17 +625,6 @@ export class ScCompiler extends FormulaCompiler {
     else this.ParseSingleReference(match[0], this.aPos.Tab(), true, !!qualifier[1], true);
     return qualifier[0].length + match[0].length;
   }
-  /** Resolves a qualified sheet before passing the A1 part to the original address parser. @param sheet - Qualifier spelling. @returns Native sheet index. */
-  private FindSheet(sheet: string): number | undefined {
-    const raw = sheet.replace(/^\$/u, "");
-    const name = unicode(raw.startsWith("'") ? raw.slice(1, -1).replaceAll("''", "'") : raw);
-    const tab: [number] = [-1];
-    try {
-      return this.rDoc.GetTable(name, tab) ? tab[0] : undefined;
-    } finally {
-      name.dispose();
-    }
-  }
   /** Scans the represented numeric ODFF subset into its actual Calc array, preserving native leading equals, forced recalc and default bracket completion. @param formula - Unicode formula. @returns Source-order token owner. */
   CompileString(formula: OUStringConstReference): ScTokenArray {
     const ooxml = this.meGrammar === FormulaGrammar.Grammar.GRAM_OOXML;
@@ -691,7 +636,7 @@ export class ScCompiler extends FormulaCompiler {
       : FormulaGrammar.isPODF(this.meGrammar)
         ? podfSymbols
         : odffSymbols;
-    const excel = this.IsExcelReference();
+    const excel = IsExcelReference(this.meGrammar);
     const cellPattern = this.IsR1C1() ? r1c1Reference : a1Reference;
     const rangePattern = this.IsR1C1() ? r1c1Range : a1Range;
     const oooRange = excel ? undefined : a1RangeWithEndSheet;
@@ -837,7 +782,7 @@ export class ScCompiler extends FormulaCompiler {
       if (qualifier) {
         const spelling = qualifier[1] as string;
         const address = remaining.slice(qualifier[0].length);
-        const tab = this.FindSheet(spelling);
+        const tab = findReferenceSheet(this.rDoc, spelling);
         if (tab !== undefined) {
           const qualifiedName = nameIdentifier.exec(address)?.[0];
           const defined =
@@ -922,7 +867,7 @@ export class ScCompiler extends FormulaCompiler {
           if (!qualifier && !body.startsWith("."))
             throw new Error("Only internal ODF references are implemented");
           const name = body.slice(qualifier?.[0].length ?? 1).replace(":.", ":");
-          const tab = qualifier ? this.FindSheet(sheet) : this.aPos.Tab();
+          const tab = qualifier ? findReferenceSheet(this.rDoc, sheet) : this.aPos.Tab();
           if (tab === undefined) throw new Error("Unknown formula sheet");
           if (name.includes(":"))
             this.ParseDoubleReference(name, tab, !!qualifier, sheet.startsWith("$"));

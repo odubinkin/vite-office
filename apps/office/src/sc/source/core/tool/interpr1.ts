@@ -137,7 +137,7 @@ function ScMatch(this: ScInterpreter, count: number): void {
   else if (source instanceof ScSingleRefToken) {
     const address = this["PopSingleRef"]();
     range = new ScRange(address, address);
-  } else matrix = this["GetLookupMatrix"]();
+  } else matrix = GetLookupMatrix.call(this);
   if (this.GetError() !== FormulaError.NONE) return;
   if (
     range &&
@@ -147,7 +147,7 @@ function ScMatch(this: ScInterpreter, count: number): void {
     this.SetError(FormulaError.IllegalParameter);
     return;
   }
-  const key = this["FillLookupEntry"]();
+  const key = FillLookupEntry.call(this);
   if (key === undefined || this.GetError() !== FormulaError.NONE) return;
   const entry = new ScQueryEntry(key, this.mrDoc.GetDocOptions(), this.mrDoc.regexMatcherFactory);
   if (!entry.CanSearch()) {
@@ -494,7 +494,7 @@ export function ScAnd(this: ScInterpreter, count: number): void {
       arg instanceof ScExternalSingleRefToken ||
       arg instanceof ScExternalDoubleRefToken
     ) {
-      const matrix = this["GetLookupMatrix"]();
+      const matrix = GetLookupMatrix.call(this);
       if (!matrix) continue;
       const value = matrixAnd(matrix);
       if (typeof value === "boolean") fold(Number(value));
@@ -530,4 +530,175 @@ function matrixAnd(matrix: ScMatrix): boolean | FormulaError {
     }
   }
   return result;
+}
+
+/** Resolves the original matrix operand types consumed by the matrix lookup path. @param this - Current interpreter. @returns Matrix or argument error. */
+export function GetLookupMatrix(this: ScInterpreter): ScMatrix | undefined {
+  const token = this["pStack"].at(-1);
+  if (token instanceof ScExternalDoubleRefToken) return this["PopExternalDoubleRef"]();
+  if (token instanceof ScExternalSingleRefToken) {
+    const value = this["PopExternalSingleRef"]();
+    if (!value) return undefined;
+    const matrix = new ScMatrix(1, 1);
+    if (value instanceof FormulaDoubleToken) matrix.PutDouble(value.GetDouble(), 0, 0);
+    else if (value instanceof FormulaStringToken) matrix.PutString(value.GetString(), 0, 0);
+    return matrix;
+  }
+  if (token instanceof ScMatrixToken) {
+    this["pStack"].pop();
+    const matrix = token.GetMatrix();
+    if (matrix) return matrix;
+  }
+  this.SetError(FormulaError.IllegalParameter);
+  return undefined;
+}
+
+/** Reads a query key with native cell and matrix type selection. @param emptyAsZero - Conditional aggregate policy for empty cell references. @param this - Current interpreter. @returns Query key or absence following an error. */
+export function FillLookupEntry(this: ScInterpreter, emptyAsZero = false): ScQueryItem | undefined {
+  let key: number | string;
+  const token = this["pStack"].at(-1);
+  if (token instanceof FormulaDoubleToken) return this["GetDouble"]();
+  if (token instanceof FormulaStringToken) key = this["GetString"]();
+  else if (token instanceof ScSingleRefToken || token instanceof ScDoubleRefToken) {
+    let address: ScAddress;
+    if (token instanceof ScSingleRefToken) address = this["PopSingleRef"]();
+    else {
+      const range = this["PopDoubleRef"]();
+      address = new ScAddress();
+      if (
+        this["nGlobalError"] !== FormulaError.NONE ||
+        !this["DoubleRefToPosSingleRef"](range, address)
+      )
+        return undefined;
+    }
+    const cell = new ScRefCellValue(this["mrDoc"], address);
+    if (emptyAsZero && cell.isEmpty()) return 0;
+    if (cell.hasNumeric()) return this["GetCellValue"](address, cell);
+    key = this["GetCellString"](cell);
+  } else {
+    const matrix = GetLookupMatrix.call(this);
+    if (!matrix) return undefined;
+    const value = matrix.Get(0, 0);
+    try {
+      if (ScMatrix.IsValueType(value.nType)) {
+        this.SetError(value.GetError());
+        return value.fVal;
+      }
+      key = text(value.GetString().getString());
+    } finally {
+      value.dispose();
+    }
+  }
+  return ComparisonString.call(this, key);
+}
+
+/** Gets the original and pooled caseless forms. @param key - Native text content. @param this - Current interpreter. @returns Comparison operands. */
+function ComparisonString(this: ScInterpreter, key: string): Exclude<ScQueryItem, number> {
+  const native = unicode(key);
+  const interned = this["mrDoc"].GetSharedStringPool().intern(native);
+  try {
+    return { text: key, ignoreCase: text(interned.getIgnoreCaseString()) };
+  } finally {
+    interned.dispose();
+    native.dispose();
+  }
+}
+
+/** Pops one normal comparison operand without coercing text into numbers. @param this - Current interpreter. @returns Comparable cell or empty. */
+export function PopComparisonValue(this: ScInterpreter): ScQueryItem | null {
+  const token = this["pStack"].at(-1);
+  if (token instanceof FormulaDoubleToken || token?.GetType() === StackVar.svMissing)
+    return this["GetDouble"]();
+  if (token instanceof FormulaStringToken) return ComparisonString.call(this, this["GetString"]());
+  if (token instanceof ScSingleRefToken || token instanceof ScDoubleRefToken) {
+    const address = token instanceof ScSingleRefToken ? this["PopSingleRef"]() : new ScAddress();
+    if (token instanceof ScDoubleRefToken) {
+      const range = this["PopDoubleRef"]();
+      if (!this["DoubleRefToPosSingleRef"](range, address)) return null;
+    }
+    if (this["nGlobalError"] !== FormulaError.NONE) return null;
+    const cell = new ScRefCellValue(this["mrDoc"], address);
+    if (cell.hasEmptyValue()) return null;
+    return cell.hasString()
+      ? ComparisonString.call(this, this["GetCellString"](cell))
+      : this["GetCellValue"](address, cell);
+  }
+  if (token instanceof ScExternalSingleRefToken) return FillLookupEntry.call(this) ?? null;
+  this["PopError"]();
+  if (token?.GetType() !== StackVar.svEmptyCell) this.SetError(FormulaError.IllegalParameter);
+  return null;
+}
+
+/** Runs the common native lookup stack and source-specific result rules. @param count - Token argument count. @param horizontal - Whether to search across the first row. @param this - Current interpreter. @returns Nothing. */
+export function CalculateLookup(this: ScInterpreter, count: number, horizontal: boolean): void {
+  if (count < 3 || count > 4) {
+    this.SetError(count < 3 ? FormulaError.ParameterExpected : FormulaError.IllegalParameter);
+    return;
+  }
+  const sorted = count === 3 || this["GetDouble"]() !== 0;
+  const index = approxFloor(this["GetDouble"]()) - 1;
+  if (this["nGlobalError"] !== FormulaError.NONE) return;
+  const source = this["pStack"].at(-1);
+  let range: ScRange | undefined;
+  let matrix: ScMatrix | undefined;
+  if (source instanceof ScDoubleRefToken) range = this["PopDoubleRef"]();
+  else if (source instanceof ScSingleRefToken) {
+    const address = this["PopSingleRef"]();
+    range = new ScRange(address, address);
+  } else matrix = GetLookupMatrix.call(this);
+  if (this["nGlobalError"] !== FormulaError.NONE) return;
+  const dimensions = { column: 0, row: 0 };
+  if (range) {
+    if (range.aStart.Tab() !== range.aEnd.Tab()) {
+      this.SetError(FormulaError.IllegalParameter);
+      return;
+    }
+    dimensions.column = range.aEnd.Col() - range.aStart.Col() + 1;
+    dimensions.row = range.aEnd.Row() - range.aStart.Row() + 1;
+  } else matrix?.GetDimensions(dimensions);
+  if (index < 0 || index >= (horizontal ? dimensions.row : dimensions.column)) {
+    this.SetError(FormulaError.IllegalArgument);
+    return;
+  }
+  const key = FillLookupEntry.call(this);
+  if (key === undefined || this["nGlobalError"] !== FormulaError.NONE) return;
+  if (range) {
+    const entry = new ScQueryEntry(
+      key,
+      this["mrDoc"].GetDocOptions(),
+      this["mrDoc"].regexMatcherFactory,
+    );
+    if (!entry.CanSearch()) {
+      this.SetError(FormulaError.NoValue);
+      return;
+    }
+    const iterator = new ScQueryCellIteratorDirect(this["mrDoc"], range, horizontal, entry);
+    const found = sorted ? iterator.FindEqualOrSortedLastInRange() : iterator.GetFirst();
+    if (!found) this.SetError(FormulaError.NotAvailable);
+    else {
+      if (horizontal) found.SetRow(range.aStart.Row() + index);
+      else found.SetCol(range.aStart.Col() + index);
+      this["PushCellResultToken"](found, true);
+    }
+    return;
+  }
+  if (!matrix) return;
+  const found = CalculateMatrixLookup(
+    matrix,
+    horizontal ? dimensions.column : dimensions.row,
+    index,
+    horizontal,
+    sorted,
+    key,
+  );
+  if (!found) {
+    this.SetError(FormulaError.NotAvailable);
+    return;
+  }
+  try {
+    if (ScMatrix.IsValueType(found.nType)) this["PushDouble"](found.fVal);
+    else this["PushString"](text(found.GetString().getString()));
+  } finally {
+    found.dispose();
+  }
 }

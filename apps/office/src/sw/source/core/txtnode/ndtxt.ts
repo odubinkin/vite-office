@@ -675,10 +675,7 @@ export class SwTextNode extends SwContentNode {
     this.mText = `${this.mText.slice(0, offset)}${text}${this.mText.slice(offset)}`;
     this.pSwpHints = hints.CanBeDeleted() ? undefined : hints;
     this.UpdateContentIndices(offset, text.length);
-    this.GetDoc().NotifyModelChange({
-      kind: "node-content-changed",
-      nodeIndex: this.GetNodes().indexOfOrUndefined(this),
-    });
+    this.NotifyContentChanged();
     return text;
   }
 
@@ -704,10 +701,7 @@ export class SwTextNode extends SwContentNode {
     this.mText = `${this.mText.slice(0, start)}${this.mText.slice(end)}`;
     this.pSwpHints = remaining.CanBeDeleted() ? undefined : remaining;
     this.UpdateContentIndices(start, end - start, SwContentIndexUpdateMode.Negative);
-    this.GetDoc().NotifyModelChange({
-      kind: "node-content-changed",
-      nodeIndex: this.GetNodes().indexOfOrUndefined(this),
-    });
+    this.NotifyContentChanged();
     return { text, hints };
   }
   /** Native capacity reserves two signed32 positions beyond the final text character. @returns Remaining native text units. */
@@ -751,10 +745,7 @@ export class SwTextNode extends SwContentNode {
     } finally {
       this.SetIgnoreDontExpand(oldIgnore);
     }
-    this.GetDoc().NotifyModelChange({
-      kind: "node-content-changed",
-      nodeIndex: this.GetNodes().indexOfOrUndefined(this),
-    });
+    this.NotifyContentChanged();
   }
 
   /** Replaces one text range with a native fragment. @param start - Inclusive replacement start. @param end - Exclusive replacement end. @param replacement - Replacement content. @param transferHints - Whether to consume same-pool owned hints instead of copying snapshots. @returns Nothing. */
@@ -772,10 +763,7 @@ export class SwTextNode extends SwContentNode {
     this.pSwpHints = hints.CanBeDeleted() ? undefined : hints;
     UpdateTextNodeReplacementIndices(this, start, removedLength, replacementText.length);
     if (transferHints) ReanchorTextNodeFlyHints(this);
-    this.GetDoc().NotifyModelChange({
-      kind: "node-content-changed",
-      nodeIndex: this.GetNodes().indexOfOrUndefined(this),
-    });
+    this.NotifyContentChanged();
   }
 
   /** Replaces the complete node text and clears direct character hints. @param text - New canonical text. @returns Nothing. */
@@ -785,11 +773,7 @@ export class SwTextNode extends SwContentNode {
     this.mText = text;
     this.pSwpHints = undefined;
     UpdateTextNodeReplacementIndices(this, 0, previousLength, text.length);
-    if (previousText !== text)
-      this.GetDoc().NotifyModelChange({
-        kind: "node-content-changed",
-        nodeIndex: this.GetNodes().indexOfOrUndefined(this),
-      });
+    if (previousText !== text) this.NotifyContentChanged();
   }
 
   /** Applies or removes one direct format over a non-empty range. @param start - Inclusive format start. @param end - Exclusive format end. @param format - Toggled direct property. @returns Nothing. */
@@ -881,10 +865,7 @@ export class SwTextNode extends SwContentNode {
     trailing.MoveTextAttr_To_AttrSet();
     this.MoveContentIndicesFrom(trailing, offset);
     ReanchorTextNodeFlyHints(trailing);
-    this.GetDoc().NotifyModelChange({
-      kind: "node-content-changed",
-      nodeIndex: this.GetNodes().indexOfOrUndefined(this),
-    });
+    this.NotifyContentChanged();
     return trailing;
   }
   /** Original JoinNext retains this owner and removes the admitted following paragraph. @returns Same native content owner. */
@@ -911,10 +892,7 @@ export class SwTextNode extends SwContentNode {
     this.mText = prepend ? text + this.mText : this.mText + text;
     const joinedHints = AppendTextNodeHints(this, source, offset, prepend, oldLength, consume);
     this.pSwpHints = joinedHints.CanBeDeleted() ? undefined : joinedHints;
-    this.GetDoc().NotifyModelChange({
-      kind: "node-content-changed",
-      nodeIndex: this.GetNodes().indexOfOrUndefined(this),
-    });
+    this.NotifyContentChanged();
   }
   /** Creates an independent text node in another document graph. @param nodes - Destination node array. @returns Detached clone. */
   public CloneTo(nodes: SwNodes): SwTextNode {
@@ -967,8 +945,8 @@ export class SwTextNode extends SwContentNode {
     return CreateTextNodeFontSizeFragment(this, start, end, fontSizeTwips);
   }
 
-  /** Creates a native fragment with a requested foreground or highlight color. */
-  /** Handles Writer formatting state. @param start - Input value. @param end - Input value. @param property - Input value. @param value - Input value. @returns Callback result. */ public CreateColorTextFragment(
+  /** Creates a native fragment with a requested foreground or highlight color. @param start - Inclusive source offset. @param end - Exclusive source offset. @param property - Color property to change. @param value - New color value. @returns Native formatted fragment. */
+  public CreateColorTextFragment(
     start: number,
     end: number,
     property: "color" | "highlight",
@@ -984,6 +962,14 @@ export class SwTextNode extends SwContentNode {
     hyperlink: WriterHyperlink | undefined,
   ): SwTextFragment {
     return CreateTextNodeHyperlinkFragment(this, start, end, hyperlink);
+  }
+
+  /** Publishes a text change to the owning Writer document. @returns Nothing. */
+  private NotifyContentChanged(): void {
+    this.GetDoc().NotifyModelChange({
+      kind: "node-content-changed",
+      nodeIndex: this.GetNodes().indexOfOrUndefined(this),
+    });
   }
 
   /** Borrows the source map for snapshot-producing operations, including an empty map when absent. @returns Source hints. */

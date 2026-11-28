@@ -1,0 +1,76 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/core/data/document.notes.ts",
+    "upstreamPath": "sc/source/core/data/document.cxx",
+    "localSymbols": [
+      "GetNote",
+      "HasNote",
+      "SetNote",
+      "GetOrCreateNote",
+      "AddPerson",
+      "GetPersonById",
+      "GetAllNoteEntries"
+    ],
+    "upstreamSymbols": [
+      "ScDocument::GetNote",
+      "ScDocument::AddPerson"
+    ],
+    "preservedResponsibilities": [
+      "Keeps the original workbook note access and comment-person lookup together while each note remains owned by its native sheet and column."
+    ],
+    "omittedResponsibilities": [
+      "Workbook lifecycle, sheet allocation and independent document settings remain in ScDocument."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/core/data/document.notes.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Keeps the original workbook note access and comment-person lookup together while each note remains owned by its native sheet and column."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/data/document.notes.ts",
+          "marker": "GetNote"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/document.notes.ts",
+          "marker": "HasNote"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/document.notes.ts",
+          "marker": "SetNote"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/document.notes.ts",
+          "marker": "GetOrCreateNote"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/document.notes.ts",
+          "marker": "AddPerson"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/document.notes.ts",
+          "marker": "GetPersonById"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/document.notes.ts",
+          "marker": "GetAllNoteEntries"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+          "marker": "ScDocument::GetNote"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+          "marker": "ScDocument::AddPerson"
+        }
+      ]
+    }
+  }
+}

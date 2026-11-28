@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/layout/newfrm-comparison.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "page-layout",
+    "capabilityIds": [
+      "CAP-0111"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/layout/newfrm-comparison.ts#layoutDescriptorEqual",
+        "apps/office/src/sw/source/core/layout/newfrm.ts#SwRootFrame"
+      ],
+      "justification": "Keeps the existing layout comparison predicates together for Writer page and frame reuse when native model values and device measurements are unchanged.",
+      "knownViolations": [],
+      "localSymbols": [
+        "pageDescriptorEqual",
+        "layoutDescriptorEqual",
+        "textFrameSettingsEqual",
+        "lineNumberInfoEqual",
+        "measurementsMatchInputs",
+        "textFrameInputEqual",
+        "textFrameEqual",
+        "tableMeasurementsEqual",
+        "tableFramesEqual"
+      ],
+      "upstreamSymbols": [
+        "SwRootFrame::SwRootFrame",
+        "InsertNewPage"
+      ],
+      "upstreamFile": "sw/source/core/layout/newfrm.cxx",
+      "sourceResponsibility": "unverified"
+    }
+  }
+}

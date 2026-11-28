@@ -1,0 +1,56 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/core/tool/compiler.reference.ts",
+    "upstreamPath": "sc/source/core/tool/compiler.cxx",
+    "localSymbols": [
+      "createDoubleReference",
+      "createSingleReference",
+      "findReferenceSheet"
+    ],
+    "upstreamSymbols": [
+      "ScCompiler::ParseDoubleReference",
+      "ScCompiler::ParseSingleReference"
+    ],
+    "preservedResponsibilities": [
+      "Keeps the native address parser flags, sheet matching and deleted-reference handling together while the original Calc compiler retains its token array."
+    ],
+    "omittedResponsibilities": [
+      "Lexical scanning, error reporting and token publication remain in ScCompiler."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/core/tool/compiler.reference.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Keeps the native address parser flags, sheet matching and deleted-reference handling together while the original Calc compiler retains its token array."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/compiler.reference.ts",
+          "marker": "createDoubleReference"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/compiler.reference.ts",
+          "marker": "createSingleReference"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/compiler.reference.ts",
+          "marker": "findReferenceSheet"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/compiler.cxx",
+          "marker": "ScCompiler::ParseDoubleReference"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/compiler.cxx",
+          "marker": "ScCompiler::ParseSingleReference"
+        }
+      ]
+    }
+  }
+}

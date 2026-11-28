@@ -33,7 +33,8 @@ it.each([
       const restored = await restoreOdtWorkerDocumentAsync(
         structuredClone(createOdtWorkerDocument(source)),
         undefined,
-        () => false,
+        /** Keeps the worker restore active for the round trip. @returns False, since the operation remains active. */ () =>
+          false,
       );
       try {
         const saved = await writeOdtDocument(restored.document, metadata);

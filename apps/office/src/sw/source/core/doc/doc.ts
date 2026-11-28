@@ -107,25 +107,21 @@ import { DocumentStylePoolManager } from "./DocumentStylePoolManager";
 import { createStyleManager } from "./swstylemanager";
 import type { IStyleAccess } from "../../../inc/istyleaccess";
 import { SwTextFormatColl, type WriterParagraphStyle } from "./fmtcol";
-import {
-  RES_PARATR_LIST_BEGIN,
-  RES_PARATR_LIST_END,
-  RES_PARATR_NUMRULE,
-  RES_PARATR_LIST_ID,
-  RES_PARATR_LIST_LEVEL,
-  RES_PARATR_LIST_ISRESTART,
-  RES_PARATR_LIST_RESTARTVALUE,
-  RES_PARATR_LIST_ISCOUNTED,
-} from "../../../inc/hintids";
-import { SwNumRuleItem } from "../para/paratr";
+import { RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END } from "../../../inc/hintids";
+
 import { SwNumRule, SwNumRuleType } from "./number";
-import { WRITER_MAX_LIST_LEVEL } from "./list";
+
 import { SwModule } from "../../uibase/app/swmodule";
 import {
   ChgNumRuleFormats,
   OutlineUpDown as moveOutlineLevels,
   GetUniqueNumRuleName,
-  GetNumberedNodes,
+  SetNumRuleStart,
+  SetCounted,
+  CanNumUpDown,
+  NumUpDown,
+  NumOrNoNum,
+  DelNumRules,
   SearchNumRule,
   RenameNumRule,
   SetNumRule,
@@ -759,63 +755,19 @@ export class SwDoc {
   }
   /** Changes native restart only on a numbered text node with a different flag. @param position - Actual node position. @param flag - Requested restart state. @returns Whether a flag changed. */
   public SetNumRuleStart(position: SwPosition, flag: boolean): boolean {
-    const node = position.GetNode();
-    if (node.GetNodes() !== this.nodes)
-      throw new Error("Writer numbering start belongs to another node array.");
-    if (
-      !(node instanceof SwTextNode) ||
-      node.GetNumRule() === undefined ||
-      node.IsListRestart() === flag
-    )
-      return false;
-    return this.RunModelTransaction(
-      /** Applies the represented document flag primitive. @returns True. */ () => {
-        node.SetListRestart(flag);
-        return true;
-      },
-    );
+    return SetNumRuleStart(this, position, flag);
   }
   /** Sets native counted state independently of applying a list rule. @param range - Inclusive native range. @param counted - Requested count state. @returns Nothing. */
   public SetCounted(range: SwPaM, counted: boolean): void {
-    if (range.GetPoint().GetNode().GetNodes() !== this.nodes)
-      throw new Error("Writer numbering range belongs to another node array.");
-    this.RunModelTransaction(
-      /** Mutates only counted attributes on current text nodes. @returns Nothing. */ () => {
-        for (
-          let index = range.Start().GetNodeIndex();
-          index <= range.End().GetNodeIndex();
-          index++
-        ) {
-          const node = this.nodes.at(index);
-          if (node instanceof SwTextNode) node.SetCountedInList(counted);
-        }
-      },
-    );
+    SetCounted(this, range, counted);
   }
   /** Checks the represented numbering range before changing any level. @param range - Native selection. @param down - Demote direction. @returns Whether every numbered node can move. */
   public CanNumUpDown(range: SwPaM, down: boolean): boolean {
-    const nodes = GetNumberedNodes(this, range);
-    return (
-      nodes.length > 0 &&
-      nodes.every(
-        /** Checks the actual list-tree level. @param node - Selected numbered node. @returns Whether within native limits. */
-        (node) =>
-          down ? node.GetActualListLevel() < WRITER_MAX_LIST_LEVEL : node.GetActualListLevel() > 0,
-      )
-    );
+    return CanNumUpDown(this, range, down);
   }
   /** Changes only list levels in the actual selected node range, including cells. @param range - Native selection. @param down - Demote direction. @returns Whether the supported numbering range changed. */
   public NumUpDown(range: SwPaM, down: boolean): boolean {
-    if (!this.CanNumUpDown(range, down)) return false;
-    const nodes = GetNumberedNodes(this, range);
-    return this.stateManager.RunModelTransaction(
-      /** Applies one fully validated native range. @returns True after mutation. */
-      () => {
-        for (const node of nodes)
-          node.SetAttrListLevel(node.GetActualListLevel() + (down ? 1 : -1));
-        return true;
-      },
-    );
+    return NumUpDown(this, range, down);
   }
   /** Moves outline levels through the source-owned docnum method body. @param range - Actual native selection. @param offset - Signed short displacement. @returns Native whole-range applicability. */
   public OutlineUpDown(range: SwPaM, offset: number): boolean {
@@ -823,59 +775,11 @@ export class SwDoc {
   }
   /** Applies native numbering visibility or removes an already uncounted direct list. @param node - Actual document node. @param del - Hide numbering when true. @returns Whether numbering changed. */
   public NumOrNoNum(node: SwNode, del = false): boolean {
-    if (node.GetNodes() !== this.nodes)
-      throw new Error("Writer numbering node belongs to another node array.");
-    if (
-      !(node instanceof SwTextNode) ||
-      node.GetNumRule() === undefined ||
-      (!node.HasNumber() && !node.HasBullet())
-    )
-      return false;
-    if (node.IsCountedInList() === del) {
-      node.SetCountedInList(!del);
-      return true;
-    }
-    if (
-      del &&
-      node.GetNumRule(false) !== undefined &&
-      node.GetActualListLevel() >= 0 &&
-      node.GetActualListLevel() <= WRITER_MAX_LIST_LEVEL
-    ) {
-      const point = new SwPosition(node, 0),
-        range = new SwPaM(point);
-      try {
-        return this.DelNumRules(range);
-      } finally {
-        range.Dispose();
-        point.Dispose();
-      }
-    }
-    return false;
+    return NumOrNoNum(this, node, del);
   }
   /** Removes numbering over native inclusive node coordinates. @param range - Actual Writer selection. @returns Whether numbered nodes were changed. */
   public DelNumRules(range: SwPaM): boolean {
-    const nodes = GetNumberedNodes(this, range);
-    if (nodes.length === 0) return false;
-    return this.RunModelTransaction(
-      /** Resets native numbering attributes without recreating a list DTO. @returns True after mutation. */
-      () => {
-        for (const node of nodes) {
-          if (node.GetpSwAttrSet()?.GetItemIfSet(RES_PARATR_NUMRULE, false) !== undefined)
-            node.ResetAttr(RES_PARATR_NUMRULE);
-          else node.SetAttr(new SwNumRuleItem(""));
-          node.ResetAttr([
-            RES_PARATR_LIST_ID,
-            RES_PARATR_LIST_LEVEL,
-            RES_PARATR_LIST_ISRESTART,
-            RES_PARATR_LIST_RESTARTVALUE,
-            RES_PARATR_LIST_ISCOUNTED,
-          ]);
-          if (node.GetTextFormatColl().IsAssignedToListLevelOfOutlineStyle())
-            node.SetCountedInList(false);
-        }
-        return true;
-      },
-    );
+    return DelNumRules(this, range);
   }
   /** Finds or creates a compatible numbering rule. @param name - Rule name. @param kind - Rule family. @param level - Checked level. @returns Document rule. */
   public EnsureNumRule(name: string, kind: "bullet" | "numbered", level = 0): SwNumRule {

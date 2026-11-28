@@ -1,5 +1,5 @@
 /** @fileoverview Native Writer page, paragraph, and character box property members from unomap1.cxx. */
-import { UnoType } from "../../../../cppu/inc/unotype";
+import { UnoType, type UnoTypeArgument } from "../../../../cppu/inc/unotype";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { PropertyMoreFlags, SfxItemPropertyMapEntry } from "../../../../svl/inc/itemprop";
 import * as Member from "../../../../editeng/inc/memberids";
@@ -20,6 +20,13 @@ import {
 import { MID_LINENUMBER_COUNT, MID_LINENUMBER_STARTVALUE } from "../../../inc/unomid";
 import { MAYBEVOID } from "../../../../udkapi/com/sun/star/beans/PropertyAttribute";
 import type { SwUnoPropertyEntry } from "./unomap";
+
+import { cppu_detail_getUnoType_FillStyle as fillStyleType } from "../../../../offapi/com/sun/star/drawing/FillStyle";
+import { cppu_detail_getUnoType_ShadowFormat as shadowFormatType } from "../../../../offapi/com/sun/star/table/ShadowFormat";
+import { XATTR_FILLSTYLE, XATTR_FILLCOLOR, XATTR_FILLTRANSPARENCE } from "../../../../svx/inc/xdef";
+import * as H from "../../../inc/hintids";
+import * as Grid from "../../../inc/unomid";
+import { pageBitmapGeometryProperties } from "./unostyle.page-stories";
 
 /** Source box property descriptors for the four physical sides. @param attributes - Original property flags. @param which - Native box item identity. @param prefix - Original character property prefix. @returns Original UNO descriptors. */
 export function boxMembers(
@@ -355,3 +362,67 @@ export function nativeEntries(
   }
   return values;
 }
+
+/** Original page-style grid and direction entries from unomap1.cxx. */
+type PageStylePropertyEntry = SwUnoPropertyEntry & { readonly type: UnoTypeArgument };
+export const SwUnoPageStylePropertyMap: ReadonlyMap<string, PageStylePropertyEntry> = new Map<
+  string,
+  PageStylePropertyEntry
+>([
+  ...pageBitmapGeometryProperties,
+  ["FillStyle", { type: fillStyleType, which: XATTR_FILLSTYLE, member: 0, kind: "any" }],
+  ["FillColor", { type: "sal_Int32", which: XATTR_FILLCOLOR, member: 0, kind: "any" }],
+  [
+    "FillTransparence",
+    { type: "sal_Int16", which: XATTR_FILLTRANSPARENCE, member: 0, kind: "any" },
+  ],
+  ["RtlGutter", { which: H.RES_RTL_GUTTER, member: 0, kind: "bool", type: "bool" }],
+  [
+    "WritingMode",
+    { which: H.RES_FRAMEDIR, member: 0, kind: "short", type: "sal_Int16", attributes: 0 },
+  ],
+  ...(
+    [
+      ["LeftMargin", H.RES_LR_SPACE, Member.MID_L_MARGIN],
+      ["RightMargin", H.RES_LR_SPACE, Member.MID_R_MARGIN],
+      ["TopMargin", H.RES_UL_SPACE, Member.MID_UP_MARGIN],
+      ["BottomMargin", H.RES_UL_SPACE, Member.MID_LO_MARGIN],
+      ["GutterMargin", H.RES_LR_SPACE, Member.MID_GUTTER_MARGIN],
+      ["BorderDistance", H.RES_BOX, 5],
+    ] as const
+  ).map(
+    /** Registers the native converted page metrics. @param row - Name, item and member. @returns UNO entry. */
+    ([name, which, member]): [string, PageStylePropertyEntry] => [
+      name,
+      { which, member: member | 0x80, kind: "long", type: "sal_Int32" },
+    ],
+  ),
+  ["ShadowFormat", { which: H.RES_SHADOW, member: 0x80, kind: "any", type: shadowFormatType }],
+  ...boxMembers(0),
+  ...[
+    ["GridColor", Grid.MID_GRID_COLOR, "sal_Int32"],
+    ["GridLines", Grid.MID_GRID_LINES, "sal_Int16"],
+    ["GridBaseHeight", Grid.MID_GRID_BASEHEIGHT | 0x80, "sal_Int32"],
+    ["GridRubyHeight", Grid.MID_GRID_RUBYHEIGHT | 0x80, "sal_Int32"],
+    ["GridMode", Grid.MID_GRID_TYPE, "sal_Int16"],
+    ["RubyBelow", Grid.MID_GRID_RUBY_BELOW, "bool"],
+    ["GridPrint", Grid.MID_GRID_PRINT, "bool"],
+    ["GridDisplay", Grid.MID_GRID_DISPLAY, "bool"],
+    ["GridBaseWidth", Grid.MID_GRID_BASEWIDTH | 0x80, "sal_Int32"],
+    ["GridSnapToChars", Grid.MID_GRID_SNAPTOCHARS, "bool"],
+    ["StandardPageMode", Grid.MID_GRID_STANDARD_MODE, "bool"],
+  ].map(
+    /** Retains original Which/member/type descriptors. @param row - Original property row. @returns Entry. */ (
+      row,
+    ) =>
+      [
+        row[0] as string,
+        {
+          which: H.RES_TEXTGRID,
+          member: row[1] as number,
+          kind: "any" as const,
+          type: row[2] as UnoTypeArgument,
+        },
+      ] as const,
+  ),
+]);

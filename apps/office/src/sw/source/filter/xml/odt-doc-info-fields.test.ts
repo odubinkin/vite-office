@@ -72,7 +72,7 @@ it("retains the title field presentation from LibreOffice testFieldRotation", /*
   }
 });
 
-it("roundtrips live metadata and fixed presentations through the Worker", async () => {
+it("roundtrips live metadata and fixed presentations through the Worker", /** Roundtrips live metadata and fixed presentations through the Worker. @returns Completion. */ async () => {
   const ns = `xmlns:office="${ODF_NAMESPACES.office}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:dc="${ODF_NAMESPACES.dc}" xmlns:meta="${ODF_NAMESPACES.meta}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:fo="${ODF_NAMESPACES.fo}" xmlns:number="${ODF_NAMESPACES.number}"`;
   const bytes = await packXmlPackage({
     mimetype: mime,
@@ -87,7 +87,8 @@ it("roundtrips live metadata and fixed presentations through the Worker", async 
     const result = await restoreOdtWorkerDocumentAsync(
       structuredClone(createOdtWorkerDocument(source)),
       undefined,
-      () => false,
+      /** Keeps the worker restore active for the round trip. @returns False, since the operation remains active. */ () =>
+        false,
     );
     restored = result.document;
     const old = [
@@ -177,7 +178,8 @@ it("exports the native first-page classification property from LibreOffice testT
     const result = await restoreOdtWorkerDocumentAsync(
       structuredClone(createOdtWorkerDocument(loaded)),
       undefined,
-      () => false,
+      /** Keeps the worker restore active for the round trip. @returns False, since the operation remains active. */ () =>
+        false,
     );
     worker = result.document;
     const property = "urn:bails:IntellectualProperty:Marking:document-header";

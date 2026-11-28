@@ -12,11 +12,13 @@ import { createCalcSession } from "../composition/calc-module";
 import { CalcWorkbench } from "./calc-workbench";
 
 let active: ReturnType<typeof createCalcSession> | undefined;
-afterEach(() => {
-  cleanup();
-  active?.Close();
-  active = undefined;
-});
+afterEach(
+  /** Unmounts the Calc workbench and closes the test session. @returns Nothing. */ () => {
+    cleanup();
+    active?.Close();
+    active = undefined;
+  },
+);
 
 /** Mounts the real Calc workspace and returns its native owner. @returns View controller. */
 function mount() {
@@ -85,16 +87,22 @@ it("ports tdf51700 whole-column selection and restores the entire transformation
   expect(text(doc.GetSharedString(new ScAddress(3, 2, 0)).getString())).toBe("fsad");
   expect(doc.GetValue(new ScAddress(3, 3, 0))).toBe(111);
   expect(controller.shell.GetUndoManager().GetUndoActionCount()).toBe(1);
-  act(() => expect(controller.Undo()).toBe(true));
+  act(
+    /** Undoes the last Calc command and asserts success. @returns Nothing. */ () =>
+      expect(controller.Undo()).toBe(true),
+  );
   expect(text(doc.GetSharedString(new ScAddress(0, 1, 0)).getString())).toBe(
     "3242,43242,3242,2342",
   );
   expect(doc.GetCellType(new ScAddress(3, 3, 0))).toBe(CellType.CELLTYPE_NONE);
-  act(() => expect(controller.Redo()).toBe(true));
+  act(
+    /** Reapplies the last undone Calc command and asserts success. @returns Nothing. */ () =>
+      expect(controller.Redo()).toBe(true),
+  );
   expect(doc.GetValue(new ScAddress(3, 3, 0))).toBe(111);
 });
 
-it("warns about occupied columns to the right and leaves a declined conversion intact", async () => {
+it("warns about occupied columns to the right and leaves a declined conversion intact", /** Warns about occupied columns to the right and leaves a declined conversion intact. @returns Completion. */ async () => {
   const controller = mount();
   const doc = controller.shell.GetDocument();
   const target = new ScAddress(1, 1, 0);
@@ -133,7 +141,10 @@ it("warns about occupied columns to the right and leaves a declined conversion i
   expect(doc.GetValue(target)).toBe(2);
   expect(doc.GetValue(new ScAddress(0, 1, 0))).toBe(1);
   expect(doc.GetValue(new ScAddress(1, 2, 0))).toBe(4);
-  act(() => expect(controller.Undo()).toBe(true));
+  act(
+    /** Undoes the last Calc command and asserts success. @returns Nothing. */ () =>
+      expect(controller.Undo()).toBe(true),
+  );
   expect(doc.GetValue(target)).toBe(88);
 });
 
@@ -200,7 +211,10 @@ it("ports tdf92423 and applies Text to Columns to the selection created by paste
   select("A1:A3");
   fireEvent.copy(grid, { clipboardData: clipboard });
   select("A7");
-  await act(async () => fireEvent.paste(grid, { clipboardData: clipboard }));
+  await act(
+    /** Pastes into the test control. @returns Whether the default action is allowed, after dispatch. */ async () =>
+      fireEvent.paste(grid, { clipboardData: clipboard }),
+  );
   expect(controller.viewData.GetMarkData().GetMarkArea().GetVars()).toEqual([0, 6, 0, 0, 8, 0]);
   await openTextToColumns();
   const dialog = within(screen.getByRole("dialog", { name: "Text to Columns" }));
@@ -264,7 +278,7 @@ it("ports tdf82398 custom separators on a date-formatted input range", /** Ports
     }
 });
 
-it("leaves the workbook intact on dialog cancellation or when the command target changes", async () => {
+it("leaves the workbook intact on dialog cancellation or when the command target changes", /** Leaves the workbook intact on dialog cancellation or when the command target changes. @returns Completion. */ async () => {
   const controller = mount();
   const doc = controller.shell.GetDocument();
   act(() => put(0, "1;2"));
@@ -277,7 +291,10 @@ it("leaves the workbook intact on dialog cancellation or when the command target
   );
   await openTextToColumns();
   dialog = within(screen.getByRole("dialog", { name: "Text to Columns" }));
-  act(() => controller.Select(3, 3));
+  act(
+    /** Moves the Calc selection to the requested cell. @returns Whether Calc accepted the selection. */ () =>
+      controller.Select(3, 3),
+  );
   await act(
     /** Clicks the button named "OK". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
       fireEvent.click(dialog.getByRole("button", { name: "OK" })),

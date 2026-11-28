@@ -17,11 +17,13 @@ import { createCalcSession } from "../composition/calc-module";
 import { CalcWorkbench } from "./calc-workbench";
 
 let session: ReturnType<typeof createCalcSession> | undefined;
-afterEach(() => {
-  cleanup();
-  session?.Close();
-  session = undefined;
-});
+afterEach(
+  /** Unmounts the Calc workbench and closes the test session. @returns Nothing. */ () => {
+    cleanup();
+    session?.Close();
+    session = undefined;
+  },
+);
 
 /** Mounts the real Calc client. @param workbook - Optional source fixture. @returns Controller. */
 function mount(workbook?: ScDocument) {
@@ -114,7 +116,7 @@ it("ports tdf131170 deletion from the pinned ODS fixture and keeps Cancel transa
   expect(doc.GetRowNameRanges().size()).toBe(0);
 });
 
-it("connects both sheet reference edits to label formulas and persists their lexical tokens in ODS", async () => {
+it("connects both sheet reference edits to label formulas and persists their lexical tokens in ODS", /** Connects both sheet reference edits to label formulas and persists their lexical tokens in ODS. @returns Completion. */ async () => {
   const controller = mount();
   const doc = controller.shell.GetDocument();
   const header = new ScAddress(0, 0, 0),

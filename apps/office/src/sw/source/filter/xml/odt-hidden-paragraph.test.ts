@@ -35,7 +35,8 @@ it("preserves the pinned hidden paragraph in its native text fly", /** Replays t
     const restored = await restoreOdtWorkerDocumentAsync(
       structuredClone(createOdtWorkerDocument(source)),
       undefined,
-      () => false,
+      /** Keeps the worker restore active for the round trip. @returns False, since the operation remains active. */ () =>
+        false,
     );
     try {
       const bytes = await writeOdtDocument(restored.document, metadata);

@@ -43,7 +43,7 @@ it("reads grouping and negative red and keeps parenthesis spacing from compiled 
   }
 });
 
-it("generates time, engineering, fractions, explicit currency and grouped locale pictures", () => {
+it("generates time, engineering, fractions, explicit currency and grouped locale pictures", /** Generates time, engineering, fractions, explicit currency and grouped locale pictures. @returns Nothing. */ () => {
   const formatter = new SvNumberFormatter(en);
   try {
     const replacement = [

@@ -203,7 +203,10 @@ export function ScPrintAreasDlg({
                     aria-label={title + " preset"}
                     className="w-[44%] rounded-md border border-slate-300 bg-white p-2"
                     value={presetsSelected[field] ?? selectedPreset(draft, field, presets)}
-                    onFocus={() => setActive(field)}
+                    onFocus={
+                      /** Records the focused field for the next range selection. @returns Nothing. */ () =>
+                        setActive(field)
+                    }
                     onChange={(event) => {
                       const selected = event.target.value;
                       const input = entries.current[field];
@@ -236,7 +239,10 @@ export function ScPrintAreasDlg({
                   spellCheck={false}
                   className="min-w-0 flex-1 rounded-md border border-slate-300 p-2"
                   value={draft[field]}
-                  onFocus={() => setActive(field)}
+                  onFocus={
+                    /** Records the focused field for the next range selection. @returns Nothing. */ () =>
+                      setActive(field)
+                  }
                   onChange={(event) => {
                     update(field, event.target.value);
                     onReference(undefined);

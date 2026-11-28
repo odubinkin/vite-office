@@ -25,7 +25,12 @@ export function ScCsvRuler({
 
   /** Inserts one valid position in the same order as the source ruler. @param positions - Existing positions. @param next - New split. @returns Updated positions. */
   function insert(positions: readonly number[], next: number): readonly number[] {
-    return [...new Set([...positions, next])].sort((left, right) => left - right);
+    return [...new Set([...positions, next])].sort(
+      /** Orders values numerically in ascending order. @param left - First value. @param right - Second value. @returns Numeric comparison. */ (
+        left,
+        right,
+      ) => left - right,
+    );
   }
 
   /** Converts a pointer's X coordinate to the visual column on the ruler. @param event - Actual ruler pointer. @returns Split position. */

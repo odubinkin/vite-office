@@ -3,7 +3,7 @@ import { SvxNumType } from "../../../../editeng/inc/svxenum";
 import { SwUndoInsNum } from "../undo/unnum";
 import { SwUndoNumruleRename } from "../undo/SwUndoFmt";
 import { SetNumRuleMode, type SwDoc } from "./doc";
-import type { SwPaM, SwPosition } from "../crsr/pam";
+import { SwPaM, SwPosition } from "../crsr/pam";
 import { SwTextNode } from "../txtnode/ndtxt";
 import type { SwTextFormatColl } from "./fmtcol";
 import { WRITER_MAX_LIST_LEVEL } from "./list";
@@ -449,3 +449,127 @@ import {
   RES_MARGIN_RIGHT,
 } from "../../../inc/hintids";
 import { SwUndoOutlineEdit } from "../undo/unoutl";
+import {
+  RES_PARATR_LIST_LEVEL,
+  RES_PARATR_LIST_ISRESTART,
+  RES_PARATR_LIST_RESTARTVALUE,
+  RES_PARATR_LIST_ISCOUNTED,
+} from "../../../inc/hintids";
+import { type SwNode } from "../docnode/node";
+
+/** Changes native restart only on a numbered text node with a different flag. @param document - Owning Writer document. @param position - Actual node position. @param flag - Requested restart state. @returns Whether a flag changed. */
+export function SetNumRuleStart(document: SwDoc, position: SwPosition, flag: boolean): boolean {
+  const node = position.GetNode();
+  if (node.GetNodes() !== document.nodes)
+    throw new Error("Writer numbering start belongs to another node array.");
+  if (
+    !(node instanceof SwTextNode) ||
+    node.GetNumRule() === undefined ||
+    node.IsListRestart() === flag
+  )
+    return false;
+  return document.RunModelTransaction(
+    /** Applies the represented document flag primitive. @returns True. */ () => {
+      node.SetListRestart(flag);
+      return true;
+    },
+  );
+}
+
+/** Sets native counted state independently of applying a list rule. @param document - Owning Writer document. @param range - Inclusive native range. @param counted - Requested count state. @returns Nothing. */
+export function SetCounted(document: SwDoc, range: SwPaM, counted: boolean): void {
+  if (range.GetPoint().GetNode().GetNodes() !== document.nodes)
+    throw new Error("Writer numbering range belongs to another node array.");
+  document.RunModelTransaction(
+    /** Mutates only counted attributes on current text nodes. @returns Nothing. */ () => {
+      for (let index = range.Start().GetNodeIndex(); index <= range.End().GetNodeIndex(); index++) {
+        const node = document.nodes.at(index);
+        if (node instanceof SwTextNode) node.SetCountedInList(counted);
+      }
+    },
+  );
+}
+
+/** Checks the represented numbering range before changing any level. @param document - Owning Writer document. @param range - Native selection. @param down - Demote direction. @returns Whether every numbered node can move. */
+export function CanNumUpDown(document: SwDoc, range: SwPaM, down: boolean): boolean {
+  const nodes = GetNumberedNodes(document, range);
+  return (
+    nodes.length > 0 &&
+    nodes.every(
+      /** Checks the actual list-tree level. @param node - Selected numbered node. @returns Whether within native limits. */
+      (node) =>
+        down ? node.GetActualListLevel() < WRITER_MAX_LIST_LEVEL : node.GetActualListLevel() > 0,
+    )
+  );
+}
+
+/** Changes only list levels in the actual selected node range, including cells. @param document - Owning Writer document. @param range - Native selection. @param down - Demote direction. @returns Whether the supported numbering range changed. */
+export function NumUpDown(document: SwDoc, range: SwPaM, down: boolean): boolean {
+  if (!document.CanNumUpDown(range, down)) return false;
+  const nodes = GetNumberedNodes(document, range);
+  return document["stateManager"].RunModelTransaction(
+    /** Applies one fully validated native range. @returns True after mutation. */
+    () => {
+      for (const node of nodes) node.SetAttrListLevel(node.GetActualListLevel() + (down ? 1 : -1));
+      return true;
+    },
+  );
+}
+
+/** Applies native numbering visibility or removes an already uncounted direct list. @param document - Owning Writer document. @param node - Actual document node. @param del - Hide numbering when true. @returns Whether numbering changed. */
+export function NumOrNoNum(document: SwDoc, node: SwNode, del = false): boolean {
+  if (node.GetNodes() !== document.nodes)
+    throw new Error("Writer numbering node belongs to another node array.");
+  if (
+    !(node instanceof SwTextNode) ||
+    node.GetNumRule() === undefined ||
+    (!node.HasNumber() && !node.HasBullet())
+  )
+    return false;
+  if (node.IsCountedInList() === del) {
+    node.SetCountedInList(!del);
+    return true;
+  }
+  if (
+    del &&
+    node.GetNumRule(false) !== undefined &&
+    node.GetActualListLevel() >= 0 &&
+    node.GetActualListLevel() <= WRITER_MAX_LIST_LEVEL
+  ) {
+    const point = new SwPosition(node, 0),
+      range = new SwPaM(point);
+    try {
+      return document.DelNumRules(range);
+    } finally {
+      range.Dispose();
+      point.Dispose();
+    }
+  }
+  return false;
+}
+
+/** Removes numbering over native inclusive node coordinates. @param document - Owning Writer document. @param range - Actual Writer selection. @returns Whether numbered nodes were changed. */
+export function DelNumRules(document: SwDoc, range: SwPaM): boolean {
+  const nodes = GetNumberedNodes(document, range);
+  if (nodes.length === 0) return false;
+  return document.RunModelTransaction(
+    /** Resets native numbering attributes without recreating a list DTO. @returns True after mutation. */
+    () => {
+      for (const node of nodes) {
+        if (node.GetpSwAttrSet()?.GetItemIfSet(RES_PARATR_NUMRULE, false) !== undefined)
+          node.ResetAttr(RES_PARATR_NUMRULE);
+        else node.SetAttr(new SwNumRuleItem(""));
+        node.ResetAttr([
+          RES_PARATR_LIST_ID,
+          RES_PARATR_LIST_LEVEL,
+          RES_PARATR_LIST_ISRESTART,
+          RES_PARATR_LIST_RESTARTVALUE,
+          RES_PARATR_LIST_ISCOUNTED,
+        ]);
+        if (node.GetTextFormatColl().IsAssignedToListLevelOfOutlineStyle())
+          node.SetCountedInList(false);
+      }
+      return true;
+    },
+  );
+}

@@ -4,7 +4,7 @@ title: "Integrate November 28 Writer and Calc branch updates"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: integrate and verify the current Writer and Calc heads, then synchronize the published branches."
 doc_version: 3
-doc_updated_at: "2026-11-28T14:05:29.341Z"
+doc_updated_at: "2026-11-28T14:31:10.967Z"
 doc_updated_by: "CODER"
 description: "Publish current feature heads, merge both into main, resolve conflicts with targeted checks, repair failures found by full verification, document suspected upstream issues and merge verified main back into both published feature branches."
 sections:
@@ -60,6 +60,10 @@ sections:
     - Observation: The focused current integration run passed all 24 Writer, Calc and shared ODF tests, typechecking passed, and registry validation passed after relocating provenance markers. Eight slow XLSX application cases and eight Writer list browser cases passed their isolated retries.
       Impact: The standard full gate is still required before publication. The observed static backlog remains broader than the merge conflicts.
       Resolution: Retain verified conflict repairs and behavior-preserving refactors on local main. Continue whole-repository JSDoc, source file limits and remaining full suites without changing the verification contract.
+
+    - Observation: The complete tracked source file-size gate passed, along with the current typecheck, dependency check and registry validation. The selected splits passed 33 focused tests. Restored the print-range transfer diagnostic and coalesced Calc grouped input into one document generation after reproduced integration failures. The targeted print, input and conditional-format retries passed.
+      Impact: Full application and browser campaigns are still in progress, and the source-wide JSDoc gate still reports undocumented callbacks. The source and test size fixes do not alter gate limits.
+      Resolution: Continue documenting callback contracts and rerun the current verification gates. Main publication remains conditional on the full verify command.
 id_source: "generated"
 ---
 ## Summary
@@ -100,3 +104,7 @@ Pending execution.
 - Observation: The focused current integration run passed all 24 Writer, Calc and shared ODF tests, typechecking passed, and registry validation passed after relocating provenance markers. Eight slow XLSX application cases and eight Writer list browser cases passed their isolated retries.
   Impact: The standard full gate is still required before publication. The observed static backlog remains broader than the merge conflicts.
   Resolution: Retain verified conflict repairs and behavior-preserving refactors on local main. Continue whole-repository JSDoc, source file limits and remaining full suites without changing the verification contract.
+
+- Observation: The complete tracked source file-size gate passed, along with the current typecheck, dependency check and registry validation. The selected splits passed 33 focused tests. Restored the print-range transfer diagnostic and coalesced Calc grouped input into one document generation after reproduced integration failures. The targeted print, input and conditional-format retries passed.
+  Impact: Full application and browser campaigns are still in progress, and the source-wide JSDoc gate still reports undocumented callbacks. The source and test size fixes do not alter gate limits.
+  Resolution: Continue documenting callback contracts and rerun the current verification gates. Main publication remains conditional on the full verify command.

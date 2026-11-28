@@ -11,11 +11,13 @@ import { createCalcSession } from "../composition/calc-module";
 import { CalcWorkbench } from "./calc-workbench";
 
 let running: ReturnType<typeof createCalcSession> | undefined;
-afterEach(() => {
-  cleanup();
-  running?.Close();
-  running = undefined;
-});
+afterEach(
+  /** Unmounts the Calc workbench and closes the test session. @returns Nothing. */ () => {
+    cleanup();
+    running?.Close();
+    running = undefined;
+  },
+);
 
 /** Renders the actual wired workspace. @returns Live Calc session. */
 function mount() {
@@ -37,7 +39,7 @@ function selectRange(value: string): void {
   fireEvent.keyDown(box, { key: "Enter" });
 }
 
-it("checks AutoCalculate against the live document and recalculates manual dependencies with F9", () => {
+it("checks AutoCalculate against the live document and recalculates manual dependencies with F9", /** Checks AutoCalculate against the live document and recalculates manual dependencies with F9. @returns Nothing. */ () => {
   const { controller, frame } = mount();
   const doc = controller.shell.GetDocument();
   const a1 = new ScAddress(),
@@ -71,7 +73,7 @@ it("checks AutoCalculate against the live document and recalculates manual depen
   expect(doc.GetAutoCalc()).toBe(true);
 });
 
-it("forces the cursor cell as in tdf97897 and hard-recalculates clean formulas on other sheets", () => {
+it("forces the cursor cell as in tdf97897 and hard-recalculates clean formulas on other sheets", /** Forces the cursor cell as in tdf97897 and hard-recalculates clean formulas on other sheets. @returns Nothing. */ () => {
   const { controller } = mount();
   const doc = controller.shell.GetDocument();
   act(() => {
@@ -123,7 +125,7 @@ it("recalculates clean volatile formulas with ordinary F9 in manual mode", /** R
   expect(doc.GetAutoCalc()).toBe(false);
 });
 
-it("previews the selected formula fragment and accepts it into the edit before committing", () => {
+it("previews the selected formula fragment and accepts it into the edit before committing", /** Previews the selected formula fragment and accepts it into the edit before committing. @returns Nothing. */ () => {
   const { controller } = mount();
   const input = screen.getByRole("textbox", { name: "Input line" }) as HTMLInputElement;
   fireEvent.focus(input);
@@ -197,14 +199,20 @@ it("ports tdf131326 and the source Formula to Value dependency, result and undo 
   expect(controller.shell.GetUndoManager().GetUndoActionCount()).toBe(undo + 1);
 
   selectRange("D4");
-  act(() => expect(controller.Undo()).toBe(true));
+  act(
+    /** Undoes the last Calc command and asserts success. @returns Nothing. */ () =>
+      expect(controller.Undo()).toBe(true),
+  );
   expect(controller.viewData.GetMarkData().IsCellMarked(0, 2)).toBe(true);
   expect(doc.GetCellType(a1)).toBe(CellType.CELLTYPE_FORMULA);
   expect(doc.GetCellType(a2)).toBe(CellType.CELLTYPE_FORMULA);
   expect(doc.GetCellType(a3)).toBe(CellType.CELLTYPE_FORMULA);
   expect(doc.GetGrammar()).toBe(FormulaGrammar.Grammar.GRAM_NATIVE);
   expect(doc.GetValue(b1)).toBe(1);
-  act(() => expect(controller.Redo()).toBe(true));
+  act(
+    /** Reapplies the last undone Calc command and asserts success. @returns Nothing. */ () =>
+      expect(controller.Redo()).toBe(true),
+  );
   expect(doc.GetCellType(a1)).toBe(CellType.CELLTYPE_VALUE);
   expect(doc.GetValue(b1)).toBe(0);
 });
@@ -242,6 +250,9 @@ it("ports the middle-of-group conversion from ucalc and restores dependent formu
     CellType.CELLTYPE_FORMULA,
     CellType.CELLTYPE_FORMULA,
   ]);
-  act(() => expect(controller.Undo()).toBe(true));
+  act(
+    /** Undoes the last Calc command and asserts success. @returns Nothing. */ () =>
+      expect(controller.Undo()).toBe(true),
+  );
   expect(inspect(3, (position) => doc.GetValue(position))).toEqual([1, 1, 1, 1, 1, 1]);
 });

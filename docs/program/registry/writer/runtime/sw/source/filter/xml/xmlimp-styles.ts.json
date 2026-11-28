@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/filter/xml/xmlimp-styles.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "odf-filter",
+    "capabilityIds": [
+      "CAP-0113",
+      "CAP-0128",
+      "CAP-0138",
+      "CAP-0139",
+      "CAP-0140",
+      "CAP-0141",
+      "CAP-0142",
+      "CAP-0143",
+      "CAP-0144",
+      "CAP-0145",
+      "CAP-cc323b2a-6d0c-47a7-b6e4-da6ba021593d",
+      "CAP-667c907c-e2ec-4609-bfdf-ddea20cf2c19",
+      "CAP-4a9d2c31-fc36-4a82-acaa-0d56bfeb4d07",
+      "CAP-3678aa65-4d47-43cc-b07f-deb755e87470",
+      "CAP-c13ec941-1af7-4a09-810f-df267da27388"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/filter/xml/xmlimp-styles.ts#applyLineNumbering",
+        "vendor/libreoffice-reference/sw/source/filter/xml/xmlimp.cxx#SwXMLDocStylesContext_Impl"
+      ],
+      "justification": "Applies the existing Writer UNO page geometry and line-numbering properties and resolves style links after master-page import.",
+      "knownViolations": [],
+      "localSymbols": [
+        "applyLineNumbering",
+        "applyNamedPageStyles"
+      ],
+      "upstreamSymbols": [
+        "SwXMLDocStylesContext_Impl",
+        "SwXMLImport::CreateFastContext"
+      ],
+      "upstreamFile": "sw/source/filter/xml/xmlimp.cxx",
+      "sourceResponsibility": "unverified"
+    }
+  }
+}

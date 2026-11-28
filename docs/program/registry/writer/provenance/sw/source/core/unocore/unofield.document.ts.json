@@ -1,0 +1,66 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/core/unocore/unofield.document.ts",
+    "upstreamPath": "sw/source/core/unocore/unofield.cxx",
+    "localSymbols": [
+      "SwXChapterField",
+      "SwXPageNumberField",
+      "SwXDocStatField",
+      "SwXDateTimeField"
+    ],
+    "upstreamSymbols": [
+      "SwXTextField::attach",
+      "SwServiceType::FieldTypeChapter",
+      "SwServiceType::FieldTypeDateTime"
+    ],
+    "preservedResponsibilities": [
+      "Keeps the four UNO descriptors for chapter, page number, document counts and date/time with their existing native field construction and attachment."
+    ],
+    "omittedResponsibilities": [
+      "The remaining UNO field services continue to use the existing field module."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/core/unocore/unofield.document.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Keeps the four UNO descriptors for chapter, page number, document counts and date/time with their existing native field construction and attachment."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/unocore/unofield.document.ts",
+          "marker": "SwXChapterField"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/unocore/unofield.document.ts",
+          "marker": "SwXPageNumberField"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/unocore/unofield.document.ts",
+          "marker": "SwXDocStatField"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/unocore/unofield.document.ts",
+          "marker": "SwXDateTimeField"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/unocore/unofield.cxx",
+          "marker": "SwXTextField::attach"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/unocore/unofield.cxx",
+          "marker": "SwServiceType::FieldTypeChapter"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/unocore/unofield.cxx",
+          "marker": "SwServiceType::FieldTypeDateTime"
+        }
+      ]
+    }
+  }
+}

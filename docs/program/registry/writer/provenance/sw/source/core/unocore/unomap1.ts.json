@@ -8,13 +8,15 @@
     "upstreamPath": "sw/source/core/unocore/unomap1.cxx",
     "localSymbols": [
       "boxMembers",
-      "charBoxMembers"
+      "charBoxMembers",
+      "SwUnoPageStylePropertyMap"
     ],
     "upstreamSymbols": [
       "GetCharStylePropertyMap"
     ],
     "preservedResponsibilities": [
-      "Preserves native Writer character, paragraph and page box member identities, distance units and UNO metadata."
+      "Preserves native Writer character, paragraph and page box member identities, distance units and UNO metadata.",
+      "Includes page fill, margins, writing direction, and page grid property metadata in native order."
     ],
     "omittedResponsibilities": [
       "Complex border colors and additional native character box property rows are outside this slice."
@@ -24,6 +26,10 @@
         {
           "path": "apps/office/src/sw/source/core/unocore/unomap1.ts",
           "marker": "boxMembers"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/unocore/unomap1.ts",
+          "marker": "SwUnoPageStylePropertyMap"
         }
       ],
       "upstream": [

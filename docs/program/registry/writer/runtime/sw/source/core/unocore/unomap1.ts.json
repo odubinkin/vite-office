@@ -23,7 +23,8 @@
       "knownViolations": [],
       "localSymbols": [
         "boxMembers",
-        "charBoxMembers"
+        "charBoxMembers",
+        "SwUnoPageStylePropertyMap"
       ],
       "sourceResponsibility": "aligned",
       "upstreamFile": "sw/source/core/unocore/unomap1.cxx",

@@ -4,12 +4,23 @@ import { XMLToken } from "../../../../xmloff/source/core/xmltoken";
 import { ScConditionMode } from "../../core/data/conditio.entry";
 import {
   ScValidErrorStyle,
+  ScValidationData,
   ScValidationMode,
   TableValidationVisibility,
 } from "../../core/data/validat";
 import { ScXMLConditionHelper } from "./XMLConverter";
 import type { ScXMLFormula, ScXMLImport } from "./xmlimprt";
 import { ScXMLImportContext } from "./importcontext";
+import type { ScDocument } from "../../../inc/document";
+import { ScAddress, type ScRange } from "../../../inc/address";
+import { FormulaGrammar } from "../../../../formula/inc/grammar";
+import { ScCompiler } from "../../../inc/compiler";
+import type { ScTokenArray } from "../../../inc/tokenarray";
+import { ScRangeStringConverter } from "../../core/tool/rangeutl";
+import { SfxUInt32Item } from "../../../../svl/source/items/intitem";
+import { ScPatternAttr } from "../../../inc/patattr";
+import { ATTR_VALIDDATA } from "../../../inc/scitems";
+import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 
 /** Original persisted input or error prompt. */
 interface ScXMLValidationMessage {
@@ -220,4 +231,81 @@ class ScXMLValidationParagraph extends SvXMLImportContext {
   public override characters(value: string): void {
     this.value += value;
   }
+}
+
+/** Resolves referenced rules and applies their original pattern delta. @param document - Calc workbook. @param validations - Parsed rules by XML name. @param ranges - Deferred validation ranges. @returns Nothing. */
+export function FinalizeValidations(
+  document: ScDocument,
+  validations: Map<string, ScMyImportValidation>,
+  ranges: { name: string; range: ScRange }[],
+): void {
+  const keys = new Map<string, number>();
+  for (const { name, range } of ranges) {
+    let key = keys.get(name);
+    if (key === undefined) {
+      const descriptor = validations.get(name);
+      if (!descriptor) continue;
+      const base = new ScAddress();
+      ScRangeStringConverter.GetAddressFromString(
+        base,
+        descriptor.base,
+        document,
+        FormulaGrammar.AddressConvention.CONV_OOO,
+        [0],
+      );
+      const tokens: ScTokenArray[] = [];
+      try {
+        for (const operand of descriptor.operands) {
+          const expression = unicode(operand.source);
+          try {
+            tokens.push(new ScCompiler(document, base, operand.grammar).CompileString(expression));
+          } finally {
+            expression.dispose();
+          }
+        }
+        const rule = new ScValidationData(
+          descriptor.mode,
+          descriptor.comparison,
+          tokens,
+          document,
+          base,
+          document.GetStorageGrammar(),
+        );
+        try {
+          rule.SetIgnoreBlank(descriptor.ignoreBlank);
+          rule.SetCaseSensitive(descriptor.caseSensitive);
+          rule.SetListType(descriptor.showList);
+          rule.SetInput(descriptor.input.title, descriptor.input.message);
+          if (!descriptor.input.display) rule.ResetInput();
+          rule.SetError(descriptor.error.title, descriptor.error.message, descriptor.alert);
+          if (!descriptor.error.display) rule.ResetError();
+          key = document.AddValidationEntry(rule);
+          keys.set(name, key);
+        } finally {
+          rule.Dispose();
+        }
+      } finally {
+        for (const code of tokens) code.Clear();
+      }
+    }
+    if (!key) continue;
+    const pattern = new ScPatternAttr(document.getCellAttributeHelper());
+    const item = new SfxUInt32Item(ATTR_VALIDDATA, key);
+    try {
+      pattern.ItemSetPut(item);
+      document.ApplyPatternAreaTab(
+        range.aStart.Col(),
+        range.aStart.Row(),
+        range.aEnd.Col(),
+        range.aEnd.Row(),
+        range.aStart.Tab(),
+        pattern,
+      );
+    } finally {
+      item.Dispose();
+      pattern.Dispose();
+    }
+  }
+  ranges.length = 0;
+  validations.clear();
 }

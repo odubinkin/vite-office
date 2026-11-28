@@ -176,7 +176,7 @@ it("ports tdf144940 first-page sharing and keeps common geometry, printing and h
   }
 });
 
-it("cancels an edited page style without changing the workbook or its history", async () => {
+it("cancels an edited page style without changing the workbook or its history", /** Cancels an edited page style without changing the workbook or its history. @returns Completion. */ async () => {
   const session = mount();
   const dialog = open();
   fireEvent.click(within(dialog).getByRole("tab", { name: "Page" }));

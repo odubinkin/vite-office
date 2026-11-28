@@ -1,0 +1,66 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/filter/xml/xmlimp-context.ts",
+    "upstreamPath": "sw/source/filter/xml/xmlimp.cxx",
+    "localSymbols": [
+      "SwXMLDocContext",
+      "XMLMasterStylesContext",
+      "SwXMLBodyContext",
+      "XMLMetaContext",
+      "XMLTitleContext"
+    ],
+    "upstreamSymbols": [
+      "SwXMLDocContext_Impl::createFastChildContext",
+      "SwXMLBodyContext_Impl"
+    ],
+    "preservedResponsibilities": [
+      "Dispatches the original Writer document and body context children, including metadata, master styles and settings."
+    ],
+    "omittedResponsibilities": [
+      "The existing Writer import coordinator retains stream lifecycle and document-model ownership."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/filter/xml/xmlimp-context.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Dispatches the original Writer document and body context children, including metadata, master styles and settings."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/xml/xmlimp-context.ts",
+          "marker": "SwXMLDocContext"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/xmlimp-context.ts",
+          "marker": "XMLMasterStylesContext"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/xmlimp-context.ts",
+          "marker": "SwXMLBodyContext"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/xmlimp-context.ts",
+          "marker": "XMLMetaContext"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/xmlimp-context.ts",
+          "marker": "XMLTitleContext"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlimp.cxx",
+          "marker": "SwXMLDocContext_Impl::createFastChildContext"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlimp.cxx",
+          "marker": "SwXMLBodyContext_Impl"
+        }
+      ]
+    }
+  }
+}

@@ -61,7 +61,7 @@ it.each([
   },
 );
 
-it("roundtrips actual date and time styles and native adjustments through Worker and ODT", async () => {
+it("roundtrips actual date and time styles and native adjustments through Worker and ODT", /** Roundtrips actual date and time styles and native adjustments through Worker and ODT. @returns Completion. */ async () => {
   const ns = `xmlns:office="${ODF_NAMESPACES.office}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:number="${ODF_NAMESPACES.number}" xmlns:fo="${ODF_NAMESPACES.fo}"`;
   const content = `<office:document-content ${ns}><office:automatic-styles><number:date-style style:name="D" fo:language="en" fo:country="US"><number:year number:style="long"/><number:text>-</number:text><number:month number:style="long"/><number:text>-</number:text><number:day number:style="long"/></number:date-style></office:automatic-styles><office:body><office:text><text:p><text:date text:fixed="true" text:date-value="2024-02-03T18:00:00" text:date-adjust="PT12H" style:data-style-name="D">Stale</text:date> <text:time text:fixed="true" text:time-value="1899-12-30T23:20:00" text:time-adjust="PT20M">Stale</text:time></text:p></office:text></office:body></office:document-content>`;
   const { document } = importWriterXml(undefined, content, metadata);

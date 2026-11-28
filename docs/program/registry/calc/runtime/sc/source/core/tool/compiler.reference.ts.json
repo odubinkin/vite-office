@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/core/tool/compiler.reference.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "numeric-formula-editing",
+    "capabilityIds": [
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d",
+      "CAP-1a127bda-0ad3-4ab0-84fc-1e8f22f87678",
+      "CAP-88a94ea5-cc81-408e-a4ca-f9fd426d999e"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sc/source/core/tool/compiler.reference.ts#createDoubleReference",
+        "vendor/libreoffice-reference/sc/source/core/tool/compiler.cxx#ScCompiler::ParseDoubleReference"
+      ],
+      "justification": "Keeps the native address parser flags, sheet matching and deleted-reference handling together while the original Calc compiler retains its token array.",
+      "knownViolations": [],
+      "localSymbols": [
+        "createDoubleReference",
+        "createSingleReference",
+        "findReferenceSheet"
+      ],
+      "upstreamSymbols": [
+        "ScCompiler::ParseDoubleReference",
+        "ScCompiler::ParseSingleReference"
+      ],
+      "upstreamFile": "sc/source/core/tool/compiler.cxx",
+      "sourceResponsibility": "unverified"
+    }
+  }
+}

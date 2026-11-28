@@ -32,6 +32,8 @@ import { DestroyTextNodeAttribute } from "./thints-insert";
 import { SwpHints } from "./ndhints";
 import { CharFormat, SwAttrHandler, type SwAttributeHint } from "../text/atrstck";
 import {
+  createSwFormatAutoFormat,
+  SwTextAttrEnd,
   SwFormatAutoFormat,
   projectWriterCharacterAttributes,
   type WriterCharacterAttributes,
@@ -43,6 +45,11 @@ import {
   type SwAttrPool,
 } from "../attr/swatrset";
 import { MakeTextAttr } from "./thints";
+import { RES_TXTATR_INETFMT } from "../../../inc/hintids";
+import { GetTextAttrAt } from "./ndtxt-attribute-query";
+import { GetTextAttrMode } from "../../../inc/swtypes";
+import { normalizeWriterHyperlink, SwFormatINetFormat, type WriterHyperlink } from "./fmtatr2";
+import { SwTextINetFormat } from "./txtatr2";
 
 /** Copies all original direct items and applies complete font values at their real boundaries. @param hints - Source ranges. @param pool - Document pool. @param textLength - Logical length. @param start - Inclusive offset. @param end - Exclusive offset. @param font - Requested five-field item. @param inherited - Node defaults. @returns Independent canonical range snapshot. */
 export function setFontItem(
@@ -285,4 +292,107 @@ function equalAttributes(
     (left.escapement?.offset ?? 0) === (right.escapement?.offset ?? 0) &&
     (left.escapement?.height ?? 100) === (right.escapement?.height ?? 100)
   );
+}
+
+/** Projects item-set hints into complete browser text runs. @param this - Writer text hints. @param text - Canonical node text. @param inherited - Node/style item set. @returns Complete runs. */
+export function projectTextRuns(
+  this: SwpHints,
+  text: string,
+  inherited: SfxItemSet,
+): readonly WriterTextRunLike[] {
+  if (text.length === 0) return [];
+  const runs: WriterTextRunLike[] = [];
+  const boundaries = new Set([0, text.length]);
+  this.entries().forEach(
+    /** Collects visible hint boundaries. @param hint - Ordered hint. @returns Nothing. */ (
+      hint,
+    ) => {
+      boundaries.add(Math.min(text.length, hint.start));
+      boundaries.add(Math.min(text.length, hint.end));
+    },
+  );
+  const ordered = [...boundaries].sort(
+    /** Orders text offsets ascending. @param left - First offset. @param right - Second offset. @returns Signed ordering. */
+    (left, right) => left - right,
+  );
+  for (let index = 0; index < ordered.length - 1; index += 1) {
+    const start = ordered[index] as number;
+    const end = ordered[index + 1] as number;
+    /* istanbul ignore next -- Unique sorted hint boundaries always increase. */
+    if (end <= start) continue;
+    const inet = GetTextAttrAt(this, start, RES_TXTATR_INETFMT, GetTextAttrMode.Default);
+    runs.push({
+      attributes: projectCharacterHintAttributes(this["pool"], this.entries(), start, inherited),
+      ...(inet?.format instanceof SwFormatINetFormat
+        ? { hyperlink: inet.format.GetHyperlink() }
+        : {}),
+      text: text.slice(start, end),
+    });
+  }
+  return mergeTextRuns(runs);
+}
+
+/** Reads effective attributes inherited by a caret. @param this - Writer text hints. @param text - Canonical node text. @param offset - Caret offset. @param inherited - Node/style item set. @returns Effective properties. */
+export function projectCaretCharacterAttributes(
+  this: SwpHints,
+  text: string,
+  offset: number,
+  inherited: SfxItemSet,
+): WriterCharacterAttributes {
+  if (!Number.isInteger(offset) || offset < 0 || offset > text.length)
+    throw new Error("Writer character-format caret is outside the text node.");
+  if (text.length === 0) return projectInheritedAttributes(this["pool"], inherited);
+  const characterOffset = offset === 0 ? 0 : offset - 1;
+  return projectCharacterHintAttributes(this["pool"], this.entries(), characterOffset, inherited);
+}
+
+/** Reads hyperlink metadata inherited by a caret. @param this - Writer text hints. @param text - Canonical node text. @param offset - Caret offset. @returns Hyperlink or undefined. */
+export function projectCaretHyperlink(
+  this: SwpHints,
+  text: string,
+  offset: number,
+): WriterHyperlink | undefined {
+  if (!Number.isInteger(offset) || offset < 0 || offset > text.length)
+    throw new Error("Writer hyperlink caret is outside the text node.");
+  if (text.length === 0) return undefined;
+  const characterOffset = offset === 0 ? 0 : offset - 1;
+  const hint = GetTextAttrAt(this, characterOffset, RES_TXTATR_INETFMT, GetTextAttrMode.Default);
+  return hint?.format instanceof SwFormatINetFormat ? hint.format.GetHyperlink() : undefined;
+}
+
+/** Projects inherited character defaults through the item model. @param pool - Original document attribute pool. @param inherited - Node/style set. @returns Browser properties. */
+function projectInheritedAttributes(
+  pool: SwAttrPool,
+  inherited: SfxItemSet,
+): WriterCharacterAttributes {
+  return projectWriterCharacterAttributes(
+    new SfxItemSet(pool, WRITER_CHARACTER_WHICH_RANGES),
+    inherited,
+  );
+}
+
+/** Rebuilds direct item-set hints from complete browser runs. @param this - Actual hint owner. @param runs - Complete text portions. @param inherited - Node/style item set. @returns Nothing. */
+export function setTextRuns(
+  this: SwpHints,
+  runs: readonly WriterTextRunLike[],
+  inherited: SfxItemSet,
+): void {
+  let offset = 0;
+  const hints: (SwTextAttrEnd<SwFormatAutoFormat> | SwTextINetFormat)[] = [];
+  const inheritedAttributes = projectInheritedAttributes(this["pool"], inherited);
+  runs.forEach(
+    /** Converts one run to a direct item-set delta. @param run - Complete run. @returns Nothing. */
+    (run) => {
+      const start = offset;
+      offset += run.text.length;
+      if (run.text.length === 0) return;
+      const format = createSwFormatAutoFormat(this["pool"], run.attributes, inheritedAttributes);
+      if (format.GetStyleHandle().Count() > 0) hints.push(new SwTextAttrEnd(format, start, offset));
+      else format.Dispose();
+      const hyperlink = normalizeWriterHyperlink(run.hyperlink);
+      if (hyperlink !== undefined)
+        hints.push(new SwTextINetFormat(new SwFormatINetFormat(hyperlink), start, offset));
+    },
+  );
+  this["assignOwned"](hints, true);
 }

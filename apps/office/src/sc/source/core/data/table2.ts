@@ -2,7 +2,7 @@
 import type { EditTextObject } from "../../../../editeng/inc/editobj";
 import type { SfxHintId } from "../../../../svl/inc/hint";
 import type { SharedStringConstReference } from "../../../../svl/inc/sharedstring";
-import type { ScRangeList } from "../../../inc/rangelst";
+import { ScRangeList } from "../../../inc/rangelst";
 import { ScRange } from "../../../inc/address";
 import { CRFlags, HasAttrFlags, STD_COL_WIDTH } from "../../../inc/global";
 import { ScMultiSelIter } from "../../../inc/markmulti";
@@ -125,13 +125,18 @@ import {
 } from "../../../inc/conditio";
 import type { ScDocument } from "../../../inc/document";
 import { InsertDeleteFlags, ScCloneFlags, UpdateRefMode } from "../../../inc/global";
-import type { ScMarkData } from "../../../inc/markdata";
+import { ScMarkData } from "../../../inc/markdata";
 import type { ScPatternAttr } from "../../../inc/patattr";
 import { RefUpdateContext } from "../../../inc/refupdatecontext";
 import { ATTR_MERGE } from "../../../inc/scitems";
 import { AutoCalcSwitch, DelayFormulaGroupingSwitch } from "../../../inc/scopetools";
 import type { ScTable } from "../../../inc/table";
 import { MatrixEdge } from "../../../inc/types";
+import type { SvxBorderLine } from "../../../../editeng/source/items/borderline";
+import type { SvxBoxInfoItem, SvxBoxItem } from "../../../../editeng/source/items/frmitems";
+import type { ScLineFlags } from "../../../inc/attarray";
+import { ATTR_MERGE_FLAG } from "../../../inc/scitems";
+import { type ScMergeFlagAttr } from "./attrib";
 /** Returns the data-only extent consumed by the native text exporter. @param this - Table. @param endCol - Last column. @param endRow - Last row. @returns Whether data exists. */
 export function GetCellArea(this: ScTable, endCol: [number], endRow: [number]): boolean {
   this.GetLastDataPos(endCol, endRow);
@@ -835,4 +840,136 @@ export function RemoveProtected(this: ScTable, range: ScRange): void {
   const last = this.ClampToAllocatedColumns(aEnd.Col());
   for (let col = aStart.Col(); col <= last; col++)
     this.FetchColumn(col)?.RemoveProtected(aStart.Row(), aEnd.Row());
+}
+
+/** Reconstructs scenario marks from the canonical column pattern runs. @param this - Native sheet. @returns Native marked ranges. */
+export function GetScenarioRanges(this: ScTable): ScRangeList {
+  const result = new ScRangeList();
+  if (!this["bScenario"]) return result;
+  const marks = new ScMarkData(this["rDocument"].GetSheetLimits());
+  const start: [number] = [0];
+  const end: [number] = [0];
+  for (const [col, column] of this["aCol"].entries()) {
+    for (let row = 0; row <= this["rDocument"].MaxRow(); row = end[0] + 1) {
+      const pattern = column.GetPatternRange(start, end, row);
+      if (!pattern) break;
+      const flags = pattern.GetItem(ATTR_MERGE_FLAG) as ScMergeFlagAttr;
+      if (flags.GetValue() & ScMF.Scenario)
+        marks.SetMultiMarkArea(new ScRange(col, start[0], this["nTab"], col, end[0], this["nTab"]));
+    }
+  }
+  marks.FillRangeListWithMarks(result, false);
+  return result;
+}
+
+/** Original line-style mutation visits allocated columns only. @param this - Native sheet. @param marks - Marks. @param line - Style or absence. @param colorOnly - Color mode. @returns Nothing. */
+export function ApplySelectionLineStyle(
+  this: ScTable,
+  marks: ScMarkData,
+  line: SvxBorderLine | undefined,
+  colorOnly: boolean,
+): void {
+  if (colorOnly && !line) return;
+  for (const column of this["aCol"]) column.ApplySelectionLineStyle(marks, line, colorOnly);
+}
+
+/** Original query clamps its final column to allocated storage before calculating right distances. @param this - Native sheet. @param outer - Outer accumulator. @param inner - Inner accumulator. @param flags - Shared flags. @param firstCol - First column. @param firstRow - First row. @param lastCol - Last column. @param lastRow - Last row. @returns Nothing. */
+export function MergeBlockFrame(
+  this: ScTable,
+  outer: SvxBoxItem,
+  inner: SvxBoxInfoItem,
+  flags: ScLineFlags,
+  firstCol: number,
+  firstRow: number,
+  lastCol: number,
+  lastRow: number,
+): void {
+  if (
+    this["rDocument"].ValidColRow(firstCol, firstRow) &&
+    this["rDocument"].ValidColRow(lastCol, lastRow)
+  ) {
+    if (firstCol > lastCol) [firstCol, lastCol] = [lastCol, firstCol];
+    if (firstRow > lastRow) [firstRow, lastRow] = [lastRow, firstRow];
+    lastCol = this.ClampToAllocatedColumns(lastCol);
+    for (let col = firstCol; col <= lastCol; col++)
+      (this["aCol"][col] as ScColumn).MergeBlockFrame(
+        outer,
+        inner,
+        flags,
+        firstRow,
+        lastRow,
+        col === firstCol,
+        lastCol - col,
+      );
+  }
+}
+
+/** Original validated block frame allocates through the real last column. @param this - Native sheet. @param outer - Outer lines. @param inner - Inner lines. @param firstCol - First column. @param firstRow - First row. @param lastCol - Last column. @param lastRow - Last row. @returns Nothing. */
+export function ApplyBlockFrame(
+  this: ScTable,
+  outer: SvxBoxItem,
+  inner: SvxBoxInfoItem,
+  firstCol: number,
+  firstRow: number,
+  lastCol: number,
+  lastRow: number,
+): void {
+  if (
+    this["rDocument"].ValidColRow(firstCol, firstRow) &&
+    this["rDocument"].ValidColRow(lastCol, lastRow)
+  ) {
+    if (firstCol > lastCol) [firstCol, lastCol] = [lastCol, firstCol];
+    if (firstRow > lastRow) [firstRow, lastRow] = [lastRow, firstRow];
+    this.CreateColumnIfNotExists(lastCol);
+    for (let col = firstCol; col <= lastCol; col++)
+      (this["aCol"][col] as ScColumn).ApplyBlockFrame(
+        outer,
+        inner,
+        firstRow,
+        lastRow,
+        col === firstCol,
+        lastCol - col,
+      );
+  }
+}
+
+/** Updates only the source manual-size bit. @param this - Native sheet. @param first - First row. @param last - Last row. @param manual - Flag. @returns Nothing. */
+export function SetManualHeight(this: ScTable, first: number, last: number, manual: boolean): void {
+  if (!this["rDocument"].ValidRow(first) || !this["rDocument"].ValidRow(last) || !this["pRowFlags"])
+    return;
+  if (manual) this["pRowFlags"].OrValue(first, last, CRFlags.ManualSize);
+  else this["pRowFlags"].AndValue(first, last, CRFlags.All & ~CRFlags.ManualSize);
+}
+
+/** Source no-drawing-layer pixel-change path, including the interactive single-row shrink heuristic. @param this - Native sheet. @param first - First row. @param last - Last row. @param height - Twips. @param ppty - Pixels per twip. @param api - Allow shrinking a single row. @returns Whether stored geometry changed. */
+export function SetRowHeightRange(
+  this: ScTable,
+  first: number,
+  last: number,
+  height: number,
+  ppty: number,
+  api: boolean,
+): boolean {
+  if (
+    !this["rDocument"].ValidRow(first) ||
+    !this["rDocument"].ValidRow(last) ||
+    !this["mpRowHeights"]
+  )
+    return false;
+  height = height & 0xffff || this.GetOptimalMinRowHeight();
+  const pixels = Math.trunc(height * ppty);
+  for (let row = first; row <= last;) {
+    const run = this.GetRowHeightRange(row),
+      oldPixels = Math.trunc(run.mnValue * ppty);
+    if (
+      run.mnValue !== height &&
+      pixels !== oldPixels &&
+      (api || last - first > 0 || pixels > oldPixels)
+    ) {
+      this["mpRowHeights"].setValue(first, last, height);
+      return true;
+    }
+    row = run.mnRow2 + 1;
+  }
+  return false;
 }

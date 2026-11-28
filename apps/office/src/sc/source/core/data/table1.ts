@@ -15,6 +15,9 @@ import { type ScLinkMode, UpdateRefMode } from "../../../inc/global";
 import { CRFlags } from "../../../inc/global";
 import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { ScHorizontalCellIterator } from "./dociter";
+import type { ScPatternAttr } from "../../../inc/patattr";
+import { ATTR_FONT_HEIGHT } from "../../../inc/scitems";
+import { lcl_GetAttribHeight, supportsStandardRowHeight } from "./column2";
 
 /** Updates the native source fields and invalidates the sheet stream. @param this - Linked sheet. @param mode - Native mode. @param doc - Source workbook. @param filter - Native filter. @param options - Filter options. @param tab - Name in the source workbook. @param delay - Refresh seconds. @returns Nothing. */
 export function SetLink(
@@ -404,4 +407,53 @@ export function StartOutlineTable(this: ScTable): ScOutlineTable {
 /** Replaces or clears the canonical sheet outline. @param this - Source sheet. @param outline - Owned outline. @returns Nothing. */
 export function SetOutlineTable(this: ScTable, outline?: ScOutlineTable): void {
   this["pOutlineTable"] = outline;
+}
+
+/** Calculates native standard attribute maxima with allocated row information;unsupported device layout retains imported geometry. @param this - Native sheet. @param context - Shared across selected sheets. @param first - First row. @param last - Last row. @param api - Source UI uses true. @returns Whether heights changed. */
+export function SetOptimalHeight(
+  this: ScTable,
+  context: RowHeightContext,
+  first: number,
+  last: number,
+  api: boolean,
+): boolean {
+  const patterns: { first: number; last: number; pattern: ScPatternAttr }[] = [];
+  const start: [number] = [0],
+    end: [number] = [0];
+  for (let col = 0; col <= Math.min(this["aCol"].length, this["rDocument"].MaxCol()); col++)
+    for (let row = first; row <= last;) {
+      const pattern = this.GetColumnData(col).GetPatternRange(start, end, row) as ScPatternAttr;
+      if (!supportsStandardRowHeight(pattern)) return false;
+      patterns.push({ first: row, last: Math.min(last, end[0]), pattern });
+      row = end[0] + 1;
+    }
+  const heights = context.getHeightArray();
+  for (const run of patterns) {
+    const height = lcl_GetAttribHeight(
+      run.pattern,
+      ATTR_FONT_HEIGHT,
+      this.GetOptimalMinRowHeight(),
+    );
+    for (let row = run.first; row <= run.last;) {
+      const old = heights.GetRangeData(row),
+        stop = Math.min(run.last, old.mnRow2);
+      if (height > old.maValue) heights.SetValue(row, stop, height);
+      row = stop + 1;
+    }
+  }
+  return SetOptimalHeightsToRows(
+    context,
+    /** Mutates actual sheet geometry. @param startRow - First. @param endRow - Last. @param height - Twips. @param fromApi - Shrink policy. @returns Changed. */
+    (startRow, endRow, height, fromApi) =>
+      this.SetRowHeightRange(startRow, endRow, height, context.getPPTY(), fromApi),
+    this["pRowFlags"] as ScBitMaskCompressedArray,
+    first,
+    last,
+    api,
+  );
+}
+
+/** Original table1 cleanup visits only actual allocated columns. @param this - Native sheet. @returns Nothing. */
+export function DeleteEmptyBroadcasters(this: ScTable): void {
+  for (const column of this["aCol"]) column.DeleteEmptyBroadcasters();
 }

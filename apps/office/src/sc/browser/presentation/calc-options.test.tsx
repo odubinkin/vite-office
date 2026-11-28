@@ -12,11 +12,13 @@ import { createCalcSession } from "../composition/calc-module";
 import { CalcWorkbench } from "./calc-workbench";
 
 let session: ReturnType<typeof createCalcSession> | undefined;
-afterEach(() => {
-  cleanup();
-  session?.Close();
-  session = undefined;
-});
+afterEach(
+  /** Unmounts the Calc workbench and closes the test session. @returns Nothing. */ () => {
+    cleanup();
+    session?.Close();
+    session = undefined;
+  },
+);
 
 /** Mounts the actual Calc application session. @returns Source view. */
 function mount() {

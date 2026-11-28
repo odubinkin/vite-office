@@ -234,7 +234,7 @@
           "marker": "preserves tdf114287 exact print bounds across ODT export"
         },
         {
-          "path": "apps/office/src/sw/source/core/layout/newfrm.ts",
+          "path": "apps/office/src/sw/source/core/layout/newfrm-comparison.ts",
           "marker": "left.lineNumberStart"
         }
       ],

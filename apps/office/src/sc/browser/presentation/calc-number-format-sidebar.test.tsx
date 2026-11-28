@@ -12,11 +12,13 @@ import { createCalcSession } from "../composition/calc-module";
 import { CalcWorkbench } from "./calc-workbench";
 
 let session: ReturnType<typeof createCalcSession> | undefined;
-afterEach(() => {
-  cleanup();
-  session?.Close();
-  session = undefined;
-});
+afterEach(
+  /** Unmounts the Calc workbench and closes the test session. @returns Nothing. */ () => {
+    cleanup();
+    session?.Close();
+    session = undefined;
+  },
+);
 
 /** Mounts the real session with its original focus and document owners. @returns Active Calc session. */
 function mount() {
@@ -32,7 +34,7 @@ function properties() {
   return sidebar;
 }
 
-it("projects category and native option controls, formatting color and undo across the active cell", () => {
+it("projects category and native option controls, formatting color and undo across the active cell", /** Projects category and native option controls, formatting color and undo across the active cell. @returns Nothing. */ () => {
   const { controller, frame } = mount();
   const doc = controller.shell.GetDocument();
   act(() => controller.EnterString("-1234.5"));
@@ -59,7 +61,10 @@ it("projects category and native option controls, formatting color and undo acro
   });
   const dispatch = frame.GetDispatcher();
   expect(dispatch.QueryState(NUMBER_FORMAT).value).toBe("1,1,3,1,0,");
-  act(() => expect(controller.Undo()).toBe(true));
+  act(
+    /** Undoes the last Calc command and asserts success. @returns Nothing. */ () =>
+      expect(controller.Undo()).toBe(true),
+  );
   expect(sidebar.getByRole("checkbox", { name: "Negative numbers in red" })).not.toBeChecked();
   expect(cell).not.toHaveStyle({ color: "rgb(255, 0, 0)" });
   expect(doc.GetValue(new ScAddress())).toBe(-1234.5);
@@ -129,7 +134,7 @@ it("keeps dock visibility and collapse separate and cancels popup focus to the e
   expect(frame.GetDispatcher().QueryState(".uno:Sidebar").checked).toBe(true);
 });
 
-it("activates formatter-owned currency rows and repeats the chosen typed key on the main button", () => {
+it("activates formatter-owned currency rows and repeats the chosen typed key on the main button", /** Activates formatter-owned currency rows and repeats the chosen typed key on the main button. @returns Nothing. */ () => {
   const { controller } = mount();
   const doc = controller.shell.GetDocument();
   act(() => controller.EnterString("3.25"));
@@ -148,7 +153,10 @@ it("activates formatter-owned currency rows and repeats the chosen typed key on 
   const key = doc.GetNumberFormat(0, 0, 0);
   const entry = doc.GetFormatTable().GetEntry(key);
   expect(entry && text(entry.GetFormatstring())).toContain("[$EUR]");
-  act(() => controller.Select(1, 0));
+  act(
+    /** Moves the Calc selection to the requested cell. @returns Whether Calc accepted the selection. */ () =>
+      controller.Select(1, 0),
+  );
   fireEvent.click(toolbar.getByRole("button", { name: "Currency" }));
   expect(doc.GetNumberFormat(1, 0, 0)).toBe(key);
   fireEvent.click(toolbar.getByRole("button", { name: "Currency" }));
@@ -186,7 +194,10 @@ it("ports testDocumentModelAccessor_getDocumentCurrencies and deduplicates the a
       const pos = new ScAddress(index, index, 0);
       doc.SetValue(pos, value);
       doc.SetNumberFormat(pos, key[0]);
-      act(() => controller.Select(index, index));
+      act(
+        /** Moves the Calc selection to the requested cell. @returns Whether Calc accepted the selection. */ () =>
+          controller.Select(index, index),
+      );
       expect(screen.getByRole("gridcell", { name: new RegExp(value + ",00€$") })).toBeVisible();
       expect(accessor.getDocumentCurrencies()).toEqual([
         { aSymbol: "€", aExtension: "-424", eLanguage: 0x0424 },

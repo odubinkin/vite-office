@@ -1,0 +1,86 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/core/layout/newfrm-comparison.ts",
+    "upstreamPath": "sw/source/core/layout/newfrm.cxx",
+    "localSymbols": [
+      "pageDescriptorEqual",
+      "layoutDescriptorEqual",
+      "textFrameSettingsEqual",
+      "lineNumberInfoEqual",
+      "measurementsMatchInputs",
+      "textFrameInputEqual",
+      "textFrameEqual",
+      "tableMeasurementsEqual",
+      "tableFramesEqual"
+    ],
+    "upstreamSymbols": [
+      "SwRootFrame::SwRootFrame",
+      "InsertNewPage"
+    ],
+    "preservedResponsibilities": [
+      "Keeps the existing layout comparison predicates together for Writer page and frame reuse when native model values and device measurements are unchanged."
+    ],
+    "omittedResponsibilities": [
+      "Original core frame creation and page-chain ownership remain in the existing layout root."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/core/layout/newfrm-comparison.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Keeps the existing layout comparison predicates together for Writer page and frame reuse when native model values and device measurements are unchanged."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/layout/newfrm-comparison.ts",
+          "marker": "pageDescriptorEqual"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/layout/newfrm-comparison.ts",
+          "marker": "layoutDescriptorEqual"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/layout/newfrm-comparison.ts",
+          "marker": "textFrameSettingsEqual"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/layout/newfrm-comparison.ts",
+          "marker": "lineNumberInfoEqual"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/layout/newfrm-comparison.ts",
+          "marker": "measurementsMatchInputs"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/layout/newfrm-comparison.ts",
+          "marker": "textFrameInputEqual"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/layout/newfrm-comparison.ts",
+          "marker": "textFrameEqual"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/layout/newfrm-comparison.ts",
+          "marker": "tableMeasurementsEqual"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/layout/newfrm-comparison.ts",
+          "marker": "tableFramesEqual"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/newfrm.cxx",
+          "marker": "SwRootFrame::SwRootFrame"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/newfrm.cxx",
+          "marker": "InsertNewPage"
+        }
+      ]
+    }
+  }
+}

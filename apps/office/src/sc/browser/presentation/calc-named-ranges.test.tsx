@@ -13,11 +13,13 @@ import { createCalcSession } from "../composition/calc-module";
 import { CalcWorkbench } from "./calc-workbench";
 
 let active: ReturnType<typeof createCalcSession> | undefined;
-afterEach(() => {
-  cleanup();
-  active?.Close();
-  active = undefined;
-});
+afterEach(
+  /** Unmounts the Calc workbench and closes the test session. @returns Nothing. */ () => {
+    cleanup();
+    active?.Close();
+    active = undefined;
+  },
+);
 
 /** Mounts the real dispatcher and document owner. @returns Live Calc session. */
 function mount(): ReturnType<typeof createCalcSession> {
@@ -96,9 +98,15 @@ it("ports tdf86214 validation and saves a sheet-local name after choosing its ra
   assert(entry);
   expect(document.GetRangeName()?.findByUpperName("VALID_NAME")).toBeUndefined();
   const index = entry.GetIndex();
-  act(() => expect(controller.Undo()).toBe(true));
+  act(
+    /** Undoes the last Calc command and asserts success. @returns Nothing. */ () =>
+      expect(controller.Undo()).toBe(true),
+  );
   expect(nameList?.findByIndex(index)).toBeUndefined();
-  act(() => expect(controller.Redo()).toBe(true));
+  act(
+    /** Reapplies the last undone Calc command and asserts success. @returns Nothing. */ () =>
+      expect(controller.Redo()).toBe(true),
+  );
   expect(nameList?.findByIndex(index)?.name).toBe("valid_name");
   enterNameBox("valid_name (Sheet1)");
   expect(controller.Address()).toBe("B3");
@@ -181,23 +189,32 @@ it("ports tdf87474 with manager rename, formula updates, cancellation and atomic
   expect(document.GetValue(position)).toBe(7);
   expect(document.GetValue(groupMember)).toBe(7);
   expect(document.GetFormulaCell(groupMember)?.GetCellGroup()).toBe(group);
-  act(() => expect(controller.Undo()).toBe(true));
+  act(
+    /** Undoes the last Calc command and asserts success. @returns Nothing. */ () =>
+      expect(controller.Undo()).toBe(true),
+  );
   expect(formula()).toBe("=SUM(SourceTotal)");
   expect(document.GetValue(position)).toBe(3);
   expect(document.GetValue(groupMember)).toBe(3);
-  act(() => expect(controller.Redo()).toBe(true));
+  act(
+    /** Reapplies the last undone Calc command and asserts success. @returns Nothing. */ () =>
+      expect(controller.Redo()).toBe(true),
+  );
   expect(formula()).toBe("=SUM(UpdatedTotal)");
   expect(document.GetValue(position)).toBe(7);
 });
 
-it("pastes a selected name into input and writes an undoable name list from the source menu alias", async () => {
+it("pastes a selected name into input and writes an undoable name list from the source menu alias", /** Pastes a selected name into input and writes an undoable name list from the source menu alias. @returns Completion. */ async () => {
   const { controller } = mount();
   const document = controller.shell.GetDocument();
   document.SetValue(new ScAddress(), 6);
   enterNameBox("Revenue");
   const bounds = [new ScAddress(1, 2, 0), new ScAddress(2, 2, 0)] as const;
   document.SetValue(bounds[1], 25);
-  act(() => controller.Select(1, 2));
+  act(
+    /** Moves the Calc selection to the requested cell. @returns Whether Calc accepted the selection. */ () =>
+      controller.Select(1, 2),
+  );
   openNameMenu(/^Insert…$/);
   let dialog = screen.getByRole("dialog", { name: "Paste Names" });
   await act(
@@ -233,10 +250,16 @@ it("pastes a selected name into input and writes an undoable name list from the 
     return stored ? text(stored.getString()) : undefined;
   }
   expect(bounds.map((at) => readText(at))).toEqual(["Revenue", "=$Sheet1.$A$1"]);
-  act(() => expect(controller.Undo()).toBe(true));
+  act(
+    /** Undoes the last Calc command and asserts success. @returns Nothing. */ () =>
+      expect(controller.Undo()).toBe(true),
+  );
   expect(readText(bounds[0])).toBeUndefined();
   expect(document.GetValue(bounds[1])).toBe(25);
-  act(() => expect(controller.Redo()).toBe(true));
+  act(
+    /** Reapplies the last undone Calc command and asserts success. @returns Nothing. */ () =>
+      expect(controller.Redo()).toBe(true),
+  );
   expect(bounds.map((at) => readText(at))).toEqual(["Revenue", "=$Sheet1.$A$1"]);
 });
 
@@ -276,7 +299,10 @@ it("keeps nested Add and Delete staged and restores all scopes with one Undo", /
   );
   expect(document.GetRangeName()?.findByUpperName("ORIGINALNAME")).toBeUndefined();
   expect(document.GetRangeName(0)?.findByUpperName("NESTEDNAME")).toBeDefined();
-  act(() => expect(controller.Undo()).toBe(true));
+  act(
+    /** Undoes the last Calc command and asserts success. @returns Nothing. */ () =>
+      expect(controller.Undo()).toBe(true),
+  );
   expect(document.GetRangeName()?.findByUpperName("ORIGINALNAME")).toBeDefined();
   expect(document.GetRangeName(0)?.findByUpperName("NESTEDNAME")).toBeUndefined();
 });
@@ -300,9 +326,15 @@ it("ports tdf137617 Create Names defaults and named position text in Calc A1 and
     /** Clicks the button named "OK". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
       fireEvent.click(within(dialog).getByRole("button", { name: "OK" })),
   );
-  act(() => controller.Select(1, 0));
+  act(
+    /** Moves the Calc selection to the requested cell. @returns Whether Calc accepted the selection. */ () =>
+      controller.Select(1, 0),
+  );
   expect(screen.getByRole("textbox", { name: "Name Box" })).toHaveValue("Result1");
-  act(() => controller.Select(1, 1));
+  act(
+    /** Moves the Calc selection to the requested cell. @returns Whether Calc accepted the selection. */ () =>
+      controller.Select(1, 1),
+  );
   expect(screen.getByRole("textbox", { name: "Name Box" })).toHaveValue("Result2");
 
   /** Changes syntax through the original Options tree. @param value - Formula syntax choice. @returns Completion. */
@@ -337,13 +369,25 @@ it("ports tdf137617 Create Names defaults and named position text in Calc A1 and
     /** Clicks the button named "OK". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
       fireEvent.click(within(dialog).getByRole("button", { name: "OK" })),
   );
-  act(() => controller.Select(2, 1));
+  act(
+    /** Moves the Calc selection to the requested cell. @returns Whether Calc accepted the selection. */ () =>
+      controller.Select(2, 1),
+  );
   expect(screen.getByRole("textbox", { name: "Name Box" })).toHaveValue("Result3");
-  act(() => controller.Select(3, 1));
+  act(
+    /** Moves the Calc selection to the requested cell. @returns Whether Calc accepted the selection. */ () =>
+      controller.Select(3, 1),
+  );
   expect(screen.getByRole("textbox", { name: "Name Box" })).toHaveValue("Result4");
-  act(() => expect(controller.Undo()).toBe(true));
+  act(
+    /** Undoes the last Calc command and asserts success. @returns Nothing. */ () =>
+      expect(controller.Undo()).toBe(true),
+  );
   expect(screen.getByRole("textbox", { name: "Name Box" })).toHaveValue("R2C4");
-  act(() => expect(controller.Redo()).toBe(true));
+  act(
+    /** Reapplies the last undone Calc command and asserts success. @returns Nothing. */ () =>
+      expect(controller.Redo()).toBe(true),
+  );
   expect(screen.getByRole("textbox", { name: "Name Box" })).toHaveValue("Result4");
   document.SetValue(new ScAddress(2, 1, 0), 5);
   document.SetValue(new ScAddress(2, 2, 0), 8);
@@ -390,7 +434,10 @@ it("creates names in edge order and stops at Cancel while preserving earlier acc
   expect(
     document.GetRangeName()?.findByUpperName("TOREPLACE")?.GetSymbol(document.GetGrammar()),
   ).toBe("$Sheet1.$A$1");
-  act(() => expect(controller.Undo()).toBe(true));
+  act(
+    /** Undoes the last Calc command and asserts success. @returns Nothing. */ () =>
+      expect(controller.Undo()).toBe(true),
+  );
   expect(document.GetRangeName()?.findByUpperName("GROSS_PROFIT")).toBeUndefined();
 });
 
@@ -401,9 +448,15 @@ it("applies Yes and No to separate name conflicts and recalculates formulas thro
   document.SetValue(new ScAddress(4, 0, 0), 22);
   document.SetValue(new ScAddress(0, 3, 0), 8);
   document.SetValue(new ScAddress(1, 3, 0), 9);
-  act(() => controller.Select(3, 0));
+  act(
+    /** Moves the Calc selection to the requested cell. @returns Whether Calc accepted the selection. */ () =>
+      controller.Select(3, 0),
+  );
   enterNameBox("MoveThis");
-  act(() => controller.Select(4, 0));
+  act(
+    /** Moves the Calc selection to the requested cell. @returns Whether Calc accepted the selection. */ () =>
+      controller.Select(4, 0),
+  );
   enterNameBox("KeepThis");
   act(() => {
     controller.Select(0, 2);
@@ -435,8 +488,14 @@ it("applies Yes and No to separate name conflicts and recalculates formulas thro
       fireEvent.click(within(question).getByRole("button", { name: "No" })),
   );
   expect(document.GetValue(total)).toBe(30);
-  act(() => expect(controller.Undo()).toBe(true));
+  act(
+    /** Undoes the last Calc command and asserts success. @returns Nothing. */ () =>
+      expect(controller.Undo()).toBe(true),
+  );
   expect(document.GetValue(total)).toBe(33);
-  act(() => expect(controller.Redo()).toBe(true));
+  act(
+    /** Reapplies the last undone Calc command and asserts success. @returns Nothing. */ () =>
+      expect(controller.Redo()).toBe(true),
+  );
   expect(document.GetValue(total)).toBe(30);
 });

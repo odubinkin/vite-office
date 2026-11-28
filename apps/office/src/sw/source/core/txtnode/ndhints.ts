@@ -3,30 +3,12 @@
  */
 
 import type { SwFormatRuby } from "./fmtatr2";
+import * as fields from "./ndhints-field-query";
 import { SwTextTOXMark } from "./atrtox";
 import { SwTextRefMark } from "./atrref";
 import { RES_TXTATR_REFMARK, RES_TXTATR_TOXMARK } from "../../../inc/hintids";
-import {
-  SwTextField,
-  type SwTextDateTimeField,
-  type SwTextDocInfoField,
-  type SwTextDocStatField,
-  type SwTextPageNumberField,
-  type SwTextChapterField,
-  type SwTextSequenceField,
-  type SwTextJumpEditField,
-  type SwTextDropDownField,
-  type SwTextOrdinaryField,
-  type SwTextReferenceField,
-} from "../../../inc/txtfld";
-import { SwSetExpField } from "../fields/expfld";
-import { SwJumpEditField } from "../fields/docufld.jumpedit";
-import { SwDropDownField } from "../fields/flddropdown";
-import { SwChapterField } from "../fields/chpfld";
-import { SwGetRefField } from "../fields/reffld";
-import { SwPageNumberField } from "../fields/docufld.pagenumber";
-import { SwDocInfoField, SwDocStatField, SwHiddenParaField } from "../fields/docufld";
-import { SwDateTimeField } from "../fields/flddat";
+import { SwTextField, type SwTextOrdinaryField } from "../../../inc/txtfld";
+
 import { SwTextFlyCnt } from "../../../inc/txtflcnt";
 import { TryInsertTextNodeHint, DestroyTextNodeAttribute } from "./thints-insert";
 import { TryInsertNesting, type NestingAttribute } from "./thints-nesting";
@@ -34,13 +16,15 @@ import type { SwRegHistory } from "../undo/rolbck";
 import { CheckCharacterHintSortNumber } from "./thints-portions";
 import { SvxFontItem } from "../../../../editeng/inc/fontitem";
 import {
-  mergeTextRuns,
   setFontItem,
-  projectCharacterHintAttributes,
   setCharacterItems,
   createCharacterFormatItems,
   createFontHeightItems,
   createCharacterColorItems,
+  projectTextRuns,
+  setTextRuns,
+  projectCaretCharacterAttributes,
+  projectCaretHyperlink,
   collectCharacterSegments,
 } from "./ndhints-font";
 import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
@@ -51,7 +35,6 @@ import {
   RES_TXTATR_FIELD,
   RES_TXTATR_AUTOFMT,
   RES_TXTATR_FLYCNT,
-  RES_TXTATR_INETFMT,
   WRITER_CHARACTER_WHICH_RANGES,
 } from "../../../inc/hintids";
 import type { SwTextNode } from "./ndtxt";
@@ -70,12 +53,10 @@ import {
   compareHintsByWhichAndStart,
   compareWhichStartPairs,
 } from "./ndhints-range";
-import { GetTextAttrAt } from "./ndtxt-attribute-query";
-import { GetTextAttrMode, SetAttrMode } from "../../../inc/swtypes";
+
+import { SetAttrMode } from "../../../inc/swtypes";
 import {
-  createSwFormatAutoFormat,
   isTextFormatHint,
-  projectWriterCharacterAttributes,
   SwFormatAutoFormat,
   SwTextAttrEnd,
   type WriterCharacterAttributes,
@@ -406,125 +387,31 @@ export class SwpHints {
     return undefined;
   }
 
-  /** Returns native index marks in the same order as other text hints. @returns Borrowed index attributes. */
-  public GetIndexMarks(): readonly SwTextTOXMark[] {
-    return this.hintsByStart.filter(
-      /** Selects the original index-mark family. @param hint - Owned attribute. @returns Whether index mark. */
-      (hint): hint is SwTextTOXMark => hint instanceof SwTextTOXMark,
-    );
-  }
+  GetIndexMarks = fields.GetIndexMarks;
 
-  /** Returns native reference marks in start order. @returns Borrowed references. */
-  public GetReferenceMarks(): readonly SwTextRefMark[] {
-    return this.hintsByStart.filter(
-      /** Selects an owned reference mark. @param hint - Indexed hint. @returns Whether a reference. */
-      (hint): hint is SwTextRefMark => hint instanceof SwTextRefMark,
-    );
-  }
+  GetReferenceMarks = fields.GetReferenceMarks;
 
-  /** Returns actual ordinary reference field hints in start order. @returns Native field hints. */
-  public GetReferenceFields(): readonly SwTextReferenceField[] {
-    return this.hintsByStart.filter(
-      /** Selects the represented ordinary field type. @param hint - Indexed hint. @returns Whether a reference field. */
-      (hint): hint is SwTextReferenceField =>
-        hint instanceof SwTextField && hint.GetAttr().GetField() instanceof SwGetRefField,
-    );
-  }
+  GetReferenceFields = fields.GetReferenceFields;
 
-  /** Applies native equal-weight HiddenParagraph precedence to the current fields. @returns Whether a hidden-paragraph field hides this owner. */
-  public IsHiddenByParaField(): boolean {
-    let hidden = false;
-    for (const hint of this.GetOrdinaryFields()) {
-      const field = hint.GetAttr().GetField();
-      if (!(field instanceof SwHiddenParaField)) continue;
-      if (!field.IsHidden()) return false;
-      hidden = true;
-    }
-    return hidden;
-  }
+  IsHiddenByParaField = fields.IsHiddenByParaField;
 
-  /** Borrows the native ordinary field points in text order. @returns Ordered field hints. */
-  public GetOrdinaryFields(): readonly SwTextOrdinaryField[] {
-    return this.hintsByStart.filter(
-      /** Matches the native ordinary text field attribute. @param hint - Original attribute. @returns Whether it is an ordinary field. */
-      (hint): hint is SwTextOrdinaryField =>
-        hint instanceof SwTextField && hint.Which() === RES_TXTATR_FIELD,
-    );
-  }
+  GetOrdinaryFields = fields.GetOrdinaryFields;
 
-  /** Returns native SetExpression sequence fields in text order. @returns Ordered field points. */
-  public GetSequenceFields(): readonly SwTextSequenceField[] {
-    return this.GetOrdinaryFields().filter(
-      /** Identifies an attached sequence field. @param hint - Original text attribute. @returns Whether this is a sequence field. */
-      (hint): hint is SwTextSequenceField => {
-        const field = hint.GetAttr().GetField();
-        return field instanceof SwSetExpField && field.IsSequenceField();
-      },
-    );
-  }
+  GetSequenceFields = fields.GetSequenceFields;
 
-  /** Returns native placeholders at their original text anchors. @returns Ordered fields. */
-  public GetJumpEditFields(): readonly SwTextJumpEditField[] {
-    return this.hintsByStart.filter(
-      /** Identifies a native placeholder. @param hint - Text attribute. @returns Whether this is a JumpEdit field. */
-      (hint): hint is SwTextJumpEditField =>
-        hint instanceof SwTextField && hint.GetAttr().GetField() instanceof SwJumpEditField,
-    );
-  }
+  GetJumpEditFields = fields.GetJumpEditFields;
 
-  /** Returns native drop-downs at their original text anchors. @returns Ordered fields. */
-  public GetDropDownFields(): readonly SwTextDropDownField[] {
-    return this.hintsByStart.filter(
-      /** Identifies a native drop-down. @param hint - Text attribute. @returns Whether this is a DropDown field. */
-      (hint): hint is SwTextDropDownField =>
-        hint instanceof SwTextField && hint.GetAttr().GetField() instanceof SwDropDownField,
-    );
-  }
+  GetDropDownFields = fields.GetDropDownFields;
 
-  /** Returns native Chapter fields at their original text anchors. @returns Ordered fields. */
-  public GetChapterFields(): readonly SwTextChapterField[] {
-    return this.hintsByStart.filter(
-      /** Identifies a native Chapter field. @param hint - Text attribute. @returns Whether this is a chapter field. */
-      (hint): hint is SwTextChapterField =>
-        hint instanceof SwTextField && hint.GetAttr().GetField() instanceof SwChapterField,
-    );
-  }
+  GetChapterFields = fields.GetChapterFields;
 
-  /** Returns native PageNumber fields at their original text anchors. @returns Ordered fields. */
-  public GetPageNumberFields(): readonly SwTextPageNumberField[] {
-    return this.hintsByStart.filter(
-      /** Identifies the actual page number field. @param hint - Text attribute. @returns Whether this is a native page number. */
-      (hint): hint is SwTextPageNumberField =>
-        hint instanceof SwTextField && hint.GetAttr().GetField() instanceof SwPageNumberField,
-    );
-  }
+  GetPageNumberFields = fields.GetPageNumberFields;
 
-  /** Returns native statistic fields in start order. @returns Native field hints. */
-  public GetDocStatFields(): readonly SwTextDocStatField[] {
-    return this.hintsByStart.filter(
-      /** Identifies the actual statistic field type. @param hint - Native hint. @returns Whether a count field. */
-      (hint): hint is SwTextDocStatField =>
-        hint instanceof SwTextField && hint.GetAttr().GetField() instanceof SwDocStatField,
-    );
-  }
+  GetDocStatFields = fields.GetDocStatFields;
 
-  /** Finds the actual document information fields. @returns Ordered native hints. */
-  public GetDocInfoFields(): readonly SwTextDocInfoField[] {
-    return this.hintsByStart.filter(
-      /** Selects the actual value class. @param hint - Text attribute. @returns Whether a DocInfo field. */
-      (hint): hint is SwTextDocInfoField =>
-        hint instanceof SwTextField && hint.GetAttr().GetField() instanceof SwDocInfoField,
-    );
-  }
+  GetDocInfoFields = fields.GetDocInfoFields;
 
-  /** Returns native date and time field hints in start order. @returns Native field hints. */
-  public GetDateTimeFields(): readonly SwTextDateTimeField[] {
-    return this.hintsByStart.filter(
-      /** Selects the actual field value class. @param hint - Text attribute. @returns Whether a date/time field. */
-      (hint): hint is SwTextDateTimeField =>
-        hint instanceof SwTextField && hint.GetAttr().GetField() instanceof SwDateTimeField,
-    );
-  }
+  GetDateTimeFields = fields.GetDateTimeFields;
 
   /** Obtains a position in the full start index. @param hint - Owned hint. @returns Index or -1. */
   public GetIndexOf(hint: TextNodeAttribute): number {
@@ -1033,61 +920,11 @@ export class SwpHints {
     for (const hint of old) DestroyTextNodeAttribute(hint);
   }
 
-  /** Rebuilds direct item-set hints from complete browser runs. @param runs - Complete text portions. @param inherited - Node/style item set. @returns Nothing. */
-  public setTextRuns(runs: readonly WriterTextRunLike[], inherited: SfxItemSet): void {
-    let offset = 0;
-    const hints: RangedTextAttr[] = [];
-    const inheritedAttributes = this.projectInherited(inherited);
-    runs.forEach(
-      /** Converts one run to a direct item-set delta. @param run - Complete run. @returns Nothing. */
-      (run) => {
-        const start = offset;
-        offset += run.text.length;
-        if (run.text.length === 0) return;
-        const format = createSwFormatAutoFormat(this.pool, run.attributes, inheritedAttributes);
-        if (format.GetStyleHandle().Count() > 0)
-          hints.push(new SwTextAttrEnd(format, start, offset));
-        else format.Dispose();
-        const hyperlink = normalizeWriterHyperlink(run.hyperlink);
-        if (hyperlink !== undefined)
-          hints.push(new SwTextINetFormat(new SwFormatINetFormat(hyperlink), start, offset));
-      },
-    );
-    this.assignOwned(hints, true);
-  }
+  setTextRuns = setTextRuns;
 
   /** Projects item-set hints into complete browser text runs. @param text - Canonical node text. @param inherited - Node/style item set. @returns Complete runs. */
   public toTextRuns(text: string, inherited: SfxItemSet): readonly WriterTextRunLike[] {
-    if (text.length === 0) return [];
-    const runs: WriterTextRunLike[] = [];
-    const boundaries = new Set([0, text.length]);
-    this.entries().forEach(
-      /** Collects visible hint boundaries. @param hint - Ordered hint. @returns Nothing. */ (
-        hint,
-      ) => {
-        boundaries.add(Math.min(text.length, hint.start));
-        boundaries.add(Math.min(text.length, hint.end));
-      },
-    );
-    const ordered = [...boundaries].sort(
-      /** Orders text offsets ascending. @param left - First offset. @param right - Second offset. @returns Signed ordering. */
-      (left, right) => left - right,
-    );
-    for (let index = 0; index < ordered.length - 1; index += 1) {
-      const start = ordered[index] as number;
-      const end = ordered[index + 1] as number;
-      /* istanbul ignore next -- Unique sorted hint boundaries always increase. */
-      if (end <= start) continue;
-      const inet = GetTextAttrAt(this, start, RES_TXTATR_INETFMT, GetTextAttrMode.Default);
-      runs.push({
-        attributes: projectCharacterHintAttributes(this.pool, this.entries(), start, inherited),
-        ...(inet?.format instanceof SwFormatINetFormat
-          ? { hyperlink: inet.format.GetHyperlink() }
-          : {}),
-        text: text.slice(start, end),
-      });
-    }
-    return mergeTextRuns(runs);
+    return projectTextRuns.call(this, text, inherited);
   }
 
   /** Reads effective attributes inherited by a caret. @param text - Canonical node text. @param offset - Caret offset. @param inherited - Node/style item set. @returns Effective properties. */
@@ -1096,21 +933,12 @@ export class SwpHints {
     offset: number,
     inherited: SfxItemSet,
   ): WriterCharacterAttributes {
-    if (!Number.isInteger(offset) || offset < 0 || offset > text.length)
-      throw new Error("Writer character-format caret is outside the text node.");
-    if (text.length === 0) return this.projectInherited(inherited);
-    const characterOffset = offset === 0 ? 0 : offset - 1;
-    return projectCharacterHintAttributes(this.pool, this.entries(), characterOffset, inherited);
+    return projectCaretCharacterAttributes.call(this, text, offset, inherited);
   }
 
   /** Reads hyperlink metadata inherited by a caret. @param text - Canonical node text. @param offset - Caret offset. @returns Hyperlink or undefined. */
   public getHyperlink(text: string, offset: number): WriterHyperlink | undefined {
-    if (!Number.isInteger(offset) || offset < 0 || offset > text.length)
-      throw new Error("Writer hyperlink caret is outside the text node.");
-    if (text.length === 0) return undefined;
-    const characterOffset = offset === 0 ? 0 : offset - 1;
-    const hint = GetTextAttrAt(this, characterOffset, RES_TXTATR_INETFMT, GetTextAttrMode.Default);
-    return hint?.format instanceof SwFormatINetFormat ? hint.format.GetHyperlink() : undefined;
+    return projectCaretHyperlink.call(this, text, offset);
   }
   /** Captures same-pool state or converts a foreign container into copied attributes. @param pool - Requested owner, defaulting to the current pool. @returns Independent hints. */
   public clone(pool: SwAttrPool = this.pool): SwpHints {
@@ -1141,14 +969,6 @@ export class SwpHints {
       else if (hint instanceof SwTextTOXMark) result.Insert(hint.CopyTOXMark(pool.GetDoc()));
       else if (hint instanceof SwTextRefMark) result.Insert(hint.clone());
     return result;
-  }
-
-  /** Projects inherited character defaults through the item model. @param inherited - Node/style set. @returns Browser properties. */
-  private projectInherited(inherited: SfxItemSet): WriterCharacterAttributes {
-    return projectWriterCharacterAttributes(
-      new SfxItemSet(this.pool, WRITER_CHARACTER_WHICH_RANGES),
-      inherited,
-    );
   }
 }
 
