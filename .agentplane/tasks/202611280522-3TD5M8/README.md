@@ -1,10 +1,11 @@
 ---
 id: "202611280522-3TD5M8"
 title: "Port native Calc ODS workbook structure protection"
-status: "DOING"
+result_summary: "Calc roundtrips native protected workbook structure and original ODS digests."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - "output/playwright/odf-next-checkpoint/workbook-protection-verification.md"
   findings:
     - "The original verifier families and workbook-versus-sheet ownership are retained. All five source-backed protection fixtures roundtrip their expected digest."
-commit: null
+commit:
+  hash: "30a3b85ab93c743277c318e8ef45f1aa99684e85"
+  message: "🧩 3TD5M8 calc: preserve native ODS workbook structure protection"
 comments:
   -
     author: "CODER"
     body: "Start: preserve native workbook structure protection in Calc ODS and Worker transport."
+  -
+    author: "CODER"
+    body: "Verified: 32 focused Calc tests and required static checks passed."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "32 focused Calc tests passed, including all five original protection-key fixture cases, ODS, Worker, sheet state, and represented browser controls. Office typing, lint, formatting, module boundaries, source provenance and Calc parity inventory passed."
+  -
+    type: "status"
+    at: "2026-11-28T05:34:31.283Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: 32 focused Calc tests and required static checks passed."
 doc_version: 3
-doc_updated_at: "2026-11-28T05:32:55.947Z"
+doc_updated_at: "2026-11-28T05:34:31.284Z"
 doc_updated_by: "CODER"
 description: "Represent ScDocProtection alongside sheet protection using the original shared protection implementation, adopt the spreadsheet protection attributes after sheets in ODS, emit the native body attributes and digest selection, and retain owner state across the Calc Worker. Port the five original ODS digest cases and keep the existing browser save policy and sheet behavior."
 sections:
