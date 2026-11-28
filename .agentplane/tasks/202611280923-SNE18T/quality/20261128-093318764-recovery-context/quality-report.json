@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202611280923-SNE18T",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-28T09:33:18.764Z",
+  "verdict": "pass",
+  "summary": "Writer preserves native JumpEdit and DropDown field settings, presentation and ownership through ODT and Worker transfer.",
+  "evaluated_sha": "e9b9dfeafbeae2eaad947af6bf31b5303d6de305",
+  "blueprint_digest": "3f98e95a0b78d9f1de6cd791f1c165d70ebe76c440b419b4b9a76d36e74d2e51",
+  "findings": [
+    "The original tdf106663 fixture retains three placeholders. The authored fixture verifies the DropDown sequence and selection and the JumpEdit kind, including changes after Worker restore."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611280923-SNE18T/README.md",
+    "output/playwright/odf-next-checkpoint/writer-choice-fields-verification.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
