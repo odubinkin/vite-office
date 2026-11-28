@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202611280937-ZDM2NK",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-28T09:56:38.845Z",
+  "verdict": "pass",
+  "summary": "Sequence definitions, numeric captions, and resolved references preserve the pinned ODT and Worker contracts.",
+  "evaluated_sha": "7a95ff882700a3dee01b4c8e2a8e207b9693884c",
+  "blueprint_digest": "2cb6320730a04de719d72dad7ccfb9bbadebaec490344c121c76b669af12a563",
+  "findings": [
+    "The two pinned input files exercise modeled caption fields and forward references. Focused checks and static gates passed."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611280937-ZDM2NK/README.md",
+    "output/playwright/odf-next-checkpoint/writer-sequence-odf-verification.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
