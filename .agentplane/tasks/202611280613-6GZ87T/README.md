@@ -1,10 +1,11 @@
 ---
 id: "202611280613-6GZ87T"
 title: "Restore deterministic Writer ODT embedded-font boundary verification"
-status: "DOING"
+result_summary: "The original Writer embedded-font ODT fixture checks exact bytes for raw and textual resources across test realms."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "output/playwright/odf-next-checkpoint/writer-font-verification.md"
   findings:
     - "Pinned and focused failures reproduced the cross-realm typed-array assertion, while all 34 focused tests pass with the corrected expectation."
-commit: null
+commit:
+  hash: "60c760c19a3e92ac3d245e6e0e5483593775358b"
+  message: "✅ 6GZ87T writer: compare ODT font bytes in the current test realm"
 comments:
   -
     author: "CODER"
     body: "Start: full-checkpoint Writer font byte assertion reproduced on main."
+  -
+    author: "CODER"
+    body: "Verified: refreshed same-realm font byte expectation and passed 34 related Writer/Calc tests, lint and formatting."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "34 related Writer and Calc tests passed. The original Writer font fixture now compares all bytes using same-realm typed arrays. Prettier, ESLint and git diff --check passed."
+  -
+    type: "status"
+    at: "2026-11-28T06:18:34.732Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: refreshed same-realm font byte expectation and passed 34 related Writer/Calc tests, lint and formatting."
 doc_version: 3
-doc_updated_at: "2026-11-28T06:16:18.853Z"
+doc_updated_at: "2026-11-28T06:18:34.733Z"
 doc_updated_by: "CODER"
 description: "Reproduce the full-suite failure on the native embedded font fixture. Validate full package bytes for typed and textual inputs across browser and Node typed-array realms. Preserve the actual import behavior and verify adjacent ODF font coverage."
 sections:
