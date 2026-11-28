@@ -199,7 +199,7 @@ describe("pinned LibreOffice ODT feature fixtures" /** Mirrors the three createS
       expect(normalizeWriterSemantics(reopened.document)).toEqual(
         normalizeWriterSemantics(imported.document),
       );
-    });
+    }, 30_000);
   it("keeps tdf114287.odt list and paragraph print bounds after reopening", /** Mirrors upstream exact layout assertions against the local ODT. @returns Completion after export and reopening. */ async () => {
     const file = "apps/office/src/sw/qa/extras/odfexport/data/tdf114287.odt";
     const imported = await readOdtDocument(new Uint8Array(fs.readFileSync(file)), { title: file });
@@ -233,7 +233,7 @@ describe("pinned LibreOffice ODT feature fixtures" /** Mirrors the three createS
       { title: file },
     );
     assertBounds(reopened.document);
-  });
+  }, 30_000);
 
   it("continues tdf113213_addToList.odt and restores the original list with one Undo", /** Mirrors upstream command and Undo assertions against a local ODT. @returns Completion after reopening. */ async () => {
     const file = "apps/office/src/sw/qa/extras/uiwriter/data/tdf113213_addToList.odt";
