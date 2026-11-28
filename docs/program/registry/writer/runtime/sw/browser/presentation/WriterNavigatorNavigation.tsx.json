@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/browser/presentation/WriterNavigatorNavigation.tsx",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "navigator",
+    "capabilityIds": [
+      "CAP-0104"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/browser/presentation/WriterNavigatorNavigation.tsx#WriterNavigatorNavigation",
+        "apps/office/e2e/writer-navigator.spec.ts#moves to the next heading through Navigate By",
+        "vendor/libreoffice-reference/sw/uiconfig/swriter/ui/navigatorpanel.ui#Navigate By"
+      ],
+      "justification": "Projects the native Navigator chooser and direction controls, binding the Writer view to the browser viewport.",
+      "knownViolations": [],
+      "localSymbols": [
+        "WriterNavigatorNavigation"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

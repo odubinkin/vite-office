@@ -228,6 +228,14 @@
         {
           "path": "apps/office/src/sw/source/filter/ww8/docxexport.numbered-list.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/nodes.ts",
+          "marker": "DetachTableSection"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/uiview/view-navigation.test.ts",
+          "marker": "deletes and restores the native table section with its cell bookmarks"
         }
       ],
       "upstream": [
@@ -398,6 +406,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/core/docnode/nodes.cxx",
           "marker": "SwNodes::MoveNodes"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/frmedt/fetab.cxx",
+          "marker": "SwFEShell::DeleteTable"
         }
       ]
     },
@@ -450,7 +462,8 @@
       "Moves actual contiguous caption text nodes between native sections without reallocation or changing tracked node identities. Maintains the outline registry and publishes the existing model change notifications. Other move profiles remain unverified.",
       "Visits direct section text and table nodes by native node index and parent ownership.",
       "Moves complete native table node sections with actual registered descendant nodes and outline identities intact.",
-      "The native node-array TextToTable boundary accepts existing table start nodes along with cell paragraphs."
+      "The native node-array TextToTable boundary accepts existing table start nodes along with cell paragraphs.",
+      "Retains and restores complete table node sections during table deletion history."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/docnode/nodes.cxx",

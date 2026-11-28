@@ -8,6 +8,10 @@
         {
           "path": "apps/office/src/sw/source/uibase/uiview/viewsrch.ts",
           "marker": "SwViewSearch"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/uiview/viewsrch.ts",
+          "marker": "RepeatSearch"
         }
       ],
       "upstream": [
@@ -34,6 +38,10 @@
         {
           "path": "vendor/libreoffice-reference/svx/source/tbxctrls/tbunosearchcontrollers.cxx",
           "marker": "FindTextFieldControl::SetTextToSelected_Impl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/uiview/viewmdi.cxx",
+          "marker": "case NID_SRCH_REP"
         }
       ]
     },
@@ -56,7 +64,8 @@
       "The modeless dialog and search request expose the regular-expression algorithm and preserve the native IsUseRegularExpression preference.",
       "Uses the visible paragraph stylesheet pool for style controls. Hidden styles remain listed while used, and hidden favourite built-in styles remain available on the replacement side (WRITER-694). Resolves existing and pool style names and preserves the native missing-template fallbacks (WRITER-693).",
       "Uses the existing table, row, cell and text fly content-protection owners for search replacement admission. Find includes protected matches under the native cursor-in-protected-area default. A style Replace All request with no replacement collection still uses the find-only admission.",
-      "The view-shell ExecuteSearch slot supplies the represented SearchItem command and direction to this owner. Quiet requests suppress miss and bulk count labels while retaining the search result and repeat state. SearchOn makes the next StateSearch query initialize from the native selection; SearchProperties and SearchOff retain the dispatched dialog settings."
+      "The view-shell ExecuteSearch slot supplies the represented SearchItem command and direction to this owner. Quiet requests suppress miss and bulk count labels while retaining the search result and repeat state. SearchOn makes the next StateSearch query initialize from the native selection; SearchProperties and SearchOff retain the dispatched dialog settings.",
+      "Overrides search direction temporarily for the Navigator repeat action."
     ],
     "upstreamPath": "sw/source/uibase/uiview/viewsrch.cxx",
     "upstreamSymbols": [

@@ -459,6 +459,16 @@ export class SwTableShell {
               this.wrtShell.GetRowHeight() === undefined,
           }),
         ),
+        {
+          id: WRITER_COMMAND_IDS.deleteTable,
+          capabilityId: "CAP-0137",
+          /** Removes the active table through native structural history. @returns Whether it was removed. */
+          execute: () => this.wrtShell.DeleteTable(),
+          /** Admits deletion only in a writable table. @returns Whether available. */
+          isEnabled: () =>
+            this.wrtShell.IsCursorInTable() !== undefined &&
+            !this.wrtShell.GetViewOptions().IsReadonly(),
+        },
         ...[
           WRITER_COMMAND_IDS.insertRowsBefore,
           WRITER_COMMAND_IDS.insertRowsAfter,

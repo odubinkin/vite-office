@@ -1,5 +1,8 @@
 /** @fileoverview Owns native table-cell shell traversal from LibreOffice trvltbl.cxx. */
 import { SwViewShell } from "../view/viewsh";
+import type { SvxProtectItem } from "../../../../editeng/source/items/frmitems";
+import { RES_PROTECT } from "../../../inc/hintids";
+import type { SwFrameFormat } from "../layout/atrfrm";
 import { SwTableBoxStartNode, SwTableNode, type SwNode, type SwStartNode } from "../docnode/node";
 import { SwCursor, SwTableCursor } from "./swcrsr";
 import { SwTable, type SwTableBox } from "../table/swtable";
@@ -10,7 +13,46 @@ import type { SwUndoCursorState } from "../undo/undobj";
 import type { SwTableLine } from "../table/swtable";
 import { SwRootFrame } from "../layout/newfrm";
 import { SwViewOption } from "../../../inc/viewopt";
-import type { SwPosition } from "./pam";
+import type { SwPaM, SwPosition } from "./pam";
+
+/** Reads a represented frame's inherited content-protection bit. @param format - Native layout format. @returns Whether its content is protected. */
+export function isContentProtected(format: SwFrameFormat | undefined): boolean {
+  return (
+    (format?.GetAttrSet().Get(RES_PROTECT) as SvxProtectItem | undefined)?.IsContentProtected() ===
+    true
+  );
+}
+
+/** Follows the native containing table formats up to an enclosing cell or story. @param node - Text or nested table owner. @returns Whether a layout ancestor protects the content. */
+export function isInProtectedTable(node: SwNode): boolean {
+  for (let box = node.GetTableBox(); box !== null;) {
+    const table = box.GetStartNode().FindTableNode();
+    if (table === null) return false;
+    if (box.getRowSpan() < 1 || isContentProtected(table.GetTable().GetFrameFormat())) return true;
+    for (let parent: SwTableBox | null = box; parent !== null;) {
+      const line = parent.GetUpper();
+      if (isContentProtected(parent.GetFrameFormat()) || isContentProtected(line?.GetFrameFormat()))
+        return true;
+      parent = line?.GetUpper() ?? null;
+    }
+    box = table.GetTableBox();
+  }
+  return false;
+}
+
+/** Resolves the first eligible content node in a native table section. @param table - Connected table owner. @param allowProtected - Whether the view admits protected cell text. @returns First eligible table cell, if any. */
+export function GetTableCursorStart(
+  table: SwTableNode,
+  allowProtected: boolean,
+): SwTextNode | undefined {
+  const nodes = table.GetNodes();
+  for (let index = table.GetIndex() + 1; index < table.EndOfSectionIndex(); index++) {
+    const node = nodes.at(index);
+    if (!(node instanceof SwTextNode) || node.FindTableNode() !== table) continue;
+    if (allowProtected || !isInProtectedTable(node)) return node;
+  }
+  return undefined;
+}
 
 /** Native extended range retains the first structural node and trailing table owners. */
 export type ExtendedSelection = readonly [SwNode, readonly SwTableNode[]];
@@ -303,6 +345,22 @@ export abstract class SwCursorShell extends SwViewShell {
   /** Returns the native cursor used to display point and mark. @returns Table or ordinary display owner. */
   public getShellCursor(): SwCursor {
     return this.tableCursor ?? this.cursor;
+  }
+
+  /** Finds the native outline entry at or before the cursor within its outline level limit. @param level - Highest zero-based outline level to admit. @param range - Optional cursor override. @returns An outline index, if found. */
+  public GetOutlinePos(level = 0xff, range: SwPaM = this.getShellCursor()): number | undefined {
+    const point = range.GetPoint().GetNode();
+    const nodes = this.GetDoc().GetNodes();
+    const index = nodes.GetOutLineNds();
+    const { found, position } = index.Seek_Entry(point);
+    const outlines = index.entries();
+    const extras = nodes.GetEndOfExtras().GetIndex();
+    for (let candidate = found ? position : position - 1; candidate >= 0; candidate--) {
+      const heading = outlines[candidate];
+      if (!heading || heading.GetAttrOutlineLevel() - 1 > level) continue;
+      return heading.GetIndex() < extras && point.GetIndex() > extras ? undefined : candidate;
+    }
+    return undefined;
   }
 
   /** Reports the bounded shell table-selection mode. @returns Whether a native table cursor is active. */

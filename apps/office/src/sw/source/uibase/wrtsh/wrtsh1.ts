@@ -1,4 +1,6 @@
 /** @fileoverview Implements the persistent Writer editing shell and SwPaM ownership from pinned LibreOffice `sw/source/uibase/wrtsh/wrtsh1.cxx`. */
+import { GetTableCursorStart } from "../../core/crsr/trvltbl";
+import { SwUndoDeleteTable } from "../../core/undo/undel-table";
 import type { SfxShell } from "../../../../sfx2/source/control/dispatch";
 import {
   SvxIndentValue,
@@ -893,6 +895,19 @@ export class SwWrtShell extends SwFEShell {
       /** Runs shell Redo. @returns Whether navigation occurred. */ () =>
         this.docShell.Redo(this.undoContext),
     );
+  }
+
+  /** Deletes the full current native table as one Writer history action. @returns Whether the table was removed. */
+  public DeleteTable(): boolean {
+    const table = this.IsCursorInTable();
+    if (!table || this.GetViewOptions().IsReadonly() || !GetTableCursorStart(table, false))
+      return false;
+    const before = this.CaptureCursorState();
+    try {
+      return this.ApplyAction(new SwUndoDeleteTable(table, before));
+    } finally {
+      before.pendingCharacterItems.Dispose();
+    }
   }
 
   /** Executes one semantic action and publishes cursor-state invalidation. @param action - Reversible Writer action. @param tryMerge - Whether adjacent typing/deletion grouping is allowed. @param execute - Initial native operation when its flags differ from redo. @returns True after successful execution. */

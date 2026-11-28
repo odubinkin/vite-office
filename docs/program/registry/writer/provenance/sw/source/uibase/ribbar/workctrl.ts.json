@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "localPath": "apps/office/src/sw/source/uibase/ribbar/workctrl.ts",
+    "classification": "upstream-mechanism",
+    "localSymbols": [
+      "SwNavigationElement"
+    ],
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/uibase/ribbar/workctrl.ts",
+          "marker": "SwNavigationElement"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/uiview/view-navigation.test.ts",
+          "marker": "dispatches the source navigation slots"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/ribbar/workctrl.cxx",
+          "marker": "aNavigationInsertIds"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/uibase/ribbar/workctrl.cxx",
+    "upstreamSymbols": [
+      "aNavigationInsertIds"
+    ],
+    "preservedResponsibilities": [
+      "Uses the source navigation IDs and chooser order for the represented Writer elements."
+    ],
+    "omittedResponsibilities": [
+      "Other navigation families outside the represented Writer document profile."
+    ]
+  }
+}

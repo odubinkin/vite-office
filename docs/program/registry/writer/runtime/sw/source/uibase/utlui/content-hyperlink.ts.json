@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/uibase/utlui/content-hyperlink.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "navigator",
+    "capabilityIds": [
+      "CAP-0103",
+      "CAP-0104"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/uibase/utlui/content-hyperlink.ts#GetURLFieldContents",
+        "apps/office/src/sw/browser/presentation/WriterNavigatorFields.test.tsx#orders the pinned tdf134960 hyperlinks by document and frame-anchor position",
+        "vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx#SwContentType::FillMemberList",
+        "vendor/libreoffice-reference/sw/qa/uitest/navigator/tdf134960.py#expectedHyperlinksOrder"
+      ],
+      "justification": "Reads original SwTextINetFormat hints, cleans their range labels and sorts them by document position with the native anchored-frame projection.",
+      "knownViolations": [],
+      "localSymbols": [
+        "GetURLFieldContents",
+        "SwURLFieldContent"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/uibase/utlui/content.cxx",
+      "upstreamSymbols": [
+        "SwContentType::FillMemberList"
+      ]
+    }
+  }
+}

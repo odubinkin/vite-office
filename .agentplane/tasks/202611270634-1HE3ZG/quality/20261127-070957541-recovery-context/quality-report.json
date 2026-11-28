@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "task_id": "202611270634-1HE3ZG",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-27T07:09:57.541Z",
+  "verdict": "pass",
+  "summary": "Writer Navigator synchronizes with the document cursor using the pinned tracking order.",
+  "evaluated_sha": "f9f30269735a3f18193f44bef8982c20af2953b3",
+  "blueprint_digest": "5e1f057a43dc08c10beeb27bbf19926b14994248b48777bc57b65abe60996549",
+  "findings": [
+    "Focused tests cover heading root selection on cursor movement, bookmark and table priority, and grouped command history. Provenance drift in an unrelated ODT witness is recorded in Findings."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611270634-1HE3ZG/README.md",
+    "output/playwright/writer-navigator-tracking-vitest-verified.log",
+    "output/playwright/writer-navigator-tracking-chromium.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

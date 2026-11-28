@@ -5,11 +5,331 @@ import { HoriOrientation } from "../../../offapi/com/sun/star/text/HoriOrientati
 import { SfxInt16Item } from "../../../svl/inc/intitem";
 import { RES_BREAK } from "../../inc/hintids";
 import { SwFormatLayoutSplit } from "../../inc/fmtlsplt";
-import { SwPosition } from "../../source/core/crsr/pam";
+import { SwPaM, SwPosition } from "../../source/core/crsr/pam";
+import { OutlineTrackingMode } from "../../source/uibase/utlui/navicfg";
 import type { SwNavigatorHeadingCommand } from "../../source/uibase/utlui/content";
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { WriterWorkbench } from "./writer-view";
+
+it("tracks heading and bookmark priority in the native tdf159428 cursor sequence", /** Moves the real document cursor across bookmark ranges under headings and before the first heading. @returns Nothing. */ () => {
+  const session = createWriterDocumentSession();
+  const shell = session.view.GetWrtShell();
+  const document = shell.GetDoc();
+  const before = document.paragraphs[0];
+  assert(before);
+  before.SetText("Earlier bookmarked text");
+  const first = document.nodes.MakeTextNode();
+  first.SetText("H1");
+  first.SetAttrOutlineLevel(1);
+  const body = document.nodes.MakeTextNode();
+  body.SetText("Bookmarked words after H1");
+  const second = document.nodes.MakeTextNode();
+  second.SetText("H1 mit Lesezeichen");
+  second.SetAttrOutlineLevel(1);
+  const marks = document.GetIDocumentMarkAccess();
+  /** Attaches an expanded bookmark to an existing paragraph. @param node - Actual text node. @param name - Source case name. @returns Nothing. */
+  function addBookmark(node: typeof first, name: string): void {
+    const start = new SwPosition(node, 0);
+    const end = new SwPosition(node, node.GetText().length);
+    const selection = new SwPaM(end, start);
+    try {
+      marks.MakeBookmark(selection, name);
+    } finally {
+      selection.Dispose();
+      end.Dispose();
+      start.Dispose();
+    }
+  }
+  addBookmark(before, "Lesezeichen 3");
+  addBookmark(body, "Lesezeichen 1");
+  addBookmark(second, "Lesezeichen 2");
+  try {
+    session.view.ToggleNavigator();
+    render(<WriterWorkbench view={session.view} isActive />);
+    const navigator = within(screen.getByRole("dialog", { name: "Navigator" }));
+    const editor = screen.getByRole("textbox", { name: "Writer document text" });
+    for (const [node, heading] of [
+      [body, "H1"],
+      [second, "H1 mit Lesezeichen"],
+      [before, "Lesezeichen 3"],
+    ] as const) {
+      act(
+        /** Transfers focus and the original selection to the document. @returns Nothing. */
+        () => {
+          editor.focus();
+          const point = new SwPosition(node, 2);
+          shell.SetCursor(point);
+          point.Dispose();
+        },
+      );
+      expect(navigator.getByRole("treeitem", { name: heading })).toHaveAttribute(
+        "aria-selected",
+        "true",
+      );
+      expect(navigator.getAllByRole("treeitem", { selected: true })).toHaveLength(1);
+    }
+    act(
+      /** Keeps an explicitly focused tree entry selected during a document cursor update. @returns Nothing. */
+      () => {
+        navigator.getByRole("treeitem", { name: "Lesezeichen 3" }).focus();
+        const point = new SwPosition(first, 0);
+        shell.SetCursor(point);
+        point.Dispose();
+      },
+    );
+    expect(navigator.getByRole("treeitem", { name: "Lesezeichen 3" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+    const tree = session.view.GetNavigator();
+    tree.SetOutlineTracking(OutlineTrackingMode.Off);
+    try {
+      const point = new SwPosition(body, 1);
+      act(
+        /** Puts the cursor inside a bookmark under a disabled outline target. @returns Nothing. */
+        () => shell.SetCursor(point),
+      );
+      point.Dispose();
+      const bookmark = tree
+        .GetContents()
+        .find(
+          /** Gets the native bookmark group. @param group - Navigator category. @returns Whether it owns bookmarks. */
+          (group) => group.type === "bookmark",
+        )
+        ?.contents.find(
+          /** Identifies the mark at the active cursor. @param entry - Original bookmark. @returns Whether it is the test target. */
+          (entry) => entry.title === "Lesezeichen 1",
+        );
+      assert(bookmark);
+      expect(tree.UpdateTracking()).toBe(bookmark.id);
+      tree.SetContentTypeTracking("bookmark", false);
+      expect(tree.UpdateTracking()).toBeUndefined();
+    } finally {
+      tree.SetContentTypeTracking("bookmark", true);
+      tree.SetOutlineTracking(OutlineTrackingMode.Default);
+    }
+  } finally {
+    cleanup();
+    session.Close();
+  }
+});
+
+it("tracks the actual table over its enclosing heading only in the matching root", /** Exercises table identity and headings root tracking using the live shell. @returns Nothing. */ () => {
+  const session = createWriterDocumentSession();
+  const shell = session.view.GetWrtShell();
+  const document = shell.GetDoc();
+  const heading = document.paragraphs[0];
+  assert(heading);
+  heading.SetText("Heading");
+  heading.SetAttrOutlineLevel(1);
+  const table = document.nodes.MakeTableNode("Document table", { width: 6000 });
+  table.AddColumnWidth(6000);
+  document.nodes.AppendTableRow(table, 1);
+  try {
+    const tree = session.view.GetNavigator();
+    const entries = tree.GetContents();
+    const tableId = entries.find(
+      /** Resolves the tables content group. @param group - Native tree group. @returns Whether it owns tables. */
+      (group) => group.type === "table",
+    )?.contents[0]?.id;
+    const headingId = entries.find(
+      /** Resolves the headings content group. @param group - Native tree group. @returns Whether it owns outlines. */
+      (group) => group.type === "outline",
+    )?.contents[0]?.id;
+    assert(tableId);
+    assert(headingId);
+    expect(tree.GotoContent(tableId)).toBe(true);
+    expect(tree.UpdateTracking()).toBe(tableId);
+    expect(tree.UpdateTracking("outline")).toBe(headingId);
+    expect(tree.UpdateTracking("bookmark")).toBeUndefined();
+    tree.SetContentTypeTracking("table", false);
+    try {
+      expect(tree.UpdateTracking()).toBe(headingId);
+      expect(tree.UpdateTracking("table")).toBeUndefined();
+    } finally {
+      tree.SetContentTypeTracking("table", true);
+    }
+    const tablePoint = new SwPosition(shell.GetCursor().GetPoint());
+    try {
+      expect(tree.GotoContent(headingId)).toBe(true);
+      shell.SetCursor(tablePoint);
+      expect(tree.UpdateTracking()).toBe(headingId);
+    } finally {
+      tablePoint.Dispose();
+    }
+  } finally {
+    session.Close();
+  }
+});
+
+it("edits and deletes native bookmarks through the Navigator toolbar and restores their ranges", /** Verifies cursor admission, the native dialog, grouped deletion and mark metadata. @returns Nothing. */ () => {
+  const session = createWriterDocumentSession();
+  const shell = session.view.GetWrtShell();
+  const document = shell.GetDoc();
+  const text = document.paragraphs[0];
+  assert(text);
+  text.SetText("Bookmarked words");
+  const marks = document.GetIDocumentMarkAccess();
+  marks.MakeMark(text, 0, "Earlier");
+  const start = new SwPosition(text, 4);
+  const end = new SwPosition(text, 10);
+  const range = new SwPaM(end, start);
+  const last = marks.MakeBookmark(range, "Last");
+  range.Dispose();
+  end.Dispose();
+  start.Dispose();
+  last.Hide(true);
+  last.SetHideCondition("condition");
+  try {
+    const caret = new SwPosition(text, 4);
+    shell.SetCursor(caret);
+    caret.Dispose();
+    session.view.ToggleNavigator();
+    render(<WriterWorkbench view={session.view} isActive />);
+    const navigator = within(screen.getByRole("dialog", { name: "Navigator" }));
+    const row = navigator.getByRole("treeitem", { name: "Last" });
+    fireEvent.click(row);
+    // The pinned cursor scan falls through when the last bookmark was never activated.
+    expect(navigator.queryByRole("button", { name: "Edit Bookmark" })).toBeNull();
+    fireEvent.doubleClick(row);
+    fireEvent.click(navigator.getByRole("button", { name: "Edit Bookmark" }));
+    const dialog = within(screen.getByRole("dialog", { name: "Bookmark" }));
+    expect(dialog.getByRole("option", { name: "Last" })).toHaveProperty("selected", true);
+    const close = dialog.getAllByRole("button", { name: "Close" }).at(-1);
+    assert(close);
+    fireEvent.click(close);
+    fireEvent.click(navigator.getByRole("button", { name: "Delete Bookmark" }));
+    expect(marks.GetBookmarkNames()).toEqual(["Earlier"]);
+    act(
+      /** Restores the deleted ordinary bookmark. @returns Nothing. */
+      () => {
+        expect(shell.Undo()).toBe(true);
+      },
+    );
+    const restored = marks.FindMark("Last");
+    expect(restored?.GetMarkStart().GetContentIndex()).toBe(4);
+    expect(restored?.GetMarkEnd().GetContentIndex()).toBe(10);
+    expect(restored?.GetHideCondition()).toBe("condition");
+    expect(restored?.IsHidden()).toBe(true);
+    fireEvent.click(navigator.getByRole("treeitem", { name: "Bookmarks" }));
+    fireEvent.click(navigator.getByRole("button", { name: "Delete All Bookmarks" }));
+    expect(marks.GetBookmarkNames()).toEqual([]);
+    act(
+      /** Restores the entire category with one undo. @returns Nothing. */
+      () => {
+        expect(shell.Undo()).toBe(true);
+      },
+    );
+    expect(marks.GetBookmarkNames()).toEqual(["Earlier", "Last"]);
+    act(
+      /** Reapplies the complete category removal. @returns Nothing. */
+      () => {
+        expect(shell.Redo()).toBe(true);
+      },
+    );
+    expect(marks.GetBookmarkNames()).toEqual([]);
+  } finally {
+    cleanup();
+    session.Close();
+  }
+});
+
+it("groups selected outline chapters and restores the selected heading identities", /** Exercises the heading-root range selection and original grouped command order. @returns Nothing. */ () => {
+  const session = createWriterDocumentSession();
+  const shell = session.view.GetWrtShell();
+  const document = shell.GetDoc();
+  const chapters = ["First", "Child", "Second", "Third"].map(
+    /** Creates a body chapter or its one descendant. @param title - Heading text. @param index - Initial document order. @returns Attached heading. */
+    (title, index) => {
+      const heading = index === 0 ? document.paragraphs[0] : document.nodes.MakeTextNode();
+      assert(heading);
+      heading.SetText(title);
+      heading.SetAttrOutlineLevel(index === 1 ? 2 : 1);
+      return heading;
+    },
+  );
+  try {
+    session.view.ToggleNavigator();
+    render(<WriterWorkbench view={session.view} isActive />);
+    const navigator = within(screen.getByRole("dialog", { name: "Navigator" }));
+    const tree = navigator.getByRole("tree");
+    const first = navigator.getByRole("treeitem", { name: "First" });
+    const child = navigator.getByRole("treeitem", { name: "Child" });
+    const second = navigator.getByRole("treeitem", { name: "Second" });
+    const third = navigator.getByRole("treeitem", { name: "Third" });
+    fireEvent.click(first);
+    fireEvent.click(second, { ctrlKey: true });
+    expect(first).toHaveAttribute("aria-selected", "false");
+    expect(tree).not.toHaveAttribute("aria-multiselectable");
+
+    fireEvent.click(navigator.getByRole("button", { name: "Content Navigation View" }));
+    expect(tree).toHaveAttribute("aria-multiselectable", "true");
+    fireEvent.keyDown(second, { key: "a", ctrlKey: true });
+    expect(first).toHaveAttribute("aria-selected", "true");
+    expect(third).toHaveAttribute("aria-selected", "true");
+    fireEvent.click(first);
+    fireEvent.keyDown(first, { key: "ArrowDown", shiftKey: true });
+    fireEvent.keyDown(child, { key: "ArrowDown", shiftKey: true });
+    expect(first).toHaveAttribute("aria-selected", "true");
+    expect(child).toHaveAttribute("aria-selected", "true");
+    expect(second).toHaveAttribute("aria-selected", "true");
+    expect(third).toHaveAttribute("aria-selected", "false");
+    fireEvent.click(navigator.getByRole("button", { name: "Demote Outline Level" }));
+    expect(child).toHaveAttribute("aria-selected", "false");
+    expect(first).toHaveAttribute("aria-selected", "true");
+    expect(second).toHaveAttribute("aria-selected", "true");
+    expect(
+      chapters.map(
+        /** Reads the native levels independently of the rendered row depth. @param heading - Actual heading. @returns Current outline level. */
+        (heading) => heading.GetAttrOutlineLevel(),
+      ),
+    ).toEqual([2, 3, 2, 1]);
+    act(
+      /** Undoes the complete outline group in one history step. @returns Nothing. */
+      () => {
+        expect(shell.Undo()).toBe(true);
+      },
+    );
+    expect(
+      chapters.map(
+        /** Reads the restored levels. @param heading - Actual heading. @returns Restored outline level. */
+        (heading) => heading.GetAttrOutlineLevel(),
+      ),
+    ).toEqual([1, 2, 1, 1]);
+    fireEvent.click(first);
+    fireEvent.click(second, { ctrlKey: true });
+    fireEvent.click(navigator.getByRole("button", { name: "Move Heading Down" }));
+    /** Reads the live outline order after each grouped history action. @returns Ordered chapter names. */
+    function chapterOrder(): string[] {
+      return document.paragraphs.map(
+        /** Reads actual document text. @param paragraph - Current chapter node. @returns Heading title. */
+        (paragraph) => paragraph.GetText(),
+      );
+    }
+    expect(chapterOrder()).toEqual(["Third", "First", "Child", "Second"]);
+    expect(first).toHaveAttribute("aria-selected", "true");
+    expect(second).toHaveAttribute("aria-selected", "true");
+    act(
+      /** Restores both moved chapters in one history step. @returns Nothing. */
+      () => {
+        expect(shell.Undo()).toBe(true);
+      },
+    );
+    expect(chapterOrder()).toEqual(["First", "Child", "Second", "Third"]);
+    act(
+      /** Replays the same ordered movement as one action. @returns Nothing. */
+      () => {
+        expect(shell.Redo()).toBe(true);
+      },
+    );
+    expect(chapterOrder()).toEqual(["Third", "First", "Child", "Second"]);
+  } finally {
+    cleanup();
+    session.view.GetNavigator().SetRootType();
+    session.Close();
+  }
+});
 
 it.each([
   {
@@ -155,7 +475,7 @@ it("keeps chapter body, table and bookmark identity and obeys the modifier for s
   const command =
     /** Runs commands on the same selected original heading. @param action - Heading action. @param withChildren - Include the subtree. @returns Nothing. */
     (action: SwNavigatorHeadingCommand, withChildren = true) => {
-      expect(tree.ExecCommand(id, action, withChildren)).toBe(true);
+      expect(tree.ExecCommand([id], action, withChildren)).toEqual([id]);
     };
   try {
     command("chapterdown", false);
@@ -357,6 +677,224 @@ it("uses the current formatted physical pages and exact follow cursor offsets", 
     expect(shell.GetCursor().GetPoint().GetNode()).toBe(second);
     expect(shell.GetCursor().GetPoint().GetContentIndex()).toBe(0);
   } finally {
+    session.Close();
+  }
+});
+
+it("collapses other top-level headings only while focused outline tracking follows a new row", /** Verifies the native focused expansion policy on the mounted tree. @returns Nothing. */ () => {
+  const session = createWriterDocumentSession();
+  const shell = session.view.GetWrtShell();
+  const document = shell.GetDoc();
+  const first = document.paragraphs[0];
+  assert(first);
+  const child = document.nodes.MakeTextNode();
+  const second = document.nodes.MakeTextNode();
+  const secondChild = document.nodes.MakeTextNode();
+  for (const [node, title, depth] of [
+    [first, "Chapter A", 1],
+    [child, "Section A", 2],
+    [second, "Chapter B", 1],
+    [secondChild, "Section B", 2],
+  ] as const) {
+    node.SetText(title);
+    node.SetAttrOutlineLevel(depth);
+  }
+  const tree = session.view.GetNavigator();
+  try {
+    session.view.ToggleNavigator();
+    render(<WriterWorkbench view={session.view} isActive />);
+    const navigator = within(screen.getByRole("dialog", { name: "Navigator" }));
+    const editor = screen.getByRole("textbox", { name: "Writer document text" });
+    /** Places the focused document cursor on a specific heading. @param node - Existing heading. @returns Nothing. */
+    function track(node: typeof child): void {
+      act(
+        /** Uses the native shell to notify the mounted Navigator. @returns Nothing. */
+        () => {
+          editor.focus();
+          const point = new SwPosition(node, 1);
+          shell.SetCursor(point);
+          point.Dispose();
+        },
+      );
+    }
+    track(child);
+    expect(navigator.getByRole("treeitem", { name: "Section B" })).toBeVisible();
+    const chapterA = navigator.getByRole("treeitem", { name: "Chapter A" });
+    fireEvent.contextMenu(chapterA, { clientX: 12, clientY: 24 });
+    fireEvent.mouseDown(screen.getByRole("menuitem", { name: "Outline Tracking" }));
+    const focus = screen.getByRole("menuitemradio", { name: "Focus" });
+    expect(screen.getByRole("menuitemradio", { name: "Default" })).toHaveAttribute(
+      "aria-checked",
+      "true",
+    );
+    fireEvent.click(focus);
+    expect(chapterA).toHaveFocus();
+    track(secondChild);
+    expect(chapterA).toHaveAttribute("aria-expanded", "false");
+    expect(navigator.queryByRole("treeitem", { name: "Section A" })).toBeNull();
+    expect(navigator.getByRole("treeitem", { name: "Section B", selected: true })).toBeVisible();
+    track(child);
+    expect(chapterA).toHaveAttribute("aria-expanded", "true");
+    expect(navigator.queryByRole("treeitem", { name: "Section B" })).toBeNull();
+    expect(navigator.getByRole("treeitem", { name: "Section A", selected: true })).toBeVisible();
+  } finally {
+    tree.SetOutlineTracking(OutlineTrackingMode.Default);
+    cleanup();
+    session.Close();
+  }
+});
+
+it("runs the native Navigator context actions for outline branches and bookmark rows", /** Drives the mounted native handlers with heading, table and bookmark content. @returns Nothing. */ () => {
+  const session = createWriterDocumentSession();
+  const shell = session.view.GetWrtShell();
+  const document = shell.GetDoc();
+  const first = document.paragraphs[0];
+  assert(first);
+  first.SetText("Chapter");
+  first.SetAttrOutlineLevel(1);
+  const child = document.nodes.MakeTextNode();
+  child.SetText("Section");
+  child.SetAttrOutlineLevel(2);
+  const table = document.nodes.MakeTableNode("Reference table", { width: 6000 });
+  table.AddColumnWidth(6000);
+  document.nodes.AppendTableRow(table, 1);
+  const marks = document.GetIDocumentMarkAccess();
+  marks.MakeMark(child, 2, "Reference");
+  const tree = session.view.GetNavigator();
+  const previousLevel = tree.GetOutlineLevel();
+  try {
+    session.view.ToggleNavigator();
+    render(<WriterWorkbench view={session.view} isActive />);
+    const navigator = within(screen.getByRole("dialog", { name: "Navigator" }));
+    /** Gets the active Navigator context popup. @returns Queries scoped to the menu. */
+    const context = () => within(screen.getByRole("menu", { name: "Navigator context menu" }));
+    const chapter = navigator.getByRole("treeitem", { name: "Chapter" });
+    const headings = navigator.getByRole("treeitem", { name: "Headings" });
+    const depth = navigator.getByRole("combobox", { name: "Show Up to Outline Level" });
+
+    fireEvent.contextMenu(chapter);
+    expect(
+      context()
+        .getAllByRole("menuitem")
+        .map(
+          /** Reads the actual native projection order. @param item - Rendered action or submenu. @returns Its visible text. */
+          (item) => item.textContent?.replace(/›$/u, ""),
+        ),
+    ).toEqual([
+      "Collapse All",
+      "Go to",
+      "Move Heading Up",
+      "Move Heading Down",
+      "Promote Outline Level",
+      "Demote Outline Level",
+      "Outline Tracking",
+      "Show Up to Outline Level",
+      "Collapse All Categories",
+    ]);
+    fireEvent.click(context().getByRole("menuitem", { name: "Collapse All" }));
+    expect(chapter).toHaveFocus();
+    expect(navigator.queryByRole("treeitem", { name: "Section" })).toBeNull();
+    fireEvent.contextMenu(headings);
+    fireEvent.click(context().getByRole("menuitem", { name: "Expand All" }));
+    expect(navigator.getByRole("treeitem", { name: "Section" })).toBeVisible();
+
+    fireEvent.contextMenu(headings);
+    fireEvent.mouseDown(context().getByRole("menuitem", { name: "Show Up to Outline Level" }));
+    const depthOne = context().getByRole("menuitemradio", { name: "1" });
+    fireEvent.click(depthOne);
+    expect(tree.GetOutlineLevel()).toBe(1);
+    expect(depth).toHaveValue("1");
+    expect(navigator.queryByRole("treeitem", { name: "Section" })).toBeNull();
+    fireEvent.change(depth, { target: { value: "2" } });
+    expect(navigator.getByRole("treeitem", { name: "Section" })).toBeVisible();
+
+    fireEvent.contextMenu(navigator.getByRole("treeitem", { name: "Reference table" }));
+    fireEvent.click(context().getByRole("menuitem", { name: "Go to" }));
+    expect(shell.GetCursor().GetPoint().GetNode().FindTableNode()?.GetTable()).toBe(table);
+
+    fireEvent.contextMenu(navigator.getByRole("treeitem", { name: "Reference" }));
+    expect(context().queryByRole("menuitem", { name: "Delete All Bookmarks" })).toBeNull();
+    fireEvent.click(context().getByRole("menuitem", { name: "Delete Bookmark" }));
+    expect(marks.GetBookmarks()).toHaveLength(0);
+    act(
+      /** Restores the deleted bookmark through ordinary document undo. @returns Nothing. */
+      () => {
+        session.view.Execute(WRITER_COMMAND_IDS.undo);
+      },
+    );
+    expect(marks.GetBookmarks()).toHaveLength(1);
+    fireEvent.contextMenu(navigator.getByRole("treeitem", { name: "Bookmarks" }));
+    expect(context().getByRole("menuitem", { name: "Delete All Bookmarks" })).toBeVisible();
+    fireEvent.click(context().getByRole("menuitem", { name: "Collapse All Categories" }));
+    expect(headings).toHaveAttribute("aria-expanded", "false");
+    expect(navigator.getByRole("treeitem", { name: "Bookmarks" })).toHaveAttribute(
+      "aria-expanded",
+      "false",
+    );
+  } finally {
+    tree.SetOutlineLevel(previousLevel);
+    cleanup();
+    session.Close();
+  }
+});
+
+it("sorts only the chosen category, flattening headings without changing their document order", /** Uses the native context checkbox and checks the displayed order, focus and heading actions. @returns Nothing. */ () => {
+  const session = createWriterDocumentSession();
+  const document = session.view.GetWrtShell().GetDoc();
+  const first = document.paragraphs[0];
+  assert(first);
+  const child = document.nodes.MakeTextNode();
+  const last = document.nodes.MakeTextNode();
+  for (const [paragraph, title, depth] of [
+    [first, "Chapter 10", 1],
+    [child, "Chapter 3", 2],
+    [last, "Chapter 2", 1],
+  ] as const) {
+    paragraph.SetText(title);
+    paragraph.SetAttrOutlineLevel(depth);
+  }
+  const tree = session.view.GetNavigator();
+  const marks = document.GetIDocumentMarkAccess();
+  marks.MakeMark(first, 0, "Bookmark 10");
+  marks.MakeMark(last, 0, "Bookmark 2");
+  /** Reads and selects the category's native sort checkbox. @param category - Tree category. @param checked - Expected sort state. @returns Nothing. */
+  function toggleSort(category: HTMLElement, checked: boolean): void {
+    fireEvent.contextMenu(category);
+    const choice = screen.getByRole("menuitemcheckbox", { name: "Display Alphabetically" });
+    expect(choice).toHaveAttribute("aria-checked", String(checked));
+    fireEvent.click(choice);
+  }
+  try {
+    session.view.ToggleNavigator();
+    render(<WriterWorkbench view={session.view} isActive />);
+    const navigator = within(screen.getByRole("dialog", { name: "Navigator" }));
+    const category = navigator.getByRole("treeitem", { name: "Headings" });
+    const nested = navigator.getByRole("treeitem", { name: "Chapter 3" });
+    expect(nested).toHaveAttribute("aria-level", "3");
+    toggleSort(category, false);
+    expect(category).toHaveFocus();
+    expect(navigator.getAllByRole("treeitem", { name: /^Chapter /u })).toEqual([
+      navigator.getByRole("treeitem", { name: "Chapter 2" }),
+      nested,
+      navigator.getByRole("treeitem", { name: "Chapter 10" }),
+    ]);
+    expect(nested).toHaveAttribute("aria-level", "2");
+    expect(navigator.getAllByRole("treeitem", { name: /^Bookmark [0-9]/u })).toEqual([
+      navigator.getByRole("treeitem", { name: "Bookmark 10" }),
+      navigator.getByRole("treeitem", { name: "Bookmark 2" }),
+    ]);
+    fireEvent.contextMenu(nested);
+    expect(screen.queryByRole("menuitem", { name: "Move Heading Up" })).toBeNull();
+    expect(screen.queryByRole("menuitemcheckbox", { name: "Display Alphabetically" })).toBeNull();
+    fireEvent.keyDown(screen.getByRole("menu", { name: "Navigator context menu" }), {
+      key: "Escape",
+    });
+    toggleSort(category, true);
+    expect(nested).toHaveAttribute("aria-level", "3");
+    expect(document.paragraphs).toEqual([first, child, last]);
+  } finally {
+    cleanup();
+    tree.SetAlphabeticSort("outline", false);
     session.Close();
   }
 });

@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202611270750-PM811E",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-28T08:11:35.238Z",
+  "verdict": "pass",
+  "summary": "Writer Navigator restores native root and independent category sort preferences.",
+  "evaluated_sha": "d9656bed842b3d78e93b1d921f167b98fd0ecd53",
+  "blueprint_digest": "6d45e07a9fdde21d525fff12100b643a6089bd1d88ff7e37debb46c5ab5509db",
+  "findings": [
+    "Natural numeric order, flat heading display, original heading identities, context admission, and reload persistence were exercised."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611270750-PM811E/README.md",
+    "output/playwright/writer-navigator-sort-vitest.log",
+    "output/playwright/writer-navigator-sort-chromium.log",
+    "output/playwright/writer-navigator-sort-chromium-verified.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

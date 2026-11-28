@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "localPath": "apps/office/src/sw/browser/storage/writer-navigator-configuration-store.ts",
+    "localSymbols": [
+      "WriterNavigatorConfigurationStore"
+    ],
+    "status": "local-only",
+    "rationale": "Reads and writes represented Office.Writer/Navigator configuration fields through browser storage, independently of any document.",
+    "responsibilities": [
+      "Reads and writes represented Office.Writer/Navigator configuration fields through browser storage, independently of any document."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser storage supplies the persistence backend for Writer configuration."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/storage/writer-navigator-configuration-store.ts",
+          "marker": "WriterNavigatorConfigurationStore"
+        },
+        {
+          "path": "apps/office/src/sw/browser/storage/writer-navigator-configuration-store.test.ts",
+          "marker": "keeps native defaults and round-trips tracking preferences"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/officecfg/registry/schema/org/openoffice/Office/Writer.xcs",
+          "marker": "oor:name=\"TableTracking\""
+        },
+        {
+          "path": "vendor/libreoffice-reference/officecfg/registry/schema/org/openoffice/Office/Writer.xcs",
+          "marker": "oor:name=\"BookmarkTracking\""
+        }
+      ]
+    }
+  }
+}

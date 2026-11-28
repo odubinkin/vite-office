@@ -108,6 +108,11 @@ export interface WriterViewCommandTarget {
   readonly ToggleHorizontalRuler: () => void;
   readonly ToggleBaselineGrid: () => void;
   readonly ToggleNavigator: () => void;
+  readonly GetMoveType: () => import("../source/uibase/ribbar/workctrl").SwNavigationElement;
+  readonly SetMoveType: (
+    type: import("../source/uibase/ribbar/workctrl").SwNavigationElement,
+  ) => void;
+  readonly MoveNavigation: (forward: boolean) => boolean;
   readonly ToggleVerticalRuler: () => void;
   readonly ToggleSidebar: () => void;
   readonly ToggleStatusBar: () => void;

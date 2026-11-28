@@ -1,6 +1,5 @@
 /** @fileoverview Writer view search dispatch over the native model cursor and replacement history. */
 import { SID_ATTR_PARA_KEEP, SID_ATTR_PARA_MODEL } from "../../../../editeng/inc/editids";
-import type { SvxProtectItem } from "../../../../editeng/source/items/frmitems";
 import {
   SvtSearchOptions,
   type SearchOptionsConfiguration,
@@ -56,7 +55,6 @@ import {
   RES_PARATR_VERTALIGN,
   RES_FRMATR_BEGIN,
   RES_FRMATR_END,
-  RES_PROTECT,
   RES_UL_SPACE,
 } from "../../../inc/hintids";
 import { SfxItemSet, type WhichRangesContainer } from "../../../../svl/source/items/itemset";
@@ -73,12 +71,11 @@ import type { SwTextFormatColl } from "../../core/doc/fmtcol";
 import { SwCursor, type SwSearchNodeFilter } from "../../core/crsr/swcrsr";
 import { PopMode } from "../../core/crsr/trvltbl";
 import type { SwDoc } from "../../core/doc/doc";
-import type { SwFrameFormat } from "../../core/layout/atrfrm";
 import type { SwNode, SwStartNode } from "../../core/docnode/node";
 import { setTextFormatCollAtShell } from "../../core/edit/edfcol";
 import { SwStartNodeType } from "../../../inc/ndtyp";
 import { CollectTextFlyFrames } from "../../core/layout/flycnt";
-import type { SwTableBox } from "../../core/table/swtable-boxline";
+import { isContentProtected, isInProtectedTable } from "../../core/crsr/trvltbl";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { findParagraphStyle } from "../app/docst";
 import type { SwWrtShell } from "../wrtsh/wrtsh1";
@@ -220,31 +217,6 @@ function createSearchNodeFilter(
     }
     return true;
   };
-}
-
-/** Reads a represented frame's inherited content-protection bit. @param format - Native layout format. @returns Whether its content is protected. */
-function isContentProtected(format: SwFrameFormat | undefined): boolean {
-  return (
-    (format?.GetAttrSet().Get(RES_PROTECT) as SvxProtectItem | undefined)?.IsContentProtected() ===
-    true
-  );
-}
-
-/** Follows the native containing table formats up to an enclosing cell or story. @param node - Text or nested table owner. @returns Whether a layout ancestor protects the content. */
-function isInProtectedTable(node: SwNode): boolean {
-  for (let box = node.GetTableBox(); box !== null;) {
-    const table = box.GetStartNode().FindTableNode();
-    if (table === null) return false;
-    if (box.getRowSpan() < 1 || isContentProtected(table.GetTable().GetFrameFormat())) return true;
-    for (let parent: SwTableBox | null = box; parent !== null;) {
-      const line = parent.GetUpper();
-      if (isContentProtected(parent.GetFrameFormat()) || isContentProtected(line?.GetFrameFormat()))
-        return true;
-      parent = line?.GetUpper() ?? null;
-    }
-    box = table.GetTableBox();
-  }
-  return false;
 }
 
 /** Applies the represented SwFrame::IsProtected owners to an editable search result. @param node - Result endpoint. @returns Whether the content admits replacement. */
@@ -514,11 +486,17 @@ export class SwViewSearch {
     options.Commit();
   }
 
-  /** Repeats the source command with its last dispatched search item. @returns Whether a match was found. */
-  public RepeatSearch(): boolean {
+  /** Repeats the source command with its last dispatched search item. @param backwards - Temporary Navigator direction, when supplied. @returns Whether a match was found. */
+  public RepeatSearch(backwards?: boolean): boolean {
     const request = this.lastRequest;
     if (request === undefined) return false;
-    return this.DispatchSearch(request.item, request.command, request.backward).matches > 0;
+    if (backwards === undefined)
+      return this.DispatchSearch(request.item, request.command, request.backward).matches > 0;
+    try {
+      return this.DispatchSearch(request.item, request.command, backwards).matches > 0;
+    } finally {
+      this.lastRequest = request;
+    }
   }
 
   /** Prepares the Find Bar request with its own transliteration flags. @param query - Toolbar text and toggles. @returns Native search item. */

@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "task_id": "202611270608-C08G26",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-27T06:28:56.479Z",
+  "verdict": "pass",
+  "summary": "The Navigator delegates bookmark operations to the original dialog, mark and history owners.",
+  "evaluated_sha": "8bed5252ef20000edc6cafe9c8d39237c80f2d66",
+  "blueprint_digest": "728ad468ab1fcc8c9ca39f1a5f1d31a34317a23680b31a9810d1868ae7d269b9",
+  "findings": [
+    "Browser and core evidence covers selected-name routing, undo, grouped deletion, range offsets and metadata."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611270608-C08G26/README.md",
+    "output/playwright/writer-navigator-bookmarks-vitest-final.log",
+    "output/playwright/writer-navigator-bookmarks-chromium.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

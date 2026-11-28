@@ -2,6 +2,133 @@
 import { expect, test } from "@playwright/test";
 import { openBrowserMenu } from "../test-support/menu-pointer-e2e";
 
+test("Writer Navigator tracks one heading while the cursor moves in the heading root", /** Ports the pinned tdf114724 heading tracking workflow. @param fixtures - Browser test inputs. @param fixtures.page - Writer page. @returns Completion. */ async ({
+  page,
+}) => {
+  await page.goto("/writer", { waitUntil: "domcontentloaded" });
+  const paragraphs = page.locator("[data-writer-paragraph-id]");
+  await paragraphs.first().click();
+  for (let index = 1; index <= 4; index++) {
+    if (index > 1) await page.keyboard.press("Enter");
+    await page.keyboard.insertText(`HEADING ${index}`);
+  }
+  const formatting = page.getByRole("toolbar", { name: "Writer formatting toolbar" });
+  const style = formatting.getByRole("combobox", { name: "Paragraph style", exact: true });
+  for (let index = 0; index < 4; index++) {
+    await paragraphs.nth(index).click();
+    await formatting.getByRole("button", { name: "Show Paragraph style", exact: true }).click();
+    await page
+      .locator(`id=${await style.getAttribute("aria-controls")}`)
+      .getByRole("option", { name: "Heading 1", exact: true })
+      .click();
+  }
+  await paragraphs.first().click();
+  await page.keyboard.press("F5");
+  const navigator = page.getByRole("dialog", { name: "Navigator", exact: true });
+  await navigator.getByRole("button", { name: "Content Navigation View" }).click();
+  const selected = navigator.getByRole("treeitem", { selected: true });
+  await paragraphs.first().click();
+  await expect(selected).toHaveText("HEADING 1");
+  for (let index = 0; index < 3; index++) await page.keyboard.press("ArrowDown");
+  await expect(selected).toHaveText("HEADING 4");
+  for (let index = 0; index < 3; index++) await page.keyboard.press("ArrowUp");
+  await expect(selected).toHaveText("HEADING 1");
+  await navigator.getByRole("button", { name: "Content Navigation View" }).click();
+  await expect(navigator.getByRole("tree")).not.toHaveAttribute("aria-multiselectable");
+});
+
+test("Writer Navigator opens the selected bookmark and deletes all marks in one undo step", /** Verifies real bookmark slot dispatch and grouped deletion in Chromium. @param fixtures - Browser test inputs. @param fixtures.page - Writer page. @returns Completion. */ async ({
+  page,
+}) => {
+  await page.goto("/writer");
+  const editor = page.getByRole("textbox", { name: "Writer document text" });
+  await editor.fill("Bookmark positions");
+  const bookmark = page.getByRole("dialog", { name: "Bookmark", exact: true });
+  for (const [key, name] of [
+    ["Home", "Earlier"],
+    ["End", "Later"],
+  ] as const) {
+    await editor.press(key);
+    await openBrowserMenu(page, "Insert");
+    await page.getByRole("menuitem", { name: /^Bookmark/u }).click();
+    await bookmark.getByLabel("Name", { exact: true }).fill(name);
+    await bookmark.getByRole("button", { name: "Insert", exact: true }).click();
+    await expect(bookmark).toBeHidden();
+  }
+  const standard = page.getByRole("toolbar", { name: "Writer standard toolbar" });
+  const undo = standard.getByRole("button", { name: "Undo", exact: true });
+  await page.keyboard.press("F5");
+  const navigator = page.getByRole("dialog", { name: "Navigator", exact: true });
+  const earlier = navigator.getByRole("treeitem", { name: "Earlier", exact: true });
+  const later = navigator.getByRole("treeitem", { name: "Later", exact: true });
+  await earlier.dblclick();
+  await navigator.getByRole("button", { name: "Edit Bookmark", exact: true }).click();
+  await expect(bookmark.getByRole("listbox").locator("option:checked")).toHaveText("Earlier");
+  await bookmark.getByRole("button", { name: "Rename", exact: true }).click();
+  const rename = page.getByRole("dialog", { name: "Rename object: Earlier", exact: true });
+  await rename.getByLabel("New name").fill("Renamed");
+  await rename.getByRole("button", { name: "OK", exact: true }).click();
+  await bookmark.getByRole("button", { name: "Close", exact: true }).last().click();
+  await expect(navigator.getByRole("treeitem", { name: "Renamed", exact: true })).toBeVisible();
+  await undo.click();
+  await expect(earlier).toBeVisible();
+  await navigator.getByRole("treeitem", { name: "Bookmarks", exact: true }).click();
+  await navigator.getByRole("button", { name: "Delete All Bookmarks", exact: true }).click();
+  await expect(
+    navigator.getByRole("button", { name: "Delete All Bookmarks", exact: true }),
+  ).toBeHidden();
+  await undo.click();
+  await navigator.getByRole("treeitem", { name: "Bookmarks", exact: true }).click();
+  await expect(earlier).toBeVisible();
+  await expect(later).toBeVisible();
+  await expect(editor).toHaveText("Bookmark positions");
+});
+
+test("Writer Navigator moves selected chapters together in the heading root", /** Verifies native tree modifiers, one history action, and retained selection. @param fixtures - Browser test inputs. @param fixtures.page - Writer page. @returns Completion. */ async ({
+  page,
+}) => {
+  await page.goto("/writer", { waitUntil: "domcontentloaded" });
+  const paragraphs = page.locator("[data-writer-paragraph-id]");
+  await paragraphs.first().click();
+  await page.keyboard.insertText("First");
+  await page.keyboard.press("Enter");
+  await page.keyboard.insertText("Second");
+  await page.keyboard.press("Enter");
+  await page.keyboard.insertText("Third");
+  const formatting = page.getByRole("toolbar", { name: "Writer formatting toolbar" });
+  const style = formatting.getByRole("combobox", { name: "Paragraph style", exact: true });
+  for (let index = 0; index < 3; index++) {
+    await paragraphs.nth(index).click();
+    await formatting.getByRole("button", { name: "Show Paragraph style", exact: true }).click();
+    await page
+      .locator(`id=${await style.getAttribute("aria-controls")}`)
+      .getByRole("option", { name: "Heading 1", exact: true })
+      .click();
+  }
+  await page.keyboard.press("F5");
+  const navigator = page.getByRole("dialog", { name: "Navigator", exact: true });
+  const tree = navigator.getByRole("tree");
+  const first = tree.getByRole("treeitem", { name: "First", exact: true });
+  const second = tree.getByRole("treeitem", { name: "Second", exact: true });
+  await first.click();
+  await navigator.getByRole("button", { name: "Content Navigation View" }).click();
+  await expect(tree).toHaveAttribute("aria-multiselectable", "true");
+  await second.click({ modifiers: ["ControlOrMeta"] });
+  await expect(first).toHaveAttribute("aria-selected", "true");
+  await expect(second).toHaveAttribute("aria-selected", "true");
+  const down = navigator.getByRole("button", { name: "Move Heading Down" });
+  await down.click();
+  await expect(down).toBeFocused();
+  await expect(paragraphs).toHaveText(["Third", "First", "Second"]);
+  await expect(first).toHaveAttribute("aria-selected", "true");
+  await expect(second).toHaveAttribute("aria-selected", "true");
+  await page
+    .getByRole("toolbar", { name: "Writer standard toolbar" })
+    .getByRole("button", { name: "Undo", exact: true })
+    .click();
+  await expect(paragraphs).toHaveText(["First", "Second", "Third"]);
+});
+
 test("Writer Navigator opens from View and returns the cursor to a native heading", /** Exercises the upstream-shaped Navigator title, controls and outline tree. @param fixtures - Browser test inputs. @param fixtures.page - Writer page. @returns Completion. */ async ({
   page,
 }) => {
@@ -104,4 +231,344 @@ test("Writer Navigator heading tools move and relevel the selected chapter", /**
   await expect(child).toBeHidden();
   await tools.getByRole("button", { name: "Promote Outline Level" }).click();
   await expect(child).toBeVisible();
+});
+
+test("Writer Navigator context menus change tracking and keep native preferences after reload", /** Exercises row-specific checkboxes, a keyboard submenu and browser persistence. @param fixtures - Browser test inputs. @param fixtures.page - Writer page. @returns Completion. */ async ({
+  page,
+}) => {
+  await page.goto("/writer", { waitUntil: "domcontentloaded" });
+  const editor = page.getByRole("textbox", { name: "Writer document text" });
+  const navigator = page.getByRole("dialog", { name: "Navigator", exact: true });
+  const context = page.getByRole("menu", { name: "Navigator context menu" });
+  const headings = navigator.getByRole("treeitem", { name: "Headings", exact: true });
+  const tableTracking = context.getByRole("menuitemcheckbox", { name: "Table Tracking" });
+  const bookmarkTracking = context.getByRole("menuitemcheckbox", { name: "Bookmark Tracking" });
+  const outlineTracking = context.getByRole("menuitem", { name: "Outline Tracking" });
+  const outlineMenu = context.getByRole("menu", { name: "Outline Tracking menu" });
+  await editor.click();
+  await page.keyboard.press("F5");
+  await headings.press("Shift+F10");
+  await expect(context).toBeFocused();
+  await page.keyboard.press("ArrowDown");
+  await expect(outlineTracking).toBeFocused();
+  await page.keyboard.press("ArrowRight");
+  await expect(outlineMenu.getByRole("menuitemradio", { name: "Default" })).toHaveAttribute(
+    "aria-checked",
+    "true",
+  );
+  await page.keyboard.press("End");
+  await page.keyboard.press("Enter");
+  await expect(headings).toBeFocused();
+  await expect(context).toBeHidden();
+  for (const [category, toggle] of [
+    ["Tables", tableTracking],
+    ["Bookmarks", bookmarkTracking],
+  ] as const) {
+    const row = navigator.getByRole("treeitem", { name: category, exact: true });
+    await row.click({ button: "right" });
+    await expect(outlineTracking).toHaveCount(0);
+    await expect(toggle).toHaveAttribute("aria-checked", "true");
+    await toggle.click();
+    await expect(row).toBeFocused();
+  }
+  await page.reload({ waitUntil: "domcontentloaded" });
+  await editor.click();
+  await page.keyboard.press("F5");
+  for (const [category, toggle] of [
+    ["Tables", tableTracking],
+    ["Bookmarks", bookmarkTracking],
+  ] as const) {
+    await navigator
+      .getByRole("treeitem", { name: category, exact: true })
+      .click({ button: "right" });
+    await expect(toggle).toHaveAttribute("aria-checked", "false");
+    await page.keyboard.press("Escape");
+    await expect(context).toBeHidden();
+    await expect(navigator).toBeVisible();
+  }
+  await headings.click({ button: "right" });
+  await outlineTracking.click();
+  await expect(outlineMenu.getByRole("menuitemradio", { name: "Off" })).toHaveAttribute(
+    "aria-checked",
+    "true",
+  );
+});
+
+test("Writer Navigator context commands share heading undo and the persistent outline level", /** Uses the native edit surface, two heading branches and the contextual outline control. @param fixtures - Browser test inputs. @param fixtures.page - Writer page. @returns Completion. */ async ({
+  page,
+}) => {
+  await page.goto("/writer", { waitUntil: "domcontentloaded" });
+  const paragraphs = page.locator("[data-writer-paragraph-id]");
+  const editor = page.getByRole("textbox", { name: "Writer document text" });
+  await paragraphs.first().click();
+  for (const [index, text] of ["Chapter A", "Section A", "Chapter B"].entries()) {
+    if (index > 0) await page.keyboard.press("Enter");
+    await page.keyboard.insertText(text);
+  }
+  const toolbar = page.getByRole("toolbar", { name: "Writer formatting toolbar" });
+  const style = toolbar.getByRole("combobox", { name: "Paragraph style", exact: true });
+  for (const [index, heading] of ["Heading 1", "Heading 2", "Heading 1"].entries()) {
+    await paragraphs.nth(index).click();
+    await toolbar.getByRole("button", { name: "Show Paragraph style", exact: true }).click();
+    await page
+      .locator(`id=${await style.getAttribute("aria-controls")}`)
+      .getByRole("option", { name: heading, exact: true })
+      .click();
+  }
+  await page.keyboard.press("F5");
+  const navigator = page.getByRole("dialog", { name: "Navigator", exact: true });
+  const chapter = navigator.getByRole("treeitem", { name: "Chapter A", exact: true });
+  const section = navigator.getByRole("treeitem", { name: "Section A", exact: true });
+  const context = page.getByRole("menu", { name: "Navigator context menu" });
+  await chapter.click({ button: "right" });
+  await context.getByRole("menuitem", { name: "Move Heading Down" }).click();
+  await expect(paragraphs).toHaveText(["Chapter B", "Chapter A", "Section A"]);
+  await page
+    .getByRole("toolbar", { name: "Writer standard toolbar" })
+    .getByRole("button", { name: "Undo", exact: true })
+    .click();
+  await expect(paragraphs).toHaveText(["Chapter A", "Section A", "Chapter B"]);
+  await chapter.click({ button: "right" });
+  const levelMenu = context.getByRole("menuitem", { name: "Show Up to Outline Level" });
+  await levelMenu.click();
+  await context.getByRole("menuitemradio", { name: "1", exact: true }).click();
+  const level = navigator.getByRole("combobox", { name: "Show Up to Outline Level" });
+  await expect(level).toHaveValue("1");
+  await expect(section).toBeHidden();
+  await page.reload({ waitUntil: "domcontentloaded" });
+  await editor.click();
+  await page.keyboard.press("F5");
+  await expect(level).toHaveValue("1");
+  const headings = navigator.getByRole("treeitem", { name: "Headings", exact: true });
+  await headings.click({ button: "right" });
+  await levelMenu.click();
+  await expect(context.getByRole("menuitemradio", { name: "1", exact: true })).toHaveAttribute(
+    "aria-checked",
+    "true",
+  );
+});
+
+test("Writer Navigator edits an anchored hyperlink and opens and removes a live comment", /** Exercises the native contextual field commands through Chromium. @param fixtures - Browser test inputs. @param fixtures.page - Writer page. @returns Completion. */ async ({
+  page,
+}) => {
+  await page.goto("/writer", { waitUntil: "domcontentloaded" });
+  const editor = page.getByRole("textbox", { name: "Writer document text" });
+  await editor.fill("Linked text");
+  await editor.press("Home");
+  await editor.press("Shift+End");
+  const hyperlinkDialog = page.getByRole("dialog", { name: "Hyperlink", exact: true });
+  await page.getByRole("button", { name: "Hyperlink", exact: true }).click();
+  await hyperlinkDialog.getByLabel("URL").fill("https://example.test/first");
+  await hyperlinkDialog.getByRole("button", { name: "Apply" }).click();
+  await expect(editor.getByRole("link", { name: "Linked text" })).toHaveAttribute(
+    "href",
+    "https://example.test/first",
+  );
+  await page.keyboard.press("F5");
+  const navigator = page.getByRole("dialog", { name: "Navigator", exact: true });
+  const popup = page.getByRole("menu", { name: "Navigator context menu" });
+  await navigator
+    .getByRole("treeitem", { name: "Linked text", exact: true })
+    .click({ button: "right" });
+  await expect(popup.getByRole("menuitemcheckbox", { name: "Hyperlink Tracking" })).toBeChecked();
+  await popup.getByRole("menuitem", { name: "Edit…", exact: true }).click();
+  await expect(hyperlinkDialog.getByLabel("URL")).toHaveValue("https://example.test/first");
+  await hyperlinkDialog.getByLabel("URL").fill("https://example.test/updated");
+  await hyperlinkDialog.getByRole("button", { name: "Apply" }).click();
+  await expect(editor.getByRole("link", { name: "Linked text" })).toHaveAttribute(
+    "href",
+    "https://example.test/updated",
+  );
+  await editor.press("End");
+  await page.getByRole("button", { name: "Comment", exact: true }).click();
+  const comment = page.getByRole("textbox", { name: "Comment — Unknown Author" });
+  await expect(comment).toBeFocused();
+  await page.keyboard.insertText("Navigator note");
+  const noteRow = navigator.getByRole("treeitem", { name: "Navigator note", exact: true });
+  await expect(noteRow).toBeVisible();
+  await noteRow.click({ button: "right" });
+  await expect(popup.getByRole("menuitemcheckbox", { name: "Comment Tracking" })).toBeChecked();
+  await popup.getByRole("menuitem", { name: "Edit…", exact: true }).click();
+  await expect(comment).toBeFocused();
+  await noteRow.click({ button: "right" });
+  await popup.getByRole("menuitem", { name: "Delete Comment", exact: true }).click();
+  await expect(noteRow).toHaveCount(0);
+  await expect(comment).toHaveCount(0);
+});
+
+test("Writer Navigator remembers the selected category and its natural display order", /** Verifies the native root and sort controls across a browser reload. @param fixtures - Browser test inputs. @param fixtures.page - Writer page. @returns Completion. */ async ({
+  page,
+}) => {
+  await page.goto("/writer", { waitUntil: "domcontentloaded" });
+  const editor = page.getByRole("textbox", { name: "Writer document text" });
+  const paragraphs = page.locator("[data-writer-paragraph-id]");
+  const formatting = page.getByRole("toolbar", { name: "Writer formatting toolbar" });
+  const style = formatting.getByRole("combobox", { name: "Paragraph style", exact: true });
+  await editor.click();
+  for (const [index, title] of ["Heading 10", "Heading 2"].entries()) {
+    if (index > 0) await page.keyboard.press("Enter");
+    await page.keyboard.insertText(title);
+    await formatting.getByRole("button", { name: "Show Paragraph style", exact: true }).click();
+    await page
+      .locator(`id=${await style.getAttribute("aria-controls")}`)
+      .getByRole("option", { name: "Heading 1", exact: true })
+      .click();
+  }
+  await page.keyboard.press("F5");
+  const navigator = page.getByRole("dialog", { name: "Navigator", exact: true });
+  const headings = navigator.getByRole("treeitem", { name: "Headings", exact: true });
+  const root = navigator.getByRole("button", { name: "Content Navigation View" });
+  const sort = page.getByRole("menuitemcheckbox", { name: "Display Alphabetically" });
+  await headings.click({ button: "right" });
+  await expect(sort).not.toBeChecked();
+  await sort.click();
+  await expect(navigator.getByRole("treeitem", { name: /^Heading [0-9]/u })).toHaveText([
+    "Heading 2",
+    "Heading 10",
+  ]);
+  await expect(paragraphs).toHaveText(["Heading 10", "Heading 2"]);
+  await root.click();
+  await expect(root).toHaveAttribute("aria-pressed", "true");
+  await expect(navigator.getByRole("treeitem", { name: "Tables", exact: true })).toHaveCount(0);
+  await page.reload({ waitUntil: "domcontentloaded" });
+  await editor.click();
+  await page.keyboard.press("F5");
+  await expect(root).toHaveAttribute("aria-pressed", "true");
+  await expect(navigator.getByRole("treeitem", { name: "Tables", exact: true })).toHaveCount(0);
+  await headings.click({ button: "right" });
+  await expect(sort).toBeChecked();
+  await sort.press("Escape");
+  await root.click();
+  await expect(navigator.getByRole("treeitem", { name: "Tables", exact: true })).toBeVisible();
+});
+
+test("Writer Navigator moves to the next heading through Navigate By", /** Selects the native heading mode and verifies cursor movement, wrapping, and focus. @param fixtures - Browser fixtures. @param fixtures.page - Writer page. @returns Completion. */ async ({
+  page,
+}) => {
+  await page.goto("/writer", { waitUntil: "domcontentloaded" });
+  const paragraphs = page.locator("[data-writer-paragraph-id]");
+  await paragraphs.first().click();
+  await page.keyboard.insertText("Starting heading");
+  await page.keyboard.press("Enter");
+  await page.keyboard.insertText("Following heading");
+  const formatting = page.getByRole("toolbar", { name: "Writer formatting toolbar" });
+  const style = formatting.getByRole("combobox", { name: "Paragraph style", exact: true });
+  for (const index of [0, 1]) {
+    await paragraphs.nth(index).click();
+    await formatting.getByRole("button", { name: "Show Paragraph style", exact: true }).click();
+    await page
+      .locator(`id=${await style.getAttribute("aria-controls")}`)
+      .getByRole("option", { name: "Heading 1", exact: true })
+      .click();
+  }
+  await paragraphs.first().click();
+  await page.keyboard.press("F5");
+  const navigator = page.getByRole("dialog", { name: "Navigator", exact: true });
+  const chooser = navigator.getByRole("combobox", { name: "Navigate By", exact: true });
+  expect(await chooser.locator("option:checked").textContent()).toBe("Page");
+  await chooser.selectOption({ label: "Heading" });
+  await expect(navigator.getByRole("spinbutton", { name: "Go to page" })).toHaveCount(0);
+  const next = navigator.getByRole("button", { name: "Next heading", exact: true });
+  await next.click();
+  await expect(page.locator("[data-writer-editing-host]")).toBeFocused();
+  await expect(navigator.getByRole("treeitem", { name: "Following heading" })).toHaveAttribute(
+    "aria-selected",
+    "true",
+  );
+  await next.click();
+  await expect(navigator.getByRole("treeitem", { name: "Starting heading" })).toHaveAttribute(
+    "aria-selected",
+    "true",
+  );
+  await navigator.getByRole("button", { name: "Previous heading", exact: true }).click();
+  await expect(navigator.getByRole("treeitem", { name: "Following heading" })).toHaveAttribute(
+    "aria-selected",
+    "true",
+  );
+});
+
+test("Writer Navigator wraps physical page scrolling without moving the caret", /** Exercises the real viewport and verifies the separate document cursor. @param fixtures - Browser fixtures. @param fixtures.page - Writer page. @returns Completion. */ async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 750 });
+  await page.goto("/writer", { waitUntil: "domcontentloaded" });
+  const editor = page.getByRole("textbox", { name: "Writer document text" });
+  await editor.fill("First page");
+  await editor.press("End");
+  await page.getByRole("button", { name: "Page Break", exact: true }).click();
+  await page.keyboard.insertText("Second page");
+  const paragraphs = page.locator("[data-writer-paragraph-id]");
+  await paragraphs.first().click();
+  await editor.press("Home");
+  await page.keyboard.press("F5");
+  const navigator = page.getByRole("dialog", { name: "Navigator", exact: true });
+  const pageNumber = navigator.getByRole("spinbutton", { name: "Go to page" });
+  const next = navigator.getByRole("button", { name: "Next page", exact: true });
+  await expect(pageNumber).toHaveValue("1");
+  await next.click();
+  await expect(pageNumber).toHaveValue("2");
+  await expect
+    .poll(
+      /** Reads the current browser caret's model paragraph after viewport-only navigation. @returns Caret text. */
+      () =>
+        page.evaluate(
+          /** Reads the current paragraph from the browser Selection. @returns Caret text or absence. */
+          () =>
+            getSelection()?.focusNode?.parentElement?.closest("[data-writer-paragraph-id]")
+              ?.textContent,
+        ),
+    )
+    .toBe("First page");
+  await next.click();
+  await expect(pageNumber).toHaveValue("1");
+});
+
+test("Writer Navigator selects, edits, renames and deletes a table", /** Uses the native table context commands and restores the original table with Undo. @param fixtures - Browser fixtures. @param fixtures.page - Writer page. @returns Completion. */ async ({
+  page,
+}) => {
+  await page.goto("/writer", { waitUntil: "domcontentloaded" });
+  await page.getByRole("textbox", { name: "Writer document text" }).fill("Body text");
+  await page.getByRole("button", { name: "Insert Table", exact: true }).click();
+  await page
+    .getByLabel("Table size")
+    .locator("..")
+    .getByRole("button", { name: "More Options" })
+    .click();
+  await page
+    .getByRole("dialog", { name: "Insert Table" })
+    .getByRole("button", { name: "Insert", exact: true })
+    .click();
+  const cell = page.getByLabel("Row 1 column 1 paragraph 1", { exact: true });
+  await cell.click();
+  await page.keyboard.insertText("Retained cell");
+  await page.keyboard.press("F5");
+  const navigator = page.getByRole("dialog", { name: "Navigator", exact: true });
+  const context = page.getByRole("menu", { name: "Navigator context menu" });
+  const row = navigator.getByRole("treeitem", { name: "Table1", exact: true });
+  await row.click({ button: "right" });
+  await context.getByRole("menuitem", { name: "Select", exact: true }).click();
+  const table = page.getByRole("table", { name: "Table1", exact: true });
+  await expect(table.locator('[data-writer-editor-selected="true"]').first()).toBeVisible();
+  await row.click({ button: "right" });
+  await context.getByRole("menuitem", { name: "Edit…", exact: true }).click();
+  const properties = page.getByRole("dialog", { name: "Table Properties", exact: true });
+  await expect(properties).toBeVisible();
+  await properties.getByRole("button", { name: "Cancel", exact: true }).click();
+  await row.click({ button: "right" });
+  await context.getByRole("menuitem", { name: "Rename", exact: true }).click();
+  const name = navigator.getByRole("textbox", { name: "Table name", exact: true });
+  await name.fill("Totals");
+  await name.press("Enter");
+  const renamed = navigator.getByRole("treeitem", { name: "Totals", exact: true });
+  await expect(renamed).toBeVisible();
+  await renamed.click({ button: "right" });
+  await context.getByRole("menuitem", { name: "Delete Table", exact: true }).click();
+  await expect(renamed).toHaveCount(0);
+  await expect(page.getByRole("table", { name: "Totals", exact: true })).toHaveCount(0);
+  await page
+    .getByRole("toolbar", { name: "Writer standard toolbar" })
+    .getByRole("button", { name: "Undo", exact: true })
+    .click();
+  await expect(renamed).toBeVisible();
+  await expect(cell).toHaveText("Retained cell");
 });

@@ -1,13 +1,27 @@
 /** @fileoverview Connects the represented native Writer Navigator content index and cursor targets. */
-import { SwPosition } from "../../core/crsr/pam";
+import { RES_TXTATR_ANNOTATION, RES_TXTATR_INETFMT } from "../../../inc/hintids";
+import type { SwFormatField } from "../../../inc/fmtfld";
+import { SwPaM, SwPosition } from "../../core/crsr/pam";
+import { GetTableCursorStart } from "../../core/crsr/trvltbl";
+import { SwTableNode } from "../../core/docnode/node";
 import { WRITER_MAX_LIST_LEVEL } from "../../core/doc/list";
+import { SwPostItFieldType } from "../../core/fields/docufld";
 import type { SwRootFrame } from "../../core/layout/newfrm";
 import type { SwTable } from "../../core/table/swtable";
+import { SwTextINetFormat } from "../../core/txtnode/txtatr2";
 import { SwTextNode } from "../../core/txtnode/ndtxt";
+import type { SwPostItMgr } from "../docvw/PostItMgr";
 import type { SwWrtShell } from "../wrtsh/wrtsh1";
+import { GetURLFieldContents, GetURLFieldContentName } from "./content-hyperlink";
+import {
+  OutlineTrackingMode,
+  SwNavigationConfig,
+  type NavigatorContentType,
+  type TrackedContentType,
+} from "./navicfg";
 
 /** Original content families with connected Writer model ownership. */
-export type SwNavigatorContentType = "outline" | "table" | "bookmark";
+export type SwNavigatorContentType = NavigatorContentType;
 
 /** Command identifiers from the native Navigator heading toolbar. */
 export type SwNavigatorHeadingCommand = "promote" | "demote" | "chapterup" | "chapterdown";
@@ -23,6 +37,7 @@ export interface SwNavigatorContent {
 export interface SwNavigatorContentGroup {
   readonly type: SwNavigatorContentType;
   readonly contents: readonly SwNavigatorContent[];
+  readonly alphabetical: boolean;
 }
 
 /** Internal target borrows its registered owner until the next snapshot. */
@@ -30,33 +45,71 @@ interface SwNavigatorTarget extends SwNavigatorContent {
   readonly type: SwNavigatorContentType;
   readonly node: SwTextNode;
   readonly offset: number;
+  readonly hyperlink?: SwTextINetFormat;
+  readonly comment?: SwFormatField;
 }
 
-const contentTypes = ["outline", "table", "bookmark"] as const;
+const contentTypes = ["outline", "table", "bookmark", "hyperlink", "comment"] as const;
+const naturalNameOrder = new Intl.Collator(undefined, { numeric: true });
 
 /** Builds the native content tree from the active document and moves its real editing cursor. */
 export class SwContentTree {
   private readonly identities = new WeakMap<object, string>();
   private nextIdentity = 1;
+  private selectedBookmarkName = "";
+  private lastGotoOutline: number | undefined;
+  private rootType: SwNavigatorContentType | undefined;
+  private readonly sortedCategories: Set<SwNavigatorContentType>;
+  private outlineLevel: number;
+  private outlineTracking: OutlineTrackingMode;
+  private readonly trackContentType: Record<TrackedContentType, boolean>;
 
-  /** Borrows the native editing and page-layout owners. @param shell - Persistent Writer shell. @param layout - Current physical page-frame source. @returns Navigator model. */
+  /** Borrows the native editing and page-layout owners. @param shell - Persistent Writer shell. @param layout - Current physical page-frame source. @param config - Navigator preferences. @param postIts - Active annotation manager. @param displayChanged - Notifies the view to refresh the Navigator projection. @returns Navigator model. */
   constructor(
     private readonly shell: SwWrtShell,
     private readonly layout: SwRootFrame,
-  ) {}
+    private readonly config = new SwNavigationConfig(),
+    private readonly postIts?: SwPostItMgr,
+    private readonly displayChanged?: () => void,
+  ) {
+    this.rootType = config.GetRootType();
+    this.sortedCategories = new Set(
+      contentTypes.filter(
+        /** Reads the native current preference for each represented category. @param type - Original content family. @returns Whether its sort bit is set. */
+        (type) => config.IsAlphabeticSort(type),
+      ),
+    );
+    this.outlineLevel = config.GetOutlineLevel();
+    this.outlineTracking = config.GetOutlineTracking();
+    this.trackContentType = {
+      table: config.GetContentTypeTrack("table"),
+      bookmark: config.GetContentTypeTrack("bookmark"),
+      hyperlink: config.GetContentTypeTrack("hyperlink"),
+      comment: config.GetContentTypeTrack("comment"),
+    };
+  }
 
-  /** Lists represented content in native category and document order. @returns Content tree roots. */
+  /** Lists represented content in native category and configured member order. @returns Content tree roots. */
   public GetContents(): readonly SwNavigatorContentGroup[] {
-    const targets = this.GetTargets();
+    const targets = this.GetTargets().filter(
+      /** Limits outline members to the visible depth. @param target - Original content target. @returns Whether the entry is represented. */
+      (target) => (target.level ?? 0) <= this.outlineLevel,
+    );
     return contentTypes.map(
       /** Builds one native content root. @param type - Content family. @returns Named group. */
-      (type) => ({
-        type,
-        contents: targets.filter(
+      (type) => {
+        const contents = targets.filter(
           /** Admits only this native content kind. @param target - Document entry. @returns Whether to include it. */
           (target) => target.type === type,
-        ),
-      }),
+        );
+        const alphabetical = this.IsAlphabeticSort(type);
+        if (alphabetical)
+          contents.sort(
+            /** Orders native names naturally, with document order retained for ties. @param a - First content row. @param b - Second content row. @returns Name comparison. */
+            (a, b) => naturalNameOrder.compare(a.title, b.title),
+          );
+        return { type, contents, alphabetical };
+      },
     );
   }
 
@@ -66,22 +119,466 @@ export class SwContentTree {
       /** Ignores entries that were removed or replaced after selection. @param entry - Live content row. @returns Whether it is the requested target. */
       (entry) => entry.id === id,
     );
-    return target ? this.SetCursor(target.node, target.offset) : false;
+    if (!target) return false;
+    const oldBookmark = this.selectedBookmarkName;
+    this.selectedBookmarkName = target.type === "bookmark" ? target.title : "";
+    this.lastGotoOutline =
+      target.type === "outline"
+        ? this.shell.GetDoc().GetNodes().GetOutLineNds().Seek_Entry(target.node).position
+        : undefined;
+    if (target.hyperlink) {
+      const start = new SwPosition(target.node, target.offset);
+      const position = new SwPaM(start);
+      start.Dispose();
+      try {
+        // Native GotoINetAttr is followed by one Chars step.
+        position.Move();
+        return this.SetCursor(target.node, position.GetPoint().GetContentIndex());
+      } finally {
+        position.Dispose();
+      }
+    }
+    return this.SetCursor(target.node, target.offset, oldBookmark !== this.selectedBookmarkName);
   }
 
-  /** Executes an original Navigator action on the selected heading, optionally with its descendants. @param id - Selected tree identity. @param command - Native heading toolbar action. @param withChildren - Whether the selected chapter includes sublevels. @returns Whether the heading was reached. */
-  public ExecCommand(id: string, command: SwNavigatorHeadingCommand, withChildren = true): boolean {
+  /** Applies the native Navigator table-name admission before changing the real frame format. @param id - Stable Navigator table identity. @param name - Requested tree label. @returns Whether the table was renamed. */
+  public RenameTable(id: string, name: string): boolean {
+    const doc = this.shell.GetDoc();
+    if (!name || /[ .<>]/u.test(name) || doc.FindTableFormatByName(name)) return false;
+    const table = this.FindTableTarget(id);
+    if (!table || this.shell.GetViewOptions().IsReadonly()) return false;
+    this.shell.SetTableName(table.GetTable().GetFrameFormat(), name);
+    return true;
+  }
+
+  /** Reports whether a table row or category permits a native Delete action. @param id - Specific Navigator table identity, or undefined for the category. @returns Whether a writable table can be deleted. */
+  public CanDeleteTable(id?: string): boolean {
+    if (this.shell.GetViewOptions().IsReadonly()) return false;
+    if (id !== undefined) {
+      const table = this.FindTableTarget(id);
+      return table !== undefined && GetTableCursorStart(table, false) !== undefined;
+    }
+    return this.shell
+      .GetDoc()
+      .GetTables()
+      .some(
+        /** Admits only represented tables with at least one unprotected cell. @param table - Native table. @returns Whether eligible. */
+        (table) => GetTableCursorStart(table.GetTableNode(), false) !== undefined,
+      );
+  }
+
+  /** Deletes the Navigator table category through the native shell in one undo group. @returns Whether any table was deleted. */
+  public DeleteTables(): boolean {
+    if (!this.CanDeleteTable()) return false;
     const document = this.shell.GetDoc();
-    const outlines = document.GetNodes().GetOutLineNds().entries();
-    const index = outlines.findIndex(
-      /** Looks up the same heading even when the document order changed. @param node - Indexed heading. @returns Whether this is the selected heading. */
-      (node) => this.identities.get(node) === id,
+    const tables = document.GetTables();
+    const undo = document.GetUndoManager();
+    return this.shell.RunNotificationTransaction(
+      /** Publishes deletion and history as one native action. @returns Whether any table was removed. */
+      () =>
+        document.RunModelTransaction(
+          /** Executes the ordered table removals under a single undo group. @returns Whether modified. */
+          () => {
+            let deleted = false;
+            undo.StartUndo("Delete Tables");
+            try {
+              for (const table of tables) {
+                const first = GetTableCursorStart(table.GetTableNode(), false);
+                if (first && this.SetCursor(first, 0))
+                  deleted = this.shell.DeleteTable() || deleted;
+              }
+            } finally {
+              undo.EndUndo();
+            }
+            return deleted;
+          },
+        ),
     );
-    const heading = outlines[index];
-    if (!heading || !this.SetCursor(heading, 0)) return false;
-    const level = heading.GetAttrOutlineLevel();
+  }
+
+  /** Resolves the still-connected table owner from a row identity. @param id - Original table row identity. @returns Current native table node. */
+  private FindTableTarget(id: string): SwTableNode | undefined {
+    return this.shell
+      .GetDoc()
+      .GetNodes()
+      .entries()
+      .find(
+        /** Matches the original table format owner by identity. @param node - Original document node. @returns Whether it owns the requested table. */
+        (node): node is SwTableNode =>
+          node instanceof SwTableNode && this.identities.get(node.GetTable()) === id,
+      );
+  }
+
+  /** Selects the exact internet attribute for the existing edit or remove hyperlink slot. @param id - Navigator hyperlink identity. @returns Whether the linked span still exists. */
+  public SelectHyperlink(id: string): boolean {
+    const hyperlink = this.GetTargets().find(
+      /** Matches the borrowed native hyperlink owner. @param entry - Current entry. @returns Whether it is the requested hyperlink. */
+      (entry) => entry.id === id,
+    )?.hyperlink;
+    const node = hyperlink?.GetpTextNode();
+    if (!hyperlink || !node) return false;
+    const start = new SwPosition(node, hyperlink.GetStart());
+    const end = new SwPosition(node, hyperlink.GetEnd());
+    try {
+      this.shell.SetPaM(end, start);
+      return true;
+    } finally {
+      end.Dispose();
+      start.Dispose();
+    }
+  }
+
+  /** Opens the anchored annotation editor through the native sidebar manager. @param id - Navigator comment identity. @returns Whether the annotation still exists. */
+  public EditComment(id: string): boolean {
+    const target = this.FindCommentTarget(id);
+    if (!target?.comment || !this.postIts) return false;
+    this.SetCursor(target.node, target.offset);
+    this.postIts.Focus(target.comment);
+    return true;
+  }
+
+  /** Deletes all annotations through the original configurable confirmation and undo. @returns Whether any annotation was deleted. */
+  public async DeleteComments(): Promise<boolean> {
+    return (await this.postIts?.DeleteNotes()) ?? false;
+  }
+
+  /** Deletes an existing annotation via the native sidebar manager. @param id - Navigator comment identity. @returns Whether the annotation was removed. */
+  public DeleteComment(id: string): boolean {
+    const target = this.FindCommentTarget(id);
+    if (!target?.comment) return false;
+    this.SetCursor(target.node, target.offset);
+    return this.postIts?.Delete(target.comment.GetField().GetPostItId()) ?? false;
+  }
+
+  /** Resolves a still-anchored comment by the native format address. @param id - Navigator comment identity. @returns Current comment target. */
+  private FindCommentTarget(id: string): SwNavigatorTarget | undefined {
+    return this.GetTargets().find(
+      /** Matches the borrowed native annotation owner. @param entry - Current entry. @returns Whether it is requested. */
+      (entry) => entry.type === "comment" && entry.id === id,
+    );
+  }
+
+  /** Returns the displayed content root. @returns A single category or undefined when showing all categories. */
+  public GetRootType(): SwNavigatorContentType | undefined {
+    return this.rootType;
+  }
+
+  /** Persists and displays the current content root. @param type - Category or undefined when showing all categories. @returns Nothing. */
+  public SetRootType(type?: SwNavigatorContentType): void {
+    if (this.rootType === type) return;
+    this.rootType = type;
+    this.config.SetRootType(type);
+    this.displayChanged?.();
+  }
+
+  /** Reads the category's current display order. @param type - Content category. @returns Whether it is sorted by name. */
+  public IsAlphabeticSort(type: SwNavigatorContentType): boolean {
+    return this.sortedCategories.has(type);
+  }
+
+  /** Updates the category display order and its corresponding persisted bit. @param type - Content category. @param enabled - Whether to display alphabetically. @returns Nothing. */
+  public SetAlphabeticSort(type: SwNavigatorContentType, enabled: boolean): void {
+    if (this.IsAlphabeticSort(type) === enabled) return;
+    if (enabled) this.sortedCategories.add(type);
+    else this.sortedCategories.delete(type);
+    this.config.SetAlphabeticSort(type, enabled);
+    this.displayChanged?.();
+  }
+
+  /** Moves to the preceding or following native document item in the chosen category. @param type - Supported cursor target. @param forward - True for next. @returns Whether a target was reached. */
+  public MoveContent(
+    type: "outline" | "table" | "bookmark" | "comment",
+    forward: boolean,
+  ): boolean {
+    if (type === "bookmark") return this.MoveBookmark(forward);
+    if (type === "table") return this.MoveTableContent(forward);
+    const point = this.shell.GetCursor().GetPoint();
+    const currentNode = point.GetNode();
+    if (type === "outline") {
+      const outlines = this.shell.GetDoc().GetNodes().GetOutLineNds();
+      const { found, position } = outlines.Seek_Entry(currentNode);
+      const headings = outlines.entries();
+      if (headings.length === 0) return false;
+      const index = forward ? position + Number(found) : position - 1;
+      const candidate = (index + headings.length) % headings.length;
+      if ((!forward || found) && candidate === position) return false;
+      const heading = headings[candidate]?.GetTextNode();
+      return heading ? this.SetCursor(heading, 0) : false;
+    }
+    const candidates = this.GetTargets().filter(
+      /** Keeps annotations with available native sidebar windows. @param entry - Model target. @returns Whether it can be reached. */
+      (entry) => entry.comment !== undefined && this.postIts?.IsVisible(entry.comment) === true,
+    );
+    const ordered = forward ? candidates : candidates.reverse();
+    const target =
+      ordered.find(
+        /** Finds a comment anchor in the requested direction. @param entry - Model target. @returns Whether it is ahead or behind the current caret. */
+        (entry) => {
+          const comparison =
+            entry.node.GetIndex() - currentNode.GetIndex() ||
+            entry.offset - point.GetContentIndex();
+          return forward ? comparison > 0 : comparison < 0;
+        },
+      ) ?? ordered[0];
+    return target ? this.EditComment(target.id) : false;
+  }
+
+  /** Traverses real table sections in node order and admits their first reachable cell. @param forward - True for next. @returns Whether the caret reached a table. */
+  private MoveTableContent(forward: boolean): boolean {
+    const point = this.shell.GetCursor().GetPoint().GetNode();
+    const current = point.FindTableNode();
+    const candidates = this.shell
+      .GetDoc()
+      .GetNodes()
+      .entries()
+      .filter(
+        /** Selects native table sections, including nested tables. @param node - Connected node. @returns Whether it owns a table. */
+        (node): node is SwTableNode => node instanceof SwTableNode,
+      );
+    const ordered = forward ? candidates : candidates.reverse();
+    const boundary = forward
+      ? (current?.EndOfSectionIndex() ?? point.GetIndex())
+      : point.GetIndex();
+    const first = ordered.findIndex(
+      /** Starts past the current section going forward, or at a preceding different table going backward. @param table - Native table start. @returns Whether it precedes wrapping. */
+      (table) =>
+        forward ? table.GetIndex() > boundary : table !== current && table.GetIndex() < boundary,
+    );
+    for (let i = 0; i < ordered.length; i++) {
+      const table = ordered[(Math.max(0, first) + i) % ordered.length];
+      if (!table) continue;
+      const target = GetTableCursorStart(table, this.shell.GetViewOptions().IsReadonly());
+      if (target) return this.SetCursor(target, 0);
+    }
+    return false;
+  }
+
+  /** Navigates to a bookmark range with the start as the moving end. @param forward - True for next. @returns Whether a bookmark was reached. */
+  private MoveBookmark(forward: boolean): boolean {
+    const marks = this.shell.GetDoc().GetIDocumentMarkAccess().GetBookmarks();
+    const point = this.shell.GetCursor().GetPoint();
+    const target = forward
+      ? (marks.find(
+          /** Matches the native next visible bookmark by its start position. @param mark - Existing mark. @returns Whether its range starts ahead. */
+          (mark) => !mark.IsHidden() && mark.GetMarkStart().compare(point) > 0,
+        ) ?? marks[0])
+      : (marks
+          .filter(
+            /** Matches the native previous visible bookmark by its end position. @param mark - Existing mark. @returns Whether its range ends behind. */
+            (mark) => !mark.IsHidden() && mark.GetMarkEnd().compare(point) < 0,
+          )
+          .sort(
+            /** Ranks overlaps by their visible end position. @param a - First mark. @param b - Second mark. @returns Native reverse order. */
+            (a, b) => b.GetMarkEnd().compare(a.GetMarkEnd()),
+          )[0] ?? marks.at(-1));
+    if (!target) return false;
+    this.shell.SetPaM(target.GetMarkStart(), target.IsExpanded() ? target.GetMarkEnd() : undefined);
+    return true;
+  }
+
+  /** Reads the original maximum heading depth. @returns Outline level. */
+  public GetOutlineLevel(): number {
+    return this.outlineLevel;
+  }
+
+  /** Updates the persistent outline depth used by the represented content list. @param level - Native outline level. @returns Nothing. */
+  public SetOutlineLevel(level: number): void {
+    if (level === this.outlineLevel) return;
+    this.outlineLevel = level;
+    this.config.SetOutlineLevel(level);
+  }
+
+  /** Reads the active outline tracking mode. @returns Original configuration value. */
+  public GetOutlineTracking(): OutlineTrackingMode {
+    return this.outlineTracking;
+  }
+
+  /** Sets the current outline tracking mode. @param mode - Native outline tracking mode. @returns Nothing. */
+  public SetOutlineTracking(mode: OutlineTrackingMode): void {
+    this.outlineTracking = mode;
+    this.config.SetOutlineTracking(mode);
+  }
+
+  /** Reads tracking for a represented content type. @param type - Native content type. @returns Whether tracking is active. */
+  public GetContentTypeTracking(type: TrackedContentType): boolean {
+    return this.trackContentType[type];
+  }
+
+  /** Sets tracking for a represented type. @param type - Native content type. @param track - New state. @returns Nothing. */
+  public SetContentTypeTracking(type: TrackedContentType, track: boolean): void {
+    this.trackContentType[type] = track;
+    this.config.SetContentTypeTrack(type, track);
+  }
+
+  /** Resolves the native cursor tracking priority in the current tree scope. @param root - Optional original content category root. @returns Tracked identity, undefined to clear, or null when tracking stops without changing selection. */
+  public UpdateTracking(root?: SwNavigatorContentType): string | null | undefined {
+    const outline = this.shell.GetOutlinePos();
+    const afterOutlineNavigation =
+      this.lastGotoOutline !== undefined && outline === this.lastGotoOutline;
+    if (!afterOutlineNavigation) {
+      this.lastGotoOutline = undefined;
+      const point = this.shell.GetCursor().GetPoint();
+      const node = point.GetNode().GetTextNode();
+      const offset = point.GetContentIndex();
+      if (root === undefined || root === "hyperlink") {
+        const attribute = node?.GetTextAttrAt(offset, RES_TXTATR_INETFMT);
+        if (node && attribute instanceof SwTextINetFormat)
+          return !this.GetContentTypeTracking("hyperlink")
+            ? null
+            : GetURLFieldContentName(node, attribute)
+              ? this.GetIdentity(attribute)
+              : undefined;
+      }
+      if (root === undefined || root === "comment") {
+        const comment =
+          node?.GetpSwpHints()?.GetTextAttrForCharAt(offset, RES_TXTATR_ANNOTATION)?.GetAttr() ??
+          this.postIts?.GetActiveField();
+        if (comment)
+          return this.GetContentTypeTracking("comment") ? this.GetIdentity(comment) : null;
+      }
+      const table = this.shell.IsCursorInTable()?.GetTable();
+      if (table && this.GetContentTypeTracking("table") && (root === undefined || root === "table"))
+        return this.GetIdentity(table);
+    }
+    if (
+      outline !== undefined &&
+      this.GetOutlineTracking() !== OutlineTrackingMode.Off &&
+      (root === undefined || root === "outline")
+    ) {
+      const heading = this.shell.GetDoc().GetNodes().GetOutLineNds().entries()[outline];
+      if (heading) return this.GetIdentity(heading);
+    }
+    return this.GetContentTypeTracking("bookmark") && (root === undefined || root === "bookmark")
+      ? this.FindBookmarkAtCursor().id
+      : undefined;
+  }
+
+  /** Queries the native bookmark toolbar admission at the current cursor position. @param id - Selected bookmark row. @returns Whether it is the bookmark associated with the cursor. */
+  public IsSelectedBookmarkAtCursor(id: string): boolean {
+    if (this.shell.IsCursorInTable()) return false;
+    const match = this.FindBookmarkAtCursor();
+    return match.confirmed && match.id === id;
+  }
+
+  /** Scans the native bookmark index, preserving the distinct toolbar and tracking fallbacks. @returns Candidate bookmark and whether the native scan returned before its end. */
+  private FindBookmarkAtCursor(): { id: string | undefined; confirmed: boolean } {
+    const point = this.shell.GetCursor().GetPoint();
+    let previous: string | undefined;
+    for (const mark of this.shell.GetDoc().GetIDocumentMarkAccess().GetBookmarks()) {
+      const [start, end] = mark.GetMarkStartEnd();
+      if (point.compare(start) < 0 && previous !== undefined)
+        return { id: previous, confirmed: true };
+      if (point.compare(start) >= 0 && point.compare(end) <= 0) {
+        previous = this.GetIdentity(mark);
+        if (mark.GetName() === this.selectedBookmarkName) return { id: previous, confirmed: true };
+      }
+    }
+    return { id: previous, confirmed: false };
+  }
+
+  /** Removes a selected ordinary bookmark or the entire Bookmark category in one native edit. @param id - Selected bookmark, or absent for the category. @returns Whether any bookmarks were removed. */
+  public DeleteBookmarks(id?: string): boolean {
+    const document = this.shell.GetDoc();
+    const marks = document.GetIDocumentMarkAccess().GetBookmarks();
+    const text = this.shell.GetTextShell();
+    if (id !== undefined) {
+      const mark = marks.find(
+        /** Resolves the current owned mark. @param bookmark - Attached bookmark. @returns Whether it is selected. */
+        (bookmark) => this.identities.get(bookmark) === id,
+      );
+      return (
+        mark !== undefined &&
+        this.GotoContent(id) &&
+        text.ApplyBookmarkOperation({ action: "remove", name: mark.GetName() })
+      );
+    }
+    if (marks.length === 0) return false;
+    const undo = document.GetUndoManager();
+    return this.shell.RunNotificationTransaction(
+      /** Groups the complete category removal and publishes one model update. @returns Whether content was deleted. */
+      () =>
+        document.RunModelTransaction(
+          /** Records the existing per-bookmark history actions in one native undo group. @returns Whether content was deleted. */
+          () => {
+            undo.StartUndo("Delete Bookmarks");
+            try {
+              for (const mark of marks)
+                text.ApplyBookmarkOperation({ action: "remove", name: mark.GetName() });
+              return true;
+            } finally {
+              undo.EndUndo();
+            }
+          },
+        ),
+    );
+  }
+
+  /** Executes one native Navigator action on selected chapters in document order. @param ids - Selected tree identities. @param command - Native heading toolbar action. @param withChildren - Whether selected chapters include sublevels. @returns Surviving selections for native outline root view. */
+  public ExecCommand(
+    ids: readonly string[],
+    command: SwNavigatorHeadingCommand,
+    withChildren = true,
+  ): string[] {
+    const document = this.shell.GetDoc();
+    const outlineIndex = document.GetNodes().GetOutLineNds();
+    const outlines = outlineIndex.entries();
+    const wanted = new Set(ids);
+    const moving = command === "chapterup" || command === "chapterdown";
+    const chapters: { id: string; heading: SwTextNode }[] = [];
+    let nextChapter = 0;
+    for (let index = 0; index < outlines.length; index++) {
+      const heading = outlines[index];
+      const id = heading && this.identities.get(heading);
+      if (!heading || !id || !wanted.has(id) || index < nextChapter) continue;
+      chapters.push({ id, heading });
+      if (withChildren || !moving) nextChapter = this.GetChapterEnd(outlines, index);
+    }
+    if (chapters.length === 0) return [];
+    const order = command === "chapterdown" ? [...chapters].reverse() : chapters;
+    const manager = document.GetUndoManager();
+    this.shell.RunNotificationTransaction(
+      /** Batches the grouped chapter edits and cursor changes. @returns Nothing. */
+      () =>
+        document.RunModelTransaction(
+          /** Begins a single Undo action for the selected tree rows. @returns Nothing. */
+          () => {
+            manager.StartUndo(moving ? "Move chapter" : "Outline level");
+            try {
+              for (const { heading } of order) {
+                const currentOutlines = outlineIndex.entries();
+                const index = currentOutlines.indexOf(heading);
+                if (index < 0 || !this.SetCursor(heading, 0)) continue;
+                this.ExecHeadingCommand(currentOutlines, index, heading, command, withChildren);
+              }
+            } finally {
+              manager.EndUndo();
+            }
+          },
+        ),
+    );
+    return chapters.map(
+      /** Retains selection by native content identity. @param chapter - Selected heading. @returns Tree identity. */
+      ({ id }) => id,
+    );
+  }
+
+  /** Finds the first heading outside a selected subtree. @param outlines - Current outline order. @param index - Selected heading index. @returns Exclusive subtree boundary. */
+  private GetChapterEnd(outlines: readonly SwTextNode[], index: number): number {
+    const level = outlines[index]?.GetAttrOutlineLevel() ?? 0;
     let end = index + 1;
     while (end < outlines.length && (outlines[end]?.GetAttrOutlineLevel() ?? 0) > level) end++;
+    return end;
+  }
+
+  /** Applies one selected chapter using the current outline positions. @param outlines - Current outline order. @param index - Selected heading index. @param heading - Selected heading. @param command - Native toolbar action. @param withChildren - Whether to include sublevels. @returns Nothing. */
+  private ExecHeadingCommand(
+    outlines: readonly SwTextNode[],
+    index: number,
+    heading: SwTextNode,
+    command: SwNavigatorHeadingCommand,
+    withChildren: boolean,
+  ): void {
+    const end = this.GetChapterEnd(outlines, index);
     const selectionEnd = withChildren ? end : index + 1;
     if (command === "chapterup" || command === "chapterdown") {
       const offset = this.GetChapterOffset(outlines, index, end, command === "chapterup");
@@ -91,40 +588,27 @@ export class SwContentTree {
           selectionEnd,
           offset + (offset > 0 ? end - selectionEnd : 0),
         );
-    } else {
-      const chapters = outlines.slice(index, selectionEnd);
-      if (
-        command === "promote"
-          ? level > 1
-          : chapters.every(
-              /** Rejects a demotion that would exceed the native outline level limit. @param node - Selected heading. @returns Whether it can move down one level. */
-              (node) => node.GetAttrOutlineLevel() <= WRITER_MAX_LIST_LEVEL,
-            )
-      ) {
-        const manager = document.GetUndoManager();
-        const cursor = this.shell.CaptureCursorState();
-        this.shell.RunNotificationTransaction(
-          /** Keeps the selected heading as the final visible cursor. @returns Nothing. */
-          () =>
-            document.RunModelTransaction(
-              /** Records the selected outline changes in one history group. @returns Nothing. */
-              () => {
-                manager.StartUndo("Outline level");
-                try {
-                  for (const node of chapters) {
-                    this.SetCursor(node, 0);
-                    this.shell.OutlineUpDown(command === "promote" ? -1 : 1, cursor);
-                  }
-                } finally {
-                  manager.EndUndo();
-                  this.SetCursor(heading, 0);
-                }
-              },
-            ),
-        );
-      }
+      return;
     }
-    return true;
+    const chapters = outlines.slice(index, selectionEnd);
+    if (
+      command === "promote"
+        ? heading.GetAttrOutlineLevel() === 1
+        : chapters.some(
+            /** Detects demotion past the native maximum outline level. @param node - Heading in range. @returns Whether demotion is prohibited. */
+            (node) => node.GetAttrOutlineLevel() > WRITER_MAX_LIST_LEVEL,
+          )
+    )
+      return;
+    const cursor = this.shell.CaptureCursorState();
+    try {
+      for (const node of chapters) {
+        this.SetCursor(node, 0);
+        this.shell.OutlineUpDown(command === "promote" ? -1 : 1, cursor);
+      }
+    } finally {
+      this.SetCursor(heading, 0);
+    }
   }
 
   /** Resolves the native chapter displacement through peer, child and parent headings. @param outlines - Current ordered outline index. @param index - Selected heading index. @param end - First heading beyond the selected subtree. @param up - Whether moving backward. @returns Signed outline displacement, or absent at the boundary. */
@@ -243,6 +727,34 @@ export class SwContentTree {
           offset: point.GetContentIndex(),
         });
     }
+    for (const { text, attribute } of GetURLFieldContents(document)) {
+      const node = attribute.GetpTextNode();
+      if (!node) continue;
+      entries.push({
+        type: "hyperlink",
+        id: this.GetIdentity(attribute),
+        title: text,
+        node,
+        offset: attribute.GetStart(),
+        hyperlink: attribute,
+      });
+    }
+    for (const comment of SwPostItFieldType.Get(document).GatherFields()) {
+      const hint = comment.GetTextField();
+      const node = hint?.GetTextNode();
+      if (!hint || !node) continue;
+      entries.push({
+        type: "comment",
+        id: this.GetIdentity(comment),
+        title: comment
+          .GetField()
+          .GetPar2()
+          .replace(/[\n\r]/gu, " "),
+        node,
+        offset: hint.GetStart(),
+        comment,
+      });
+    }
     return entries;
   }
 
@@ -269,12 +781,12 @@ export class SwContentTree {
     return next;
   }
 
-  /** Transfers an owned position into the persistent Writer cursor. @param node - Native text node. @param offset - UTF-16 content position. @returns Whether the position belongs to the active document. */
-  private SetCursor(node: SwTextNode, offset: number): boolean {
+  /** Transfers an owned position into the persistent Writer cursor. @param node - Native text node. @param offset - UTF-16 content position. @param updateTracking - Whether the Navigator bookmark identity changed. @returns Whether the position belongs to the active document. */
+  private SetCursor(node: SwTextNode, offset: number, updateTracking = false): boolean {
     if (node.GetDoc() !== this.shell.GetDoc()) return false;
     const position = new SwPosition(node, offset);
     try {
-      this.shell.SetCursor(position);
+      if (!this.shell.SetCursor(position) && updateTracking) this.shell.NotifySelectionChanged();
       return true;
     } finally {
       position.Dispose();

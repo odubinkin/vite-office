@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/uibase/uiview/viewmdi.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "navigator",
+    "capabilityIds": [
+      "CAP-0104"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/uibase/uiview/viewmdi.ts#GetNavigationPage",
+        "apps/office/src/sw/source/uibase/uiview/view-navigation.test.ts#wraps physical scrolling",
+        "vendor/libreoffice-reference/sw/source/uibase/uiview/viewmdi.cxx#SwView::MoveNavigation"
+      ],
+      "justification": "Resolves the next physical page beyond the visible range and wraps at the document edges.",
+      "knownViolations": [],
+      "localSymbols": [
+        "GetNavigationPage"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/uibase/uiview/viewmdi.cxx",
+      "upstreamSymbols": [
+        "SwView::MoveNavigation"
+      ]
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "localPath": "apps/office/src/sw/browser/presentation/WriterNavigatorNavigation.tsx",
+    "classification": "browser-adaptation",
+    "localSymbols": [
+      "WriterNavigatorNavigation"
+    ],
+    "status": "local-only",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterNavigatorNavigation.tsx",
+          "marker": "WriterNavigatorNavigation"
+        },
+        {
+          "path": "apps/office/e2e/writer-navigator.spec.ts",
+          "marker": "moves to the next heading through Navigate By"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/uiconfig/swriter/ui/navigatorpanel.ui",
+          "marker": "Navigate By"
+        }
+      ]
+    },
+    "rationale": "Projects the native Navigator chooser and direction controls, binding the Writer view to the browser viewport.",
+    "responsibilities": [
+      "Projects the native Navigator chooser and direction controls, binding the Writer view to the browser viewport."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser select and scroll geometry replace the native widget and physical viewport."
+    }
+  }
+}

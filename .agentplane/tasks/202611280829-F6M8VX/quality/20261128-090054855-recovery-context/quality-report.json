@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "task_id": "202611280829-F6M8VX",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-28T09:00:54.855Z",
+  "verdict": "pass",
+  "summary": "Navigator table actions use the Writer table slots and retained native undo section.",
+  "evaluated_sha": "4efd1c127c603ecbccbcd4ec5db49a7fb7359bac",
+  "blueprint_digest": "72b47fce43da506d2240db4491c10463d89f2ac19e6e99fbff88de5a91c696ca",
+  "findings": [
+    "Protected traversal, grouped deletion, original cell and bookmark restoration, and the complete browser flow passed."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611280829-F6M8VX/README.md",
+    "output/playwright/writer-navigator-table-verified-vitest.log",
+    "output/playwright/writer-navigator-table-chromium.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

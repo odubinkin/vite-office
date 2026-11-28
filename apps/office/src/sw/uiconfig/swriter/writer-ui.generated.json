@@ -16,6 +16,7 @@
     "defaultParagraphStyle": ".uno:StyleApply?Style:string=Standard&FamilyName:string=ParagraphStyles",
     "decreaseIndent": ".uno:DecrementIndent",
     "demote": ".uno:DecrementLevel",
+    "editBookmark": ".uno:EditBookmark",
     "editHyperlink": ".uno:EditHyperlink",
     "exportText": ".uno:ExportTo",
     "fontName": ".uno:CharFontName",
@@ -81,6 +82,7 @@
     "formatPaintbrush": ".uno:FormatPaintbrush",
     "clearDirectFormatting": ".uno:ResetAttributes",
     "tableDialog": ".uno:TableDialog",
+    "deleteTable": ".uno:DeleteTable",
     "tableRowHeight": ".uno:TableRowHeight",
     "tableColumnWidth": ".uno:TableColumWidth",
     "tableAlignment": ".uno:TableAlignment",
@@ -99,6 +101,9 @@
     "toggleHorizontalRuler": ".uno:Ruler",
     "toggleBaselineGrid": ".uno:BaselineGridVisible",
     "toggleNavigator": ".uno:Navigator",
+    "navElement": ".uno:NavElement",
+    "scrollToPrevious": ".uno:ScrollToPrevious",
+    "scrollToNext": ".uno:ScrollToNext",
     "toggleVerticalRuler": ".uno:VRuler",
     "toggleSidebar": ".uno:Sidebar",
     "showAnnotations": ".uno:ShowAnnotations",
@@ -461,6 +466,18 @@
       "showsDialog": false,
       "shortcuts": [],
       "slotId": 10461
+    },
+    ".uno:EditBookmark": {
+      "browserOwned": false,
+      "argumentSchema": ["Bookmark:SfxStringItem"],
+      "capabilityId": "CAP-0113",
+      "controlLabel": "Edit Bookmark",
+      "label": "Edit Bookmark",
+      "placements": ["sw/sdi/swriter.sdi"],
+      "semantics": "action",
+      "showsDialog": true,
+      "shortcuts": [],
+      "slotId": 21433
     },
     ".uno:EditHyperlink": {
       "browserOwned": false,
@@ -1251,6 +1268,42 @@
       "shortcuts": ["F5"],
       "slotId": 10366
     },
+    ".uno:NavElement": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0104",
+      "controlLabel": "Navigate By",
+      "label": "Navigate By",
+      "placements": ["sw/sdi/swriter.sdi"],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 20255
+    },
+    ".uno:ScrollToPrevious": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0104",
+      "controlLabel": "Previous",
+      "label": "Previous",
+      "placements": ["sw/sdi/swriter.sdi"],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 20257
+    },
+    ".uno:ScrollToNext": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0104",
+      "controlLabel": "Next",
+      "label": "Next",
+      "placements": ["sw/sdi/swriter.sdi"],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 20258
+    },
     ".uno:VRuler": {
       "browserOwned": false,
       "argumentSchema": [],
@@ -1568,6 +1621,23 @@
       "showsDialog": true,
       "shortcuts": [],
       "slotId": 20460
+    },
+    ".uno:DeleteTable": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0137",
+      "controlLabel": "Delete Table",
+      "label": "Delete Table",
+      "iconName": "lc_deletetable.svg",
+      "placements": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml",
+        "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
+      ],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 20529
     },
     ".uno:SetRowHeight": {
       "browserOwned": false,
@@ -1954,6 +2024,11 @@
     },
     {
       "classification": "supported-upstream",
+      "commandUrl": ".uno:EditBookmark",
+      "sources": ["sw/sdi/swriter.sdi"]
+    },
+    {
+      "classification": "supported-upstream",
       "commandUrl": ".uno:EditHyperlink",
       "sources": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
@@ -2318,6 +2393,21 @@
     },
     {
       "classification": "supported-upstream",
+      "commandUrl": ".uno:NavElement",
+      "sources": ["sw/sdi/swriter.sdi"]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:ScrollToPrevious",
+      "sources": ["sw/sdi/swriter.sdi"]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:ScrollToNext",
+      "sources": ["sw/sdi/swriter.sdi"]
+    },
+    {
+      "classification": "supported-upstream",
       "commandUrl": ".uno:VRuler",
       "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
     },
@@ -2454,6 +2544,15 @@
     {
       "classification": "supported-upstream",
       "commandUrl": ".uno:TableDialog",
+      "sources": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml",
+        "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
+      ]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:DeleteTable",
       "sources": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
         "sw/uiconfig/swriter/popupmenu/table.xml",
@@ -5260,22 +5359,6 @@
     },
     {
       "classification": "X",
-      "context": [".uno:TableMenu", ".uno:TableDeleteMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:DeleteTable",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:TableMenu"],
-      "entryKind": "menu",
-      "sourceUrl": ".uno:TableDeleteMenu",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
       "context": [".uno:TableMenu", ".uno:TableAutoFitMenu"],
       "entryKind": "command",
       "sourceUrl": ".uno:SetMinimalColumnWidth",
@@ -7308,22 +7391,6 @@
     },
     {
       "classification": "X",
-      "context": [".uno:TableDeleteMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:DeleteTable",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
-    },
-    {
-      "classification": "X",
-      "context": [],
-      "entryKind": "menu",
-      "sourceUrl": ".uno:TableDeleteMenu",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
-    },
-    {
-      "classification": "X",
       "context": [".uno:TableAutoFitMenu"],
       "entryKind": "command",
       "sourceUrl": ".uno:SetMinimalColumnWidth",
@@ -7750,14 +7817,6 @@
       "classification": "X",
       "context": [],
       "entryKind": "command",
-      "sourceUrl": ".uno:DeleteTable",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [],
-      "entryKind": "command",
       "sourceUrl": ".uno:MergeCells",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
@@ -8120,6 +8179,12 @@
             "label": "Insert"
           },
           {
+            "id": ".uno:TableDeleteMenu",
+            "items": [{ "commandUrl": ".uno:DeleteTable", "kind": "command", "visible": true }],
+            "kind": "menu",
+            "label": "Delete"
+          },
+          {
             "id": ".uno:TableSelectMenu",
             "items": [
               { "commandUrl": ".uno:EntireCell", "kind": "command", "visible": true },
@@ -8228,6 +8293,12 @@
         ],
         "kind": "menu",
         "label": "Insert"
+      },
+      {
+        "id": ".uno:TableDeleteMenu",
+        "items": [{ "commandUrl": ".uno:DeleteTable", "kind": "command", "visible": true }],
+        "kind": "menu",
+        "label": "Delete"
       },
       {
         "id": ".uno:TableAutoFitMenu",
@@ -8366,6 +8437,8 @@
       { "commandUrl": ".uno:InsertRowsAfter", "kind": "command", "visible": true },
       { "commandUrl": ".uno:InsertColumnsBefore", "kind": "command", "visible": true },
       { "commandUrl": ".uno:InsertColumnsAfter", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:DeleteTable", "kind": "command", "visible": true },
       { "kind": "separator" },
       { "commandUrl": ".uno:EntireCell", "kind": "command", "visible": true },
       { "commandUrl": ".uno:EntireRow", "kind": "command", "visible": false },
@@ -10381,18 +10454,6 @@
       },
       {
         "classification": "X",
-        "context": [".uno:TableMenu", ".uno:TableDeleteMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:DeleteTable"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:TableMenu"],
-        "entryKind": "menu",
-        "sourceUrl": ".uno:TableDeleteMenu"
-      },
-      {
-        "classification": "X",
         "context": [".uno:TableMenu", ".uno:TableAutoFitMenu"],
         "entryKind": "command",
         "sourceUrl": ".uno:SetMinimalColumnWidth"
@@ -11867,18 +11928,6 @@
       },
       {
         "classification": "X",
-        "context": [".uno:TableDeleteMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:DeleteTable"
-      },
-      {
-        "classification": "X",
-        "context": [],
-        "entryKind": "menu",
-        "sourceUrl": ".uno:TableDeleteMenu"
-      },
-      {
-        "classification": "X",
         "context": [".uno:TableAutoFitMenu"],
         "entryKind": "command",
         "sourceUrl": ".uno:SetMinimalColumnWidth"
@@ -12196,12 +12245,6 @@
         "context": [],
         "entryKind": "command",
         "sourceUrl": ".uno:DeleteColumns"
-      },
-      {
-        "classification": "X",
-        "context": [],
-        "entryKind": "command",
-        "sourceUrl": ".uno:DeleteTable"
       },
       {
         "classification": "X",

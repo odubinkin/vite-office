@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202611270734-J6QYEY",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-27T07:46:23.797Z",
+  "verdict": "pass",
+  "summary": "Navigator Hyperlinks and Comments use the original text attributes and annotation fields.",
+  "evaluated_sha": "635de4df8312dc96e9d91a5d207dcbd1a2a412e1",
+  "blueprint_digest": "bdb3c9eda218954067067470337387ef61a62bf9bff75dc3fdf517f92139e7bc",
+  "findings": [
+    "Pinned anchor ordering, duplicate link identity, collapsed comments refresh, context edit/delete, tracking flags and browser focus were checked against the represented shell."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611270734-J6QYEY/README.md",
+    "output/playwright/writer-navigator-fields-verified-vitest.log",
+    "output/playwright/writer-navigator-fields-native-cases.log",
+    "output/playwright/writer-navigator-fields-chromium.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

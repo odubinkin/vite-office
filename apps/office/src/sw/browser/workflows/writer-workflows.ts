@@ -16,6 +16,7 @@ import type { WriterClipboardSelection } from "../../source/uibase/dochdl/swdtfl
 import { SwDocShell } from "../../source/uibase/app/docsh";
 import type { WriterCommentDeleteConfiguration } from "../../source/uibase/dialog/writer-dialog-controller";
 import type { SwWrtShell } from "../../source/uibase/wrtsh/wrtsh1";
+import type { NavigatorConfiguration } from "../../source/uibase/utlui/navicfg";
 import { createWriterInterface } from "../../sdi/swriter";
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
 
@@ -23,6 +24,7 @@ import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-comma
 export interface WriterSessionServices {
   readonly layoutPreferences?: WriterLayoutPreferenceStore;
   readonly searchOptions?: SearchOptionsConfiguration;
+  readonly navigatorConfiguration?: NavigatorConfiguration;
   readonly commentDeleteConfiguration?: WriterCommentDeleteConfiguration;
   readonly copyRichText: (selection: WriterClipboardSelection) => Promise<void>;
   readonly documentOpen: DocumentOpenPort;

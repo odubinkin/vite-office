@@ -35,6 +35,7 @@ import { WriterWorkbench } from "../presentation/writer-view";
 import { WriterViewStore } from "../presentation/writer-view-projection";
 import { WriterSearchOptionsStore } from "../storage/writer-search-options-store";
 import { WriterLayoutPreferenceStore } from "../storage/writer-layout-preferences-store";
+import { WriterNavigatorConfigurationStore } from "../storage/writer-navigator-configuration-store";
 import { IndexedDbWriterOdtStore } from "../storage/writer-odt-store";
 import { WriterAutosaveController } from "../workflows/writer-autosave";
 import { WriterFileDialogController } from "../workflows/writer-file-dialog-controller";
@@ -103,6 +104,7 @@ export function createWriterBrowserSessionServices(): WriterSessionServices {
       : {
           layoutPreferences: new WriterLayoutPreferenceStore(globalThis.localStorage),
           searchOptions: new WriterSearchOptionsStore(globalThis.localStorage),
+          navigatorConfiguration: new WriterNavigatorConfigurationStore(globalThis.localStorage),
           commentDeleteConfiguration: {
             /** Reads the original shared query setting. @returns Whether to confirm deletion. */
             GetQueryDeleteAllComments() {
@@ -194,6 +196,7 @@ export function createWriterDocumentSession(
     services.searchOptions,
     createBrowserRegexMatcher,
     services.commentDeleteConfiguration,
+    services.navigatorConfiguration,
   );
   const fileDialogs = new WriterFileDialogController();
   const sessionServices = { ...services, fileDialogs };

@@ -28,6 +28,8 @@ import { SwPostItMgr } from "../docvw/PostItMgr";
 import { SwEditWin } from "../docvw/edtwin";
 import { SwAnnotationShell } from "../shells/annotsh";
 import { SwTableShell } from "../shells/tabsh";
+import { SwNavigationElement } from "../ribbar/workctrl";
+import { GetNavigationPage, type SwNavigationViewport } from "./viewmdi";
 import { SwViewCommandShell } from "../shells/view";
 import { SwWrtShell } from "../wrtsh/wrtsh1";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
@@ -48,10 +50,13 @@ import { RES_PAGEDESC } from "../../../inc/hintids";
 import type { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
 import { getPageRegisterStyles, PageDescToItemSet } from "../utlui/uitool";
 import { SwContentTree } from "../utlui/content";
+import type { NavigatorConfiguration } from "../utlui/navicfg";
 import { SvxRuler } from "../../../../svx/source/dialog/svxruler";
 
 /** Persistent Writer view joining SwDocShell, SwWrtShell, and frame dispatch. */
 export class SwView {
+  private static moveType = SwNavigationElement.Page;
+  private navigationViewport: SwNavigationViewport | undefined;
   private readonly releaseMetricView: () => void;
   private readonly dialogController = new WriterDialogController();
   private frame: SfxViewFrame<SwView> | undefined;
@@ -71,13 +76,14 @@ export class SwView {
   private readonly layout: SwRootFrame;
   private readonly wrtShellSubscription: () => void;
 
-  /** Creates one persistent view over a persistent document shell. @param docShell - Owning Writer document shell. @param module - Actual module metric preferences and open-view enumeration. @param searchOptions - User search configuration. @param createRegex - Browser regular-expression compiler. @param commentDeleteConfiguration - Shared comment deletion query preference. @returns Nothing. */
+  /** Creates one persistent view over a persistent document shell. @param docShell - Owning Writer document shell. @param module - Actual module metric preferences and open-view enumeration. @param searchOptions - User search configuration. @param createRegex - Browser regular-expression compiler. @param commentDeleteConfiguration - Shared comment deletion query preference. @param navigatorConfiguration - Writer Navigator preference provider. @returns Nothing. */
   public constructor(
     private readonly docShell: SwDocShell,
     private readonly module: SwModule = SwModule.get(),
     searchOptions?: SearchOptionsConfiguration,
     createRegex?: RegexMatcherFactory,
     commentDeleteConfiguration?: WriterCommentDeleteConfiguration,
+    navigatorConfiguration?: NavigatorConfiguration,
   ) {
     const pref = module.GetUsrPref(false);
     this.horizontalRuler.SetUnit(pref.GetHScrollMetric());
@@ -98,7 +104,6 @@ export class SwView {
       this.viewOptions,
       this,
     );
-    this.navigator = new SwContentTree(this.wrtShell, this.layout);
     this.postItMgr = new SwPostItMgr(
       this.viewOptions,
       this.wrtShell,
@@ -107,6 +112,14 @@ export class SwView {
         this.Invalidate("selection"),
       this.dialogController,
       commentDeleteConfiguration,
+    );
+    this.navigator = new SwContentTree(
+      this.wrtShell,
+      this.layout,
+      module.GetNavigationConfig(navigatorConfiguration),
+      this.postItMgr,
+      /** Republishes the Navigator projection after a display change. @returns Nothing. */
+      () => this.Invalidate("view"),
     );
     this.annotationShell = new SwAnnotationShell(this.postItMgr, this.wrtShell);
     this.search = new SwViewSearch(this.wrtShell, searchOptions, createRegex, this.postItMgr);
@@ -202,6 +215,48 @@ export class SwView {
   /** Returns the persistent Writer editing shell. @returns SwWrtShell. */
   public GetWrtShell(): SwWrtShell {
     return this.wrtShell;
+  }
+
+  /** Returns the native session-wide navigator move type. @returns Current navigation element. */
+  public GetMoveType(): SwNavigationElement {
+    return SwView.moveType;
+  }
+
+  /** Changes the native navigator move type. @param type - Selected navigation element. @returns Nothing. */
+  public SetMoveType(type: SwNavigationElement): void {
+    this.search.ClearFeedback();
+    if (SwView.moveType === type) return;
+    SwView.moveType = type;
+    this.Invalidate("view");
+  }
+
+  /** Binds the browser implementation of native viewport navigation. @param viewport - The mounted editing view or undefined when unmounted. @returns Nothing. */
+  public SetNavigationViewport(viewport?: SwNavigationViewport): void {
+    this.navigationViewport = viewport;
+  }
+
+  /** Dispatches the original view movement by its active element. @param forward - True for next. @returns Whether the requested destination was reached. */
+  public MoveNavigation(forward: boolean): boolean {
+    switch (this.GetMoveType()) {
+      case SwNavigationElement.Page: {
+        const viewport = this.navigationViewport;
+        const span = viewport?.GetVisiblePageNumbers();
+        if (!viewport || !span) return false;
+        const page = GetNavigationPage(span, this.navigator.GetPageState().count, forward);
+        viewport.GoToPage(page);
+        return true;
+      }
+      case SwNavigationElement.Table:
+        return this.navigator.MoveContent("table", forward);
+      case SwNavigationElement.Heading:
+        return this.navigator.MoveContent("outline", forward);
+      case SwNavigationElement.Bookmark:
+        return this.navigator.MoveContent("bookmark", forward);
+      case SwNavigationElement.Comment:
+        return this.navigator.MoveContent("comment", forward);
+      case SwNavigationElement.RepeatSearch:
+        return this.search.RepeatSearch(!forward);
+    }
   }
 
   /** Executes the represented native repeat-search command. @returns Whether a match was found. */

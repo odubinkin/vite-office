@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/browser/presentation/WriterNavigatorRename.tsx",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "navigator",
+    "capabilityIds": [
+      "CAP-0104"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/browser/presentation/WriterNavigatorRename.tsx#WriterNavigatorRename",
+        "apps/office/e2e/writer-navigator.spec.ts#selects, edits, renames and deletes a table",
+        "vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx#IMPL_LINK(SwContentTree, EditedEntryHdl"
+      ],
+      "justification": "Projects the native inline Navigator table name editor using a browser input.",
+      "knownViolations": [],
+      "localSymbols": [
+        "WriterNavigatorRename"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

@@ -8,7 +8,16 @@
     "rationale": "Projects the original Navigator child window, page controls, content root and outline depth controls.",
     "responsibilities": [
       "Projects the original Navigator child window, page controls, content root and outline depth controls.",
-      "Presents the native contextual heading toolbar and sends the selected heading, command ID and primary modifier to Writer."
+      "Presents the native contextual heading toolbar and sends the selected heading, command ID and primary modifier to Writer.",
+      "Projects the original heading-root multiple selection, retains visible heading identities after edits, and expands ancestors of the surviving selected entries.",
+      "Shows the original bookmark edit and delete controls for the active tree entry or category.",
+      "Applies cursor tracking outside the focused Navigator tree while retaining the represented root and outline depth.",
+      "Projects the row-specific Navigator tracking popup with native check and radio states, and focuses the tracked outline branch when the Focus mode is enabled.",
+      "Shares outline depth between the toolbar and native context submenu, and routes contextual navigation, heading edits, bookmark deletion and expansion to the connected owners.",
+      "Exposes Hyperlinks and Comments in the retained content tree and routes their contextual actions to Writer slots and annotation management.",
+      "Restores the native root and projects display-sorted outlines as sibling rows while preserving their original identities.",
+      "Selects the native category corresponding to the Navigate By chooser.",
+      "Connects native table selection, properties, inline rename and deletion in the Navigator tree."
     ],
     "evidence": {
       "local": [
@@ -19,6 +28,80 @@
         {
           "path": "apps/office/src/sw/browser/presentation/WriterNavigator.tsx",
           "marker": "headingTools"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterNavigator.tsx",
+          "marker": "trackDocumentCursor"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterNavigator.tsx",
+          "marker": "menuItems"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterNavigator.tsx",
+          "marker": "changeOutlineLevel"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterNavigator.test.tsx",
+          "marker": "runs the native Navigator context actions for outline branches and bookmark rows"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterNavigator.tsx",
+          "marker": "editContent"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterNavigatorFields.test.tsx",
+          "marker": "updates the collapsed comments category for the pinned tdf137274 sequence"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterNavigator.tsx",
+          "marker": "toggleRoot"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterNavigator.test.tsx",
+          "marker": "sorts only the chosen category, flattening headings without changing their document order"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterNavigator.tsx",
+          "marker": "WriterNavigatorNavigation"
+        },
+        {
+          "path": "apps/office/e2e/writer-navigator.spec.ts",
+          "marker": "selects, edits, renames and deletes a table"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/uiconfig/swriter/ui/navigatorcontextmenu.ui",
+          "marker": "navigatorcontextmenu|STR_OUTLINE_TRACKING"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx",
+          "marker": "m_nOutlineTracking == 2"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx",
+          "marker": "SwContentTree::ExecuteContextMenuAction"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx",
+          "marker": "SwContentTree::EditEntry"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx",
+          "marker": "SwContentTree::SetRootType"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx",
+          "marker": "if (pCntType->IsAlphabeticSort())"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/utlui/navipi.cxx",
+          "marker": "SwNavigationPI::UpdateNavigateBy"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx",
+          "marker": "SwContentTree::DeleteAllContentOfEntryContentType"
         }
       ]
     },

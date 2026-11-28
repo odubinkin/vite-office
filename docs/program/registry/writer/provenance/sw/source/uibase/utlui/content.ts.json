@@ -16,7 +16,16 @@
     ],
     "preservedResponsibilities": [
       "Reads the native outline, table and bookmark owners and navigates through the live Writer cursor.",
-      "Uses the selected outline entry, native chapter offsets, level bounds and optional descendants for the four heading actions."
+      "Uses the selected outline entry, native chapter offsets, level bounds and optional descendants for the four heading actions.",
+      "Applies selected heading commands as a single undo group in native document order, reversing chapter moves down and filtering included descendants.",
+      "Connects ordinary bookmark selection, cursor-dependent edit admission and group deletion through the native Writer mark and undo owners.",
+      "Tracks the live table, outline and bookmark indexes in the native order for the current content root.",
+      "Uses source outline tracking mode and content-type flags when choosing the next tracked entry.",
+      "Applies the native configured outline depth at the Navigator content list.",
+      "Lists the attached hyperlink and annotation owners in native order, and routes their address-based navigation and cursor tracking.",
+      "Retains the native category root and updates only the selected category display order through the original sort state.",
+      "Routes directional navigation to original headings, table starts, bookmark ranges and visible annotation fields.",
+      "Uses the live table node and cursor eligibility for Navigator traversal and table actions."
     ],
     "omittedResponsibilities": [
       "The represented tree serves the active document and the three connected native content families."
@@ -30,6 +39,50 @@
         {
           "path": "apps/office/src/sw/source/uibase/utlui/content.ts",
           "marker": "ExecCommand"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/utlui/content.ts",
+          "marker": "UpdateTracking"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/utlui/content.ts",
+          "marker": "SetContentTypeTracking"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/utlui/content.ts",
+          "marker": "SetOutlineLevel"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/utlui/content.ts",
+          "marker": "FindCommentTarget"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterNavigatorFields.test.tsx",
+          "marker": "updates the collapsed comments category for the pinned tdf137274 sequence"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterNavigatorFields.test.tsx",
+          "marker": "orders the pinned tdf134960 hyperlinks by document and frame-anchor position"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/utlui/content.ts",
+          "marker": "SetAlphabeticSort"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterNavigator.test.tsx",
+          "marker": "sorts only the chosen category, flattening headings without changing their document order"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/utlui/content.ts",
+          "marker": "MoveContent"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/utlui/content.ts",
+          "marker": "CanDeleteTable"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/uiview/view-navigation.test.ts",
+          "marker": "deletes and restores the native table section with its cell bookmarks"
         }
       ],
       "upstream": [
@@ -44,6 +97,50 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx",
           "marker": "SwContentTree::ExecCommand"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx",
+          "marker": "SwContentTree::UpdateTracking"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx",
+          "marker": "SwContentTree::SetContentTypeTracking"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx",
+          "marker": "SwContentTree::SetOutlineTracking"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx",
+          "marker": "SwContentTree::SetOutlineLevel"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx",
+          "marker": "SwContentTree::UpdateTracking"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx",
+          "marker": "SwContentTree::GotoContent"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx",
+          "marker": "SwContentTree::ToggleToRoot"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx",
+          "marker": "SetSortAlphabeticallyBlock(nBlock ^ nMask)"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/inc/swcont.hxx",
+          "marker": "vcl::NaturalSortCompare"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/uiview/viewmdi.cxx",
+          "marker": "SwView::MoveNavigation"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx",
+          "marker": "SwContentTree::DeleteAllContentOfEntryContentType"
         }
       ]
     }

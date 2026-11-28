@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "localPath": "apps/office/src/sw/source/core/undo/undel-table.ts",
+    "classification": "upstream-mechanism",
+    "localSymbols": [
+      "SwUndoDeleteTable"
+    ],
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/undo/undel-table.ts",
+          "marker": "SwUndoDeleteTable"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/uiview/view-navigation.test.ts",
+          "marker": "deletes and restores the native table section with its cell bookmarks"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/undo/undel.cxx",
+          "marker": "SwUndoDelete::SwUndoDelete"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/frmedt/fetab.cxx",
+          "marker": "SwFEShell::DeleteTable"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/core/undo/undel.cxx",
+    "upstreamSymbols": [
+      "SwUndoDelete::SwUndoDelete"
+    ],
+    "preservedResponsibilities": [
+      "Retains and restores the original table section, attached content history and cursor during complete table deletion."
+    ],
+    "omittedResponsibilities": [
+      "Cross-paragraph and arbitrary structural range deletion retain their existing undo owners."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/core/undo/undel-table.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Complete table deletion specializes retained structural history independently of text delete and join undo."
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/uibase/utlui/content-hyperlink.ts",
+    "upstreamPath": "sw/source/uibase/utlui/content.cxx",
+    "localSymbols": [
+      "GetURLFieldContents",
+      "SwURLFieldContent"
+    ],
+    "upstreamSymbols": [
+      "SwContentType::FillMemberList"
+    ],
+    "preservedResponsibilities": [
+      "Reads original SwTextINetFormat hints, cleans their range labels and sorts them by document position with the native anchored-frame projection."
+    ],
+    "omittedResponsibilities": [
+      "Alphabetic sorting, selection from the layout and table-of-contents section ownership are outside the represented hyperlink enumeration profile."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/uibase/utlui/content-hyperlink.ts",
+          "marker": "GetURLFieldContents"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterNavigatorFields.test.tsx",
+          "marker": "orders the pinned tdf134960 hyperlinks by document and frame-anchor position"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx",
+          "marker": "SwContentType::FillMemberList"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/qa/uitest/navigator/tdf134960.py",
+          "marker": "expectedHyperlinksOrder"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/uibase/utlui/content-hyperlink.ts",
+      "rationale": "Keeps enumeration and layout-anchor ordering associated with the Navigator content owner in a focused TypeScript module.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

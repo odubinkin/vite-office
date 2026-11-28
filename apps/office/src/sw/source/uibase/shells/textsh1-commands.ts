@@ -10,6 +10,11 @@ import { SfxUInt16Item } from "../../../../svl/source/items/intitem";
 import { SfxStringItem } from "../../../../svl/source/items/stritem";
 import { FN_NUMBER_NEWSTART, FN_NUMBER_NEWSTART_AT, FN_PARAM_1 } from "../../../inc/cmdid";
 import { SwPaM } from "../../core/crsr/pam";
+import {
+  SwUndoDeleteBookmark,
+  SwUndoInsBookmark,
+  SwUndoRenameBookmark,
+} from "../../core/undo/unbkmk";
 import { ConvertAttrCharToGen, ConvertAttrGenToChar } from "../utlui/uitool";
 import {
   SvxBoxInfoItem,
@@ -49,6 +54,35 @@ import {
   SID_ATTR_PARA_LINESPACE,
   SID_ATTR_PARA_LRSPACE,
 } from "../../../../editeng/inc/editids";
+
+/** Applies a bookmark operation using the native mark and history owners. @param target - Active Writer text shell primitives. @param result - Selected bookmark operation. @returns Whether the operation changed Writer. */
+export function applyBookmarkOperation(
+  target: SwTextShellTarget,
+  result: WriterBookmarkDialogResult,
+): boolean {
+  const document = target.GetDoc();
+  const marks = document.GetIDocumentMarkAccess();
+  if (result.action === "create")
+    return document.RunModelTransaction(
+      /** Records the actual generated name and range on the inserted mark. @returns True after insertion. */
+      () => {
+        const mark = marks.MakeBookmark(target.GetCursor(), result.name);
+        document.GetUndoManager().AddUndoAction(new SwUndoInsBookmark(mark));
+        document.NotifyModelChange({ kind: "document-modified", modified: true });
+        return true;
+      },
+    );
+  const mark = marks.FindMark(result.name);
+  if (!mark) return false;
+  if (result.action === "remove") return target.ApplyAction(new SwUndoDeleteBookmark(mark));
+  if (result.action === "rename")
+    return (
+      result.name !== result.newName &&
+      target.ApplyAction(new SwUndoRenameBookmark(result.name, result.newName))
+    );
+  const [start, end] = mark.GetMarkStartEnd();
+  return target.SetPaM(start, mark.IsExpanded() ? end : undefined);
+}
 
 /** Creates the active SwWrtShell command registry. @param target - Persistent Writer editing shell. @param dialogController - Writer-owned dialog lifecycle. @param annotation - Original annotation slots. @param editShell - Native selection measurement. @returns Validated immutable descriptors. */
 export function createWriterTextCommandRegistry(
@@ -387,27 +421,34 @@ export function createWriterTextCommandRegistry(
       /** Uses native current SET or beginning-of-link Default lookup. @returns Whether enabled. */
       isEnabled: (): boolean => target.CanEditHyperlink(),
     },
-    {
-      capabilityId: "CAP-0113",
-      /** Opens the upstream-shaped bookmark dialog or applies a typed operation. @param _context - Bound shell. @param arguments_ - Optional test/dispatch fields. @returns Operation result. */
-      execute: (_context, arguments_: unknown): boolean | Promise<boolean> => {
-        const args = getWriterCommandArguments<{ bookmark?: WriterBookmarkDialogResult }>(
-          arguments_,
-        );
-        if (args?.bookmark !== undefined) return target.ApplyBookmarkOperation(args.bookmark);
-        return dialogController
-          .RequestBookmarkDialog(
-            WRITER_COMMAND_IDS.insertBookmark,
-            target.GetBookmarkNames(),
-            target.GetBookmarkAtCursor(),
-          )
-          .then(
-            /** Applies an accepted bookmark action. @param result - Dialog result. @returns Whether changed. */
-            (result) => (result === undefined ? false : target.ApplyBookmarkOperation(result)),
-          );
-      },
-      id: WRITER_COMMAND_IDS.insertBookmark,
-    },
+    ...[WRITER_COMMAND_IDS.insertBookmark, WRITER_COMMAND_IDS.editBookmark].map(
+      /** Maps the two original bookmark slots onto the shared dialog. @param id - Native command URL. @returns Text-shell command handler. */
+      (id): WriterSlotHandler<SwTextShell> => ({
+        capabilityId: "CAP-0113",
+        /** Opens the native bookmark dialog or applies the admitted typed operation. @param _context - Bound shell. @param arguments_ - Native initial bookmark name or direct operation. @returns Operation result. */
+        execute: (_context, arguments_: unknown): boolean | Promise<boolean> => {
+          const args = getWriterCommandArguments<{
+            Bookmark?: string;
+            bookmark?: WriterBookmarkDialogResult;
+          }>(arguments_);
+          if (args?.bookmark !== undefined) return target.ApplyBookmarkOperation(args.bookmark);
+          const names = target.GetBookmarkNames();
+          const selected =
+            id === WRITER_COMMAND_IDS.editBookmark ? args?.Bookmark : target.GetBookmarkAtCursor();
+          return dialogController
+            .RequestBookmarkDialog(
+              id,
+              names,
+              selected !== undefined && names.includes(selected) ? selected : undefined,
+            )
+            .then(
+              /** Applies an accepted bookmark action. @param result - Dialog result. @returns Whether changed. */
+              (result) => (result === undefined ? false : target.ApplyBookmarkOperation(result)),
+            );
+        },
+        id,
+      }),
+    ),
     {
       capabilityId: "CAP-0112",
       /** Opens Insert Break and inserts a hard page break after acceptance. @param _context - Bound shell. @param arguments_ - Optional direct break kind. @returns Operation result. */

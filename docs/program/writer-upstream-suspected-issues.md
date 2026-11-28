@@ -6581,3 +6581,26 @@ relationship to the expanded text.
 - [Original field property access](../../vendor/libreoffice-reference/sw/source/core/fields/docufld.cxx#L1534)
 - [Original expression update](../../vendor/libreoffice-reference/sw/source/core/doc/DocumentFieldsManager.cxx#L950)
 - [Original ODF field export](../../vendor/libreoffice-reference/xmloff/source/text/txtflde.cxx#L1520)
+
+### WRITER-789 — Bookmark edit toolbar detection omits the last containing mark
+
+The Navigator walks bookmarks in document order to decide whether an entry
+matches the cursor. It returns immediately for the bookmark last activated
+through Navigator. Otherwise, it reports the latest containing mark only
+when it encounters a subsequent bookmark that starts after the cursor.
+If iteration ends first, the result is false even when a bookmark contains
+the cursor. This can hide Edit Bookmark for the last bookmark until the
+entry is activated. Writer preserves the same decision.
+
+- [Original Navigator cursor comparison and bookmark activation](../../vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx)
+
+### WRITER-790 — Previous heading skips the sole heading from a preceding paragraph
+
+When the cursor is before the only heading, the outline lookup returns
+insertion position zero. Previous heading wraps to the last outline
+position, which is also zero. The native traversal treats the matching
+indices as a completed cycle and leaves the cursor in its original
+paragraph. Next heading from that position reaches the heading. Writer
+preserves this behavior.
+
+- [Original previous and next heading traversal](../../vendor/libreoffice-reference/sw/source/core/crsr/crstrvl.cxx#L1275)

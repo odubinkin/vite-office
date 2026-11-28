@@ -268,8 +268,9 @@ export function WriterWorkbench({
                 setTableColumns(columns);
                 setTableDialog("properties");
               },
-            isEnabled: /** Checks table selection. @returns Availability. */ () =>
-              currentTable !== undefined,
+            isEnabled:
+              /** Checks the live table cursor, including immediate Navigator activation. @returns Availability. */ () =>
+                view.GetWrtShell().IsCursorInTable() !== undefined,
           },
           ...(
             [
@@ -711,8 +712,10 @@ export function WriterWorkbench({
         }
         navigator={
           <WriterNavigator
+            commandSource={commandSource}
+            resolveArguments={resolveCommandArguments}
             view={view}
-            visible={snapshot.isNavigatorVisible}
+            visible={snapshot.isNavigatorVisible && isActive}
             editingHost={editingHostRef}
             focusDocument={focusDocument}
           />
