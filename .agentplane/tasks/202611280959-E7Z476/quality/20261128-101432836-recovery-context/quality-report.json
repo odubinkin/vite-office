@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202611280959-E7Z476",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-28T10:14:32.836Z",
+  "verdict": "pass",
+  "summary": "Native Writer variable and user-field owners survive import, Worker transfer and ODT export.",
+  "evaluated_sha": "e2517c7ac9c576d24dd95b4f0f0793a0540b9331",
+  "blueprint_digest": "220e0ebadfffaecb05979c401baee9a99ab281446fab4b346ba700879ac8dda4",
+  "findings": [
+    "Pinned table and fly fields retain their scoped header declarations. Focused checks passed."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611280959-E7Z476/README.md",
+    "output/playwright/odf-next-checkpoint/writer-variable-fields-verification.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
