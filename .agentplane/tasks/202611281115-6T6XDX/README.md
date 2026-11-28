@@ -1,10 +1,11 @@
 ---
 id: "202611281115-6T6XDX"
 title: "Align Calc ODS scalar error predicates and fallback branches with LibreOffice"
-status: "DOING"
+result_summary: "Aligned Calc scalar error predicates and IFERROR and IFNA fallback branches with pinned LibreOffice."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "output/playwright/odf-next-checkpoint/calc-error-fallback-verification.md"
   findings:
     - "Replayed upstream scalar cases through Worker and ODS reopen. Documented the omitted-operand fixture discrepancy."
-commit: null
+commit:
+  hash: "25641d9936084d25965d276462ab2205d459603f"
+  message: "🧩 6T6XDX calc: evaluate scalar error predicates and ODS fallback branches"
 comments:
   -
     author: "CODER"
     body: "Start: implement native scalar error predicates and conditional error fallbacks."
+  -
+    author: "CODER"
+    body: "Verified: pinned scalar IFERROR and predicate cases, lazy fallback, Worker transfer and ODS reopen. 44 focused tests and static checks passed."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "44 focused Calc and shared tests across eight files, TypeScript, lint, module boundaries, provenance and inventory passed."
+  -
+    type: "status"
+    at: "2026-11-28T12:52:06.888Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: pinned scalar IFERROR and predicate cases, lazy fallback, Worker transfer and ODS reopen. 44 focused tests and static checks passed."
 doc_version: 3
-doc_updated_at: "2026-11-28T12:50:42.639Z"
+doc_updated_at: "2026-11-28T12:52:06.888Z"
 doc_updated_by: "CODER"
 description: "Port IFERROR and IFNA native jump tokens, scalar error propagation and ISERROR, ISERR and ISNA predicate semantics across ODS compile, calculation and persistence. Replay the pinned scalar IFERROR and information-function assertions with focused checks."
 sections:
