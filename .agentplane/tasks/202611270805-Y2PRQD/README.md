@@ -1,10 +1,11 @@
 ---
 id: "202611270805-Y2PRQD"
 title: "Paint native cell orientation and line breaks in the Calc grid"
-status: "DOING"
+result_summary: "Connected native Calc text output state to the grid, preserved CALC-853, and verified the source ODS fixture and browser wrapping."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "output/calc-next/Y2PRQD-browser-relaxed.log"
   findings:
     - "Conditional orientation and the exact half-turn retain the pinned paint decisions."
-commit: null
+commit:
+  hash: "764c31ed57ad16427170621c84be5cbc6da1e1ad"
+  message: "🧩 Y2PRQD code: paint Calc cell orientation and wrapping"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: native cell wrapping and orientation now feed the grid. Targeted Vitest and Chromium checks passed."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "40 targeted tests passed, followed by 8 after the final alignment change. Chromium viewport and Worker checks passed with the cached browser and a viewport timeout retry. Scoped source checks passed; global evidence markers retain inherited failures."
+  -
+    type: "status"
+    at: "2026-11-28T08:20:43.144Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native cell wrapping and orientation now feed the grid. Targeted Vitest and Chromium checks passed."
 doc_version: 3
-doc_updated_at: "2026-11-28T08:19:21.321Z"
+doc_updated_at: "2026-11-28T08:20:43.145Z"
 doc_updated_by: "CODER"
 description: "Consume native Calc text orientation and wrapping attributes in the normal grid painter. Route the represented plain and rich text display through the original orientation, Asian vertical and wrap decisions, honor source rotation reference positions, and use DOM/CSS layout for the resulting cell text. Preserve the existing value display, script font runs, conditional style precedence, direction, protection and editor focus. Extend the source owner only where the grid needs an original decision that is currently missing. Keep dependent drawing and editing behavior within the supported browser grid slice."
 sections:
