@@ -1,10 +1,11 @@
 ---
 id: "202611280746-Q216GP"
 title: "Port ODS numeric format placeholders and scientific text"
-status: "DOING"
+result_summary: "Ported ODF native width blanks, digit placeholders and scientific text against original Calc regressions."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "output/playwright/odf-next-checkpoint/calc-number-format-verification.md"
   findings:
     - "All original format strings and the mandatory exponent zero normalization survived ODS"
-commit: null
+commit:
+  hash: "ea1764883a406604c0e1fc5fbf0914da4d461ee5"
+  message: "🧩 Q216GP calc: roundtrip ODF numeric placeholders and exponent text"
 comments:
   -
     author: "CODER"
     body: "Start: align shared ODF number format XML and formatter round trips against the original Calc regressions."
+  -
+    author: "CODER"
+    body: "Verified: 41 Calc and 8 Writer related cases, TypeScript, lint, provenance and Calc runtime parity."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "41 related Calc cases and 8 Writer cases passed, including six original LibreOffice ODF number-style save/reload regressions. Typecheck, lint, formatting, dependencies, provenance and zero Calc parity violations passed."
+  -
+    type: "status"
+    at: "2026-11-28T07:56:30.716Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: 41 Calc and 8 Writer related cases, TypeScript, lint, provenance and Calc runtime parity."
 doc_version: 3
-doc_updated_at: "2026-11-28T07:54:18.083Z"
+doc_updated_at: "2026-11-28T07:56:30.717Z"
 doc_updated_by: "CODER"
 description: "Align the shared native ODF number-style import and export with pinned LibreOffice for fixed-width blanks, integer and exponent placeholders, lowercase exponent, and positioned literal text. Replay original Calc data-style package fixtures and verify Writer consumers."
 sections:
