@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202611280618-KMYN3V",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-28T06:31:59.903Z",
+  "verdict": "pass",
+  "summary": "Native Writer date, time and duration metadata fields roundtrip through ODF and Worker.",
+  "evaluated_sha": "fd6bbd062ea7d17b20e3244ce539c1babae14090",
+  "blueprint_digest": "40acb82b6d64effee4a9d1259476fac88bd87d87d6e556d0efd25a0e3a8b73ae",
+  "findings": [
+    "Actual metadata, fixed presentation, document number-style ownership and the original absent-style fallback are covered."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611280618-KMYN3V/README.md",
+    "output/playwright/odf-next-checkpoint/writer-docinfo-time-verification.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
