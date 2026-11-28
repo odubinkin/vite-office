@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202611271843-KBGKS7",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-28T04:29:43.984Z",
+  "verdict": "pass",
+  "summary": "Calc derives ODS database filter values from the native typed color and RTL numeric contracts.",
+  "evaluated_sha": "b405230303d6b18d6c4dfacbc1ab8ef6d67a526e",
+  "blueprint_digest": "b468733869a64ad415e5683c5ebb225cac4aeebccec1f96498b5bcbc07fcb045",
+  "findings": [
+    "The original RGB, automatic styling and date filters retain their XML values through the represented package and Worker paths. CALC-873 records the native non-empty overwrite."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611271843-KBGKS7/README.md",
+    "output/playwright/odf-next-checkpoint/ods-filter-query-verification.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
