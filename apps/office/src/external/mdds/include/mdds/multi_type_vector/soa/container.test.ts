@@ -1,6 +1,5 @@
 /** @fileoverview Complete unchanged original container constructor/lifetime/operator states over real shared SoA ownership and typed scalar callbacks. */
 import { readFileSync } from "node:fs";
-import { URL } from "node:url";
 import { describe, it, expect } from "vitest";
 import scalarFixture from "./native-scalar-release-cases.json";
 /** Complete native corpus; both operation groups share the same full-field decoder and observer. */
@@ -26,7 +25,10 @@ import { type iterator_updater, type iterator_base, type const_iterator_base } f
 import { type BlockPosition } from "../util.ts";
 
 const fixture = JSON.parse(
-  readFileSync(new URL("./native-container-cases.json", import.meta.url), "utf8"),
+  readFileSync(
+    "src/external/mdds/include/mdds/multi_type_vector/soa/native-container-cases.json",
+    "utf8",
+  ),
 ) as NativeFixture;
 
 /** Erased existing original block type witness. */

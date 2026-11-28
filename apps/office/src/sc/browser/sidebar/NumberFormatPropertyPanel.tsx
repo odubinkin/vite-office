@@ -171,21 +171,33 @@ export function NumberFormatPropertyPanel({
           maximum={fraction ? 8 : 20}
           value={index === 0 ? "" : precision}
           disabled={!editable}
-          onValue={(value) => update({ precision: value })}
+          onValue={
+            /** Updates `precision`. @param value - Control callback value. @returns Nothing. */ (
+              value,
+            ) => update({ precision: value })
+          }
         />
         <NumberFormatField
           label="Leading zeroes"
           maximum={20}
           value={leading}
           disabled={!editable || time}
-          onValue={(value) => update({ leading: value })}
+          onValue={
+            /** Updates `leading`. @param value - Control callback value. @returns Nothing. */ (
+              value,
+            ) => update({ leading: value })
+          }
         />
         <label className="col-span-2 flex items-center gap-2">
           <input
             type="checkbox"
             checked={!!negative}
             disabled={!editable}
-            onChange={(event) => update({ red: event.currentTarget.checked })}
+            onChange={
+              /** Updates `red`. @param event - Control change event. @returns Nothing. */ (
+                event,
+              ) => update({ red: event.currentTarget.checked })
+            }
           />
           Negative numbers in red
         </label>
@@ -194,7 +206,11 @@ export function NumberFormatPropertyPanel({
             type="checkbox"
             checked={!!group}
             disabled={!grouping}
-            onChange={(event) => update({ grouped: event.currentTarget.checked })}
+            onChange={
+              /** Updates `grouped`. @param event - Control change event. @returns Nothing. */ (
+                event,
+              ) => update({ grouped: event.currentTarget.checked })
+            }
           />
           {scientific ? "Engineering notation" : "Thousands separator"}
         </label>

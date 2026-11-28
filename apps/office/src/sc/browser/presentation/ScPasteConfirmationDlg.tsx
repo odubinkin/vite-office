@@ -24,18 +24,32 @@ export function ScPasteConfirmationDlg({ kind, onRespond }: Props): React.JSX.El
       aria-modal="true"
       aria-label={title}
       className="office-dialog-panel fixed left-1/2 top-1/3 z-50 w-96 max-w-[calc(100vw-2rem)] -translate-x-1/2"
-      onKeyDown={(event) => {
-        if (event.key === "Escape") {
-          event.stopPropagation();
-          onRespond({ accepted: false, warnAgain });
+      onKeyDown={
+        /** Reports the dialog result. @param event - Browser event. @returns Nothing. */ (
+          event,
+        ) => {
+          if (event.key === "Escape") {
+            event.stopPropagation();
+            onRespond({ accepted: false, warnAgain });
+          }
         }
-      }}
-      onSubmit={(event) => {
-        event.preventDefault();
-        onRespond({ accepted: replace, warnAgain });
-      }}
+      }
+      onSubmit={
+        /** Reports the dialog result. @param event - Browser event. @returns Nothing. */ (
+          event,
+        ) => {
+          event.preventDefault();
+          onRespond({ accepted: replace, warnAgain });
+        }
+      }
     >
-      <DialogHeader title={title} onClose={() => onRespond({ accepted: false, warnAgain })} />
+      <DialogHeader
+        title={title}
+        onClose={
+          /** Reports the dialog result. @returns Nothing. */ () =>
+            onRespond({ accepted: false, warnAgain })
+        }
+      />
       <div className="space-y-2 px-4 py-3">
         {replace ? (
           <>
@@ -45,7 +59,11 @@ export function ScPasteConfirmationDlg({ kind, onRespond }: Props): React.JSX.El
               <input
                 type="checkbox"
                 checked={warnAgain}
-                onChange={(event) => setWarnAgain(event.target.checked)}
+                onChange={
+                  /** Updates the warn again. @param event - Control change event. @returns Nothing. */ (
+                    event,
+                  ) => setWarnAgain(event.target.checked)
+                }
               />
               Warn me about this in the future.
             </label>
@@ -64,7 +82,12 @@ export function ScPasteConfirmationDlg({ kind, onRespond }: Props): React.JSX.El
           type={replace ? "button" : "submit"}
           className="office-dialog-secondary"
           autoFocus={!replace}
-          onClick={replace ? () => onRespond({ accepted: false, warnAgain }) : undefined}
+          onClick={
+            replace
+              ? /** Rejects the paste and preserves the chosen warning preference. @returns Nothing. */ () =>
+                  onRespond({ accepted: false, warnAgain })
+              : undefined
+          }
         >
           No
         </button>
@@ -72,7 +95,12 @@ export function ScPasteConfirmationDlg({ kind, onRespond }: Props): React.JSX.El
           type={replace ? "submit" : "button"}
           className="office-dialog-primary"
           autoFocus={replace}
-          onClick={replace ? undefined : () => onRespond({ accepted: true, warnAgain })}
+          onClick={
+            replace
+              ? undefined
+              : /** Accepts the paste and preserves the chosen warning preference. @returns Nothing. */ () =>
+                  onRespond({ accepted: true, warnAgain })
+          }
         >
           Yes
         </button>

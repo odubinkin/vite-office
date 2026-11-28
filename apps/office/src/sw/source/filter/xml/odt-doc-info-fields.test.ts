@@ -111,7 +111,13 @@ it("roundtrips live metadata and fixed presentations through the Worker", /** Ro
       "+ Y: 0 M: 0 D: 0 H: 1 M: 2 S: 3",
       "Fixed build",
     ];
-    expect(fields(restored).map((hint) => hint.GetAttr().GetField().Expand())).toEqual(old);
+    expect(
+      fields(restored).map(
+        /** Expands the original document information field for comparison. @param hint - Imported text hint. @returns Visible field text. */ (
+          hint,
+        ) => hint.GetAttr().GetField().Expand(),
+      ),
+    ).toEqual(old);
     const title = unicode("Changed title");
     try {
       restored.documentProperties.GetDocumentProperties().setTitle(title);
@@ -134,10 +140,13 @@ it("roundtrips live metadata and fixed presentations through the Worker", /** Ro
     expect(content).toContain("Unnamed<text:s/>display");
     expect(content).not.toContain(CH_TXTATR_BREAKWORD);
     reopened = (await readOdtDocument(saved, metadata)).document;
-    expect(fields(reopened).map((hint) => hint.GetAttr().GetField().Expand())).toEqual([
-      "Changed title",
-      ...old.slice(1),
-    ]);
+    expect(
+      fields(reopened).map(
+        /** Expands the reopened document information field for comparison. @param hint - Imported text hint. @returns Visible field text. */ (
+          hint,
+        ) => hint.GetAttr().GetField().Expand(),
+      ),
+    ).toEqual(["Changed title", ...old.slice(1)]);
   } finally {
     source.document.Dispose();
     restored?.Dispose();
@@ -151,12 +160,20 @@ it("reads the native modification fields from the LibreOffice testBadSplitSectio
   );
   const { document } = await readOdtDocument(new Uint8Array(fixture), metadata);
   try {
-    const formats = fields(document).map((hint) => hint.GetAttr().GetField());
+    const formats = fields(document).map(
+      /** Reads the imported document-information field from its hint. @param hint - Imported text hint. @returns Native document information field. */ (
+        hint,
+      ) => hint.GetAttr().GetField(),
+    );
     const date = formats.find(
-      (field) => field.GetSubType() === (SwDocInfoSubType.Change | SwDocInfoSubType.SubDate),
+      /** Selects the modification date field by its exact native subtype flags. @param field - Native document information field. @returns Whether this is the modification date. */ (
+        field,
+      ) => field.GetSubType() === (SwDocInfoSubType.Change | SwDocInfoSubType.SubDate),
     );
     const time = formats.find(
-      (field) => field.GetSubType() === (SwDocInfoSubType.Change | SwDocInfoSubType.SubTime),
+      /** Selects the modification time field by its exact native subtype flags. @param field - Native document information field. @returns Whether this is the modification time. */ (
+        field,
+      ) => field.GetSubType() === (SwDocInfoSubType.Change | SwDocInfoSubType.SubTime),
     );
     // The source references missing N36 and N61 definitions, so both fields use the locale defaults.
     expect(date?.GetFormat()).toBe(0);
@@ -183,8 +200,16 @@ it("exports the native first-page classification property from LibreOffice testT
     );
     worker = result.document;
     const property = "urn:bails:IntellectualProperty:Marking:document-header";
-    const original = fields(worker).map((hint) => hint.GetAttr().GetField());
-    const marking = original.find((field) => field.GetName() === property);
+    const original = fields(worker).map(
+      /** Reads the custom document information field carried by the hint. @param hint - Imported text hint. @returns Native custom-property field. */ (
+        hint,
+      ) => hint.GetAttr().GetField(),
+    );
+    const marking = original.find(
+      /** Selects a field representing the requested custom property. @param field - Native custom-property field. @returns Whether the field name matches. */ (
+        field,
+      ) => field.GetName() === property,
+    );
     expect(marking?.Expand()).toBe("Classification: General Business");
     const archive = await DocumentArchive.open(await writeOdtDocument(worker, metadata));
     const styles = await archive.readTextEntry("styles.xml");

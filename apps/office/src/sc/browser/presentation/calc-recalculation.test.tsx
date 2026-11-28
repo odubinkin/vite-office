@@ -44,21 +44,25 @@ it("checks AutoCalculate against the live document and recalculates manual depen
   const doc = controller.shell.GetDocument();
   const a1 = new ScAddress(),
     b1 = new ScAddress(1, 0, 0);
-  act(() => {
-    controller.EnterString("2");
-    controller.Select(1, 0);
-    expect(controller.EnterString("=A1*3")).toBe(true);
-  });
+  act(
+    /** Enters the sample text through Calc and moves the selection. @returns Nothing. */ () => {
+      controller.EnterString("2");
+      controller.Select(1, 0);
+      expect(controller.EnterString("=A1*3")).toBe(true);
+    },
+  );
   expect(doc.GetValue(b1)).toBe(6);
   openCalculate();
   const automatic = screen.getByRole("menuitemcheckbox", { name: "AutoCalculate" });
   expect(automatic).toBeChecked();
   fireEvent.click(automatic);
   expect(doc.GetAutoCalc()).toBe(false);
-  act(() => {
-    controller.Select(0, 0);
-    controller.EnterString("4");
-  });
+  act(
+    /** Moves the selection and enters the sample text through Calc. @returns Nothing. */ () => {
+      controller.Select(0, 0);
+      controller.EnterString("4");
+    },
+  );
   expect(doc.GetValue(a1)).toBe(4);
   expect(doc.GetValue(b1)).toBe(6);
   fireEvent.keyDown(screen.getByRole("grid", { name: "Spreadsheet" }), { key: "F9" });
@@ -67,7 +71,10 @@ it("checks AutoCalculate against the live document and recalculates manual depen
 
   const dispatcher = frame.GetDispatcher();
   const request = new SfxRequest(26411, [new SfxBoolItem(26411, true)]);
-  act(() => dispatcher.ExecuteRequest(request));
+  act(
+    /** Executes the prepared recalculation slot request. @returns Native operation result. */ () =>
+      dispatcher.ExecuteRequest(request),
+  );
   expect(request.IsDone()).toBe(true);
   expect(dispatcher.QueryState(".uno:AutomaticCalculation").checked).toBe(true);
   expect(doc.GetAutoCalc()).toBe(true);
@@ -76,12 +83,14 @@ it("checks AutoCalculate against the live document and recalculates manual depen
 it("forces the cursor cell as in tdf97897 and hard-recalculates clean formulas on other sheets", /** Forces the cursor cell as in tdf97897 and hard-recalculates clean formulas on other sheets. @returns Nothing. */ () => {
   const { controller } = mount();
   const doc = controller.shell.GetDocument();
-  act(() => {
-    controller.EnterString("=1+2");
-    controller.InsertSheet();
-    controller.EnterString("=3+4");
-    controller.SelectTab(0);
-  });
+  act(
+    /** Enters the sample text through Calc and activates the selected sheet. @returns Nothing. */ () => {
+      controller.EnterString("=1+2");
+      controller.InsertSheet();
+      controller.EnterString("=3+4");
+      controller.SelectTab(0);
+    },
+  );
   const first = doc.GetFormulaCell(new ScAddress());
   const other = doc.GetFormulaCell(new ScAddress(0, 0, 1));
   assert(first && other);
@@ -95,7 +104,10 @@ it("forces the cursor cell as in tdf97897 and hard-recalculates clean formulas o
   expect(first.GetValue()).toBe(3);
   expect(other.GetValue()).toBe(170);
 
-  act(() => doc.SetAutoCalc(false));
+  act(
+    /** Disables automatic recalculation for the fixture. @returns Native operation result. */ () =>
+      doc.SetAutoCalc(false),
+  );
   fireEvent.keyDown(screen.getByRole("grid", { name: "Spreadsheet" }), {
     key: "F9",
     ctrlKey: true,
@@ -109,14 +121,19 @@ it("forces the cursor cell as in tdf97897 and hard-recalculates clean formulas o
 it("recalculates clean volatile formulas with ordinary F9 in manual mode", /** Recalculates clean volatile formulas with ordinary F9 in manual mode. @returns Nothing. */ () => {
   const { controller } = mount();
   const doc = controller.shell.GetDocument();
-  act(() => {
-    expect(controller.EnterString("=TODAY()")).toBe(true);
-    controller.Select(1, 0);
-  });
+  act(
+    /** Enters the sample text through Calc and moves the selection. @returns Nothing. */ () => {
+      expect(controller.EnterString("=TODAY()")).toBe(true);
+      controller.Select(1, 0);
+    },
+  );
   const cell = doc.GetFormulaCell(new ScAddress());
   assert(cell);
   const date = cell.GetValue();
-  act(() => doc.SetAutoCalc(false));
+  act(
+    /** Disables automatic recalculation for the fixture. @returns Native operation result. */ () =>
+      doc.SetAutoCalc(false),
+  );
   expect(date).toBeGreaterThan(0);
   cell.SetResultDouble(date - 1);
   expect(cell.GetDirty()).toBe(false);
@@ -149,12 +166,14 @@ it("keeps the numeric F9 preview for an expression with an Excel A1 sheet qualif
     doc = controller.shell.GetDocument();
   const sheetName = unicode("Source Data");
   try {
-    act(() => {
-      doc.InsertTab(1, sheetName);
-      doc.SetValue(new ScAddress(0, 0, 1), 4);
-      doc.SetValue(new ScAddress(0, 1, 1), 5);
-      doc.SetGrammar(FormulaGrammar.Grammar.GRAM_NATIVE_XL_A1);
-    });
+    act(
+      /** Sets the native value. @returns Nothing. */ () => {
+        doc.InsertTab(1, sheetName);
+        doc.SetValue(new ScAddress(0, 0, 1), 4);
+        doc.SetValue(new ScAddress(0, 1, 1), 5);
+        doc.SetGrammar(FormulaGrammar.Grammar.GRAM_NATIVE_XL_A1);
+      },
+    );
   } finally {
     sheetName.dispose();
   }
@@ -173,15 +192,17 @@ it("ports tdf131326 and the source Formula to Value dependency, result and undo 
     a2 = new ScAddress(0, 1, 0),
     a3 = new ScAddress(0, 2, 0);
   const b1 = new ScAddress(1, 0, 0);
-  act(() => {
-    expect(controller.EnterString("=1")).toBe(true);
-    controller.Select(0, 1);
-    expect(controller.EnterString('="=literal"')).toBe(true);
-    controller.Select(0, 2);
-    expect(controller.EnterString("=1/0")).toBe(true);
-    controller.Select(1, 0);
-    expect(controller.EnterString("=ISFORMULA(A1)"), controller.error).toBe(true);
-  });
+  act(
+    /** Enters the sample text through Calc and moves the selection. @returns Nothing. */ () => {
+      expect(controller.EnterString("=1")).toBe(true);
+      controller.Select(0, 1);
+      expect(controller.EnterString('="=literal"')).toBe(true);
+      controller.Select(0, 2);
+      expect(controller.EnterString("=1/0")).toBe(true);
+      controller.Select(1, 0);
+      expect(controller.EnterString("=ISFORMULA(A1)"), controller.error).toBe(true);
+    },
+  );
   expect(doc.GetValue(b1)).toBe(1);
   selectRange("A1:A3");
   const undo = controller.shell.GetUndoManager().GetUndoActionCount();
@@ -221,28 +242,73 @@ it("ports the middle-of-group conversion from ucalc and restores dependent formu
   const { controller } = mount();
   const doc = controller.shell.GetDocument();
   const grammar = FormulaGrammar.Grammar.GRAM_ENGLISH_XL_R1C1;
-  act(() => {
-    doc.SetGrammar(grammar);
-    for (let row = 2; row <= 7; ++row) {
-      [`=${row - 1}`, "=RC[-1]*2", "=ISFORMULA(RC[-1])"].forEach((source, index) => {
-        const input = unicode(source);
-        try {
-          doc.SetFormula(new ScAddress(index + 1, row, 0), input, grammar);
-        } finally {
-          input.dispose();
-        }
-      });
-    }
-  });
-  const inspect = (column: number, read: (address: ScAddress) => number): number[] =>
-    Array.from({ length: 6 }, (_, row) => read(new ScAddress(column, row + 2, 0)));
-  expect(inspect(3, (position) => doc.GetValue(position))).toEqual([1, 1, 1, 1, 1, 1]);
+  act(
+    /** Populates the fixture with formulas using the active address grammar. @returns Nothing. */ () => {
+      doc.SetGrammar(grammar);
+      for (let row = 2; row <= 7; ++row) {
+        [`=${row - 1}`, "=RC[-1]*2", "=ISFORMULA(RC[-1])"].forEach(
+          /** Creates one native source formula in the calculation fixture. @param source - Formula source text. @param index - Column offset from the fixture start. @returns Nothing. */ (
+            source,
+            index,
+          ) => {
+            const input = unicode(source);
+            try {
+              doc.SetFormula(new ScAddress(index + 1, row, 0), input, grammar);
+            } finally {
+              input.dispose();
+            }
+          },
+        );
+      }
+    },
+  );
+  const inspect =
+    /** Collects numeric fixture results down the specified column. @param column - Zero-based column index. @param read - Address-based document accessor. @returns Values in document row order. */ (
+      column: number,
+      read: (address: ScAddress) => number,
+    ): number[] =>
+      Array.from(
+        { length: 6 },
+        /** Reads the addressed row of the recalculation result column. @param _ - Unused generated entry. @param row - Fixture row index. @returns Value reported by the supplied reader. */ (
+          _,
+          row,
+        ) => read(new ScAddress(column, row + 2, 0)),
+      );
+  expect(
+    inspect(
+      3,
+      /** Reads the formula's value before any forced recalculation. @param position - Native position. @returns Current number in the cell. */ (
+        position,
+      ) => doc.GetValue(position),
+    ),
+  ).toEqual([1, 1, 1, 1, 1, 1]);
   selectRange("R5C2:R6C3");
   openCalculate();
   fireEvent.click(screen.getByRole("menuitem", { name: "Formula to Value" }));
-  expect(inspect(2, (position) => doc.GetValue(position))).toEqual([2, 4, 6, 8, 10, 12]);
-  expect(inspect(3, (position) => doc.GetValue(position))).toEqual([1, 1, 0, 0, 1, 1]);
-  expect(inspect(1, (position) => doc.GetCellType(position))).toEqual([
+  expect(
+    inspect(
+      2,
+      /** Reads the formula result from the document after a normal recalculation. @param position - Native position. @returns Current number in the cell. */ (
+        position,
+      ) => doc.GetValue(position),
+    ),
+  ).toEqual([2, 4, 6, 8, 10, 12]);
+  expect(
+    inspect(
+      3,
+      /** Reads the dependent cell after a normal recalculation. @param position - Native position. @returns Current number in the cell. */ (
+        position,
+      ) => doc.GetValue(position),
+    ),
+  ).toEqual([1, 1, 0, 0, 1, 1]);
+  expect(
+    inspect(
+      1,
+      /** Reads the calculated cell's native type. @param position - Native position. @returns Current cell type identifier. */ (
+        position,
+      ) => doc.GetCellType(position),
+    ),
+  ).toEqual([
     CellType.CELLTYPE_FORMULA,
     CellType.CELLTYPE_FORMULA,
     CellType.CELLTYPE_VALUE,
@@ -254,5 +320,12 @@ it("ports the middle-of-group conversion from ucalc and restores dependent formu
     /** Undoes the last Calc command and asserts success. @returns Nothing. */ () =>
       expect(controller.Undo()).toBe(true),
   );
-  expect(inspect(3, (position) => doc.GetValue(position))).toEqual([1, 1, 1, 1, 1, 1]);
+  expect(
+    inspect(
+      3,
+      /** Reads the formula result after full calculation. @param position - Native position. @returns Current number in the cell. */ (
+        position,
+      ) => doc.GetValue(position),
+    ),
+  ).toEqual([1, 1, 1, 1, 1, 1]);
 });

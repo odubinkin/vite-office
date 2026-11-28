@@ -46,25 +46,33 @@ function NameTable({ rows, selected, onSelect }: TableProps): React.JSX.Element 
           </tr>
         </thead>
         <tbody>
-          {rows.map((row) => {
-            const key = rowId(row);
-            return (
-              <tr
-                key={key}
-                aria-selected={selected.has(key)}
-                className={selected.has(key) ? "bg-blue-100" : "hover:bg-slate-50"}
-                onClick={(event) => onSelect(key, event.ctrlKey || event.metaKey)}
-              >
-                <td className="px-2 py-1">
-                  <button type="button" className="text-left">
-                    {row.name}
-                  </button>
-                </td>
-                <td className="px-2 py-1 font-mono">{row.expression}</td>
-                <td className="px-2 py-1">{row.scopeLabel}</td>
-              </tr>
-            );
-          })}
+          {rows.map(
+            /** Renders a native defined-name row with its current selection state. @param row - Defined-name row. @returns Selectable table row. */ (
+              row,
+            ) => {
+              const key = rowId(row);
+              return (
+                <tr
+                  key={key}
+                  aria-selected={selected.has(key)}
+                  className={selected.has(key) ? "bg-blue-100" : "hover:bg-slate-50"}
+                  onClick={
+                    /** Selects a name and respects the platform modifier for multiple selection. @param event - Name row mouse event. @returns Nothing. */ (
+                      event,
+                    ) => onSelect(key, event.ctrlKey || event.metaKey)
+                  }
+                >
+                  <td className="px-2 py-1">
+                    <button type="button" className="text-left">
+                      {row.name}
+                    </button>
+                  </td>
+                  <td className="px-2 py-1 font-mono">{row.expression}</td>
+                  <td className="px-2 py-1">{row.scopeLabel}</td>
+                </tr>
+              );
+            },
+          )}
         </tbody>
       </table>
     </div>
@@ -97,12 +105,22 @@ export function ScNameManagerDlg({
   onRespond,
   onCancel,
 }: ManagerProps): React.JSX.Element {
-  const [rows, setRows] = useState(() => model.GetRows());
+  const [rows, setRows] = useState(
+    /** Reads initial rows from the native name manager. @returns Defined-name rows. */ () =>
+      model.GetRows(),
+  );
   const selectedRow = model.selected;
   const initial = selectedRow
-    ? (rows.find((row) => rowId(row) === rowId(selectedRow)) ?? rows[0])
+    ? (rows.find(
+        /** Finds the current row that matches the preserved name identity. @param row - Candidate defined-name row. @returns Whether the row matches. */ (
+          row,
+        ) => rowId(row) === rowId(selectedRow),
+      ) ?? rows[0])
     : rows[0];
-  const [selected, setSelected] = useState(() => new Set(initial ? [rowId(initial)] : []));
+  const [selected, setSelected] = useState(
+    /** Initializes the selection from the active defined name. @returns Selected row identities. */ () =>
+      new Set(initial ? [rowId(initial)] : []),
+  );
   const [draft, setDraft] = useState<
     Pick<ScRangeNameLine, "name" | "expression" | "scope" | "type"> | undefined
   >(initial);
@@ -113,7 +131,14 @@ export function ScNameManagerDlg({
   const anchor = useRef<{ point: ScAddress; kind: Parameters<ScPrintReferenceInput["Start"]>[1] }>(
     undefined,
   );
-  const previous = selected.size === 1 ? rows.find((row) => selected.has(rowId(row))) : undefined;
+  const previous =
+    selected.size === 1
+      ? rows.find(
+          /** Keeps the names marked for the current operation. @param row - Candidate defined-name row. @returns Whether the row is selected. */ (
+            row,
+          ) => selected.has(rowId(row)),
+        )
+      : undefined;
 
   /** Writes a valid edit into the cloned name map. @param fields - Proposed name fields. @returns Nothing. */
   function update(fields: NonNullable<typeof draft>): void {
@@ -129,8 +154,21 @@ export function ScNameManagerDlg({
     const key = rowId({ scope: fields.scope, index: result.GetIndex() });
     setRows(entries);
     setSelected(new Set([key]));
-    if (previous.scope !== fields.scope && rows.some((row) => rowId(row) === key))
-      setDraft(entries.find((row) => rowId(row) === key) ?? fields);
+    if (
+      previous.scope !== fields.scope &&
+      rows.some(
+        /** Finds the draft name matching the selected row identity. @param row - Draft defined-name row. @returns Whether the row matches. */ (
+          row,
+        ) => rowId(row) === key,
+      )
+    )
+      setDraft(
+        entries.find(
+          /** Finds the name with the same identity in the refreshed rows. @param row - Refreshed defined-name row. @returns Whether the row matches. */ (
+            row,
+          ) => rowId(row) === key,
+        ) ?? fields,
+      );
   }
 
   /** Updates the selected row with the pointed absolute reference. @param end - Grid endpoint. @returns Nothing. */
@@ -153,50 +191,74 @@ export function ScNameManagerDlg({
     update({ ...draft, expression: FormatNameReference(doc, range) });
   }
 
-  useImperativeHandle(referenceInput, () => ({
-    /** Starts grid tracking when the reference field owns focus. @param point - Grid anchor. @param kind - Pick surface. @returns Nothing. */
-    Start(point, kind) {
-      if (!rangeActive.current && !collapsed) return;
-      anchor.current = { point, kind };
-      pick(point);
-    },
-    Move: pick,
-    /** Ends tracking and returns to the reference field. @returns Nothing. */
-    End() {
-      if (!anchor.current) return;
-      anchor.current = undefined;
-      rangeEdit.current?.focus({ preventScroll: true });
-    },
-  }));
+  useImperativeHandle(
+    referenceInput,
+    /** Exposes grid-picking operations for the name manager reference. @returns Reference selection handle. */ () => ({
+      /** Starts grid tracking when the reference field owns focus. @param point - Grid anchor. @param kind - Pick surface. @returns Nothing. */
+      Start(point, kind) {
+        if (!rangeActive.current && !collapsed) return;
+        anchor.current = { point, kind };
+        pick(point);
+      },
+      Move: pick,
+      /** Ends tracking and returns to the reference field. @returns Nothing. */
+      End() {
+        if (!anchor.current) return;
+        anchor.current = undefined;
+        rangeEdit.current?.focus({ preventScroll: true });
+      },
+    }),
+  );
 
   return (
     <form
       role="dialog"
       aria-label="Manage Names"
       className={dialogClass}
-      onSubmit={(event) => {
-        event.preventDefault();
-        if (!error && !collapsed) onRespond("apply");
-      }}
-      onKeyDown={(event) => {
-        if (event.key === "Escape") {
-          event.stopPropagation();
-          onCancel();
+      onSubmit={
+        /** Submits the "Manage Names" control. @param event - Browser event. @returns Nothing. */ (
+          event,
+        ) => {
+          event.preventDefault();
+          if (!error && !collapsed) onRespond("apply");
         }
-      }}
+      }
+      onKeyDown={
+        /** Handles keyboard input on the "Manage Names" control. @param event - Browser event. @returns Nothing. */ (
+          event,
+        ) => {
+          if (event.key === "Escape") {
+            event.stopPropagation();
+            onCancel();
+          }
+        }
+      }
     >
       <DialogHeader title="Manage Names" onClose={onCancel} />
       {!collapsed && (
         <NameTable
           rows={rows}
           selected={selected}
-          onSelect={(key, multiple) => {
-            const next = selectRows(selected, key, multiple);
-            setSelected(next);
-            setDraft(next.size === 1 ? rows.find((row) => next.has(rowId(row))) : undefined);
-            setError("");
-            onReference(undefined);
-          }}
+          onSelect={
+            /** Applies single or multiple selection and refreshes the name draft. @param key - Selected row identity. @param multiple - Whether to extend selection. @returns Nothing. */ (
+              key,
+              multiple,
+            ) => {
+              const next = selectRows(selected, key, multiple);
+              setSelected(next);
+              setDraft(
+                next.size === 1
+                  ? rows.find(
+                      /** Finds the row retained in the new selection. @param row - Candidate defined-name row. @returns Whether the row is selected. */ (
+                        row,
+                      ) => next.has(rowId(row)),
+                    )
+                  : undefined,
+              );
+              setError("");
+              onReference(undefined);
+            }
+          }
         />
       )}
       {!collapsed && (
@@ -206,12 +268,16 @@ export function ScNameManagerDlg({
             className={inputClass}
             value={draft?.name ?? ""}
             disabled={!draft}
-            onFocus={() => {
-              rangeActive.current = false;
-            }}
-            onChange={(event) => {
-              if (draft) update({ ...draft, name: event.target.value });
-            }}
+            onFocus={
+              /** Ends the active name reference interaction. @returns Nothing. */ () => {
+                rangeActive.current = false;
+              }
+            }
+            onChange={
+              /** Updates `name`. @param event - Browser event. @returns Nothing. */ (event) => {
+                if (draft) update({ ...draft, name: event.target.value });
+              }
+            }
           />
         </label>
       )}
@@ -223,12 +289,18 @@ export function ScNameManagerDlg({
             className={inputClass}
             value={draft?.expression ?? ""}
             disabled={!draft}
-            onFocus={() => {
-              rangeActive.current = true;
-            }}
-            onChange={(event) => {
-              if (draft) update({ ...draft, expression: event.target.value });
-            }}
+            onFocus={
+              /** Marks the name range editor as active. @returns Nothing. */ () => {
+                rangeActive.current = true;
+              }
+            }
+            onChange={
+              /** Updates `expression`. @param event - Browser event. @returns Nothing. */ (
+                event,
+              ) => {
+                if (draft) update({ ...draft, expression: event.target.value });
+              }
+            }
           />
         </label>
         <button
@@ -236,10 +308,12 @@ export function ScNameManagerDlg({
           className={buttonClass}
           aria-label={collapsed ? "Expand" : "Shrink"}
           disabled={!draft}
-          onClick={() => {
-            setCollapsed(!collapsed);
-            rangeEdit.current?.focus();
-          }}
+          onClick={
+            /** Updates the collapsed and focuses the input. @returns Nothing. */ () => {
+              setCollapsed(!collapsed);
+              rangeEdit.current?.focus();
+            }
+          }
         >
           {collapsed ? "▾" : "▴"}
         </button>
@@ -252,60 +326,90 @@ export function ScNameManagerDlg({
               className={inputClass}
               disabled={!draft}
               value={draft?.scope ?? -1}
-              onFocus={() => {
-                rangeActive.current = false;
-              }}
-              onChange={(event) => {
-                if (draft) update({ ...draft, scope: Number(event.target.value) });
-              }}
+              onFocus={
+                /** Clears focus ownership from the name range editor. @returns Nothing. */ () => {
+                  rangeActive.current = false;
+                }
+              }
+              onChange={
+                /** Updates `scope`. @param event - Browser event. @returns Nothing. */ (event) => {
+                  if (draft) update({ ...draft, scope: Number(event.target.value) });
+                }
+              }
             >
-              {model.editor.scopes.map(([scope, label]) => (
-                <option key={scope} value={scope}>
-                  {label}
-                </option>
-              ))}
+              {model.editor.scopes.map(
+                /** Renders the `scope` option for the source entry. @param entry - Source entry. @returns Rendered element. */ ([
+                  scope,
+                  label,
+                ]) => (
+                  <option key={scope} value={scope}>
+                    {label}
+                  </option>
+                ),
+              )}
             </select>
           </label>
           {error && <p role="alert">{error}</p>}
           <details>
             <summary>Range Options</summary>
             <div className="grid grid-cols-2 gap-2 pt-2">
-              {rangeOptions.map(([flag, label]) => (
-                <label className="flex gap-2" key={flag}>
-                  <input
-                    type="checkbox"
-                    disabled={!draft}
-                    checked={Boolean((draft?.type ?? 0) & flag)}
-                    onChange={(event) => {
-                      if (draft)
-                        update({
-                          ...draft,
-                          type: event.target.checked ? draft.type | flag : draft.type & ~flag,
-                        });
-                    }}
-                  />
-                  {label}
-                </label>
-              ))}
+              {rangeOptions.map(
+                /** Renders one label for the source entry. @param entry - Source entry. @returns Rendered element. */ ([
+                  flag,
+                  label,
+                ]) => (
+                  <label className="flex gap-2" key={flag}>
+                    <input
+                      type="checkbox"
+                      disabled={!draft}
+                      checked={Boolean((draft?.type ?? 0) & flag)}
+                      onChange={
+                        /** Updates `type`. @param event - Browser event. @returns Nothing. */ (
+                          event,
+                        ) => {
+                          if (draft)
+                            update({
+                              ...draft,
+                              type: event.target.checked ? draft.type | flag : draft.type & ~flag,
+                            });
+                        }
+                      }
+                    />
+                    {label}
+                  </label>
+                ),
+              )}
             </div>
           </details>
           <div className="flex flex-wrap gap-2">
-            <button type="button" className={buttonClass} onClick={() => onRespond("add")}>
+            <button
+              type="button"
+              className={buttonClass}
+              onClick={/** Reports the dialog result. @returns Nothing. */ () => onRespond("add")}
+            >
               Add
             </button>
             <button
               type="button"
               className={buttonClass}
               disabled={!selected.size}
-              onClick={() => {
-                model.Remove(rows.filter((row) => selected.has(rowId(row))));
-                const entries = model.GetRows();
-                setRows(entries);
-                setSelected(new Set(entries[0] ? [rowId(entries[0])] : []));
-                setDraft(entries[0]);
-                setError("");
-                onReference(undefined);
-              }}
+              onClick={
+                /** Activates the "Delete" control. @returns Nothing. */ () => {
+                  model.Remove(
+                    rows.filter(
+                      /** Collects the selected names for the manager operation. @param row - Candidate name row. @returns Whether the row is selected. */ (
+                        row,
+                      ) => selected.has(rowId(row)),
+                    ),
+                  );
+                  const entries = model.GetRows();
+                  setRows(entries);
+                  setSelected(new Set(entries[0] ? [rowId(entries[0])] : []));
+                  setDraft(entries[0]);
+                  setError("");
+                  onReference(undefined);
+                }
+              }
             >
               Delete
             </button>
@@ -332,32 +436,51 @@ export function ScNamePasteDlg({
   readonly onRespond: (result: NamePasteResult) => void;
   readonly onCancel: () => void;
 }): React.JSX.Element {
-  const [selected, setSelected] = useState(() => new Set(rows[0] ? [rowId(rows[0])] : []));
+  const [selected, setSelected] = useState(
+    /** Selects the first defined name for insertion. @returns Initial selected row identities. */ () =>
+      new Set(rows[0] ? [rowId(rows[0])] : []),
+  );
   return (
     <section
       role="dialog"
       aria-label="Paste Names"
       aria-modal="true"
       className={dialogClass}
-      onKeyDown={(event) => {
-        if (event.key === "Escape") {
-          event.stopPropagation();
-          onCancel();
+      onKeyDown={
+        /** Handles keyboard input on the "Paste Names" control. @param event - Browser event. @returns Nothing. */ (
+          event,
+        ) => {
+          if (event.key === "Escape") {
+            event.stopPropagation();
+            onCancel();
+          }
         }
-      }}
+      }
     >
       <DialogHeader title="Paste Names" onClose={onCancel} />
       <NameTable
         rows={rows}
         selected={selected}
-        onSelect={(key, multiple) => setSelected((current) => selectRows(current, key, multiple))}
+        onSelect={
+          /** Updates the Paste Names selection using the requested selection mode. @param key - Selected row identity. @param multiple - Whether to extend selection. @returns Nothing. */ (
+            key,
+            multiple,
+          ) =>
+            setSelected(
+              /** Creates the next Paste Names selection set. @param current - Previous selection set. @returns New selection set. */ (
+                current,
+              ) => selectRows(current, key, multiple),
+            )
+        }
       />
       <div className="flex justify-end gap-2">
         <button
           type="button"
           className={buttonClass}
           disabled={!rows.length}
-          onClick={() => onRespond({ kind: "list" })}
+          onClick={
+            /** Reports the dialog result. @returns Nothing. */ () => onRespond({ kind: "list" })
+          }
         >
           Paste All
         </button>
@@ -365,8 +488,16 @@ export function ScNamePasteDlg({
           type="button"
           className={buttonClass}
           disabled={!selected.size}
-          onClick={() =>
-            onRespond({ kind: "names", rows: rows.filter((row) => selected.has(rowId(row))) })
+          onClick={
+            /** Reports the dialog result. @returns Nothing. */ () =>
+              onRespond({
+                kind: "names",
+                rows: rows.filter(
+                  /** Collects defined names to paste into the current selection. @param row - Candidate name row. @returns Whether the name is selected. */ (
+                    row,
+                  ) => selected.has(rowId(row)),
+                ),
+              })
           }
         >
           Paste

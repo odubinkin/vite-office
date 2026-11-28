@@ -41,10 +41,20 @@ export function CalcAll(this: ScDocument): void {
   this["bAutoCalc"] = true;
   this["bCalculatingFormulaTree"] = true;
   try {
-    ForEachFormula(this, (cell) => cell.SetDirtyVar());
-    ForEachFormula(this, (cell) => {
-      if (cell.GetDirty()) cell.Interpret();
-    });
+    ForEachFormula(
+      this,
+      /** Marks visited formulas dirty before dependency recalculation. @param cell - Visited formula cell. @returns Nothing. */ (
+        cell,
+      ) => cell.SetDirtyVar(),
+    );
+    ForEachFormula(
+      this,
+      /** Interprets only the formulas that remain marked dirty. @param cell - Visited formula cell. @returns Nothing. */ (
+        cell,
+      ) => {
+        if (cell.GetDirty()) cell.Interpret();
+      },
+    );
     for (let cell = this["pFormulaTree"]; cell;) {
       const next = cell.GetNext();
       if (!cell.GetCode().IsRecalcModeAlways()) this.RemoveFromFormulaTree(cell);
@@ -62,8 +72,12 @@ function ForEachFormula(doc: ScDocument, visit: (cell: ScFormulaCell) => void): 
     const table = doc.FetchTable(tab);
     if (!table) continue;
     for (let col = 0; col < table.GetAllocatedColumnsCount(); ++col)
-      ProcessFormula(table.CreateColumnIfNotExists(col).GetCellStore(), (_row, cell) =>
-        visit(cell),
+      ProcessFormula(
+        table.CreateColumnIfNotExists(col).GetCellStore(),
+        /** Dispatches the shared visitor for each formula in a sparse column span. @param _row - Unused source row. @param cell - Visited formula cell. @returns Visitor result. */ (
+          _row,
+          cell,
+        ) => visit(cell),
       );
   }
 }

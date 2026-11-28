@@ -32,7 +32,13 @@ it("retains the original Manbow font resource through ODS and the Worker", /** U
       ),
     ),
   );
-  const [path] = source.getEntryNames().filter((name) => name.startsWith("Fonts/"));
+  const [path] = source
+    .getEntryNames()
+    .filter(
+      /** Selects package entries from the ODF embedded font directory. @param name - Name supplied by the caller. @returns Whether the member is an embedded font. */ (
+        name,
+      ) => name.startsWith("Fonts/"),
+    );
   assert(path);
   const bytes = await source.readEntry(path);
   const original = await source.readTextEntry("content.xml");

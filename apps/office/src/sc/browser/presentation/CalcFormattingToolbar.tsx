@@ -280,7 +280,11 @@ const conditionalMenu = calcMenus
       menu,
     ) => menu.items,
   )
-  .find((item) => item.kind === "submenu" && item.id === conditionalCommand);
+  .find(
+    /** Checks whether (`item.kind` equals `"submenu"` and `item.id` equals `conditionalCommand`). @param item - Candidate entry. @returns Whether the condition holds. */ (
+      item,
+    ) => item.kind === "submenu" && item.id === conditionalCommand,
+  );
 const ConditionalIcon = officeCommandIcons.get(conditionalCommand);
 
 /** Renders the native conditional toolbar popup over the same registered commands as Format. @param props - Actual command bindings. @returns Toolbar menu control. */
@@ -314,10 +318,12 @@ function CalcConditionalToolbarMenu({
         aria-expanded={position !== undefined}
         disabled={!state.enabled}
         data-office-tooltip={resource.label}
-        onClick={(event) => {
-          const rect = event.currentTarget.getBoundingClientRect();
-          setPosition({ x: rect.left, y: rect.bottom });
-        }}
+        onClick={
+          /** Updates the position. @param event - Browser event. @returns Nothing. */ (event) => {
+            const rect = event.currentTarget.getBoundingClientRect();
+            setPosition({ x: rect.left, y: rect.bottom });
+          }
+        }
       >
         {ConditionalIcon && <ConditionalIcon aria-hidden={true} size={16} />}
       </button>
@@ -326,7 +332,7 @@ function CalcConditionalToolbarMenu({
           ariaLabel={resource.label}
           {...{ commandSource, resolveArguments, position, items }}
           getCommandResource={getCalcCommandResource}
-          onClose={() => setPosition(undefined)}
+          onClose={/** Updates the position. @returns Nothing. */ () => setPosition(undefined)}
         />
       )}
     </>

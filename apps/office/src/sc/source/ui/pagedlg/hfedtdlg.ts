@@ -89,12 +89,16 @@ export function StandaloneHeaderFooterLayout(items: SfxItemSet): ScHFEditLayout 
   if (!h.on && !f.on) return undefined;
   const usage = (items.Get(ATTR_PAGE) as SvxPageItem).GetPageUsage();
   const oneSide = usage === SvxPageUsage.Left || usage === SvxPageUsage.Right;
-  const active = (isHeader: boolean, shared: boolean) =>
-    pane(
-      isHeader,
-      usage === SvxPageUsage.Left && !shared ? "left" : "right",
-      usage !== SvxPageUsage.Left,
-    );
+  const active =
+    /** Selects the source print area pane for the page usage and sharing state. @param isHeader - Whether the pane edits headers. @param shared - Whether the page style shares the pane between pages. @returns Header or footer editor layout. */ (
+      isHeader: boolean,
+      shared: boolean,
+    ) =>
+      pane(
+        isHeader,
+        usage === SvxPageUsage.Left && !shared ? "left" : "right",
+        usage !== SvxPageUsage.Left,
+      );
   if (h.on && f.on) {
     const panes =
       oneSide || (h.shared && f.shared)
@@ -143,7 +147,9 @@ export class ScHFEditDlg {
     const type = (items.Get(ATTR_PAGE) as SvxPageItem).GetNumType();
     const pattern = new CellAttributeHelper(items.GetPool()).getDefaultCellAttribute();
     this.pages = layout.panes.map(
-      ({ which }) =>
+      /** Initializes an editor page for one native header or footer slot. @param entry - Native item-set address. @returns Region editor page. */ ({
+        which,
+      }) =>
         new ScHFEditPage(
           data,
           type,

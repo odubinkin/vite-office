@@ -114,8 +114,9 @@ it("reads legacy tab colors and writes the current ODS style and display propert
     expect(source.GetTabBgColor(0).toUInt32()).toBe(0x123456);
     expect(source.GetTabBgColor(1).equals(COL_AUTO)).toBe(true);
     const record = encodeCalcDocument(source);
-    expect(() =>
-      decodeCalcDocument({ ...record, drawingGrid: [-1, 500, 4, 4, false, true, true] }),
+    expect(
+      /** Decodes the malformed input whose negative drawing grid spacing should be rejected. @returns Decoded document if input passes validation. */ () =>
+        decodeCalcDocument({ ...record, drawingGrid: [-1, 500, 4, 4, false, true, true] }),
     ).toThrow("Calc worker drawing grid is invalid.");
     transferred = decodeCalcDocument(structuredClone(record));
     const exported = await writeOdsXml(transferred);

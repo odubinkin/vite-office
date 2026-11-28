@@ -514,7 +514,12 @@ export class ScImportExport {
       this.importedSize = this.ReadFields(
         stream,
         options,
-        (column, row, field, format) => {
+        /** Writes one import field into the destination document using the selected column format. @param column - Source column offset. @param row - Source row offset. @param field - Parsed field text. @param format - Selected source column format. @returns Nothing. */ (
+          column,
+          row,
+          field,
+          format,
+        ) => {
           lcl_PutString(
             docImport,
             new ScAddress(this.origin.Col() + column, this.origin.Row() + row, this.origin.Tab()),

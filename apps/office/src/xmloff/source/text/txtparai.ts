@@ -529,7 +529,11 @@ function createInlineContext(
           hyperlink,
           namedStyles,
         );
-  const count = countFields.find(([token]) => token === element);
+  const count = countFields.find(
+    /** Checks whether `token` equals `element`. @param entry - Candidate entry. @returns Whether the condition holds. */ ([
+      token,
+    ]) => token === element,
+  );
   if (count)
     return annotation
       ? null

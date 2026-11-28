@@ -167,10 +167,11 @@ it("paints a merged range from its source cell even when its origin is hidden or
     },
     inputMode: ScInputMode.SC_INPUT_NONE,
     inputText: "",
-    getCell: (
-      /** Reads actual document values. @param position - Native address. @returns Cell text and alignment. */
-      position,
-    ) => ({ text: String(document.GetValue(position)), alignment: "right" }),
+    getCell:
+      /** Reads the calculated text for one address in the output fixture. @param position - Native position. @returns Formatted cell text. */ (
+        /** Reads actual document values. @param position - Native address. @returns Cell text and alignment. */
+        position,
+      ) => ({ text: String(document.GetValue(position)), alignment: "right" }),
     onSelect: vi.fn(),
     onHeader: vi.fn(),
     onEdit: vi.fn(),

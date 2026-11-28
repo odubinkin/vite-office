@@ -81,7 +81,11 @@ export function decodeIndexMarks(
         record.secondaryKeyReading,
         record.textReading,
         record.bookmarkName,
-      ].some((value) => typeof value !== "string") ||
+      ].some(
+        /** Detects a non-string field in a serialized Writer index mark. @param value - Serialized field value. @returns Whether the field is invalid. */ (
+          value,
+        ) => typeof value !== "string",
+      ) ||
       (record.end === undefined
         ? !record.alternativeText || node.GetText()[record.start] !== CH_TXTATR_INWORD
         : record.alternativeText ||

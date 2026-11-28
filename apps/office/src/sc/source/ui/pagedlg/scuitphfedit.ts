@@ -33,14 +33,23 @@ export const headerFooterAreas = ["Left area", "Center area", "Right area"] as c
 
 /** Original field insert buttons and file-menu choices. */
 export const headerFooterFields = {
-  "Page Number": () => new SvxPageField(),
-  "Number of Pages": () => new SvxPagesField(),
-  "Sheet Name": () => new SvxTableField(),
-  Date: () => new SvxDateField(),
-  Time: () => new SvxTimeField(),
-  Title: () => new SvxFileField(),
-  "File Name": () => new SvxExtFileField(undefined, undefined, SvxFileFormat.NameAndExt),
-  "Path/File Name": () => new SvxExtFileField(),
+  "Page Number": /** Creates the current page number field. @returns Native page field. */ () =>
+    new SvxPageField(),
+  "Number of Pages":
+    /** Creates the total page count field. @returns Native page count field. */ () =>
+      new SvxPagesField(),
+  "Sheet Name": /** Creates the current sheet name field. @returns Native sheet field. */ () =>
+    new SvxTableField(),
+  Date: /** Creates the current date field. @returns Native date field. */ () => new SvxDateField(),
+  Time: /** Creates the current time field. @returns Native time field. */ () => new SvxTimeField(),
+  Title: /** Creates the simple file name field. @returns Native file field. */ () =>
+    new SvxFileField(),
+  "File Name":
+    /** Creates an extended file name field with its extension visible. @returns Native extended file field. */ () =>
+      new SvxExtFileField(undefined, undefined, SvxFileFormat.NameAndExt),
+  "Path/File Name":
+    /** Creates the full default file name field. @returns Native extended file field. */ () =>
+      new SvxExtFileField(),
 } satisfies Record<string, () => SvxFieldData>;
 
 /** A browser-presented source field command. */
@@ -148,23 +157,29 @@ export class ScHFEditPage {
 
   /** Mirrors the preset shapes recognized by the source Reset method. @returns Original preset index or the customized entry. */
   private WhatPreset(): number | undefined {
-    const read = (editor: ScHeaderEditEngine) => {
-      const doc = editor.getImpl().GetEditDoc();
-      const node = doc.GetObject(0);
-      const prefix = node ? text(node.GetString()) : "";
-      const at = (position: number) => {
-        const attr = node?.GetCharAttribs().FindFeature(position);
-        return attr?.GetStart() === position && attr.GetItem() instanceof SvxFieldItem
-          ? (attr.GetItem() as SvxFieldItem).GetField()
-          : undefined;
+    const read =
+      /** Reads the header editor's paragraph and identifies its field text. @param editor - Source header editor. @returns Native header text. */ (
+        editor: ScHeaderEditEngine,
+      ) => {
+        const doc = editor.getImpl().GetEditDoc();
+        const node = doc.GetObject(0);
+        const prefix = node ? text(node.GetString()) : "";
+        const at =
+          /** Reads a field feature from the corresponding paragraph position. @param position - Native position. @returns Native field at the position or undefined. */ (
+            position: number,
+          ) => {
+            const attr = node?.GetCharAttribs().FindFeature(position);
+            return attr?.GetStart() === position && attr.GetItem() instanceof SvxFieldItem
+              ? (attr.GetItem() as SvxFieldItem).GetField()
+              : undefined;
+          };
+        return {
+          empty: prefix.length === 0,
+          prefix,
+          page: prefix === "Page \u0001" && at(5) instanceof SvxPageField,
+          field: doc.Count() === 1 && prefix.length === 1 ? at(0) : undefined,
+        };
       };
-      return {
-        empty: prefix.length === 0,
-        prefix,
-        page: prefix === "Page \u0001" && at(5) instanceof SvxPageField,
-        field: doc.Count() === 1 && prefix.length === 1 ? at(0) : undefined,
-      };
-    };
     const left = read(this.areas[0]),
       center = read(this.areas[1]),
       right = read(this.areas[2]);
@@ -204,12 +219,16 @@ export class ScHFEditPage {
   /** Serializes all three original edit regions into their native page style item. @param output - Dialog result. @returns Nothing. */
   FillItemSet(output: SfxItemSet): void {
     const item = new ScPageHFItem(this.which);
-    const [left, center, right] = this.areas.map((editor) => {
-      const empty = editor.GetEmptyItemSet();
-      for (let paragraph = 0; paragraph < editor.GetParagraphCount(); paragraph++)
-        editor.SetParaAttribs(paragraph, empty);
-      return editor.CreateTextObject();
-    });
+    const [left, center, right] = this.areas.map(
+      /** Clears explicitly applied native attributes from the region editor. @param editor - Header or footer edit engine. @returns Nothing. */ (
+        editor,
+      ) => {
+        const empty = editor.GetEmptyItemSet();
+        for (let paragraph = 0; paragraph < editor.GetParagraphCount(); paragraph++)
+          editor.SetParaAttribs(paragraph, empty);
+        return editor.CreateTextObject();
+      },
+    );
     if (!left || !center || !right) return;
     try {
       item.SetLeftArea(left);

@@ -58,8 +58,10 @@ it("transfers explicit row and column labels before compiling Worker formulas" /
   const document = new ScDocument();
   let transferred: ScDocument | undefined;
   let reopened: ScDocument | undefined;
-  const valueCell = (value: number) =>
-    `<table:table-cell office:value-type="float" office:value="${value}"/>`;
+  const valueCell =
+    /** Serializes one numeric cell for the ODS label range fixture. @param value - Numeric fixture value. @returns ODF table-cell markup. */ (
+      value: number,
+    ) => `<table:table-cell office:value-type="float" office:value="${value}"/>`;
   try {
     new ScXMLImport(document).importContent(
       `<office:document-content xmlns:office="${NS.office}" xmlns:table="${NS.table}" xmlns:text="${NS.text}" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2"><office:body><office:spreadsheet>

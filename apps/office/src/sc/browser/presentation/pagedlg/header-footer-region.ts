@@ -74,9 +74,12 @@ export function paintHeaderRegion(root: HTMLElement, engine: ScHeaderEditEngine)
       } else {
         run.textContent = feature?.Which() === EE.EE_FEATURE_TAB ? "\t" : plain.slice(start, end);
       }
-      const get = (which: number) =>
-        attrs.FindAttribRightOpen(which, start)?.GetItem() ??
-        node.GetContentAttribs().GetItem(which);
+      const get =
+        /** Looks up the active character attribute before using the paragraph default. @param which - Native item identifier. @returns Native character item. */ (
+          which: number,
+        ) =>
+          attrs.FindAttribRightOpen(which, start)?.GetItem() ??
+          node.GetContentAttribs().GetItem(which);
       const font = (get(EE.EE_CHAR_FONTINFO) as SvxFontItem).GetFamilyName();
       const size = (get(EE.EE_CHAR_FONTHEIGHT) as SvxFontHeightItem).GetHeight();
       if (font) run.style.fontFamily = font;
@@ -189,12 +192,24 @@ function deleteRange(
     return new ESelection(nPara, nIndex, nPara + 1, 0);
   const boundaries = Array.from(
     new Intl.Segmenter(undefined, { granularity: "grapheme" }).segment(text(node.GetString())),
-    (part) => part.index,
+    /** Reads `part.index` from the source entry. @param part - Source entry. @returns Projected value. */ (
+      part,
+    ) => part.index,
   );
   boundaries.push(node.Len());
   const edge = backwards
-    ? boundaries.reverse().find((index) => index < nIndex)
-    : boundaries.find((index) => index > nIndex);
+    ? boundaries
+        .reverse()
+        .find(
+          /** Checks whether `index` is less than `nIndex`. @param index - Candidate entry. @returns Whether the condition holds. */ (
+            index,
+          ) => index < nIndex,
+        )
+    : boundaries.find(
+        /** Checks whether `index` is greater than `nIndex`. @param index - Candidate entry. @returns Whether the condition holds. */ (
+          index,
+        ) => index > nIndex,
+      );
   return new ESelection(nPara, nIndex, nPara, edge ?? nIndex);
 }
 
@@ -207,16 +222,24 @@ export function bindHeaderRegion(
   const listeners = new AbortController();
   let composing: ESelection | undefined;
   const options = { signal: listeners.signal };
-  const selection = () => headerRegionSelection(root) ?? new ESelection();
-  const replace = (range: ESelection, value: string) => {
-    const next = new ESelection(engine.Replace(range, value));
-    paintHeaderRegion(root, engine);
-    restoreHeaderRegionSelection(root, next);
-    changed(next);
-  };
+  const selection =
+    /** Reads the browser selection as an EditEngine range. @returns Current range or an empty selection. */ () =>
+      headerRegionSelection(root) ?? new ESelection();
+  const replace =
+    /** Replaces the selected header or footer text and updates the caret. @param range - EditEngine selection to replace. @param value - Replacement text. @returns Nothing. */ (
+      range: ESelection,
+      value: string,
+    ) => {
+      const next = new ESelection(engine.Replace(range, value));
+      paintHeaderRegion(root, engine);
+      restoreHeaderRegionSelection(root, next);
+      changed(next);
+    };
   root.addEventListener(
     "beforeinput",
-    (event) => {
+    /** Routes non-composing browser edit commands to the region's native engine. @param event - Browser beforeinput event. @returns Nothing. */ (
+      event,
+    ) => {
       if (event.isComposing) return;
       event.preventDefault();
       const range = selection();
@@ -242,7 +265,9 @@ export function bindHeaderRegion(
   );
   root.addEventListener(
     "paste",
-    (event) => {
+    /** Inserts plain text from the clipboard into the active print region selection. @param event - Browser paste event. @returns Nothing. */ (
+      event,
+    ) => {
       event.preventDefault();
       const value = event.clipboardData?.getData("text/plain");
       if (value !== undefined && value !== "") replace(selection(), value.replace(/\r\n?/g, "\n"));
@@ -251,14 +276,16 @@ export function bindHeaderRegion(
   );
   root.addEventListener(
     "compositionstart",
-    () => {
+    /** Captures the initial selection before the input method starts composition. @returns Nothing. */ () => {
       composing = selection();
     },
     options,
   );
   root.addEventListener(
     "compositionend",
-    (event) => {
+    /** Commits the composed text to the saved native selection. @param event - Browser composition end event. @returns Nothing. */ (
+      event,
+    ) => {
       if (!composing) return;
       const range = composing;
       composing = undefined;
@@ -270,5 +297,6 @@ export function bindHeaderRegion(
     },
     options,
   );
-  return () => listeners.abort();
+  return /** Unregisters the DOM listeners owned by this editable region. @returns Nothing. */ () =>
+    listeners.abort();
 }

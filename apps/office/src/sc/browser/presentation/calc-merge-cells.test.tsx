@@ -66,12 +66,13 @@ async function loadOds(filename: string) {
   );
   const doc = await readOdsDocument(bytes);
   const session = mount();
-  act(() =>
-    session.controller.shell.ReplaceDocument(
-      doc,
-      createDocument({ id: filename, suiteId: "calc", title: filename }),
-      { kind: "input", name: filename, source: { kind: "external", reference: bytes } },
-    ),
+  act(
+    /** Installs the test document in the active Calc session. @returns Replacement result. */ () =>
+      session.controller.shell.ReplaceDocument(
+        doc,
+        createDocument({ id: filename, suiteId: "calc", title: filename }),
+        { kind: "input", name: filename, source: { kind: "external", reference: bytes } },
+      ),
   );
   return { ...session, doc };
 }
@@ -82,10 +83,12 @@ it("ports tdf117367 and keeps the three merge policies mutually exclusive", /** 
   const a1 = new ScAddress(0, 0),
     a2 = new ScAddress(0, 1);
   expect(frame.GetDispatcher().QueryState(".uno:ToggleMergeCells").enabled).toBe(false);
-  act(() => {
-    doc.SetTextCell(a1, unicode("AAA"));
-    doc.SetTextCell(a2, unicode("BBB"));
-  });
+  act(
+    /** Seeds both cells with text before merging. @returns Nothing. */ () => {
+      doc.SetTextCell(a1, unicode("AAA"));
+      doc.SetTextCell(a2, unicode("BBB"));
+    },
+  );
   select("A1:B4");
   await execute("Merge Cells");
   const dialog = within(screen.getByRole("dialog", { name: "Merge Cells" }));
@@ -160,7 +163,10 @@ it("ports the tdf37901 merge block and restores Key# from both merge commands", 
   const doc = controller.shell.GetDocument();
   const key = new ScAddress(1, 1);
   // The source's A1:B2 block contains only this text. Its other formulas are outside the regression.
-  act(() => doc.SetTextCell(key, unicode("Key#")));
+  act(
+    /** Writes the lookup key into the document fixture. @returns Native operation result. */ () =>
+      doc.SetTextCell(key, unicode("Key#")),
+  );
   const count = controller.shell.GetUndoManager().GetUndoActionCount();
   for (const range of ["B1:B2", "A2:B2"]) {
     for (const toggle of [false, true]) {
@@ -182,10 +188,12 @@ it("cancels a pending merge if the originating worksheet selection changes", /**
   const doc = controller.shell.GetDocument();
   const a1 = new ScAddress(0, 0),
     b1 = new ScAddress(1, 0);
-  act(() => {
-    doc.SetValue(a1, 2);
-    doc.SetValue(b1, 3);
-  });
+  act(
+    /** Sets the native value. @returns Nothing. */ () => {
+      doc.SetValue(a1, 2);
+      doc.SetValue(b1, 3);
+    },
+  );
   select("A1:B1");
   await execute("Merge Cells");
   expect(frame.GetDispatcher().QueryState(".uno:MergeCells").enabled).toBe(false);

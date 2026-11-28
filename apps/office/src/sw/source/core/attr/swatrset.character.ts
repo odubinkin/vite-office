@@ -72,9 +72,13 @@ export function writerCharacterItemFactory(which: number): SfxPoolItemFactory | 
         value,
       ) => new SvxCaseMapItem(Number(value), which);
     case Which.RES_CHRATR_BLINK:
-      return (value) => new SvxBlinkItem(Boolean(value), which);
+      return /** Builds a Writer character blink item from its imported boolean. @param value - Imported setting. @returns Native blink item. */ (
+        value,
+      ) => new SvxBlinkItem(Boolean(value), which);
     case Which.RES_CHRATR_HIDDEN:
-      return (value) => new SvxCharHiddenItem(Boolean(value), which);
+      return /** Builds a Writer hidden-character item from its imported boolean. @param value - Imported setting. @returns Native hidden item. */ (
+        value,
+      ) => new SvxCharHiddenItem(Boolean(value), which);
     case Which.RES_CHRATR_CONTOUR:
       return /** Restores the native outline. @param value - Stored value. @returns Contour item. */ (
         value,

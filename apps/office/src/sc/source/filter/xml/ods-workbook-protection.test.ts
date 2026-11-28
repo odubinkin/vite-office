@@ -30,7 +30,12 @@ it.each([
   ["testProtectionKeyODS_XL_SHA1", 5, "OX3WkEe79fv1PE+FUmfOLdwVoqI=", excel],
 ] as const)(
   "%s retains the workbook and sheet verifier",
-  async (_name, fixture, digest, algorithm) => {
+  /** Verifies a pinned workbook protection digest and algorithm through ODF import. @param _name - Fixture case title. @param fixture - Pinned flat ODF fixture name. @param digest - Expected protection digest. @param algorithm - Expected digest algorithm. @returns Test completion. */ async (
+    _name,
+    fixture,
+    digest,
+    algorithm,
+  ) => {
     const flat = readFileSync(
       `../../vendor/libreoffice-reference/sc/qa/unit/data/fods/protection-key${fixture}.fods`,
       "utf8",

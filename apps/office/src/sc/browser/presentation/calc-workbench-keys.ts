@@ -63,6 +63,24 @@ export function HandleCellClipboard(
   if (handled) event.preventDefault();
 }
 
+/** Connects workspace keyboard and clipboard props to the Calc command owners. @param frame - Active native dispatch frame. @param source - Browser command projection. @param clipboard - Active clipboard workflow. @param modal - Whether a dialog owns the input. @returns React event handlers for the workspace. */
+export function getCalcWorkspaceEventHandlers(
+  frame: SfxViewFrame<CalcViewController>,
+  source: BrowserCommandSource,
+  clipboard: CalcClipboardWorkflow,
+  modal: boolean,
+) {
+  /** Routes a clipboard event through the active Calc workflow. @param event - Workspace copy or paste event. @returns Nothing. */
+  const onClipboard = (event: ClipboardEvent) => HandleCellClipboard(event, clipboard, modal);
+  return {
+    onKeyDown:
+      /** Dispatches a workspace accelerator after the active field handles its own keys. @param event - Workspace keyboard event. @returns Nothing. */
+      (event: KeyboardEvent) => HandleWorkspaceShortcut(event, frame, source, modal),
+    onCopy: onClipboard,
+    onPaste: onClipboard,
+  };
+}
+
 /** Existing void-slot browser arguments shared by all current Calc command surfaces;typed widgets augment their own payload through the generic controller. @returns Undefined. */
 export function resolveCalcCommandArguments(): undefined {
   return undefined;

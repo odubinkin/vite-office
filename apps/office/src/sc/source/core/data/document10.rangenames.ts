@@ -41,7 +41,16 @@ export function PreprocessAllRangeNamesUpdate(
     for (let entry = iterator.GetNext(x, y); entry; entry = iterator.GetNext(x, y)) {
       const cell = entry.getFormula();
       const code = cell?.GetCode();
-      if (!code?.GetArray()?.some((token) => token.GetOpCode() === OpCode.ocName)) continue;
+      if (
+        !code
+          ?.GetArray()
+          ?.some(
+            /** Identifies named-expression references in the compiled formula. @param token - Compiled formula token. @returns Whether the opcode is a range name. */ (
+              token,
+            ) => token.GetOpCode() === OpCode.ocName,
+          )
+      )
+        continue;
       const position = new ScAddress(x[0], y[0], tab);
       const compiler = new ScCompiler(document, position, code, grammar);
       const symbol = new OUString();

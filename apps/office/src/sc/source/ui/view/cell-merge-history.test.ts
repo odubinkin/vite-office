@@ -24,8 +24,9 @@ it("centers a source merge and restores both data and original alignment through
   const a1 = new ScAddress(0, 0, 0),
     b1 = new ScAddress(1, 0, 0);
   /** Reads the actual native alignment item at the merge origin. @returns Horizontal alignment. */
-  const alignment = () =>
-    (doc.GetPattern(a1)?.GetItem(ATTR_HOR_JUSTIFY) as SvxHorJustifyItem).GetValue();
+  const alignment =
+    /** Reads the merged cell's effective horizontal justification. @returns Native alignment enum value. */ () =>
+      (doc.GetPattern(a1)?.GetItem(ATTR_HOR_JUSTIFY) as SvxHorJustifyItem).GetValue();
   const confirm = vi.fn().mockResolvedValue(ScMergeCellsOption.MoveContentHiddenCells);
   try {
     doc.SetTextCell(a1, unicode("First"));

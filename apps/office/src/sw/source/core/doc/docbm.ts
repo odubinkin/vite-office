@@ -136,13 +136,19 @@ export class DocumentMarkAccess {
   /** Lists attached annotation ranges in document order. @returns Borrowed ranges. */
   public GetAnnotationMarks(): readonly AnnotationMark[] {
     return this.GetAllMarks().filter(
-      (mark): mark is AnnotationMark => mark instanceof AnnotationMark,
+      /** Narrows the matched bookmark to a Writer annotation mark. @param mark - Candidate document mark. @returns Whether the mark is an annotation. */ (
+        mark,
+      ): mark is AnnotationMark => mark instanceof AnnotationMark,
     );
   }
 
   /** Finds the first registered annotation with an authored name. @param name - Annotation name. @returns Borrowed range. */
   public FindAnnotationMark(name: string): AnnotationMark | undefined {
-    return this.GetAnnotationMarks().find((mark) => mark.GetName() === name);
+    return this.GetAnnotationMarks().find(
+      /** Finds the annotation whose name matches the requested field. @param mark - Candidate annotation mark. @returns Whether the mark name matches. */ (
+        mark,
+      ) => mark.GetName() === name,
+    );
   }
 
   /** Releases the registered range when its owning field is erased. @param field - Field leaving the document. @returns Nothing. */

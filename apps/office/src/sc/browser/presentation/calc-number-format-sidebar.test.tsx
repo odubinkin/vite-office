@@ -37,7 +37,10 @@ function properties() {
 it("projects category and native option controls, formatting color and undo across the active cell", /** Projects category and native option controls, formatting color and undo across the active cell. @returns Nothing. */ () => {
   const { controller, frame } = mount();
   const doc = controller.shell.GetDocument();
-  act(() => controller.EnterString("-1234.5"));
+  act(
+    /** Enters the fixture value through the normal Calc input path. @returns Native operation result. */ () =>
+      controller.EnterString("-1234.5"),
+  );
   const sidebar = properties();
   const category = sidebar.getByRole("combobox", { name: "Category" });
   const decimal = sidebar.getByRole("spinbutton", { name: "Decimal places" });
@@ -74,10 +77,13 @@ it("uses the source scientific, fraction, time, date and mixed selection control
   const { controller, frame } = mount();
   const sidebar = properties();
   const category = sidebar.getByRole("combobox", { name: "Category" });
-  const set = (category: number) =>
-    fireEvent.change(sidebar.getByRole("combobox", { name: "Category" }), {
-      target: { value: String(category) },
-    });
+  const set =
+    /** Selects a different number format category through the sidebar. @param category - Native format category identifier. @returns Change-event dispatch result. */ (
+      category: number,
+    ) =>
+      fireEvent.change(sidebar.getByRole("combobox", { name: "Category" }), {
+        target: { value: String(category) },
+      });
   set(6);
   expect(sidebar.queryByRole("checkbox", { name: "Thousands separator" })).toBeNull();
   const engineering = sidebar.getByRole("checkbox", { name: "Engineering notation" });
@@ -95,10 +101,12 @@ it("uses the source scientific, fraction, time, date and mixed selection control
   set(4);
   expect(sidebar.getByRole("spinbutton", { name: "Decimal places" })).toBeDisabled();
   const dispatch = frame.GetDispatcher();
-  act(() => {
-    controller.viewData.GetMarkData().SetMarkArea(new ScRange(0, 0, 0, 0, 1, 0));
-    dispatch.Invalidate("calc-view");
-  });
+  act(
+    /** Marks the test cell range and invalidates its toolbar state. @returns Nothing. */ () => {
+      controller.viewData.GetMarkData().SetMarkArea(new ScRange(0, 0, 0, 0, 1, 0));
+      dispatch.Invalidate("calc-view");
+    },
+  );
   expect(dispatch.QueryState(NUMBER_FORMAT_TYPE).mixed).toBe(true);
   expect(category).toHaveValue("-1");
   const count = controller.shell.GetUndoManager().GetUndoActionCount();
@@ -121,13 +129,17 @@ it("keeps dock visibility and collapse separate and cancels popup focus to the e
   sidebar.getByRole("combobox", { name: "Category" }).focus();
   fireEvent.keyDown(sidebar.getByRole("combobox", { name: "Category" }), { key: "Escape" });
   expect(sidebar.getByRole("button", { name: /^Number Format$/ })).toHaveFocus();
-  act(() => {
-    frame.GetDispatcher().Execute(".uno:Sidebar");
-  });
+  act(
+    /** Reopens the sidebar after its fixture state update. @returns Nothing. */ () => {
+      frame.GetDispatcher().Execute(".uno:Sidebar");
+    },
+  );
   expect(screen.queryByRole("complementary", { name: "Calc properties sidebar" })).toBeNull();
-  act(() => {
-    frame.GetDispatcher().Execute(".uno:Sidebar");
-  });
+  act(
+    /** Reopens the sidebar before checking category-dependent formats. @returns Nothing. */ () => {
+      frame.GetDispatcher().Execute(".uno:Sidebar");
+    },
+  );
   expect(sidebar.getByRole("combobox", { name: "Category" })).toBeVisible();
   fireEvent.click(sidebar.getByRole("button", { name: "Close Sidebar Deck" }));
   expect(sidebar.queryByRole("combobox", { name: "Category" })).toBeNull();
@@ -137,7 +149,10 @@ it("keeps dock visibility and collapse separate and cancels popup focus to the e
 it("activates formatter-owned currency rows and repeats the chosen typed key on the main button", /** Activates formatter-owned currency rows and repeats the chosen typed key on the main button. @returns Nothing. */ () => {
   const { controller } = mount();
   const doc = controller.shell.GetDocument();
-  act(() => controller.EnterString("3.25"));
+  act(
+    /** Enters the fixture value through the normal Calc input path. @returns Native operation result. */ () =>
+      controller.EnterString("3.25"),
+  );
   const toolbar = within(screen.getByRole("toolbar", { name: "Calc formatting toolbar" }));
   const open = toolbar.getByLabelText("Currency formats");
   fireEvent.click(open);

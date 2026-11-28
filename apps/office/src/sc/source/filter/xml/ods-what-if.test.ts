@@ -57,7 +57,9 @@ it("imports the original tdf149752 linked product consolidation", /** Ports the 
         "META-INF/manifest.xml": await archive.readTextEntry("META-INF/manifest.xml"),
       },
     },
-    (document) => {
+    /** Verifies the consolidation data reconstructed by ODS import. @param document - Imported Calc document. @returns Nothing. */ (
+      document,
+    ) => {
       const settings = document.GetConsolidateDlgData();
       assert(settings);
       expect(settings.eFunction).toBe(ScSubTotalFunc.PROD);
@@ -116,7 +118,9 @@ it("preserves original per-sheet scenario flags and marked ranges", /** Verifies
           '<manifest:manifest xmlns:manifest="urn:oasis:names:tc:opendocument:xmlns:manifest:1.0" manifest:version="1.3"><manifest:file-entry manifest:full-path="/" manifest:media-type="application/vnd.oasis.opendocument.spreadsheet"/><manifest:file-entry manifest:full-path="content.xml" manifest:media-type="text/xml"/></manifest:manifest>',
       },
     },
-    (document) => {
+    /** Verifies the scenario sheet and its recorded options after import. @param document - Imported Calc document. @returns Nothing. */ (
+      document,
+    ) => {
       expect(document.FetchTable(0)?.IsScenario()).toBe(false);
       const table = document.FetchTable(1);
       assert(table);

@@ -68,58 +68,89 @@ export function ScPageFormatTab({
             <select
               className={selectClass}
               value={page.GetPaperSizeBox().get_active_id()}
-              onChange={(event) => {
-                page.PaperSizeSelect_Impl(Number(event.target.value) as Paper);
-                onChange({ ...layout, ...page.GetGeometry() });
-              }}
+              onChange={
+                /** Applies the selected native paper preset and refreshes the page layout. @param event - Paper size change event. @returns Nothing. */ (
+                  event,
+                ) => {
+                  page.PaperSizeSelect_Impl(Number(event.target.value) as Paper);
+                  onChange({ ...layout, ...page.GetGeometry() });
+                }
+              }
             >
               {page
                 .GetPaperSizeBox()
                 .GetEntries()
-                .map(({ paper, label }) => (
-                  <option key={paper} value={paper}>
-                    {label}
-                  </option>
-                ))}
+                .map(
+                  /** Renders the `paper` option for the source entry. @param entry - Source entry. @returns Rendered element. */ ({
+                    paper,
+                    label,
+                  }) => (
+                    <option key={paper} value={paper}>
+                      {label}
+                    </option>
+                  ),
+                )}
             </select>
           </label>
-          {lengths.map(([key, label]) => (
-            <PageStyleMetric
-              key={key}
-              label={label}
-              unit={unit}
-              value={geometry[key]}
-              {...limits[key]}
-              onChange={(value) => {
-                page.PaperSizeModify_Impl(key, value);
-                onChange({ ...layout, ...page.GetGeometry() });
-              }}
-            />
-          ))}
+          {lengths.map(
+            /** Renders one PageStyleMetric for the source entry. @param entry - Source entry. @returns Rendered element. */ ([
+              key,
+              label,
+            ]) => (
+              <PageStyleMetric
+                key={key}
+                label={label}
+                unit={unit}
+                value={geometry[key]}
+                {...limits[key]}
+                onChange={
+                  /** Updates one dimension for custom paper and refreshes the geometry. @param value - Paper dimension in native units. @returns Nothing. */ (
+                    value,
+                  ) => {
+                    page.PaperSizeModify_Impl(key, value);
+                    onChange({ ...layout, ...page.GetGeometry() });
+                  }
+                }
+              />
+            ),
+          )}
           <fieldset className="col-span-2 flex flex-wrap gap-3">
             <legend className="mb-1">Orientation</legend>
-            {orientations.map(([landscape, label]) => (
-              <label key={label} className="flex items-center gap-1.5">
-                <input
-                  type="radio"
-                  name={orientationName}
-                  checked={geometry.landscape === landscape}
-                  onChange={() => {
-                    page.SwapOrientation_Impl(landscape);
-                    onChange({ ...layout, ...page.GetGeometry() });
-                  }}
-                />
-                {label}
-              </label>
-            ))}
+            {orientations.map(
+              /** Renders one label for the source entry. @param entry - Source entry. @returns Rendered element. */ ([
+                landscape,
+                label,
+              ]) => (
+                <label key={label} className="flex items-center gap-1.5">
+                  <input
+                    type="radio"
+                    name={orientationName}
+                    checked={geometry.landscape === landscape}
+                    onChange={
+                      /** Switches paper orientation and reads the updated native layout. @returns Nothing. */ () => {
+                        page.SwapOrientation_Impl(landscape);
+                        onChange({ ...layout, ...page.GetGeometry() });
+                      }
+                    }
+                  />
+                  {label}
+                </label>
+              ),
+            )}
           </fieldset>
           <label className="col-span-2 grid gap-1">
             Text direction
             <select
               className={selectClass}
               value={layout.direction}
-              onChange={(event) =>
-                onChange({ ...layout, direction: Number(event.target.value) as SvxFrameDirection })
+              onChange={
+                /** Applies the native frame direction selected in the list. @param event - Text direction change event. @returns Nothing. */ (
+                  event,
+                ) =>
+                  onChange({
+                    ...layout,
+                    direction: Number(event.target.value) as SvxFrameDirection,
+                  })
               }
             >
               <option value={SvxFrameDirection.Environment}>
@@ -132,25 +163,34 @@ export function ScPageFormatTab({
         </fieldset>
         <fieldset className="grid grid-cols-2 gap-3 rounded-md border border-slate-200 p-3">
           <legend className="px-1 font-semibold">Margins</legend>
-          {margins.map(([key, label]) => (
-            <PageStyleMetric
-              key={key}
-              label={
-                layout.usage === SvxPageUsage.Mirror && key === "leftMargin"
-                  ? "Inner"
-                  : layout.usage === SvxPageUsage.Mirror && key === "rightMargin"
-                    ? "Outer"
-                    : label
-              }
-              unit={unit}
-              value={geometry[key]}
-              {...limits[key]}
-              onChange={(value) => {
-                page.SetMargin(key, value);
-                onChange({ ...layout, ...page.GetGeometry() });
-              }}
-            />
-          ))}
+          {margins.map(
+            /** Renders one PageStyleMetric for the source entry. @param entry - Source entry. @returns Rendered element. */ ([
+              key,
+              label,
+            ]) => (
+              <PageStyleMetric
+                key={key}
+                label={
+                  layout.usage === SvxPageUsage.Mirror && key === "leftMargin"
+                    ? "Inner"
+                    : layout.usage === SvxPageUsage.Mirror && key === "rightMargin"
+                      ? "Outer"
+                      : label
+                }
+                unit={unit}
+                value={geometry[key]}
+                {...limits[key]}
+                onChange={
+                  /** Applies the edited margin and refreshes the geometry from the native model. @param value - Margin in native units. @returns Nothing. */ (
+                    value,
+                  ) => {
+                    page.SetMargin(key, value);
+                    onChange({ ...layout, ...page.GetGeometry() });
+                  }
+                }
+              />
+            ),
+          )}
         </fieldset>
         <fieldset className="grid grid-cols-2 gap-3 rounded-md border border-slate-200 p-3">
           <legend className="px-1 font-semibold">Layout Settings</legend>
@@ -159,15 +199,22 @@ export function ScPageFormatTab({
             <select
               className={selectClass}
               value={layout.usage}
-              onChange={(event) =>
-                onChange({ ...layout, usage: Number(event.target.value) as SvxPageUsage })
+              onChange={
+                /** Applies the selected layout mode for left and right pages. @param event - Page usage change event. @returns Nothing. */ (
+                  event,
+                ) => onChange({ ...layout, usage: Number(event.target.value) as SvxPageUsage })
               }
             >
-              {pageUsage.map(([value, label]) => (
-                <option key={value} value={value}>
-                  {label}
-                </option>
-              ))}
+              {pageUsage.map(
+                /** Renders the `value` option for the source entry. @param entry - Source entry. @returns Rendered element. */ ([
+                  value,
+                  label,
+                ]) => (
+                  <option key={value} value={value}>
+                    {label}
+                  </option>
+                ),
+              )}
             </select>
           </label>
           <label className="grid gap-1">
@@ -175,18 +222,29 @@ export function ScPageFormatTab({
             <select
               className={selectClass}
               value={layout.numbering}
-              onChange={(event) =>
-                onChange({ ...layout, numbering: Number(event.target.value) as SvxNumType })
+              onChange={
+                /** Sets the native numbering style used for page counts. @param event - Numbering format change event. @returns Nothing. */ (
+                  event,
+                ) => onChange({ ...layout, numbering: Number(event.target.value) as SvxNumType })
               }
             >
-              {!pageNumbering.some(([value]) => value === layout.numbering) ? (
+              {!pageNumbering.some(
+                /** Checks whether `value` equals `layout.numbering`. @param entry - Candidate entry. @returns Whether the condition holds. */ ([
+                  value,
+                ]) => value === layout.numbering,
+              ) ? (
                 <option value={layout.numbering}>Current format</option>
               ) : null}
-              {pageNumbering.map(([value, label]) => (
-                <option key={value} value={value}>
-                  {label}
-                </option>
-              ))}
+              {pageNumbering.map(
+                /** Renders the `value` option for the source entry. @param entry - Source entry. @returns Rendered element. */ ([
+                  value,
+                  label,
+                ]) => (
+                  <option key={value} value={value}>
+                    {label}
+                  </option>
+                ),
+              )}
             </select>
           </label>
           <fieldset className="col-span-2 flex flex-wrap gap-3">
@@ -196,16 +254,25 @@ export function ScPageFormatTab({
                 ["centerHorizontal", "Horizontal"],
                 ["centerVertical", "Vertical"],
               ] as const
-            ).map(([key, title]) => (
-              <label key={key} className="flex items-center gap-1.5">
-                <input
-                  type="checkbox"
-                  checked={layout[key]}
-                  onChange={(event) => onChange({ ...layout, [key]: event.target.checked })}
-                />
-                {title}
-              </label>
-            ))}
+            ).map(
+              /** Renders one label for the source entry. @param entry - Source entry. @returns Rendered element. */ ([
+                key,
+                title,
+              ]) => (
+                <label key={key} className="flex items-center gap-1.5">
+                  <input
+                    type="checkbox"
+                    checked={layout[key]}
+                    onChange={
+                      /** Applies the related page alignment option. @param event - Alignment checkbox change event. @returns Nothing. */ (
+                        event,
+                      ) => onChange({ ...layout, [key]: event.target.checked })
+                    }
+                  />
+                  {title}
+                </label>
+              ),
+            )}
           </fieldset>
         </fieldset>
       </div>

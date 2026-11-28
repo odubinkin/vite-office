@@ -231,7 +231,11 @@ export function encodeCalcChangeTrack(
           ...(moves.length
             ? {
                 moveCutOffs: moves.map(
-                  ({ action, from, to }) => [action.GetActionNumber(), from, to] as const,
+                  /** Converts the movement cutoff to its stable persisted tuple. @param entry - Movement action and range bounds. @returns Action number and inclusive cutoff bounds. */ ({
+                    action,
+                    from,
+                    to,
+                  }) => [action.GetActionNumber(), from, to] as const,
                 ),
               }
             : {}),
@@ -240,12 +244,17 @@ export function encodeCalcChangeTrack(
       throw new Error("Calc worker change action type is unsupported");
     },
   );
-  const generated = Array.from(track.generatedEntries(), (action): GeneratedRecord => ({
-    id: action.GetActionNumber(),
-    range: action.GetBigRange().GetVars(),
-    value: encodeCell(action.GetNewCell(), textStyles),
-    input: action.GetNewValue(),
-  }));
+  const generated = Array.from(
+    track.generatedEntries(),
+    /** Encodes an original generated change record for the worker. @param action - Native change action. @returns Generated record with value, input and affected range. */ (
+      action,
+    ): GeneratedRecord => ({
+      id: action.GetActionNumber(),
+      range: action.GetBigRange().GetVars(),
+      value: encodeCell(action.GetNewCell(), textStyles),
+      input: action.GetNewValue(),
+    }),
+  );
   return {
     actions,
     ...(generated.length ? { generated } : {}),
@@ -260,7 +269,11 @@ function validRange(range: unknown): range is ReturnType<ScBigRange["GetVars"]> 
   return (
     Array.isArray(range) &&
     range.length === 6 &&
-    range.every((value: unknown) => typeof value === "bigint" && BigInt.asIntN(64, value) === value)
+    range.every(
+      /** Checks that the coordinate can round-trip through the signed native range. @param value - Serialized coordinate. @returns Whether the value fits in a signed 64-bit integer. */ (
+        value: unknown,
+      ) => typeof value === "bigint" && BigInt.asIntN(64, value) === value,
+    )
   );
 }
 
@@ -278,11 +291,14 @@ function decodeCell(importer: ScXMLImport, value: ChangeCell): ScCellValue {
     value?.kind === "edit" &&
     Array.isArray(value.paragraphs) &&
     value.paragraphs.every(
-      (paragraph) =>
+      /** Validates the span shape for an imported rich-text paragraph. @param paragraph - Candidate paragraph. @returns Whether all spans are well formed. */ (
+        paragraph,
+      ) =>
         Array.isArray(paragraph) &&
         paragraph.every(
-          (span) =>
-            Array.isArray(span) && typeof span[0] === "string" && typeof span[1] === "string",
+          /** Requires two leading string fields for a serialized text span. @param span - Candidate span. @returns Whether the record can be read as a text span. */ (
+            span,
+          ) => Array.isArray(span) && typeof span[0] === "string" && typeof span[1] === "string",
         ),
     )
   )

@@ -104,7 +104,13 @@ export class CalcConditionalWorkflows {
         }
         const previous =
           action.kind === "edit"
-            ? model.GetFormats().find((entry) => entry.GetKey() === action.key)
+            ? model
+                .GetFormats()
+                .find(
+                  /** Finds the staged format entry selected by the manager action. @param entry - Conditional format candidate. @returns Whether the format key matches. */ (
+                    entry,
+                  ) => entry.GetKey() === action.key,
+                )
             : undefined;
         const selection = ConditionalSelection(this.controller.viewData);
         const editor = new ScCondFormatDlg(

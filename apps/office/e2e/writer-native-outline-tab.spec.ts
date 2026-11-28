@@ -2,6 +2,7 @@
 import { readFile } from "node:fs/promises";
 import { expect, test } from "@playwright/test";
 import { SwDoc } from "../src/sw/source/core/doc/doc";
+import { createWriterNumFormat } from "../src/sw/source/core/doc/number";
 import { SwDocShell } from "../src/sw/source/uibase/app/docsh";
 import { createDocument } from "../src/sfx2/source/doc/objsh";
 import { writeOdtDocument } from "../src/sw/source/filter/xml/wrtxml";
@@ -15,6 +16,14 @@ for (const width of [1280, 390])
     if (body === undefined) throw new Error("Missing outline fixture");
     body.SetText("Heading");
     body.ChgFormatColl(doc.GetTextFormatColl("heading-2"));
+    doc.GetOutlineNumRule().Set(
+      2,
+      createWriterNumFormat("numbered", "", {
+        numberingType: "none",
+        positionAndSpaceMode: "label-alignment",
+        indentAt: 720,
+      }),
+    );
     const table = doc.nodes.MakeTableNode("Outline", {}, body);
     table.AddColumnWidth(2400);
     const cell = doc.nodes.AppendTableRow(table, 1).GetTabBoxes()[0]?.GetParagraphs()[0];
@@ -62,7 +71,7 @@ for (const width of [1280, 390])
     if (path === null) throw new Error("Missing outline export");
     const context = await browser.newContext({
       viewport: { width, height: 900 },
-      baseURL: "http://127.0.0.1:4173",
+      baseURL: new URL(page.url()).origin,
     });
     try {
       const reopened = await context.newPage();
@@ -101,6 +110,14 @@ for (const width of [1280, 390])
     if (body === undefined) throw new Error("Missing tenth heading");
     body.SetText("Tenth boundary");
     body.ChgFormatColl(doc.GetTextFormatColl("heading-9"));
+    doc.GetOutlineNumRule().Set(
+      9,
+      createWriterNumFormat("numbered", "", {
+        numberingType: "none",
+        positionAndSpaceMode: "label-alignment",
+        indentAt: 720,
+      }),
+    );
     const metadata = createDocument({
         id: "tenth-outline",
         suiteId: "writer",
@@ -127,10 +144,12 @@ for (const width of [1280, 390])
     await expect(editor).toHaveAttribute("data-style", "heading-10");
     await expect(editor).toHaveText("Tenth boundary");
     await page.keyboard.press("Tab");
-    await expect(editor).toHaveText("\tTenth boundary");
+    await expect(editor).toHaveText("Tenth boundary");
     await expect(editor).toHaveAttribute("data-style", "heading-10");
     await page.keyboard.press("Control+z");
-    await expect(editor).toHaveText("Tenth boundary");
+    await expect(editor).toHaveAttribute("data-style", "heading-9");
+    await page.keyboard.press("Control+y");
+    await expect(editor).toHaveAttribute("data-style", "heading-10");
     await page.keyboard.press("Shift+Tab");
     await expect(editor).toHaveAttribute("data-style", "heading-9");
     await page.keyboard.press("Control+z");

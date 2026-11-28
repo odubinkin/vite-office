@@ -34,33 +34,42 @@ export class TableValues {
         ++column
       ) {
         const store = sheet.CreateColumnIfNotExists(column).GetCellStore();
-        ProcessFormula(store.begin(), store, range.aStart.Row(), range.aEnd.Row(), (row, cell) => {
-          const value = new ScCellValue();
-          const formula = cell.GetResult();
-          try {
-            if (formula.meType === FormulaResultValue.Value) value.set(formula.mfValue);
-            else if (formula.meType === FormulaResultValue.String && formula.mbMultiLine) {
-              const engine = doc.GetEditEngine();
-              engine.SetTextCurrentDefaults(formula.maString.getString());
-              const content = engine.CreateTextObject();
-              if (content) {
-                try {
-                  value.set(content);
-                } finally {
-                  content.dispose();
-                }
-              } else value.set(formula.maString);
-            } else
-              value.set(
-                formula.meType === FormulaResultValue.String
-                  ? formula.maString
-                  : SharedString.getEmptyString(),
-              );
-            result.cells.push({ position: new ScAddress(column, row, tab), value });
-          } finally {
-            formula.dispose();
-          }
-        });
+        ProcessFormula(
+          store.begin(),
+          store,
+          range.aStart.Row(),
+          range.aEnd.Row(),
+          /** Snapshots a formula result as a scalar cell value for conversion. @param row - Source cell row. @param cell - Native formula cell. @returns Nothing. */ (
+            row,
+            cell,
+          ) => {
+            const value = new ScCellValue();
+            const formula = cell.GetResult();
+            try {
+              if (formula.meType === FormulaResultValue.Value) value.set(formula.mfValue);
+              else if (formula.meType === FormulaResultValue.String && formula.mbMultiLine) {
+                const engine = doc.GetEditEngine();
+                engine.SetTextCurrentDefaults(formula.maString.getString());
+                const content = engine.CreateTextObject();
+                if (content) {
+                  try {
+                    value.set(content);
+                  } finally {
+                    content.dispose();
+                  }
+                } else value.set(formula.maString);
+              } else
+                value.set(
+                  formula.meType === FormulaResultValue.String
+                    ? formula.maString
+                    : SharedString.getEmptyString(),
+                );
+              result.cells.push({ position: new ScAddress(column, row, tab), value });
+            } finally {
+              formula.dispose();
+            }
+          },
+        );
       }
     }
     return result;

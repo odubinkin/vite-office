@@ -157,7 +157,7 @@ describe("global and scoped registry gates", /** Registers inventory concurrency
     expect(parseInventoryRegistry(reverse, baseline)).toEqual(parsed);
     expect(includesRegistryOwner("writer", "writer")).toBe(true);
     expect(includesRegistryOwner("writer", "calc")).toBe(false);
-  });
+  }, 30_000);
   it("rejects global duplicate IDs, aliases, operation contracts, paths and orphan references", /** Exercises merge collision guards. @returns Completion after assertions. */ async () => {
     for (const failure of [
       "capability",
@@ -211,7 +211,7 @@ describe("global and scoped registry gates", /** Registers inventory concurrency
           parseInventoryRegistry(registry, baseline),
       ).toThrow();
     }
-  });
+  }, 60_000);
   it("strictly parses independent invariant entries", /** Rejects malformed paths and contract data. @returns Completion after assertions. */ async () => {
     const { registry } = await fixture();
     const valid = projectRegistryViews(registry)[

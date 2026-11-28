@@ -41,7 +41,11 @@ export function ScNameDefDlg({
     anchor: ScAddress;
     kind: Parameters<ScPrintReferenceInput["Start"]>[1];
   }>(undefined);
-  useLayoutEffect(() => nameEdit.current?.focus(), []);
+  useLayoutEffect(
+    /** Focuses the defined-name field when the dialog opens. @returns Nothing. */ () =>
+      nameEdit.current?.focus(),
+    [],
+  );
   const nameError = name ? model.CheckName(name, scope) : "";
   const expressionError = model.CheckExpression(expression, type);
   const validation = nameError || expressionError || error;
@@ -66,38 +70,49 @@ export function ScNameDefDlg({
     onReference(range);
   }
 
-  useImperativeHandle(referenceInput, () => ({
-    /** Starts tracking on the original reference field. @param anchor - First cell. @param kind - Grid surface. @returns Nothing. */
-    Start(anchor, kind) {
-      if (!active.current && !collapsed) return;
-      drag.current = { anchor, kind };
-      pick(anchor);
-    },
-    Move: pick,
-    /** Ends tracking and returns focus to the reference entry. @returns Nothing. */
-    End() {
-      if (!drag.current) return;
-      drag.current = undefined;
-      referenceEdit.current?.focus({ preventScroll: true });
-    },
-  }));
+  useImperativeHandle(
+    referenceInput,
+    /** Exposes grid-picking operations for the defined name reference. @returns Reference selection handle. */ () => ({
+      /** Starts tracking on the original reference field. @param anchor - First cell. @param kind - Grid surface. @returns Nothing. */
+      Start(anchor, kind) {
+        if (!active.current && !collapsed) return;
+        drag.current = { anchor, kind };
+        pick(anchor);
+      },
+      Move: pick,
+      /** Ends tracking and returns focus to the reference entry. @returns Nothing. */
+      End() {
+        if (!drag.current) return;
+        drag.current = undefined;
+        referenceEdit.current?.focus({ preventScroll: true });
+      },
+    }),
+  );
 
   return (
     <form
       role="dialog"
       aria-label="Define Name"
       className="fixed right-4 top-24 z-50 w-96 max-w-[calc(100vw-2rem)] space-y-3 rounded-lg border border-slate-300 bg-white p-4 text-sm shadow-xl"
-      onSubmit={(event) => {
-        event.preventDefault();
-        if (!name || validation || collapsed) return;
-        setError(onAdd({ name, expression, scope, type }));
-      }}
-      onKeyDown={(event) => {
-        if (event.key === "Escape") {
-          event.stopPropagation();
-          onCancel();
+      onSubmit={
+        /** Submits the "Define Name" control. @param event - Browser event. @returns Nothing. */ (
+          event,
+        ) => {
+          event.preventDefault();
+          if (!name || validation || collapsed) return;
+          setError(onAdd({ name, expression, scope, type }));
         }
-      }}
+      }
+      onKeyDown={
+        /** Handles keyboard input on the "Define Name" control. @param event - Browser event. @returns Nothing. */ (
+          event,
+        ) => {
+          if (event.key === "Escape") {
+            event.stopPropagation();
+            onCancel();
+          }
+        }
+      }
     >
       <DialogHeader title="Define Name" onClose={onCancel} />
       {!collapsed && (
@@ -107,13 +122,19 @@ export function ScNameDefDlg({
             className="block w-full rounded border px-2 py-1"
             ref={nameEdit}
             value={name}
-            onFocus={() => {
-              active.current = false;
-            }}
-            onChange={(event) => {
-              setName(event.target.value);
-              setError("");
-            }}
+            onFocus={
+              /** Records focus for the `name` control. @returns Nothing. */ () => {
+                active.current = false;
+              }
+            }
+            onChange={
+              /** Applies a change from the `name` control. @param event - Browser event. @returns Nothing. */ (
+                event,
+              ) => {
+                setName(event.target.value);
+                setError("");
+              }
+            }
           />
         </label>
       )}
@@ -124,24 +145,32 @@ export function ScNameDefDlg({
             className="block w-full rounded border px-2 py-1"
             ref={referenceEdit}
             value={expression}
-            onFocus={() => {
-              active.current = true;
-            }}
-            onChange={(event) => {
-              setExpression(event.target.value);
-              setError("");
-              onReference(undefined);
-            }}
+            onFocus={
+              /** Records focus for the `expression` control. @returns Nothing. */ () => {
+                active.current = true;
+              }
+            }
+            onChange={
+              /** Applies a change from the `expression` control. @param event - Browser event. @returns Nothing. */ (
+                event,
+              ) => {
+                setExpression(event.target.value);
+                setError("");
+                onReference(undefined);
+              }
+            }
           />
         </label>
         <button
           type="button"
           aria-label={collapsed ? "Expand" : "Shrink"}
           className="rounded border px-2 py-1"
-          onClick={() => {
-            setCollapsed(!collapsed);
-            referenceEdit.current?.focus();
-          }}
+          onClick={
+            /** Updates the collapsed and focuses the input. @returns Nothing. */ () => {
+              setCollapsed(!collapsed);
+              referenceEdit.current?.focus();
+            }
+          }
         >
           {collapsed ? "▾" : "▴"}
         </button>
@@ -153,19 +182,30 @@ export function ScNameDefDlg({
             <select
               className="block w-full rounded border px-2 py-1"
               value={scope}
-              onFocus={() => {
-                active.current = false;
-              }}
-              onChange={(event) => {
-                setScope(Number(event.target.value));
-                setError("");
-              }}
+              onFocus={
+                /** Records focus for the `scope` control. @returns Nothing. */ () => {
+                  active.current = false;
+                }
+              }
+              onChange={
+                /** Applies a change from the `scope` control. @param event - Browser event. @returns Nothing. */ (
+                  event,
+                ) => {
+                  setScope(Number(event.target.value));
+                  setError("");
+                }
+              }
             >
-              {model.scopes.map(([tab, label]) => (
-                <option key={tab} value={tab}>
-                  {label}
-                </option>
-              ))}
+              {model.scopes.map(
+                /** Renders the `tab` option for the source entry. @param entry - Source entry. @returns Rendered element. */ ([
+                  tab,
+                  label,
+                ]) => (
+                  <option key={tab} value={tab}>
+                    {label}
+                  </option>
+                ),
+              )}
             </select>
           </label>
           {validation ? (
@@ -176,19 +216,28 @@ export function ScNameDefDlg({
           <details>
             <summary>Range Options</summary>
             <div className="grid grid-cols-2 gap-2 pt-2">
-              {rangeOptions.map(([flag, label]) => (
-                <label key={flag} className="flex gap-2">
-                  <input
-                    type="checkbox"
-                    checked={Boolean(type & flag)}
-                    onChange={(event) => {
-                      setType(event.target.checked ? type | flag : type & ~flag);
-                      setError("");
-                    }}
-                  />
-                  {label}
-                </label>
-              ))}
+              {rangeOptions.map(
+                /** Renders one label for the source entry. @param entry - Source entry. @returns Rendered element. */ ([
+                  flag,
+                  label,
+                ]) => (
+                  <label key={flag} className="flex gap-2">
+                    <input
+                      type="checkbox"
+                      checked={Boolean(type & flag)}
+                      onChange={
+                        /** Updates the type and updates the error. @param event - Browser event. @returns Nothing. */ (
+                          event,
+                        ) => {
+                          setType(event.target.checked ? type | flag : type & ~flag);
+                          setError("");
+                        }
+                      }
+                    />
+                    {label}
+                  </label>
+                ),
+              )}
             </div>
           </details>
           <div className="flex justify-end gap-2">

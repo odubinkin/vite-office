@@ -44,30 +44,36 @@ function SearchMatchMatrix(
   const end = horizontal ? columns : rows;
   const key = entry.item;
   /** Reads an owned scalar from the search vector. @param offset - Vector position. @returns Matrix scalar. */
-  const get = (offset: number) => matrix.Get(horizontal ? offset : 0, horizontal ? 0 : offset);
+  const get =
+    /** Reads the matrix entry along the lookup vector. @param offset - Offset within the current sequence. @returns Typed matrix cell. */ (
+      offset: number,
+    ) => matrix.Get(horizontal ? offset : 0, horizontal ? 0 : offset);
   /** Orders one matrix value against the query result. @param offset - Candidate position. @returns Order relative to the search key. */
-  const compare = (offset: number): number => {
-    const item = get(offset);
-    try {
-      if (item.nType === ScMatValType.Empty) return -1;
-      if (ScMatrix.IsValueType(item.nType)) {
-        if (!Number.isFinite(item.fVal)) return 1;
-        if (typeof key !== "number") return -1;
-        return item.fVal === key ? 0 : item.fVal < key ? -1 : 1;
+  const compare =
+    /** Reads a numeric entry from the lookup vector and releases its native value. @param offset - Offset within the current sequence. @returns Numeric value used by lookup. */ (
+      offset: number,
+    ): number => {
+      const item = get(offset);
+      try {
+        if (item.nType === ScMatValType.Empty) return -1;
+        if (ScMatrix.IsValueType(item.nType)) {
+          if (!Number.isFinite(item.fVal)) return 1;
+          if (typeof key !== "number") return -1;
+          return item.fVal === key ? 0 : item.fVal < key ? -1 : 1;
+        }
+        if (typeof key === "number") return 1;
+        const value = item.GetString();
+        if (
+          mode === 0 &&
+          entry.searchType !== SearchParam.SearchType.Normal &&
+          entry.matchesText(value.getString(), text(value.getIgnoreCaseString()))
+        )
+          return 0;
+        return GetCollator().compare(text(value.getString()), key.text);
+      } finally {
+        item.dispose();
       }
-      if (typeof key === "number") return 1;
-      const value = item.GetString();
-      if (
-        mode === 0 &&
-        entry.searchType !== SearchParam.SearchType.Normal &&
-        entry.matchesText(value.getString(), text(value.getIgnoreCaseString()))
-      )
-        return 0;
-      return GetCollator().compare(text(value.getString()), key.text);
-    } finally {
-      item.dispose();
-    }
-  };
+    };
   if (end === 0) return undefined;
   if (mode === 0) {
     for (let offset = 0; offset < end; ++offset) if (compare(offset) === 0) return offset + 1;

@@ -89,9 +89,21 @@ it("keeps native hidden text, legacy content and an unsupported condition's pres
   const content = `<office:document-content xmlns:office="${ODF_NAMESPACES.office}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:w="${ODF_NAMESPACES.ooow}" xmlns:other="urn:other"><office:body><office:text><text:p><text:hidden-text text:condition="w:1 EQ 1" office:string-value="Secret" text:is-hidden="true">Secret</text:hidden-text><text:hidden-text text:condition="w:FALSE" text:string-value="Visible"/><text:conditional-text text:condition="other:TRUE" text:string-value-if-true="a" text:string-value-if-false="b">fallback</text:conditional-text></text:p></office:text></office:body></office:document-content>`;
   const source = importWriterXml(undefined, content, metadata);
   try {
-    expect(hiddenFields(source.document).map((field) => field.Expand())).toEqual(["Secret", ""]);
+    expect(
+      hiddenFields(source.document).map(
+        /** Expands the native hidden-text field in the first state. @param field - Native Writer field. @returns Visible field text. */ (
+          field,
+        ) => field.Expand(),
+      ),
+    ).toEqual(["Secret", ""]);
     source.document.getIDocumentFieldsAccess().UpdateExpFields();
-    expect(hiddenFields(source.document).map((field) => field.Expand())).toEqual(["", "Visible"]);
+    expect(
+      hiddenFields(source.document).map(
+        /** Expands the native hidden-text field after updating its owner. @param field - Native Writer field. @returns Visible field text. */ (
+          field,
+        ) => field.Expand(),
+      ),
+    ).toEqual(["", "Visible"]);
     const archive = await DocumentArchive.open(await writeOdtDocument(source.document, metadata));
     const serialized = await archive.readTextEntry("content.xml");
     const xml = new DOMParser().parseFromString(serialized, "application/xml");

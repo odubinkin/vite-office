@@ -747,22 +747,25 @@ export class ScInterpreter {
     let errorFunctions = 0;
     let errorFunctionCount: number | undefined;
     /** Preserves a pending error result for its later error-evaluating function. @param stackBase - Stack position before the current opcode's arguments. @returns Whether to continue with the next RPN token. */
-    const continueAfterError = (stackBase: number): boolean => {
-      if (this.nGlobalError === FormulaError.NONE) return true;
-      errorFunctionCount ??= code.reduce(
-        /** Counts the native error-evaluating commands in the original RPN. @param count - Previous count. @param instruction - RPN token. @returns Updated count. */
-        (count, instruction) => count + Number(IsErrFunc(instruction.GetOpCode())),
-        0,
-      );
-      if (errorFunctions >= errorFunctionCount) return false;
-      const top = this.pStack.length > stackBase ? this.pStack.at(-1) : undefined;
-      this.pStack.length = Math.min(this.pStack.length, stackBase);
-      this.PushWithoutError(
-        top instanceof FormulaErrorToken ? top : new FormulaErrorToken(this.nGlobalError),
-      );
-      this.nGlobalError = FormulaError.NONE;
-      return true;
-    };
+    const continueAfterError =
+      /** Propagates a pending formula error into the active stack frame. @param stackBase - Initial evaluation stack depth. @returns Whether an error was applied. */ (
+        stackBase: number,
+      ): boolean => {
+        if (this.nGlobalError === FormulaError.NONE) return true;
+        errorFunctionCount ??= code.reduce(
+          /** Counts the native error-evaluating commands in the original RPN. @param count - Previous count. @param instruction - RPN token. @returns Updated count. */
+          (count, instruction) => count + Number(IsErrFunc(instruction.GetOpCode())),
+          0,
+        );
+        if (errorFunctions >= errorFunctionCount) return false;
+        const top = this.pStack.length > stackBase ? this.pStack.at(-1) : undefined;
+        this.pStack.length = Math.min(this.pStack.length, stackBase);
+        this.PushWithoutError(
+          top instanceof FormulaErrorToken ? top : new FormulaErrorToken(this.nGlobalError),
+        );
+        this.nGlobalError = FormulaError.NONE;
+        return true;
+      };
     for (let pc = 0; pc < code.length; ++pc) {
       const token = code[pc] as FormulaToken;
       const op = token.GetOpCode();

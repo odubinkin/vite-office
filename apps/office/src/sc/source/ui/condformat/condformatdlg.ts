@@ -32,9 +32,12 @@ export function FormatConditionalRange(
 
 /** Projects a list in source order and omits repeated active sheet names. @param ranges - Actual marked ranges. @param doc - Workbook. @returns Range list text. */
 export function FormatConditionalRanges(ranges: ScRangeList, doc: ScDocument): string {
-  return Array.from(ranges, (range) => FormatConditionalRange(range, doc, ScRefFlags.VALID)).join(
-    ";",
-  );
+  return Array.from(
+    ranges,
+    /** Formats a conditional formatting reference for display in the editor. @param range - Native conditional range. @returns Native range text. */ (
+      range,
+    ) => FormatConditionalRange(range, doc, ScRefFlags.VALID),
+  ).join(";");
 }
 
 /** Resolves semicolon-delimited original references on the edited sheet. @param value - Entered range list. @param doc - Actual workbook. @param tab - Default and required sheet. @returns Valid ranges or absence. */

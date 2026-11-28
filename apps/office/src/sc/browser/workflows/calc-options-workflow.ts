@@ -25,8 +25,15 @@ export class CalcOptionsWorkflow {
         slotId: 31630,
         label: "Options",
         shortcuts: ["Alt+F12"],
-        getState: (target) => ({ enabled: target.canOpen() }),
-        execute: (target, request) => !request.GetArgs().length && target.Execute(),
+        getState:
+          /** Checks whether the session permits opening Calc Options. @param target - Active Calc slot target. @returns Command state. */ (
+            target,
+          ) => ({ enabled: target.canOpen() }),
+        execute:
+          /** Opens Calc Options when the slot was dispatched without arguments. @param target - Active Calc slot target. @param request - Original Sfx slot request. @returns Dispatch result. */ (
+            target,
+            request,
+          ) => !request.GetArgs().length && target.Execute(),
       },
     ]),
   );

@@ -4,7 +4,7 @@ title: "Integrate November 28 Writer and Calc branch updates"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: integrate and verify the current Writer and Calc heads, then synchronize the published branches."
 doc_version: 3
-doc_updated_at: "2026-11-28T14:31:10.967Z"
+doc_updated_at: "2026-11-28T14:57:07.689Z"
 doc_updated_by: "CODER"
 description: "Publish current feature heads, merge both into main, resolve conflicts with targeted checks, repair failures found by full verification, document suspected upstream issues and merge verified main back into both published feature branches."
 sections:
@@ -64,6 +64,10 @@ sections:
     - Observation: The complete tracked source file-size gate passed, along with the current typecheck, dependency check and registry validation. The selected splits passed 33 focused tests. Restored the print-range transfer diagnostic and coalesced Calc grouped input into one document generation after reproduced integration failures. The targeted print, input and conditional-format retries passed.
       Impact: Full application and browser campaigns are still in progress, and the source-wide JSDoc gate still reports undocumented callbacks. The source and test size fixes do not alter gate limits.
       Resolution: Continue documenting callback contracts and rerun the current verification gates. Main publication remains conditional on the full verify command.
+
+    - Observation: Writer treated the counted outline list rebuilt on ODT import as an ordinary list. It also exposed a native mixed-range success result without a mutation.
+      Impact: Tab could leave the imported heading at the same level and its undo history did not use the outline action. The first full browser run recorded 642 passing and 12 failing scenarios on the pre-fix snapshot.
+      Resolution: Dispatch counted headings to the native outline-level movement and typed undo action, preserve the mixed core result, and record WRITER-792. Current focused outline checks passed in Vitest and Chromium. The strict full verification remains pending.
 id_source: "generated"
 ---
 ## Summary
@@ -108,3 +112,7 @@ Pending execution.
 - Observation: The complete tracked source file-size gate passed, along with the current typecheck, dependency check and registry validation. The selected splits passed 33 focused tests. Restored the print-range transfer diagnostic and coalesced Calc grouped input into one document generation after reproduced integration failures. The targeted print, input and conditional-format retries passed.
   Impact: Full application and browser campaigns are still in progress, and the source-wide JSDoc gate still reports undocumented callbacks. The source and test size fixes do not alter gate limits.
   Resolution: Continue documenting callback contracts and rerun the current verification gates. Main publication remains conditional on the full verify command.
+
+- Observation: Writer treated the counted outline list rebuilt on ODT import as an ordinary list. It also exposed a native mixed-range success result without a mutation.
+  Impact: Tab could leave the imported heading at the same level and its undo history did not use the outline action. The first full browser run recorded 642 passing and 12 failing scenarios on the pre-fix snapshot.
+  Resolution: Dispatch counted headings to the native outline-level movement and typed undo action, preserve the mixed core result, and record WRITER-792. Current focused outline checks passed in Vitest and Chromium. The strict full verification remains pending.

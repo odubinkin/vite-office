@@ -282,7 +282,8 @@ export class SwDocInfoFieldType extends SwValueFieldType {
           new DateTime(properties.getCreationDate()),
           format,
           language,
-          () => properties.getAuthor(),
+          /** Reads the author stored in document properties. @returns Author text. */ () =>
+            properties.getAuthor(),
         );
       case SwDocInfoSubType.Change:
         return this.ExpandStamp(
@@ -290,7 +291,8 @@ export class SwDocInfoFieldType extends SwValueFieldType {
           new DateTime(properties.getModificationDate()),
           format,
           language,
-          () => properties.getModifiedBy(),
+          /** Reads the last editor stored in document properties. @returns Last editor text. */ () =>
+            properties.getModifiedBy(),
         );
       case SwDocInfoSubType.Print:
         return this.ExpandStamp(
@@ -298,7 +300,8 @@ export class SwDocInfoFieldType extends SwValueFieldType {
           new DateTime(properties.getPrintDate()),
           format,
           language,
-          () => properties.getPrintedBy(),
+          /** Reads the last print operator stored in document properties. @returns Print operator text. */ () =>
+            properties.getPrintedBy(),
         );
       default:
         return "";
@@ -311,36 +314,45 @@ export class SwDocInfoFieldType extends SwValueFieldType {
     format: number,
     language = LANGUAGE_SYSTEM,
   ): string | undefined {
-    return this.ReadCustomProperty(name, (value) => {
-      const date = new UnoDate();
-      if (value.extract(date, cppu_detail_getUnoType_Date))
-        return this.ExpandValue(this.DateToDays(date), format, language);
-      const stamp = new UnoDateTime();
-      if (value.extract(stamp, cppu_detail_getUnoType_DateTime))
-        return this.ExpandValue(
-          this.DateToDays(stamp) + new Time(stamp).GetTimeInDays(),
-          format,
-          language,
-        );
-      const duration = new Duration();
-      if (value.extract(duration, cppu_detail_getUnoType_Duration)) {
-        const components = [
-          duration.Years,
-          duration.Months,
-          duration.Days,
-          duration.Hours,
-          duration.Minutes,
-          duration.Seconds,
-        ];
-        return (
-          (duration.Negative ? "-" : "+") +
-          STR_DURATION_FORMAT.replace(/%([1-6])/gu, (_, index: string) =>
-            String(components[Number(index) - 1]),
-          )
-        );
-      }
-      return convertCustomProperty(value);
-    });
+    return this.ReadCustomProperty(
+      name,
+      /** Expands a UNO date or time from the custom document property. @param value - UNO property value. @returns Formatted field text. */ (
+        value,
+      ) => {
+        const date = new UnoDate();
+        if (value.extract(date, cppu_detail_getUnoType_Date))
+          return this.ExpandValue(this.DateToDays(date), format, language);
+        const stamp = new UnoDateTime();
+        if (value.extract(stamp, cppu_detail_getUnoType_DateTime))
+          return this.ExpandValue(
+            this.DateToDays(stamp) + new Time(stamp).GetTimeInDays(),
+            format,
+            language,
+          );
+        const duration = new Duration();
+        if (value.extract(duration, cppu_detail_getUnoType_Duration)) {
+          const components = [
+            duration.Years,
+            duration.Months,
+            duration.Days,
+            duration.Hours,
+            duration.Minutes,
+            duration.Seconds,
+          ];
+          return (
+            (duration.Negative ? "-" : "+") +
+            STR_DURATION_FORMAT.replace(
+              /%([1-6])/gu,
+              /** Substitutes an indexed date component into the field pattern. @param _ - Matched placeholder. @param index - One-based component index. @returns Formatted component text. */ (
+                _,
+                index: string,
+              ) => String(components[Number(index) - 1]),
+            )
+          );
+        }
+        return convertCustomProperty(value);
+      },
+    );
   }
 
   /** Resolves the actual UNO document property, retaining the caller's cache on a missing or unavailable value. @param name - Authored field name. @param present - Property conversion. @returns Presentation, if available. */

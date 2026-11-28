@@ -6,6 +6,40 @@ import { ScAddress, ScRange, ScRefFlags } from "../../../inc/address";
 import { ScComplexRefData, ScSingleRefData } from "../../../inc/refdata";
 import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 
+const sheetIdentifier = "(\\$?(?:'(?:[^']|'')+'|[\\p{L}\\p{N}_]+))";
+const excelSheet = new RegExp("^" + sheetIdentifier + "!", "u");
+const odfSheet = new RegExp("^" + sheetIdentifier + "\\.", "u");
+const deletedOdfSheet = /^(\$?)#REF!\./u;
+const a1Reference = /^\$?[A-Za-z]+\$?[1-9][0-9]*/u;
+const a1RangeWithEndSheet = new RegExp(
+  "^" + a1Reference.source.slice(1) + ":" + sheetIdentifier + "\\." + a1Reference.source.slice(1),
+  "u",
+);
+const r1c1Offset = String.raw`(?:[0-9]+|\[[+-]?[0-9]+\])?`;
+const r1c1Row = "R" + r1c1Offset,
+  r1c1Column = "C" + r1c1Offset;
+const r1c1Cell = r1c1Row + r1c1Column;
+const referenceBoundary = String.raw`(?![\p{L}\p{N}_?\[])`;
+const r1c1Reference = new RegExp(`^${r1c1Cell}${referenceBoundary}`, "iu");
+const r1c1Range = new RegExp(
+  `^(?:${r1c1Cell}:${r1c1Cell}|${r1c1Row}(?::${r1c1Row})?|${r1c1Column}(?::${r1c1Column})?)${referenceBoundary}`,
+  "iu",
+);
+const a1Range =
+  /^(?:\$?[A-Za-z]+\$?[1-9][0-9]*:\$?[A-Za-z]+\$?[1-9][0-9]*|\$?[A-Za-z]+:\$?[A-Za-z]+|\$?[1-9][0-9]*:\$?[1-9][0-9]*)/u;
+
+/** Prefix matchers for A1 and R1C1 references and native sheet qualifiers. */
+export const referencePatterns = {
+  excelSheet,
+  odfSheet,
+  deletedOdfSheet,
+  a1Reference,
+  a1RangeWithEndSheet,
+  r1c1Reference,
+  r1c1Range,
+  a1Range,
+};
+
 /** Binds native parser flags to complex reference data. @param name - Unwrapped reference. @param document - Calc sheet and limits owner. @param originAddress - Formula origin. @param details - Active reference convention. @param tab - Resolved tab. @param qualified - Whether the qualifier is present. @param absolute - Absolute sheet qualifier. @param deletedTab - Whether the sheet was deleted. @returns Native range token data. */
 export function createDoubleReference(
   name: string,

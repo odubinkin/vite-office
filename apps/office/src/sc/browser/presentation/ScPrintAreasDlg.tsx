@@ -51,7 +51,9 @@ function selectedPreset(
   const value = draft[field];
   if (!value) return "none";
   const index = presets.findIndex(
-    ({ reference }) => reference === value || reference === value.toUpperCase(),
+    /** Matches the range selector against the original and uppercased reference text. @param entry - Candidate print area reference. @returns Whether the reference matches. */ ({
+      reference,
+    }) => reference === value || reference === value.toUpperCase(),
   );
   return index < 0 ? "user" : String(index);
 }
@@ -88,28 +90,42 @@ export function ScPrintAreasDlg({
     end: number;
   }>();
 
-  useLayoutEffect(() => {
-    const input = entries.current.area;
-    input?.focus();
-    input?.select();
-  }, []);
+  useLayoutEffect(
+    /** Focuses and selects the main print area when the dialog opens. @returns Nothing. */ () => {
+      const input = entries.current.area;
+      input?.focus();
+      input?.select();
+    },
+    [],
+  );
 
-  useLayoutEffect(() => {
-    if (!insertion) return;
-    const input = entries.current[insertion.field];
-    input?.focus({ preventScroll: true });
-    input?.setSelectionRange(insertion.start, insertion.end);
-  }, [insertion]);
+  useLayoutEffect(
+    /** Returns focus to the active reference entry during grid selection. @returns Nothing. */ () => {
+      if (!insertion) return;
+      const input = entries.current[insertion.field];
+      input?.focus({ preventScroll: true });
+      input?.setSelectionRange(insertion.start, insertion.end);
+    },
+    [insertion],
+  );
 
   /** Writes one RefEdit value and updates the inferred preset. @param field - Entry identity. @param value - Entry text. @param entire - Explicit entire-sheet selection. @returns Nothing. */
   function update(field: PrintRangeField, value: string, entire = false): void {
-    setPresetsSelected((previous) => ({ ...previous, [field]: undefined }));
+    setPresetsSelected(
+      /** Clears the selected range field for an empty area choice. @param previous - Previous print area form. @returns Updated print area form. */ (
+        previous,
+      ) => ({ ...previous, [field]: undefined }),
+    );
     setInvalid(undefined);
-    setDraft((previous) => ({
-      ...previous,
-      [field]: value,
-      entire: field === "area" ? entire : previous.entire,
-    }));
+    setDraft(
+      /** Updates the selected print range and the entire-sheet flag when editing the main area. @param previous - Previous print area form. @returns Updated print area form. */ (
+        previous,
+      ) => ({
+        ...previous,
+        [field]: value,
+        entire: field === "area" ? entire : previous.entire,
+      }),
+    );
   }
 
   /** Projects the tracked range into the active edit and the grid highlight. @param position - Current endpoint. @returns Nothing. */
@@ -135,141 +151,181 @@ export function ScPrintAreasDlg({
     onReference(range);
   }
 
-  useImperativeHandle(referenceInput, () => ({
-    /** Starts replacing or appending to the current reference entry. @param position - Initial grid cell. @param kind - Grid surface. @param append - Multi-range modifier. @returns Nothing. */
-    Start(position, kind, append) {
-      const value = draft[active];
-      const input = entries.current[active];
-      const shouldAppend = active === "area" && append && value.length > 0;
-      const from = shouldAppend ? value.length : (input?.selectionStart ?? 0);
-      const to = shouldAppend ? value.length : (input?.selectionEnd ?? from);
-      gesture.current = {
-        anchor: position,
-        kind,
-        field: active,
-        before:
-          active === "area" ? value.slice(0, from) + (shouldAppend ? printRangeSeparator : "") : "",
-        after: active === "area" ? value.slice(to) : "",
-      };
-      moveReference(position);
-    },
-    Move: moveReference,
-    /** Releases the active reference drag. @returns Nothing. */
-    End() {
-      gesture.current = undefined;
-    },
-  }));
+  useImperativeHandle(
+    referenceInput,
+    /** Exposes grid-picking operations for the print area input. @returns Reference selection handle. */ () => ({
+      /** Starts replacing or appending to the current reference entry. @param position - Initial grid cell. @param kind - Grid surface. @param append - Multi-range modifier. @returns Nothing. */
+      Start(position, kind, append) {
+        const value = draft[active];
+        const input = entries.current[active];
+        const shouldAppend = active === "area" && append && value.length > 0;
+        const from = shouldAppend ? value.length : (input?.selectionStart ?? 0);
+        const to = shouldAppend ? value.length : (input?.selectionEnd ?? from);
+        gesture.current = {
+          anchor: position,
+          kind,
+          field: active,
+          before:
+            active === "area"
+              ? value.slice(0, from) + (shouldAppend ? printRangeSeparator : "")
+              : "",
+          after: active === "area" ? value.slice(to) : "",
+        };
+        moveReference(position);
+      },
+      Move: moveReference,
+      /** Releases the active reference drag. @returns Nothing. */
+      End() {
+        gesture.current = undefined;
+      },
+    }),
+  );
 
   return (
     <form
       role="dialog"
       aria-label="Edit Print Ranges"
       className="office-dialog-form fixed right-4 top-4 z-[60] w-[min(29rem,calc(100vw-2rem))] overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl"
-      onSubmit={(event) => {
-        event.preventDefault();
-        if (collapsed) {
-          setCollapsed(false);
-          return;
+      onSubmit={
+        /** Submits the "Edit Print Ranges" control. @param event - Browser event. @returns Nothing. */ (
+          event,
+        ) => {
+          event.preventDefault();
+          if (collapsed) {
+            setCollapsed(false);
+            return;
+          }
+          const result = CheckPrintAreas(model, draft);
+          if (typeof result === "string") {
+            setInvalid(result);
+            entries.current[result]?.focus();
+          } else onSubmit(result);
         }
-        const result = CheckPrintAreas(model, draft);
-        if (typeof result === "string") {
-          setInvalid(result);
-          entries.current[result]?.focus();
-        } else onSubmit(result);
-      }}
-      onKeyDown={(event) => {
-        if (event.key !== "Escape") return;
-        event.preventDefault();
-        event.stopPropagation();
-        if (collapsed) setCollapsed(false);
-        else onCancel();
-      }}
+      }
+      onKeyDown={
+        /** Handles keyboard input on the "Edit Print Ranges" control. @param event - Browser event. @returns Nothing. */ (
+          event,
+        ) => {
+          if (event.key !== "Escape") return;
+          event.preventDefault();
+          event.stopPropagation();
+          if (collapsed) setCollapsed(false);
+          else onCancel();
+        }
+      }
     >
       {collapsed ? null : <DialogHeader title="Edit Print Ranges" onClose={onCancel} />}
       <div className={collapsed ? "p-3" : "office-dialog-content grid gap-4"}>
-        {fields.map((field) => {
-          if (collapsed && field !== active) return null;
-          const title = fieldNames[field];
-          const presets =
-            field === "area"
-              ? [{ name: "- selection -", reference: model.selection }, ...model.named.area]
-              : model.named[field];
-          return (
-            <fieldset key={field} className="min-w-0 text-sm text-slate-700">
-              <legend className="mb-1 font-semibold">{title}</legend>
-              <div className="flex items-center gap-2">
-                {collapsed ? null : (
-                  <select
-                    aria-label={title + " preset"}
-                    className="w-[44%] rounded-md border border-slate-300 bg-white p-2"
-                    value={presetsSelected[field] ?? selectedPreset(draft, field, presets)}
+        {fields.map(
+          /** Renders a repeat range or print area control while respecting reference focus mode. @param field - Print range field identifier. @returns Range controls for the field or null. */ (
+            field,
+          ) => {
+            if (collapsed && field !== active) return null;
+            const title = fieldNames[field];
+            const presets =
+              field === "area"
+                ? [{ name: "- selection -", reference: model.selection }, ...model.named.area]
+                : model.named[field];
+            return (
+              <fieldset key={field} className="min-w-0 text-sm text-slate-700">
+                <legend className="mb-1 font-semibold">{title}</legend>
+                <div className="flex items-center gap-2">
+                  {collapsed ? null : (
+                    <select
+                      aria-label={title + " preset"}
+                      className="w-[44%] rounded-md border border-slate-300 bg-white p-2"
+                      value={presetsSelected[field] ?? selectedPreset(draft, field, presets)}
+                      onFocus={
+                        /** Records the focused field for the next range selection. @returns Nothing. */ () =>
+                          setActive(field)
+                      }
+                      onChange={
+                        /** Focuses the input and selects the input text and updates the presets selected. @param event - Browser event. @returns Nothing. */ (
+                          event,
+                        ) => {
+                          const selected = event.target.value;
+                          const input = entries.current[field];
+                          if (selected === "user") {
+                            input?.focus();
+                            input?.select();
+                          } else if (selected === "none" || selected === "entire")
+                            update(field, "", selected === "entire");
+                          else update(field, presets[Number(selected)]?.reference ?? "");
+                          setPresetsSelected(
+                            /** Applies the selected preset to the matching print range field. @param previous - Previous print area form. @returns Updated print area form. */ (
+                              previous,
+                            ) => ({ ...previous, [field]: selected }),
+                          );
+                          onReference(undefined);
+                        }
+                      }
+                    >
+                      <option value="none">- none -</option>
+                      {field === "area" ? <option value="entire">- entire sheet -</option> : null}
+                      <option value="user">- user defined -</option>
+                      {presets.map(
+                        /** Renders the `index` option for the source entry. @param entry - Source entry. @param index - Entry index. @returns Rendered element. */ (
+                          { name },
+                          index,
+                        ) => (
+                          <option key={index} value={index}>
+                            {name}
+                          </option>
+                        ),
+                      )}
+                    </select>
+                  )}
+                  <input
+                    ref={
+                      /** Registers the input for focus restoration to this reference field. @param input - Mounted input or null on detach. @returns Nothing. */ (
+                        input,
+                      ) => {
+                        entries.current[field] = input;
+                      }
+                    }
+                    aria-label={title}
+                    aria-invalid={invalid === field}
+                    spellCheck={false}
+                    className="min-w-0 flex-1 rounded-md border border-slate-300 p-2"
+                    value={draft[field]}
                     onFocus={
                       /** Records the focused field for the next range selection. @returns Nothing. */ () =>
                         setActive(field)
                     }
-                    onChange={(event) => {
-                      const selected = event.target.value;
-                      const input = entries.current[field];
-                      if (selected === "user") {
+                    onChange={
+                      /** Updates the range reference owner. @param event - Browser event. @returns Nothing. */ (
+                        event,
+                      ) => {
+                        update(field, event.target.value);
+                        onReference(undefined);
+                      }
+                    }
+                  />
+                  <button
+                    type="button"
+                    aria-label={collapsed ? "Expand Edit Print Ranges" : "Select " + title}
+                    className="rounded-md border border-slate-300 p-2 hover:bg-slate-100"
+                    onClick={
+                      /** Updates the active and updates the collapsed and focuses the input. @returns Nothing. */ () => {
+                        const input = entries.current[field];
+                        setActive(field);
+                        setCollapsed(!collapsed);
                         input?.focus();
-                        input?.select();
-                      } else if (selected === "none" || selected === "entire")
-                        update(field, "", selected === "entire");
-                      else update(field, presets[Number(selected)]?.reference ?? "");
-                      setPresetsSelected((previous) => ({ ...previous, [field]: selected }));
-                      onReference(undefined);
-                    }}
+                        if (!collapsed) input?.select();
+                      }
+                    }
                   >
-                    <option value="none">- none -</option>
-                    {field === "area" ? <option value="entire">- entire sheet -</option> : null}
-                    <option value="user">- user defined -</option>
-                    {presets.map(({ name }, index) => (
-                      <option key={index} value={index}>
-                        {name}
-                      </option>
-                    ))}
-                  </select>
-                )}
-                <input
-                  ref={(input) => {
-                    entries.current[field] = input;
-                  }}
-                  aria-label={title}
-                  aria-invalid={invalid === field}
-                  spellCheck={false}
-                  className="min-w-0 flex-1 rounded-md border border-slate-300 p-2"
-                  value={draft[field]}
-                  onFocus={
-                    /** Records the focused field for the next range selection. @returns Nothing. */ () =>
-                      setActive(field)
-                  }
-                  onChange={(event) => {
-                    update(field, event.target.value);
-                    onReference(undefined);
-                  }}
-                />
-                <button
-                  type="button"
-                  aria-label={collapsed ? "Expand Edit Print Ranges" : "Select " + title}
-                  className="rounded-md border border-slate-300 p-2 hover:bg-slate-100"
-                  onClick={() => {
-                    const input = entries.current[field];
-                    setActive(field);
-                    setCollapsed(!collapsed);
-                    input?.focus();
-                    if (!collapsed) input?.select();
-                  }}
-                >
-                  {collapsed ? (
-                    <ChevronDown size={16} aria-hidden />
-                  ) : (
-                    <ChevronUp size={16} aria-hidden />
-                  )}
-                </button>
-              </div>
-            </fieldset>
-          );
-        })}
+                    {collapsed ? (
+                      <ChevronDown size={16} aria-hidden />
+                    ) : (
+                      <ChevronUp size={16} aria-hidden />
+                    )}
+                  </button>
+                </div>
+              </fieldset>
+            );
+          },
+        )}
         {invalid === undefined ? null : (
           <p role="alert" className="text-sm text-red-700">
             Invalid sheet reference.

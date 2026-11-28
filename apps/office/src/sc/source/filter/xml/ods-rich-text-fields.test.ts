@@ -179,10 +179,16 @@ it("preserves native word mode, kerning, width, emphasis and script locales on c
       const attrs: EECharAttrib[] = [];
       edit.GetCharAttribs(0, attrs);
       const values = new Map(
-        attrs.map(({ nStart, nEnd, pAttr }) => [
-          `${nStart},${nEnd},${pAttr?.Which()}`,
-          pAttr instanceof SvxEmphasisMarkItem ? pAttr.GetEmphasisMark() : pAttr?.QueryValue(),
-        ]),
+        attrs.map(
+          /** Projects a native inline emphasis attribute for fixture comparison. @param entry - Native character span. @returns Character span identity and emphasis value. */ ({
+            nStart,
+            nEnd,
+            pAttr,
+          }) => [
+            `${nStart},${nEnd},${pAttr?.Which()}`,
+            pAttr instanceof SvxEmphasisMarkItem ? pAttr.GetEmphasisMark() : pAttr?.QueryValue(),
+          ],
+        ),
       );
       for (const [which, first, second] of [
         [EE_CHAR_WLM, true, false],
@@ -206,12 +212,23 @@ it("preserves native word mode, kerning, width, emphasis and script locales on c
       const sections: Section[] = [];
       positioned.GetAllSections(sections);
       expect(
-        sections.map(({ mnParagraph, mnStart, mnEnd, maAttributes }) => [
-          mnParagraph,
-          mnStart,
-          mnEnd,
-          maAttributes.map((item) => item.Which()),
-        ]),
+        sections.map(
+          /** Projects imported spans and their edit items for fixture comparison. @param entry - Native imported text range. @returns Paragraph, character offsets and item identities. */ ({
+            mnParagraph,
+            mnStart,
+            mnEnd,
+            maAttributes,
+          }) => [
+            mnParagraph,
+            mnStart,
+            mnEnd,
+            maAttributes.map(
+              /** Reads the native item ID from an imported character attribute. @param item - Character format item. @returns Native Which ID. */ (
+                item,
+              ) => item.Which(),
+            ),
+          ],
+        ),
       ).toEqual([
         [0, 0, 3, [EE_CHAR_ESCAPEMENT]],
         [0, 3, 8, []],

@@ -32,7 +32,11 @@ it.each([
   ["testTdf111969B", "tdf111969_fieldB.fodt", 2],
 ] as const)(
   "%s retains the fixed time at its original field boundary",
-  (_name, filename, offset) => {
+  /** Checks the imported Writer date or time field using a pinned native fixture. @param _name - Fixture case title. @param filename - Native ODT filename. @param offset - Expected field offset. @returns Nothing. */ (
+    _name,
+    filename,
+    offset,
+  ) => {
     const original = readFileSync(
       `../../vendor/libreoffice-reference/sw/qa/extras/uiwriter/data/${filename}`,
       "utf8",
@@ -71,8 +75,18 @@ it("roundtrips actual date and time styles and native adjustments through Worker
     worker = decodeWriterDocument(structuredClone(encodeWriterDocument(document)));
     const expansions = ["2024-02-04", "23:40:00"];
     for (const model of [document, worker]) {
-      const fields = dateTimeFields(model).map((hint) => hint.GetAttr().GetField());
-      expect(fields.map((field) => field.Expand())).toEqual(expansions);
+      const fields = dateTimeFields(model).map(
+        /** Reads the native field held in each date or time text hint. @param hint - Text hint. @returns Native Writer field. */ (
+          hint,
+        ) => hint.GetAttr().GetField(),
+      );
+      expect(
+        fields.map(
+          /** Expands a date or time field for comparison. @param field - Native Writer field. @returns Visible field text. */ (
+            field,
+          ) => field.Expand(),
+        ),
+      ).toEqual(expansions);
       expect(
         fields.map(
           /** Calls `GetOffset` for each entry. @param field - Collection entry. @returns The projected entry value. */ (
@@ -93,10 +107,13 @@ it("roundtrips actual date and time styles and native adjustments through Worker
     expect(time.getAttributeNS(ODF_NAMESPACES.text, "time-adjust")).toBe("PT00H20M00S");
     expect(saved).not.toContain(CH_TXTATR_BREAKWORD);
     reopened = (await readOdtDocument(bytes, metadata)).document;
-    expect(dateTimeFields(reopened).map((hint) => hint.GetAttr().GetField().Expand())).toEqual([
-      "2024-02-03",
-      "23:40:00",
-    ]);
+    expect(
+      dateTimeFields(reopened).map(
+        /** Expands the imported field referenced by each text hint. @param hint - Imported text hint. @returns Visible field text. */ (
+          hint,
+        ) => hint.GetAttr().GetField().Expand(),
+      ),
+    ).toEqual(["2024-02-03", "23:40:00"]);
   } finally {
     document.Dispose();
     worker?.Dispose();

@@ -6617,3 +6617,14 @@ on a built-in entry is lost on save. Writer retains this shared behavior.
 - [Original format key reuse](../../vendor/libreoffice-reference/xmloff/source/style/xmlnumfi.cxx#L1666)
 - [Original title assignment](../../vendor/libreoffice-reference/xmloff/source/style/xmlnumfi.cxx#L1715)
 - [Original title export](../../vendor/libreoffice-reference/xmloff/source/style/xmlnumfe.cxx#L1181)
+
+### WRITER-792 — Mixed outline and list selections report success without moving either
+
+`SwDoc::NumUpDown` distinguishes outline numbering from ordinary list
+numbering. A selection containing both makes both branch flags false.
+The function skips both mutations and returns the initial success value.
+The core preserves this return value. The shell keeps a mixed selection
+from creating an undo entry when neither numbering family moves.
+
+- [Original numbering family classification and initial result](../../vendor/libreoffice-reference/sw/source/core/doc/docnum.cxx#L1846)
+- [Original return after the two mutation branches](../../vendor/libreoffice-reference/sw/source/core/doc/docnum.cxx#L1947)

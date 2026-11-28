@@ -102,7 +102,10 @@ export class ScTablePage {
   /** Produces original Sheet-tab changes without writing unchanged default items. @param state - Current tab controls. @param output - Dialog output set. @returns Nothing. */
   FillItemSet(state: ScTablePageState, output: SfxItemSet): void {
     const saved = this.initial;
-    const explicit = (which: number) => this.input.GetItemState(which) !== SfxItemState.DEFAULT;
+    const explicit =
+      /** Checks whether an item is explicitly set in the options tab's input set. @param which - Native item identifier. @returns Whether a non-default item exists. */ (
+        which: number,
+      ) => this.input.GetItemState(which) !== SfxItemState.DEFAULT;
     for (const [key, , which] of sheetPrintFlags) {
       if (explicit(which) || state.flags[key] !== saved.flags[key])
         output.Put(new SfxBoolItem(which, state.flags[key]));

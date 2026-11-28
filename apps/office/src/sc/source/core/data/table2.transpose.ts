@@ -23,7 +23,9 @@ function TransposePattern(pattern: ScPatternAttr): ScPatternAttr | undefined {
   const set = pattern.GetItemSet();
   if (
     [ATTR_BORDER, ATTR_MERGE, ATTR_MERGE_FLAG].every(
-      (which) => set.GetItemState(which, false) === SfxItemState.DEFAULT,
+      /** Checks whether a transpose-sensitive native item falls back to its default. @param which - Native item identifier. @returns Whether the current item is unset. */ (
+        which,
+      ) => set.GetItemState(which, false) === SfxItemState.DEFAULT,
     )
   )
     return undefined;

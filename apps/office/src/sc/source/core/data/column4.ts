@@ -322,12 +322,16 @@ export function DeleteBeforeCopyFromClip(
     throw new Error("Nondefault pre-paste deletion is not implemented");
   if (!(flags & InsertDeleteFlags.CONTENTS)) return;
   /** Clears a destination span and records its original broadcast and listener spans. @param first - First row. @param last - Last row. @returns Nothing. */
-  const remove = (first: number, last: number): void => {
-    const result = this.DeleteCells(position, first, last, flags);
-    broadcasts.set(doc, this.GetTab(), this.GetCol(), result.aDeletedRows, true);
-    for (const [start, end] of result.aFormulaRanges)
-      context.setListeningFormulaSpans(this.GetTab(), this.GetCol(), start, this.GetCol(), end);
-  };
+  const remove =
+    /** Deletes one contiguous run of cells using the column's native deletion path. @param first - First affected row. @param last - Last affected row. @returns Nothing. */ (
+      first: number,
+      last: number,
+    ): void => {
+      const result = this.DeleteCells(position, first, last, flags);
+      broadcasts.set(doc, this.GetTab(), this.GetCol(), result.aDeletedRows, true);
+      for (const [start, end] of result.aFormulaRanges)
+        context.setListeningFormulaSpans(this.GetTab(), this.GetCol(), start, this.GetCol(), end);
+    };
   if (!context.isSkipEmptyCells()) {
     remove(range.mnRow1, range.mnRow2);
     return;

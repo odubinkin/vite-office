@@ -50,12 +50,26 @@ export function ScCsvRuler({
       if (primary && !shiftKey) {
         next =
           direction < 0
-            ? (splits.filter((split) => split < current).at(-1) ?? 1)
-            : (splits.find((split) => split > current) ?? end);
+            ? (splits
+                .filter(
+                  /** Checks whether `split` is less than `current`. @param split - Candidate entry. @returns Whether the condition holds. */ (
+                    split,
+                  ) => split < current,
+                )
+                .at(-1) ?? 1)
+            : (splits.find(
+                /** Checks whether `split` is greater than `current`. @param split - Candidate entry. @returns Whether the condition holds. */ (
+                  split,
+                ) => split > current,
+              ) ?? end);
       } else if (primary && shiftKey && splits.includes(current))
         onChange(
           insert(
-            splits.filter((split) => split !== current),
+            splits.filter(
+              /** Checks whether `split` differs from `current`. @param split - Candidate entry. @returns Whether the condition holds. */ (
+                split,
+              ) => split !== current,
+            ),
             next,
           ),
         );
@@ -63,7 +77,15 @@ export function ScCsvRuler({
     } else if (key === "Home" || key === "End") setPosition(key === "Home" ? 1 : end);
     else if (key === "Insert") onChange(insert(splits, current));
     else if (key === "Delete")
-      onChange(shiftKey ? [] : splits.filter((split) => split !== current));
+      onChange(
+        shiftKey
+          ? []
+          : splits.filter(
+              /** Checks whether `split` differs from `current`. @param split - Candidate entry. @returns Whether the condition holds. */ (
+                split,
+              ) => split !== current,
+            ),
+      );
     else return;
     event.preventDefault();
   }
@@ -82,54 +104,88 @@ export function ScCsvRuler({
           "repeating-linear-gradient(90deg, transparent 0 calc(1ch - 1px), #94a3b8 calc(1ch - 1px) 1ch)",
       }}
       onKeyDown={keyDown}
-      onClick={(event) => {
-        if (event.detail !== 0) return;
-        onChange(
-          splits.includes(current)
-            ? splits.filter((split) => split !== current)
-            : insert(splits, current),
-        );
-      }}
-      onPointerDown={(event) => {
-        if (event.button !== 0) return;
-        const start = pointerPosition(event);
-        drag.current = { original: splits, start, moved: false };
-        event.currentTarget.setPointerCapture(event.pointerId);
-        setPosition(start);
-        onChange(insert(splits, start));
-      }}
-      onPointerMove={(event) => {
-        const tracking = drag.current;
-        if (!tracking) return;
-        const next = pointerPosition(event);
-        if (next !== tracking.start) tracking.moved = true;
-        setPosition(next);
-        onChange(
-          insert(
-            tracking.original.filter((split) => split !== tracking.start),
-            next,
-          ),
-        );
-      }}
-      onPointerUp={() => {
-        const tracking = drag.current;
-        if (tracking && !tracking.moved && tracking.original.includes(tracking.start))
-          onChange(tracking.original.filter((split) => split !== tracking.start));
-        drag.current = null;
-      }}
-      onPointerCancel={() => {
-        if (drag.current) onChange(drag.current.original);
-        drag.current = null;
-      }}
+      onClick={
+        /** Activates the "Fixed width ruler" control. @param event - Browser event. @returns Nothing. */ (
+          event,
+        ) => {
+          if (event.detail !== 0) return;
+          onChange(
+            splits.includes(current)
+              ? splits.filter(
+                  /** Checks whether `split` differs from `current`. @param split - Candidate entry. @returns Whether the condition holds. */ (
+                    split,
+                  ) => split !== current,
+                )
+              : insert(splits, current),
+          );
+        }
+      }
+      onPointerDown={
+        /** Starts pointer interaction on the "Fixed width ruler" control. @param event - Browser event. @returns Nothing. */ (
+          event,
+        ) => {
+          if (event.button !== 0) return;
+          const start = pointerPosition(event);
+          drag.current = { original: splits, start, moved: false };
+          event.currentTarget.setPointerCapture(event.pointerId);
+          setPosition(start);
+          onChange(insert(splits, start));
+        }
+      }
+      onPointerMove={
+        /** Updates the pointer interaction on the "Fixed width ruler" control. @param event - Browser event. @returns Nothing. */ (
+          event,
+        ) => {
+          const tracking = drag.current;
+          if (!tracking) return;
+          const next = pointerPosition(event);
+          if (next !== tracking.start) tracking.moved = true;
+          setPosition(next);
+          onChange(
+            insert(
+              tracking.original.filter(
+                /** Checks whether `split` differs from `tracking.start`. @param split - Candidate entry. @returns Whether the condition holds. */ (
+                  split,
+                ) => split !== tracking.start,
+              ),
+              next,
+            ),
+          );
+        }
+      }
+      onPointerUp={
+        /** Finishes the pointer interaction on the "Fixed width ruler" control. @returns Nothing. */ () => {
+          const tracking = drag.current;
+          if (tracking && !tracking.moved && tracking.original.includes(tracking.start))
+            onChange(
+              tracking.original.filter(
+                /** Checks whether `split` differs from `tracking.start`. @param split - Candidate entry. @returns Whether the condition holds. */ (
+                  split,
+                ) => split !== tracking.start,
+              ),
+            );
+          drag.current = null;
+        }
+      }
+      onPointerCancel={
+        /** Restores the original marker position after a cancelled ruler drag. @returns Nothing. */ () => {
+          if (drag.current) onChange(drag.current.original);
+          drag.current = null;
+        }
+      }
     >
-      {splits.map((split) => (
-        <span
-          key={split}
-          aria-hidden="true"
-          className="absolute inset-y-0 w-0.5 bg-sky-700"
-          style={{ left: `${split}ch` }}
-        />
-      ))}
+      {splits.map(
+        /** Renders one span for the source entry. @param split - Source entry. @returns Rendered element. */ (
+          split,
+        ) => (
+          <span
+            key={split}
+            aria-hidden="true"
+            className="absolute inset-y-0 w-0.5 bg-sky-700"
+            style={{ left: `${split}ch` }}
+          />
+        ),
+      )}
       <span
         aria-hidden="true"
         className="absolute bottom-0 h-2 w-1 bg-slate-700"

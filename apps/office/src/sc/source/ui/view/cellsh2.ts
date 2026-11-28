@@ -86,17 +86,18 @@ export function ImportTextToColumns(
     InsertDeleteFlags.ATTRIB |
     InsertDeleteFlags.NOCAPTIONS) as InsertDeleteFlags;
   /** Copies the represented state through the native Undo document. @returns Owned snapshot. */
-  const snapshot = (): ScDocument => {
-    const state = new ScDocument(ScDocumentMode.SCDOCMODE_UNDO);
-    try {
-      state.InitUndo(doc, aStart.Tab(), aEnd.Tab());
-      doc.CopyToDocument(range, flags, false, state);
-      return state;
-    } catch (error) {
-      state.Dispose();
-      throw error;
-    }
-  };
+  const snapshot =
+    /** Copies the original selected cells to an undo document before text conversion. @returns Undo document for the affected range. */ (): ScDocument => {
+      const state = new ScDocument(ScDocumentMode.SCDOCMODE_UNDO);
+      try {
+        state.InitUndo(doc, aStart.Tab(), aEnd.Tab());
+        doc.CopyToDocument(range, flags, false, state);
+        return state;
+      } catch (error) {
+        state.Dispose();
+        throw error;
+      }
+    };
   const manager = shell.GetUndoManager();
   const before = snapshot();
   const marks = new ScMarkData(doc.GetSheetLimits());

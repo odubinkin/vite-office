@@ -115,10 +115,18 @@ it.each([false, true])(
       ),
     );
     const smallCaps = sampleStyles
-      .find((sample) => sample.getAttribute("style:name") === "Titre_20_1_20_Car")
+      .find(
+        /** Finds the character style by its escaped ODF name. @param sample - ODF style element. @returns Whether the source style name matches. */ (
+          sample,
+        ) => sample.getAttribute("style:name") === "Titre_20_1_20_Car",
+      )
       ?.firstElementChild?.getAttribute("fo:font-variant");
     const blinking = sampleStyles
-      .find((sample) => sample.getAttribute("style:name") === "ListLabel_20_1")
+      .find(
+        /** Finds the list label style by its escaped ODF name. @param sample - ODF style element. @returns Whether the source style name matches. */ (
+          sample,
+        ) => sample.getAttribute("style:name") === "ListLabel_20_1",
+      )
       ?.firstElementChild?.getAttribute("style:text-blinking");
     expect([smallCaps, blinking]).toEqual(["small-caps", "true"]);
     const styles = `<office:document-styles ${namespaces}><office:styles><style:style style:name="TextFlags" style:family="paragraph"><style:text-properties fo:text-transform="uppercase" style:text-blinking="false" text:display="true" fo:hyphenate="true"/></style:style></office:styles></office:document-styles>`;

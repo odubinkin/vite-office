@@ -1,5 +1,5 @@
 /** @fileoverview Checks literal native outline move-table, range, signed history and ring contracts without upstream execution. */
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, assert, describe, expect, it } from "vitest";
 import { SwDoc } from "./doc";
 import { createWriterNumFormat, NumDownChangesIndent } from "./number";
 import { SwEditWin } from "../../uibase/docvw/edtwin";
@@ -12,6 +12,10 @@ import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { SvxWeightItem } from "../../../../editeng/source/items/textitem";
 import { RES_CHRATR_WEIGHT } from "../../../inc/hintids";
 import { SwView } from "../../uibase/uiview/view";
+import { readOdtDocument } from "../../filter/xml/swxml";
+import { writeOdtDocument } from "../../filter/xml/wrtxml";
+import { SfxListUndoAction } from "../../../../svl/source/undo/undo";
+import { SwNumRuleItem } from "../para/paratr";
 
 const shells: SwWrtShell[] = [];
 afterEach(
@@ -55,7 +59,11 @@ function range(first: SwTextNode, last = first, ring?: SwPaM): SwPaM {
   }
 }
 /** Sets the persistent actual shell selection. @param f - Owners. @param first - Fixed endpoint. @param last - Moving endpoint. @returns Nothing. */
-function select(f: ReturnType<typeof fixture>, first: SwTextNode, last = first): void {
+function select(
+  f: Pick<ReturnType<typeof fixture>, "shell">,
+  first: SwTextNode,
+  last = first,
+): void {
   const point = new SwPosition(last, 0),
     mark = first === last ? undefined : new SwPosition(first, 0);
   try {
@@ -66,6 +74,71 @@ function select(f: ReturnType<typeof fixture>, first: SwTextNode, last = first):
   }
 }
 describe("native outline movement", /** Registers source-shaped outline behavior. @returns Nothing. */ () => {
+  it("changes the assigned style when Tab reaches outline numbering after reopening an ODT", /** Checks native outline dispatch, maximum level and inverse undo. @returns Completion. */ async () => {
+    const f = fixture();
+    heading(f.first, 9);
+    f.doc.GetOutlineNumRule().Set(
+      9,
+      createWriterNumFormat("numbered", "", {
+        numberingType: "none",
+        positionAndSpaceMode: "label-alignment",
+        indentAt: 720,
+      }),
+    );
+    const metadata = createDocument({
+      id: "reopened-outline",
+      suiteId: "writer",
+      title: "Outline",
+    });
+    const { document } = await readOdtDocument(await writeOdtDocument(f.doc, metadata), metadata);
+    const shell = new SwView(new SwDocShell(document, metadata)).GetWrtShell();
+    shells.push(shell);
+    document.GetUndoManager().Clear();
+    const node = required(document.paragraphs[0]);
+    select({ shell }, node);
+    expect(node.GetNumRule()?.IsOutlineRule()).toBe(true);
+    expect(NumDownChangesIndent(shell)).toBe(true);
+    const edit = new SwEditWin(shell.GetView());
+
+    expect(edit.HandleTab()).toBe(true);
+    expect(node.GetParagraphStyle()).toBe("heading-10");
+    const action = shell.GetDoc().GetUndoManager().GetUndoAction();
+    assert(action instanceof SfxListUndoAction);
+    expect(action.GetUndoAction(0)).toBeInstanceOf(SwUndoOutlineLeftRight);
+
+    expect(edit.HandleTab()).toBe(true);
+    expect(node.GetText()).toBe("First");
+    expect(shell.GetDoc().GetUndoManager().GetUndoActionCount()).toBe(1);
+    expect(edit.HandleTab(true)).toBe(true);
+    expect(node.GetParagraphStyle()).toBe("heading-9");
+    expect(shell.Undo()).toBe(true);
+    expect(node.GetParagraphStyle()).toBe("heading-10");
+  });
+
+  it("keeps mixed outline and list numbering unchanged without recording history", /** Covers the original mixed-family return value and the Writer command state. @returns Nothing. */ () => {
+    const f = fixture();
+    heading(f.first, 2);
+    f.first.SetAttr(new SwNumRuleItem(f.doc.GetOutlineNumRule().GetName()));
+    select(f, f.second);
+    expect(f.shell.SetParagraphListKind("numbered")).toBe(true);
+    expect(f.first.GetNumRule()?.IsOutlineRule()).toBe(true);
+    expect(f.second.GetNumRule()?.IsOutlineRule()).toBe(false);
+    const listLevel = f.second.GetActualListLevel();
+    f.doc.GetUndoManager().Clear();
+
+    const selection = range(f.first, f.second);
+    try {
+      expect(f.doc.NumUpDown(selection, true)).toBe(true);
+    } finally {
+      selection.Dispose();
+    }
+    select(f, f.first, f.second);
+    expect(f.shell.NumUpDown(true)).toBe(false);
+    expect(f.first.GetParagraphStyle()).toBe("heading-2");
+    expect(f.second.GetActualListLevel()).toBe(listLevel);
+    expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(0);
+  });
+
   it("rejects an empty outline index and zero movement without materializing styles", /** Checks actual native early exits. @returns Nothing. */ () => {
     const f = fixture(),
       pam = range(f.first);

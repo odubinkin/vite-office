@@ -76,11 +76,12 @@ it("preserves the pinned hidden paragraph in its native text fly", /** Replays t
             title: metadata.title,
           });
           /** Reads the browser projection for the original fly text node. @returns Projected paragraph. */
-          const projectHidden = () =>
-            projection.Project(document, first, cursor, state, options).textNodes.find(
-              /** Finds the original fly paragraph by its node position. @param value - Projected paragraph. @returns Whether it belongs to the field. */
-              (value) => value.nodeIndex === hidden.GetIndex(),
-            )?.hiddenByParaField;
+          const projectHidden =
+            /** Finds the projected text node for the originally hidden paragraph. @returns Node from the active Writer projection. */ () =>
+              projection.Project(document, first, cursor, state, options).textNodes.find(
+                /** Finds the original fly paragraph by its node position. @param value - Projected paragraph. @returns Whether it belongs to the field. */
+                (value) => value.nodeIndex === hidden.GetIndex(),
+              )?.hiddenByParaField;
           expect(projectHidden()).toBe(true);
           options.SetFieldName(true);
           expect(projectHidden()).toBeUndefined();
@@ -123,7 +124,13 @@ it("keeps original hidden body frames at zero height and preserves a visible car
     const lineInfo = new SwLineNumberInfo().QueryValue();
     const hidden = layout.Format(measurements, descriptor, undefined, lineInfo).pages[0]
       ?.textFrames;
-    expect(hidden?.map((frame) => frame.IsHiddenNow())).toEqual([true, false]);
+    expect(
+      hidden?.map(
+        /** Reads whether the first layout omits this hidden paragraph frame. @param frame - Paragraph layout frame. @returns Whether the frame is hidden. */ (
+          frame,
+        ) => frame.IsHiddenNow(),
+      ),
+    ).toEqual([true, false]);
     expect(hidden?.[0]?.GetPara()).toBeUndefined();
     const shown = layout.Format(
       measurements,
@@ -131,7 +138,13 @@ it("keeps original hidden body frames at zero height and preserves a visible car
       { ...DEFAULT_SW_TEXT_FRAME_SETTINGS, showHiddenPara: true },
       lineInfo,
     ).pages[0]?.textFrames;
-    expect(shown?.map((frame) => frame.IsHiddenNow())).toEqual([false, false]);
+    expect(
+      shown?.map(
+        /** Reads paragraph frame visibility after field updates. @param frame - Paragraph layout frame. @returns Whether the frame is hidden. */ (
+          frame,
+        ) => frame.IsHiddenNow(),
+      ),
+    ).toEqual([false, false]);
 
     const second = document.paragraphs[1];
     assert(second);
@@ -140,7 +153,13 @@ it("keeps original hidden body frames at zero height and preserves a visible car
     second.EraseText(point, 1);
     const allHidden = layout.Format(measurements, descriptor, undefined, lineInfo).pages[0]
       ?.textFrames;
-    expect(allHidden?.map((frame) => frame.IsHiddenNow())).toEqual([false, true]);
+    expect(
+      allHidden?.map(
+        /** Reads paragraph frame visibility after changing the display option. @param frame - Paragraph layout frame. @returns Whether the frame is hidden. */ (
+          frame,
+        ) => frame.IsHiddenNow(),
+      ),
+    ).toEqual([false, true]);
   } finally {
     SwFrame.DestroyFrame(layout);
     document.Dispose();

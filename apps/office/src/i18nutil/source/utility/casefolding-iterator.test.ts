@@ -1,7 +1,6 @@
 /** @fileoverview Replays complete original lookup, width and iterator streams with actual shared owners and initialized-field masks. */
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
-import { URL } from "node:url";
 import { gunzipSync } from "node:zlib";
 import { expect, test, vi } from "vitest";
 import type { MappingElement as State } from "../../inc/casefolding";
@@ -23,7 +22,7 @@ interface NativeFixture {
 }
 
 const fixture = JSON.parse(
-  readFileSync(new URL("./native-casefolding-iterator-cases.json", import.meta.url), "utf8"),
+  readFileSync("src/i18nutil/source/utility/native-casefolding-iterator-cases.json", "utf8"),
 ) as NativeFixture;
 
 /** Whole lossless initialized native stream reader. */

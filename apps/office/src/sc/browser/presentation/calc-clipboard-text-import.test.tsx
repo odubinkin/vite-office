@@ -128,12 +128,20 @@ it("ports tdf117868 pipe detection to the clipboard text import dialog", /** Por
     ["a", "aardvark"],
     ["b", "bear"],
     ["c", "cow"],
-  ].forEach((row, index) =>
-    row.forEach((value, column) =>
-      expect(text(doc.GetSharedString(new ScAddress(column, index + 1, 0)).getString())).toBe(
-        value,
+  ].forEach(
+    /** Verifies all cells in the imported text row. @param row - Expected cell values. @param index - Row index relative to the paste anchor. @returns Nothing. */ (
+      row,
+      index,
+    ) =>
+      row.forEach(
+        /** Verifies that the imported text matches the expected cell contents. @param value - Expected cell text. @param column - Destination column. @returns Assertion result. */ (
+          value,
+          column,
+        ) =>
+          expect(text(doc.GetSharedString(new ScAddress(column, index + 1, 0)).getString())).toBe(
+            value,
+          ),
       ),
-    ),
   );
 });
 
@@ -256,8 +264,11 @@ it("keeps Unicode fixed-width preview and pasted columns on the same ruler posit
     /** Clicks the button named "OK". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
       fireEvent.click(dialog.getByRole("button", { name: "OK" })),
   );
-  ["A", "漢", "B"].forEach((value, column) =>
-    expect(text(doc.GetSharedString(new ScAddress(column, 0, 0)).getString())).toBe(value),
+  ["A", "漢", "B"].forEach(
+    /** Verifies each column produced by the explicit text import. @param value - Expected cell text. @param column - Destination column. @returns Assertion result. */ (
+      value,
+      column,
+    ) => expect(text(doc.GetSharedString(new ScAddress(column, 0, 0)).getString())).toBe(value),
   );
   act(
     /** Undoes the last Calc command and asserts success. @returns Nothing. */ () =>

@@ -70,9 +70,11 @@ function edit(parent: HTMLElement): HTMLElement {
 
 /** Issues a native browser input event to the editable region. @param region - Editable box. @param value - Entered text. @param inputType - InputEvent operation. @returns Nothing. */
 function input(region: HTMLElement, value: string | null, inputType = "insertText"): void {
-  act(() => {
-    region.focus();
-  });
+  act(
+    /** Focuses the input. @returns Nothing. */ () => {
+      region.focus();
+    },
+  );
   fireEvent(
     region,
     new InputEvent("beforeinput", { bubbles: true, cancelable: true, inputType, data: value }),
@@ -101,7 +103,10 @@ it.each([
   ["Footer", ATTR_PAGE_FOOTERFIRST],
 ] as const)(
   "ports tdf142763 and edits independent first-page %s regions through Page Style",
-  async (name, which) => {
+  /** Opens the chosen page-style tab and verifies the matching print region. @param name - Page settings tab name. @param which - Native identifier for the region settings. @returns Test completion. */ async (
+    name,
+    which,
+  ) => {
     const workbook = mount();
     const parent = openPage(name);
     fireEvent.click(within(parent).getByRole("checkbox", { name: "Same content on first page" }));
@@ -130,13 +135,17 @@ it.each([
     expect(content(workbook, which)).toBeUndefined();
     await response(parent, "OK");
     expect(content(workbook, which)?.GetCenterArea()?.HasField()).toBe(true);
-    act(() => {
-      expect(session?.controller.Undo()).toBe(true);
-    });
+    act(
+      /** Undoes the latest command. @returns Nothing. */ () => {
+        expect(session?.controller.Undo()).toBe(true);
+      },
+    );
     expect(content(workbook, which)).toBeUndefined();
-    act(() => {
-      expect(session?.controller.Redo()).toBe(true);
-    });
+    act(
+      /** Reapplies the latest command. @returns Nothing. */ () => {
+        expect(session?.controller.Redo()).toBe(true);
+      },
+    );
     expect(content(workbook, which)?.GetCenterArea()?.HasField()).toBe(true);
   },
 );
@@ -222,7 +231,13 @@ it("opens the standalone source dialog and persists field edits through ODS and 
       expect(area.HasField(new SvxPageField().GetClassId())).toBe(true);
       const attributes: EECharAttrib[] = [];
       area.GetCharAttribs(0, attributes);
-      expect(attributes.some(({ pAttr }) => pAttr?.Which() === EE_CHAR_WEIGHT)).toBe(true);
+      expect(
+        attributes.some(
+          /** Finds the original weight attribute inside the edited region. @param entry - Character attribute record. @returns Whether this raw attribute stores font weight. */ ({
+            pAttr,
+          }) => pAttr?.Which() === EE_CHAR_WEIGHT,
+        ),
+      ).toBe(true);
     } finally {
       copy.Dispose();
     }

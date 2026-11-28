@@ -68,14 +68,15 @@ it("ports tdf131170 deletion from the pinned ODS fixture and keeps Cancel transa
   const doc = await readOdsDocument(await archive.finish());
   mount(doc);
   let dialog = open();
-  const options = () =>
-    within(dialog)
-      .getAllByRole("option")
-      .map(
-        /** Reads the entry's `textContent` field. @param option - Collection entry. @returns The field value. */ (
-          option,
-        ) => option.textContent,
-      );
+  const options =
+    /** Reads the list of labels currently displayed in the dialog. @returns Displayed option labels. */ () =>
+      within(dialog)
+        .getAllByRole("option")
+        .map(
+          /** Reads the entry's `textContent` field. @param option - Collection entry. @returns The field value. */ (
+            option,
+          ) => option.textContent,
+        );
   expect(options()).toEqual([
     "--- Column ---",
     "$Sheet1.$I$6:$K$6 [AA, BB, CC]",
@@ -121,12 +122,14 @@ it("connects both sheet reference edits to label formulas and persists their lex
   const doc = controller.shell.GetDocument();
   const header = new ScAddress(0, 0, 0),
     formula = new ScAddress(2, 1, 0);
-  act(() => {
-    controller.EnterString("Net Sales");
-    doc.SetValue(new ScAddress(0, 1, 0), 4);
-    doc.SetValue(new ScAddress(0, 2, 0), 9);
-    controller.Select(1, 0);
-  });
+  act(
+    /** Enters the sample text through Calc and sets the native value and moves the selection. @returns Nothing. */ () => {
+      controller.EnterString("Net Sales");
+      doc.SetValue(new ScAddress(0, 1, 0), 4);
+      doc.SetValue(new ScAddress(0, 2, 0), 9);
+      controller.Select(1, 0);
+    },
+  );
   let dialog = open();
   const label = within(dialog).getByRole("textbox", { name: "Range" });
   const data = within(dialog).getByRole("textbox", { name: "For data range" });
@@ -152,12 +155,14 @@ it("connects both sheet reference edits to label formulas and persists their lex
   );
   expect(doc.GetColNameRanges().Find(header)?.GetRange(1).aEnd.Row()).toBe(2);
 
-  act(() => {
-    controller.Select(2, 1);
-    expect(controller.EnterString("=SUM('Net Sales')")).toBe(true);
-    controller.Select(3, 1);
-    expect(controller.EnterString("='Net Sales'+1")).toBe(true);
-  });
+  act(
+    /** Moves the selection and enters the sample text through Calc. @returns Nothing. */ () => {
+      controller.Select(2, 1);
+      expect(controller.EnterString("=SUM('Net Sales')")).toBe(true);
+      controller.Select(3, 1);
+      expect(controller.EnterString("='Net Sales'+1")).toBe(true);
+    },
+  );
   const cell = doc.GetFormulaCell(formula);
   expect(cell?.GetCode().HasOpCode(OpCode.ocColRowName)).toBe(true);
   expect(doc.GetValue(formula)).toBe(13);
@@ -211,11 +216,13 @@ it("connects both sheet reference edits to label formulas and persists their lex
 it("resolves a row label and relocates the document pair when preceding sheets change", /** Resolves a row label and relocates the document pair when preceding sheets change. @returns Completion. */ async () => {
   const controller = mount();
   const doc = controller.shell.GetDocument();
-  act(() => {
-    controller.EnterString("Net Total");
-    doc.SetValue(new ScAddress(1, 0, 0), 11);
-    doc.SetValue(new ScAddress(2, 0, 0), 13);
-  });
+  act(
+    /** Enters the sample text through Calc and sets the native value. @returns Nothing. */ () => {
+      controller.EnterString("Net Total");
+      doc.SetValue(new ScAddress(1, 0, 0), 11);
+      doc.SetValue(new ScAddress(2, 0, 0), 13);
+    },
+  );
   const dialog = open();
   fireEvent.click(within(dialog).getByRole("radio", { name: "Contains row labels" }));
   fireEvent.change(within(dialog).getByRole("textbox", { name: "For data range" }), {
@@ -226,10 +233,12 @@ it("resolves a row label and relocates the document pair when preceding sheets c
       fireEvent.click(within(dialog).getByRole("button", { name: "OK" })),
   );
   expect(doc.GetRowNameRanges().size()).toBe(1);
-  act(() => {
-    controller.Select(1, 1);
-    expect(controller.EnterString("=SUM('Net Total')")).toBe(true);
-  });
+  act(
+    /** Moves the selection and enters the sample text through Calc. @returns Nothing. */ () => {
+      controller.Select(1, 1);
+      expect(controller.EnterString("=SUM('Net Total')")).toBe(true);
+    },
+  );
   expect(doc.GetValue(new ScAddress(1, 1, 0))).toBe(24);
   const name = unicode("Before");
   try {

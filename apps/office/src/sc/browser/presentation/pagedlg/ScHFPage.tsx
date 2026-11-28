@@ -35,7 +35,11 @@ export function ScHFPage({
         <input
           type="checkbox"
           checked={state.enabled}
-          onChange={(event) => onChange({ ...state, enabled: event.target.checked })}
+          onChange={
+            /** Updates whether the header or footer is enabled. @param event - Enabled checkbox change event. @returns Nothing. */ (
+              event,
+            ) => onChange({ ...state, enabled: event.target.checked })
+          }
         />
         {title} on
       </label>
@@ -48,7 +52,11 @@ export function ScHFPage({
             type="checkbox"
             checked={state.shared}
             disabled={!shareSides}
-            onChange={(event) => onChange({ ...state, shared: event.target.checked })}
+            onChange={
+              /** Updates whether the region is shared across left and right pages. @param event - Sharing checkbox change event. @returns Nothing. */ (
+                event,
+              ) => onChange({ ...state, shared: event.target.checked })
+            }
           />
           Same content on left and right pages
         </label>
@@ -56,33 +64,54 @@ export function ScHFPage({
           <input
             type="checkbox"
             checked={state.sharedFirst}
-            onChange={(event) => onChange({ ...state, sharedFirst: event.target.checked })}
+            onChange={
+              /** Updates whether the first page shares the same region. @param event - First-page sharing checkbox change event. @returns Nothing. */ (
+                event,
+              ) => onChange({ ...state, sharedFirst: event.target.checked })
+            }
           />
           Same content on first page
         </label>
         <div className="grid grid-cols-2 gap-3">
-          {geometry.map(([key, label]) => (
-            <PageStyleMetric
-              key={key}
-              label={label}
-              unit={unit}
-              value={state[key]}
-              onChange={(value) => onChange({ ...state, [key]: value })}
-            />
-          ))}
+          {geometry.map(
+            /** Renders one PageStyleMetric for the source entry. @param entry - Source entry. @returns Rendered element. */ ([
+              key,
+              label,
+            ]) => (
+              <PageStyleMetric
+                key={key}
+                label={label}
+                unit={unit}
+                value={state[key]}
+                onChange={
+                  /** Applies the dimension value to the relevant header or footer setting. @param value - Region dimension in the item's units. @returns Nothing. */ (
+                    value,
+                  ) => onChange({ ...state, [key]: value })
+                }
+              />
+            ),
+          )}
         </div>
         <label className="flex items-center gap-2">
           <input
             type="checkbox"
             checked={state.dynamic}
-            onChange={(event) => onChange({ ...state, dynamic: event.target.checked })}
+            onChange={
+              /** Updates whether the region height grows automatically. @param event - Automatic height checkbox change event. @returns Nothing. */ (
+                event,
+              ) => onChange({ ...state, dynamic: event.target.checked })
+            }
           />
           AutoFit height
         </label>
         <button
           type="button"
           className="office-dialog-secondary justify-self-start"
-          onClick={(event) => onEdit(event.currentTarget)}
+          onClick={
+            /** Opens the region text editor from its originating button. @param event - Edit button click event. @returns Nothing. */ (
+              event,
+            ) => onEdit(event.currentTarget)
+          }
         >
           Edit…
         </button>

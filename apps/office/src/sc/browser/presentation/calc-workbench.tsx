@@ -41,8 +41,7 @@ import type { CalcFileWorkflows } from "../workflows/calc-file-workflows";
 import { CalcCellContextMenu } from "./CalcCellContextMenu";
 import { CalcSheetDialogs } from "./CalcSheetDialogs";
 import {
-  HandleCellClipboard,
-  HandleWorkspaceShortcut,
+  getCalcWorkspaceEventHandlers,
   resolveCalcCommandArguments,
   useCalcCommandSource,
 } from "./calc-workbench-keys";
@@ -551,13 +550,12 @@ export function CalcWorkbench({
   }
   return (
     <section
-      onKeyDown={(event) => HandleWorkspaceShortcut(event, frame, source, modal || referenceOpen)}
-      onCopy={(event) =>
-        HandleCellClipboard(event, sheetWorkflows.clipboard, modal || referenceOpen)
-      }
-      onPaste={(event) =>
-        HandleCellClipboard(event, sheetWorkflows.clipboard, modal || referenceOpen)
-      }
+      {...getCalcWorkspaceEventHandlers(
+        frame,
+        source,
+        sheetWorkflows.clipboard,
+        modal || referenceOpen,
+      )}
       ref={root}
       aria-label="Calc workspace"
       className="flex h-dvh w-full min-h-0 min-w-0 flex-col overflow-hidden bg-slate-100"
@@ -974,7 +972,12 @@ export function CalcWorkbench({
           printDialog,
         }}
         referenceInput={printInput}
-        onReference={(owner, range) => setReferenceSelection({ owner, range })}
+        onReference={
+          /** Stores the current native reference owner and highlighted cell range. @param owner - Active reference owner. @param range - Picked range. @returns Nothing. */ (
+            owner,
+            range,
+          ) => setReferenceSelection({ owner, range })
+        }
       />
       {controller.error ? (
         <p

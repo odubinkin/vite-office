@@ -42,20 +42,33 @@ export class ScNameDlg {
   /** Reads name, rendered reference and scope for each visible entry. @returns Table rows. */
   GetRows(): ScRangeNameLine[] {
     const grammar = this.editor.document.GetGrammar();
-    return this.editor.scopes.flatMap(([scope, scopeLabel]) => {
-      const entries = this.names.get(scope);
-      if (!entries) return [];
-      return Array.from(entries)
-        .filter((entry) => !(entry.type & (RangeDataType.Database | RangeDataType.Hidden)))
-        .map((entry) => ({
-          index: entry.GetIndex(),
-          name: entry.name,
-          expression: entry.GetSymbol(grammar, this.editor.position, this.names),
-          type: entry.type,
-          scope,
-          scopeLabel,
-        }));
-    });
+    return this.editor.scopes.flatMap(
+      /** Builds native range-name rows for the chosen document or sheet scope. @param entry - Scope identifier and display label. @returns Rows visible in this scope. */ ([
+        scope,
+        scopeLabel,
+      ]) => {
+        const entries = this.names.get(scope);
+        if (!entries) return [];
+        return Array.from(entries)
+          .filter(
+            /** Removes hidden and database names from the range-name editor. @param entry - Native range data. @returns Whether the range name is visible. */ (
+              entry,
+            ) => !(entry.type & (RangeDataType.Database | RangeDataType.Hidden)),
+          )
+          .map(
+            /** Projects a visible range name to its editor fields. @param entry - Native range data. @returns Name, expression, flags and source identity. */ (
+              entry,
+            ) => ({
+              index: entry.GetIndex(),
+              name: entry.name,
+              expression: entry.GetSymbol(grammar, this.editor.position, this.names),
+              type: entry.type,
+              scope,
+              scopeLabel,
+            }),
+          );
+      },
+    );
   }
 
   /** Edits the row while retaining its native index when the scope stays the same. @param old - Selected row. @param data - Draft fields. @returns Updated value or validation text. */

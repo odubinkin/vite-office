@@ -45,10 +45,12 @@ it("ports create_range_name.py by naming a selection in the position box and usi
   expect(controller.viewData.GetMarkData().IsCellMarked(2, 0)).toBe(true);
   enterNameBox("QuarterTotal");
   expect(screen.getByRole("textbox", { name: "Name Box" })).toHaveValue("QuarterTotal");
-  act(() => {
-    controller.Select(0, 1);
-    expect(controller.EnterString("=SUM(QuarterTotal)")).toBe(true);
-  });
+  act(
+    /** Moves the selection and enters the sample text through Calc. @returns Nothing. */ () => {
+      controller.Select(0, 1);
+      expect(controller.EnterString("=SUM(QuarterTotal)")).toBe(true);
+    },
+  );
   expect(doc.GetValue(new ScAddress(0, 1, 0))).toBe(3);
   enterNameBox("QuarterTotal");
   expect(controller.Address()).toBe("A1");
@@ -141,12 +143,14 @@ it("ports tdf87474 with manager rename, formula updates, cancellation and atomic
   document.SetValue(new ScAddress(), 3);
   document.SetValue(new ScAddress(1, 0, 0), 7);
   enterNameBox("SourceTotal");
-  act(() => {
-    controller.Select(0, 1);
-    expect(controller.EnterString("=SUM(SourceTotal)")).toBe(true);
-    controller.Select(0, 2);
-    expect(controller.EnterString("=SUM(SourceTotal)")).toBe(true);
-  });
+  act(
+    /** Moves the selection and enters the sample text through Calc. @returns Nothing. */ () => {
+      controller.Select(0, 1);
+      expect(controller.EnterString("=SUM(SourceTotal)")).toBe(true);
+      controller.Select(0, 2);
+      expect(controller.EnterString("=SUM(SourceTotal)")).toBe(true);
+    },
+  );
   document.FetchTable(0)?.RegroupFormulaCells(0);
   const group = document.GetFormulaCell(position)?.GetCellGroup();
   expect(group).toBeTruthy();
@@ -177,14 +181,15 @@ it("ports tdf87474 with manager rename, formula updates, cancellation and atomic
     },
   );
   expect(document.GetRangeName()?.findByUpperName("SOURCETOTAL")).toBeUndefined();
-  const formula = () => {
-    const value = document.GetFormulaCell(position)?.GetFormula(document.GetGrammar());
-    try {
-      return value && text(value);
-    } finally {
-      value?.dispose();
-    }
-  };
+  const formula =
+    /** Reads the formula after a named range has been inserted. @returns Current formula text. */ () => {
+      const value = document.GetFormulaCell(position)?.GetFormula(document.GetGrammar());
+      try {
+        return value && text(value);
+      } finally {
+        value?.dispose();
+      }
+    };
   expect(formula()).toBe("=SUM(UpdatedTotal)");
   expect(document.GetValue(position)).toBe(7);
   expect(document.GetValue(groupMember)).toBe(7);
@@ -223,11 +228,16 @@ it("pastes a selected name into input and writes an undoable name list from the 
     },
   );
   expect(controller.Input()).toBe("=Revenue ");
-  act(() => controller.Cancel());
-  act(() => {
-    controller.StartInput(ScInputMode.SC_INPUT_TOP, "=SUM(Placeholder)");
-    controller.SetInputSelection(5, 16);
-  });
+  act(
+    /** Cancels the active formula input. @returns Native operation result. */ () =>
+      controller.Cancel(),
+  );
+  act(
+    /** Selects the placeholder inside the formula input. @returns Nothing. */ () => {
+      controller.StartInput(ScInputMode.SC_INPUT_TOP, "=SUM(Placeholder)");
+      controller.SetInputSelection(5, 16);
+    },
+  );
   openNameMenu(/^Insert…$/);
   dialog = screen.getByRole("dialog", { name: "Paste Names" });
   await act(
@@ -236,7 +246,10 @@ it("pastes a selected name into input and writes an undoable name list from the 
     },
   );
   expect(controller.Input()).toBe("=SUM(Revenue )");
-  act(() => controller.Cancel());
+  act(
+    /** Cancels the active formula input. @returns Native operation result. */ () =>
+      controller.Cancel(),
+  );
   openNameMenu(/^Insert…$/);
   dialog = screen.getByRole("dialog", { name: "Paste Names" });
   await act(
@@ -249,7 +262,13 @@ it("pastes a selected name into input and writes an undoable name list from the 
     const stored = new ScRefCellValue(document, at).getSharedString();
     return stored ? text(stored.getString()) : undefined;
   }
-  expect(bounds.map((at) => readText(at))).toEqual(["Revenue", "=$Sheet1.$A$1"]);
+  expect(
+    bounds.map(
+      /** Reads the defined-name output at the requested address. @param at - Destination cell address. @returns Cell text. */ (
+        at,
+      ) => readText(at),
+    ),
+  ).toEqual(["Revenue", "=$Sheet1.$A$1"]);
   act(
     /** Undoes the last Calc command and asserts success. @returns Nothing. */ () =>
       expect(controller.Undo()).toBe(true),
@@ -260,7 +279,13 @@ it("pastes a selected name into input and writes an undoable name list from the 
     /** Reapplies the last undone Calc command and asserts success. @returns Nothing. */ () =>
       expect(controller.Redo()).toBe(true),
   );
-  expect(bounds.map((at) => readText(at))).toEqual(["Revenue", "=$Sheet1.$A$1"]);
+  expect(
+    bounds.map(
+      /** Reads each inserted defined-name cell to check the output order. @param at - Destination cell address. @returns Cell text. */ (
+        at,
+      ) => readText(at),
+    ),
+  ).toEqual(["Revenue", "=$Sheet1.$A$1"]);
 });
 
 it("keeps nested Add and Delete staged and restores all scopes with one Undo", /** Keeps nested Add and Delete staged and restores all scopes with one Undo. @returns Completion. */ async () => {
@@ -310,12 +335,14 @@ it("keeps nested Add and Delete staged and restores all scopes with one Undo", /
 it("ports tdf137617 Create Names defaults and named position text in Calc A1 and Excel R1C1", /** Ports tdf137617 Create Names defaults and named position text in Calc A1 and Excel R1C1. @returns Completion. */ async () => {
   const { controller } = mount();
   const document = controller.shell.GetDocument();
-  act(() => {
-    controller.Select(0, 0);
-    controller.EnterString("Result1");
-    controller.Select(0, 1);
-    controller.EnterString("Result2");
-  });
+  act(
+    /** Moves the selection and enters the sample text through Calc. @returns Nothing. */ () => {
+      controller.Select(0, 0);
+      controller.EnterString("Result1");
+      controller.Select(0, 1);
+      controller.EnterString("Result2");
+    },
+  );
   enterNameBox("A1:B2");
   openNameMenu(/^Create Names/);
   let dialog = screen.getByRole("dialog", { name: "Create Names" });
@@ -353,12 +380,14 @@ it("ports tdf137617 Create Names defaults and named position text in Calc A1 and
   }
   await setSyntax("2");
   expect(document.GetGrammar()).toBe(FormulaGrammar.Grammar.GRAM_NATIVE_XL_R1C1);
-  act(() => {
-    controller.Select(2, 0);
-    controller.EnterString("Result3");
-    controller.Select(3, 0);
-    controller.EnterString("Result4");
-  });
+  act(
+    /** Moves the selection and enters the sample text through Calc. @returns Nothing. */ () => {
+      controller.Select(2, 0);
+      controller.EnterString("Result3");
+      controller.Select(3, 0);
+      controller.EnterString("Result4");
+    },
+  );
   enterNameBox("R1C3:R2C4");
   openNameMenu(/^Create Names/);
   dialog = screen.getByRole("dialog", { name: "Create Names" });
@@ -391,11 +420,13 @@ it("ports tdf137617 Create Names defaults and named position text in Calc A1 and
   expect(screen.getByRole("textbox", { name: "Name Box" })).toHaveValue("Result4");
   document.SetValue(new ScAddress(2, 1, 0), 5);
   document.SetValue(new ScAddress(2, 2, 0), 8);
-  act(() => {
-    controller.Select(4, 0);
-    const accepted = controller.EnterString("=SUM(Sheet1!R2C3:R3C3)");
-    expect(accepted, controller.error).toBe(true);
-  });
+  act(
+    /** Moves the selection and enters the sample text through Calc. @returns Nothing. */ () => {
+      controller.Select(4, 0);
+      const accepted = controller.EnterString("=SUM(Sheet1!R2C3:R3C3)");
+      expect(accepted, controller.error).toBe(true);
+    },
+  );
   expect(document.GetValue(new ScAddress(4, 0, 0))).toBe(13);
   await setSyntax("0");
   expect(document.GetGrammar()).toBe(FormulaGrammar.Grammar.GRAM_NATIVE);
@@ -405,14 +436,16 @@ it("creates names in edge order and stops at Cancel while preserving earlier acc
   const { controller } = mount();
   const document = controller.shell.GetDocument();
   enterNameBox("ToReplace");
-  act(() => {
-    controller.Select(0, 2);
-    controller.EnterString("  Gross profit");
-    controller.Select(1, 2);
-    controller.EnterString("ToReplace");
-    controller.Select(2, 2);
-    controller.EnterString("AfterConflict");
-  });
+  act(
+    /** Moves the selection and enters the sample text through Calc. @returns Nothing. */ () => {
+      controller.Select(0, 2);
+      controller.EnterString("  Gross profit");
+      controller.Select(1, 2);
+      controller.EnterString("ToReplace");
+      controller.Select(2, 2);
+      controller.EnterString("AfterConflict");
+    },
+  );
   enterNameBox("A3:C4");
   openNameMenu(/^Create Names/);
   const dialog = screen.getByRole("dialog", { name: "Create Names" });
@@ -458,14 +491,16 @@ it("applies Yes and No to separate name conflicts and recalculates formulas thro
       controller.Select(4, 0),
   );
   enterNameBox("KeepThis");
-  act(() => {
-    controller.Select(0, 2);
-    controller.EnterString("MoveThis");
-    controller.Select(1, 2);
-    controller.EnterString("KeepThis");
-    controller.Select(2, 4);
-    controller.EnterString("=MoveThis+KeepThis");
-  });
+  act(
+    /** Moves the selection and enters the sample text through Calc. @returns Nothing. */ () => {
+      controller.Select(0, 2);
+      controller.EnterString("MoveThis");
+      controller.Select(1, 2);
+      controller.EnterString("KeepThis");
+      controller.Select(2, 4);
+      controller.EnterString("=MoveThis+KeepThis");
+    },
+  );
   const total = new ScAddress(2, 4, 0);
   expect(document.GetValue(total)).toBe(33);
   enterNameBox("A3:B4");

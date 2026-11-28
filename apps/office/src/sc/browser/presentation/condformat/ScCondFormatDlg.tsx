@@ -83,14 +83,27 @@ export function ScCondFormatDlg({
   const easy = model.easyMode !== undefined;
   const title = easy ? "Highlight cells…" : "Conditional Formatting for " + range;
 
-  useLayoutEffect(() => {
-    field.current?.focus();
-    field.current?.select();
-  }, []);
+  useLayoutEffect(
+    /** Focuses and selects the initial condition range. @returns Nothing. */ () => {
+      field.current?.focus();
+      field.current?.select();
+    },
+    [],
+  );
 
   /** Replaces one rule card's edited values. @param index - Current rule number. @param draft - Entered values. @returns Nothing. */
   function change(index: number, draft: ConditionalRuleDraft): void {
-    setRules((previous) => previous.map((rule, entry) => (entry === index ? draft : rule)));
+    setRules(
+      /** Replaces the edited rule in the ordered draft. @param previous - Previous draft. @returns Updated list of rules. */ (
+        previous,
+      ) =>
+        previous.map(
+          /** Substitutes the newly edited rule at the matching index. @param rule - Existing rule. @param entry - Existing rule index. @returns Updated or original rule. */ (
+            rule,
+            entry,
+          ) => (entry === index ? draft : rule),
+        ),
+    );
   }
 
   /** Moves the selected original entry within the ordered list. @param offset - Move direction. @returns Nothing. */
@@ -128,35 +141,38 @@ export function ScCondFormatDlg({
     onReference(area);
   }
 
-  useImperativeHandle(referenceInput, () => ({
-    /** Starts selecting cells for the original active reference field. @param position - Initial cell. @param kind - Original grid surface. @param append - Whether the modifier extends the range list. @returns Nothing. */
-    Start(position, kind, append) {
-      const fieldKind = activeField;
-      const element = document.activeElement;
-      const actual =
-        element instanceof HTMLInputElement && element.dataset.reference === fieldKind
-          ? element
-          : undefined;
-      const value = fieldKind === "range" ? range : (current?.[fieldKind] ?? "");
-      const appendRange = append && fieldKind === "range" && value.length > 0;
-      const start = appendRange ? value.length : (actual?.selectionStart ?? 0);
-      const end = appendRange ? value.length : (actual?.selectionEnd ?? value.length);
-      gesture.current = {
-        anchor: position,
-        kind,
-        field: fieldKind,
-        index: selected,
-        prefix: value.slice(0, start) + (appendRange ? ";" : ""),
-        suffix: value.slice(end),
-      };
-      pick(position);
-    },
-    Move: pick,
-    /** Finishes the current native reference drag. @returns Nothing. */
-    End() {
-      gesture.current = undefined;
-    },
-  }));
+  useImperativeHandle(
+    referenceInput,
+    /** Exposes grid-picking operations for the conditional format range. @returns Reference selection handle. */ () => ({
+      /** Starts selecting cells for the original active reference field. @param position - Initial cell. @param kind - Original grid surface. @param append - Whether the modifier extends the range list. @returns Nothing. */
+      Start(position, kind, append) {
+        const fieldKind = activeField;
+        const element = document.activeElement;
+        const actual =
+          element instanceof HTMLInputElement && element.dataset.reference === fieldKind
+            ? element
+            : undefined;
+        const value = fieldKind === "range" ? range : (current?.[fieldKind] ?? "");
+        const appendRange = append && fieldKind === "range" && value.length > 0;
+        const start = appendRange ? value.length : (actual?.selectionStart ?? 0);
+        const end = appendRange ? value.length : (actual?.selectionEnd ?? value.length);
+        gesture.current = {
+          anchor: position,
+          kind,
+          field: fieldKind,
+          index: selected,
+          prefix: value.slice(0, start) + (appendRange ? ";" : ""),
+          suffix: value.slice(end),
+        };
+        pick(position);
+      },
+      Move: pick,
+      /** Finishes the current native reference drag. @returns Nothing. */
+      End() {
+        gesture.current = undefined;
+      },
+    }),
+  );
 
   const validRange = !rules.length || !!ParseConditionalRanges(range, model.document, model.tab);
 
@@ -166,22 +182,30 @@ export function ScCondFormatDlg({
       aria-label={title}
       data-office-modal-panel="true"
       className="office-dialog-form fixed right-4 top-4 z-[60] w-[min(38rem,calc(100vw-2rem))] overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl"
-      onSubmit={(event) => {
-        event.preventDefault();
-        if (collapsed) {
-          setCollapsed(false);
-          return;
+      onSubmit={
+        /** Updates the collapsed and submits the current selection. @param event - Browser event. @returns Nothing. */ (
+          event,
+        ) => {
+          event.preventDefault();
+          if (collapsed) {
+            setCollapsed(false);
+            return;
+          }
+          const result = model.CreateResult(range, rules);
+          if (result) onSubmit(result);
         }
-        const result = model.CreateResult(range, rules);
-        if (result) onSubmit(result);
-      }}
-      onKeyDown={(event) => {
-        if (event.key === "Escape") {
-          event.stopPropagation();
-          if (collapsed) setCollapsed(false);
-          else onCancel();
+      }
+      onKeyDown={
+        /** Updates the collapsed and closes the active dialog. @param event - Browser event. @returns Nothing. */ (
+          event,
+        ) => {
+          if (event.key === "Escape") {
+            event.stopPropagation();
+            if (collapsed) setCollapsed(false);
+            else onCancel();
+          }
         }
-      }}
+      }
     >
       <DialogHeader title={title} onClose={onCancel} />
       <div className="office-dialog-content grid gap-3 text-sm">
@@ -191,253 +215,360 @@ export function ScCondFormatDlg({
               <legend className="mb-1 font-semibold">
                 {easy
                   ? "Cell value " +
-                    (conditionChoices.find(([mode]) => mode === model.easyMode)?.[1] ?? "")
+                    (conditionChoices.find(
+                      /** Checks whether `mode` equals `model.easyMode`. @param entry - Candidate entry. @returns Whether the condition holds. */ ([
+                        mode,
+                      ]) => mode === model.easyMode,
+                    )?.[1] ?? "")
                   : "Conditions"}
               </legend>
-              {rules.map((rule, index) => (
-                <div key={index} className="grid gap-2 rounded-md border border-slate-200 p-2">
-                  {!easy && (
-                    <button
-                      type="button"
-                      className="text-left font-medium"
-                      aria-expanded={index === selected}
-                      onClick={() => setSelected(index)}
-                    >
-                      {index + 1}.{" "}
-                      {
-                        [...ruleKinds, ...scaleKinds]
-                          .filter(([kind]) => kind === rule.kind)
-                          .at(-1)?.[1]
-                      }
-                    </button>
-                  )}
-                  {index === selected && (
-                    <>
-                      {!easy && (
-                        <select
-                          aria-label="Rule type"
-                          className={control}
-                          value={isColorFormat(rule.kind) ? "scale3" : rule.kind}
-                          onChange={(event) =>
-                            change(index, model.NewRule(event.target.value as ConditionalRuleKind))
-                          }
-                        >
-                          {ruleKinds.map(([kind, caption]) => (
-                            <option key={kind} value={kind}>
-                              {caption}
-                            </option>
-                          ))}
-                        </select>
-                      )}
-                      {rule.kind === "iconset" && (
-                        <select
-                          aria-label="Icon set type"
-                          className={control}
-                          value={rule.iconSetType ?? ScIconSetType.IconSet_3Arrows}
-                          onChange={(event) => {
-                            const iconSetType = Number(event.target.value) as ScIconSetType;
-                            change(index, {
-                              ...rule,
-                              iconSetType,
-                              stops: NewIconSetStops(iconSetType),
-                            });
-                          }}
-                        >
-                          {iconSetTypes.map((type) => (
-                            <option key={type} value={type}>
-                              {ScIconSetFormat.getIconSetName(type)}
-                            </option>
-                          ))}
-                        </select>
-                      )}
-                      {isColorFormat(rule.kind) && (
-                        <select
-                          aria-label="Color format"
-                          className={control}
-                          value={rule.kind}
-                          onChange={(event) =>
-                            change(index, model.NewRule(event.target.value as ConditionalRuleKind))
-                          }
-                        >
-                          {scaleKinds.map(([kind, label]) => (
-                            <option key={kind} value={kind}>
-                              {label}
-                            </option>
-                          ))}
-                        </select>
-                      )}
-                      {!easy && rule.kind === "condition" && (
-                        <select
-                          aria-label="Condition"
-                          className={control}
-                          value={rule.mode}
-                          onChange={(event) =>
-                            change(index, { ...rule, mode: Number(event.target.value) })
-                          }
-                        >
-                          {conditionChoices.map(([mode, caption]) => (
-                            <option key={mode} value={mode}>
-                              {caption}
-                            </option>
-                          ))}
-                        </select>
-                      )}
-                      {rule.kind === "date" && (
-                        <select
-                          aria-label="Date"
-                          className={control}
-                          value={rule.date}
-                          onChange={(event) =>
-                            change(index, { ...rule, date: Number(event.target.value) })
-                          }
-                        >
-                          {dateChoices.map(([type, caption]) => (
-                            <option key={type} value={type}>
-                              {caption}
-                            </option>
-                          ))}
-                        </select>
-                      )}
-                      {(rule.kind === "formula" || rule.kind === "condition") &&
-                        (["first", "second"] as const)
-                          .slice(0, rule.kind === "formula" ? 1 : ConditionOperands(rule.mode))
-                          .map((part, operand) => (
-                            <input
-                              key={part}
-                              data-reference={part}
-                              aria-label={
-                                rule.kind === "formula" ? "Formula" : "Value " + (operand + 1)
-                              }
-                              className={control}
-                              value={rule[part]}
-                              onFocus={() => {
-                                setActiveField(part);
-                              }}
-                              onChange={(event) =>
-                                change(index, { ...rule, [part]: event.target.value })
-                              }
-                            />
-                          ))}
-                      {isColorFormat(rule.kind) ? (
-                        <div className="grid gap-2">
-                          {rule.stops.map((stop, number) => {
-                            const bar = rule.kind === "databar";
-                            const icons = rule.kind === "iconset";
-                            const choices = icons
-                              ? iconSetChoices
-                              : bar
-                                ? dataBarChoices.filter(
-                                    ([type]) =>
-                                      type === stop.type ||
-                                      type !==
-                                        (number === 0
-                                          ? ScColorScaleEntryType.MAX
-                                          : ScColorScaleEntryType.MIN),
-                                  )
-                                : scaleChoices;
-                            const label = icons
-                              ? `Icon ${number + 1}`
-                              : number === 0
-                                ? "Minimum"
-                                : number === rule.stops.length - 1
-                                  ? "Maximum"
-                                  : "Middle";
-                            const update = (replacement: typeof stop) =>
-                              change(index, {
-                                ...rule,
-                                stops: rule.stops.map((value, i) =>
-                                  i === number ? replacement : value,
-                                ),
-                              });
-                            return (
-                              <div key={label} className="grid grid-cols-[1fr_1fr_auto] gap-1">
-                                <select
-                                  aria-label={label + " type"}
-                                  value={stop.type}
-                                  className={control}
-                                  onChange={(event) =>
-                                    update({ ...stop, type: Number(event.target.value) })
-                                  }
-                                >
-                                  {choices.map(([type, caption]) => (
-                                    <option key={type} value={type}>
-                                      {caption}
-                                    </option>
-                                  ))}
-                                </select>
-                                <input
-                                  aria-label={label + " value"}
-                                  className={control}
-                                  value={stop.value}
-                                  disabled={
-                                    stop.type === ScColorScaleEntryType.AUTO ||
-                                    stop.type === ScColorScaleEntryType.MIN ||
-                                    stop.type === ScColorScaleEntryType.MAX
-                                  }
-                                  onChange={(event) =>
-                                    update({ ...stop, value: event.target.value })
-                                  }
-                                />
-                                {icons && (
-                                  <select
-                                    aria-label={label + " comparison"}
-                                    value={stop.mode ?? ScConditionMode.EqGreater}
-                                    className={control}
-                                    onChange={(event) =>
-                                      update({ ...stop, mode: Number(event.target.value) })
-                                    }
-                                  >
-                                    {conditionChoices.slice(0, 6).map(([mode, caption]) => (
-                                      <option key={mode} value={mode}>
-                                        {caption}
-                                      </option>
-                                    ))}
-                                  </select>
-                                )}
-                                {!bar && !icons && (
-                                  <input
-                                    type="color"
-                                    aria-label={label + " color"}
-                                    value={stop.color}
-                                    onChange={(event) =>
-                                      update({ ...stop, color: event.target.value })
-                                    }
-                                  />
-                                )}
-                              </div>
-                            );
-                          })}
-                        </div>
-                      ) : (
-                        <label className="grid gap-1">
-                          Apply Style
+              {rules.map(
+                /** Renders one div for the source entry. @param rule - Source entry. @param index - Entry index. @returns Rendered element. */ (
+                  rule,
+                  index,
+                ) => (
+                  <div key={index} className="grid gap-2 rounded-md border border-slate-200 p-2">
+                    {!easy && (
+                      <button
+                        type="button"
+                        className="text-left font-medium"
+                        aria-expanded={index === selected}
+                        onClick={
+                          /** Updates the selected. @returns Nothing. */ () => setSelected(index)
+                        }
+                      >
+                        {index + 1}.{" "}
+                        {
+                          [...ruleKinds, ...scaleKinds]
+                            .filter(
+                              /** Checks whether `kind` equals `rule.kind`. @param entry - Candidate entry. @returns Whether the condition holds. */ ([
+                                kind,
+                              ]) => kind === rule.kind,
+                            )
+                            .at(-1)?.[1]
+                        }
+                      </button>
+                    )}
+                    {index === selected && (
+                      <>
+                        {!easy && (
                           <select
+                            aria-label="Rule type"
                             className={control}
-                            value={rule.style}
-                            onChange={(event) =>
-                              change(index, { ...rule, style: event.target.value })
+                            value={isColorFormat(rule.kind) ? "scale3" : rule.kind}
+                            onChange={
+                              /** Replaces the row with a new rule of the selected type. @param event - Rule type change event. @returns Nothing. */ (
+                                event,
+                              ) =>
+                                change(
+                                  index,
+                                  model.NewRule(event.target.value as ConditionalRuleKind),
+                                )
                             }
                           >
-                            {[...new Set([...model.styles, rule.style])].map((style) => (
-                              <option key={style}>{style}</option>
-                            ))}
+                            {ruleKinds.map(
+                              /** Renders the `kind` option for the source entry. @param entry - Source entry. @returns Rendered element. */ ([
+                                kind,
+                                caption,
+                              ]) => (
+                                <option key={kind} value={kind}>
+                                  {caption}
+                                </option>
+                              ),
+                            )}
                           </select>
-                        </label>
-                      )}
-                    </>
-                  )}
-                </div>
-              ))}
+                        )}
+                        {rule.kind === "iconset" && (
+                          <select
+                            aria-label="Icon set type"
+                            className={control}
+                            value={rule.iconSetType ?? ScIconSetType.IconSet_3Arrows}
+                            onChange={
+                              /** Applies a change from the "Icon set type" control. @param event - Browser event. @returns Nothing. */ (
+                                event,
+                              ) => {
+                                const iconSetType = Number(event.target.value) as ScIconSetType;
+                                change(index, {
+                                  ...rule,
+                                  iconSetType,
+                                  stops: NewIconSetStops(iconSetType),
+                                });
+                              }
+                            }
+                          >
+                            {iconSetTypes.map(
+                              /** Renders the `type` option for the source entry. @param type - Source entry. @returns Rendered element. */ (
+                                type,
+                              ) => (
+                                <option key={type} value={type}>
+                                  {ScIconSetFormat.getIconSetName(type)}
+                                </option>
+                              ),
+                            )}
+                          </select>
+                        )}
+                        {isColorFormat(rule.kind) && (
+                          <select
+                            aria-label="Color format"
+                            className={control}
+                            value={rule.kind}
+                            onChange={
+                              /** Replaces the expanded row with a rule of the selected type. @param event - Rule type change event. @returns Nothing. */ (
+                                event,
+                              ) =>
+                                change(
+                                  index,
+                                  model.NewRule(event.target.value as ConditionalRuleKind),
+                                )
+                            }
+                          >
+                            {scaleKinds.map(
+                              /** Renders the `kind` option for the source entry. @param entry - Source entry. @returns Rendered element. */ ([
+                                kind,
+                                label,
+                              ]) => (
+                                <option key={kind} value={kind}>
+                                  {label}
+                                </option>
+                              ),
+                            )}
+                          </select>
+                        )}
+                        {!easy && rule.kind === "condition" && (
+                          <select
+                            aria-label="Condition"
+                            className={control}
+                            value={rule.mode}
+                            onChange={
+                              /** Applies the chosen comparison mode to the rule draft. @param event - Comparison mode change event. @returns Nothing. */ (
+                                event,
+                              ) => change(index, { ...rule, mode: Number(event.target.value) })
+                            }
+                          >
+                            {conditionChoices.map(
+                              /** Renders the `mode` option for the source entry. @param entry - Source entry. @returns Rendered element. */ ([
+                                mode,
+                                caption,
+                              ]) => (
+                                <option key={mode} value={mode}>
+                                  {caption}
+                                </option>
+                              ),
+                            )}
+                          </select>
+                        )}
+                        {rule.kind === "date" && (
+                          <select
+                            aria-label="Date"
+                            className={control}
+                            value={rule.date}
+                            onChange={
+                              /** Applies the chosen date condition to the rule draft. @param event - Date condition change event. @returns Nothing. */ (
+                                event,
+                              ) => change(index, { ...rule, date: Number(event.target.value) })
+                            }
+                          >
+                            {dateChoices.map(
+                              /** Renders the `type` option for the source entry. @param entry - Source entry. @returns Rendered element. */ ([
+                                type,
+                                caption,
+                              ]) => (
+                                <option key={type} value={type}>
+                                  {caption}
+                                </option>
+                              ),
+                            )}
+                          </select>
+                        )}
+                        {(rule.kind === "formula" || rule.kind === "condition") &&
+                          (["first", "second"] as const)
+                            .slice(0, rule.kind === "formula" ? 1 : ConditionOperands(rule.mode))
+                            .map(
+                              /** Renders one input for the source entry. @param part - Source entry. @param operand - Entry index. @returns Rendered element. */ (
+                                part,
+                                operand,
+                              ) => (
+                                <input
+                                  key={part}
+                                  data-reference={part}
+                                  aria-label={
+                                    rule.kind === "formula" ? "Formula" : "Value " + (operand + 1)
+                                  }
+                                  className={control}
+                                  value={rule[part]}
+                                  onFocus={
+                                    /** Updates the active field. @returns Nothing. */ () => {
+                                      setActiveField(part);
+                                    }
+                                  }
+                                  onChange={
+                                    /** Updates the selected formula field in the rule draft. @param event - Formula field change event. @returns Nothing. */ (
+                                      event,
+                                    ) => change(index, { ...rule, [part]: event.target.value })
+                                  }
+                                />
+                              ),
+                            )}
+                        {isColorFormat(rule.kind) ? (
+                          <div className="grid gap-2">
+                            {rule.stops.map(
+                              /** Renders controls for one data bar, color scale, or icon threshold. @param stop - Current threshold settings. @param number - Threshold index. @returns Threshold editor. */ (
+                                stop,
+                                number,
+                              ) => {
+                                const bar = rule.kind === "databar";
+                                const icons = rule.kind === "iconset";
+                                const choices = icons
+                                  ? iconSetChoices
+                                  : bar
+                                    ? dataBarChoices.filter(
+                                        /** Keeps the selected stop type and removes the incompatible endpoint type. @param entry - Threshold type option. @returns Whether the threshold option is available. */ ([
+                                          type,
+                                        ]) =>
+                                          type === stop.type ||
+                                          type !==
+                                            (number === 0
+                                              ? ScColorScaleEntryType.MAX
+                                              : ScColorScaleEntryType.MIN),
+                                      )
+                                    : scaleChoices;
+                                const label = icons
+                                  ? `Icon ${number + 1}`
+                                  : number === 0
+                                    ? "Minimum"
+                                    : number === rule.stops.length - 1
+                                      ? "Maximum"
+                                      : "Middle";
+                                const update =
+                                  /** Replaces the selected data bar or color scale stop in the staged rule. @param replacement - Updated stop values. @returns Nothing. */ (
+                                    replacement: typeof stop,
+                                  ) =>
+                                    change(index, {
+                                      ...rule,
+                                      stops: rule.stops.map(
+                                        /** Replaces the stop at the selected position only. @param value - Existing stop. @param i - Stop index. @returns Updated or original stop. */ (
+                                          value,
+                                          i,
+                                        ) => (i === number ? replacement : value),
+                                      ),
+                                    });
+                                return (
+                                  <div key={label} className="grid grid-cols-[1fr_1fr_auto] gap-1">
+                                    <select
+                                      aria-label={label + " type"}
+                                      value={stop.type}
+                                      className={control}
+                                      onChange={
+                                        /** Updates `type`. @param event - Control change event. @returns Nothing. */ (
+                                          event,
+                                        ) => update({ ...stop, type: Number(event.target.value) })
+                                      }
+                                    >
+                                      {choices.map(
+                                        /** Renders the `type` option for the source entry. @param entry - Source entry. @returns Rendered element. */ ([
+                                          type,
+                                          caption,
+                                        ]) => (
+                                          <option key={type} value={type}>
+                                            {caption}
+                                          </option>
+                                        ),
+                                      )}
+                                    </select>
+                                    <input
+                                      aria-label={label + " value"}
+                                      className={control}
+                                      value={stop.value}
+                                      disabled={
+                                        stop.type === ScColorScaleEntryType.AUTO ||
+                                        stop.type === ScColorScaleEntryType.MIN ||
+                                        stop.type === ScColorScaleEntryType.MAX
+                                      }
+                                      onChange={
+                                        /** Updates `value`. @param event - Control change event. @returns Nothing. */ (
+                                          event,
+                                        ) => update({ ...stop, value: event.target.value })
+                                      }
+                                    />
+                                    {icons && (
+                                      <select
+                                        aria-label={label + " comparison"}
+                                        value={stop.mode ?? ScConditionMode.EqGreater}
+                                        className={control}
+                                        onChange={
+                                          /** Updates `mode`. @param event - Control change event. @returns Nothing. */ (
+                                            event,
+                                          ) => update({ ...stop, mode: Number(event.target.value) })
+                                        }
+                                      >
+                                        {conditionChoices.slice(0, 6).map(
+                                          /** Renders the `mode` option for the source entry. @param entry - Source entry. @returns Rendered element. */ ([
+                                            mode,
+                                            caption,
+                                          ]) => (
+                                            <option key={mode} value={mode}>
+                                              {caption}
+                                            </option>
+                                          ),
+                                        )}
+                                      </select>
+                                    )}
+                                    {!bar && !icons && (
+                                      <input
+                                        type="color"
+                                        aria-label={label + " color"}
+                                        value={stop.color}
+                                        onChange={
+                                          /** Updates `color`. @param event - Control change event. @returns Nothing. */ (
+                                            event,
+                                          ) => update({ ...stop, color: event.target.value })
+                                        }
+                                      />
+                                    )}
+                                  </div>
+                                );
+                              },
+                            )}
+                          </div>
+                        ) : (
+                          <label className="grid gap-1">
+                            Apply Style
+                            <select
+                              className={control}
+                              value={rule.style}
+                              onChange={
+                                /** Applies the chosen cell style to the rule draft. @param event - Cell style change event. @returns Nothing. */ (
+                                  event,
+                                ) => change(index, { ...rule, style: event.target.value })
+                              }
+                            >
+                              {[...new Set([...model.styles, rule.style])].map(
+                                /** Renders one option for the source entry. @param style - Source entry. @returns Rendered element. */ (
+                                  style,
+                                ) => (
+                                  <option key={style}>{style}</option>
+                                ),
+                              )}
+                            </select>
+                          </label>
+                        )}
+                      </>
+                    )}
+                  </div>
+                ),
+              )}
             </fieldset>
             {!easy && (
               <div className="flex flex-wrap gap-1">
                 <button
                   type="button"
                   className="office-dialog-secondary"
-                  onClick={() => {
-                    setRules([...rules, model.NewRule("condition")]);
-                    setSelected(rules.length);
-                  }}
+                  onClick={
+                    /** Activates the "Add" control. @returns Nothing. */ () => {
+                      setRules([...rules, model.NewRule("condition")]);
+                      setSelected(rules.length);
+                    }
+                  }
                 >
                   Add
                 </button>
@@ -445,10 +576,19 @@ export function ScCondFormatDlg({
                   type="button"
                   className="office-dialog-secondary"
                   disabled={!current}
-                  onClick={() => {
-                    setRules(rules.filter((_, index) => index !== selected));
-                    setSelected(Math.max(0, Math.min(selected, rules.length - 2)));
-                  }}
+                  onClick={
+                    /** Activates the "Remove" control. @returns Nothing. */ () => {
+                      setRules(
+                        rules.filter(
+                          /** Checks whether `index` differs from `selected`. @param _ - Candidate entry. @param index - Entry index. @returns Whether the condition holds. */ (
+                            _,
+                            index,
+                          ) => index !== selected,
+                        ),
+                      );
+                      setSelected(Math.max(0, Math.min(selected, rules.length - 2)));
+                    }
+                  }
                 >
                   Remove
                 </button>
@@ -456,7 +596,9 @@ export function ScCondFormatDlg({
                   type="button"
                   className="office-dialog-secondary"
                   disabled={selected <= 0 || !current}
-                  onClick={() => move(-1)}
+                  onClick={
+                    /** Moves the selected rule up one position. @returns Nothing. */ () => move(-1)
+                  }
                 >
                   Up
                 </button>
@@ -464,7 +606,10 @@ export function ScCondFormatDlg({
                   type="button"
                   className="office-dialog-secondary"
                   disabled={selected >= rules.length - 1}
-                  onClick={() => move(1)}
+                  onClick={
+                    /** Moves the selected rule down one position. @returns Nothing. */ () =>
+                      move(1)
+                  }
                 >
                   Down
                 </button>
@@ -481,20 +626,28 @@ export function ScCondFormatDlg({
               className={control}
               value={range}
               aria-invalid={!validRange}
-              onFocus={() => {
-                setActiveField("range");
-              }}
-              onChange={(event) => setRange(event.target.value)}
+              onFocus={
+                /** Records focus for the `range` control. @returns Nothing. */ () => {
+                  setActiveField("range");
+                }
+              }
+              onChange={
+                /** Updates the range. @param event - Control change event. @returns Nothing. */ (
+                  event,
+                ) => setRange(event.target.value)
+              }
             />
           </label>
           <button
             className="office-dialog-secondary"
             type="button"
             aria-pressed={collapsed}
-            onClick={() => {
-              setActiveField("range");
-              setCollapsed(!collapsed);
-            }}
+            onClick={
+              /** Updates the active field and updates the collapsed. @returns Nothing. */ () => {
+                setActiveField("range");
+                setCollapsed(!collapsed);
+              }
+            }
           >
             {collapsed ? "Expand" : "Select Range"}
           </button>

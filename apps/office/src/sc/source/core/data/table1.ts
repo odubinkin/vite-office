@@ -216,7 +216,11 @@ export function AddPrintRange(this: ScTable, range: ScRange): void {
 /** Copies an original sheet's print data into its workbook snapshot entry. @param this - Native sheet. @param saver - Sheet snapshot. @returns Nothing. */
 export function FillPrintSaver(this: ScTable, saver: ScPrintSaverTab): void {
   saver.SetAreas(
-    this["aPrintRanges"].map((range) => new ScRange(range)),
+    this["aPrintRanges"].map(
+      /** Copies each original range before replacing the stored print area collection. @param range - Original range. @returns Independent range copy. */ (
+        range,
+      ) => new ScRange(range),
+    ),
     this.IsPrintEntireSheet(),
   );
   saver.SetRepeat(this.GetRepeatColRange(), this.GetRepeatRowRange());

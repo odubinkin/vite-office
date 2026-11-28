@@ -100,7 +100,9 @@ it("keeps quoted print areas, excluded sheets and repeating headers across ODS a
     const content = new DOMParser().parseFromString(xml as string, "application/xml");
     const tableNamespace = ODF_NAMESPACES.table;
     const excluded = Array.from(content.getElementsByTagNameNS(tableNamespace, "table")).find(
-      (table) => table.getAttributeNS(tableNamespace, "name") === "Excluded",
+      /** Locates the excluded sheet in the exported ODF table list. @param table - ODF table element. @returns Whether this table is the excluded sheet. */ (
+        table,
+      ) => table.getAttributeNS(tableNamespace, "name") === "Excluded",
     );
     expect(excluded?.getAttributeNS(tableNamespace, "print")).toBe("false");
     expect((xml as string).match(/<table:table-header-rows>/gu)).toHaveLength(3);

@@ -164,7 +164,11 @@ export function CreatePrintAreasModel(view: ScViewData): PrintAreasModel | undef
       columns: FormatRepeatRange(sheet.GetRepeatColRange(), document, "columns"),
     },
     selection: GetPrintSelection(view)
-      .map((range) => FormatPrintArea(range, document))
+      .map(
+        /** Formats each existing range in the active document's reference grammar. @param range - Native print range. @returns Formatted print area. */ (
+          range,
+        ) => FormatPrintArea(range, document),
+      )
       .join(printRangeSeparator),
     named,
   };
@@ -178,7 +182,13 @@ export function CheckPrintAreas(
   const { document, tab, initial } = model;
   if (
     draft.area &&
-    draft.area.split(printRangeSeparator).some((entry) => !ParsePrintRange(entry, document, tab))
+    draft.area
+      .split(printRangeSeparator)
+      .some(
+        /** Finds an area string the active document cannot parse. @param entry - One entered print area. @returns Whether the string is invalid. */ (
+          entry,
+        ) => !ParsePrintRange(entry, document, tab),
+      )
   )
     return "area";
   const rows = ParseRepeatRange(draft.rows, document, "rows");

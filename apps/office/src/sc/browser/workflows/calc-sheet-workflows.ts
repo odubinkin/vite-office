@@ -19,7 +19,6 @@ import { SfxInt16Item, SfxUInt16Item } from "../../../svl/source/items/intitem";
 import { OUString } from "../../../sal/inc/rtl/ustring";
 import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { SvxColorItem } from "../../../editeng/inc/colritem";
-import { SfxBoolItem } from "../../../svl/source/items/cenumitm";
 import { SfxStringItem } from "../../../svl/source/items/stritem";
 import { SfxIntegerListItem } from "../../../svl/source/items/ilstitem";
 import { Color } from "../../../tools/inc/color";
@@ -48,18 +47,7 @@ import {
   FID_TAB_SET_TAB_BG_COLOR,
 } from "../../sdi/scalc";
 import { calcMergeCommands } from "../../sdi/cellsh";
-import {
-  calcPageStyleCommand,
-  calcHeaderFooterCommand,
-  calcPrintRangeCommands,
-  FN_PRINT_ENTIRE_SHEET,
-  FN_PRINT_REPEAT_COL,
-  FN_PRINT_REPEAT_ROW,
-  SID_CHANGE_PRINTAREA,
-  SID_DEFINE_PRINTAREA,
-} from "../../sdi/tabvwsh";
-import { CreatePrintAreasModel, type PrintAreasModel } from "../../source/ui/pagedlg/areasdlg";
-import { CalcPageStyleWorkflow } from "./calc-page-style-workflow";
+import { CalcPageStyleWorkflow, calcPageStyleSlots } from "./calc-page-style-workflow";
 import { CalcConditionalWorkflows, conditionalFormatCommands } from "./calc-conditional-workflows";
 import {
   FormatNameReference,
@@ -96,15 +84,6 @@ export type CalcSheetTabDialog =
 type SheetCommand = keyof typeof calcSheetCommands;
 /** Native manual outline operation identifiers. */
 type OutlineCommand = (typeof calcOutlineCommands)[number]["kind"];
-/** Native print-range slot operations. */
-type PrintRangeCommand = (typeof calcPrintRangeCommands)[number]["kind"];
-
-/** Looks up the original SfxStringItem by its Which ID. @param request - Slot request. @param which - Argument identity. @returns Native string with empty default. */
-function printRangeArgument(request: SfxRequest, which: number): string {
-  const item = request.GetArgs().find((candidate) => candidate.Which() === which);
-  return item instanceof SfxStringItem ? item.GetValue() : "";
-}
-
 /** Source name-paste modal result. */
 export type NamePasteResult =
   { readonly kind: "names"; readonly rows: readonly ScRangeNameLine[] } | { readonly kind: "list" };
@@ -129,7 +108,10 @@ export class CalcSheetWorkflows {
   readonly metricDialogs = new SfxDialogController<ScMetricInputDlg, number>();
   readonly pageStyles: CalcPageStyleWorkflow;
   readonly cellFormat: CalcCellFormatWorkflow;
-  readonly printDialogs = new SfxDialogController<PrintAreasModel, SfxRequest | undefined>();
+  /** Borrows the print-area dialog owner for sheet workflow rendering. @returns Current dialog controller. */
+  get printDialogs() {
+    return this.pageStyles.printDialogs;
+  }
   private managing: ScNameDlg | undefined;
   private creatingNames: AbortController | undefined;
   readonly createNamesDialogs = new SfxDialogController<CreateNamesRequest, CreateNamesResult>();
@@ -150,16 +132,29 @@ export class CalcSheetWorkflows {
       controller,
       /** Checks modal admission. @returns Availability. */ () => !this.HasSheetDialog(),
     );
-    this.pageStyles = new CalcPageStyleWorkflow(controller, () => !this.HasSheetDialog());
-    this.options = new CalcOptionsWorkflow(controller, () => !this.HasSheetDialog());
-    this.merge = new CalcMergeWorkflow(controller, () => !this.HasSheetDialog());
+    this.pageStyles = new CalcPageStyleWorkflow(
+      controller,
+      /** Checks whether the sheet workflow currently permits opening Calc Options. @returns Whether the dialog can open. */ () =>
+        !this.HasSheetDialog(),
+    );
+    this.options = new CalcOptionsWorkflow(
+      controller,
+      /** Checks whether the sheet workflow currently permits opening the label range dialog. @returns Whether the dialog can open. */ () =>
+        !this.HasSheetDialog(),
+    );
+    this.merge = new CalcMergeWorkflow(
+      controller,
+      /** Checks whether the sheet workflow currently permits opening a merge confirmation. @returns Whether the dialog can open. */ () =>
+        !this.HasSheetDialog(),
+    );
     this.protection = new CalcSheetProtectionWorkflow(
       controller,
       /** Shares sheet dialogs. @returns Availability. */ () => !this.HasSheetDialog(),
     );
     this.clipboard = new CalcClipboardWorkflow(
       controller,
-      () => !this.HasSheetDialog(),
+      /** Checks whether the sheet workflow currently permits opening a page style dialog. @returns Whether the dialog can open. */ () =>
+        !this.HasSheetDialog(),
       dispatcher,
     );
     this.conditionals = new CalcConditionalWorkflows(controller);
@@ -168,69 +163,120 @@ export class CalcSheetWorkflows {
       this,
       new SfxInterface<CalcSheetWorkflows>([
         createCellFormatSlot(),
-        ...calcMergeCommands.map(({ id, slotId, label, kind }) => ({
-          commandUrl: id,
-          slotId,
-          label,
-          getState: (target: CalcSheetWorkflows) => target.merge.GetState(kind),
-          execute: (target: CalcSheetWorkflows, request: SfxRequest) =>
-            target.merge.Execute(kind, request),
-        })),
+        ...calcMergeCommands.map(
+          /** Registers one original merge or split cell command. @param entry - Merge command metadata and operation. @returns Browser slot definition. */ ({
+            id,
+            slotId,
+            label,
+            kind,
+          }) => ({
+            commandUrl: id,
+            slotId,
+            label,
+            getState:
+              /** Queries the availability of the registered cell merge operation. @param target - Active Calc slot target. @returns Merge command state. */ (
+                target: CalcSheetWorkflows,
+              ) => target.merge.GetState(kind),
+            execute:
+              /** Executes the registered cell merge operation from the slot. @param target - Active Calc slot target. @param request - Original Sfx slot request. @returns Merge completion. */ (
+                target: CalcSheetWorkflows,
+                request: SfxRequest,
+              ) => target.merge.Execute(kind, request),
+          }),
+        ),
         {
           commandUrl: ".uno:TextToColumns",
           slotId: 26347,
           label: "Text to Columns",
-          getState: (target: CalcSheetWorkflows) => ({
-            enabled: target.CanTextToColumns(),
-          }),
-          execute: (target: CalcSheetWorkflows) => target.TextToColumns(),
+          getState:
+            /** Checks whether the active selection can be split into columns. @param target - Active Calc slot target. @returns Text to Columns command state. */ (
+              target: CalcSheetWorkflows,
+            ) => ({
+              enabled: target.CanTextToColumns(),
+            }),
+          execute:
+            /** Starts the Text to Columns workflow for the active selection. @param target - Active Calc slot target. @returns Conversion completion. */ (
+              target: CalcSheetWorkflows,
+            ) => target.TextToColumns(),
         },
         {
           commandUrl: ".uno:AddName",
           slotId: 26276,
           label: "Define Name",
-          getState: (target: CalcSheetWorkflows) => ({ enabled: !target.HasSheetDialog() }),
-          execute: (target: CalcSheetWorkflows, request: SfxRequest) =>
-            !request.GetArgs().length && target.DefineName(),
+          getState:
+            /** Checks whether the session can open Define Name. @param target - Active Calc slot target. @returns Define Name command state. */ (
+              target: CalcSheetWorkflows,
+            ) => ({ enabled: !target.HasSheetDialog() }),
+          execute:
+            /** Opens Define Name when the request contains no slot arguments. @param target - Active Calc slot target. @param request - Original Sfx slot request. @returns Dispatch completion. */ (
+              target: CalcSheetWorkflows,
+              request: SfxRequest,
+            ) => !request.GetArgs().length && target.DefineName(),
         },
         {
           commandUrl: ".uno:DefineName",
           slotId: 26271,
           label: "Manage Names",
           shortcuts: ["Ctrl+F3", "Meta+F3"],
-          getState: (target: CalcSheetWorkflows) => ({ enabled: !target.HasSheetDialog() }),
-          execute: (target: CalcSheetWorkflows, request: SfxRequest) =>
-            !request.GetArgs().length && target.ManageNames(),
+          getState:
+            /** Checks whether the session can open Manage Names. @param target - Active Calc slot target. @returns Manage Names command state. */ (
+              target: CalcSheetWorkflows,
+            ) => ({ enabled: !target.HasSheetDialog() }),
+          execute:
+            /** Opens Manage Names when the request contains no slot arguments. @param target - Active Calc slot target. @param request - Original Sfx slot request. @returns Dispatch completion. */ (
+              target: CalcSheetWorkflows,
+              request: SfxRequest,
+            ) => !request.GetArgs().length && target.ManageNames(),
         },
         {
           commandUrl: ".uno:InsertName",
           slotId: 26272,
           label: "Insert Name",
-          getState: (target: CalcSheetWorkflows) => ({ enabled: !target.HasSheetDialog() }),
-          execute: (target: CalcSheetWorkflows, request: SfxRequest) =>
-            !request.GetArgs().length && target.PasteNames(),
+          getState:
+            /** Checks whether the session can open Insert Name. @param target - Active Calc slot target. @returns Insert Name command state. */ (
+              target: CalcSheetWorkflows,
+            ) => ({ enabled: !target.HasSheetDialog() }),
+          execute:
+            /** Opens Insert Name when the request contains no slot arguments. @param target - Active Calc slot target. @param request - Original Sfx slot request. @returns Dispatch completion. */ (
+              target: CalcSheetWorkflows,
+              request: SfxRequest,
+            ) => !request.GetArgs().length && target.PasteNames(),
         },
         {
           commandUrl: ".uno:CreateNames",
           slotId: 26273,
           label: "Create Names",
-          getState: (target: CalcSheetWorkflows) => ({
-            enabled:
-              !target.HasSheetDialog() &&
-              target.controller.viewData.GetSimpleArea(new ScRange()) === ScMarkType.SC_MARK_SIMPLE,
-          }),
-          execute: (target: CalcSheetWorkflows, request: SfxRequest) =>
-            !request.GetArgs().length && target.CreateNames(),
+          getState:
+            /** Checks that Create Names can use a single rectangular mark and open a dialog. @param target - Active Calc slot target. @returns Create Names command state. */ (
+              target: CalcSheetWorkflows,
+            ) => ({
+              enabled:
+                !target.HasSheetDialog() &&
+                target.controller.viewData.GetSimpleArea(new ScRange()) ===
+                  ScMarkType.SC_MARK_SIMPLE,
+            }),
+          execute:
+            /** Opens Create Names when the request contains no slot arguments. @param target - Active Calc slot target. @param request - Original Sfx slot request. @returns Dispatch completion. */ (
+              target: CalcSheetWorkflows,
+              request: SfxRequest,
+            ) => !request.GetArgs().length && target.CreateNames(),
         },
         {
           commandUrl: ".uno:DefineLabelRange",
           slotId: 26629,
           label: "Define Label Range",
-          getState: (target: CalcSheetWorkflows) => ({
-            enabled: Boolean(target.labelRanges.dialogs.GetSnapshot()) || !target.HasSheetDialog(),
-          }),
-          execute: (target: CalcSheetWorkflows, request: SfxRequest) =>
-            !request.GetArgs().length && target.labelRanges.Execute(),
+          getState:
+            /** Enables the command when its dialog is active or the session can open it. @param target - Active Calc slot target. @returns Define Label Range command state. */ (
+              target: CalcSheetWorkflows,
+            ) => ({
+              enabled:
+                Boolean(target.labelRanges.dialogs.GetSnapshot()) || !target.HasSheetDialog(),
+            }),
+          execute:
+            /** Opens the label range editor when the request contains no slot arguments. @param target - Active Calc slot target. @param request - Original Sfx slot request. @returns Dispatch completion. */ (
+              target: CalcSheetWorkflows,
+              request: SfxRequest,
+            ) => !request.GetArgs().length && target.labelRanges.Execute(),
         },
         ...conditionalFormatCommands.map(
           /** Binds one original conditional-format Sfx command. @param slot - Source command. @returns Slot definition. */ ([
@@ -242,24 +288,31 @@ export class CalcSheetWorkflows {
             commandUrl,
             slotId,
             label,
-            getState: (target: CalcSheetWorkflows) => ({
-              enabled: !target.HasSheetDialog() && target.conditionals.CanExecute(kind),
-            }),
-            execute: (target: CalcSheetWorkflows, request: SfxRequest) => {
-              const [argument] = request.GetArgs();
-              if (kind === "easy") {
-                const value = argument instanceof SfxUnoAnyItem ? argument.GetValue() : undefined;
-                const mode =
-                  typeof value === "object" && value !== null && "FormatRule" in value
-                    ? Number(value.FormatRule)
-                    : argument instanceof SfxInt16Item
-                      ? argument.GetValue()
-                      : undefined;
-                if (mode !== undefined && ![0, 1, 2, 6, 23].includes(mode)) return false;
-                return target.conditionals.Execute(kind, mode);
-              }
-              return !argument && target.conditionals.Execute(kind);
-            },
+            getState:
+              /** Checks whether conditional formatting can open for the current Calc selection. @param target - Active Calc slot target. @returns Command state. */ (
+                target: CalcSheetWorkflows,
+              ) => ({
+                enabled: !target.HasSheetDialog() && target.conditionals.CanExecute(kind),
+              }),
+            execute:
+              /** Prompts for the requested conditional formatting action and uses the supplied rule mode for Easy Conditional Format. @param target - Active Calc slot target. @param request - Original Sfx slot request. @returns Dispatch completion. */ (
+                target: CalcSheetWorkflows,
+                request: SfxRequest,
+              ) => {
+                const [argument] = request.GetArgs();
+                if (kind === "easy") {
+                  const value = argument instanceof SfxUnoAnyItem ? argument.GetValue() : undefined;
+                  const mode =
+                    typeof value === "object" && value !== null && "FormatRule" in value
+                      ? Number(value.FormatRule)
+                      : argument instanceof SfxInt16Item
+                        ? argument.GetValue()
+                        : undefined;
+                  if (mode !== undefined && ![0, 1, 2, 6, 23].includes(mode)) return false;
+                  return target.conditionals.Execute(kind, mode);
+                }
+                return !argument && target.conditionals.Execute(kind);
+              },
           }),
         ),
         ...(
@@ -333,41 +386,7 @@ export class CalcSheetWorkflows {
               },
           }),
         ),
-        {
-          commandUrl: calcHeaderFooterCommand.id,
-          slotId: calcHeaderFooterCommand.slotId,
-          label: calcHeaderFooterCommand.label,
-          getState: (target: CalcSheetWorkflows) => ({
-            enabled: target.pageStyles.CanEditHeaderFooter(),
-          }),
-          execute: (target: CalcSheetWorkflows, request: SfxRequest) =>
-            target.pageStyles.EditHeaderFooter(request),
-        },
-        {
-          commandUrl: calcPageStyleCommand.id,
-          slotId: calcPageStyleCommand.slotId,
-          label: calcPageStyleCommand.label,
-          getState: (target: CalcSheetWorkflows) => ({ enabled: !target.HasSheetDialog() }),
-          execute: (target: CalcSheetWorkflows, request: SfxRequest) =>
-            target.pageStyles.EditPageStyle(request),
-        },
-        ...calcPrintRangeCommands.map(({ id, slotId, label, kind }) => ({
-          commandUrl: id,
-          slotId,
-          label,
-          getState: (target: CalcSheetWorkflows) => ({
-            enabled: target.CanExecutePrintRange(kind),
-          }),
-          execute: (target: CalcSheetWorkflows, request: SfxRequest) =>
-            target.ExecutePrintRange(kind, request),
-        })),
-        {
-          commandUrl: ".uno:ChangePrintArea",
-          slotId: SID_CHANGE_PRINTAREA,
-          label: "Change Print Area",
-          execute: (target: CalcSheetWorkflows, request: SfxRequest) =>
-            target.ChangePrintRange(request),
-        },
+        ...calcPageStyleSlots,
         ...calcOutlineCommands.map(
           /** Registers the cell-shell outline slots in the browser dispatch adapter. @param source - Source command. @returns Shell slot. */
           (source) => ({
@@ -529,7 +548,11 @@ export class CalcSheetWorkflows {
       const range = new ScRange();
       this.controller.viewData.GetSimpleArea(range);
       if (data.expression === FormatNameReference(dialog.request.document, range)) {
-        const scope = dialog.request.scopes.find(([tab]) => tab === data.scope)?.[1];
+        const scope = dialog.request.scopes.find(
+          /** Checks whether `tab` equals `data.scope`. @param entry - Candidate entry. @returns Whether the condition holds. */ ([
+            tab,
+          ]) => tab === data.scope,
+        )?.[1];
         this.controller.ChangeAddress(data.scope < 0 ? data.name : `${data.name} (${scope})`);
       }
       this.nameDialogs.Complete(id, true);
@@ -589,7 +612,11 @@ export class CalcSheetWorkflows {
         end = Math.max(first, last);
       const inserted =
         result.result.rows
-          .map((row) => FormatPastedRangeName(row, model.editor.document.GetAddressConvention()))
+          .map(
+            /** Formats a defined name using the editor document's address convention. @param row - Selected defined-name row. @returns Formula text for name insertion. */ (
+              row,
+            ) => FormatPastedRangeName(row, model.editor.document.GetAddressConvention()),
+          )
           .join(" ") + " ";
       controller.ChangeInput(
         controller.inputText.slice(0, start) + inserted + controller.inputText.slice(end),
@@ -619,7 +646,9 @@ export class CalcSheetWorkflows {
       const done = await controller.shell.GetDocFunc().CreateNames(
         range,
         options.result,
-        async (name) => {
+        /** Obtains confirmation before a generated range name can replace an existing one. @param name - Conflicting defined name. @returns Chosen replacement response or cancellation. */ async (
+          name,
+        ) => {
           if (owner.signal.aborted) return "cancel";
           const result = await this.createNamesDialogs.Request({ kind: "replace", name });
           return result.kind === "accepted" && typeof result.result === "string"
@@ -653,8 +682,9 @@ export class CalcSheetWorkflows {
     if (!GetTextToColumnsRange(controller.viewData, source, false)) return false;
     const revision = controller.GetCommandStateRevision();
     /** Protects the originating range as modal responses arrive. @returns Whether the target remains current. */
-    const current = (): boolean =>
-      doc === controller.shell.GetDocument() && revision === controller.GetCommandStateRevision();
+    const current =
+      /** Checks that an asynchronous sheet command still refers to the active document and revision. @returns Whether it is safe to apply the command result. */ (): boolean =>
+        doc === controller.shell.GetDocument() && revision === controller.GetCommandStateRevision();
     const importer = new ScImportExport(doc, source.aStart);
     const value = importer.ExportTextToColumns(source);
     const options = await this.clipboard.RequestTextOptions("textToColumns", value, current);
@@ -697,62 +727,6 @@ export class CalcSheetWorkflows {
       this.options.dialogs.GetSnapshot() ||
       this.conditionals.IsOpen(),
     );
-  }
-
-  /** Reads source print-range availability from the current sheet. @param kind - Source command. @returns Slot state. */
-  private CanExecutePrintRange(kind: PrintRangeCommand): boolean {
-    if (this.printDialogs.GetSnapshot()) return kind === "edit";
-    if (this.HasSheetDialog()) return false;
-    const view = this.controller.viewData;
-    const sheet = view.GetDocument().FetchTable(view.GetTabNumber());
-    return !!sheet && (kind !== "clear" || !sheet.IsPrintEntireSheet());
-  }
-
-  /** Executes the original menu slots and toggles the modeless child window. @param kind - Source command. @param request - Actual slot request. @returns Completion. */
-  private async ExecutePrintRange(kind: PrintRangeCommand, request: SfxRequest): Promise<void> {
-    if (!this.controller.Commit()) return;
-    const view = this.controller.GetViewShell();
-    if (kind === "edit") {
-      const open = this.printDialogs.GetSnapshot();
-      if (open) {
-        this.printDialogs.Cancel(open.id);
-        return;
-      }
-      const model = CreatePrintAreasModel(view.GetViewData());
-      if (!model) return;
-      const result = await this.printDialogs.Request(model);
-      if (
-        result.kind === "accepted" &&
-        result.result &&
-        view === this.controller.GetViewShell() &&
-        model.tab === view.GetViewData().GetTabNumber()
-      )
-        this.ChangePrintRange(result.result);
-      return;
-    }
-    const typed = request.GetArgs().length > 0;
-    const print =
-      kind === "clear" ? "" : typed ? printRangeArgument(request, SID_DEFINE_PRINTAREA) : undefined;
-    view.SetPrintRanges(kind === "clear", print, undefined, undefined, kind === "add");
-    if (kind === "clear" || !typed) request.Done();
-    this.controller.SyncSheetView();
-  }
-
-  /** Applies the original dialog result slot. @param request - Typed print, repeat and entire-sheet items. @returns Nothing. */
-  private ChangePrintRange(request: SfxRequest): void {
-    if (!request.GetArgs().length) return;
-    const entire = request.GetArgs().find((item) => item.Which() === FN_PRINT_ENTIRE_SHEET);
-    this.controller
-      .GetViewShell()
-      .SetPrintRanges(
-        entire instanceof SfxBoolItem && entire.GetValue(),
-        printRangeArgument(request, SID_CHANGE_PRINTAREA),
-        printRangeArgument(request, FN_PRINT_REPEAT_COL),
-        printRangeArgument(request, FN_PRINT_REPEAT_ROW),
-        false,
-      );
-    request.Done();
-    this.controller.SyncSheetView();
   }
 
   /** Applies a level or group button through the active Calc shell. @param control - Native outline window action. @returns Nothing. */

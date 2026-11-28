@@ -21,7 +21,10 @@ test("Writer renders and reopens a translucent paragraph fill", /** Exercises th
   await open();
   await dialog.getByRole("tab", { name: "Area", exact: true }).click();
   await dialog.getByRole("button", { name: "Color", exact: true }).click();
-  await dialog.getByRole("button", { name: "#ff0000", exact: true }).click();
+  await dialog
+    .getByRole("group", { name: "Palette colors" })
+    .getByRole("button", { name: "Red", exact: true })
+    .click();
   await dialog.getByRole("tab", { name: "Transparency", exact: true }).click();
   await dialog.getByRole("radio", { name: "Transparency", exact: true }).check();
   await dialog.getByRole("spinbutton", { name: "Transparency", exact: true }).press("ArrowUp");

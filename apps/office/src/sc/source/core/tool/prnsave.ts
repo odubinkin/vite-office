@@ -27,7 +27,11 @@ export class ScPrintRangeSaver {
 
   /** Allocates one entry for each original sheet index. @param count - Sheet count. @returns Snapshot. */
   constructor(count: number) {
-    this.sheets = Array.from({ length: count }, () => new ScPrintSaverTab());
+    this.sheets = Array.from(
+      { length: count },
+      /** Creates an independent print-state snapshot for one sheet. @returns Sheet print snapshot. */ () =>
+        new ScPrintSaverTab(),
+    );
   }
 
   /** Returns the number of captured sheet indexes. @returns Original sheet count. */

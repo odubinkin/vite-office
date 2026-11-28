@@ -142,7 +142,13 @@ it("reopens print titles around adjacent groups and bounds column export by nati
     for (const axis of ["row", "column"]) {
       const tag = axis === "row" ? "table-header-rows" : "table-header-columns";
       const headers = [...xml.getElementsByTagNameNS(ODF_NAMESPACES.table, tag)];
-      expect(headers.map((header) => header.children.length)).toEqual([1, 0, 1, 1]);
+      expect(
+        headers.map(
+          /** Reads `header.children.length` from the source entry. @param header - Source entry. @returns Projected value. */ (
+            header,
+          ) => header.children.length,
+        ),
+      ).toEqual([1, 0, 1, 1]);
       expect(headers[0]?.parentElement?.localName).toBe(`table-${axis}-group`);
       expect(headers[1]?.parentElement?.localName).toBe("table");
     }

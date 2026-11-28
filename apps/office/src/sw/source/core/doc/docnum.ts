@@ -490,23 +490,49 @@ export function SetCounted(document: SwDoc, range: SwPaM, counted: boolean): voi
   );
 }
 
+/** Identifies the original outline and ordinary numbering branches. @param nodes - Selected numbered nodes. @returns The set of numbering families represented in the selection. */
+export function ClassifyNumberingLevels(
+  nodes: readonly SwTextNode[],
+): "outline" | "list" | "mixed" | undefined {
+  let hasOutline = false;
+  let hasList = false;
+  for (const node of nodes) {
+    if (node.GetNumRule()?.IsOutlineRule()) hasOutline = true;
+    else hasList = true;
+  }
+  if (hasOutline && hasList) return "mixed";
+  if (hasOutline) return "outline";
+  return hasList ? "list" : undefined;
+}
+
 /** Checks the represented numbering range before changing any level. @param document - Owning Writer document. @param range - Native selection. @param down - Demote direction. @returns Whether every numbered node can move. */
 export function CanNumUpDown(document: SwDoc, range: SwPaM, down: boolean): boolean {
   const nodes = GetNumberedNodes(document, range);
-  return (
-    nodes.length > 0 &&
-    nodes.every(
-      /** Checks the actual list-tree level. @param node - Selected numbered node. @returns Whether within native limits. */
-      (node) =>
-        down ? node.GetActualListLevel() < WRITER_MAX_LIST_LEVEL : node.GetActualListLevel() > 0,
-    )
+  const family = ClassifyNumberingLevels(nodes);
+  if (family === undefined || family === "mixed") return false;
+  return nodes.every(
+    /** Uses the collection's assigned outline level or the native list level. @param node - Selected numbered node. @returns Whether the target is within the supported levels. */ (
+      node,
+    ) => {
+      const collection = node.GetTextFormatColl();
+      const level =
+        family === "list"
+          ? node.GetActualListLevel()
+          : collection.IsAssignedToListLevelOfOutlineStyle()
+            ? collection.GetAssignedOutlineStyleLevel()
+            : node.GetAttrOutlineLevel() - 1;
+      return down ? level < WRITER_MAX_LIST_LEVEL : level > 0;
+    },
   );
 }
 
-/** Changes only list levels in the actual selected node range, including cells. @param document - Owning Writer document. @param range - Native selection. @param down - Demote direction. @returns Whether the supported numbering range changed. */
+/** Moves a native outline or list range through its own level operation. @param document - Owning Writer document. @param range - Native selection. @param down - Demote direction. @returns Native command success, including a mixed-range no-op. */
 export function NumUpDown(document: SwDoc, range: SwPaM, down: boolean): boolean {
-  if (!document.CanNumUpDown(range, down)) return false;
   const nodes = GetNumberedNodes(document, range);
+  const family = ClassifyNumberingLevels(nodes);
+  if (family === "mixed") return true;
+  if (family === "outline") return document.OutlineUpDown(range, down ? 1 : -1);
+  if (!document.CanNumUpDown(range, down)) return false;
   return document["stateManager"].RunModelTransaction(
     /** Applies one fully validated native range. @returns True after mutation. */
     () => {

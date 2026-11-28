@@ -40,7 +40,12 @@ export function ScCalcOptionsDialog({
   const [error, setError] = useState("");
   const [details, setDetails] = useState(false);
   const [expanded, setExpanded] = useState(true);
-  const [, refresh] = useReducer((value: number) => value + 1, 0);
+  const [, refresh] = useReducer(
+    /** Advances the revision to refresh the native options view. @param value - Previous revision. @returns New render revision. */ (
+      value: number,
+    ) => value + 1,
+    0,
+  );
   const title = "Options";
 
   /** Keeps the Calculate page visible on an invalid increment. @returns Whether to proceed. */
@@ -63,16 +68,24 @@ export function ScCalcOptionsDialog({
         inert={details}
         className="fixed left-1/2 top-1/2 z-50 w-[52rem] max-w-[calc(100vw-2rem)] -translate-x-1/2 -translate-y-1/2 space-y-3 rounded-lg border border-slate-300 bg-white p-4 text-sm shadow-xl"
         noValidate
-        onKeyDown={(event) => {
-          if (event.key === "Escape") {
-            event.stopPropagation();
-            onCancel();
+        onKeyDown={
+          /** Closes the active dialog. @param event - Browser event. @returns Nothing. */ (
+            event,
+          ) => {
+            if (event.key === "Escape") {
+              event.stopPropagation();
+              onCancel();
+            }
           }
-        }}
-        onSubmit={(event) => {
-          event.preventDefault();
-          if (validate()) onAccept();
-        }}
+        }
+        onSubmit={
+          /** Submits the current selection. @param event - Browser event. @returns Nothing. */ (
+            event,
+          ) => {
+            event.preventDefault();
+            if (validate()) onAccept();
+          }
+        }
       >
         <DialogHeader title={title} onClose={onCancel} />
         <div className="grid max-h-[70vh] grid-cols-[minmax(7rem,1fr)_3fr] gap-3 overflow-auto">
@@ -87,7 +100,9 @@ export function ScCalcOptionsDialog({
                 aria-label="LibreOffice Calc"
                 autoFocus
                 className="rounded px-1 text-left font-medium"
-                onClick={() => setExpanded(!expanded)}
+                onClick={
+                  /** Updates the expanded. @returns Nothing. */ () => setExpanded(!expanded)
+                }
               >
                 <span aria-hidden="true">{expanded ? "▾" : "▸"} </span>LibreOffice Calc
               </button>
@@ -151,24 +166,37 @@ export function ScCalcOptionsDialog({
                     <select
                       value={formula.syntax}
                       className={inputClass}
-                      onChange={(event) => {
-                        formula.SetSyntax(Number(event.target.value));
-                        refresh();
-                      }}
+                      onChange={
+                        /** Applies a change from the `formula.syntax` control. @param event - Browser event. @returns Nothing. */ (
+                          event,
+                        ) => {
+                          formula.SetSyntax(Number(event.target.value));
+                          refresh();
+                        }
+                      }
                     >
-                      {calcFormulaSyntaxes.map(({ label }, index) => (
-                        <option key={label} value={index}>
-                          {label}
-                        </option>
-                      ))}
+                      {calcFormulaSyntaxes.map(
+                        /** Renders the `index` option for the source entry. @param entry - Source entry. @param index - Entry index. @returns Rendered element. */ (
+                          { label },
+                          index,
+                        ) => (
+                          <option key={label} value={index}>
+                            {label}
+                          </option>
+                        ),
+                      )}
                     </select>
                   </label>
                   <Check
                     checked={formula.english}
-                    set={(checked) => {
-                      formula.SetEnglish(checked);
-                      refresh();
-                    }}
+                    set={
+                      /** Refreshes the displayed values. @param checked - New checkbox state. @returns Nothing. */ (
+                        checked,
+                      ) => {
+                        formula.SetEnglish(checked);
+                        refresh();
+                      }
+                    }
                   >
                     Use English function names
                   </Check>
@@ -178,20 +206,24 @@ export function ScCalcOptionsDialog({
                   <Radio
                     name="formula-settings"
                     checked={!formula.custom}
-                    select={() => {
-                      formula.SetCustom(false);
-                      refresh();
-                    }}
+                    select={
+                      /** Refreshes the displayed values. @returns Nothing. */ () => {
+                        formula.SetCustom(false);
+                        refresh();
+                      }
+                    }
                   >
                     Default settings
                   </Radio>
                   <Radio
                     name="formula-settings"
                     checked={formula.custom}
-                    select={() => {
-                      formula.SetCustom(true);
-                      refresh();
-                    }}
+                    select={
+                      /** Refreshes the displayed values. @returns Nothing. */ () => {
+                        formula.SetCustom(true);
+                        refresh();
+                      }
+                    }
                   >
                     Custom (conversion of text to numbers and more):
                   </Radio>
@@ -199,7 +231,7 @@ export function ScCalcOptionsDialog({
                     type="button"
                     className={buttonClass}
                     disabled={!formula.custom}
-                    onClick={() => setDetails(true)}
+                    onClick={/** Updates the details. @returns Nothing. */ () => setDetails(true)}
                   >
                     Details…
                   </button>
@@ -212,13 +244,15 @@ export function ScCalcOptionsDialog({
           <button
             type="button"
             className={buttonClass}
-            onClick={() => {
-              if (page === "Calculate") calculate.Reset();
-              else if (page === "Formula") formula.Reset();
-              else view.Reset();
-              setError("");
-              refresh();
-            }}
+            onClick={
+              /** Activates the "Reset" control. @returns Nothing. */ () => {
+                if (page === "Calculate") calculate.Reset();
+                else if (page === "Formula") formula.Reset();
+                else view.Reset();
+                setError("");
+                refresh();
+              }
+            }
           >
             Reset
           </button>
@@ -230,7 +264,12 @@ export function ScCalcOptionsDialog({
           </button>
         </div>
       </form>
-      {details && <FormulaDetails model={formula} close={() => setDetails(false)} />}
+      {details && (
+        <FormulaDetails
+          model={formula}
+          close={/** Updates the details. @returns Nothing. */ () => setDetails(false)}
+        />
+      )}
     </>
   );
 }
@@ -255,46 +294,66 @@ function CalculatePage({
         <legend className="font-medium">General Calculations</legend>
         <Check
           checked={!values.IsIgnoreCase()}
-          set={(value) => {
-            values.SetIgnoreCase(!value);
-            refresh();
-          }}
+          set={
+            /** Refreshes the displayed values. @param value - New control value. @returns Nothing. */ (
+              value,
+            ) => {
+              values.SetIgnoreCase(!value);
+              refresh();
+            }
+          }
         >
           Case sensitive
         </Check>
         <Check
           checked={values.IsCalcAsShown()}
-          set={(value) => {
-            values.SetCalcAsShown(value);
-            refresh();
-          }}
+          set={
+            /** Refreshes the displayed values. @param value - New control value. @returns Nothing. */ (
+              value,
+            ) => {
+              values.SetCalcAsShown(value);
+              refresh();
+            }
+          }
         >
           Precision as shown
         </Check>
         <Check
           checked={values.IsMatchWholeCell()}
-          set={(value) => {
-            values.SetMatchWholeCell(value);
-            refresh();
-          }}
+          set={
+            /** Refreshes the displayed values. @param value - New control value. @returns Nothing. */ (
+              value,
+            ) => {
+              values.SetMatchWholeCell(value);
+              refresh();
+            }
+          }
         >
           Search criteria = and &lt;&gt; must apply to whole cells
         </Check>
         <Check
           checked={values.IsLookUpColRowNames()}
-          set={(value) => {
-            values.SetLookUpColRowNames(value);
-            refresh();
-          }}
+          set={
+            /** Refreshes the displayed values. @param value - New control value. @returns Nothing. */ (
+              value,
+            ) => {
+              values.SetLookUpColRowNames(value);
+              refresh();
+            }
+          }
         >
           Automatically find column and row labels
         </Check>
         <Check
           checked={model.limitDecimals}
-          set={(value) => {
-            model.SetLimitDecimals(value);
-            refresh();
-          }}
+          set={
+            /** Refreshes the displayed values. @param value - New control value. @returns Nothing. */ (
+              value,
+            ) => {
+              model.SetLimitDecimals(value);
+              refresh();
+            }
+          }
         >
           Limit decimals for general number format
         </Check>
@@ -307,10 +366,14 @@ function CalculatePage({
             className={`${inputClass} w-16`}
             value={model.decimalPlaces}
             disabled={!model.limitDecimals}
-            onChange={(event) => {
-              model.SetDecimalPlaces(event.target.value);
-              refresh();
-            }}
+            onChange={
+              /** Applies a change from the `model.decimalPlaces` control. @param event - Browser event. @returns Nothing. */ (
+                event,
+              ) => {
+                model.SetDecimalPlaces(event.target.value);
+                refresh();
+              }
+            }
           />
         </label>
       </fieldset>
@@ -318,10 +381,14 @@ function CalculatePage({
         <legend className="font-medium">Iterative References</legend>
         <Check
           checked={values.IsIter()}
-          set={(value) => {
-            values.SetIter(value);
-            refresh();
-          }}
+          set={
+            /** Refreshes the displayed values. @param value - New control value. @returns Nothing. */ (
+              value,
+            ) => {
+              values.SetIter(value);
+              refresh();
+            }
+          }
         >
           Iterations
         </Check>
@@ -334,10 +401,14 @@ function CalculatePage({
             className={`${inputClass} w-20`}
             value={model.steps}
             disabled={!values.IsIter()}
-            onChange={(event) => {
-              model.SetSteps(event.target.value);
-              refresh();
-            }}
+            onChange={
+              /** Applies a change from the `model.steps` control. @param event - Browser event. @returns Nothing. */ (
+                event,
+              ) => {
+                model.SetSteps(event.target.value);
+                refresh();
+              }
+            }
           />
         </label>
         <label className="flex items-center gap-2">
@@ -349,10 +420,14 @@ function CalculatePage({
             value={model.minimumChange}
             disabled={!values.IsIter()}
             aria-invalid={Boolean(error)}
-            onChange={(event) => {
-              model.SetMinimumChange(event.target.value);
-              refresh();
-            }}
+            onChange={
+              /** Applies a change from the `model.minimumChange` control. @param event - Browser event. @returns Nothing. */ (
+                event,
+              ) => {
+                model.SetMinimumChange(event.target.value);
+                refresh();
+              }
+            }
           />
         </label>
         {error && (
@@ -363,35 +438,49 @@ function CalculatePage({
       </fieldset>
       <fieldset className={groupClass}>
         <legend className="font-medium">Date</legend>
-        {calcNullDates.map(({ day, month, year, label }, index) => (
-          <Radio
-            key={year}
-            name="date"
-            checked={dateIndex === index}
-            select={() => {
-              values.SetDate(day, month, year);
-              refresh();
-            }}
-          >
-            {label}
-          </Radio>
-        ))}
+        {calcNullDates.map(
+          /** Renders one Radio for the source entry. @param entry - Source entry. @param index - Entry index. @returns Rendered element. */ (
+            { day, month, year, label },
+            index,
+          ) => (
+            <Radio
+              key={year}
+              name="date"
+              checked={dateIndex === index}
+              select={
+                /** Refreshes the displayed values. @returns Nothing. */ () => {
+                  values.SetDate(day, month, year);
+                  refresh();
+                }
+              }
+            >
+              {label}
+            </Radio>
+          ),
+        )}
       </fieldset>
       <fieldset className={groupClass}>
         <legend className="font-medium">Formulas Wildcards</legend>
-        {criteria.map(([mode, label]) => (
-          <Radio
-            key={mode}
-            name="criteria"
-            checked={model.GetCriteriaMode() === mode}
-            select={() => {
-              model.SetCriteriaMode(mode);
-              refresh();
-            }}
-          >
-            {label}
-          </Radio>
-        ))}
+        {criteria.map(
+          /** Renders one Radio for the source entry. @param entry - Source entry. @returns Rendered element. */ ([
+            mode,
+            label,
+          ]) => (
+            <Radio
+              key={mode}
+              name="criteria"
+              checked={model.GetCriteriaMode() === mode}
+              select={
+                /** Refreshes the displayed values. @returns Nothing. */ () => {
+                  model.SetCriteriaMode(mode);
+                  refresh();
+                }
+              }
+            >
+              {label}
+            </Radio>
+          ),
+        )}
       </fieldset>
     </div>
   );
@@ -399,7 +488,12 @@ function CalculatePage({
 
 const referenceSyntaxes = [
   [FormulaGrammar.AddressConvention.CONV_UNSPECIFIED, "Use formula syntax"],
-  ...calcFormulaSyntaxes.map(({ convention, label }) => [convention, label] as const),
+  ...calcFormulaSyntaxes.map(
+    /** Builds the listbox entry that pairs a native address format with its label. @param entry - Address convention entry. @returns Convention and display label tuple. */ ({
+      convention,
+      label,
+    }) => [convention, label] as const,
+  ),
   [FormulaGrammar.AddressConvention.CONV_A1_XL_A1, "Calc A1 | Excel A1"],
 ] as const;
 const conversions = [
@@ -430,17 +524,25 @@ function FormulaDetails({
       aria-label={title}
       aria-modal="true"
       className="fixed left-1/2 top-1/2 z-[51] w-[25rem] max-w-[calc(100vw-2rem)] -translate-x-1/2 -translate-y-1/2 space-y-3 rounded-lg border border-slate-300 bg-white p-4 text-sm shadow-xl"
-      onKeyDown={(event) => {
-        if (event.key === "Escape") {
-          event.stopPropagation();
+      onKeyDown={
+        /** Closes the active dialog. @param event - Browser event. @returns Nothing. */ (
+          event,
+        ) => {
+          if (event.key === "Escape") {
+            event.stopPropagation();
+            close();
+          }
+        }
+      }
+      onSubmit={
+        /** Closes the active dialog. @param event - Browser event. @returns Nothing. */ (
+          event,
+        ) => {
+          event.preventDefault();
+          model.SetDetailedSettings(conversion, empty, syntax, onlyDocument);
           close();
         }
-      }}
-      onSubmit={(event) => {
-        event.preventDefault();
-        model.SetDetailedSettings(conversion, empty, syntax, onlyDocument);
-        close();
-      }}
+      }
     >
       <DialogHeader title={title} onClose={close} />
       <fieldset className={groupClass}>
@@ -451,13 +553,22 @@ function FormulaDetails({
             autoFocus
             value={conversion}
             className={`block ${inputClass}`}
-            onChange={(event) => setConversion(Number(event.target.value))}
+            onChange={
+              /** Updates the conversion. @param event - Control change event. @returns Nothing. */ (
+                event,
+              ) => setConversion(Number(event.target.value))
+            }
           >
-            {conversions.map((label, index) => (
-              <option key={label} value={index}>
-                {label}
-              </option>
-            ))}
+            {conversions.map(
+              /** Renders the `index` option for the source entry. @param label - Source entry. @param index - Entry index. @returns Rendered element. */ (
+                label,
+                index,
+              ) => (
+                <option key={label} value={index}>
+                  {label}
+                </option>
+              ),
+            )}
           </select>
         </label>
         <Check
@@ -472,13 +583,22 @@ function FormulaDetails({
           <select
             value={syntax}
             className={`block ${inputClass}`}
-            onChange={(event) => setSyntax(Number(event.target.value) as AddressConvention)}
+            onChange={
+              /** Updates the syntax. @param event - Control change event. @returns Nothing. */ (
+                event,
+              ) => setSyntax(Number(event.target.value) as AddressConvention)
+            }
           >
-            {referenceSyntaxes.map(([value, label]) => (
-              <option key={value} value={value}>
-                {label}
-              </option>
-            ))}
+            {referenceSyntaxes.map(
+              /** Renders the `value` option for the source entry. @param entry - Source entry. @returns Rendered element. */ ([
+                value,
+                label,
+              ]) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ),
+            )}
           </select>
         </label>
         <Check checked={onlyDocument} set={setOnlyDocument}>
@@ -515,7 +635,11 @@ function Check({
         type="checkbox"
         checked={checked}
         disabled={disabled}
-        onChange={(event) => set(event.target.checked)}
+        onChange={
+          /** Applies the changed options checkbox value. @param event - Checkbox change event. @returns Nothing. */ (
+            event,
+          ) => set(event.target.checked)
+        }
       />
       {children}
     </label>

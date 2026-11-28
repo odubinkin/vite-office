@@ -112,14 +112,22 @@ export function CalcSheetDialogs({
         <ScImportAsciiDlg
           key={pasteText.id}
           request={pasteText.request}
-          onRespond={(value) => sheetWorkflows.clipboard.dialogs.Complete(pasteText.id, value)}
+          onRespond={
+            /** Completes the text-paste dialog with its accepted result. @param value - Accepted dialog result. @returns Request completion result. */ (
+              value,
+            ) => sheetWorkflows.clipboard.dialogs.Complete(pasteText.id, value)
+          }
         />
       )}
       {pasteText?.request.kind === "special" && (
         <ScInsertContentsDlg
           key={pasteText.id}
           initial={pasteText.request.initial}
-          onRespond={(value) => sheetWorkflows.clipboard.dialogs.Complete(pasteText.id, value)}
+          onRespond={
+            /** Completes the text-paste dialog with its accepted result. @param value - Accepted dialog result. @returns Request completion result. */ (
+              value,
+            ) => sheetWorkflows.clipboard.dialogs.Complete(pasteText.id, value)
+          }
         />
       )}
       {pasteText?.request.kind === "format" && (
@@ -140,7 +148,11 @@ export function CalcSheetDialogs({
         <ScPasteConfirmationDlg
           key={pasteText.id}
           kind={pasteText.request.kind}
-          onRespond={(value) => sheetWorkflows.clipboard.dialogs.Complete(pasteText.id, value)}
+          onRespond={
+            /** Completes the text-paste dialog with its accepted result. @param value - Accepted dialog result. @returns Request completion result. */ (
+              value,
+            ) => sheetWorkflows.clipboard.dialogs.Complete(pasteText.id, value)
+          }
         />
       )}
       {optionsDialog && (
@@ -151,7 +163,10 @@ export function CalcSheetDialogs({
             /** Cancels the current options dialog. @returns Whether the request was still active. */ () =>
               sheetWorkflows.options.dialogs.Cancel(optionsDialog.id)
           }
-          onAccept={() => sheetWorkflows.options.dialogs.Complete(optionsDialog.id, true)}
+          onAccept={
+            /** Completes Calc Options with its accepted result. @returns Request completion result. */ () =>
+              sheetWorkflows.options.dialogs.Complete(optionsDialog.id, true)
+          }
         />
       )}
       {labelRanges && (
@@ -159,12 +174,19 @@ export function CalcSheetDialogs({
           key={labelRanges.id}
           model={labelRanges.request}
           referenceInput={referenceInput}
-          onReference={(range) => onReference(labelRanges, range)}
+          onReference={
+            /** Records the sheet range selected for the active dialog. @param range - Selected sheet range or an empty selection. @returns Nothing. */ (
+              range,
+            ) => onReference(labelRanges, range)
+          }
           onCancel={
             /** Cancels the current label ranges dialog. @returns Whether the request was still active. */ () =>
               sheetWorkflows.labelRanges.dialogs.Cancel(labelRanges.id)
           }
-          onAccept={() => sheetWorkflows.labelRanges.dialogs.Complete(labelRanges.id, true)}
+          onAccept={
+            /** Completes the label range dialog with its accepted result. @returns Request completion result. */ () =>
+              sheetWorkflows.labelRanges.dialogs.Complete(labelRanges.id, true)
+          }
         />
       )}
       {createNames && (
@@ -175,7 +197,11 @@ export function CalcSheetDialogs({
             /** Cancels the open create names dialog. @returns Whether the request was still active. */ () =>
               sheetWorkflows.createNamesDialogs.Cancel(createNames.id)
           }
-          onRespond={(result) => sheetWorkflows.createNamesDialogs.Complete(createNames.id, result)}
+          onRespond={
+            /** Completes the Create Names dialog with its accepted result. @param result - Accepted dialog result. @returns Request completion result. */ (
+              result,
+            ) => sheetWorkflows.createNamesDialogs.Complete(createNames.id, result)
+          }
         />
       )}
       {nameManager && (
@@ -183,12 +209,20 @@ export function CalcSheetDialogs({
           key={nameManager.id}
           model={nameManager.request}
           referenceInput={referenceInput}
-          onReference={(range) => onReference(nameManager, range)}
+          onReference={
+            /** Records the sheet range selected for the active dialog. @param range - Selected sheet range or an empty selection. @returns Nothing. */ (
+              range,
+            ) => onReference(nameManager, range)
+          }
           onCancel={
             /** Cancels the open name manager. @returns Whether the request was still active. */ () =>
               sheetWorkflows.nameManagerDialogs.Cancel(nameManager.id)
           }
-          onRespond={(result) => sheetWorkflows.nameManagerDialogs.Complete(nameManager.id, result)}
+          onRespond={
+            /** Completes the defined-name manager with its accepted result. @param result - Accepted dialog result. @returns Request completion result. */ (
+              result,
+            ) => sheetWorkflows.nameManagerDialogs.Complete(nameManager.id, result)
+          }
         />
       )}
       {namePaste && (
@@ -199,7 +233,11 @@ export function CalcSheetDialogs({
             /** Cancels the open name paste dialog. @returns Whether the request was still active. */ () =>
               sheetWorkflows.namePasteDialogs.Cancel(namePaste.id)
           }
-          onRespond={(result) => sheetWorkflows.namePasteDialogs.Complete(namePaste.id, result)}
+          onRespond={
+            /** Completes the Paste Names dialog with its accepted result. @param result - Accepted dialog result. @returns Request completion result. */ (
+              result,
+            ) => sheetWorkflows.namePasteDialogs.Complete(namePaste.id, result)
+          }
         />
       )}
       {nameDialog && (
@@ -207,12 +245,20 @@ export function CalcSheetDialogs({
           key={nameDialog.id}
           model={nameDialog.request}
           referenceInput={referenceInput}
-          onReference={(range) => onReference(nameDialog, range)}
+          onReference={
+            /** Records the sheet range selected for the active dialog. @param range - Selected sheet range or an empty selection. @returns Nothing. */ (
+              range,
+            ) => onReference(nameDialog, range)
+          }
           onCancel={
             /** Cancels the open name definition dialog. @returns Whether the request was still active. */ () =>
               sheetWorkflows.nameDialogs.Cancel(nameDialog.id)
           }
-          onAdd={(data) => sheetWorkflows.AddName(nameDialog.id, data)}
+          onAdd={
+            /** Submits the new defined name to the active editor request. @param data - New defined-name fields. @returns Defined-name insertion result. */ (
+              data,
+            ) => sheetWorkflows.AddName(nameDialog.id, data)
+          }
         />
       )}
       {condManager && (
@@ -223,8 +269,10 @@ export function CalcSheetDialogs({
             /** Cancels the current conditionals dialog. @returns Whether the request was still active. */ () =>
               sheetWorkflows.conditionals.managers.Cancel(condManager.id)
           }
-          onResponse={(result) =>
-            sheetWorkflows.conditionals.managers.Complete(condManager.id, result)
+          onResponse={
+            /** Completes the conditional format manager with its accepted result. @param result - Accepted dialog result. @returns Request completion result. */ (
+              result,
+            ) => sheetWorkflows.conditionals.managers.Complete(condManager.id, result)
           }
         />
       )}
@@ -233,7 +281,11 @@ export function CalcSheetDialogs({
           key={condEditor.id}
           model={condEditor.request}
           referenceInput={referenceInput}
-          onReference={(range) => onReference(condEditor, range)}
+          onReference={
+            /** Records the sheet range selected for the active dialog. @param range - Selected sheet range or an empty selection. @returns Nothing. */ (
+              range,
+            ) => onReference(condEditor, range)
+          }
           onCancel={
             /** Cancels the current conditionals dialog. @returns Whether the request was still active. */ () =>
               sheetWorkflows.conditionals.editors.Cancel(condEditor.id)

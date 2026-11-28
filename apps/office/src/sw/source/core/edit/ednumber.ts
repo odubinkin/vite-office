@@ -6,7 +6,7 @@ import type { SwUndoCursorState, SwUndoRedoContext } from "../undo/undobj";
 import { SetNumRuleMode, type SwDoc } from "../doc/doc";
 import { SwNumRule } from "../doc/number";
 import { WRITER_MAX_LIST_LEVEL } from "../doc/list";
-import { MoveOutlinePara } from "../doc/docnum";
+import { ClassifyNumberingLevels, GetNumberedNodes, MoveOutlinePara } from "../doc/docnum";
 import { SwPaM, SwPosition } from "../crsr/pam";
 import type { SwNode } from "../docnode/node";
 import { SwTextNode } from "../txtnode/ndtxt";
@@ -375,9 +375,14 @@ export abstract class SwEditShell extends SwCursorShell {
   public NumUpDown(down: boolean): boolean {
     if (!this.CanNumUpDown(down)) return false;
     const cursor = this.GetCursor(),
+      doc = this.GetDoc(),
+      offset = down ? 1 : -1,
       before = this.CaptureCursorState();
-    if (!cursor.IsMultiSelection())
-      return this.ApplyAction(new SwUndoNumUpDown(before, down ? 1 : -1, cursor));
+    if (!cursor.IsMultiSelection()) {
+      if (ClassifyNumberingLevels(GetNumberedNodes(doc, cursor)) === "outline")
+        return this.OutlineUpDown(offset, before);
+      return this.ApplyAction(new SwUndoNumUpDown(before, offset, cursor));
+    }
     const normalized = new SwPamRanges(cursor),
       range = new SwPaM(cursor.GetPoint()),
       action = new SfxListUndoAction<SwUndoRedoContext>(
@@ -386,8 +391,12 @@ export abstract class SwEditShell extends SwCursorShell {
     try {
       for (let index = 0; index < normalized.Count(); index++) {
         normalized.SetPam(index, range);
-        if (this.GetDoc().CanNumUpDown(range, down))
-          action.AddAction(new SwUndoNumUpDown(before, down ? 1 : -1, range));
+        if (doc.CanNumUpDown(range, down))
+          action.AddAction(
+            ClassifyNumberingLevels(GetNumberedNodes(doc, range)) === "outline"
+              ? new SwUndoOutlineLeftRight(range, offset, before)
+              : new SwUndoNumUpDown(before, offset, range),
+          );
       }
     } finally {
       range.Dispose();

@@ -113,10 +113,12 @@ it("ports tdf144940 first-page sharing and keeps common geometry, printing and h
   const session = mount();
   const controller = session.controller;
   const doc = controller.shell.GetDocument();
-  act(() => {
-    controller.InsertSheet();
-    controller.SelectTab(0);
-  });
+  act(
+    /** Activates the selected sheet. @returns Nothing. */ () => {
+      controller.InsertSheet();
+      controller.SelectTab(0);
+    },
+  );
   const dialog = open();
   fireEvent.click(within(dialog).getByRole("tab", { name: "Header" }));
   expect(within(dialog).getByRole("checkbox", { name: "Header on" })).toBeChecked();
@@ -146,13 +148,17 @@ it("ports tdf144940 first-page sharing and keeps common geometry, printing and h
     landscape: true,
     usage: SvxPageUsage.Mirror,
   });
-  act(() => {
-    expect(controller.Undo()).toBe(true);
-  });
+  act(
+    /** Undoes the latest command. @returns Nothing. */ () => {
+      expect(controller.Undo()).toBe(true);
+    },
+  );
   expect(GetPageStyleGeometry(items(doc, 1)).landscape).toBe(false);
-  act(() => {
-    expect(controller.Redo()).toBe(true);
-  });
+  act(
+    /** Reapplies the latest command. @returns Nothing. */ () => {
+      expect(controller.Redo()).toBe(true);
+    },
+  );
   const reopened = await readOdsDocument(await writeOdsDocument(doc));
   try {
     const stored = items(reopened);
@@ -185,7 +191,10 @@ it("cancels an edited page style without changing the workbook or its history", 
   expect(within(dialog).getByRole("radio", { name: "Portrait" })).toBeChecked();
   fireEvent.click(within(dialog).getByRole("radio", { name: "Landscape" }));
   fireEvent.keyDown(within(dialog).getByRole("radio", { name: "Landscape" }), { key: "Escape" });
-  await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
+  await waitFor(
+    /** Waits for the accepted page-style dialog to close. @returns Assertion result. */ () =>
+      expect(screen.queryByRole("dialog")).toBeNull(),
+  );
   expect(GetPageStyleGeometry(items(session.controller.shell.GetDocument())).landscape).toBe(false);
   expect(session.controller.shell.GetUndoManager().GetUndoActionCount()).toBe(0);
   cleanup();
@@ -196,10 +205,12 @@ it("renames a shared custom page style and persists its border and fill", /** Re
   const session = mount();
   const controller = session.controller;
   const doc = controller.shell.GetDocument();
-  act(() => {
-    controller.InsertSheet();
-    controller.SelectTab(0);
-  });
+  act(
+    /** Activates the selected sheet. @returns Nothing. */ () => {
+      controller.InsertSheet();
+      controller.SelectTab(0);
+    },
+  );
   assert(doc.GetStyleSheetPool()?.GetPageStyle("Invoice", true));
   doc.SetPageStyle(0, "Invoice");
   doc.SetPageStyle(1, "Invoice");
@@ -221,13 +232,17 @@ it("renames a shared custom page style and persists its border and fill", /** Re
   );
   expect([doc.GetPageStyle(0), doc.GetPageStyle(1)]).toEqual(["Invoice print", "Invoice print"]);
   expect((items(doc).Get(ATTR_BORDER) as SvxBoxItem).GetTop()?.GetWidth()).toBeGreaterThan(0);
-  act(() => {
-    expect(controller.Undo()).toBe(true);
-  });
+  act(
+    /** Undoes the latest command. @returns Nothing. */ () => {
+      expect(controller.Undo()).toBe(true);
+    },
+  );
   expect([doc.GetPageStyle(0), doc.GetPageStyle(1)]).toEqual(["Invoice", "Invoice"]);
-  act(() => {
-    expect(controller.Redo()).toBe(true);
-  });
+  act(
+    /** Reapplies the latest command. @returns Nothing. */ () => {
+      expect(controller.Redo()).toBe(true);
+    },
+  );
   const reopened = await readOdsDocument(await writeOdsDocument(doc));
   try {
     expect(reopened.GetPageStyle(1)).toBe("Invoice print");

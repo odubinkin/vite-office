@@ -132,7 +132,10 @@ export abstract class SwContentIndexRegistry extends BroadcastingModify {
       )
         saved.push({ index, relative: current - first });
     }
-    return (target, offset) => {
+    return /** Reassigns saved text indices relative to the target registry. @param target - Destination text index registry. @param offset - Base offset in the destination. @returns Nothing. */ (
+      target,
+      offset,
+    ) => {
       for (const { index, relative } of saved) index.AssignFromRegistry(target, offset + relative);
     };
   }

@@ -38,10 +38,12 @@ it("validates Calculate before leaving the page, resets controls and applies doc
   const controller = mount(),
     doc = controller.shell.GetDocument();
   const target = new ScAddress(1, 0, 0);
-  act(() => {
-    controller.Select(1, 0);
-    expect(controller.EnterString('="Calc"="calc"')).toBe(true);
-  });
+  act(
+    /** Moves the selection and enters the sample text through Calc. @returns Nothing. */ () => {
+      controller.Select(1, 0);
+      expect(controller.EnterString('="Calc"="calc"')).toBe(true);
+    },
+  );
   expect(doc.GetValue(target)).toBe(0);
   let dialog = options();
   fireEvent.click(dialog.getByRole("checkbox", { name: "Iterations" }));
@@ -93,19 +95,21 @@ it("validates Calculate before leaving the page, resets controls and applies doc
 it("uses the automatic label switch for formula admission and the connected data range", /** Uses the automatic label switch for formula admission and the connected data range. @returns Completion. */ async () => {
   const controller = mount(),
     doc = controller.shell.GetDocument();
-  act(() => {
-    controller.Select(0, 0);
-    expect(controller.EnterString("Net Sales")).toBe(true);
-    doc.SetValue(new ScAddress(0, 1, 0), 4);
-    doc.SetValue(new ScAddress(0, 2, 0), 9);
-    doc.SetValue(new ScAddress(0, 5, 0), 20);
-    controller.Select(4, 0);
-    expect(controller.EnterString("Q1")).toBe(true);
-    controller.Select(4, 1);
-    expect(controller.EnterString("North Region")).toBe(true);
-    doc.SetValue(new ScAddress(5, 1, 0), 2);
-    doc.SetValue(new ScAddress(6, 1, 0), 5);
-  });
+  act(
+    /** Moves the selection and enters the sample text through Calc and sets the native value. @returns Nothing. */ () => {
+      controller.Select(0, 0);
+      expect(controller.EnterString("Net Sales")).toBe(true);
+      doc.SetValue(new ScAddress(0, 1, 0), 4);
+      doc.SetValue(new ScAddress(0, 2, 0), 9);
+      doc.SetValue(new ScAddress(0, 5, 0), 20);
+      controller.Select(4, 0);
+      expect(controller.EnterString("Q1")).toBe(true);
+      controller.Select(4, 1);
+      expect(controller.EnterString("North Region")).toBe(true);
+      doc.SetValue(new ScAddress(5, 1, 0), 2);
+      doc.SetValue(new ScAddress(6, 1, 0), 5);
+    },
+  );
   let dialog = options();
   const lookup = dialog.getByRole("checkbox", { name: "Automatically find column and row labels" });
   if (!lookup.matches(":checked")) fireEvent.click(lookup);
@@ -113,12 +117,14 @@ it("uses the automatic label switch for formula admission and the connected data
     /** Clicks the button named "OK". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
       fireEvent.click(dialog.getByRole("button", { name: "OK" })),
   );
-  act(() => {
-    controller.Select(2, 1);
-    expect(controller.EnterString("=SUM('Net Sales')")).toBe(true);
-    controller.Select(4, 3);
-    expect(controller.EnterString("=SUM('North Region')")).toBe(true);
-  });
+  act(
+    /** Moves the selection and enters the sample text through Calc. @returns Nothing. */ () => {
+      controller.Select(2, 1);
+      expect(controller.EnterString("=SUM('Net Sales')")).toBe(true);
+      controller.Select(4, 3);
+      expect(controller.EnterString("=SUM('North Region')")).toBe(true);
+    },
+  );
   expect(doc.GetValue(new ScAddress(2, 1, 0))).toBe(13);
   expect(doc.GetValue(new ScAddress(4, 3, 0))).toBe(7);
   doc.SetValue(new ScAddress(0, 3, 0), 6);
@@ -137,10 +143,12 @@ it("uses the automatic label switch for formula admission and the connected data
     /** Clicks the button named "OK". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
       fireEvent.click(dialog.getByRole("button", { name: "OK" })),
   );
-  act(() => {
-    controller.Select(2, 2);
-    expect(controller.EnterString("=SUM('Net Sales')")).toBe(false);
-  });
+  act(
+    /** Moves the selection and enters the sample text through Calc. @returns Nothing. */ () => {
+      controller.Select(2, 2);
+      expect(controller.EnterString("=SUM('Net Sales')")).toBe(false);
+    },
+  );
   expect(doc.GetErrCode(new ScAddress(2, 2, 0))).toBe(FormulaError.NoName);
 });
 
@@ -186,12 +194,14 @@ it("applies Excel A1 references and confirmed details without changing global co
   expect(doc.GetGrammar()).toBe(FormulaGrammar.Grammar.GRAM_ENGLISH_XL_A1);
   expect(doc.GetDocOptions().IsWriteCalcConfig()).toBe(false);
   expect(ScInterpreter.GetGlobalConfig().meStringConversion).toBe(3);
-  act(() => {
-    controller.Select(2, 0);
-    expect(controller.EnterString("=SUM('Source Data'!A1:A2)")).toBe(true);
-    controller.Select(2, 1);
-    expect(controller.EnterString('="arbitrary"+3')).toBe(true);
-  });
+  act(
+    /** Moves the selection and enters the sample text through Calc. @returns Nothing. */ () => {
+      controller.Select(2, 0);
+      expect(controller.EnterString("=SUM('Source Data'!A1:A2)")).toBe(true);
+      controller.Select(2, 1);
+      expect(controller.EnterString('="arbitrary"+3')).toBe(true);
+    },
+  );
   expect(doc.GetValue(new ScAddress(2, 0, 0))).toBe(13);
   expect(doc.GetValue(new ScAddress(2, 1, 0))).toBe(3);
 });

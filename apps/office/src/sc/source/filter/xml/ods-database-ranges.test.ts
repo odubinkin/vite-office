@@ -111,17 +111,42 @@ it("testAutofilterColorsODF preserves RGB criteria and both automatic colors", /
             ) => entry.items,
           );
         expect(
-          items.filter(isQueryColorItem).map((item) => [item.type, item.value.toUInt32()]),
-        ).toEqual(criteria.map(([type, , packed]) => [type, packed]));
+          items
+            .filter(isQueryColorItem)
+            .map(
+              /** Extracts the imported value separator type and packed value for comparison. @param item - Native imported filter item. @returns Type and unsigned value pair. */ (
+                item,
+              ) => [item.type, item.value.toUInt32()],
+            ),
+        ).toEqual(
+          criteria.map(
+            /** Projects the two relevant expected fields from the native capture. @param entry - Expected native tuple. @returns Reference type and packed value. */ ([
+              type,
+              ,
+              packed,
+            ]) => [type, packed],
+          ),
+        );
       }
       const filter = ranges[sheet]?.[1]?.match(/<table:filter-and>(.*?)<\/table:filter-and>/s)?.[1];
       assert(filter);
       expect(
-        [...filter.matchAll(/<table:filter-condition [^>]+\/>/g)].map(([condition]) => [
-          condition.match(/loext:data-type="([^"]+)"/)?.[1],
-          condition.match(/table:value="([^"]+)"/)?.[1],
-        ]),
-      ).toEqual(criteria.map(([type, value]) => [type, value]));
+        [...filter.matchAll(/<table:filter-condition [^>]+\/>/g)].map(
+          /** Reads the extension data type and serialized ODF value from a condition. @param entry - Filter condition match. @returns Serialized data type and value. */ ([
+            condition,
+          ]) => [
+            condition.match(/loext:data-type="([^"]+)"/)?.[1],
+            condition.match(/table:value="([^"]+)"/)?.[1],
+          ],
+        ),
+      ).toEqual(
+        criteria.map(
+          /** Builds an expected condition pair for the exported value comparison. @param entry - Reference condition pair. @returns Expected data type and value. */ ([
+            type,
+            value,
+          ]) => [type, value],
+        ),
+      );
     }
   } finally {
     source.Dispose();
@@ -142,7 +167,10 @@ it("testDateAutofilterODS preserves the original lexical filter values", /** Tes
     assert(filter);
     expect(
       [...filter.matchAll(/<table:filter-condition [^>]*table:value="([^"]+)"/g)].map(
-        ([, value]) => value,
+        /** Extracts the captured color from each expected result. @param entry - Expected type and color tuple. @returns Expected filter color. */ ([
+          ,
+          value,
+        ]) => value,
       ),
     ).toEqual(["Calc", "2021-05-04"]);
   } finally {

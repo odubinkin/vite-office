@@ -32,33 +32,50 @@ export function ScNameCreateDlg({ request, onCancel, onRespond }: Props): React.
       aria-label={title}
       aria-modal="true"
       className="fixed left-1/2 top-1/3 z-50 w-80 max-w-[calc(100vw-2rem)] -translate-x-1/2 space-y-3 rounded-lg border border-slate-300 bg-white p-4 text-sm shadow-xl"
-      onKeyDown={(event) => {
-        if (event.key === "Escape") {
-          event.stopPropagation();
-          onCancel();
+      onKeyDown={
+        /** Closes the active dialog. @param event - Browser event. @returns Nothing. */ (
+          event,
+        ) => {
+          if (event.key === "Escape") {
+            event.stopPropagation();
+            onCancel();
+          }
         }
-      }}
-      onSubmit={(event) => {
-        event.preventDefault();
-        if (request.kind === "options") onRespond(flags);
-        else if (replacement) onRespond("yes");
-        else onCancel();
-      }}
+      }
+      onSubmit={
+        /** Reports the dialog result and closes the active dialog. @param event - Browser event. @returns Nothing. */ (
+          event,
+        ) => {
+          event.preventDefault();
+          if (request.kind === "options") onRespond(flags);
+          else if (replacement) onRespond("yes");
+          else onCancel();
+        }
+      }
     >
       <DialogHeader title={title} onClose={onCancel} />
       {request.kind === "options" ? (
         <fieldset className="space-y-2">
           <legend className="mb-2 font-medium">Create Names From</legend>
-          {edges.map(([flag, label]) => (
-            <label key={flag} className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                checked={Boolean(flags & flag)}
-                onChange={(event) => setFlags(event.target.checked ? flags | flag : flags & ~flag)}
-              />
-              {label}
-            </label>
-          ))}
+          {edges.map(
+            /** Renders one label for the source entry. @param entry - Source entry. @returns Rendered element. */ ([
+              flag,
+              label,
+            ]) => (
+              <label key={flag} className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={Boolean(flags & flag)}
+                  onChange={
+                    /** Updates the flags. @param event - Control change event. @returns Nothing. */ (
+                      event,
+                    ) => setFlags(event.target.checked ? flags | flag : flags & ~flag)
+                  }
+                />
+                {label}
+              </label>
+            ),
+          )}
         </fieldset>
       ) : (
         <p>
@@ -74,7 +91,11 @@ export function ScNameCreateDlg({ request, onCancel, onRespond }: Props): React.
           </button>
         )}
         {replacement && (
-          <button type="button" className={buttonClass} onClick={() => onRespond("no")}>
+          <button
+            type="button"
+            className={buttonClass}
+            onClick={/** Reports the dialog result. @returns Nothing. */ () => onRespond("no")}
+          >
             No
           </button>
         )}

@@ -57,65 +57,76 @@ function indexes(document: SwDoc, type: TOXTypes): SwSectionNode[] {
 }
 
 it("preserves the configured alphabetical index and the separator template", /** Uses the native tdf144672 alphabetical index source. @returns Completion. */ async () => {
-  const xml = await checkRoundTrip("uitest/data/tdf144672.odt", (document) => {
-    const [node] = indexes(document, TOXTypes.Index);
-    assert(node);
-    const section = node.GetSection();
-    assert(section instanceof SwTOXBaseSection);
-    const tox = section.tox;
-    expect(tox.type).toBe(document.GetTOXType(TOXTypes.Index));
-    expect(tox.name).toBe("Alphabetical Index1");
-    expect(tox.title).toBe("Alphabetical Index");
-    expect(tox.language).toBe(LANGUAGE_ENGLISH_US);
-    expect(tox.mainEntryCharStyle).toBe("Main Index Entry");
-    expect(tox.sortAlgorithm).toBe("alphanumeric");
-    expect(tox.indexOptions).toBe(
-      SwTOIOptions.SameEntry | SwTOIOptions.CaseSensitive | SwTOIOptions.FF,
-    );
-    expect(tox.form.GetFormMax()).toBe(5);
-    expect(tox.form.GetTemplate(1)).toBe("Index Separator");
-    expect(
-      tox.form
-        .GetPattern(1)
-        .map(
-          /** Reads the entry's `eTokenType` field. @param token - Collection entry. @returns The field value. */ (
-            token,
-          ) => token.eTokenType,
-        ),
-    ).toEqual([FormTokenType.EntryText]);
-    const [title] = document.GetNodes().GetSectionBlocks(node);
-    expect(title instanceof SwSectionNode && title.GetSection().GetSectionData().type).toBe(
-      SectionType.ToxHeader,
-    );
-  });
+  const xml = await checkRoundTrip(
+    "uitest/data/tdf144672.odt",
+    /** Checks that the index-of-entries section round-trips with its source descriptor. @param document - Imported Writer document. @returns Nothing. */ (
+      document,
+    ) => {
+      const [node] = indexes(document, TOXTypes.Index);
+      assert(node);
+      const section = node.GetSection();
+      assert(section instanceof SwTOXBaseSection);
+      const tox = section.tox;
+      expect(tox.type).toBe(document.GetTOXType(TOXTypes.Index));
+      expect(tox.name).toBe("Alphabetical Index1");
+      expect(tox.title).toBe("Alphabetical Index");
+      expect(tox.language).toBe(LANGUAGE_ENGLISH_US);
+      expect(tox.mainEntryCharStyle).toBe("Main Index Entry");
+      expect(tox.sortAlgorithm).toBe("alphanumeric");
+      expect(tox.indexOptions).toBe(
+        SwTOIOptions.SameEntry | SwTOIOptions.CaseSensitive | SwTOIOptions.FF,
+      );
+      expect(tox.form.GetFormMax()).toBe(5);
+      expect(tox.form.GetTemplate(1)).toBe("Index Separator");
+      expect(
+        tox.form
+          .GetPattern(1)
+          .map(
+            /** Reads the entry's `eTokenType` field. @param token - Collection entry. @returns The field value. */ (
+              token,
+            ) => token.eTokenType,
+          ),
+      ).toEqual([FormTokenType.EntryText]);
+      const [title] = document.GetNodes().GetSectionBlocks(node);
+      expect(title instanceof SwSectionNode && title.GetSection().GetSectionData().type).toBe(
+        SectionType.ToxHeader,
+      );
+    },
+  );
   expect(xml).toContain('text:alphabetical-index-entry-template text:outline-level="separator"');
   expect(xml).toContain('text:sort-algorithm="alphanumeric" fo:language="en" fo:country="US"');
 });
 
 it("keeps the user-defined index's type, source switches and cached frame and table entries", /** Checks the original cached index from tdf153636 before any regeneration. @returns Completion. */ async () => {
-  const xml = await checkRoundTrip("extras/uiwriter/data/tdf153636.odt", (document) => {
-    const [node] = indexes(document, TOXTypes.User);
-    assert(node);
-    const section = node.GetSection();
-    assert(section instanceof SwTOXBaseSection);
-    const tox = section.tox;
-    expect(tox.type).toBe(document.GetTOXType(TOXTypes.User));
-    expect(tox.name).toBe("User-Defined1");
-    expect(tox.title).toBe("User-Defined Index");
-    expect(tox.createType).toBe(
-      SwTOXElement.Graphic | SwTOXElement.Mark | SwTOXElement.Table | SwTOXElement.Frame,
-    );
-    expect(tox.levelFromChapter).toBe(true);
-    expect(tox.form.GetFormMax()).toBe(11);
-    expect(tox.form.GetTemplate(1)).toBe("User Index 1");
-    const [, ...entries] = document.GetNodes().GetSectionBlocks(node);
-    expect(entries.map((entry) => entry.GetTextNode()?.GetText())).toEqual([
-      "Frame1\t1",
-      "SecondTable\t1",
-      "Image1\t1",
-      "FirstTable\t1",
-    ]);
-  });
+  const xml = await checkRoundTrip(
+    "extras/uiwriter/data/tdf153636.odt",
+    /** Checks that the user-defined index section retains its source descriptor. @param document - Imported Writer document. @returns Nothing. */ (
+      document,
+    ) => {
+      const [node] = indexes(document, TOXTypes.User);
+      assert(node);
+      const section = node.GetSection();
+      assert(section instanceof SwTOXBaseSection);
+      const tox = section.tox;
+      expect(tox.type).toBe(document.GetTOXType(TOXTypes.User));
+      expect(tox.name).toBe("User-Defined1");
+      expect(tox.title).toBe("User-Defined Index");
+      expect(tox.createType).toBe(
+        SwTOXElement.Graphic | SwTOXElement.Mark | SwTOXElement.Table | SwTOXElement.Frame,
+      );
+      expect(tox.levelFromChapter).toBe(true);
+      expect(tox.form.GetFormMax()).toBe(11);
+      expect(tox.form.GetTemplate(1)).toBe("User Index 1");
+      const [, ...entries] = document.GetNodes().GetSectionBlocks(node);
+      expect(
+        entries.map(
+          /** Extracts the paragraph text from an imported index entry. @param entry - Imported index node. @returns Entry text or undefined. */ (
+            entry,
+          ) => entry.GetTextNode()?.GetText(),
+        ),
+      ).toEqual(["Frame1\t1", "SecondTable\t1", "Image1\t1", "FirstTable\t1"]);
+    },
+  );
   expect(xml).toContain('text:copy-outline-levels="true" text:index-name="User-Defined"');
 });
 
@@ -145,37 +156,42 @@ it.each([
   /** Opens the pinned tdf99689 documents and checks the native kept sections. @param fixture - Source descriptor and expected content. @returns Completion. */ async (
     fixture,
   ) => {
-    const xml = await checkRoundTrip(fixture.fixture, (document) => {
-      const [node] = indexes(document, fixture.type);
-      assert(node);
-      const section = node.GetSection();
-      assert(section instanceof SwTOXBaseSection);
-      const tox = section.tox;
-      expect(tox.name).toBe(fixture.name);
-      expect(tox.title).toBe(fixture.title);
-      expect(tox.sequenceName).toBe(fixture.sequence);
-      expect(tox.captionDisplay).toBe(SwCaptionDisplay.Complete);
-      expect(tox.fromObjectNames).toBe(false);
-      expect(tox.form.GetFormMax()).toBe(2);
-      expect(tox.form.GetTemplate(1)).toBe(fixture.style);
-      expect(
-        tox.form
-          .GetPattern(1)
-          .map(
-            /** Reads the entry's `eTokenType` field. @param token - Collection entry. @returns The field value. */ (
-              token,
-            ) => token.eTokenType,
-          ),
-      ).toEqual([
-        FormTokenType.LinkStart,
-        FormTokenType.Entry,
-        FormTokenType.TabStop,
-        FormTokenType.PageNums,
-        FormTokenType.LinkEnd,
-      ]);
-      const [, entry] = document.GetNodes().GetSectionBlocks(node);
-      expect(entry?.GetTextNode()?.GetText()).toBe(fixture.text);
-    });
+    const xml = await checkRoundTrip(
+      fixture.fixture,
+      /** Checks that the selected list-style index family retains its source descriptor. @param document - Imported Writer document. @returns Nothing. */ (
+        document,
+      ) => {
+        const [node] = indexes(document, fixture.type);
+        assert(node);
+        const section = node.GetSection();
+        assert(section instanceof SwTOXBaseSection);
+        const tox = section.tox;
+        expect(tox.name).toBe(fixture.name);
+        expect(tox.title).toBe(fixture.title);
+        expect(tox.sequenceName).toBe(fixture.sequence);
+        expect(tox.captionDisplay).toBe(SwCaptionDisplay.Complete);
+        expect(tox.fromObjectNames).toBe(false);
+        expect(tox.form.GetFormMax()).toBe(2);
+        expect(tox.form.GetTemplate(1)).toBe(fixture.style);
+        expect(
+          tox.form
+            .GetPattern(1)
+            .map(
+              /** Reads the entry's `eTokenType` field. @param token - Collection entry. @returns The field value. */ (
+                token,
+              ) => token.eTokenType,
+            ),
+        ).toEqual([
+          FormTokenType.LinkStart,
+          FormTokenType.Entry,
+          FormTokenType.TabStop,
+          FormTokenType.PageNums,
+          FormTokenType.LinkEnd,
+        ]);
+        const [, entry] = document.GetNodes().GetSectionBlocks(node);
+        expect(entry?.GetTextNode()?.GetText()).toBe(fixture.text);
+      },
+    );
     expect(xml).toContain(
       `<text:${fixture.element}-source text:caption-sequence-name="${fixture.sequence}" text:caption-sequence-format="text"`,
     );
@@ -184,23 +200,28 @@ it.each([
 );
 
 it("keeps the object-index source classes and cached title from TESTXMLID.odt", /** Uses the original object index section from the native test fixture. @returns Completion. */ async () => {
-  const xml = await checkRoundTrip("python/testdocuments/TESTXMLID.odt", (document) => {
-    const [node] = indexes(document, TOXTypes.Objects);
-    assert(node);
-    const section = node.GetSection();
-    assert(section instanceof SwTOXBaseSection);
-    const tox = section.tox;
-    expect(tox.name).toBe("Table of Objects1");
-    expect(tox.objectOptions).toBe(
-      SwTOOElements.Calc | SwTOOElements.Chart | SwTOOElements.DrawImpress | SwTOOElements.Math,
-    );
-    expect(tox.form.GetTemplate(1)).toBe("Object Index 1");
-    const [title] = document.GetNodes().GetSectionBlocks(node);
-    assert(title instanceof SwSectionNode);
-    expect(document.GetNodes().GetSectionBlocks(title)[0]?.GetTextNode()?.GetText()).toBe(
-      "Table of Objects",
-    );
-  });
+  const xml = await checkRoundTrip(
+    "python/testdocuments/TESTXMLID.odt",
+    /** Checks that the object index section retains its original type and switches. @param document - Imported Writer document. @returns Nothing. */ (
+      document,
+    ) => {
+      const [node] = indexes(document, TOXTypes.Objects);
+      assert(node);
+      const section = node.GetSection();
+      assert(section instanceof SwTOXBaseSection);
+      const tox = section.tox;
+      expect(tox.name).toBe("Table of Objects1");
+      expect(tox.objectOptions).toBe(
+        SwTOOElements.Calc | SwTOOElements.Chart | SwTOOElements.DrawImpress | SwTOOElements.Math,
+      );
+      expect(tox.form.GetTemplate(1)).toBe("Object Index 1");
+      const [title] = document.GetNodes().GetSectionBlocks(node);
+      assert(title instanceof SwSectionNode);
+      expect(document.GetNodes().GetSectionBlocks(title)[0]?.GetTextNode()?.GetText()).toBe(
+        "Table of Objects",
+      );
+    },
+  );
   expect(xml).toContain(
     '<text:object-index-source text:use-spreadsheet-objects="true" text:use-chart-objects="true" text:use-draw-objects="true" text:use-math-objects="true">',
   );

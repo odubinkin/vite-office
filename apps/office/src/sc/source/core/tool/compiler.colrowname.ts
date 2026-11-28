@@ -120,7 +120,12 @@ function FindAutomaticLabel(
     if (label !== undefined && collation.compare(label, name) === 0) matches.push(address);
   }
   // The source ScCellIterator traverses columns before rows.
-  matches.sort((left, right) => left.Col() - right.Col() || left.Row() - right.Row());
+  matches.sort(
+    /** Orders label candidates by column and then by row. @param left - First candidate address. @param right - Second candidate address. @returns Relative address order. */ (
+      left,
+      right,
+    ) => left.Col() - right.Col() || left.Row() - right.Row(),
+  );
   let first: ScAddress | undefined;
   let second: ScAddress | undefined;
   let distance = Infinity;
@@ -144,8 +149,10 @@ function FindAutomaticLabel(
   }
   if (!first || !second || (x >= first.Col() && y >= first.Row())) return first;
   if (x < first.Col()) return y >= second.Row() ? second : first;
-  const squared = (address: ScAddress): number =>
-    (x - address.Col()) ** 2 + (y - address.Row()) ** 2;
+  const squared =
+    /** Measures each candidate label's squared distance from the formula cell. @param address - Candidate cell address. @returns Squared distance in cells. */ (
+      address: ScAddress,
+    ): number => (x - address.Col()) ** 2 + (y - address.Row()) ** 2;
   return squared(first) <= squared(second) ? first : second;
 }
 
@@ -178,7 +185,9 @@ export function GetRefColRowNames(
     next !== OpCode.ocColRowName &&
     next !== OpCode.ocIntersect &&
     [previous, next].some(
-      (op) => op >= OpCode.ocStartBinaryOperators && op < OpCode.ocStopBinaryOperators,
+      /** Checks whether (`op` is at least `OpCode.ocStartBinaryOperators` and `op` is less than `OpCode.ocStopBinaryOperators`). @param op - Candidate entry. @returns Whether the condition holds. */ (
+        op,
+      ) => op >= OpCode.ocStartBinaryOperators && op < OpCode.ocStopBinaryOperators,
     )
   ) {
     scalar = true;
@@ -218,8 +227,14 @@ function AutomaticBounds(
   if (!doc.GetRefCellValue(address).isEmpty() && GetLabelString(doc, address) === undefined)
     return undefined;
 
-  const axis = (pos: ScAddress): number => (column ? pos.Row() : pos.Col());
-  const cross = (pos: ScAddress): number => (column ? pos.Col() : pos.Row());
+  const axis =
+    /** Reads the candidate coordinate along the search axis. @param pos - Cell address in the matching range. @returns Row or column coordinate. */ (
+      pos: ScAddress,
+    ): number => (column ? pos.Row() : pos.Col());
+  const cross =
+    /** Reads the coordinate orthogonal to the label search axis. @param pos - Cell address in the matching range. @returns Column or row coordinate. */ (
+      pos: ScAddress,
+    ): number => (column ? pos.Col() : pos.Row());
   const ranges = column ? doc.GetColNameRanges() : doc.GetRowNameRanges();
   const maximum = column ? doc.MaxRow() : doc.MaxCol();
   let start = Math.min(axis(address) + 1, maximum);

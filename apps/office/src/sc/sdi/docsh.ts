@@ -32,56 +32,75 @@ export function createCalcCalculationInterface(): SfxInterface<CalcCalculationTa
       commandUrl: ".uno:AutomaticCalculation",
       slotId: FID_AUTO_CALC,
       label: "AutoCalculate",
-      getState: ({ shell }) => {
-        const doc = shell.GetDocument();
-        return {
-          enabled: doc.GetHardRecalcState() === ScDocument.HardRecalcState.OFF,
-          checked: doc.GetAutoCalc(),
-        };
-      },
-      execute: ({ shell }, request) => ToggleAutomaticCalculation(shell, request),
+      getState:
+        /** Reads the current document's automatic recalculation command state. @param entry - Slot target exposing the active document shell. @returns Enabled and checked state for the slot. */ ({
+          shell,
+        }) => {
+          const doc = shell.GetDocument();
+          return {
+            enabled: doc.GetHardRecalcState() === ScDocument.HardRecalcState.OFF,
+            checked: doc.GetAutoCalc(),
+          };
+        },
+      execute:
+        /** Toggles automatic calculation through the native document shell. @param entry - Slot target exposing the active document shell. @param request - Original Sfx slot request. @returns Slot execution result. */ (
+          { shell },
+          request,
+        ) => ToggleAutomaticCalculation(shell, request),
     },
     {
       commandUrl: ".uno:Calculate",
       slotId: FID_RECALC,
       label: "Recalculate",
       shortcuts: ["F9"],
-      execute: (target, request) => {
-        if (
-          target.inputHandler.IsInputMode() &&
-          target.inputHandler.IsFormulaMode() &&
-          !request.IsAPI()
-        )
-          target.FormulaPreview();
-        else if (target.Commit()) DoRecalc(target.shell, target.Position());
-        else return false;
-        request.Done();
-        return true;
-      },
+      execute:
+        /** Previews a formula in edit mode or commits input before normal recalculation. @param target - Active Calc slot target. @param request - Original Sfx slot request. @returns Whether the dispatcher handled the request. */ (
+          target,
+          request,
+        ) => {
+          if (
+            target.inputHandler.IsInputMode() &&
+            target.inputHandler.IsFormulaMode() &&
+            !request.IsAPI()
+          )
+            target.FormulaPreview();
+          else if (target.Commit()) DoRecalc(target.shell, target.Position());
+          else return false;
+          request.Done();
+          return true;
+        },
     },
     {
       commandUrl: ".uno:CalculateHard",
       slotId: FID_HARD_RECALC,
       label: "Recalculate Hard",
       shortcuts: ["Ctrl+Shift+F9", "Meta+Shift+F9"],
-      execute: (target, request) => {
-        if (!target.Commit()) return false;
-        DoHardRecalc(target.shell);
-        request.Done();
-        return true;
-      },
+      execute:
+        /** Commits current input before triggering a hard formula recalculation. @param target - Active Calc slot target. @param request - Original Sfx slot request. @returns Whether the dispatcher handled the request. */ (
+          target,
+          request,
+        ) => {
+          if (!target.Commit()) return false;
+          DoHardRecalc(target.shell);
+          request.Done();
+          return true;
+        },
     },
     {
       commandUrl: ".uno:ConvertFormulaToValue",
       slotId: SID_CONVERT_FORMULA_TO_VALUE,
       label: "Formula to Value",
-      execute: (target, request) => {
-        if (!target.Commit()) return false;
-        const range = new ScRange();
-        target.viewData.GetSimpleArea(range);
-        range.PutInOrder();
-        return new ConvertFormulaToValueOperation(target.shell, range, request.IsAPI()).run();
-      },
+      execute:
+        /** Commits current input before converting the oriented selection from formulas to values. @param target - Active Calc slot target. @param request - Original Sfx slot request. @returns Whether the dispatcher handled the request. */ (
+          target,
+          request,
+        ) => {
+          if (!target.Commit()) return false;
+          const range = new ScRange();
+          target.viewData.GetSimpleArea(range);
+          range.PutInOrder();
+          return new ConvertFormulaToValueOperation(target.shell, range, request.IsAPI()).run();
+        },
     },
   ]);
 }
@@ -89,7 +108,13 @@ export function createCalcCalculationInterface(): SfxInterface<CalcCalculationTa
 /** Applies the requested native boolean or toggles it, recording the resolved option. @param shell - Active document shell. @param request - Native Sfx request. @returns Whether handled. */
 function ToggleAutomaticCalculation(shell: ScDocShell, request: SfxRequest): boolean {
   const document = shell.GetDocument();
-  const option = request.GetArgs().find((item) => item.Which() === FID_AUTO_CALC);
+  const option = request
+    .GetArgs()
+    .find(
+      /** Finds the original automatic calculation argument in the request. @param item - Request argument. @returns Whether the native item identifier matches. */ (
+        item,
+      ) => item.Which() === FID_AUTO_CALC,
+    );
   const enabled = option instanceof SfxBoolItem ? option.GetValue() : !document.GetAutoCalc();
   document.SetAutoCalc(enabled);
   shell.SetDocumentModified();

@@ -110,11 +110,18 @@ abstract class ScXMLChangeActionContext extends ScXMLImportContext {
   ): SvXMLImportContext {
     switch (element) {
       case X.OFFICE_CHANGE_INFO:
-        return new ScXMLChangeInfoContext(attributes, (user, timestamp, comment) => {
-          this.user = user;
-          this.timestamp = timestamp;
-          this.comment = comment;
-        });
+        return new ScXMLChangeInfoContext(
+          attributes,
+          /** Stores the change author, time, and comment from the ODF child context. @param user - Change author. @param timestamp - Parsed change timestamp. @param comment - Change comment. @returns Nothing. */ (
+            user,
+            timestamp,
+            comment,
+          ) => {
+            this.user = user;
+            this.timestamp = timestamp;
+            this.comment = comment;
+          },
+        );
       case X.TABLE_DEPENDENCIES:
         return new ScXMLDependingsContext(this.dependencies);
       case X.TABLE_DELETIONS:
@@ -166,7 +173,9 @@ class ScXMLContentChangeContext extends ScXMLChangeActionContext {
       return new ScXMLPreviousContext(
         this.GetScImport(),
         Number(this.range.aStart.GetVars()[2]),
-        (cell) => {
+        /** Stores the prior value for the tracked content change. @param cell - Parsed tracked-change cell. @returns Nothing. */ (
+          cell,
+        ) => {
           this.oldCell = cell;
         },
       );
@@ -253,10 +262,17 @@ class ScXMLDeletionContext extends ScXMLChangeActionContext {
   ): SvXMLImportContext {
     if (element !== X.TABLE_CUT_OFFS) return super.createFastChildContext(element, attributes);
     return new ScXMLCutOffsContext(
-      (id, count) => {
+      /** Records the insertion row or column cutoff. @param id - Source identifier. @param count - Parsed cutoff count. @returns Nothing. */ (
+        id,
+        count,
+      ) => {
         this.insertCutOff = { id, count };
       },
-      (id, from, to) => {
+      /** Appends a movement cutoff to the current tracked deletion. @param id - Source identifier. @param from - First source cutoff position. @param to - Last source cutoff position. @returns Nothing. */ (
+        id,
+        from,
+        to,
+      ) => {
         this.moveCutOffs.push({ id, from, to });
       },
     );
@@ -383,7 +399,9 @@ class ScXMLCellContentDeletionContext extends ScXMLImportContext {
         this.GetScImport(),
         attributes,
         Number(this.range.aStart.GetVars()[2]),
-        (cell) => {
+        /** Stores a cell carried by the tracked movement context. @param cell - Parsed tracked-change cell. @returns Nothing. */ (
+          cell,
+        ) => {
           this.cell = cell;
         },
       );
@@ -452,18 +470,30 @@ class ScXMLChangeInfoContext extends SvXMLImportContext {
   public override createFastChildContext(element: X): SvXMLImportContext | null {
     switch (element) {
       case X.DC_CREATOR:
-        return new ScXMLContentContext((value) => {
-          this.user += value;
-        });
+        return new ScXMLContentContext(
+          /** Appends text to the current change author's name. @param value - XML character data. @returns Nothing. */ (
+            value,
+          ) => {
+            this.user += value;
+          },
+        );
       case X.DC_DATE:
-        return new ScXMLContentContext((value) => {
-          this.date += value;
-        });
+        return new ScXMLContentContext(
+          /** Appends text to the current change timestamp. @param value - XML character data. @returns Nothing. */ (
+            value,
+          ) => {
+            this.date += value;
+          },
+        );
       case X.TEXT_P:
         if (this.paragraphs++) this.comment += "\n";
-        return new ScXMLContentContext((value) => {
-          this.comment += value;
-        });
+        return new ScXMLContentContext(
+          /** Appends text to the current change comment. @param value - XML character data. @returns Nothing. */ (
+            value,
+          ) => {
+            this.comment += value;
+          },
+        );
       default:
         return null;
     }
@@ -588,9 +618,14 @@ class ScXMLChangeCellContext extends ScXMLImportContext {
       this.richText = true;
       return new ScXMLCellTextParaContext(owner, this.tab);
     }
-    return new ScXMLChangeTextPContext(owner, this.tab, attributes, () => {
-      this.richText = true;
-    });
+    return new ScXMLChangeTextPContext(
+      owner,
+      this.tab,
+      attributes,
+      /** Records that the imported change cell contains rich text. @returns Nothing. */ () => {
+        this.richText = true;
+      },
+    );
   }
 
   /** Receives the actual cell edit spans from one paragraph. @param paragraph - Parsed paragraph. @returns Nothing. */
@@ -609,7 +644,14 @@ class ScXMLChangeCellContext extends ScXMLImportContext {
       return;
     }
     const numeric = this.kind === "float" || this.kind === "date" || this.kind === "time";
-    const paragraph = this.paragraphs[0]?.map(([value]) => value).join("") ?? "";
+    const paragraph =
+      this.paragraphs[0]
+        ?.map(
+          /** Extracts the imported scalar value from the cell record. @param entry - Parsed scalar and input text tuple. @returns Tracked cell value. */ ([
+            value,
+          ]) => value,
+        )
+        .join("") ?? "";
     const value = this.empty ? undefined : !numeric && paragraph ? paragraph : this.input;
     this.receive(
       new ScMyCellInfo(value, this.kind === "date" || this.kind === "time" ? paragraph : ""),

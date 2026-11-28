@@ -153,50 +153,97 @@ export class CalcClipboardWorkflow {
         commandUrl: ".uno:Copy",
         slotId: 5711,
         label: "Copy",
-        getState: (workflow) => ({ enabled: workflow.CanCopy() }),
-        execute: (workflow) => workflow.Copy(),
+        getState:
+          /** Queries whether the clipboard command can copy the current cell selection. @param workflow - Active Calc clipboard workflow. @returns Copy command state. */ (
+            workflow,
+          ) => ({ enabled: workflow.CanCopy() }),
+        execute:
+          /** Copies the selection through the original Calc clipboard owner. @param workflow - Active Calc clipboard workflow. @returns Clipboard completion. */ (
+            workflow,
+          ) => workflow.Copy(),
       },
       {
         commandUrl: ".uno:Paste",
         slotId: 5712,
         label: "Paste",
-        getState: (workflow) => ({ enabled: workflow.CanRead() }),
-        execute: (workflow) => workflow.Paste({ kind: "normal" }),
+        getState:
+          /** Queries whether the system clipboard can be read for ordinary paste. @param workflow - Active Calc clipboard workflow. @returns Paste command state. */ (
+            workflow,
+          ) => ({ enabled: workflow.CanRead() }),
+        execute:
+          /** Pastes the clipboard data with its normal formats. @param workflow - Active Calc clipboard workflow. @returns Clipboard completion. */ (
+            workflow,
+          ) => workflow.Paste({ kind: "normal" }),
       },
       {
         commandUrl: ".uno:PasteUnformatted",
         slotId: 5314,
         label: "Paste Unformatted Text",
         shortcuts: ["Ctrl+Alt+Shift+V", "Meta+Alt+Shift+V"],
-        getState: (workflow) => ({ enabled: workflow.CanRead() }),
-        execute: (workflow) => workflow.Paste({ kind: "unformatted" }),
+        getState:
+          /** Queries whether unformatted paste can read the system clipboard. @param workflow - Active Calc clipboard workflow. @returns Command state. */ (
+            workflow,
+          ) => ({ enabled: workflow.CanRead() }),
+        execute:
+          /** Pastes the clipboard content without formatting. @param workflow - Active Calc clipboard workflow. @returns Clipboard completion. */ (
+            workflow,
+          ) => workflow.Paste({ kind: "unformatted" }),
       },
       {
         commandUrl: pasteTextImportCommand,
         slotId: 5805,
         label: "Use Text Import Dialog",
-        getState: (workflow) => ({ enabled: workflow.CanRead() }),
-        execute: (workflow) => workflow.Paste({ kind: "textImport" }),
+        getState:
+          /** Queries whether the text import dialog can read clipboard content. @param workflow - Active Calc clipboard workflow. @returns Text import command state. */ (
+            workflow,
+          ) => ({ enabled: workflow.CanRead() }),
+        execute:
+          /** Pastes through the text import workflow. @param workflow - Active Calc clipboard workflow. @returns Clipboard completion. */ (
+            workflow,
+          ) => workflow.Paste({ kind: "textImport" }),
       },
-      ...pasteOnlySlots.map(({ flags, ...slot }) => ({
-        ...slot,
-        getState: (workflow: CalcClipboardWorkflow) => ({ enabled: workflow.CanPasteOwned() }),
-        execute: (workflow: CalcClipboardWorkflow) => workflow.Paste({ kind: "owned", flags }),
-      })),
+      ...pasteOnlySlots.map(
+        /** Registers a selective paste slot with its native insert flags. @param entry - Selective paste flags and slot metadata. @returns Browser slot definition. */ ({
+          flags,
+          ...slot
+        }) => ({
+          ...slot,
+          getState:
+            /** Checks whether the active Calc session owns the copied cells needed for a selective paste. @param workflow - Active Calc clipboard workflow. @returns Selective paste state. */ (
+              workflow: CalcClipboardWorkflow,
+            ) => ({ enabled: workflow.CanPasteOwned() }),
+          execute:
+            /** Pastes the local Calc selection using the slot's original flags. @param workflow - Active Calc clipboard workflow. @returns Clipboard completion. */ (
+              workflow: CalcClipboardWorkflow,
+            ) => workflow.Paste({ kind: "owned", flags }),
+        }),
+      ),
       {
         commandUrl: ".uno:PasteTransposed",
         slotId: 5808,
         label: "Paste Transposed",
-        getState: (workflow) => ({ enabled: workflow.CanPasteOwned() }),
-        execute: (workflow) => workflow.Paste({ kind: "owned", transpose: true }),
+        getState:
+          /** Checks whether there is an owned selection to transpose. @param workflow - Active Calc clipboard workflow. @returns Transpose paste state. */ (
+            workflow,
+          ) => ({ enabled: workflow.CanPasteOwned() }),
+        execute:
+          /** Pastes the locally owned selection with rows and columns transposed. @param workflow - Active Calc clipboard workflow. @returns Clipboard completion. */ (
+            workflow,
+          ) => workflow.Paste({ kind: "owned", transpose: true }),
       },
       {
         commandUrl: ".uno:PasteSpecial",
         slotId: 5311,
         label: "Paste Special",
         shortcuts: ["Ctrl+Shift+V", "Meta+Shift+V"],
-        getState: (workflow) => ({ enabled: workflow.CanRead() }),
-        execute: (workflow) => workflow.PasteSpecial(),
+        getState:
+          /** Queries whether Paste Special can read the system clipboard. @param workflow - Active Calc clipboard workflow. @returns Paste Special state. */ (
+            workflow,
+          ) => ({ enabled: workflow.CanRead() }),
+        execute:
+          /** Opens the active clipboard formats and delegates the selection to Paste Special. @param workflow - Active Calc clipboard workflow. @returns Clipboard completion. */ (
+            workflow,
+          ) => workflow.PasteSpecial(),
       },
     ]),
   );
@@ -241,7 +288,11 @@ export class CalcClipboardWorkflow {
     if (
       !this.CanUseCells() ||
       this.reading ||
-      !clipboard.types.some((type) => type === plainType || type === calcType)
+      !clipboard.types.some(
+        /** Checks whether (`type` equals `plainType` or `type` equals `calcType`). @param type - Candidate entry. @returns Whether the condition holds. */ (
+          type,
+        ) => type === plainType || type === calcType,
+      )
     )
       return false;
     const transfer = {
@@ -356,10 +407,11 @@ export class CalcClipboardWorkflow {
       const transfer =
         (request.kind === "normal" ? request.transfer : undefined) ?? (await ReadSystemTransfer());
       /** Checks that the browser response still targets the initiating selection. @returns Whether current. */
-      const current = (): boolean =>
-        !this.closed &&
-        doc === controller.shell.GetDocument() &&
-        revision === controller.GetCommandStateRevision();
+      const current =
+        /** Rejects stale asynchronous paste work after a document swap or a clipboard generation change. @returns Whether the request still belongs to the live session. */ (): boolean =>
+          !this.closed &&
+          doc === controller.shell.GetDocument() &&
+          revision === controller.GetCommandStateRevision();
       if (!current()) return false;
       const owned = this.owned;
       if (
@@ -534,7 +586,11 @@ export class CalcClipboardWorkflow {
     if (
       flags & InsertDeleteFlags.CONTENTS &&
       this.warnReplace &&
-      [...marks].some((tab) => !doc.IsBlockEmpty(startCol, startRow, endCol, endRow, tab)) &&
+      [...marks].some(
+        /** Checks for occupied cells before paste can overwrite a destination sheet. @param tab - Destination sheet index. @returns Whether the destination block contains data. */ (
+          tab,
+        ) => !doc.IsBlockEmpty(startCol, startRow, endCol, endRow, tab),
+      ) &&
       (!(await this.Confirm("replace")) || !current())
     )
       return false;

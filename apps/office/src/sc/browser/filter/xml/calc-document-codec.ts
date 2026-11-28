@@ -419,7 +419,11 @@ function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
       if (
         !Array.isArray(record.fontEmbedding) ||
         record.fontEmbedding.length !== 5 ||
-        !record.fontEmbedding.every((value) => typeof value === "boolean")
+        !record.fontEmbedding.every(
+          /** Checks that one deserialized flag has the required boolean type. @param value - Candidate flag. @returns Whether the value is boolean. */ (
+            value,
+          ) => typeof value === "boolean",
+        )
       )
         throw new Error("Calc worker font embedding settings are invalid.");
       const [enabled, usedOnly, latin, asian, complex] = record.fontEmbedding;

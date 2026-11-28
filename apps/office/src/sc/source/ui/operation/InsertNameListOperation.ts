@@ -26,11 +26,22 @@ export class InsertNameListOperation {
     const names = [
       ...local,
       ...Array.from(doc.GetRangeName() ?? []).filter(
-        (entry) => !local.findByUpperName(entry.GetUpperName()),
+        /** Keeps global range names that are not shadowed by a local name. @param entry - Global range name. @returns Whether the global name is visible. */ (
+          entry,
+        ) => !local.findByUpperName(entry.GetUpperName()),
       ),
-    ].filter((entry) => !(entry.type & RangeDataType.Database));
+    ].filter(
+      /** Removes database-only entries from Insert Name List. @param entry - Native range name. @returns Whether the range name can be listed. */ (
+        entry,
+      ) => !(entry.type & RangeDataType.Database),
+    );
     const collator = GetCollator();
-    names.sort((a, b) => collator.compare(a.name, b.name));
+    names.sort(
+      /** Orders names by the collator used for Insert Name List. @param a - First name entry. @param b - Second name entry. @returns Relative name order. */ (
+        a,
+        b,
+      ) => collator.compare(a.name, b.name),
+    );
     const col = this.start.Col(),
       row = this.start.Row();
     const last = row + names.length - 1;
@@ -42,17 +53,23 @@ export class InsertNameListOperation {
     )
       return false;
     const target = new ScRange(col, row, tab, col + 1, last, tab);
-    const definitions = names.map((entry, index) => ({
-      name: entry.name,
-      symbol: "=" + entry.GetSymbol(doc.GetGrammar(), new ScAddress(col, row + index, tab)),
-    }));
+    const definitions = names.map(
+      /** Builds the name and address-relative formula used for each inserted row. @param entry - Native range name. @param index - Output row offset. @returns Name and resolved formula text. */ (
+        entry,
+        index,
+      ) => ({
+        name: entry.name,
+        symbol: "=" + entry.GetSymbol(doc.GetGrammar(), new ScAddress(col, row + index, tab)),
+      }),
+    );
     const history = this.shell.GetUndoManager();
-    const snapshot = (): ScDocument => {
-      const copy = new ScDocument(ScDocumentMode.SCDOCMODE_UNDO);
-      copy.InitUndo(doc, tab, tab);
-      doc.CopyToDocument(target, nameListSnapshotFlags, false, copy);
-      return copy;
-    };
+    const snapshot =
+      /** Copies the original document cells for Insert Name List undo. @returns Document snapshot recorded by the undo operation. */ (): ScDocument => {
+        const copy = new ScDocument(ScDocumentMode.SCDOCMODE_UNDO);
+        copy.InitUndo(doc, tab, tab);
+        doc.CopyToDocument(target, nameListSnapshotFlags, false, copy);
+        return copy;
+      };
     const before = history.GetMaxUndoActionCount() > 0 ? snapshot() : null;
     const parameter = new ScSetStringParam();
     parameter.setTextInput();

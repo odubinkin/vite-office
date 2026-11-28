@@ -38,10 +38,13 @@ export function ScIntersect(this: ScInterpreter): void {
     return;
   }
   /** Resolves a represented reference operand. @param token - Single or double reference. @returns Native bounds. */
-  const resolve = (token: ScSingleRefToken | ScDoubleRefToken): ScRange =>
-    token instanceof ScDoubleRefToken
-      ? token.GetDoubleRef().toAbs(this.mrDoc, this.aPos)
-      : new ScRange(token.GetSingleRef().toAbs(this.mrDoc, this.aPos));
+  const resolve =
+    /** Converts a single-cell or double-reference token into its occupied range. @param token - Formula reference token. @returns Native address range. */ (
+      token: ScSingleRefToken | ScDoubleRefToken,
+    ): ScRange =>
+      token instanceof ScDoubleRefToken
+        ? token.GetDoubleRef().toAbs(this.mrDoc, this.aPos)
+        : new ScRange(token.GetSingleRef().toAbs(this.mrDoc, this.aPos));
   const intersection = resolve(left).Intersection(resolve(right));
   const limits = this.mrDoc.GetSheetLimits();
   if (!intersection.IsValid()) this.SetError(FormulaError.NoCode);

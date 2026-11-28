@@ -254,7 +254,11 @@ it("rejects transpose wider than the sheet before generating a paste history ent
   const view = new ScTabViewShell(shell);
   const clip = clipboard(doc, new ScRange(0, 0, 0, 0, doc.MaxCol() + 1, 0));
   const errors: string[] = [];
-  view.SetErrorMessageHandler((message) => errors.push(message));
+  view.SetErrorMessageHandler(
+    /** Captures the alert emitted by the paste validation path. @param message - Alert message. @returns Updated diagnostic count. */ (
+      message,
+    ) => errors.push(message),
+  );
   const undo = shell.GetUndoManager();
   const count = undo.GetUndoActionCount();
   expect(view.PasteFromClip(F.CONTENTS, clip, ScPasteFunc.NONE, false, true)).toBe(false);

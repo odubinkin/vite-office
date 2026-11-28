@@ -48,11 +48,14 @@ export function CreatePageStyleRequest(
     canRename: style.IsUserDefined(),
     items: snapshot.items,
     fieldData: FillHeaderFieldData(shell, tab),
-    nameAvailable: (name) => {
-      if (!name) return false;
-      const existing = shell.GetDocument().GetStyleSheetPool()?.GetPageStyle(name);
-      return !existing || existing === style;
-    },
+    nameAvailable:
+      /** Checks screen input for a usable native cell style name. @param name - Name supplied by the caller. @returns Whether the style can be used. */ (
+        name,
+      ) => {
+        if (!name) return false;
+        const existing = shell.GetDocument().GetStyleSheetPool()?.GetPageStyle(name);
+        return !existing || existing === style;
+      },
   };
 }
 

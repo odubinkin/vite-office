@@ -41,15 +41,17 @@ it("copies cells and their formats, then pastes relative formulas through one na
   const a1 = new ScAddress(),
     c3 = new ScAddress(2, 2, 0),
     d3 = new ScAddress(3, 2, 0);
-  act(() => {
-    controller.EnterString("7");
-    controller.Select(1, 0);
-    expect(controller.EnterString("=A1+$A$1")).toBe(true);
-    const pattern = new ScPatternAttr(doc.getCellAttributeHelper());
-    pattern.ItemSetPut(new SvxFontHeightItem(320, 100, 101));
-    doc.ApplyPatternAreaTab(0, 0, 0, 0, 0, pattern);
-    pattern.Dispose();
-  });
+  act(
+    /** Enters the sample text through Calc and moves the selection. @returns Nothing. */ () => {
+      controller.EnterString("7");
+      controller.Select(1, 0);
+      expect(controller.EnterString("=A1+$A$1")).toBe(true);
+      const pattern = new ScPatternAttr(doc.getCellAttributeHelper());
+      pattern.ItemSetPut(new SvxFontHeightItem(320, 100, 101));
+      doc.ApplyPatternAreaTab(0, 0, 0, 0, 0, pattern);
+      pattern.Dispose();
+    },
+  );
   select("A1:B1");
   const clipboard = transfer();
   fireEvent.copy(grid(), { clipboardData: clipboard });
@@ -83,20 +85,22 @@ it("copies cells and their formats, then pastes relative formulas through one na
 
 it("ports tdf119343 by recalculating the pasted reference against the next row", /** Ports tdf119343 by recalculating the pasted reference against the next row. @returns Completion. */ async () => {
   const controller = mount();
-  act(() => {
-    for (const [row, value] of [
-      [293, "Q108420"],
-      [294, "Q1099565"],
-      [295, "Q11005355"],
-    ] as const) {
-      controller.Select(9, row);
-      expect(controller.EnterString(value)).toBe(true);
-    }
-    for (const row of [293, 294]) {
-      controller.Select(12, row);
-      expect(controller.EnterString("=+J" + (row + 1))).toBe(true);
-    }
-  });
+  act(
+    /** Moves the selection and enters the sample text through Calc. @returns Nothing. */ () => {
+      for (const [row, value] of [
+        [293, "Q108420"],
+        [294, "Q1099565"],
+        [295, "Q11005355"],
+      ] as const) {
+        controller.Select(9, row);
+        expect(controller.EnterString(value)).toBe(true);
+      }
+      for (const row of [293, 294]) {
+        controller.Select(12, row);
+        expect(controller.EnterString("=+J" + (row + 1))).toBe(true);
+      }
+    },
+  );
   select("M295");
   const clipboard = transfer();
   fireEvent.copy(grid(), { clipboardData: clipboard });
@@ -151,26 +155,31 @@ it("ports testCopyPasteTranspose across sheets with rotated borders and native h
   browserClipboard(clipboard);
   const controller = mount(),
     doc = controller.shell.GetDocument();
-  act(() => {
-    const name = unicode("Sheet2");
-    expect(doc.InsertTab(1, name)).toBe(true);
-    name.dispose();
-    expect(controller.EnterString("1")).toBe(true);
-    controller.Select(1, 0);
-    expect(controller.EnterString("=A1+1")).toBe(true);
-    controller.Select(2, 0);
-    expect(controller.EnterString("test")).toBe(true);
-    const pattern = new ScPatternAttr(doc.getCellAttributeHelper());
-    const box = new SvxBoxItem(ATTR_BORDER);
-    box.SetLine(new SvxBorderLine(new Color(0), 30), SvxBoxItemLine.TOP);
-    box.SetDistance(12, SvxBoxItemLine.TOP);
-    pattern.ItemSetPut(box);
-    doc.ApplyPattern(1, 0, 0, pattern);
-    pattern.Dispose();
-  });
+  act(
+    /** Enters the sample text through Calc and moves the selection. @returns Nothing. */ () => {
+      const name = unicode("Sheet2");
+      expect(doc.InsertTab(1, name)).toBe(true);
+      name.dispose();
+      expect(controller.EnterString("1")).toBe(true);
+      controller.Select(1, 0);
+      expect(controller.EnterString("=A1+1")).toBe(true);
+      controller.Select(2, 0);
+      expect(controller.EnterString("test")).toBe(true);
+      const pattern = new ScPatternAttr(doc.getCellAttributeHelper());
+      const box = new SvxBoxItem(ATTR_BORDER);
+      box.SetLine(new SvxBorderLine(new Color(0), 30), SvxBoxItemLine.TOP);
+      box.SetDistance(12, SvxBoxItemLine.TOP);
+      pattern.ItemSetPut(box);
+      doc.ApplyPattern(1, 0, 0, pattern);
+      pattern.Dispose();
+    },
+  );
   select("A1:C1");
   fireEvent.copy(grid(), { clipboardData: clipboard });
-  act(() => controller.SelectTab(1));
+  act(
+    /** Switches to the other sheet in the clipboard fixture. @returns Native operation result. */ () =>
+      controller.SelectTab(1),
+  );
   select("D2");
   const count = controller.shell.GetUndoManager().GetUndoActionCount();
   await pasteSpecial("Paste Transposed");
@@ -211,11 +220,13 @@ it("rotates only fully relative references and repeats the same clipboard withou
   const controller = mount(),
     doc = controller.shell.GetDocument();
   select("B2");
-  act(() => {
-    expect(controller.EnterString("7")).toBe(true);
-    controller.Select(2, 1);
-    expect(controller.EnterString("=SUM(B2:B3)+SUM($B2:B3)+$B$2")).toBe(true);
-  });
+  act(
+    /** Enters the sample text through Calc and moves the selection. @returns Nothing. */ () => {
+      expect(controller.EnterString("7")).toBe(true);
+      controller.Select(2, 1);
+      expect(controller.EnterString("=SUM(B2:B3)+SUM($B2:B3)+$B$2")).toBe(true);
+    },
+  );
   select("B2:C3");
   fireEvent.copy(grid(), { clipboardData: clipboard });
   for (const [name, target, expected] of [
@@ -239,20 +250,22 @@ it("confirms the transposed selection size and preserves rich cells and styled e
   const rich = new ScAddress(6, 5, 0),
     styledEmpty = new ScAddress(6, 4, 0),
     cleared = new ScAddress(6, 6, 0);
-  act(() => {
-    doc.SetValue(new ScAddress(0, 0, 0), 10);
-    doc.SetValue(new ScAddress(2, 0, 0), 30);
-    doc.SetValue(cleared, 50);
-    const pattern = new ScPatternAttr(doc.getCellAttributeHelper());
-    pattern.ItemSetPut(new SvxFontHeightItem(320, 100, 101));
-    doc.ApplyPattern(0, 1, 0, pattern);
-    pattern.Dispose();
-    const string = unicode("first\nsecond");
-    const engine = doc.GetEditEngine();
-    engine.SetTextCurrentDefaults(string);
-    string.dispose();
-    doc.SetEditText(new ScAddress(1, 1, 0), engine.CreateTextObject());
-  });
+  act(
+    /** Sets the native value. @returns Nothing. */ () => {
+      doc.SetValue(new ScAddress(0, 0, 0), 10);
+      doc.SetValue(new ScAddress(2, 0, 0), 30);
+      doc.SetValue(cleared, 50);
+      const pattern = new ScPatternAttr(doc.getCellAttributeHelper());
+      pattern.ItemSetPut(new SvxFontHeightItem(320, 100, 101));
+      doc.ApplyPattern(0, 1, 0, pattern);
+      pattern.Dispose();
+      const string = unicode("first\nsecond");
+      const engine = doc.GetEditEngine();
+      engine.SetTextCurrentDefaults(string);
+      string.dispose();
+      doc.SetEditText(new ScAddress(1, 1, 0), engine.CreateTextObject());
+    },
+  );
   select("A1:C2");
   fireEvent.copy(grid(), { clipboardData: clipboard });
   select("F5:F6");
@@ -292,15 +305,17 @@ it("ports tdf69450 by pasting formats from populated and empty cells without del
   const controller = mount(),
     doc = controller.shell.GetDocument();
   const b1 = new ScAddress(1, 0, 0);
-  act(() => {
-    expect(controller.EnterString("A")).toBe(true);
-    controller.Select(1, 0);
-    expect(controller.EnterString("B")).toBe(true);
-    const pattern = new ScPatternAttr(doc.getCellAttributeHelper());
-    pattern.ItemSetPut(new SvxFontHeightItem(320, 100, 101));
-    doc.ApplyPattern(0, 1, 0, pattern);
-    pattern.Dispose();
-  });
+  act(
+    /** Enters the sample text through Calc and moves the selection. @returns Nothing. */ () => {
+      expect(controller.EnterString("A")).toBe(true);
+      controller.Select(1, 0);
+      expect(controller.EnterString("B")).toBe(true);
+      const pattern = new ScPatternAttr(doc.getCellAttributeHelper());
+      pattern.ItemSetPut(new SvxFontHeightItem(320, 100, 101));
+      doc.ApplyPattern(0, 1, 0, pattern);
+      pattern.Dispose();
+    },
+  );
   select("A1");
   fireEvent.copy(grid(), { clipboardData: clipboard });
   select("B1");
@@ -350,15 +365,17 @@ it("applies a preset draft with Skip Empty Cells to values and formats", /** App
     doc = controller.shell.GetDocument();
   const target = new ScAddress(3, 0, 0),
     hole = new ScAddress(4, 0, 0);
-  act(() => {
-    expect(controller.EnterString("=2+3")).toBe(true);
-    doc.SetValue(hole, 27);
-    const pattern = new ScPatternAttr(doc.getCellAttributeHelper());
-    pattern.ItemSetPut(new SvxFontHeightItem(320, 100, 101));
-    doc.ApplyPattern(0, 0, 0, pattern);
-    doc.ApplyPattern(1, 0, 0, pattern);
-    pattern.Dispose();
-  });
+  act(
+    /** Enters the sample text through Calc and sets the native value. @returns Nothing. */ () => {
+      expect(controller.EnterString("=2+3")).toBe(true);
+      doc.SetValue(hole, 27);
+      const pattern = new ScPatternAttr(doc.getCellAttributeHelper());
+      pattern.ItemSetPut(new SvxFontHeightItem(320, 100, 101));
+      doc.ApplyPattern(0, 0, 0, pattern);
+      doc.ApplyPattern(1, 0, 0, pattern);
+      pattern.Dispose();
+    },
+  );
   select("A1:B1");
   fireEvent.copy(grid(), { clipboardData: clipboard });
   select("D1");
@@ -390,14 +407,16 @@ it("runs Formats Only from the menu immediately and keeps the original formula o
   const controller = mount(),
     doc = controller.shell.GetDocument();
   const target = new ScAddress(2, 0, 0);
-  act(() => {
-    controller.Select(target.Col(), target.Row());
-    expect(controller.EnterString("=2+3")).toBe(true);
-    const pattern = new ScPatternAttr(doc.getCellAttributeHelper());
-    pattern.ItemSetPut(new SvxFontHeightItem(340, 100, 101));
-    doc.ApplyPattern(0, 0, 0, pattern);
-    pattern.Dispose();
-  });
+  act(
+    /** Moves the selection and enters the sample text through Calc. @returns Nothing. */ () => {
+      controller.Select(target.Col(), target.Row());
+      expect(controller.EnterString("=2+3")).toBe(true);
+      const pattern = new ScPatternAttr(doc.getCellAttributeHelper());
+      pattern.ItemSetPut(new SvxFontHeightItem(340, 100, 101));
+      doc.ApplyPattern(0, 0, 0, pattern);
+      pattern.Dispose();
+    },
+  );
   const original = doc.GetFormulaCell(target);
   assert(original);
   select("A1");
@@ -427,20 +446,22 @@ it("pastes numbers without dates, keeps result errors and restores overwritten c
   const controller = mount(),
     doc = controller.shell.GetDocument();
   const dateFormat = doc.GetFormatTable().GetStandardFormat(SvNumFormatType.DATE);
-  act(() => {
-    controller.EnterString("=1+2");
-    controller.Select(0, 1);
-    controller.EnterString("=1/0");
-    doc.SetValue(new ScAddress(0, 3, 0), 45001);
-    doc.SetNumberFormat(new ScAddress(0, 3, 0), dateFormat);
-    controller.Select(2, 0);
-    controller.EnterString("old text");
-    controller.Select(2, 1);
-    controller.EnterString("=9");
-    doc.SetValue(new ScAddress(2, 2, 0), 45002);
-    doc.SetNumberFormat(new ScAddress(2, 2, 0), dateFormat);
-    doc.SetValue(new ScAddress(2, 3, 0), 42);
-  });
+  act(
+    /** Enters the sample text through Calc and moves the selection and sets the native value. @returns Nothing. */ () => {
+      controller.EnterString("=1+2");
+      controller.Select(0, 1);
+      controller.EnterString("=1/0");
+      doc.SetValue(new ScAddress(0, 3, 0), 45001);
+      doc.SetNumberFormat(new ScAddress(0, 3, 0), dateFormat);
+      controller.Select(2, 0);
+      controller.EnterString("old text");
+      controller.Select(2, 1);
+      controller.EnterString("=9");
+      doc.SetValue(new ScAddress(2, 2, 0), 45002);
+      doc.SetNumberFormat(new ScAddress(2, 2, 0), dateFormat);
+      doc.SetValue(new ScAddress(2, 3, 0), 42);
+    },
+  );
   select("A1:A4");
   fireEvent.copy(grid(), { clipboardData: clipboard });
   select("C1");
@@ -478,14 +499,16 @@ it("pastes a multiline formula result as rich text and refuses a later external 
   browserClipboard(clipboard);
   const controller = mount(),
     doc = controller.shell.GetDocument();
-  act(() => {
-    const string = unicode("alpha\nbeta");
-    const engine = doc.GetEditEngine();
-    engine.SetTextCurrentDefaults(string);
-    string.dispose();
-    doc.SetEditText(new ScAddress(0, 1, 0), engine.CreateTextObject());
-    expect(controller.EnterString("=A2")).toBe(true);
-  });
+  act(
+    /** Enters the sample text through Calc. @returns Nothing. */ () => {
+      const string = unicode("alpha\nbeta");
+      const engine = doc.GetEditEngine();
+      engine.SetTextCurrentDefaults(string);
+      string.dispose();
+      doc.SetEditText(new ScAddress(0, 1, 0), engine.CreateTextObject());
+      expect(controller.EnterString("=A2")).toBe(true);
+    },
+  );
   select("A1");
   fireEvent.copy(grid(), { clipboardData: clipboard });
   select("B1");
@@ -507,11 +530,13 @@ it("asks for Text Import settings, preserves leading zeroes and skips empty cell
     doc = controller.shell.GetDocument();
   const b2 = new ScAddress(1, 1, 0),
     b3 = new ScAddress(1, 2, 0);
-  act(() => {
-    controller.Select(1, 2);
-    controller.EnterString("keep");
-    controller.Select(1, 1);
-  });
+  act(
+    /** Moves the selection and enters the sample text through Calc. @returns Nothing. */ () => {
+      controller.Select(1, 2);
+      controller.EnterString("keep");
+      controller.Select(1, 1);
+    },
+  );
   const data = transfer("id\tamount\n001\t2\n\t3");
   const count = controller.shell.GetUndoManager().GetUndoActionCount();
   await act(
@@ -565,11 +590,13 @@ it("asks to extend a short selection and then to replace existing cells before c
   const first = new ScAddress(0, 0, 0),
     last = new ScAddress(0, 2, 0),
     existing = new ScAddress(2, 2, 0);
-  act(() => {
-    doc.SetValue(first, 17);
-    doc.SetValue(last, 29);
-    doc.SetValue(existing, 41);
-  });
+  act(
+    /** Sets the native value. @returns Nothing. */ () => {
+      doc.SetValue(first, 17);
+      doc.SetValue(last, 29);
+      doc.SetValue(existing, 41);
+    },
+  );
   select("A1:A3");
   const clipboard = transfer();
   fireEvent.copy(grid(), { clipboardData: clipboard });
@@ -665,7 +692,10 @@ it("keeps editable input clipboard events native and imports external formula ad
   expect(editTransfer.setData).not.toHaveBeenCalled();
   expect(doc.GetCellType(new ScAddress())).toBe(CellType.CELLTYPE_NONE);
   fireEvent.keyDown(input, { key: "Escape" });
-  act(() => doc.SetValue(new ScAddress(), 11));
+  act(
+    /** Seeds the source cell for the clipboard operation. @returns Native operation result. */ () =>
+      doc.SetValue(new ScAddress(), 11),
+  );
   select("C4");
   await act(
     /** Pastes into the worksheet grid. @returns Whether the default action is allowed, after dispatch. */ async () =>
@@ -699,18 +729,20 @@ it("imports quoted multiline cells and detected dates with number-format undo", 
     date = new ScAddress(2, 1, 0);
   expect(doc.GetCellType(rich)).toBe(CellType.CELLTYPE_EDIT);
   /** Reads the rich cell's default paragraph separator. @returns Cell text. */
-  const readRich = (): string => {
-    const value = doc.GetRefCellValue(rich).getEditText()?.GetText();
-    assert(value);
-    try {
-      return text(value);
-    } finally {
-      value.dispose();
-    }
-  };
+  const readRich =
+    /** Reads the text from the clipboard fixture's rich-text cell. @returns Rich cell text. */ (): string => {
+      const value = doc.GetRefCellValue(rich).getEditText()?.GetText();
+      assert(value);
+      try {
+        return text(value);
+      } finally {
+        value.dispose();
+      }
+    };
   /** Reads the number format from the actual stored pattern. @returns Format index. */
-  const format = (): number =>
-    doc.GetPattern(date)?.GetNumberFormat(doc.GetNonThreadedContext()) ?? 0;
+  const format =
+    /** Reads the date cell's effective number format after paste. @returns Native format identifier. */ (): number =>
+      doc.GetPattern(date)?.GetNumberFormat(doc.GetNonThreadedContext()) ?? 0;
   expect(readRich()).toBe("first\nsecond");
   expect(doc.GetFormatTable().GetType(format()) & SvNumFormatType.DATE).not.toBe(0);
   act(

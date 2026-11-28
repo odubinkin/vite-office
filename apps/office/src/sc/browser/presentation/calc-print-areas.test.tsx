@@ -65,11 +65,16 @@ it("ports the upstream Define, edit repeat titles and clear scenario", /** Ports
     target: { value: "$A" },
   });
   fireEvent.click(screen.getByRole("button", { name: "OK" }));
-  await waitFor(() => expect(sheet.GetRepeatRowRange()).toEqual(new ScRange(0, 0, 0)));
+  await waitFor(
+    /** Waits for the loaded repeat-row state to reach the sheet. @returns Assertion result. */ () =>
+      expect(sheet.GetRepeatRowRange()).toEqual(new ScRange(0, 0, 0)),
+  );
 
-  act(() => {
-    dispatcher.Execute(".uno:EditPrintArea");
-  });
+  act(
+    /** Dispatches the original UNO command from the test. @returns Nothing. */ () => {
+      dispatcher.Execute(".uno:EditPrintArea");
+    },
+  );
   expect(screen.getByRole("textbox", { name: "Print Range" })).toHaveValue("$A$1:$F$20");
   expect(screen.getByRole("textbox", { name: "Rows to Repeat" })).toHaveValue("$1");
   expect(screen.getByRole("textbox", { name: "Columns to Repeat" })).toHaveValue("$A");
@@ -88,7 +93,10 @@ it("ports the upstream Define, edit repeat titles and clear scenario", /** Ports
   expect(screen.getByRole("textbox", { name: "Columns to Repeat" })).toHaveValue("$A");
   const actions = controller.shell.GetUndoManager().GetUndoActionCount();
   fireEvent.click(screen.getByRole("button", { name: "OK" }));
-  await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
+  await waitFor(
+    /** Waits for the accepted print area dialog to close. @returns Assertion result. */ () =>
+      expect(screen.queryByRole("dialog")).toBeNull(),
+  );
   expect(controller.shell.GetUndoManager().GetUndoActionCount()).toBe(actions);
   cleanup();
   session.Close();
@@ -103,13 +111,17 @@ it("applies typed areas to marked sheets and restores workbook print history", /
   controller.InsertSheet();
   controller.SelectTab(0);
   controller.SelectTab(1, true);
-  const apply = (id: string, value: string) => {
-    const command = dispatcher.QueryDispatch(id);
-    assert(command);
-    return dispatcher.ExecuteRequest(
-      new SfxRequest(command.slot.slotId, [new SfxStringItem(SID_DEFINE_PRINTAREA, value)]),
-    );
-  };
+  const apply =
+    /** Dispatches a print range command with a single string argument. @param id - UNO command URL. @param value - Range text passed to the slot. @returns Nothing. */ (
+      id: string,
+      value: string,
+    ) => {
+      const command = dispatcher.QueryDispatch(id);
+      assert(command);
+      return dispatcher.ExecuteRequest(
+        new SfxRequest(command.slot.slotId, [new SfxStringItem(SID_DEFINE_PRINTAREA, value)]),
+      );
+    };
   const first = new ScRange(1, 1, 0, 2, 2, 0);
   const second = new ScRange(4, 4, 0);
   const sheet0 = doc.FetchTable(0);
@@ -173,7 +185,10 @@ it("captures a grid reference without moving the cell cursor and validates the f
   expect(rows).toHaveFocus();
   expect(rows).toHaveAttribute("aria-invalid", "true");
   fireEvent.keyDown(rows, { key: "Escape" });
-  await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
+  await waitFor(
+    /** Waits for the cancelled reference-picking dialog to close. @returns Assertion result. */ () =>
+      expect(screen.queryByRole("dialog")).toBeNull(),
+  );
   expect(screen.getByRole("grid")).toHaveFocus();
   expect(session.controller.shell.GetDocument().FetchTable(0)?.IsPrintEntireSheet()).toBe(true);
   cleanup();

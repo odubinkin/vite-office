@@ -58,19 +58,40 @@ export function ScPageStyleDlg({ model, onCancel, onSubmit }: DialogProps): Reac
   const [tab, setTab] = useState(0);
   const [name, setName] = useState(model.name);
   const [error, setError] = useState<string>();
-  const [original] = useState(() => GetPageStyleGeometry(model.items));
+  const [original] = useState(
+    /** Reads physical page dimensions and margins from the supplied style. @returns Page geometry. */ () =>
+      GetPageStyleGeometry(model.items),
+  );
   const [layout, setLayout] = useState(original);
   const [page, setPage] = useState(
-    () => new SvxPageDescPage(original, getPageFormatDefaultLimits(), (_context, text) => text),
+    /** Initializes the native page-description tab. @returns Page-description tab model. */ () =>
+      new SvxPageDescPage(
+        original,
+        getPageFormatDefaultLimits(),
+        /** Preserves the original text of a native page style label. @param _context - Native resource translation context. @param text - Source label. @returns Untranslated label. */ (
+          _context,
+          text,
+        ) => text,
+      ),
   );
   const [border] = useState(
-    () => new SvxBorderTabPage(model.items, ATTR_BORDER, undefined, ATTR_BORDER_INNER),
+    /** Initializes the page border model from the native item set. @returns Border tab model. */ () =>
+      new SvxBorderTabPage(model.items, ATTR_BORDER, undefined, ATTR_BORDER_INNER),
   );
   const [borderRevision, setBorderRevision] = useState(0);
   const [borderReset, setBorderReset] = useState(0);
-  const [header] = useState(() => new ScHeaderFooterSettings(model.items, true));
-  const [footer] = useState(() => new ScHeaderFooterSettings(model.items, false));
-  const [sheet] = useState(() => new ScSheetSettings(model.items));
+  const [header] = useState(
+    /** Initializes header settings from the page style. @returns Header settings. */ () =>
+      new ScHeaderFooterSettings(model.items, true),
+  );
+  const [footer] = useState(
+    /** Initializes footer settings from the page style. @returns Footer settings. */ () =>
+      new ScHeaderFooterSettings(model.items, false),
+  );
+  const [sheet] = useState(
+    /** Initializes sheet print settings from the page style. @returns Sheet settings. */ () =>
+      new ScSheetSettings(model.items),
+  );
   const [headerState, setHeaderState] = useState(header.initial);
   const [footerState, setFooterState] = useState(footer.initial);
   const [sheetState, setSheetState] = useState(sheet.initial);
@@ -83,16 +104,20 @@ export function ScPageStyleDlg({ model, onCancel, onSubmit }: DialogProps): Reac
   const shareSides = layout.usage !== SvxPageUsage.Left && layout.usage !== SvxPageUsage.Right;
   const unit = ScOptionsUtil.IsMetricSystem() ? FieldUnit.CM : FieldUnit.INCH;
 
-  useLayoutEffect(() => {
-    tabList.current?.querySelector<HTMLElement>('[aria-selected="true"]')?.focus();
-  }, [tab]);
+  useLayoutEffect(
+    /** Focuses the selected page style tab. @returns Nothing. */ () => {
+      tabList.current?.querySelector<HTMLElement>('[aria-selected="true"]')?.focus();
+    },
+    [tab],
+  );
 
   useLayoutEffect(
-    () => () => {
-      editor.current?.model.Dispose();
-      editor.current?.input.Dispose();
-      contents.current?.Dispose();
-    },
+    /** Registers cleanup for the active page settings editors. @returns Cleanup that disposes the current editor and input models. */ () =>
+      /** Registers cleanup for the active page settings editors. @returns Cleanup that disposes the current editor and input models. */ () => {
+        editor.current?.model.Dispose();
+        editor.current?.input.Dispose();
+        contents.current?.Dispose();
+      },
     [],
   );
 
@@ -126,7 +151,10 @@ export function ScPageStyleDlg({ model, onCancel, onSubmit }: DialogProps): Reac
     editor.current = undefined;
     setNested(undefined);
     const opener = active?.opener;
-    queueMicrotask(() => opener?.focus());
+    queueMicrotask(
+      /** Restores keyboard focus to the button that opened the subdialog. @returns Nothing. */ () =>
+        opener?.focus(),
+    );
   }
 
   /** Activates the source tab and records lazy creation of Sheet's output owner. @param index - Tab index. @returns Nothing. */
@@ -146,13 +174,24 @@ export function ScPageStyleDlg({ model, onCancel, onSubmit }: DialogProps): Reac
       case "Page":
         setLayout(original);
         setPage(
-          new SvxPageDescPage(original, getPageFormatDefaultLimits(), (_context, text) => text),
+          new SvxPageDescPage(
+            original,
+            getPageFormatDefaultLimits(),
+            /** Preserves the original text of a native page style preview label. @param _context - Native resource translation context. @param text - Source label. @returns Untranslated label. */ (
+              _context,
+              text,
+            ) => text,
+          ),
         );
         break;
       case "Borders":
         border.Reset();
         setBorderRevision(0);
-        setBorderReset((value) => value + 1);
+        setBorderReset(
+          /** Advances the render revision after an item set edit. @param value - Previous revision. @returns New render revision. */ (
+            value,
+          ) => value + 1,
+        );
         break;
       case "Background":
         setColor(initialColor);
@@ -202,20 +241,28 @@ export function ScPageStyleDlg({ model, onCancel, onSubmit }: DialogProps): Reac
       aria-modal="true"
       data-office-modal="true"
       className="fixed inset-0 z-[60] grid place-items-center bg-slate-950/50 p-4 backdrop-blur-[2px]"
-      onKeyDown={(event) => {
-        if (event.key !== "Escape") return;
-        event.preventDefault();
-        event.stopPropagation();
-        onCancel();
-      }}
+      onKeyDown={
+        /** Handles keyboard input on the "Page Style" control. @param event - Browser event. @returns Nothing. */ (
+          event,
+        ) => {
+          if (event.key !== "Escape") return;
+          event.preventDefault();
+          event.stopPropagation();
+          onCancel();
+        }
+      }
     >
       <form
         data-office-modal-panel="true"
         className="office-dialog-form flex max-h-[calc(100dvh-2rem)] w-full max-w-3xl flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl"
-        onSubmit={(event) => {
-          event.preventDefault();
-          submit();
-        }}
+        onSubmit={
+          /** Prevents native form navigation and submits the edited page style. @param event - Form submit event. @returns Nothing. */ (
+            event,
+          ) => {
+            event.preventDefault();
+            submit();
+          }
+        }
       >
         <DialogHeader title={`Page Style: ${model.name}`} onClose={onCancel} />
         <div
@@ -223,38 +270,50 @@ export function ScPageStyleDlg({ model, onCancel, onSubmit }: DialogProps): Reac
           role="tablist"
           aria-label="Page style tabs"
           className="flex shrink-0 flex-wrap gap-1 border-b border-slate-200 px-4 pt-2"
-          onKeyDown={(event) => {
-            const count = pageStyleTabs.length;
-            const next =
-              event.key === "ArrowRight"
-                ? (tab + 1) % count
-                : event.key === "ArrowLeft"
-                  ? (tab + count - 1) % count
-                  : event.key === "Home"
-                    ? 0
-                    : event.key === "End"
-                      ? count - 1
-                      : undefined;
-            if (next === undefined) return;
-            event.preventDefault();
-            activate(next);
-          }}
+          onKeyDown={
+            /** Handles keyboard input on the "Page style tabs" control. @param event - Browser event. @returns Nothing. */ (
+              event,
+            ) => {
+              const count = pageStyleTabs.length;
+              const next =
+                event.key === "ArrowRight"
+                  ? (tab + 1) % count
+                  : event.key === "ArrowLeft"
+                    ? (tab + count - 1) % count
+                    : event.key === "Home"
+                      ? 0
+                      : event.key === "End"
+                        ? count - 1
+                        : undefined;
+              if (next === undefined) return;
+              event.preventDefault();
+              activate(next);
+            }
+          }
         >
-          {pageStyleTabs.map((label, index) => (
-            <button
-              type="button"
-              role="tab"
-              key={label}
-              id={id + "-" + index}
-              aria-controls={id + "-panel"}
-              tabIndex={index === tab ? 0 : -1}
-              aria-selected={index === tab}
-              className="rounded-t-md border-b-2 border-transparent px-2 py-2 text-sm text-slate-700 aria-selected:border-indigo-600 aria-selected:font-semibold"
-              onClick={() => activate(index)}
-            >
-              {label}
-            </button>
-          ))}
+          {pageStyleTabs.map(
+            /** Renders one button for the source entry. @param label - Source entry. @param index - Entry index. @returns Rendered element. */ (
+              label,
+              index,
+            ) => (
+              <button
+                type="button"
+                role="tab"
+                key={label}
+                id={id + "-" + index}
+                aria-controls={id + "-panel"}
+                tabIndex={index === tab ? 0 : -1}
+                aria-selected={index === tab}
+                className="rounded-t-md border-b-2 border-transparent px-2 py-2 text-sm text-slate-700 aria-selected:border-indigo-600 aria-selected:font-semibold"
+                onClick={
+                  /** Activates the selected page style panel. @returns Nothing. */ () =>
+                    activate(index)
+                }
+              >
+                {label}
+              </button>
+            ),
+          )}
         </div>
         <div
           role="tabpanel"
@@ -272,10 +331,14 @@ export function ScPageStyleDlg({ model, onCancel, onSubmit }: DialogProps): Reac
                   readOnly={!model.canRename}
                   className="rounded-md border border-slate-300 px-2 py-1.5 read-only:bg-slate-100"
                   value={name}
-                  onChange={(event) => {
-                    setName(event.target.value);
-                    setError(undefined);
-                  }}
+                  onChange={
+                    /** Applies a change from the `name` control. @param event - Browser event. @returns Nothing. */ (
+                      event,
+                    ) => {
+                      setName(event.target.value);
+                      setError(undefined);
+                    }
+                  }
                 />
               </label>
               {error ? (
@@ -295,7 +358,14 @@ export function ScPageStyleDlg({ model, onCancel, onSubmit }: DialogProps): Reac
               resetKey={borderReset}
               formatLine={formatBorder}
               MetricSpinButton={MetricSpinButton}
-              onChange={() => setBorderRevision((value) => value + 1)}
+              onChange={
+                /** Updates the border revision. @returns Nothing. */ () =>
+                  setBorderRevision(
+                    /** Advances the render revision after a background edit. @param value - Previous revision. @returns New render revision. */ (
+                      value,
+                    ) => value + 1,
+                  )
+              }
             />
           ) : null}
           {pageStyleTabs[tab] === "Background" ? (
@@ -306,7 +376,11 @@ export function ScPageStyleDlg({ model, onCancel, onSubmit }: DialogProps): Reac
                 <select
                   value={filled ? "color" : "none"}
                   className="rounded-md border border-slate-300 p-2"
-                  onChange={(event) => setFilled(event.target.value === "color")}
+                  onChange={
+                    /** Updates the filled. @param event - Control change event. @returns Nothing. */ (
+                      event,
+                    ) => setFilled(event.target.value === "color")
+                  }
                 >
                   <option value="none">None</option>
                   <option value="color">Color</option>
@@ -318,7 +392,11 @@ export function ScPageStyleDlg({ model, onCancel, onSubmit }: DialogProps): Reac
                   <input
                     type="color"
                     value={color}
-                    onChange={(event) => setColor(event.target.value)}
+                    onChange={
+                      /** Updates the color. @param event - Control change event. @returns Nothing. */ (
+                        event,
+                      ) => setColor(event.target.value)
+                    }
                   />
                 </label>
               ) : null}
@@ -331,7 +409,11 @@ export function ScPageStyleDlg({ model, onCancel, onSubmit }: DialogProps): Reac
               unit={unit}
               shareSides={shareSides}
               onChange={setHeaderState}
-              onEdit={(button) => editContent(true, button)}
+              onEdit={
+                /** Opens the header text editor and retains its focus return target. @param button - Originating header edit button. @returns Nothing. */ (
+                  button,
+                ) => editContent(true, button)
+              }
             />
           ) : null}
           {pageStyleTabs[tab] === "Footer" ? (
@@ -341,7 +423,11 @@ export function ScPageStyleDlg({ model, onCancel, onSubmit }: DialogProps): Reac
               unit={unit}
               shareSides={shareSides}
               onChange={setFooterState}
-              onEdit={(button) => editContent(false, button)}
+              onEdit={
+                /** Opens the footer text editor and retains its focus return target. @param button - Originating footer edit button. @returns Nothing. */ (
+                  button,
+                ) => editContent(false, button)
+              }
             />
           ) : null}
           {pageStyleTabs[tab] === "Sheet" ? (
@@ -369,7 +455,14 @@ export function ScPageStyleDlg({ model, onCancel, onSubmit }: DialogProps): Reac
     <>
       {settings}
       {nested && (
-        <ScHFEditDlg model={nested} onCancel={() => closeContent()} onSubmit={closeContent} />
+        <ScHFEditDlg
+          model={nested}
+          onCancel={
+            /** Closes the region text editor without applying new content. @returns Nothing. */ () =>
+              closeContent()
+          }
+          onSubmit={closeContent}
+        />
       )}
     </>
   );

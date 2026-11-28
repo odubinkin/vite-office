@@ -64,11 +64,13 @@ it("ports tdf51700 whole-column selection and restores the entire transformation
   const doc = controller.shell.GetDocument();
   expect(command()).toBeDisabled();
   fireEvent.keyDown(screen.getByRole("menu", { name: "Data menu" }), { key: "Escape" });
-  act(() => {
-    put(1, "3242,43242,3242,2342");
-    put(2, "fdsfa,afsdfa,adfdas,fsad");
-    put(3, "21312,1111,1111,111");
-  });
+  act(
+    /** Writes the comma-delimited input rows. @returns Nothing. */ () => {
+      put(1, "3242,43242,3242,2342");
+      put(2, "fdsfa,afsdfa,adfdas,fsad");
+      put(3, "21312,1111,1111,111");
+    },
+  );
   select("A1");
   fireEvent.click(screen.getByRole("button", { name: /^Column A$/ }));
   await openTextToColumns();
@@ -106,11 +108,13 @@ it("warns about occupied columns to the right and leaves a declined conversion i
   const controller = mount();
   const doc = controller.shell.GetDocument();
   const target = new ScAddress(1, 1, 0);
-  act(() => {
-    put(1, "1;2");
-    put(2, "3;4");
-    doc.SetValue(target, 88);
-  });
+  act(
+    /** Sets the native value. @returns Nothing. */ () => {
+      put(1, "1;2");
+      put(2, "3;4");
+      doc.SetValue(target, 88);
+    },
+  );
   select("A2:A3");
   await openTextToColumns();
   const dialog = within(screen.getByRole("dialog", { name: "Text to Columns" }));
@@ -152,12 +156,13 @@ it("ports the original tdf69981 workbook and preserves explicit empty and traili
   const data = await readFile("../../vendor/libreoffice-reference/sc/qa/uitest/data/tdf69981.ods");
   const doc = await readOdsDocument(new Uint8Array(data));
   const controller = mount();
-  act(() =>
-    controller.shell.ReplaceDocument(
-      doc,
-      createDocument({ id: "tdf69981", suiteId: "calc", title: "tdf69981" }),
-      { kind: "input", name: "tdf69981.ods", source: { kind: "external", reference: {} } },
-    ),
+  act(
+    /** Installs the pasted delimiter fixture in the active session. @returns Replacement result. */ () =>
+      controller.shell.ReplaceDocument(
+        doc,
+        createDocument({ id: "tdf69981", suiteId: "calc", title: "tdf69981" }),
+        { kind: "input", name: "tdf69981.ods", source: { kind: "external", reference: {} } },
+      ),
   );
   select("A2:A7");
   await openTextToColumns();
@@ -183,29 +188,45 @@ it("ports the original tdf69981 workbook and preserves explicit empty and traili
     ["a", "b", ""],
     ["a", "", "c"],
   ];
-  expected.forEach((row, y) =>
-    row.forEach((value, x) =>
-      expect(text(doc.GetSharedString(new ScAddress(x, y, 0)).getString())).toBe(value),
-    ),
+  expected.forEach(
+    /** Verifies each cell in a split output row without moving the selection. @param row - Expected columns for the row. @param y - Destination row. @returns Nothing. */ (
+      row,
+      y,
+    ) =>
+      row.forEach(
+        /** Compares one split cell against the expected string. @param value - Expected cell contents. @param x - Destination column. @returns Assertion result. */ (
+          value,
+          x,
+        ) => expect(text(doc.GetSharedString(new ScAddress(x, y, 0)).getString())).toBe(value),
+      ),
   );
 });
 
 it("ports tdf92423 and applies Text to Columns to the selection created by paste", /** Ports tdf92423 and applies Text to Columns to the selection created by paste. @returns Completion. */ async () => {
   const controller = mount();
   const doc = controller.shell.GetDocument();
-  act(() => {
-    put(0, "1;2");
-    put(1, "2;3");
-    put(2, "3;4");
-  });
+  act(
+    /** Writes the semicolon-delimited input rows. @returns Nothing. */ () => {
+      put(0, "1;2");
+      put(1, "2;3");
+      put(2, "3;4");
+    },
+  );
   const values = new Map<string, string>();
   const clipboard = {
     /** Mirrors the types emitted by the browser transfer. @returns Available types. */
     get types() {
       return [...values.keys()];
     },
-    setData: (type: string, value: string) => values.set(type, value),
-    getData: (type: string) => values.get(type) ?? "",
+    setData:
+      /** Captures the text-to-columns fixture's recorded clipboard payload. @param type - MIME type. @param value - Payload string. @returns Updated clipboard contents map. */ (
+        type: string,
+        value: string,
+      ) => values.set(type, value),
+    getData:
+      /** Copies the clipboard data for the requested format into the test consumer. @param type - MIME type. @returns Recorded payload or an empty string. */ (
+        type: string,
+      ) => values.get(type) ?? "",
   };
   const grid = screen.getByRole("grid", { name: "Spreadsheet" });
   select("A1:A3");
@@ -234,12 +255,14 @@ it("ports tdf92423 and applies Text to Columns to the selection created by paste
 it("ports tdf82398 custom separators on a date-formatted input range", /** Ports tdf82398 custom separators on a date-formatted input range. @returns Completion. */ async () => {
   const controller = mount();
   const doc = controller.shell.GetDocument();
-  act(() => {
-    put(0, "afasdfs.fdfasd.fsadf.fasd");
-    put(1, "3242.43242.3242.2342");
-    put(2, "fdsfa.afsdfa.adfdas.fsad");
-    put(3, "21312.1111.1111.111");
-  });
+  act(
+    /** Writes the period-delimited and comma-delimited fixture rows. @returns Nothing. */ () => {
+      put(0, "afasdfs.fdfasd.fsadf.fasd");
+      put(1, "3242.43242.3242.2342");
+      put(2, "fdsfa.afsdfa.adfdas.fsad");
+      put(3, "21312.1111.1111.111");
+    },
+  );
   select("A1:A4");
   const toolbar = within(screen.getByRole("toolbar", { name: "Calc formatting toolbar" }));
   fireEvent.click(toolbar.getByRole("button", { name: "Date" }));
@@ -281,7 +304,7 @@ it("ports tdf82398 custom separators on a date-formatted input range", /** Ports
 it("leaves the workbook intact on dialog cancellation or when the command target changes", /** Leaves the workbook intact on dialog cancellation or when the command target changes. @returns Completion. */ async () => {
   const controller = mount();
   const doc = controller.shell.GetDocument();
-  act(() => put(0, "1;2"));
+  act(/** Writes the protected-sheet input row. @returns Nothing. */ () => put(0, "1;2"));
   select("A1");
   await openTextToColumns();
   let dialog = within(screen.getByRole("dialog", { name: "Text to Columns" }));

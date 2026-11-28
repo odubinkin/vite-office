@@ -61,7 +61,12 @@ export function ScHFEditDlg({ model, onCancel, onSubmit }: Props): React.JSX.Ele
   const id = useId();
   const roots = useRef<(HTMLDivElement | null)[]>([]);
   const current = useRef(0);
-  const selections = useRef(headerFooterAreas.map(() => new ESelection()));
+  const selections = useRef(
+    headerFooterAreas.map(
+      /** Creates an empty selection for a header or footer text region. @returns Native EditEngine selection. */ () =>
+        new ESelection(),
+    ),
+  );
   const [tab, setTab] = useState(0);
   const [fonts, setFonts] = useState<readonly string[]>([]);
   const [, refresh] = useState(0);
@@ -71,33 +76,58 @@ export function ScHFEditDlg({ model, onCancel, onSubmit }: Props): React.JSX.Ele
   const page = at(model.pages, tab);
   const title = model.layout.title + " (Page Style: " + model.name + ")";
 
-  useLayoutEffect(() => {
-    let live = true;
-    void FontList.FromBrowser().then((list) => {
-      if (live) setFonts(list.GetFontNames());
-    });
-    return () => {
-      live = false;
-    };
-  }, []);
+  useLayoutEffect(
+    /** Loads the browser font names for header and footer text. @returns Cleanup that drops a late font response. */ () => {
+      let live = true;
+      void FontList.FromBrowser().then(
+        /** Applies font family names while the character dialog is still mounted. @param list - Resolved browser font list. @returns Nothing. */ (
+          list,
+        ) => {
+          if (live) setFonts(list.GetFontNames());
+        },
+      );
+      return /** Marks the font request stale when the effect closes. @returns Nothing. */ () => {
+        live = false;
+      };
+    },
+    [],
+  );
 
-  useLayoutEffect(() => {
-    const cleanups = page.areas.map((area, index) => {
-      const root = at(roots.current, index);
-      paintHeaderRegion(root, area);
-      return bindHeaderRegion(root, area, (range) => {
-        selections.current[index] = range;
-        current.current = index;
-        page.selectedPreset = undefined;
-        refresh((value) => value + 1);
-      });
-    });
-    focusRegion(0, new ESelection());
-    return () => {
-      for (const cleanup of cleanups) cleanup();
-    };
-    // The DOM region listeners are owned by the active native page.
-  }, [page]);
+  useLayoutEffect(
+    /** Paints the editable regions of the current preview page. @returns Cleanup for the rendered regions. */ () => {
+      const cleanups = page.areas.map(
+        /** Paints one header or footer region and binds its editing events. @param area - Native print region. @param index - Region index. @returns Region cleanup callback. */ (
+          area,
+          index,
+        ) => {
+          const root = at(roots.current, index);
+          paintHeaderRegion(root, area);
+          return bindHeaderRegion(
+            root,
+            area,
+            /** Remembers the selected region and its native text selection. @param range - Selection within the edited region. @returns Nothing. */ (
+              range,
+            ) => {
+              selections.current[index] = range;
+              current.current = index;
+              page.selectedPreset = undefined;
+              refresh(
+                /** Advances the state revision after changing the region selection. @param value - Previous revision. @returns New render revision. */ (
+                  value,
+                ) => value + 1,
+              );
+            },
+          );
+        },
+      );
+      focusRegion(0, new ESelection());
+      return /** Releases all editable regions owned by the preview effect. @returns Nothing. */ () => {
+        for (const cleanup of cleanups) cleanup();
+      };
+      // The DOM region listeners are owned by the active native page.
+    },
+    [page],
+  );
 
   /** Restores an explicit native range and keeps the current area for tool commands. @param index - Region index. @param range - Native selection. @returns Nothing. */
   function focusRegion(index: number, range: ESelection): void {
@@ -106,7 +136,11 @@ export function ScHFEditDlg({ model, onCancel, onSubmit }: Props): React.JSX.Ele
     restoreHeaderRegionSelection(root, range);
     current.current = index;
     selections.current[index] = range;
-    refresh((value) => value + 1);
+    refresh(
+      /** Advances the state revision to refresh the preview. @param value - Previous revision. @returns New render revision. */ (
+        value,
+      ) => value + 1,
+    );
   }
 
   /** Stores the currently displayed browser selection for a toolbar command. @param index - Region index. @returns Nothing. */
@@ -114,7 +148,11 @@ export function ScHFEditDlg({ model, onCancel, onSubmit }: Props): React.JSX.Ele
     current.current = index;
     const selection = headerRegionSelection(at(roots.current, index));
     if (selection) selections.current[index] = selection;
-    refresh((value) => value + 1);
+    refresh(
+      /** Advances the state revision after updating the active text selection. @param value - Previous revision. @returns New render revision. */ (
+        value,
+      ) => value + 1,
+    );
   }
 
   /** Applies a source field to the retained editor selection. @param field - Actual source field name. @returns Nothing. */
@@ -130,7 +168,14 @@ export function ScHFEditDlg({ model, onCancel, onSubmit }: Props): React.JSX.Ele
       item.Dispose();
     }
     setFiles(false);
-    if (!fieldGroups[0].some((entry) => entry === field)) page.selectedPreset = undefined;
+    if (
+      !fieldGroups[0].some(
+        /** Checks whether `entry` equals `field`. @param entry - Candidate entry. @returns Whether the condition holds. */ (
+          entry,
+        ) => entry === field,
+      )
+    )
+      page.selectedPreset = undefined;
   }
 
   /** Applies original pool attributes to the current browser edit region. @param values - Owned native items. @param paragraph - Expand a collapsed selection for the Text Attributes dialog. @returns Nothing. */
@@ -158,7 +203,10 @@ export function ScHFEditDlg({ model, onCancel, onSubmit }: Props): React.JSX.Ele
   function closeAttributes(): void {
     setAttributes(false);
     const index = current.current;
-    queueMicrotask(() => focusRegion(index, at(selections.current, index)));
+    queueMicrotask(
+      /** Restores focus to the active print region's previous selection. @returns Nothing. */ () =>
+        focusRegion(index, at(selections.current, index)),
+    );
   }
 
   const currentArea = at(page.areas, current.current);
@@ -190,22 +238,36 @@ export function ScHFEditDlg({ model, onCancel, onSubmit }: Props): React.JSX.Ele
     headerRegionItem(currentArea, cursor, EE.EE_CHAR_KERNING) as SvxKerningItem
   ).GetValue();
   const attributeTabs = ["Font", "Font Effects", "Position"];
-  const weightItem = (on: boolean) =>
-    new SvxWeightItem(on ? FontWeight.WEIGHT_BOLD : FontWeight.WEIGHT_NORMAL, EE.EE_CHAR_WEIGHT);
-  const postureItem = (on: boolean) =>
-    new SvxPostureItem(on ? FontItalic.ITALIC_NORMAL : FontItalic.ITALIC_NONE, EE.EE_CHAR_ITALIC);
-  const underlineItem = (on: boolean) =>
-    new SvxUnderlineItem(
-      on ? FontLineStyle.LINESTYLE_SINGLE : FontLineStyle.LINESTYLE_NONE,
-      EE.EE_CHAR_UNDERLINE,
-    );
-  const heightItem = (points: number) =>
-    new SvxFontHeightItem(Math.round(points * 20), 100, EE.EE_CHAR_FONTHEIGHT);
-  const familyItem = (name: string) => {
-    const item = font.Clone();
-    item.SetFamilyName(name);
-    return item;
-  };
+  const weightItem =
+    /** Builds the text weight item for the current bold toggle. @param on - Whether bold is enabled. @returns Native character weight item. */ (
+      on: boolean,
+    ) =>
+      new SvxWeightItem(on ? FontWeight.WEIGHT_BOLD : FontWeight.WEIGHT_NORMAL, EE.EE_CHAR_WEIGHT);
+  const postureItem =
+    /** Builds the text posture item for the current italic toggle. @param on - Whether italic is enabled. @returns Native character posture item. */ (
+      on: boolean,
+    ) =>
+      new SvxPostureItem(on ? FontItalic.ITALIC_NORMAL : FontItalic.ITALIC_NONE, EE.EE_CHAR_ITALIC);
+  const underlineItem =
+    /** Builds the underline item for the current underline toggle. @param on - Whether single underline is enabled. @returns Native character underline item. */ (
+      on: boolean,
+    ) =>
+      new SvxUnderlineItem(
+        on ? FontLineStyle.LINESTYLE_SINGLE : FontLineStyle.LINESTYLE_NONE,
+        EE.EE_CHAR_UNDERLINE,
+      );
+  const heightItem =
+    /** Converts an entered point size to the character height's twip units. @param points - Point size. @returns Native font-height item. */ (
+      points: number,
+    ) => new SvxFontHeightItem(Math.round(points * 20), 100, EE.EE_CHAR_FONTHEIGHT);
+  const familyItem =
+    /** Clones the current character font with a new family name. @param name - Selected font family. @returns Cloned character font item. */ (
+      name: string,
+    ) => {
+      const item = font.Clone();
+      item.SetFamilyName(name);
+      return item;
+    };
 
   return (
     <div
@@ -219,13 +281,17 @@ export function ScHFEditDlg({ model, onCancel, onSubmit }: Props): React.JSX.Ele
         inert={attributes}
         data-office-modal-panel="true"
         className="office-dialog-form flex max-h-[calc(100dvh-2rem)] w-full max-w-3xl flex-col overflow-auto rounded-2xl border border-slate-200 bg-white shadow-2xl"
-        onKeyDown={(event) => {
-          if (event.key !== "Escape") return;
-          event.preventDefault();
-          event.stopPropagation();
-          if (files) setFiles(false);
-          else onCancel();
-        }}
+        onKeyDown={
+          /** Updates the files and closes the active dialog. @param event - Browser event. @returns Nothing. */ (
+            event,
+          ) => {
+            if (event.key !== "Escape") return;
+            event.preventDefault();
+            event.stopPropagation();
+            if (files) setFiles(false);
+            else onCancel();
+          }
+        }
       >
         <DialogHeader title={title} onClose={onCancel} />
         {!model.layout.single && (
@@ -233,42 +299,53 @@ export function ScHFEditDlg({ model, onCancel, onSubmit }: Props): React.JSX.Ele
             role="tablist"
             aria-label="Header and footer variants"
             className="flex flex-wrap gap-1 border-b border-slate-200 px-4 pt-2"
-            onKeyDown={(event) => {
-              const count = model.pages.length;
-              const next =
-                event.key === "ArrowRight"
-                  ? (tab + 1) % count
-                  : event.key === "ArrowLeft"
-                    ? (tab + count - 1) % count
-                    : event.key === "Home"
-                      ? 0
-                      : event.key === "End"
-                        ? count - 1
-                        : undefined;
-              if (next === undefined) return;
-              event.preventDefault();
-              model.Visit(next);
-              setTab(next);
-            }}
+            onKeyDown={
+              /** Handles keyboard input on the "Header and footer variants" control. @param event - Browser event. @returns Nothing. */ (
+                event,
+              ) => {
+                const count = model.pages.length;
+                const next =
+                  event.key === "ArrowRight"
+                    ? (tab + 1) % count
+                    : event.key === "ArrowLeft"
+                      ? (tab + count - 1) % count
+                      : event.key === "Home"
+                        ? 0
+                        : event.key === "End"
+                          ? count - 1
+                          : undefined;
+                if (next === undefined) return;
+                event.preventDefault();
+                model.Visit(next);
+                setTab(next);
+              }
+            }
           >
-            {model.layout.panes.map((pane, index) => (
-              <button
-                type="button"
-                role="tab"
-                id={id + "-" + index}
-                aria-controls={id + "-panel"}
-                aria-selected={tab === index}
-                tabIndex={tab === index ? 0 : -1}
-                className="border-b-2 border-transparent px-2 py-2 text-sm aria-selected:border-indigo-600 aria-selected:font-semibold"
-                key={pane.which}
-                onClick={() => {
-                  model.Visit(index);
-                  setTab(index);
-                }}
-              >
-                {pane.label}
-              </button>
-            ))}
+            {model.layout.panes.map(
+              /** Renders one button for the source entry. @param pane - Source entry. @param index - Entry index. @returns Rendered element. */ (
+                pane,
+                index,
+              ) => (
+                <button
+                  type="button"
+                  role="tab"
+                  id={id + "-" + index}
+                  aria-controls={id + "-panel"}
+                  aria-selected={tab === index}
+                  tabIndex={tab === index ? 0 : -1}
+                  className="border-b-2 border-transparent px-2 py-2 text-sm aria-selected:border-indigo-600 aria-selected:font-semibold"
+                  key={pane.which}
+                  onClick={
+                    /** Activates the selected pane and updates the tab. @returns Nothing. */ () => {
+                      model.Visit(index);
+                      setTab(index);
+                    }
+                  }
+                >
+                  {pane.label}
+                </button>
+              ),
+            )}
           </div>
         )}
         <div
@@ -282,24 +359,33 @@ export function ScHFEditDlg({ model, onCancel, onSubmit }: Props): React.JSX.Ele
             <select
               className={control + " min-w-0 max-w-full"}
               value={page.selectedPreset ?? "custom"}
-              onChange={(event) => {
-                const selected = event.target.value;
-                if (selected === "custom") return;
-                const index = page.ApplyPreset(Number(selected));
-                for (const [region, area] of page.areas.entries())
-                  paintHeaderRegion(at(roots.current, region), area);
-                const doc = at(page.areas, index).getImpl().GetEditDoc();
-                focusRegion(
-                  index,
-                  new ESelection(doc.Count() - 1, doc.GetObject(doc.Count() - 1)?.Len() ?? 0),
-                );
-              }}
+              onChange={
+                /** Applies the selected native header or footer preset. @param event - Preset list change event. @returns Nothing. */ (
+                  event,
+                ) => {
+                  const selected = event.target.value;
+                  if (selected === "custom") return;
+                  const index = page.ApplyPreset(Number(selected));
+                  for (const [region, area] of page.areas.entries())
+                    paintHeaderRegion(at(roots.current, region), area);
+                  const doc = at(page.areas, index).getImpl().GetEditDoc();
+                  focusRegion(
+                    index,
+                    new ESelection(doc.Count() - 1, doc.GetObject(doc.Count() - 1)?.Len() ?? 0),
+                  );
+                }
+              }
             >
-              {page.presets.map(({ label }, index) => (
-                <option value={String(index)} key={index}>
-                  {label}
-                </option>
-              ))}
+              {page.presets.map(
+                /** Renders one option for the source entry. @param entry - Source entry. @param index - Entry index. @returns Rendered element. */ (
+                  { label },
+                  index,
+                ) => (
+                  <option value={String(index)} key={index}>
+                    {label}
+                  </option>
+                ),
+              )}
               {page.selectedPreset === undefined && <option value="custom">Customized</option>}
             </select>
           </label>
@@ -309,17 +395,29 @@ export function ScHFEditDlg({ model, onCancel, onSubmit }: Props): React.JSX.Ele
               aria-label="Font Name"
               className={control + " max-w-52"}
               value={family}
-              onChange={(event) => format([familyItem(event.target.value)])}
+              onChange={
+                /** Applies the chosen font family to the selected region text. @param event - Font-family change event. @returns Nothing. */ (
+                  event,
+                ) => format([familyItem(event.target.value)])
+              }
             >
-              {[...new Set([family, ...fonts])].map((name) => (
-                <option key={name}>{name}</option>
-              ))}
+              {[...new Set([family, ...fonts])].map(
+                /** Renders one option for the source entry. @param name - Source entry. @returns Rendered element. */ (
+                  name,
+                ) => (
+                  <option key={name}>{name}</option>
+                ),
+              )}
             </select>
             <select
               aria-label="Font Size"
               className={control}
               value={size / 20}
-              onChange={(event) => format([heightItem(Number(event.target.value))])}
+              onChange={
+                /** Applies the chosen point size to the selected region text. @param event - Font-size change event. @returns Nothing. */ (
+                  event,
+                ) => format([heightItem(Number(event.target.value))])
+              }
             >
               {[...new Set([...sizes, size / 20])]
                 .sort(
@@ -328,16 +426,23 @@ export function ScHFEditDlg({ model, onCancel, onSubmit }: Props): React.JSX.Ele
                     right,
                   ) => left - right,
                 )
-                .map((size) => (
-                  <option key={size}>{size}</option>
-                ))}
+                .map(
+                  /** Renders one option for the source entry. @param size - Source entry. @returns Rendered element. */ (
+                    size,
+                  ) => (
+                    <option key={size}>{size}</option>
+                  ),
+                )}
             </select>
             <button
               type="button"
               className={toggle + " font-bold"}
               aria-label="Bold"
               aria-pressed={bold}
-              onClick={() => format([weightItem(!bold)])}
+              onClick={
+                /** Toggles bold for the selected header or footer text. @returns Nothing. */ () =>
+                  format([weightItem(!bold)])
+              }
             >
               B
             </button>
@@ -346,7 +451,10 @@ export function ScHFEditDlg({ model, onCancel, onSubmit }: Props): React.JSX.Ele
               className={toggle + " italic"}
               aria-label="Italic"
               aria-pressed={italic}
-              onClick={() => format([postureItem(!italic)])}
+              onClick={
+                /** Toggles italic for the selected header or footer text. @returns Nothing. */ () =>
+                  format([postureItem(!italic)])
+              }
             >
               I
             </button>
@@ -355,18 +463,23 @@ export function ScHFEditDlg({ model, onCancel, onSubmit }: Props): React.JSX.Ele
               className={toggle + " underline"}
               aria-label="Underline"
               aria-pressed={underline}
-              onClick={() => format([underlineItem(!underline)])}
+              onClick={
+                /** Toggles single underline for the selected header or footer text. @returns Nothing. */ () =>
+                  format([underlineItem(!underline)])
+              }
             >
               U
             </button>
             <button
               type="button"
               className={control}
-              onClick={() => {
-                page.selectedPreset = undefined;
-                setAttributeTab(0);
-                setAttributes(true);
-              }}
+              onClick={
+                /** Activates the "Text Attributes" control. @returns Nothing. */ () => {
+                  page.selectedPreset = undefined;
+                  setAttributeTab(0);
+                  setAttributes(true);
+                }
+              }
             >
               Text Attributes
             </button>
@@ -379,54 +492,94 @@ export function ScHFEditDlg({ model, onCancel, onSubmit }: Props): React.JSX.Ele
                 className={control}
                 aria-expanded={files}
                 aria-haspopup="true"
-                onClick={() => setFiles(!files)}
+                onClick={/** Updates the files. @returns Nothing. */ () => setFiles(!files)}
               >
                 Title / File Name
               </button>
               {files && (
                 <div className="absolute z-10 mt-1 grid w-max rounded border border-slate-300 bg-white p-1 shadow-md">
-                  {fieldGroups[0].map((field) => (
-                    <button
-                      key={field}
-                      type="button"
-                      className="rounded px-2 py-1 text-left hover:bg-slate-100"
-                      onClick={() => insert(field)}
-                    >
-                      {field}
-                    </button>
-                  ))}
+                  {fieldGroups[0].map(
+                    /** Renders one button for the source entry. @param field - Source entry. @returns Rendered element. */ (
+                      field,
+                    ) => (
+                      <button
+                        key={field}
+                        type="button"
+                        className="rounded px-2 py-1 text-left hover:bg-slate-100"
+                        onClick={
+                          /** Inserts the chosen native header or footer field. @returns Nothing. */ () =>
+                            insert(field)
+                        }
+                      >
+                        {field}
+                      </button>
+                    ),
+                  )}
                 </div>
               )}
             </div>
-            {fieldGroups[1].map((field) => (
-              <button key={field} type="button" className={control} onClick={() => insert(field)}>
-                {field}
-              </button>
-            ))}
+            {fieldGroups[1].map(
+              /** Renders one button for the source entry. @param field - Source entry. @returns Rendered element. */ (
+                field,
+              ) => (
+                <button
+                  key={field}
+                  type="button"
+                  className={control}
+                  onClick={
+                    /** Inserts the chosen native header or footer field. @returns Nothing. */ () =>
+                      insert(field)
+                  }
+                >
+                  {field}
+                </button>
+              ),
+            )}
           </div>
           <div className="grid grid-cols-3 gap-2">
-            {headerFooterAreas.map((label, index) => (
-              <div key={label} className="grid min-w-0 gap-1">
-                <span id={id + "-area-" + index}>{label}</span>
-                <div
-                  ref={(root) => {
-                    roots.current[index] = root;
-                  }}
-                  role="textbox"
-                  aria-multiline="true"
-                  aria-labelledby={id + "-area-" + index}
-                  contentEditable
-                  suppressContentEditableWarning
-                  spellCheck={false}
-                  className="min-h-24 overflow-auto whitespace-pre-wrap break-words rounded border border-slate-300 p-2 focus:border-indigo-500 focus:outline-indigo-500"
-                  style={{ textAlign: index === 0 ? "left" : index === 1 ? "center" : "right" }}
-                  onFocus={() => remember(index)}
-                  onBlur={() => remember(index)}
-                  onPointerUp={() => remember(index)}
-                  onKeyUp={() => remember(index)}
-                />
-              </div>
-            ))}
+            {headerFooterAreas.map(
+              /** Renders one div for the source entry. @param label - Source entry. @param index - Entry index. @returns Rendered element. */ (
+                label,
+                index,
+              ) => (
+                <div key={label} className="grid min-w-0 gap-1">
+                  <span id={id + "-area-" + index}>{label}</span>
+                  <div
+                    ref={
+                      /** Registers the element where the header or footer region is painted. @param root - Mounted region or null on detach. @returns Nothing. */ (
+                        root,
+                      ) => {
+                        roots.current[index] = root;
+                      }
+                    }
+                    role="textbox"
+                    aria-multiline="true"
+                    aria-labelledby={id + "-area-" + index}
+                    contentEditable
+                    suppressContentEditableWarning
+                    spellCheck={false}
+                    className="min-h-24 overflow-auto whitespace-pre-wrap break-words rounded border border-slate-300 p-2 focus:border-indigo-500 focus:outline-indigo-500"
+                    style={{ textAlign: index === 0 ? "left" : index === 1 ? "center" : "right" }}
+                    onFocus={
+                      /** Records the focused region and its selection. @returns Nothing. */ () =>
+                        remember(index)
+                    }
+                    onBlur={
+                      /** Records the region and selection after the keyboard event. @returns Nothing. */ () =>
+                        remember(index)
+                    }
+                    onPointerUp={
+                      /** Records the region and selection after the pointer event. @returns Nothing. */ () =>
+                        remember(index)
+                    }
+                    onKeyUp={
+                      /** Records the region and selection after the text input event. @returns Nothing. */ () =>
+                        remember(index)
+                    }
+                  />
+                </div>
+              ),
+            )}
           </div>
         </div>
         <div className="office-dialog-actions">
@@ -437,12 +590,14 @@ export function ScHFEditDlg({ model, onCancel, onSubmit }: Props): React.JSX.Ele
             <button
               type="button"
               className="office-dialog-secondary"
-              onClick={() => {
-                model.Reset(tab);
-                for (const [index, area] of page.areas.entries())
-                  paintHeaderRegion(at(roots.current, index), area);
-                focusRegion(0, new ESelection());
-              }}
+              onClick={
+                /** Activates the "Reset" control. @returns Nothing. */ () => {
+                  model.Reset(tab);
+                  for (const [index, area] of page.areas.entries())
+                    paintHeaderRegion(at(roots.current, index), area);
+                  focusRegion(0, new ESelection());
+                }
+              }
             >
               Reset
             </button>
@@ -453,7 +608,10 @@ export function ScHFEditDlg({ model, onCancel, onSubmit }: Props): React.JSX.Ele
           <button
             type="button"
             className="office-dialog-primary"
-            onClick={() => onSubmit(model.Output())}
+            onClick={
+              /** Submits the native item set from the standalone region editor. @returns Nothing. */ () =>
+                onSubmit(model.Output())
+            }
           >
             OK
           </button>
@@ -470,63 +628,87 @@ export function ScHFEditDlg({ model, onCancel, onSubmit }: Props): React.JSX.Ele
             aria-label="Text Attributes"
             data-office-modal-panel="true"
             className="office-dialog-form w-full max-w-lg rounded-2xl border border-slate-200 bg-white shadow-2xl"
-            onKeyDown={(event) => {
-              if (event.key !== "Escape") return;
-              event.preventDefault();
-              event.stopPropagation();
-              closeAttributes();
-            }}
-            onSubmit={(event) => {
-              event.preventDefault();
-              const values = new FormData(event.currentTarget);
-              const position = Number(values.get("position"));
-              const items = [
-                [
-                  String(values.get("family")) !== family,
-                  () => familyItem(String(values.get("family"))),
-                ],
-                [
-                  Number(values.get("size")) !== size / 20,
-                  () => heightItem(Number(values.get("size"))),
-                ],
-                [values.has("bold") !== bold, () => weightItem(values.has("bold"))],
-                [values.has("italic") !== italic, () => postureItem(values.has("italic"))],
-                [
-                  values.has("underline") !== underline,
-                  () => underlineItem(values.has("underline")),
-                ],
-                [
-                  String(values.get("color")) !== hex,
-                  () =>
-                    new SvxColorItem(
-                      new Color(Number.parseInt(String(values.get("color")).slice(1), 16)),
-                      EE.EE_CHAR_COLOR,
-                    ),
-                ],
-                [
-                  position !== Math.sign(escape.GetEsc()),
-                  () =>
-                    new SvxEscapementItem(
-                      position * 33,
-                      position ? 58 : 100,
-                      EE.EE_CHAR_ESCAPEMENT,
-                    ),
-                ],
-                [
-                  Number(values.get("kerning")) * 20 !== kerning,
-                  () =>
-                    new SvxKerningItem(
-                      Math.round(Number(values.get("kerning")) * 20),
-                      EE.EE_CHAR_KERNING,
-                    ),
-                ],
-              ] as const;
-              format(
-                items.flatMap(([changed, create]) => (changed ? [create()] : [])),
-                true,
-              );
-              closeAttributes();
-            }}
+            onKeyDown={
+              /** Handles keyboard input on the "Text Attributes" control. @param event - Browser event. @returns Nothing. */ (
+                event,
+              ) => {
+                if (event.key !== "Escape") return;
+                event.preventDefault();
+                event.stopPropagation();
+                closeAttributes();
+              }
+            }
+            onSubmit={
+              /** Submits the "Text Attributes" control. @param event - Browser event. @returns Nothing. */ (
+                event,
+              ) => {
+                event.preventDefault();
+                const values = new FormData(event.currentTarget);
+                const position = Number(values.get("position"));
+                const items = [
+                  [
+                    String(values.get("family")) !== family,
+                    /** Builds the family item from the submitted character dialog. @returns Native font-family item. */ () =>
+                      familyItem(String(values.get("family"))),
+                  ],
+                  [
+                    Number(values.get("size")) !== size / 20,
+                    /** Builds the font height from the submitted point size. @returns Native font-height item. */ () =>
+                      heightItem(Number(values.get("size"))),
+                  ],
+                  [
+                    values.has("bold") !== bold,
+                    /** Builds the weight captured by the dialog's bold field. @returns Native character weight item. */ () =>
+                      weightItem(values.has("bold")),
+                  ],
+                  [
+                    values.has("italic") !== italic,
+                    /** Builds the posture captured by the dialog's italic field. @returns Native character posture item. */ () =>
+                      postureItem(values.has("italic")),
+                  ],
+                  [
+                    values.has("underline") !== underline,
+                    /** Builds the underline captured by the dialog. @returns Native underline item. */ () =>
+                      underlineItem(values.has("underline")),
+                  ],
+                  [
+                    String(values.get("color")) !== hex,
+                    /** Converts the submitted RGB value to an EditEngine color item. @returns Native character color item. */ () =>
+                      new SvxColorItem(
+                        new Color(Number.parseInt(String(values.get("color")).slice(1), 16)),
+                        EE.EE_CHAR_COLOR,
+                      ),
+                  ],
+                  [
+                    position !== Math.sign(escape.GetEsc()),
+                    /** Builds the reduced size and vertical displacement for the chosen text position. @returns Native character escapement item. */ () =>
+                      new SvxEscapementItem(
+                        position * 33,
+                        position ? 58 : 100,
+                        EE.EE_CHAR_ESCAPEMENT,
+                      ),
+                  ],
+                  [
+                    Number(values.get("kerning")) * 20 !== kerning,
+                    /** Converts the submitted character spacing to twips. @returns Native character kerning item. */ () =>
+                      new SvxKerningItem(
+                        Math.round(Number(values.get("kerning")) * 20),
+                        EE.EE_CHAR_KERNING,
+                      ),
+                  ],
+                ] as const;
+                format(
+                  items.flatMap(
+                    /** Builds a native font item only when the dialog changed that field. @param entry - Changed flag and item factory. @returns One changed item or an empty list. */ ([
+                      changed,
+                      create,
+                    ]) => (changed ? [create()] : []),
+                  ),
+                  true,
+                );
+                closeAttributes();
+              }
+            }
           >
             <DialogHeader title="Text Attributes" onClose={closeAttributes} />
             <div
@@ -534,20 +716,28 @@ export function ScHFEditDlg({ model, onCancel, onSubmit }: Props): React.JSX.Ele
               aria-label="Text attributes tabs"
               className="flex gap-2 border-b border-slate-200 px-4 pt-2"
             >
-              {attributeTabs.map((label, index) => (
-                <button
-                  type="button"
-                  role="tab"
-                  id={id + "-attribute-" + index}
-                  aria-controls={id + "-attributes-" + index}
-                  aria-selected={index === attributeTab}
-                  key={label}
-                  className="border-b-2 border-transparent px-2 pb-2 text-sm aria-selected:border-indigo-600"
-                  onClick={() => setAttributeTab(index)}
-                >
-                  {label}
-                </button>
-              ))}
+              {attributeTabs.map(
+                /** Renders one button for the source entry. @param label - Source entry. @param index - Entry index. @returns Rendered element. */ (
+                  label,
+                  index,
+                ) => (
+                  <button
+                    type="button"
+                    role="tab"
+                    id={id + "-attribute-" + index}
+                    aria-controls={id + "-attributes-" + index}
+                    aria-selected={index === attributeTab}
+                    key={label}
+                    className="border-b-2 border-transparent px-2 pb-2 text-sm aria-selected:border-indigo-600"
+                    onClick={
+                      /** Updates the attribute tab. @returns Nothing. */ () =>
+                        setAttributeTab(index)
+                    }
+                  >
+                    {label}
+                  </button>
+                ),
+              )}
             </div>
             <div className="office-dialog-content text-sm">
               <div

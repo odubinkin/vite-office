@@ -50,6 +50,7 @@ import {
   findReferenceSheet,
   FormatSheet,
   IsExcelReference,
+  referencePatterns,
 } from "./compiler.reference";
 
 /** Selects lexical symbols from the native language resource. @param resource - Actual symbols. @returns Token lookup. */
@@ -85,28 +86,7 @@ const emptyParameterSuccessors = new Set<OpCode>([
   OpCode.ocArrayClose,
   ...arraySeparators,
 ]);
-const sheetIdentifier = "(\\$?(?:'(?:[^']|'')+'|[\\p{L}\\p{N}_]+))";
-const excelSheet = new RegExp("^" + sheetIdentifier + "!", "u");
-const odfSheet = new RegExp("^" + sheetIdentifier + "\\.", "u");
-const deletedOdfSheet = /^(\$?)#REF!\./u;
-const a1Reference = /^\$?[A-Za-z]+\$?[1-9][0-9]*/u;
-const a1RangeWithEndSheet = new RegExp(
-  "^" + a1Reference.source.slice(1) + ":" + sheetIdentifier + "\\." + a1Reference.source.slice(1),
-  "u",
-);
 const nameIdentifier = /^[\p{L}_][\p{L}\p{N}_.?]*/u;
-const r1c1Offset = String.raw`(?:[0-9]+|\[[+-]?[0-9]+\])?`;
-const r1c1Row = "R" + r1c1Offset,
-  r1c1Column = "C" + r1c1Offset;
-const r1c1Cell = r1c1Row + r1c1Column;
-const referenceBoundary = String.raw`(?![\p{L}\p{N}_?\[])`;
-const r1c1Reference = new RegExp(`^${r1c1Cell}${referenceBoundary}`, "iu");
-const r1c1Range = new RegExp(
-  `^(?:${r1c1Cell}:${r1c1Cell}|${r1c1Row}(?::${r1c1Row})?|${r1c1Column}(?::${r1c1Column})?)${referenceBoundary}`,
-  "iu",
-);
-const a1Range =
-  /^(?:\$?[A-Za-z]+\$?[1-9][0-9]*:\$?[A-Za-z]+\$?[1-9][0-9]*|\$?[A-Za-z]+:\$?[A-Za-z]+|\$?[1-9][0-9]*:\$?[1-9][0-9]*)/u;
 // Existing per-realm compiler symbol bootstrap binds the classification part of
 // native ScGlobal::Init after symbols,without a replacement global service.
 ScParameterClassification.Init();
@@ -402,15 +382,24 @@ export class ScCompiler extends FormulaCompiler {
     if (token instanceof FormulaExternalToken && text(token.GetExternal()) === ANALYSIS_EDATE)
       return EDATE;
     if (token instanceof ScExternalSingleRefToken || token instanceof ScExternalDoubleRefToken)
-      return CreateStringFromExternal(this.rDoc, this.meGrammar, token, (ref) =>
-        this.MakeOneRefStrImpl(ref, false, 0, true),
+      return CreateStringFromExternal(
+        this.rDoc,
+        this.meGrammar,
+        token,
+        /** Serializes a native single-cell reference in the current convention. @param ref - Single-cell reference data. @returns Reference string. */ (
+          ref,
+        ) => this.MakeOneRefStrImpl(ref, false, 0, true),
       );
     if (token instanceof ScMatrixToken)
       return CreateStringFromMatrix(
         token.GetMatrix() as ScMatrix,
         this.meGrammar === FormulaGrammar.Grammar.GRAM_OOXML,
-        (value) => this.AppendString(value),
-        (error) => super.CreateStringFromToken(new FormulaErrorToken(error)),
+        /** Appends an encoded value to the active formula output buffer. @param value - Formula text fragment. @returns Nothing. */ (
+          value,
+        ) => this.AppendString(value),
+        /** Serializes an error through the common formula token stringifier. @param error - Native spreadsheet error. @returns Formula error text. */ (
+          error,
+        ) => super.CreateStringFromToken(new FormulaErrorToken(error)),
       );
     if (token instanceof ScSingleRefToken && token.GetOpCode() === OpCode.ocColRowName)
       return this.CreateStringFromLabel(token);
@@ -615,11 +604,11 @@ export class ScCompiler extends FormulaCompiler {
   }
   /** Recognizes the deleted sheet prefix in pre-5.1.4 ODFF references. @param source - Formula text at the current position. @param bracketed - Whether the whole enclosed reference must match. @returns Consumed source length, or zero. */
   private ParsePredetectedErrRefReference(source: string, bracketed = false): number {
-    const qualifier = deletedOdfSheet.exec(source);
+    const qualifier = referencePatterns.deletedOdfSheet.exec(source);
     if (!qualifier) return 0;
     const address = source.slice(qualifier[0].length);
-    const range = a1Range.exec(address);
-    const match = range ?? a1Reference.exec(address);
+    const range = referencePatterns.a1Range.exec(address);
+    const match = range ?? referencePatterns.a1Reference.exec(address);
     if (!match || (bracketed && match[0].length !== address.length)) return 0;
     if (range) this.ParseDoubleReference(match[0], this.aPos.Tab(), true, !!qualifier[1], true);
     else this.ParseSingleReference(match[0], this.aPos.Tab(), true, !!qualifier[1], true);
@@ -637,9 +626,11 @@ export class ScCompiler extends FormulaCompiler {
         ? podfSymbols
         : odffSymbols;
     const excel = IsExcelReference(this.meGrammar);
-    const cellPattern = this.IsR1C1() ? r1c1Reference : a1Reference;
-    const rangePattern = this.IsR1C1() ? r1c1Range : a1Range;
-    const oooRange = excel ? undefined : a1RangeWithEndSheet;
+    const cellPattern = this.IsR1C1()
+      ? referencePatterns.r1c1Reference
+      : referencePatterns.a1Reference;
+    const rangePattern = this.IsR1C1() ? referencePatterns.r1c1Range : referencePatterns.a1Range;
+    const oooRange = excel ? undefined : referencePatterns.a1RangeWithEndSheet;
     const original = text(formula);
     let first = 0,
       end = original.length;
@@ -778,7 +769,9 @@ export class ScCompiler extends FormulaCompiler {
         last = OpCode.ocPush;
         continue;
       }
-      const qualifier = (excel ? excelSheet : odfSheet).exec(remaining);
+      const qualifier = (excel ? referencePatterns.excelSheet : referencePatterns.odfSheet).exec(
+        remaining,
+      );
       if (qualifier) {
         const spelling = qualifier[1] as string;
         const address = remaining.slice(qualifier[0].length);
@@ -862,7 +855,7 @@ export class ScCompiler extends FormulaCompiler {
           if (!array.AddToken(new FormulaErrorToken(error)))
             this.SetError(FormulaError.CodeOverflow);
         } else if (!this.ParsePredetectedErrRefReference(body, true)) {
-          const qualifier = odfSheet.exec(body);
+          const qualifier = referencePatterns.odfSheet.exec(body);
           const sheet = qualifier?.[1] ?? "";
           if (!qualifier && !body.startsWith("."))
             throw new Error("Only internal ODF references are implemented");

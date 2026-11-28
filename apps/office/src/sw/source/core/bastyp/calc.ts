@@ -64,7 +64,9 @@ const unaryFunctions: Readonly<Record<string, (value: number) => number>> = {
   asin: Math.asin,
   atan: Math.atan,
   cos: Math.cos,
-  int: (value) => value | 0,
+  int: /** Coerces the UNO input to a signed 32-bit integer. @param value - Incoming numeric value. @returns Signed integer. */ (
+    value,
+  ) => value | 0,
   sign: Math.sign,
   sin: Math.sin,
   tan: Math.tan,

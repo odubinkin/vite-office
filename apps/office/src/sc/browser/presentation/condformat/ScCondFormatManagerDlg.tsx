@@ -29,7 +29,11 @@ function getCondition(format: ScConditionalFormat): string {
     case "condition":
       return [
         "Cell value is",
-        conditionChoices.find(([mode]) => mode === rule.mode)?.[1],
+        conditionChoices.find(
+          /** Checks whether `mode` equals `rule.mode`. @param entry - Candidate entry. @returns Whether the condition holds. */ ([
+            mode,
+          ]) => mode === rule.mode,
+        )?.[1],
         rule.first,
         rule.second,
       ]
@@ -38,7 +42,14 @@ function getCondition(format: ScConditionalFormat): string {
     case "formula":
       return "Formula is " + rule.first;
     case "date":
-      return "Date is " + (dateChoices.find(([date]) => date === rule.date)?.[1] ?? "");
+      return (
+        "Date is " +
+        (dateChoices.find(
+          /** Checks whether `date` equals `rule.date`. @param entry - Candidate entry. @returns Whether the condition holds. */ ([
+            date,
+          ]) => date === rule.date,
+        )?.[1] ?? "")
+      );
     case "databar":
       return "Data Bar";
     case "iconset":
@@ -50,8 +61,14 @@ function getCondition(format: ScConditionalFormat): string {
 
 /** Renders the source Range and Condition columns and routes manager decisions. @param props - Original session and callbacks. @returns Manager dialog. */
 export function ScCondFormatManagerDlg({ model, onResponse, onCancel }: Props): React.JSX.Element {
-  const [formats, setFormats] = useState(() => model.GetFormats());
-  const [selected, setSelected] = useState(() => formats[0]?.GetKey());
+  const [formats, setFormats] = useState(
+    /** Loads the current conditional formats into the manager. @returns Conditional formats. */ () =>
+      model.GetFormats(),
+  );
+  const [selected, setSelected] = useState(
+    /** Selects the first existing conditional format on open. @returns Initial selected format key. */ () =>
+      formats[0]?.GetKey(),
+  );
   const title = "Manage Conditional Formatting";
   return (
     <div
@@ -64,11 +81,15 @@ export function ScCondFormatManagerDlg({ model, onResponse, onCancel }: Props): 
         aria-label={title}
         data-office-modal-panel="true"
         className="office-dialog-form w-full max-w-xl overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl"
-        onKeyDown={(event) => {
-          if (event.key !== "Escape") return;
-          event.stopPropagation();
-          onCancel();
-        }}
+        onKeyDown={
+          /** Closes the active dialog. @param event - Browser event. @returns Nothing. */ (
+            event,
+          ) => {
+            if (event.key !== "Escape") return;
+            event.stopPropagation();
+            onCancel();
+          }
+        }
       >
         <DialogHeader title={title} onClose={onCancel} />
         <div className="office-dialog-content flex flex-wrap items-start gap-2">
@@ -85,30 +106,41 @@ export function ScCondFormatManagerDlg({ model, onResponse, onCancel }: Props): 
                 </tr>
               </thead>
               <tbody>
-                {formats.map((format) => {
-                  const key = format.GetKey();
-                  return (
-                    <tr
-                      key={key}
-                      data-selected={key === selected}
-                      className="border-t border-slate-200 data-[selected=true]:bg-indigo-50"
-                      onClick={() => setSelected(key)}
-                      onDoubleClick={() => onResponse({ kind: "edit", key })}
-                    >
-                      <td className="p-2">
-                        <button
-                          type="button"
-                          className="text-left"
-                          aria-pressed={key === selected}
-                          onClick={() => setSelected(key)}
-                        >
-                          {FormatConditionalRanges(format.GetRange(), model.document)}
-                        </button>
-                      </td>
-                      <td className="p-2">{getCondition(format)}</td>
-                    </tr>
-                  );
-                })}
+                {formats.map(
+                  /** Renders one staged conditional format row with its selection state. @param format - Native conditional format entry. @returns Selectable manager row. */ (
+                    format,
+                  ) => {
+                    const key = format.GetKey();
+                    return (
+                      <tr
+                        key={key}
+                        data-selected={key === selected}
+                        className="border-t border-slate-200 data-[selected=true]:bg-indigo-50"
+                        onClick={
+                          /** Updates the selected. @returns Nothing. */ () => setSelected(key)
+                        }
+                        onDoubleClick={
+                          /** Opens the conditional format entry on double click. @returns Nothing. */ () =>
+                            onResponse({ kind: "edit", key })
+                        }
+                      >
+                        <td className="p-2">
+                          <button
+                            type="button"
+                            className="text-left"
+                            aria-pressed={key === selected}
+                            onClick={
+                              /** Updates the selected. @returns Nothing. */ () => setSelected(key)
+                            }
+                          >
+                            {FormatConditionalRanges(format.GetRange(), model.document)}
+                          </button>
+                        </td>
+                        <td className="p-2">{getCondition(format)}</td>
+                      </tr>
+                    );
+                  },
+                )}
               </tbody>
             </table>
           </div>
@@ -116,7 +148,10 @@ export function ScCondFormatManagerDlg({ model, onResponse, onCancel }: Props): 
             <button
               type="button"
               className="office-dialog-secondary"
-              onClick={() => onResponse({ kind: "add" })}
+              onClick={
+                /** Starts creating a conditional format in the current manager session. @returns Nothing. */ () =>
+                  onResponse({ kind: "add" })
+              }
             >
               Add
             </button>
@@ -124,9 +159,11 @@ export function ScCondFormatManagerDlg({ model, onResponse, onCancel }: Props): 
               type="button"
               className="office-dialog-secondary"
               disabled={selected === undefined}
-              onClick={() => {
-                if (selected !== undefined) onResponse({ kind: "edit", key: selected });
-              }}
+              onClick={
+                /** Activates the "Edit" control. @returns Nothing. */ () => {
+                  if (selected !== undefined) onResponse({ kind: "edit", key: selected });
+                }
+              }
             >
               Edit
             </button>
@@ -134,13 +171,15 @@ export function ScCondFormatManagerDlg({ model, onResponse, onCancel }: Props): 
               type="button"
               className="office-dialog-secondary"
               disabled={selected === undefined}
-              onClick={() => {
-                if (selected === undefined) return;
-                model.Remove(selected);
-                const remaining = model.GetFormats();
-                setFormats(remaining);
-                setSelected(remaining[0]?.GetKey());
-              }}
+              onClick={
+                /** Activates the "Remove" control. @returns Nothing. */ () => {
+                  if (selected === undefined) return;
+                  model.Remove(selected);
+                  const remaining = model.GetFormats();
+                  setFormats(remaining);
+                  setSelected(remaining[0]?.GetKey());
+                }
+              }
             >
               Remove
             </button>
@@ -156,7 +195,10 @@ export function ScCondFormatManagerDlg({ model, onResponse, onCancel }: Props): 
           <button
             type="button"
             className="office-dialog-primary"
-            onClick={() => onResponse({ kind: "apply" })}
+            onClick={
+              /** Accepts all staged conditional format manager changes. @returns Nothing. */ () =>
+                onResponse({ kind: "apply" })
+            }
           >
             OK
           </button>

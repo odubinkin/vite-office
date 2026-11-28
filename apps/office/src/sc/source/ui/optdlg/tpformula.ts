@@ -49,7 +49,11 @@ export class ScTpFormulaOptions {
     const convention = FormulaGrammar.extractRefConvention(this.grammar);
     this.syntax = Math.max(
       0,
-      calcFormulaSyntaxes.findIndex((mode) => mode.convention === convention),
+      calcFormulaSyntaxes.findIndex(
+        /** Checks whether `mode.convention` equals `convention`. @param mode - Candidate entry. @returns Whether the condition holds. */ (
+          mode,
+        ) => mode.convention === convention,
+      ),
     );
     this.english = FormulaGrammar.isEnglish(this.grammar);
     this.config.copy_assign(this.original);

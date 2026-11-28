@@ -44,43 +44,58 @@ export class ScColRowNameRangesDlg {
   /** Builds the source sorted group with previews of its first four labels. @param column - Column list. @returns Entries. */
   GetEntries(column: boolean): ScLabelRangeEntry[] {
     const list = column ? this.columns : this.rows;
-    const pairs = Array.from({ length: list.size() }, (_, index) => list.at(index));
+    const pairs = Array.from(
+      { length: list.size() },
+      /** Reads a range pair from its zero-based position in the native list. @param _ - Unused generated entry. @param index - Native entry index. @returns Range pair at the requested index. */ (
+        _,
+        index,
+      ) => list.at(index),
+    );
     const doc = this.document;
     const collator = GetCollator();
-    pairs.sort((a, b) => {
-      const first = a.GetRange(0).aStart,
-        second = b.GetRange(0).aStart;
-      const firstSheet = doc.FetchTable(first.Tab())?.GetName();
-      const secondSheet = doc.FetchTable(second.Tab())?.GetName();
-      return (
-        (first.Tab() === second.Tab()
-          ? 0
-          : collator.compare(
-              firstSheet ? text(firstSheet) : "",
-              secondSheet ? text(secondSheet) : "",
-            )) ||
-        first.Col() - second.Col() ||
-        first.Row() - second.Row()
-      );
-    });
-    return pairs.map((pair) => {
-      const label = pair.GetRange(0),
-        start = label.aStart;
-      const length = column ? label.aEnd.Col() - start.Col() : label.aEnd.Row() - start.Row();
-      const samples: string[] = [];
-      for (let offset = 0; offset <= Math.min(length, 3); offset++) {
-        const address = new ScAddress(start);
-        if (column) address.IncCol(offset);
-        else address.IncRow(offset);
-        samples.push(GetLabelString(doc, address) ?? "");
-      }
-      if (length > 3) samples.push("...");
-      return {
-        column,
+    pairs.sort(
+      /** Orders label ranges using the source sheet positions and addresses. @param a - First label range pair. @param b - Second label range pair. @returns Relative display order. */ (
+        a,
+        b,
+      ) => {
+        const first = a.GetRange(0).aStart,
+          second = b.GetRange(0).aStart;
+        const firstSheet = doc.FetchTable(first.Tab())?.GetName();
+        const secondSheet = doc.FetchTable(second.Tab())?.GetName();
+        return (
+          (first.Tab() === second.Tab()
+            ? 0
+            : collator.compare(
+                firstSheet ? text(firstSheet) : "",
+                secondSheet ? text(secondSheet) : "",
+              )) ||
+          first.Col() - second.Col() ||
+          first.Row() - second.Row()
+        );
+      },
+    );
+    return pairs.map(
+      /** Builds a dialog row from the native label and corresponding data area. @param pair - Native range pair. @returns Label range row. */ (
         pair,
-        title: FormatNameReference(doc, label) + " [" + samples.join(", ") + "]",
-      };
-    });
+      ) => {
+        const label = pair.GetRange(0),
+          start = label.aStart;
+        const length = column ? label.aEnd.Col() - start.Col() : label.aEnd.Row() - start.Row();
+        const samples: string[] = [];
+        for (let offset = 0; offset <= Math.min(length, 3); offset++) {
+          const address = new ScAddress(start);
+          if (column) address.IncCol(offset);
+          else address.IncRow(offset);
+          samples.push(GetLabelString(doc, address) ?? "");
+        }
+        if (length > 3) samples.push("...");
+        return {
+          column,
+          pair,
+          title: FormatNameReference(doc, label) + " [" + samples.join(", ") + "]",
+        };
+      },
+    );
   }
 
   /** Selects a source list entry and its existing data range. @param entry - Selection. @returns Nothing. */
@@ -195,7 +210,11 @@ export class ScColRowNameRangesDlg {
     const entry = this.selected;
     if (!entry) return;
     const entries = [...this.GetEntries(true), ...this.GetEntries(false)];
-    const index = entries.findIndex(({ pair }) => pair === entry.pair);
+    const index = entries.findIndex(
+      /** Checks whether `pair` equals `entry.pair`. @param entry - Candidate entry. @returns Whether the condition holds. */ ({
+        pair,
+      }) => pair === entry.pair,
+    );
     (entry.column ? this.columns : this.rows).Remove(entry.pair);
     this.Clear();
     const columns = this.GetEntries(true);

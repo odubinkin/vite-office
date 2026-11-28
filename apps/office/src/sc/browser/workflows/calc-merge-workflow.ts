@@ -32,18 +32,24 @@ export class CalcMergeWorkflow {
     if (!this.GetState(kind).enabled) return false;
     const { controller } = this;
     const view = controller.GetViewShell();
-    const ok = await new ScCellShell(view).ExecuteMerge(kind, request, async (dialog) => {
-      const revision = controller.GetCommandStateRevision();
-      const result = await this.dialogs.Request(dialog);
-      if (
-        this.closed ||
-        view !== controller.GetViewShell() ||
-        revision !== controller.GetCommandStateRevision() ||
-        result.kind !== "accepted"
-      )
-        return;
-      return result.result;
-    });
+    const ok = await new ScCellShell(view).ExecuteMerge(
+      kind,
+      request,
+      /** Requests the native merge confirmation while retaining the active command generation. @param dialog - Merge confirmation model. @returns Accepted merge result or cancellation. */ async (
+        dialog,
+      ) => {
+        const revision = controller.GetCommandStateRevision();
+        const result = await this.dialogs.Request(dialog);
+        if (
+          this.closed ||
+          view !== controller.GetViewShell() ||
+          revision !== controller.GetCommandStateRevision() ||
+          result.kind !== "accepted"
+        )
+          return;
+        return result.result;
+      },
+    );
     if (ok) controller.SyncSheetView();
     return ok;
   }
