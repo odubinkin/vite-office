@@ -1,10 +1,11 @@
 ---
 id: "202611280725-EVK21N"
 title: "Port Writer ODT document statistics fields"
-status: "DOING"
+result_summary: "Ported the native Writer statistic owner and count fields through ODT and Worker; replayed tdf71583.odt."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "output/playwright/odf-next-checkpoint/writer-statistics-verification.md"
   findings:
     - "The original page-count-range ODT preserves the count service and Roman format while the outgoing metadata uses the native counts."
-commit: null
+commit:
+  hash: "1d35c6288c62d1349cae7a33d1494ac1da498f33"
+  message: "🧩 EVK21N writer: roundtrip ODT document statistic fields"
 comments:
   -
     author: "CODER"
     body: "Start: port the Writer statistics manager and actual ODT count field lifecycle against the pinned sources."
+  -
+    author: "CODER"
+    body: "Verified: 25 related Writer cases passed, plus layout, Worker, TypeScript, lint, dependencies, provenance and Writer inventory."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "25 related Writer tests passed across 8 files, including the original tdf71583 ODT, Worker round trip, metadata, date/time, reference fields, annotations and layout. Types, scoped lint and formatting, dependencies, provenance and Writer parity with zero violations passed."
+  -
+    type: "status"
+    at: "2026-11-28T07:45:39.556Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: 25 related Writer cases passed, plus layout, Worker, TypeScript, lint, dependencies, provenance and Writer inventory."
 doc_version: 3
-doc_updated_at: "2026-11-28T07:42:37.351Z"
+doc_updated_at: "2026-11-28T07:45:39.558Z"
 doc_updated_by: "CODER"
 description: "Implement the native Writer statistics field family and document statistic ownership across ODT import and export, layout-backed page totals and Writer Worker transfer. Port the pinned ODF page-count-range fixture and verify related Writer modules."
 sections:
