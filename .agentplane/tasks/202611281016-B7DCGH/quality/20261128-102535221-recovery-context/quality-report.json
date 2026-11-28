@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202611281016-B7DCGH",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-28T10:25:35.221Z",
+  "verdict": "pass",
+  "summary": "Pinned ODS caches and volatile dependency recalculation follow the represented Calc load semantics.",
+  "evaluated_sha": "b817eb068107cca626b61211155512d631d5e6ec",
+  "blueprint_digest": "408c4be656f75ba4b605dbd0dbabb252565f20ac57315999ed128be68a006394",
+  "findings": [
+    "The ODS packages and Worker retain current datetime formats, typed errors and cached matrix results; focused gates passed."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611281016-B7DCGH/README.md",
+    "output/playwright/odf-next-checkpoint/calc-formula-cache-verification.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
