@@ -778,7 +778,7 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
   const validations = encodeCalcValidations(document);
   const documentMetaXml = document.documentProperties.GetTransferXml();
   const docProtection = document.GetDocProtection();
-  const changeTrack = encodeCalcChangeTrack(document);
+  const changeTrack = encodeCalcChangeTrack(document, textStyles);
   const consolidation = document.GetConsolidateDlgData();
   const embeddedFonts = document.GetEmbeddedFonts();
   const fontEmbedding = [
@@ -1389,7 +1389,7 @@ function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
       decodeProtection(protection, record.docProtection, ScDocProtectionOption.NONE, "workbook");
       document.SetDocProtection(protection);
     }
-    if (record.changeTrack !== undefined) decodeCalcChangeTrack(document, record.changeTrack);
+    if (record.changeTrack !== undefined) decodeCalcChangeTrack(importer, record.changeTrack);
     document.SetAutoCalc(record.autoCalculate ?? true);
     complete = true;
     return document;

@@ -109,11 +109,13 @@ uses the workbook editability guard.
 
 Calc adopts the native change track after sheets and their cell values are
 available. The original content action number, range, acceptance state,
-previous scalar cell, dependencies, author, comment and timestamp cross ODS
-and Worker transport. The track restores the latest content value from the
-actual cell model when the document is imported.
+previous cell, dependencies, author, comment and timestamp cross ODS and
+Worker transport. Historical formulas use the native position, storage
+grammar and matrix metadata. Historical edit cells share the workbook's
+text styles. The track restores the latest content value from the actual
+cell model when the document is imported.
 
 ODS writes the original author/date anonymization under the two
 Security/Scripting flags. The tracked changes key crosses the native
-configuration settings item. Structural actions, previous rich text and
-formula cells, and interactive change recording remain outside this slice.
+configuration settings item. Structural actions and interactive change
+recording remain outside this slice.

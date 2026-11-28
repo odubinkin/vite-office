@@ -5,7 +5,8 @@
     "classification": "upstream-mechanism",
     "localPath": "apps/office/src/sc/source/filter/xml/XMLChangeTrackingExportHelper.ts",
     "localSymbols": [
-      "ScChangeTrackingExportHelper"
+      "ScChangeTrackingExportHelper",
+      "WriteFormulaCell"
     ],
     "status": "mapped",
     "evidence": {
@@ -27,19 +28,30 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/filter/xml/XMLChangeTrackingExportHelper.cxx",
           "marker": "ScChangeTrackingExportHelper::WriteChangeInfo"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/XMLChangeTrackingExportHelper.cxx",
+          "marker": "ScChangeTrackingExportHelper::WriteFormulaCell"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/XMLChangeTrackingExportHelper.cxx",
+          "marker": "ScChangeTrackingExportHelper::WriteEditCell"
         }
       ]
     },
     "upstreamPath": "sc/source/filter/xml/XMLChangeTrackingExportHelper.cxx",
     "upstreamSymbols": [
       "ScChangeTrackingExportHelper::CollectAndWriteChanges",
-      "ScChangeTrackingExportHelper::WriteChangeInfo"
+      "ScChangeTrackingExportHelper::WriteChangeInfo",
+      "ScChangeTrackingExportHelper::WriteFormulaCell",
+      "ScChangeTrackingExportHelper::WriteEditCell"
     ],
     "preservedResponsibilities": [
-      "Writes native content actions, previous cells and change author/date privacy rules."
+      "Writes native content actions, previous cells and change author/date privacy rules.",
+      "Writes historical formula addresses, grammar, matrix flags and results and exports historical edit text using workbook text styles."
     ],
     "omittedResponsibilities": [
-      "Structural actions and specialized formula, rich text and change style branches remain outside this slice."
+      "Structural actions and generated-cell branches remain outside this slice."
     ]
   }
 }

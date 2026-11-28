@@ -728,6 +728,7 @@ const entries: readonly (readonly [string, string, XMLToken])[] = [
   [ODF_NAMESPACES.style, "default-cell-style-name", XMLToken.STYLE_DEFAULT_CELL_STYLE_NAME],
   [ODF_NAMESPACES.table, "number-matrix-columns-spanned", XMLToken.TABLE_MATRIX_COLS_SPANNED],
   [ODF_NAMESPACES.table, "number-matrix-rows-spanned", XMLToken.TABLE_MATRIX_ROWS_SPANNED],
+  [ODF_NAMESPACES.table, "matrix-covered", XMLToken.TABLE_MATRIX_COVERED],
   [ODF_NAMESPACES.table, "number-columns-spanned", XMLToken.TABLE_NUMBER_COLUMNS_SPANNED],
   [ODF_NAMESPACES.table, "number-rows-spanned", XMLToken.TABLE_NUMBER_ROWS_SPANNED],
   [ODF_NAMESPACES.office, "value-type", XMLToken.TABLE_VALUE_TYPE],

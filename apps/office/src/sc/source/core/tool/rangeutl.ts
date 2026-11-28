@@ -54,6 +54,20 @@ export const ScRangeStringConverter = {
     area.nRowEnd = range.aEnd.Row();
     return true;
   },
+  /** Writes an address in the original workbook convention with the native sheet qualifier. @param address - Native cell position. @param doc - Workbook. @param convention - Output convention. @returns Address or an empty string when its sheet is absent. */
+  GetStringFromAddress(address: ScAddress, doc: ScDocument, convention: AddressConvention): string {
+    if (!doc.FetchTable(address.Tab())) return "";
+    const output = address.Format(
+      ScRefFlags.VALID | ScRefFlags.TAB_3D,
+      doc,
+      new ScAddress.Details(convention),
+    );
+    try {
+      return text(output);
+    } finally {
+      output.dispose();
+    }
+  },
   /** Writes both endpoints with their respective sheet qualifiers, as the ODF print-range attribute requires. @param ranges - Sheet areas. @param doc - Actual workbook. @param convention - Original output convention. @returns Space-delimited range addresses. */
   GetStringFromRangeList(
     ranges: Iterable<ScRange>,

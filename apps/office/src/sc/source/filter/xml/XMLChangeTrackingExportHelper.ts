@@ -4,6 +4,7 @@ import { OUStringBuffer } from "../../../../sal/inc/rtl/ustrbuf";
 import { DateTime as UnoDateTime } from "../../../../offapi/com/sun/star/util/DateTime";
 import { DateTime } from "../../../../tools/source/datetime/datetime";
 import { Converter } from "../../../../sax/source/tools/converter";
+import { FormulaGrammar } from "../../../../formula/inc/grammar";
 import type { SecurityOptionsSnapshot } from "../../../../unotools/source/config/securityoptions";
 import { SvNumFormatType } from "../../../../svl/inc/zforlist";
 import { writeNumberFormatAttributes } from "../../../../xmloff/source/style/numehelp";
@@ -12,20 +13,25 @@ import type { ScBigRange } from "../../../inc/bigrange";
 import type { ScCellValue } from "../../../inc/cellvalue";
 import type { ScDocument } from "../../../inc/document";
 import { CellType } from "../../../inc/global";
+import { ScMatrixMode, type ScFormulaCell } from "../../core/data/formulacell";
+import { ScRangeStringConverter } from "../../core/tool/rangeutl";
+import { GetString as getEditString } from "../../core/tool/editutil";
 import {
   ScChangeActionState,
   type ScChangeAction,
   type ScChangeActionContent,
 } from "../../core/tool/chgtrack";
+import { type CellTextStylePool, writeCellParagraphs } from "./xmlexprt.celltext";
 
 /** Projects the actual native change track in action order. */
 export class ScChangeTrackingExportHelper {
   private readonly userIds = new Map<string, number>();
   private readonly anonymize: boolean;
 
-  /** Binds workbook and original security preferences. @param document - Native owner. @param options - Active security flags. */
+  /** Binds workbook, the shared text style pool and original security preferences. @param document - Native owner. @param textStyles - Workbook text styles. @param options - Active security flags. */
   public constructor(
     private readonly document: ScDocument,
+    private readonly textStyles: CellTextStylePool,
     options: SecurityOptionsSnapshot,
   ) {
     this.anonymize = options.removePersonalInfoOnSaving && !options.keepRedlineInfoOnSaving;
@@ -93,16 +99,64 @@ export class ScChangeTrackingExportHelper {
     }
   }
 
-  /** Writes the original scalar cell representation. @param cell - Previous native snapshot. @param input - Original date/time input. @returns ODF tracked cell. */
+  /** Writes the original cell representation. @param cell - Previous native snapshot. @param input - Original date/time input. @returns ODF tracked cell. */
   private WriteCell(cell: ScCellValue, input: string): string {
-    const type = cell.getType();
-    if (type === CellType.CELLTYPE_NONE) return "<table:change-track-table-cell/>";
-    if (type === CellType.CELLTYPE_STRING) {
-      const shared = cell.getSharedString();
-      return `<table:change-track-table-cell office:value-type="string"><text:p>${exportText(shared ? text(shared.getString()) : "")}</text:p></table:change-track-table-cell>`;
+    switch (cell.getType()) {
+      case CellType.CELLTYPE_NONE:
+        return "<table:change-track-table-cell/>";
+      case CellType.CELLTYPE_STRING:
+        return writeTrackedString(text(cell.getSharedString().getString()));
+      case CellType.CELLTYPE_VALUE:
+        return `<table:change-track-table-cell${this.SetValueAttributes(cell.getDouble(), input)}/>`;
+      case CellType.CELLTYPE_EDIT: {
+        const edit = cell.getEditText();
+        if (!edit) return writeTrackedString("");
+        const value = getEditString(edit, this.document);
+        try {
+          return value.isEmpty()
+            ? writeTrackedString("")
+            : `<table:change-track-table-cell office:value-type="string">${writeCellParagraphs(this.textStyles.collect(edit))}</table:change-track-table-cell>`;
+        } finally {
+          value.dispose();
+        }
+      }
+      case CellType.CELLTYPE_FORMULA: {
+        const formula = cell.getFormula();
+        if (!formula) throw new Error("Missing historical Calc formula");
+        return this.WriteFormulaCell(formula);
+      }
     }
-    if (type !== CellType.CELLTYPE_VALUE)
-      throw new Error("ODS tracked previous non-scalar cells are not implemented");
+  }
+
+  /** Writes original formula position, grammar and matrix metadata. @param formula - Historical formula cell. @returns ODF tracked cell. */
+  private WriteFormulaCell(formula: ScFormulaCell): string {
+    const grammar = this.document.GetStorageGrammar();
+    const prefix = grammar === FormulaGrammar.Grammar.GRAM_ODFF ? "of" : "oooc";
+    const address = ScRangeStringConverter.GetStringFromAddress(
+      formula.aPos,
+      this.document,
+      FormulaGrammar.AddressConvention.CONV_OOO,
+    );
+    const source = formula.GetFormula(grammar);
+    try {
+      const value = text(source);
+      const matrix = formula.GetMatrixFlag();
+      const code = matrix === ScMatrixMode.NONE ? value : value.slice(1, -1);
+      let attributes = ` table:cell-address="${escapeXml(address)}" table:formula="${prefix}:${escapeXml(code)}"`;
+      if (matrix === ScMatrixMode.Formula) {
+        const [columns, rows] = formula.GetMatColsRows() ?? [0, 0];
+        attributes += ` table:number-matrix-columns-spanned="${columns}" table:number-matrix-rows-spanned="${rows}"`;
+      } else if (matrix === ScMatrixMode.Reference) attributes += ' table:matrix-covered="true"';
+      return formula.IsValue()
+        ? `<table:change-track-table-cell${attributes}${this.SetValueAttributes(formula.GetValue(), value)}/>`
+        : writeTrackedString(text(formula.GetString().getString()), attributes);
+    } finally {
+      source.dispose();
+    }
+  }
+
+  /** Writes a native numeric value and its recognized date or time spelling. @param value - Numeric cell result. @param input - Original input text or formula. @returns ODF value attributes. */
+  private SetValueAttributes(value: number, input: string): string {
     const format = this.document.GetFormatTable();
     if (input) {
       const lexical = unicode(input);
@@ -112,14 +166,22 @@ export class ScChangeTrackingExportHelper {
         if (format.IsNumberFormat(lexical, key, parsed)) {
           const kind = format.GetType(key[0]) & ~SvNumFormatType.DEFINED;
           if (kind === SvNumFormatType.DATE || kind === SvNumFormatType.TIME)
-            return `<table:change-track-table-cell${writeNumberFormatAttributes(format, key[0], parsed[0], format.GetNullDate())}/>`;
+            return writeNumberFormatAttributes(format, key[0], parsed[0], format.GetNullDate());
         }
       } finally {
         lexical.dispose();
       }
     }
-    return `<table:change-track-table-cell${writeNumberFormatAttributes(format, 0, cell.getDouble(), format.GetNullDate())}/>`;
+    return writeNumberFormatAttributes(format, 0, value, format.GetNullDate());
   }
+}
+
+/** Writes the original string cell and optional paragraph. @param value - Actual cell text. @param attributes - Optional formula attributes. @returns ODF tracked cell. */
+function writeTrackedString(value: string, attributes = ""): string {
+  const element = `<table:change-track-table-cell${attributes} office:value-type="string"`;
+  return value
+    ? `${element}><text:p>${exportText(value)}</text:p></table:change-track-table-cell>`
+    : `${element}/>`;
 }
 
 /** Writes the original compact or ranged address. @param range - Native bounds. @returns ODF cell address. */

@@ -967,7 +967,7 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
         }
       }
       this.docImport.finalize();
-      this.changeTrackingImportHelper?.CreateChangeTrack(this.document);
+      this.changeTrackingImportHelper?.CreateChangeTrack(this);
       this.SetStringRefSyntaxIfMissing();
       this.FinalizeConditionalFormats();
       this.FinalizeValidations();

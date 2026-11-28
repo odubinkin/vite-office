@@ -20,16 +20,19 @@
         "apps/office/src/sc/source/filter/xml/ods-tracked-cell-content.test.ts",
         "vendor/libreoffice-reference/sc/source/filter/xml/XMLChangeTrackingExportHelper.cxx"
       ],
-      "justification": "Writes native content actions, previous cells and change author/date privacy rules. Structural actions and specialized formula, rich text and change style branches remain outside this slice.",
+      "justification": "Writes native content actions, previous cells and change author/date privacy rules. Structural actions and generated-cell branches remain outside this slice. Writes historical formula addresses, grammar, matrix flags and results and exports historical edit text using workbook text styles.",
       "knownViolations": [],
       "localSymbols": [
-        "ScChangeTrackingExportHelper"
+        "ScChangeTrackingExportHelper",
+        "WriteFormulaCell"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sc/source/filter/xml/XMLChangeTrackingExportHelper.cxx",
       "upstreamSymbols": [
         "ScChangeTrackingExportHelper::CollectAndWriteChanges",
-        "ScChangeTrackingExportHelper::WriteChangeInfo"
+        "ScChangeTrackingExportHelper::WriteChangeInfo",
+        "ScChangeTrackingExportHelper::WriteFormulaCell",
+        "ScChangeTrackingExportHelper::WriteEditCell"
       ]
     }
   }

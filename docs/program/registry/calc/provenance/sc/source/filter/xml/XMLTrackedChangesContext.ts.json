@@ -5,7 +5,8 @@
     "classification": "upstream-mechanism",
     "localPath": "apps/office/src/sc/source/filter/xml/XMLTrackedChangesContext.ts",
     "localSymbols": [
-      "ScXMLTrackedChangesContext"
+      "ScXMLTrackedChangesContext",
+      "ScXMLChangeTextPContext"
     ],
     "status": "mapped",
     "evidence": {
@@ -27,19 +28,25 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/filter/xml/XMLTrackedChangesContext.cxx",
           "marker": "ScXMLContentChangeContext::endFastElement"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/XMLTrackedChangesContext.cxx",
+          "marker": "ScXMLChangeTextPContext::createFastChildContext"
         }
       ]
     },
     "upstreamPath": "sc/source/filter/xml/XMLTrackedChangesContext.cxx",
     "upstreamSymbols": [
       "ScXMLTrackedChangesContext::createFastChildContext",
-      "ScXMLContentChangeContext::endFastElement"
+      "ScXMLContentChangeContext::endFastElement",
+      "ScXMLChangeTextPContext::createFastChildContext"
     ],
     "preservedResponsibilities": [
-      "Imports native change information, action identifiers, previous scalar cells and dependency IDs."
+      "Imports native change information, action identifiers, previous cells and dependency IDs.",
+      "Decodes original scalar, formula and formatted previous-cell payloads with a first-paragraph fast path."
     ],
     "omittedResponsibilities": [
-      "Structural and non-scalar previous-cell branches are not admitted."
+      "Structural actions are outside this slice."
     ]
   }
 }

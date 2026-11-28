@@ -8408,3 +8408,13 @@ the scalar as a float. Calc follows the same assignments.
 - [Original cell creation and fallback](../../vendor/libreoffice-reference/sc/source/filter/xml/XMLChangeTrackingImportHelper.cxx#L53)
 - [Original content action constructor](../../vendor/libreoffice-reference/sc/source/core/tool/chgtrack.cxx#L1244)
 - [Original value attribute selection](../../vendor/libreoffice-reference/sc/source/filter/xml/XMLChangeTrackingExportHelper.cxx#L213)
+
+### CALC-876 — The first tracked cell paragraph reads its space count from the paragraph
+
+The simple text path in the first tracked cell paragraph obtains the repeat
+count for a space element from the paragraph's attributes. A standard
+`text:s text:c="5"` therefore yields one space in that path. Once the
+paragraph switches to formatted edit text, the shared text importer uses the
+space element's own attributes. Calc follows the original transition.
+
+- [Original tracked first-paragraph child handling](../../vendor/libreoffice-reference/sc/source/filter/xml/XMLTrackedChangesContext.cxx#L657)

@@ -20,16 +20,18 @@
         "apps/office/src/sc/source/filter/xml/ods-tracked-cell-content.test.ts",
         "vendor/libreoffice-reference/sc/source/filter/xml/XMLTrackedChangesContext.cxx"
       ],
-      "justification": "Imports native change information, action identifiers, previous scalar cells and dependency IDs. Structural and non-scalar previous-cell branches are not admitted.",
+      "justification": "Imports native change information, action identifiers, previous cells and dependency IDs. Structural actions are outside this slice. Decodes original scalar, formula and formatted previous-cell payloads with a first-paragraph fast path.",
       "knownViolations": [],
       "localSymbols": [
-        "ScXMLTrackedChangesContext"
+        "ScXMLTrackedChangesContext",
+        "ScXMLChangeTextPContext"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sc/source/filter/xml/XMLTrackedChangesContext.cxx",
       "upstreamSymbols": [
         "ScXMLTrackedChangesContext::createFastChildContext",
-        "ScXMLContentChangeContext::endFastElement"
+        "ScXMLContentChangeContext::endFastElement",
+        "ScXMLChangeTextPContext::createFastChildContext"
       ]
     }
   }

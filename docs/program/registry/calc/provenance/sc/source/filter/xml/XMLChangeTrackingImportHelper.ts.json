@@ -5,7 +5,9 @@
     "classification": "upstream-mechanism",
     "localPath": "apps/office/src/sc/source/filter/xml/XMLChangeTrackingImportHelper.ts",
     "localSymbols": [
-      "ScXMLChangeTrackingImportHelper"
+      "ScXMLChangeTrackingImportHelper",
+      "ScMyCellInfo",
+      "createPreviousFormulaCell"
     ],
     "status": "mapped",
     "evidence": {
@@ -27,16 +29,22 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/filter/xml/XMLChangeTrackingImportHelper.cxx",
           "marker": "ScXMLChangeTrackingImportHelper::GetIDFromString"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/XMLChangeTrackingImportHelper.cxx",
+          "marker": "ScMyCellInfo::CreateCell"
         }
       ]
     },
     "upstreamPath": "sc/source/filter/xml/XMLChangeTrackingImportHelper.cxx",
     "upstreamSymbols": [
       "ScXMLChangeTrackingImportHelper::CreateChangeTrack",
-      "ScXMLChangeTrackingImportHelper::GetIDFromString"
+      "ScXMLChangeTrackingImportHelper::GetIDFromString",
+      "ScMyCellInfo::CreateCell"
     ],
     "preservedResponsibilities": [
-      "Reconstructs native content actions in insertion, dependency and current-cell passes."
+      "Reconstructs native content actions in insertion, dependency and current-cell passes.",
+      "Reconstructs formula snapshots using the authored position, grammar and matrix metadata, and creates edit cells through the native text engine."
     ],
     "omittedResponsibilities": [
       "Other change action types and generated-cell branches remain outside this slice."

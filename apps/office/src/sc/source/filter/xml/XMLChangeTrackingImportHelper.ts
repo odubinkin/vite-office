@@ -1,19 +1,62 @@
 /** @fileoverview Reconstructs native Calc content change actions from the ODF loading pass. */
 import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { Converter } from "../../../../sax/source/tools/converter";
+import { FormulaGrammar } from "../../../../formula/inc/grammar";
 import { ScAddress } from "../../../inc/address";
 import { ScCellValue } from "../../../inc/cellvalue";
 import type { ScDocument } from "../../../inc/document";
+import { ScFormulaCell, ScMatrixMode } from "../../core/data/formulacell";
+import { ScRangeStringConverter } from "../../core/tool/rangeutl";
 import {
   ScChangeActionContent,
   ScChangeTrack,
   type ScChangeActionInfo,
 } from "../../core/tool/chgtrack";
+import { createCellEditText } from "./xmlcelli.edit";
+import type { ScXMLFormula, ScXMLImport } from "./xmlimprt";
+import type { CellTextParagraph } from "./xmlexprt.celltext";
 
-/** Native loader state for the supported scalar previous cell. */
-export interface ScMyCellInfo {
-  readonly value: number | string | undefined;
-  readonly inputString: string;
+/** Native deferred formula attributes from a tracked change cell. */
+export interface ScMyFormulaInfo extends ScXMLFormula {
+  readonly address: string;
+  readonly matrix: ScMatrixMode;
+  readonly columns: number;
+  readonly rows: number;
+}
+
+/** Original native loader state for a previous cell and its optional input spelling. */
+export class ScMyCellInfo {
+  /** Stores parsed data until the original document and formula references are ready. @param value - Parsed previous snapshot. @param inputString - Original input spelling. */
+  public constructor(
+    private readonly value?:
+      number | string | ScMyFormulaInfo | { paragraphs: CellTextParagraph[] },
+    public readonly inputString = "",
+  ) {}
+
+  /** Builds the original cell after the workbook is populated. @param importer - Style and document owner. @returns Owned cell. */
+  public CreateCell(importer: ScXMLImport): ScCellValue {
+    const document = importer.GetDocument();
+    const value = this.value;
+    if (typeof value !== "object") return createPreviousCell(document, value);
+    if ("paragraphs" in value) {
+      const edit = createCellEditText(importer, value.paragraphs);
+      try {
+        return new ScCellValue(edit);
+      } finally {
+        edit.dispose();
+      }
+    }
+    if (!value.source || !value.address) return new ScCellValue();
+    const address = new ScAddress();
+    ScRangeStringConverter.GetAddressFromString(
+      address,
+      value.address,
+      document,
+      FormulaGrammar.AddressConvention.CONV_OOO,
+      [0],
+    );
+    return createPreviousFormulaCell(document, address, value);
+  }
 }
 
 /** Loaded content change before linking its dependencies. */
@@ -45,13 +88,14 @@ export class ScXMLChangeTrackingImportHelper {
     if (action.actionNumber > 0) this.actions.push(action);
   }
 
-  /** Reconstructs the native actions in their original three import passes. @param document - Fully populated workbook. */
-  public CreateChangeTrack(document: ScDocument): void {
+  /** Reconstructs the native actions in their original three import passes. @param importer - Importer for the fully populated workbook. */
+  public CreateChangeTrack(importer: ScXMLImport): void {
+    const document = importer.GetDocument();
     const track = new ScChangeTrack(document);
     const loaded: ScMyContentAction[] = [];
     try {
       for (const action of this.actions) {
-        const cell = createPreviousCell(document, action.oldCell.value);
+        const cell = action.oldCell.CreateCell(importer);
         try {
           if (
             track.AppendLoaded(
@@ -107,6 +151,29 @@ export class ScXMLChangeTrackingImportHelper {
     } finally {
       this.actions.length = 0;
     }
+  }
+}
+
+/** Creates an owned historical formula at the original cell position and matrix geometry. @param document - Workbook. @param address - Original position. @param value - Deferred historical formula. @returns Owned cell. */
+export function createPreviousFormulaCell(
+  document: ScDocument,
+  address: ScAddress,
+  value: Omit<ScMyFormulaInfo, "address">,
+): ScCellValue {
+  const source = unicode(value.source);
+  try {
+    const formula = new ScFormulaCell(document, address, source, value.grammar, value.matrix);
+    const cell = new ScCellValue();
+    cell.set(formula);
+    try {
+      if (value.columns || value.rows) formula.SetMatColsRows(value.columns, value.rows);
+      return cell;
+    } catch (error) {
+      cell.clear();
+      throw error;
+    }
+  } finally {
+    source.dispose();
   }
 }
 

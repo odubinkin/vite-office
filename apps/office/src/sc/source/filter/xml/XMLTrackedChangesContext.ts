@@ -1,4 +1,4 @@
-/** @fileoverview Native ODF tracked-change context and its scalar content-action children. */
+/** @fileoverview Native ODF tracked-change context and the original previous-cell children. */
 import { decodeBase64 } from "../../../../comphelper/source/misc/base64";
 import { toDouble } from "../../../../o3tl/inc/string_view";
 import { Converter } from "../../../../sax/source/tools/converter";
@@ -14,13 +14,16 @@ import { XMLToken as X } from "../../../../xmloff/source/core/xmltoken";
 import { SvXMLUnitConverter } from "../../../../xmloff/source/core/xmluconv";
 import { ScBigRange } from "../../../inc/bigrange";
 import { ScChangeActionState as State } from "../../core/tool/chgtrack";
+import { ScMatrixMode } from "../../core/data/formulacell";
 import { ScXMLCellTextParaContext } from "./celltextparacontext";
 import { ScXMLImportContext } from "./importcontext";
 import {
   ScXMLChangeTrackingImportHelper,
-  type ScMyCellInfo,
+  ScMyCellInfo,
+  type ScMyFormulaInfo,
 } from "./XMLChangeTrackingImportHelper";
 import type { ScXMLImport } from "./xmlimprt";
+import type { CellTextParagraph } from "./xmlexprt.celltext";
 
 /** Dispatches the represented original tracked cell content actions. */
 export class ScXMLTrackedChangesContext extends ScXMLImportContext {
@@ -61,7 +64,7 @@ class ScXMLContentChangeContext extends ScXMLImportContext {
   private timestamp = new DateTime(DateTime.EMPTY);
   private comment = "";
   private previousAction = 0;
-  private oldCell: ScMyCellInfo = { value: undefined, inputString: "" };
+  private oldCell = new ScMyCellInfo();
   private readonly dependencies: number[] = [];
 
   /** Reads the original action ID and acceptance. @param owner - Workbook importer. @param attributes - Action attributes. @param helper - Deferred track owner. */
@@ -105,9 +108,13 @@ class ScXMLContentChangeContext extends ScXMLImportContext {
         this.previousAction = ScXMLChangeTrackingImportHelper.GetIDFromString(
           attributes.get(X.TABLE_ID),
         );
-        return new ScXMLPreviousContext(this.GetScImport(), (cell) => {
-          this.oldCell = cell;
-        });
+        return new ScXMLPreviousContext(
+          this.GetScImport(),
+          Number(this.range.aStart.GetVars()[2]),
+          (cell) => {
+            this.oldCell = cell;
+          },
+        );
       default:
         return this.createUnknownChildContext();
     }
@@ -231,6 +238,7 @@ class ScXMLPreviousContext extends ScXMLImportContext {
   /** Binds the old cell to the current action. @param owner - Workbook importer. @param receive - Cell callback. */
   public constructor(
     owner: ScXMLImport,
+    private readonly tab: number,
     private readonly receive: (cell: ScMyCellInfo) => void,
   ) {
     super(owner);
@@ -241,27 +249,46 @@ class ScXMLPreviousContext extends ScXMLImportContext {
     attributes: FastAttributeList,
   ): SvXMLImportContext {
     return element === X.TABLE_CHANGE_TRACK_TABLE_CELL
-      ? new ScXMLChangeCellContext(this.GetScImport(), attributes, this.receive)
+      ? new ScXMLChangeCellContext(this.GetScImport(), attributes, this.tab, this.receive)
       : new SvXMLIgnoreContext(true);
   }
 }
 
-/** Maps the original tracked previous scalar cell values. */
+/** Maps the original tracked scalar, formula and edit cells. */
 class ScXMLChangeCellContext extends ScXMLImportContext {
   private readonly input: number;
   private readonly kind: string;
   private empty = true;
-  private paragraph: string | undefined;
+  private richText = false;
+  private readonly paragraphs: CellTextParagraph[] = [];
+  private readonly formula: ScMyFormulaInfo | undefined;
 
-  /** Reads the original scalar attributes. @param owner - Workbook importer. @param attributes - Previous cell attributes. @param receive - Cell callback. */
+  /** Reads the original previous-cell attributes. @param owner - Workbook importer. @param attributes - Previous cell attributes. @param tab - Sheet of the tracked action. @param receive - Cell callback. */
   public constructor(
     owner: ScXMLImport,
     attributes: FastAttributeList,
+    private readonly tab: number,
     private readonly receive: (cell: ScMyCellInfo) => void,
   ) {
     super(owner);
-    if (attributes.get(X.TABLE_FORMULA) !== null)
-      throw new Error("ODS tracked previous formulas are not implemented");
+    const formula = attributes.get(X.TABLE_FORMULA);
+    if (formula !== null) {
+      const columns = attributes.getAsInteger(X.TABLE_MATRIX_COLS_SPANNED) ?? 0;
+      const rows = attributes.getAsInteger(X.TABLE_MATRIX_ROWS_SPANNED) ?? 0;
+      this.formula = {
+        ...owner.ExtractFormulaNamespaceGrammar(formula, attributes),
+        address: attributes.get(X.TABLE_CELL_ADDRESS) ?? "",
+        matrix:
+          attributes.get(X.TABLE_MATRIX_COVERED) === "true"
+            ? ScMatrixMode.Reference
+            : columns && rows
+              ? ScMatrixMode.Formula
+              : ScMatrixMode.NONE,
+        columns,
+        rows,
+      };
+      this.empty = false;
+    }
     this.kind = attributes.get(X.TABLE_VALUE_TYPE) ?? "";
     const input: [number] = [0];
     const zero = owner.GetDocument().GetFormatTable().GetNullDate();
@@ -284,32 +311,79 @@ class ScXMLChangeCellContext extends ScXMLImportContext {
     this.input = input[0];
   }
 
-  /** Uses the native cell text context for a scalar paragraph. @param element - Content token. @returns Cell text parser or absence. */
-  public override createFastChildContext(element: X): SvXMLImportContext {
+  /** Uses the original first paragraph fast path before switching to edit text. @param element - Content token. @param attributes - Paragraph attributes. @returns Cell text parser or absence. */
+  public override createFastChildContext(
+    element: X,
+    attributes: FastAttributeList,
+  ): SvXMLImportContext {
     if (element !== X.TEXT_P) return new SvXMLIgnoreContext(true);
-    if (this.paragraph !== undefined)
-      throw new Error("ODS tracked previous rich text is not implemented");
     this.empty = false;
-    return new ScXMLCellTextParaContext(
-      {
-        GetScImport: this.GetScImport.bind(this),
-        setParagraph: (spans) => {
-          if (spans.some(([, style, field]) => style || field))
-            throw new Error("ODS tracked previous rich text is not implemented");
-          this.paragraph = spans.map(([value]) => value).join("");
-        },
-      },
-      0,
-    );
+    const owner = {
+      GetScImport: this.GetScImport.bind(this),
+      setParagraph: this.SetParagraph.bind(this),
+    };
+    if (this.paragraphs.length) {
+      this.richText = true;
+      return new ScXMLCellTextParaContext(owner, this.tab);
+    }
+    return new ScXMLChangeTextPContext(owner, this.tab, attributes, () => {
+      this.richText = true;
+    });
   }
 
-  /** Publishes the original empty, text or numeric result. */
+  /** Receives the actual cell edit spans from one paragraph. @param paragraph - Parsed paragraph. */
+  private SetParagraph(paragraph: CellTextParagraph): void {
+    this.paragraphs.push(paragraph);
+  }
+
+  /** Publishes the original empty, scalar, formula or edit-text result. */
   public override endFastElement(): void {
+    if (this.richText) {
+      this.receive(new ScMyCellInfo({ paragraphs: this.paragraphs }));
+      return;
+    }
+    if (this.formula) {
+      this.receive(new ScMyCellInfo(this.formula));
+      return;
+    }
     const numeric = this.kind === "float" || this.kind === "date" || this.kind === "time";
-    const value = this.empty ? undefined : !numeric && this.paragraph ? this.paragraph : this.input;
-    this.receive({
-      value,
-      inputString: this.kind === "date" || this.kind === "time" ? (this.paragraph ?? "") : "",
-    });
+    const paragraph = this.paragraphs[0]?.map(([value]) => value).join("") ?? "";
+    const value = this.empty ? undefined : !numeric && paragraph ? paragraph : this.input;
+    this.receive(
+      new ScMyCellInfo(value, this.kind === "date" || this.kind === "time" ? paragraph : ""),
+    );
+  }
+}
+
+/** Original first tracked-cell paragraph, which uses its own attributes for the simple space path. */
+class ScXMLChangeTextPContext extends ScXMLCellTextParaContext {
+  private edit = false;
+
+  /** Captures the first paragraph and the callback that creates the edit cell. @param owner - Cell paragraph owner. @param tab - Sheet index. @param attributes - First paragraph attributes. @param enterEdit - Marks the cell as edit text. */
+  public constructor(
+    owner: ConstructorParameters<typeof ScXMLCellTextParaContext>[0],
+    tab: number,
+    private readonly attributes: FastAttributeList,
+    private readonly enterEdit: () => void,
+  ) {
+    super(owner, tab);
+  }
+
+  /** Promotes complex inline content to the shared Calc edit text context. @param element - Inline token. @param attributes - Child attributes. @returns Child handler. */
+  public override createFastChildContext(
+    element: X,
+    attributes: FastAttributeList,
+  ): SvXMLImportContext {
+    if (!this.edit && element === X.TEXT_S) {
+      const count = this.attributes.getAsInteger(X.TEXT_C) || 1;
+      if (count > 1_000_000) throw new Error("ODS text space limit exceeded");
+      this.PushSpan(" ".repeat(Math.max(0, count)), "");
+      return new SvXMLIgnoreContext(true);
+    }
+    if (!this.edit) {
+      this.edit = true;
+      this.enterEdit();
+    }
+    return super.createFastChildContext(element, attributes);
   }
 }

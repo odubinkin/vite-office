@@ -110,6 +110,8 @@ export class ScChangeActionContent extends ScChangeAction {
     }
     this.oldValue = oldValue;
     this.oldCell = ScCellValue.move(oldCell);
+    if (this.oldCell.getType() === CellType.CELLTYPE_FORMULA)
+      this.oldCell.getFormula()?.SetInChangeTrack(true);
   }
 
   /** Borrows the original preceding cell. @returns Old cell. */
@@ -130,6 +132,7 @@ export class ScChangeActionContent extends ScChangeAction {
   /** Copies the cell value supplied by the next content action or current sheet. @param cell - Source snapshot. */
   public SetNewCell(cell: ScCellValue): void {
     const copy = new ScCellValue(cell);
+    if (copy.getType() === CellType.CELLTYPE_FORMULA) copy.getFormula()?.SetInChangeTrack(true);
     this.newCell.clear();
     this.newCell = copy;
   }

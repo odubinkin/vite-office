@@ -308,14 +308,15 @@ export class ScXMLExport {
     tableProtection: ReadonlyMap<Readonly<ScTableProtection>, string> = new Map(),
     docProtection = "",
   ): string {
-    const trackedChanges = new ScChangeTrackingExportHelper(
-      this.document,
-      this.options.securityOptions ?? captureSecurityOptions(),
-    ).CollectAndWriteChanges();
     this.fontPool = new XMLFontAutoStylePool();
     if (this.document.IsEmbedFonts())
       for (const font of this.document.GetEmbeddedFonts()) this.fontPool.AddEmbedded(font);
     this.textStyles = new CellTextStylePool(this.document, this.fontPool);
+    const trackedChanges = new ScChangeTrackingExportHelper(
+      this.document,
+      this.textStyles,
+      this.options.securityOptions ?? captureSecurityOptions(),
+    ).CollectAndWriteChanges();
     for (const which of [100, 111, 116]) {
       const font = (this.document.GetPool() as ScDocumentPool).GetUserOrPoolDefaultItem(
         which,

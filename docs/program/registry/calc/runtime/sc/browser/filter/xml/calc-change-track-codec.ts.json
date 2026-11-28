@@ -19,7 +19,7 @@
         "apps/office/src/sc/browser/filter/xml/calc-change-track-codec.ts",
         "apps/office/src/sc/source/filter/xml/ods-tracked-cell-content.test.ts"
       ],
-      "justification": "Transfers native Calc content changes and original action references through the browser Worker graph.",
+      "justification": "Transfers native Calc content changes and original action references through the browser Worker graph. Transports the formula positions and matrix metadata and the workbook text styles of native previous and linked change cells.",
       "knownViolations": [],
       "localSymbols": [
         "encodeCalcChangeTrack",
