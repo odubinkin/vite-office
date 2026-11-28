@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202611281035-E2Q2ZZ",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-28T10:42:45.901Z",
+  "verdict": "pass",
+  "summary": "Native search mode now reaches the existing Calc criteria paths from ODS load.",
+  "evaluated_sha": "8301ef83ba1153ef61b2392776583d4f0da4f157",
+  "blueprint_digest": "38f33d4949a7a717b7b8595630b1754abcd66ef7200112880bf9782ef971149e",
+  "findings": [
+    "Matrix HLOOKUP and VLOOKUP remain literal as in upstream; browser regex engine uses the existing platform binding."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611281035-E2Q2ZZ/README.md",
+    "output/playwright/odf-next-checkpoint/calc-odf-regexp-verification.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

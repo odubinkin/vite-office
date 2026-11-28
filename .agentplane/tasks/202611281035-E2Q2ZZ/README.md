@@ -4,7 +4,7 @@ title: "Align Calc ODS formula search mode with native criteria evaluation"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 4
+revision: 6
 origin:
   system: "manual"
 depends_on: []
@@ -19,11 +19,27 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-11-28T10:42:45.422Z"
+  updated_by: "CODER"
+  note: "10 focused Calc checks including ODS recalculation after Worker and save/reopen, plus TypeScript, lint, boundaries, provenance, Calc inventory and diff checks passed."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-11-28T10:42:45.901Z"
+  updated_by: "EVALUATOR"
+  note: "Native search mode now reaches the existing Calc criteria paths from ODS load."
+  evaluated_sha: "8301ef83ba1153ef61b2392776583d4f0da4f157"
+  blueprint_digest: "38f33d4949a7a717b7b8595630b1754abcd66ef7200112880bf9782ef971149e"
+  evidence_refs:
+    - ".agentplane/tasks/202611281035-E2Q2ZZ/README.md"
+    - ".agentplane/tasks/202611281035-E2Q2ZZ/quality/20261128-104245901-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202611281035-E2Q2ZZ/quality/20261128-104245901-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202611281035-E2Q2ZZ/quality/20261128-104245901-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202611281035-E2Q2ZZ/blueprint/resolved-snapshot.json"
+    - "output/playwright/odf-next-checkpoint/calc-odf-regexp-verification.md"
+  findings:
+    - "Matrix HLOOKUP and VLOOKUP remain literal as in upstream; browser regex engine uses the existing platform binding."
 commit: null
 comments:
   -
@@ -37,8 +53,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: apply the original ODS search-mode setting to represented formula criteria."
+  -
+    type: "verify"
+    at: "2026-11-28T10:42:45.422Z"
+    author: "CODER"
+    state: "ok"
+    note: "10 focused Calc checks including ODS recalculation after Worker and save/reopen, plus TypeScript, lint, boundaries, provenance, Calc inventory and diff checks passed."
 doc_version: 3
-doc_updated_at: "2026-11-28T10:35:48.911Z"
+doc_updated_at: "2026-11-28T10:42:45.475Z"
 doc_updated_by: "CODER"
 description: "Connect ODS regular-expression, wildcard and literal calculation defaults with native query-entry text search, worksheet and matrix lookup, and represented conditional and database formulas. Use the established browser regex service at workbook and Worker boundaries, keep original ODF settings and name ownership, and verify affected cases with pinned criteria assertions and ODS reopening."
 sections:
@@ -58,6 +80,36 @@ sections:
     3. Compare the final result against ## Scope and record any residual follow-up in ## Findings. Expected: open edges are explicit rather than implicit.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-11-28T10:42:45.422Z — VERIFY — ok
+
+    By: CODER
+
+    Note: 10 focused Calc checks including ODS recalculation after Worker and save/reopen, plus TypeScript, lint, boundaries, provenance, Calc inventory and diff checks passed.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-28T10:35:48.911Z, excerpt_hash=sha256:9abd0511baab4dfe19972762cbbef462b2f3eb099123112e4c7be8ceffd8e65f
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611281035-E2Q2ZZ/blueprint/resolved-snapshot.json
+    - old_digest: 38f33d4949a7a717b7b8595630b1754abcd66ef7200112880bf9782ef971149e
+    - current_digest: 38f33d4949a7a717b7b8595630b1754abcd66ef7200112880bf9782ef971149e
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202611281035-E2Q2ZZ
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202611281035-E2Q2ZZ
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -91,6 +143,36 @@ PLANNER fallback scaffold for "Align Calc ODS formula search mode with native cr
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-11-28T10:42:45.422Z — VERIFY — ok
+
+By: CODER
+
+Note: 10 focused Calc checks including ODS recalculation after Worker and save/reopen, plus TypeScript, lint, boundaries, provenance, Calc inventory and diff checks passed.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-28T10:35:48.911Z, excerpt_hash=sha256:9abd0511baab4dfe19972762cbbef462b2f3eb099123112e4c7be8ceffd8e65f
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611281035-E2Q2ZZ/blueprint/resolved-snapshot.json
+- old_digest: 38f33d4949a7a717b7b8595630b1754abcd66ef7200112880bf9782ef971149e
+- current_digest: 38f33d4949a7a717b7b8595630b1754abcd66ef7200112880bf9782ef971149e
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202611281035-E2Q2ZZ
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202611281035-E2Q2ZZ
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
