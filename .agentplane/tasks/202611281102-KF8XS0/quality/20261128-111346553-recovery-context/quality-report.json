@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202611281102-KF8XS0",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-28T11:13:46.553Z",
+  "verdict": "pass",
+  "summary": "Native paragraph visibility follows ODT field conditions and represented Writer view layout.",
+  "evaluated_sha": "7fde1272b270feeb12f6f519ded7066ad9569502",
+  "blueprint_digest": "a0ba524bfb2c0b3f26c839eaab666e6582e55939bf33b8a005f9957133146964",
+  "findings": [
+    "Preserves the non-hiding field precedence and a usable first body frame. Desktop field-name UI and PDF geometry remain outside the represented slice."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611281102-KF8XS0/README.md",
+    "output/playwright/odf-next-checkpoint/writer-hidden-paragraph-verification.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
