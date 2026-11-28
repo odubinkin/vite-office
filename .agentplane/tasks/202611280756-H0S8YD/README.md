@@ -1,10 +1,11 @@
 ---
 id: "202611280756-H0S8YD"
 title: "Port Writer ODT page numbers and continuation fields"
-status: "DOING"
+result_summary: "Ported page number and continuation fields with page descriptor numbering, actual body frame expansion and Worker round trip."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "output/playwright/odf-next-checkpoint/writer-page-number-verification.md"
   findings:
     - "Original ODT keeps its PageNumber text field and the two-page case verifies Roman format, authored adjustment, and the absent next page."
-commit: null
+commit:
+  hash: "ea23a94dec5a80772eaea30c0a8cc52682a7b1b6"
+  message: "🧩 H0S8YD writer: roundtrip page numbers and continuations"
 comments:
   -
     author: "CODER"
     body: "Start: port the original page descriptor numbering property and attached page-number/continuation lifecycle."
+  -
+    author: "CODER"
+    body: "Verified: 46 Writer related cases, types, lint, formatting, dependencies, provenance and runtime parity."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "46 related Writer tests passed, including the original whitespace page number, a native two-page body layout, ODT and Worker, page style properties and redlines. Typecheck, lint, formatting, dependencies, provenance and Writer parity passed."
+  -
+    type: "status"
+    at: "2026-11-28T08:15:42.553Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: 46 Writer related cases, types, lint, formatting, dependencies, provenance and runtime parity."
 doc_version: 3
-doc_updated_at: "2026-11-28T08:09:52.755Z"
+doc_updated_at: "2026-11-28T08:15:42.556Z"
 doc_updated_by: "CODER"
 description: "Preserve page-layout numbering types, native PageNumber and page-continuation fields, their relative page selection and offset, layout-backed values within the current Writer page frame slice, and Worker transfer."
 sections:
