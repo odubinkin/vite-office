@@ -15,7 +15,8 @@
       "Projects the row-specific Navigator tracking popup with native check and radio states, and focuses the tracked outline branch when the Focus mode is enabled.",
       "Shares outline depth between the toolbar and native context submenu, and routes contextual navigation, heading edits, bookmark deletion and expansion to the connected owners.",
       "Exposes Hyperlinks and Comments in the retained content tree and routes their contextual actions to Writer slots and annotation management.",
-      "Restores the native root and projects display-sorted outlines as sibling rows while preserving their original identities."
+      "Restores the native root and projects display-sorted outlines as sibling rows while preserving their original identities.",
+      "Selects the native category corresponding to the Navigate By chooser."
     ],
     "evidence": {
       "local": [
@@ -58,6 +59,10 @@
         {
           "path": "apps/office/src/sw/browser/presentation/WriterNavigator.test.tsx",
           "marker": "sorts only the chosen category, flattening headings without changing their document order"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterNavigator.tsx",
+          "marker": "WriterNavigatorNavigation"
         }
       ],
       "upstream": [
@@ -84,6 +89,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx",
           "marker": "if (pCntType->IsAlphabeticSort())"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/utlui/navipi.cxx",
+          "marker": "SwNavigationPI::UpdateNavigateBy"
         }
       ]
     },

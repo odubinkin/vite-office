@@ -10,7 +10,7 @@ import {
   type WriterSlotHandler,
   type WriterViewCommandTarget,
 } from "../../../sdi/swriter";
-import { SfxUInt16Item } from "../../../../svl/source/items/intitem";
+import { SfxUInt16Item, SfxUInt32Item } from "../../../../svl/source/items/intitem";
 import { SvxSearchItem } from "../../../../svl/source/items/srchitem";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SID_SEARCH_QUIET } from "../../../../sfx2/inc/sfxsids";
@@ -20,6 +20,7 @@ import {
 } from "../uiview/search-dispatch";
 import type { WriterExecuteSearchArguments, WriterSearchSlotItem } from "../uiview/viewsrch";
 import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
+import { IsNavigationElement } from "../ribbar/workctrl";
 import { SID_ATTR_PARA_ULSPACE } from "../../../../editeng/inc/editids";
 
 /** Dedicated view command shell owning Writer view and chrome registration. */
@@ -159,6 +160,36 @@ export function createWriterViewCommandRegistry(
       /** Requests browser Select All projection. @returns Nothing. */
       execute: (): void => target.RequestSelectAll(),
       id: WRITER_COMMAND_IDS.selectAll,
+    },
+    {
+      id: WRITER_COMMAND_IDS.navElement,
+      capabilityId: "CAP-0104",
+      /** Accepts the native unsigned Navigator element slot item. @param context - Active view. @param args - Native request items. @returns Nothing. */
+      execute(context, args): void {
+        const slot = getWriterSlotId(WRITER_COMMAND_IDS.navElement);
+        const item = args.find(
+          /** Identifies the original navigation item. @param candidate - Request item. @returns Whether it represents the slot. */
+          (candidate): candidate is SfxUInt32Item =>
+            candidate instanceof SfxUInt32Item && candidate.Which() === slot,
+        );
+        const type = item?.GetValue();
+        if (type !== undefined && IsNavigationElement(type)) context.SetMoveType(type);
+      },
+      /** Supplies the selected native navigation element. @param context - Active view. @returns Source slot state. */
+      getStateValue: (context) =>
+        new SfxUInt32Item(getWriterSlotId(WRITER_COMMAND_IDS.navElement), context.GetMoveType()),
+    },
+    {
+      id: WRITER_COMMAND_IDS.scrollToPrevious,
+      capabilityId: "CAP-0104",
+      /** Moves to the previous element from the active view. @param context - Active view. @returns Whether reached. */
+      execute: (context) => context.MoveNavigation(false),
+    },
+    {
+      id: WRITER_COMMAND_IDS.scrollToNext,
+      capabilityId: "CAP-0104",
+      /** Moves to the next element from the active view. @param context - Active view. @returns Whether reached. */
+      execute: (context) => context.MoveNavigation(true),
     },
     {
       capabilityId: "CAP-0104",

@@ -28,6 +28,8 @@ import { SwPostItMgr } from "../docvw/PostItMgr";
 import { SwEditWin } from "../docvw/edtwin";
 import { SwAnnotationShell } from "../shells/annotsh";
 import { SwTableShell } from "../shells/tabsh";
+import { SwNavigationElement } from "../ribbar/workctrl";
+import { GetNavigationPage, type SwNavigationViewport } from "./viewmdi";
 import { SwViewCommandShell } from "../shells/view";
 import { SwWrtShell } from "../wrtsh/wrtsh1";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
@@ -53,6 +55,8 @@ import { SvxRuler } from "../../../../svx/source/dialog/svxruler";
 
 /** Persistent Writer view joining SwDocShell, SwWrtShell, and frame dispatch. */
 export class SwView {
+  private static moveType = SwNavigationElement.Page;
+  private navigationViewport: SwNavigationViewport | undefined;
   private readonly releaseMetricView: () => void;
   private readonly dialogController = new WriterDialogController();
   private frame: SfxViewFrame<SwView> | undefined;
@@ -211,6 +215,48 @@ export class SwView {
   /** Returns the persistent Writer editing shell. @returns SwWrtShell. */
   public GetWrtShell(): SwWrtShell {
     return this.wrtShell;
+  }
+
+  /** Returns the native session-wide navigator move type. @returns Current navigation element. */
+  public GetMoveType(): SwNavigationElement {
+    return SwView.moveType;
+  }
+
+  /** Changes the native navigator move type. @param type - Selected navigation element. @returns Nothing. */
+  public SetMoveType(type: SwNavigationElement): void {
+    this.search.ClearFeedback();
+    if (SwView.moveType === type) return;
+    SwView.moveType = type;
+    this.Invalidate("view");
+  }
+
+  /** Binds the browser implementation of native viewport navigation. @param viewport - The mounted editing view or undefined when unmounted. @returns Nothing. */
+  public SetNavigationViewport(viewport?: SwNavigationViewport): void {
+    this.navigationViewport = viewport;
+  }
+
+  /** Dispatches the original view movement by its active element. @param forward - True for next. @returns Whether the requested destination was reached. */
+  public MoveNavigation(forward: boolean): boolean {
+    switch (this.GetMoveType()) {
+      case SwNavigationElement.Page: {
+        const viewport = this.navigationViewport;
+        const span = viewport?.GetVisiblePageNumbers();
+        if (!viewport || !span) return false;
+        const page = GetNavigationPage(span, this.navigator.GetPageState().count, forward);
+        viewport.GoToPage(page);
+        return true;
+      }
+      case SwNavigationElement.Table:
+        return this.navigator.MoveContent("table", forward);
+      case SwNavigationElement.Heading:
+        return this.navigator.MoveContent("outline", forward);
+      case SwNavigationElement.Bookmark:
+        return this.navigator.MoveContent("bookmark", forward);
+      case SwNavigationElement.Comment:
+        return this.navigator.MoveContent("comment", forward);
+      case SwNavigationElement.RepeatSearch:
+        return this.search.RepeatSearch(!forward);
+    }
   }
 
   /** Executes the represented native repeat-search command. @returns Whether a match was found. */

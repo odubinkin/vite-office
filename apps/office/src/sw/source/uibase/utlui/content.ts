@@ -215,6 +215,77 @@ export class SwContentTree {
     this.displayChanged?.();
   }
 
+  /** Moves to the preceding or following native document item in the chosen category. @param type - Supported cursor target. @param forward - True for next. @returns Whether a target was reached. */
+  public MoveContent(
+    type: "outline" | "table" | "bookmark" | "comment",
+    forward: boolean,
+  ): boolean {
+    if (type === "bookmark") return this.MoveBookmark(forward);
+    const point = this.shell.GetCursor().GetPoint();
+    const currentNode = point.GetNode();
+    const currentTable = currentNode.FindTableNode();
+    if (type === "outline") {
+      const outlines = this.shell.GetDoc().GetNodes().GetOutLineNds();
+      const { found, position } = outlines.Seek_Entry(currentNode);
+      const headings = outlines.entries();
+      if (headings.length === 0) return false;
+      const index = forward ? position + Number(found) : position - 1;
+      const candidate = (index + headings.length) % headings.length;
+      if ((!forward || found) && candidate === position) return false;
+      const heading = headings[candidate]?.GetTextNode();
+      return heading ? this.SetCursor(heading, 0) : false;
+    }
+    const candidates = this.GetTargets().filter(
+      /** Keeps the native table starts or visible annotation windows. @param entry - Model target. @returns Whether the target can be reached. */
+      (entry) =>
+        entry.type === type &&
+        (type === "table" ||
+          (entry.comment !== undefined && this.postIts?.IsVisible(entry.comment) === true)),
+    );
+    const ordered = forward ? candidates : candidates.reverse();
+    const target =
+      ordered.find(
+        /** Finds the next native position, skipping the current table section. @param entry - Candidate. @returns Whether it is in the requested direction. */
+        (entry) => {
+          const node = entry.node.GetIndex();
+          if (type === "table" && currentTable)
+            return forward
+              ? node > currentTable.EndOfSectionIndex()
+              : node < currentTable.GetIndex();
+          const comparison =
+            node - currentNode.GetIndex() || entry.offset - point.GetContentIndex();
+          return forward ? comparison > 0 : comparison < 0;
+        },
+      ) ?? ordered[0];
+    if (!target) return false;
+    return type === "comment"
+      ? this.EditComment(target.id)
+      : this.SetCursor(target.node, target.offset);
+  }
+
+  /** Navigates to a bookmark range with the start as the moving end. @param forward - True for next. @returns Whether a bookmark was reached. */
+  private MoveBookmark(forward: boolean): boolean {
+    const marks = this.shell.GetDoc().GetIDocumentMarkAccess().GetBookmarks();
+    const point = this.shell.GetCursor().GetPoint();
+    const target = forward
+      ? (marks.find(
+          /** Matches the native next visible bookmark by its start position. @param mark - Existing mark. @returns Whether its range starts ahead. */
+          (mark) => !mark.IsHidden() && mark.GetMarkStart().compare(point) > 0,
+        ) ?? marks[0])
+      : (marks
+          .filter(
+            /** Matches the native previous visible bookmark by its end position. @param mark - Existing mark. @returns Whether its range ends behind. */
+            (mark) => !mark.IsHidden() && mark.GetMarkEnd().compare(point) < 0,
+          )
+          .sort(
+            /** Ranks overlaps by their visible end position. @param a - First mark. @param b - Second mark. @returns Native reverse order. */
+            (a, b) => b.GetMarkEnd().compare(a.GetMarkEnd()),
+          )[0] ?? marks.at(-1));
+    if (!target) return false;
+    this.shell.SetPaM(target.GetMarkStart(), target.IsExpanded() ? target.GetMarkEnd() : undefined);
+    return true;
+  }
+
   /** Reads the original maximum heading depth. @returns Outline level. */
   public GetOutlineLevel(): number {
     return this.outlineLevel;

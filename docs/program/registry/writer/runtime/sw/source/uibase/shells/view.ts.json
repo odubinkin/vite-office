@@ -18,9 +18,11 @@
       "defaultStatus": "not-applicable",
       "divergenceClass": "A",
       "evidence": [
-        "apps/office/src/sw/source/uibase/shells/view.ts#SwViewCommandShell"
+        "apps/office/src/sw/source/uibase/shells/view.ts#SwViewCommandShell",
+        "apps/office/src/sw/source/uibase/shells/view.ts#navElement",
+        "vendor/libreoffice-reference/sw/source/uibase/uiview/view2.cxx#case FN_NAV_ELEMENT"
       ],
-      "justification": "TypeScript command or dialog request composition; the upstream SwTextShell and SwView operations are mapped in their own source owners. TaskAHJ2M9: Actual SwView owns paragraph UL slot projection and application;the text shell retains LR ownership. Full native AutoUpdatePara and layout/protection services remain unported.",
+      "justification": "TypeScript command or dialog request composition; the upstream SwTextShell and SwView operations are mapped in their own source owners. TaskAHJ2M9: Actual SwView owns paragraph UL slot projection and application;the text shell retains LR ownership. Full native AutoUpdatePara and layout/protection services remain unported. Receives NavElement, ScrollToPrevious and ScrollToNext through their native view-command scope.",
       "knownViolations": [],
       "localSymbols": [
         "SwViewCommandShell",

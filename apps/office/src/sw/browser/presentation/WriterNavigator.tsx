@@ -36,6 +36,8 @@ import type {
 import { OutlineTrackingMode } from "../../source/uibase/utlui/navicfg";
 import { selectWriterPopupCommandResource } from "./writer-command-presentation";
 import type { SwView } from "../../source/uibase/uiview/view";
+import { SwNavigationElement } from "../../source/uibase/ribbar/workctrl";
+import { WriterNavigatorNavigation } from "./WriterNavigatorNavigation";
 import { queueWriterCursorReveal } from "./writer-cursor-reveal";
 import { getWriterNavigatorMenuItems, navigatorOutlineLevels } from "./writer-navigator-menu";
 
@@ -173,7 +175,6 @@ export function WriterNavigator({
     () => tree.GetOutlineLevel(),
   );
   const root = tree.GetRootType();
-  const [pageDraft, setPageDraft] = useState<{ origin: number; value: string }>();
   const [popup, setPopup] = useState<
     | {
         rowId: string;
@@ -183,7 +184,6 @@ export function WriterNavigator({
     | undefined
   >();
   if (!visible && popup !== undefined) setPopup(undefined);
-  const page = tree.GetPageState();
   /** Looks up the application's translation for a native Navigator label. @param key - Control identity. @param fallback - Source label. @returns Label. */
   function label(key: string, fallback: string): string {
     return localization.GetText(`writer.navigator.${key}`, fallback);
@@ -375,13 +375,6 @@ export function WriterNavigator({
       if (row.group) void tree.DeleteComments();
       else if (tree.DeleteComment(row.id)) reveal();
     }
-  }
-
-  /** Navigates to an existing physical page. @param number - One-based page number. @returns Nothing. */
-  function goToPage(number: number): void {
-    if (!tree.GotoPage(number)) return;
-    setPageDraft(undefined);
-    reveal(number);
   }
 
   /** Selects a tree row and applies extended selection in the heading root. @param row - Newly active entry. @param extend - Include the range from the selection anchor. @param primary - Toggle an entry or add a range. @returns Nothing. */
@@ -623,9 +616,6 @@ export function WriterNavigator({
   }
 
   const title = label("title", "Navigator");
-  const previous = label("previous-page", "Previous Page");
-  const next = label("next-page", "Next Page");
-  const currentPage = pageDraft?.origin === page.current ? pageDraft.value : String(page.current);
   return (
     <section
       aria-label={title}
@@ -662,54 +652,29 @@ export function WriterNavigator({
         aria-label={label("navigation", "Navigation")}
         className="flex shrink-0 flex-wrap items-center gap-1.5 border-b border-slate-200 p-2"
       >
-        <button
-          type="button"
-          aria-label={previous}
-          title={previous}
-          disabled={page.current <= 1}
-          className="rounded p-1 hover:bg-slate-100 disabled:opacity-40"
-          onClick={
-            /** Goes to the previous physical page. @returns Nothing. */ () =>
-              goToPage(page.current - 1)
-          }
-        >
-          <ArrowUp size={16} />
-        </button>
-        <input
-          type="number"
-          min={1}
-          max={page.count}
-          value={currentPage}
-          aria-label={label("go-to-page", "Go to page")}
-          className="w-14 rounded border border-slate-300 px-1 text-sm"
-          onChange={
-            /** Retains the page-number draft. @param event - Input change. @returns Nothing. */
-            (event) => setPageDraft({ origin: page.current, value: event.currentTarget.value })
-          }
-          onKeyDown={
-            /** Submits the original Go to page field. @param event - Input key. @returns Nothing. */
-            (event) => {
-              if (event.key !== "Enter") return;
-              event.preventDefault();
-              const requested = event.currentTarget.valueAsNumber;
-              if (Number.isFinite(requested))
-                goToPage(Math.max(1, Math.min(page.count, Math.trunc(requested))));
+        <WriterNavigatorNavigation
+          view={view}
+          editingHost={editingHost}
+          visible={visible}
+          label={label}
+          selectType={
+            /** Selects the matching native category without altering document selection. @param type - Navigation element. @returns Nothing. */
+            (type) => {
+              const category = {
+                [SwNavigationElement.Table]: "table",
+                [SwNavigationElement.Heading]: "outline",
+                [SwNavigationElement.Bookmark]: "bookmark",
+                [SwNavigationElement.Comment]: "comment",
+              } as const;
+              if (!(type in category)) return;
+              const row = rows.find(
+                /** Finds the existing category in the current tree. @param entry - Current entry. @returns Whether it is the requested category. */
+                (entry) => entry.group && entry.type === category[type as keyof typeof category],
+              );
+              if (row) select(row);
             }
           }
         />
-        <button
-          type="button"
-          aria-label={next}
-          title={next}
-          disabled={page.current >= page.count}
-          className="rounded p-1 hover:bg-slate-100 disabled:opacity-40"
-          onClick={
-            /** Goes to the next physical page. @returns Nothing. */ () =>
-              goToPage(page.current + 1)
-          }
-        >
-          <ArrowDown size={16} />
-        </button>
         <button
           type="button"
           aria-label={label("content-view", "Content Navigation View")}

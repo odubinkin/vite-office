@@ -514,11 +514,17 @@ export class SwViewSearch {
     options.Commit();
   }
 
-  /** Repeats the source command with its last dispatched search item. @returns Whether a match was found. */
-  public RepeatSearch(): boolean {
+  /** Repeats the source command with its last dispatched search item. @param backwards - Temporary Navigator direction, when supplied. @returns Whether a match was found. */
+  public RepeatSearch(backwards?: boolean): boolean {
     const request = this.lastRequest;
     if (request === undefined) return false;
-    return this.DispatchSearch(request.item, request.command, request.backward).matches > 0;
+    if (backwards === undefined)
+      return this.DispatchSearch(request.item, request.command, request.backward).matches > 0;
+    try {
+      return this.DispatchSearch(request.item, request.command, backwards).matches > 0;
+    } finally {
+      this.lastRequest = request;
+    }
   }
 
   /** Prepares the Find Bar request with its own transliteration flags. @param query - Toolbar text and toggles. @returns Native search item. */

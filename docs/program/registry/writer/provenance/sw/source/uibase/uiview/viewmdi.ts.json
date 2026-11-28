@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "localPath": "apps/office/src/sw/source/uibase/uiview/viewmdi.ts",
+    "classification": "upstream-mechanism",
+    "localSymbols": [
+      "GetNavigationPage"
+    ],
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/uibase/uiview/viewmdi.ts",
+          "marker": "GetNavigationPage"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/uiview/view-navigation.test.ts",
+          "marker": "wraps physical scrolling"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/uiview/viewmdi.cxx",
+          "marker": "SwView::MoveNavigation"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/uibase/uiview/viewmdi.cxx",
+    "upstreamSymbols": [
+      "SwView::MoveNavigation"
+    ],
+    "preservedResponsibilities": [
+      "Resolves the next physical page beyond the visible range and wraps at the document edges."
+    ],
+    "omittedResponsibilities": [
+      "Other navigation families outside the represented Writer document profile."
+    ]
+  }
+}

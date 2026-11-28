@@ -441,3 +441,84 @@ test("Writer Navigator remembers the selected category and its natural display o
   await root.click();
   await expect(navigator.getByRole("treeitem", { name: "Tables", exact: true })).toBeVisible();
 });
+
+test("Writer Navigator moves to the next heading through Navigate By", /** Selects the native heading mode and verifies cursor movement, wrapping, and focus. @param fixtures - Browser fixtures. @param fixtures.page - Writer page. @returns Completion. */ async ({
+  page,
+}) => {
+  await page.goto("/writer", { waitUntil: "domcontentloaded" });
+  const paragraphs = page.locator("[data-writer-paragraph-id]");
+  await paragraphs.first().click();
+  await page.keyboard.insertText("Starting heading");
+  await page.keyboard.press("Enter");
+  await page.keyboard.insertText("Following heading");
+  const formatting = page.getByRole("toolbar", { name: "Writer formatting toolbar" });
+  const style = formatting.getByRole("combobox", { name: "Paragraph style", exact: true });
+  for (const index of [0, 1]) {
+    await paragraphs.nth(index).click();
+    await formatting.getByRole("button", { name: "Show Paragraph style", exact: true }).click();
+    await page
+      .locator(`id=${await style.getAttribute("aria-controls")}`)
+      .getByRole("option", { name: "Heading 1", exact: true })
+      .click();
+  }
+  await paragraphs.first().click();
+  await page.keyboard.press("F5");
+  const navigator = page.getByRole("dialog", { name: "Navigator", exact: true });
+  const chooser = navigator.getByRole("combobox", { name: "Navigate By", exact: true });
+  expect(await chooser.locator("option:checked").textContent()).toBe("Page");
+  await chooser.selectOption({ label: "Heading" });
+  await expect(navigator.getByRole("spinbutton", { name: "Go to page" })).toHaveCount(0);
+  const next = navigator.getByRole("button", { name: "Next heading", exact: true });
+  await next.click();
+  await expect(page.locator("[data-writer-editing-host]")).toBeFocused();
+  await expect(navigator.getByRole("treeitem", { name: "Following heading" })).toHaveAttribute(
+    "aria-selected",
+    "true",
+  );
+  await next.click();
+  await expect(navigator.getByRole("treeitem", { name: "Starting heading" })).toHaveAttribute(
+    "aria-selected",
+    "true",
+  );
+  await navigator.getByRole("button", { name: "Previous heading", exact: true }).click();
+  await expect(navigator.getByRole("treeitem", { name: "Following heading" })).toHaveAttribute(
+    "aria-selected",
+    "true",
+  );
+});
+
+test("Writer Navigator wraps physical page scrolling without moving the caret", /** Exercises the real viewport and verifies the separate document cursor. @param fixtures - Browser fixtures. @param fixtures.page - Writer page. @returns Completion. */ async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 750 });
+  await page.goto("/writer", { waitUntil: "domcontentloaded" });
+  const editor = page.getByRole("textbox", { name: "Writer document text" });
+  await editor.fill("First page");
+  await editor.press("End");
+  await page.getByRole("button", { name: "Page Break", exact: true }).click();
+  await page.keyboard.insertText("Second page");
+  const paragraphs = page.locator("[data-writer-paragraph-id]");
+  await paragraphs.first().click();
+  await editor.press("Home");
+  await page.keyboard.press("F5");
+  const navigator = page.getByRole("dialog", { name: "Navigator", exact: true });
+  const pageNumber = navigator.getByRole("spinbutton", { name: "Go to page" });
+  const next = navigator.getByRole("button", { name: "Next page", exact: true });
+  await expect(pageNumber).toHaveValue("1");
+  await next.click();
+  await expect(pageNumber).toHaveValue("2");
+  await expect
+    .poll(
+      /** Reads the current browser caret's model paragraph after viewport-only navigation. @returns Caret text. */
+      () =>
+        page.evaluate(
+          /** Reads the current paragraph from the browser Selection. @returns Caret text or absence. */
+          () =>
+            getSelection()?.focusNode?.parentElement?.closest("[data-writer-paragraph-id]")
+              ?.textContent,
+        ),
+    )
+    .toBe("First page");
+  await next.click();
+  await expect(pageNumber).toHaveValue("1");
+});

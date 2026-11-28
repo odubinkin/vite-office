@@ -100,6 +100,9 @@
     "toggleHorizontalRuler": ".uno:Ruler",
     "toggleBaselineGrid": ".uno:BaselineGridVisible",
     "toggleNavigator": ".uno:Navigator",
+    "navElement": ".uno:NavElement",
+    "scrollToPrevious": ".uno:ScrollToPrevious",
+    "scrollToNext": ".uno:ScrollToNext",
     "toggleVerticalRuler": ".uno:VRuler",
     "toggleSidebar": ".uno:Sidebar",
     "showAnnotations": ".uno:ShowAnnotations",
@@ -1264,6 +1267,42 @@
       "shortcuts": ["F5"],
       "slotId": 10366
     },
+    ".uno:NavElement": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0104",
+      "controlLabel": "Navigate By",
+      "label": "Navigate By",
+      "placements": ["sw/sdi/swriter.sdi"],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 20255
+    },
+    ".uno:ScrollToPrevious": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0104",
+      "controlLabel": "Previous",
+      "label": "Previous",
+      "placements": ["sw/sdi/swriter.sdi"],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 20257
+    },
+    ".uno:ScrollToNext": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0104",
+      "controlLabel": "Next",
+      "label": "Next",
+      "placements": ["sw/sdi/swriter.sdi"],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 20258
+    },
     ".uno:VRuler": {
       "browserOwned": false,
       "argumentSchema": [],
@@ -2333,6 +2372,21 @@
         "sw/uiconfig/swriter/menubar/menubar.xml",
         "sw/uiconfig/swriter/toolbar/standardbar.xml"
       ]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:NavElement",
+      "sources": ["sw/sdi/swriter.sdi"]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:ScrollToPrevious",
+      "sources": ["sw/sdi/swriter.sdi"]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:ScrollToNext",
+      "sources": ["sw/sdi/swriter.sdi"]
     },
     {
       "classification": "supported-upstream",

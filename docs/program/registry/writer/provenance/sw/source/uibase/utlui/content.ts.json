@@ -23,7 +23,8 @@
       "Uses source outline tracking mode and content-type flags when choosing the next tracked entry.",
       "Applies the native configured outline depth at the Navigator content list.",
       "Lists the attached hyperlink and annotation owners in native order, and routes their address-based navigation and cursor tracking.",
-      "Retains the native category root and updates only the selected category display order through the original sort state."
+      "Retains the native category root and updates only the selected category display order through the original sort state.",
+      "Routes directional navigation to original headings, table starts, bookmark ranges and visible annotation fields."
     ],
     "omittedResponsibilities": [
       "The represented tree serves the active document and the three connected native content families."
@@ -69,6 +70,10 @@
         {
           "path": "apps/office/src/sw/browser/presentation/WriterNavigator.test.tsx",
           "marker": "sorts only the chosen category, flattening headings without changing their document order"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/utlui/content.ts",
+          "marker": "MoveContent"
         }
       ],
       "upstream": [
@@ -119,6 +124,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/uibase/inc/swcont.hxx",
           "marker": "vcl::NaturalSortCompare"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/uiview/viewmdi.cxx",
+          "marker": "SwView::MoveNavigation"
         }
       ]
     }

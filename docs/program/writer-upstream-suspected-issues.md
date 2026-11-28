@@ -6265,3 +6265,14 @@ the cursor. This can hide Edit Bookmark for the last bookmark until the
 entry is activated. Writer preserves the same decision.
 
 - [Original Navigator cursor comparison and bookmark activation](../../vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx)
+
+### WRITER-760 — Previous heading skips the sole heading from a preceding paragraph
+
+When the cursor is before the only heading, the outline lookup returns
+insertion position zero. Previous heading wraps to the last outline
+position, which is also zero. The native traversal treats the matching
+indices as a completed cycle and leaves the cursor in its original
+paragraph. Next heading from that position reaches the heading. Writer
+preserves this behavior.
+
+- [Original previous and next heading traversal](../../vendor/libreoffice-reference/sw/source/core/crsr/crstrvl.cxx#L1210)
