@@ -845,6 +845,7 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                               }}
                             >
                               <ScCellText
+                                layout={textLayout}
                                 text={cell.text}
                                 pattern={pattern}
                                 conditional={conditional}

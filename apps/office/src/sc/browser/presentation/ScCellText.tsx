@@ -23,16 +23,20 @@ import { getScriptType, ScriptType } from "../../../i18nlangtag/source/isolang/m
 import { browserFontFamily } from "../../../vcl/browser/font-family";
 import { getFontFamilyGeneric } from "../../../xmloff/source/style/fonthdl";
 import type { SvxFontHeightItem } from "../../../editeng/inc/fhgtitem";
+import type { ScCellTextLayout } from "../../source/ui/view/output2";
+import { ScCellTextFit } from "./ScCellTextFit";
 const breakIterator = new BreakIteratorImpl();
 /** Paints original script font values without storing text or attributes in React state. @param props - Display text, borrowed pattern and active conditional style. @returns Script-specific text spans. */
 export function ScCellText({
   text,
   pattern,
   conditional,
+  layout,
 }: {
   readonly text: string;
   readonly pattern: ScPatternAttr;
   readonly conditional?: SfxItemSet | undefined;
+  readonly layout?: ScCellTextLayout;
 }): React.JSX.Element {
   const strikeout = pattern.GetItem(106, conditional) as SvxCrossedOutItem,
     overline = pattern.GetItem(105, conditional) as SvxOverlineItem,
@@ -60,6 +64,11 @@ export function ScCellText({
       const font = pattern.GetItem(which, conditional) as SvxFontItem;
       const weight = (pattern.GetItem(which + 2, conditional) as SvxWeightItem).GetWeight();
       const posture = (pattern.GetItem(which + 3, conditional) as SvxPostureItem).GetPosture();
+      const fontHeight = pattern.GetItem(
+        effective === ScriptType.ASIAN ? 112 : effective === ScriptType.COMPLEX ? 117 : 101,
+        conditional,
+      ) as SvxFontHeightItem;
+      const fontSize = `${fontHeight.GetHeight() / 20}pt`;
       const source = text.slice(pos, end);
       const segments = wordMode ? (source.match(/\s+|\S+/gu) ?? []) : [source];
       let start = pos;
@@ -99,7 +108,9 @@ export function ScCellText({
                   font.GetFamilyName(),
                   getFontFamilyGeneric(font.GetFamily()),
                 ),
-                fontSize: `${(pattern.GetItem(effective === ScriptType.ASIAN ? 112 : effective === ScriptType.COMPLEX ? 117 : 101, conditional) as SvxFontHeightItem).GetHeight() / 20}pt`,
+                fontSize: layout?.shrink
+                  ? `calc(${fontSize} * var(--calc-cell-text-scale, 1))`
+                  : fontSize,
               }}
             >
               {wordMode && decorated && underline.GetBoolValue() ? (
@@ -132,5 +143,7 @@ export function ScCellText({
   } finally {
     string.dispose();
   }
+  if (runs.length && (layout?.shrink || (layout?.repeat && !/[\r\n]/u.test(text))))
+    return <ScCellTextFit layout={layout}>{runs}</ScCellTextFit>;
   return <>{runs}</>;
 }

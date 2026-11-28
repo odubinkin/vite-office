@@ -8,6 +8,7 @@ import {
   ATTR_LINEBREAK,
   ATTR_ROTATE_MODE,
   ATTR_ROTATE_VALUE,
+  ATTR_SHRINKTOFIT,
   ATTR_VERTICAL_ASIAN,
   ATTR_VER_JUSTIFY,
 } from "../../../inc/scitems";
@@ -30,6 +31,9 @@ export interface ScCellTextLayout {
   readonly orientation: SvxCellOrientation;
   readonly asianVertical: boolean;
   readonly lineBreak: boolean;
+  readonly repeat: boolean;
+  readonly shrink: boolean;
+  readonly numeric: boolean;
   readonly hyphenate: boolean;
   /** Counterclockwise hundredths of a degree for the general rotation path. */
   readonly rotation: number;
@@ -45,9 +49,9 @@ export function getCellTextLayout(
 ): ScCellTextLayout {
   let horizontal = (pattern.GetItem(ATTR_HOR_JUSTIFY, conditional) as SvxHorJustifyItem).GetValue();
   const wrap = (pattern.GetItem(ATTR_LINEBREAK, conditional) as SfxBoolItem).GetValue();
-  const repeat = horizontal === SvxCellHorJustify.Repeat;
-  if (repeat && wrap) horizontal = SvxCellHorJustify.Standard;
-  const orientation = repeat
+  const filled = horizontal === SvxCellHorJustify.Repeat;
+  if (filled && wrap) horizontal = SvxCellHorJustify.Standard;
+  const orientation = filled
     ? SvxCellOrientation.Standard
     : pattern.GetCellOrientation(conditional);
   const asianVertical =
@@ -60,7 +64,7 @@ export function getCellTextLayout(
   }
   let rotation = 0;
   let reference = SvxRotateMode.SVX_ROTATE_MODE_STANDARD;
-  if (!repeat && orientation === SvxCellOrientation.Standard) {
+  if (!filled && orientation === SvxCellOrientation.Standard) {
     const raw = (pattern.GetItem(ATTR_ROTATE_VALUE, conditional) as ScRotateValueItem).GetValue();
     if (raw !== 0) {
       rotation = ((raw % 36000) + 36000) % 36000;
@@ -77,25 +81,52 @@ export function getCellTextLayout(
   }
 
   let lineBreak = wrap || horizontal === SvxCellHorJustify.Block;
+  const shrinkToFit = (pattern.GetItem(ATTR_SHRINKTOFIT, conditional) as SfxBoolItem).GetValue();
+  const ordinary = rotation === 0 && orientation === SvxCellOrientation.Standard;
+  const cell = (lineBreak && ordinary) || shrinkToFit ? doc.GetRefCellValue(pos) : undefined;
+  const numeric = cell?.getFormula()?.IsRunning() === true || cell?.hasNumeric() === true;
   // DrawStrings suppresses wrapping only for number results in the NUMBER category.
-  if (lineBreak && rotation === 0 && orientation === SvxCellOrientation.Standard) {
-    const cell = doc.GetRefCellValue(pos);
-    if (cell.getFormula()?.IsRunning() || cell.hasNumeric()) {
-      const formatter = doc.GetFormatTable();
-      const key = doc.GetNumberFormat(pos.Col(), pos.Row(), pos.Tab());
-      if (formatter.GetType(key) === SvNumFormatType.NUMBER) lineBreak = false;
-    }
+  if (lineBreak && ordinary && numeric) {
+    const formatter = doc.GetFormatTable();
+    const key = doc.GetNumberFormat(pos.Col(), pos.Row(), pos.Tab());
+    if (formatter.GetType(key) === SvNumFormatType.NUMBER) lineBreak = false;
   }
   const hyphenate =
     lineBreak && (pattern.GetItem(ATTR_HYPHENATE, conditional) as SfxBoolItem).GetValue();
+  const repeat = filled && !lineBreak;
+  const shrink = !lineBreak && !repeat && shrinkToFit;
   return {
     horizontal,
     vertical,
     orientation,
     asianVertical,
     lineBreak,
+    repeat,
+    shrink,
+    numeric,
     hyphenate,
     rotation,
     reference,
   };
+}
+
+/** Counts the whole copies admitted by the native output rectangle. @param available - Content extent after margins. @param advance - Measured text advance. @returns Native repeat count, with one original copy for clipped or empty text. */
+export function getCellTextRepeatCount(available: number, advance: number): number {
+  return available > 0 && advance > 0 ? Math.max(1, Math.trunc(available / advance)) : 1;
+}
+
+/** Computes the native integer scale and repeats measurements at up to seven ten-percent reductions. @param available - Content extent after margins. @param advance - Unscaled text extent. @param measure - Measures the text again at the requested percent. @returns Applied scale and whether the reduced text fits. */
+export function getCellTextShrinkScale(
+  available: number,
+  advance: number,
+  measure: (percent: number) => number,
+): { percent: number; fits: boolean } {
+  if (available <= 0 || advance <= available) return { percent: 100, fits: advance <= available };
+  let percent = Math.trunc((available * 100) / advance);
+  let measured = measure(percent);
+  for (let retry = 0; measured > available && retry < 7; retry++) {
+    percent = Math.trunc((percent * 9) / 10);
+    measured = measure(percent);
+  }
+  return { percent, fits: measured <= available };
 }

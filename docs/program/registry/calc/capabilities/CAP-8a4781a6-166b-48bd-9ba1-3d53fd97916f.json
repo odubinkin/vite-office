@@ -1,0 +1,87 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-8a4781a6-166b-48bd-9ba1-3d53fd97916f",
+    "capabilityId": "CAP-8a4781a6-166b-48bd-9ba1-3d53fd97916f",
+    "suite": "calc",
+    "subsystem": "cell-formatting",
+    "type": "command",
+    "maturity": "implemented",
+    "capability": "Calc cell Filled alignment and Shrink to fit paint",
+    "assertions": [
+      "The grid resolves repetition and scaling only after the pinned wrapping rules.",
+      "Repetition preserves complete runs and one accessible cell value.",
+      "Actual visible font runs respond to width changes at integer scales with bounded retries."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser text probes and ResizeObserver measure the actual shaped script runs and current content box. CSS font sizing applies the original Calc fitting decisions."
+    },
+    "gaps": [
+      "Browser font shaping and grid clipping determine the available drawing surface."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/output2.cxx",
+          "marker": "ScDrawStringsVars::SetShrinkScale"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/output2.cxx",
+          "marker": "SC_SHRINKAGAIN_MAX"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/subsequent_filters_test3.cxx",
+          "marker": "testWrapAndShrinkXLSXML"
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/libreoffice-reference/cui/uiconfig/ui/cellalignment.ui",
+          "marker": "Shrink to fit cell size"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/ui/view/output2.ts",
+          "marker": "getCellTextShrinkScale"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/ScCellTextFit.tsx",
+          "marker": "ScCellTextFit"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/ui/view/output2.test.ts",
+          "marker": "pinned wrap and shrink cell matrix"
+        },
+        {
+          "path": "apps/office/e2e/calc/cell-text-fit.spec.ts",
+          "marker": "fills with whole styled runs"
+        }
+      ],
+      "docs": [
+        {
+          "path": ".agentplane/tasks/202611280821-BZWR3G/README.md",
+          "marker": "Shrink to fit"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "aspect": "command-state",
+    "atomicOperation": "calc-grid-cell-text-fit",
+    "scopeLimitations": [
+      "Retains the browser grid output boundary. Printer-device measurement and cross-cell clipping are outside this port."
+    ]
+  }
+}

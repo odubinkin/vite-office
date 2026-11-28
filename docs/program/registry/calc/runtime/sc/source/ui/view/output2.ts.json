@@ -8,7 +8,8 @@
     "suite": "calc",
     "subsystem": "cell-formatting",
     "capabilityIds": [
-      "CAP-0fca5c56-238e-49a4-b93d-9509e8a9032e"
+      "CAP-0fca5c56-238e-49a4-b93d-9509e8a9032e",
+      "CAP-8a4781a6-166b-48bd-9ba1-3d53fd97916f"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -18,18 +19,23 @@
       "evidence": [
         "apps/office/src/sc/source/ui/view/output2.ts",
         "apps/office/src/sc/browser/presentation/calc-cell-text-layout.test.tsx",
-        "vendor/libreoffice-reference/sc/source/ui/view/output2.cxx#ScOutputData::DrawRotated"
+        "vendor/libreoffice-reference/sc/source/ui/view/output2.cxx#ScOutputData::DrawRotated",
+        "apps/office/src/sc/source/ui/view/output2.test.ts",
+        "vendor/libreoffice-reference/sc/source/ui/view/output2.cxx#ScDrawStringsVars::SetShrinkScale"
       ],
       "justification": "Resolves Calc cell wrapping, stacked and rotated output decisions through effective pattern attributes.",
       "knownViolations": [],
       "localSymbols": [
-        "getCellTextLayout"
+        "getCellTextLayout",
+        "getCellTextRepeatCount",
+        "getCellTextShrinkScale"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sc/source/ui/view/output2.cxx",
       "upstreamSymbols": [
         "ScOutputData::DrawRotated",
-        "ScOutputData::DrawEditStacked"
+        "ScOutputData::DrawEditStacked",
+        "ScDrawStringsVars::SetShrinkScale"
       ]
     }
   }

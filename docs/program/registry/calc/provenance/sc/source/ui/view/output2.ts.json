@@ -7,14 +7,18 @@
     "localPath": "apps/office/src/sc/source/ui/view/output2.ts",
     "upstreamPath": "sc/source/ui/view/output2.cxx",
     "localSymbols": [
-      "getCellTextLayout"
+      "getCellTextLayout",
+      "getCellTextRepeatCount",
+      "getCellTextShrinkScale"
     ],
     "upstreamSymbols": [
       "ScOutputData::DrawRotated",
-      "ScOutputData::DrawEditStacked"
+      "ScOutputData::DrawEditStacked",
+      "ScDrawStringsVars::SetShrinkScale"
     ],
     "preservedResponsibilities": [
-      "Resolves Calc cell wrapping, stacked and rotated output decisions through effective pattern attributes."
+      "Resolves Calc cell wrapping, stacked and rotated output decisions through effective pattern attributes.",
+      "Preserves the Filled and Shrink to fit admission order, whole repeat count and bounded remeasurement."
     ],
     "omittedResponsibilities": [
       "Native device drawing and overflow into neighboring cells are outside the browser cell box."
@@ -24,6 +28,10 @@
         {
           "path": "apps/office/src/sc/source/ui/view/output2.ts",
           "marker": "getCellTextLayout"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/view/output2.test.ts",
+          "marker": "seven retries"
         }
       ],
       "upstream": [
@@ -34,6 +42,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/ui/view/output2.cxx",
           "marker": "ScOutputData::DrawEditStacked"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/output2.cxx",
+          "marker": "ScDrawStringsVars::SetShrinkScale"
         }
       ]
     }
