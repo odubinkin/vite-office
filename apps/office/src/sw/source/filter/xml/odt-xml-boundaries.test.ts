@@ -64,13 +64,15 @@ it("reads raw and typed embedded resources from browser XML and rejects a missin
   const loaded = await readOdtDocument(xml, metadata);
   expect(loaded.document.GetEmbeddedFonts()[0]?.bytes).toEqual(font.bytes);
   const bytes = xml.files[font.path] as Uint8Array;
+  const textBytes = new TextDecoder().decode(bytes);
   const textResource = {
     ...xml,
-    files: { ...xml.files, [font.path]: new TextDecoder().decode(bytes) },
+    files: { ...xml.files, [font.path]: textBytes },
   };
   const textLoaded = await readOdtDocument(textResource, metadata);
+  // TextEncoder can allocate in Node's realm while the document owns a DOM-realm byte array.
   expect(textLoaded.document.GetEmbeddedFonts()[0]?.bytes).toEqual(
-    new TextEncoder().encode(new TextDecoder().decode(bytes)),
+    new Uint8Array(new TextEncoder().encode(textBytes)),
   );
   textLoaded.document.Dispose();
   const files = { ...xml.files };
