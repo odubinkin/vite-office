@@ -8,6 +8,7 @@ import type { ScFormulaCell } from "../../../inc/formulacell";
 import { EditTextObject } from "../../../../editeng/inc/editobj";
 import { CellType } from "../../../inc/global";
 import { SharedString, type SharedStringConstReference } from "../../../../svl/inc/sharedstring";
+import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 
 /** Original empty,numeric,shared-string and formula std::variant alternatives represented by JS tags and values. */
 type CellData =
@@ -16,6 +17,28 @@ type CellData =
   | { readonly index: 2; readonly value: SharedString }
   | { readonly index: 3; readonly value: EditTextObject | null }
   | { readonly index: 4; readonly value: ScFormulaCell | null };
+
+/** Treats original formatted cell text as a string for value comparison. @param type - Source cell type. @returns Comparison type. */
+function adjustCellType(type: CellType): CellType {
+  return type === CellType.CELLTYPE_EDIT ? CellType.CELLTYPE_STRING : type;
+}
+
+/** Reads plain original paragraph text without resolving styles. @param cell - String or edit cell. @returns Comparison text. */
+function getString(cell: ScCellValue): string {
+  if (cell.getType() === CellType.CELLTYPE_STRING) return text(cell.getSharedString().getString());
+  const edit = cell.getEditText();
+  if (!edit) return "";
+  const result: string[] = [];
+  for (let index = 0; index < edit.GetParagraphCount(); index++) {
+    const paragraph = edit.GetText(index);
+    try {
+      result.push(text(paragraph));
+    } finally {
+      paragraph.dispose();
+    }
+  }
+  return result.join("\n");
+}
 
 /** Original owning cell value; scalar construction/set copies string values, logical moves empty their source. */
 export class ScCellValue {
@@ -216,6 +239,36 @@ export class ScCellValue {
   /** Original emptiness depends on the variant tag, not string content or numeric value. @returns Empty-cell predicate. */
   isEmpty(): boolean {
     return this.getType() === CellType.CELLTYPE_NONE;
+  }
+
+  /** Compares actual original cell values while ignoring text formatting. @param other - Cell to compare. @returns Whether the native values match. */
+  equalsWithoutFormat(other: ScCellValue): boolean {
+    const type = adjustCellType(this.getType());
+    if (type !== adjustCellType(other.getType())) return false;
+    switch (type) {
+      case CellType.CELLTYPE_NONE:
+        return true;
+      case CellType.CELLTYPE_VALUE:
+        return this.getDouble() === other.getDouble();
+      case CellType.CELLTYPE_STRING:
+        return getString(this) === getString(other);
+      case CellType.CELLTYPE_FORMULA: {
+        const left = this.getFormula()?.GetCode();
+        const right = other.getFormula()?.GetCode();
+        if (!left || !right) return left === right;
+        if (left.GetLen() !== right.GetLen() || left.GetCodeError() !== right.GetCodeError())
+          return false;
+        const rightTokens = right.GetArray();
+        let index = 0;
+        for (const token of left.Tokens()) {
+          const otherToken = rightTokens?.[index++];
+          if (!otherToken || !token.TextEqual(otherToken)) return false;
+        }
+        return true;
+      }
+      default:
+        return false;
+    }
   }
   /** Original move assignment clears before transfer, including self-move clearing. @param source - Moved cell. @returns This cell. */
   move_assign(source: ScCellValue): this {

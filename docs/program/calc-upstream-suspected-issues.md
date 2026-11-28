@@ -8429,3 +8429,15 @@ entry. Calc preserves that result for the rejection marker.
 - [Original rejection dispatch](../../vendor/libreoffice-reference/sc/source/filter/xml/XMLTrackedChangesContext.cxx#L1327)
 - [Original move construction](../../vendor/libreoffice-reference/sc/source/filter/xml/XMLChangeTrackingImportHelper.cxx#L431)
 - [Original handling of malformed actions](../../vendor/libreoffice-reference/sc/source/filter/xml/XMLChangeTrackingImportHelper.cxx#L774)
+
+### CALC-878 — A tracked sheet deletion skips inline generated cells and cutoffs
+
+The deletion context reads deleted cell and cutoff children for row, column
+and sheet deletions. The import helper admits generated cell snapshots only
+for row or column deletions and moves, and resolves cutoff references only
+for row or column deletions. A sheet deletion can still reference an
+existing deleted action ID. Calc follows both native paths.
+
+- [Original deletion context](../../vendor/libreoffice-reference/sc/source/filter/xml/XMLTrackedChangesContext.cxx#L1223)
+- [Original generated snapshot branch](../../vendor/libreoffice-reference/sc/source/filter/xml/XMLChangeTrackingImportHelper.cxx#L345)
+- [Original deletion dependency dispatch](../../vendor/libreoffice-reference/sc/source/filter/xml/XMLChangeTrackingImportHelper.cxx#L625)

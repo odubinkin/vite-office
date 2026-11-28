@@ -20,20 +20,26 @@
         "apps/office/src/sc/source/filter/xml/ods-tracked-cell-content.test.ts",
         "vendor/libreoffice-reference/sc/source/core/tool/chgtrack.cxx"
       ],
-      "justification": "Owns loaded content actions, the old and new cell values, action order and dependency links. Interactive change recording, deletion and movement actions, accept/reject commands and desktop notification are outside this slice. Owns loaded row, column and sheet insertion actions together with the preserved content snapshots.",
+      "justification": "Owns loaded content actions, the old and new cell values, action order and dependency links. Interactive change recording, accept/reject commands and desktop notification are outside this slice. Owns loaded row, column and sheet insertion actions together with the preserved content snapshots. Owns loaded deletion and movement actions, original cutoffs and separate generated cell snapshots.",
       "knownViolations": [],
       "localSymbols": [
         "ScChangeAction",
         "ScChangeActionContent",
         "ScChangeTrack",
-        "ScChangeActionIns"
+        "ScChangeActionIns",
+        "ScChangeActionDel",
+        "ScChangeActionMove",
+        "AddLoadedGenerated"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sc/source/core/tool/chgtrack.cxx",
       "upstreamSymbols": [
         "ScChangeActionContent::ScChangeActionContent",
         "ScChangeTrack::AppendLoaded",
-        "ScChangeActionIns::ScChangeActionIns"
+        "ScChangeActionIns::ScChangeActionIns",
+        "ScChangeActionDel::ScChangeActionDel",
+        "ScChangeActionMove::ScChangeActionMove",
+        "ScChangeTrack::AddLoadedGenerated"
       ]
     }
   }

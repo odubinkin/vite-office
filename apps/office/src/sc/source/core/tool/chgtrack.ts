@@ -26,6 +26,12 @@ export type ScChangeActionInsertionType =
   | ScChangeActionType.SC_CAT_INSERT_ROWS
   | ScChangeActionType.SC_CAT_INSERT_TABS;
 
+/** Native deletion action types. */
+export type ScChangeActionDeletionType =
+  | ScChangeActionType.SC_CAT_DELETE_COLS
+  | ScChangeActionType.SC_CAT_DELETE_ROWS
+  | ScChangeActionType.SC_CAT_DELETE_TABS;
+
 /** The original change acceptance state order. */
 export enum ScChangeActionState {
   SC_CAS_VIRGIN,
@@ -48,6 +54,9 @@ export interface ScChangeActionInfo {
 export abstract class ScChangeAction<Type extends ScChangeActionType = ScChangeActionType> {
   private readonly info: ScChangeActionInfo;
   private readonly dependents: ScChangeAction[] = [];
+  private nextAction: ScChangeAction | undefined;
+  private readonly deleted: ScChangeAction[] = [];
+  private readonly deletedIn: ScChangeAction[] = [];
 
   /** Copies the action position and UTC time. @param type - Original action type. @param info - Original action metadata. */
   public constructor(
@@ -115,8 +124,45 @@ export abstract class ScChangeAction<Type extends ScChangeActionType = ScChangeA
     return this.dependents;
   }
 
-  /** Releases the owned snapshot if the action has one. */
-  public Dispose(): void {}
+  /** Reads the original following action in load order. @returns Following action. */
+  public GetNext(): ScChangeAction | undefined {
+    return this.nextAction;
+  }
+
+  /** Updates the following action on append. @param action - Following action. */
+  public SetNext(action: ScChangeAction): void {
+    this.nextAction = action;
+  }
+
+  /** Links one deleted action in both directions. @param action - Deleted action from the track. */
+  public SetDeletedInThis(action: ScChangeAction): void {
+    const deleted = action instanceof ScChangeActionContent ? action.GetTopContent() : action;
+    deleted.deletedIn.unshift(this);
+    this.deleted.unshift(deleted);
+  }
+
+  /** Borrows the original ordered actions owned by this deletion relationship. @returns Deleted actions. */
+  public GetDeleted(): readonly ScChangeAction[] {
+    return this.deleted;
+  }
+
+  /** Borrows the original deletion records that own this action. @returns Deleting actions. */
+  public GetDeletedIn(): readonly ScChangeAction[] {
+    return this.deletedIn;
+  }
+
+  /** Checks whether any original deletion record owns this action. @returns Deletion flag. */
+  public IsDeletedIn(): boolean {
+    return this.GetDeletedIn().length !== 0;
+  }
+
+  /** Releases relationships when the originating track is disposed. */
+  public Dispose(): void {
+    this.nextAction = undefined;
+    this.dependents.length = 0;
+    this.deleted.length = 0;
+    this.deletedIn.length = 0;
+  }
 }
 
 /** Original loaded row, column or sheet insertion with its whole-axis range. */
@@ -136,11 +182,84 @@ export class ScChangeActionIns extends ScChangeAction<ScChangeActionInsertionTyp
   }
 }
 
+/** One original loaded movement action holds the source in addition to the target range. */
+export class ScChangeActionMove extends ScChangeAction<ScChangeActionType.SC_CAT_MOVE> {
+  private readonly from: ScBigRange;
+
+  /** Stores the two independent ranges of a movement. @param info - Target range and metadata. @param from - Source range. */
+  public constructor(info: ScChangeActionInfo, from: ScBigRange) {
+    super(ScChangeActionType.SC_CAT_MOVE, info);
+    this.from = new ScBigRange(from);
+  }
+
+  /** Borrows the original moved source range. @returns Source range. */
+  public GetFromRange(): ScBigRange {
+    return this.from;
+  }
+}
+
+/** Original loaded deletion of a row, column or sheet and its typed cutoff links. */
+export class ScChangeActionDel extends ScChangeAction<ScChangeActionDeletionType> {
+  private insertCutOff: { action: ScChangeActionIns; count: number } | undefined;
+  private readonly moveCutOffs: { action: ScChangeActionMove; from: number; to: number }[] = [];
+
+  /** Retains the axis-specific member of an original multi-deletion. @param type - Deleted axis. @param info - Original action data. @param offset - Multi-deletion slave offset. */
+  public constructor(
+    type: ScChangeActionDeletionType,
+    info: ScChangeActionInfo,
+    private readonly offset: number,
+  ) {
+    super(type, info);
+  }
+
+  /** Reads the original column displacement. @returns Column offset. */
+  public GetDx(): number {
+    return this.GetType() === ScChangeActionType.SC_CAT_DELETE_COLS ? this.offset : 0;
+  }
+
+  /** Reads the original row displacement. @returns Row offset. */
+  public GetDy(): number {
+    return this.GetType() === ScChangeActionType.SC_CAT_DELETE_ROWS ? this.offset : 0;
+  }
+
+  /** Sets the original insertion cutoff after resolving its action. @param action - Referenced insertion. @param count - Signed-short displacement. */
+  public SetCutOffInsert(action: ScChangeActionIns, count: number): void {
+    this.insertCutOff = { action, count };
+  }
+
+  /** Borrows the original insertion cutoff. @returns Insertion cutoff if present. */
+  public GetCutOffInsert(): Readonly<{ action: ScChangeActionIns; count: number }> | undefined {
+    return this.insertCutOff;
+  }
+
+  /** Inserts the original movement cutoff at the head of its list. @param action - Referenced movement. @param from - First displacement. @param to - Last displacement. */
+  public AddCutOffMove(action: ScChangeActionMove, from: number, to: number): void {
+    this.moveCutOffs.unshift({ action, from, to });
+  }
+
+  /** Borrows the original movement cutoffs in order. @returns Movement cutoffs. */
+  public GetMoveCutOffs(): readonly Readonly<{
+    action: ScChangeActionMove;
+    from: number;
+    to: number;
+  }>[] {
+    return this.moveCutOffs;
+  }
+
+  /** Releases inherited relationships and typed cutoff links. */
+  public override Dispose(): void {
+    super.Dispose();
+    this.insertCutOff = undefined;
+    this.moveCutOffs.length = 0;
+  }
+}
+
 /** One native content action holds the preceding cell and the reconstructed new cell. */
 export class ScChangeActionContent extends ScChangeAction<ScChangeActionType.SC_CAT_CONTENT> {
   private readonly oldCell: ScCellValue;
   private readonly oldValue: string;
   private newCell = new ScCellValue();
+  private newValue = "";
   private previous: ScChangeActionContent | undefined;
   private next: ScChangeActionContent | undefined;
 
@@ -148,19 +267,11 @@ export class ScChangeActionContent extends ScChangeAction<ScChangeActionType.SC_
   public constructor(
     info: ScChangeActionInfo,
     oldCell: ScCellValue,
-    document: ScDocument,
+    private readonly document: ScDocument,
     oldValue = "",
   ) {
     super(ScChangeActionType.SC_CAT_CONTENT, info);
-    if (!oldValue && oldCell.getType() === CellType.CELLTYPE_VALUE) {
-      const input = document.GetFormatTable().GetInputLineString(oldCell.getDouble(), 0);
-      try {
-        oldValue = text(input);
-      } finally {
-        input.dispose();
-      }
-    }
-    this.oldValue = oldValue;
+    this.oldValue = oldValue || this.GetInputString(oldCell, 0);
     this.oldCell = ScCellValue.move(oldCell);
     if (this.oldCell.getType() === CellType.CELLTYPE_FORMULA)
       this.oldCell.getFormula()?.SetInChangeTrack(true);
@@ -181,12 +292,19 @@ export class ScChangeActionContent extends ScChangeAction<ScChangeActionType.SC_
     return this.oldValue;
   }
 
-  /** Copies the cell value supplied by the next content action or current sheet. @param cell - Source snapshot. */
-  public SetNewCell(cell: ScCellValue): void {
+  /** Reads the original input spelling for the newer value. @returns Cell input text. */
+  public GetNewValue(): string {
+    return this.newValue;
+  }
+
+  /** Copies the cell value supplied by another action or current sheet. @param cell - Source snapshot. @param input - Optional original spelling. @param format - Original document number format. */
+  public SetNewCell(cell: ScCellValue, input = "", format = 0): void {
+    const value = input || this.GetInputString(cell, format);
     const copy = new ScCellValue(cell);
     if (copy.getType() === CellType.CELLTYPE_FORMULA) copy.getFormula()?.SetInChangeTrack(true);
     this.newCell.clear();
     this.newCell = copy;
+    this.newValue = value;
   }
 
   /** Borrows the preceding content action. @returns Previous link if present. */
@@ -205,16 +323,45 @@ export class ScChangeActionContent extends ScChangeAction<ScChangeActionType.SC_
     return this.next === undefined;
   }
 
+  /** Finds the final action in the original cell content chain. @returns Top content action. */
+  public GetTopContent(): ScChangeActionContent {
+    if (!this.next) return this;
+    let result = this.next;
+    while (result.next) result = result.next;
+    return result;
+  }
+
+  /** Reads deletion references from the original top content action. @returns Deleting actions. */
+  public override GetDeletedIn(): readonly ScChangeAction[] {
+    return this.next ? this.GetTopContent().GetDeletedIn() : super.GetDeletedIn();
+  }
+
   /** Releases native owned cell snapshots. */
   public override Dispose(): void {
+    super.Dispose();
     this.oldCell.clear();
     this.newCell.clear();
+    this.previous = undefined;
+    this.next = undefined;
+  }
+
+  /** Uses the original input line format for numeric date/time and ordinary values. @param cell - Owned or borrowed snapshot. @param format - Document number format. @returns Native input spelling. */
+  private GetInputString(cell: ScCellValue, format: number): string {
+    if (cell.getType() !== CellType.CELLTYPE_VALUE) return "";
+    const value = this.document.GetFormatTable().GetInputLineString(cell.getDouble(), format);
+    try {
+      return text(value);
+    } finally {
+      value.dispose();
+    }
   }
 }
 
 /** Document-owned loaded Calc change track. */
 export class ScChangeTrack {
   private readonly actions = new Map<number, ScChangeAction>();
+  private readonly generated = new Map<number, ScChangeActionContent>();
+  private generatedMin = 0xfffffff0;
   private last: ScChangeAction | undefined;
   private protection = new Uint8Array();
   private actionMax = 0;
@@ -236,6 +383,7 @@ export class ScChangeTrack {
       return false;
     }
     this.actions.set(id, action);
+    this.last?.SetNext(action);
     this.last = action;
     return true;
   }
@@ -243,6 +391,47 @@ export class ScChangeTrack {
   /** Reads one indexed action. @param id - Original action number. @returns Action if loaded. */
   public GetAction(id: number): ScChangeAction | undefined {
     return this.actions.get(id);
+  }
+
+  /** Reads a normal or generated action by its original identifier. @param id - Action identifier. @returns Original action. */
+  public GetActionOrGenerated(id: number): ScChangeAction | undefined {
+    return this.IsGenerated(id) ? this.generated.get(id) : this.actions.get(id);
+  }
+
+  /** Tests the original generated interval. @param id - Action identifier. @returns Whether the ID is in that interval. */
+  public IsGenerated(id: number): boolean {
+    return id >= this.generatedMin;
+  }
+
+  /** Creates a detached historical cell from the loaded deletion list. @param value - Deleted cell snapshot. @param range - Original coordinates. @param input - Original value spelling. @returns Owned generated action. */
+  public AddLoadedGenerated(
+    value: ScCellValue,
+    range: ScBigRange,
+    input: string,
+  ): ScChangeActionContent {
+    const id = this.generatedMin - 1;
+    const generated = new ScChangeActionContent(
+      {
+        actionNumber: id,
+        rejectingNumber: 0,
+        state: ScChangeActionState.SC_CAS_VIRGIN,
+        range,
+        user: "",
+        dateTimeUTC: new DateTime(DateTime.EMPTY),
+        comment: "",
+      },
+      new ScCellValue(),
+      this.document,
+    );
+    generated.SetNewCell(value, input);
+    this.generatedMin = id;
+    this.generated.set(id, generated);
+    return generated;
+  }
+
+  /** Iterates generated snapshots in load order for Worker transfer. @returns Generated cells. */
+  public generatedEntries(): IterableIterator<ScChangeActionContent> {
+    return this.generated.values();
   }
 
   /** Reads the last action in original document order. @returns Latest loaded action. */
@@ -288,7 +477,9 @@ export class ScChangeTrack {
   /** Releases all tracked cell snapshots with the owner. */
   public Dispose(): void {
     for (const action of this.actions.values()) action.Dispose();
+    for (const action of this.generated.values()) action.Dispose();
     this.actions.clear();
+    this.generated.clear();
     this.last = undefined;
   }
 }

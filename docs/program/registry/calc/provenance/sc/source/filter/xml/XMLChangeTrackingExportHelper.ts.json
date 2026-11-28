@@ -7,7 +7,10 @@
     "localSymbols": [
       "ScChangeTrackingExportHelper",
       "WriteFormulaCell",
-      "WriteInsertion"
+      "WriteInsertion",
+      "WriteDeletion",
+      "WriteMovement",
+      "WriteDeleted"
     ],
     "status": "mapped",
     "evidence": {
@@ -41,6 +44,18 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/filter/xml/XMLChangeTrackingExportHelper.cxx",
           "marker": "ScChangeTrackingExportHelper::WriteInsertion"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/XMLChangeTrackingExportHelper.cxx",
+          "marker": "ScChangeTrackingExportHelper::WriteDeletion"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/XMLChangeTrackingExportHelper.cxx",
+          "marker": "ScChangeTrackingExportHelper::WriteMovement"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/XMLChangeTrackingExportHelper.cxx",
+          "marker": "ScChangeTrackingExportHelper::WriteDeleted"
         }
       ]
     },
@@ -50,15 +65,19 @@
       "ScChangeTrackingExportHelper::WriteChangeInfo",
       "ScChangeTrackingExportHelper::WriteFormulaCell",
       "ScChangeTrackingExportHelper::WriteEditCell",
-      "ScChangeTrackingExportHelper::WriteInsertion"
+      "ScChangeTrackingExportHelper::WriteInsertion",
+      "ScChangeTrackingExportHelper::WriteDeletion",
+      "ScChangeTrackingExportHelper::WriteMovement",
+      "ScChangeTrackingExportHelper::WriteDeleted"
     ],
     "preservedResponsibilities": [
       "Writes native content actions, previous cells and change author/date privacy rules.",
       "Writes historical formula addresses, grammar, matrix flags and results and exports historical edit text using workbook text styles.",
-      "Writes native insertion metadata, whole-axis position and ordered dependency identifiers."
+      "Writes native insertion metadata, whole-axis position and ordered dependency identifiers.",
+      "Exports original multi-deletion groups, movement bounds, deleted records, generated snapshots and cutoff lists."
     ],
     "omittedResponsibilities": [
-      "Deletion, movement and generated-cell branches remain outside this slice."
+      "Interactive change operations are outside this exporter."
     ]
   }
 }

@@ -8,7 +8,10 @@
       "ScChangeAction",
       "ScChangeActionContent",
       "ScChangeTrack",
-      "ScChangeActionIns"
+      "ScChangeActionIns",
+      "ScChangeActionDel",
+      "ScChangeActionMove",
+      "AddLoadedGenerated"
     ],
     "status": "mapped",
     "evidence": {
@@ -34,6 +37,18 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/core/tool/chgtrack.cxx",
           "marker": "ScChangeActionIns::ScChangeActionIns"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/chgtrack.cxx",
+          "marker": "ScChangeActionDel::ScChangeActionDel"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/chgtrack.cxx",
+          "marker": "ScChangeActionMove::ScChangeActionMove"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/chgtrack.cxx",
+          "marker": "ScChangeTrack::AddLoadedGenerated"
         }
       ]
     },
@@ -41,14 +56,18 @@
     "upstreamSymbols": [
       "ScChangeActionContent::ScChangeActionContent",
       "ScChangeTrack::AppendLoaded",
-      "ScChangeActionIns::ScChangeActionIns"
+      "ScChangeActionIns::ScChangeActionIns",
+      "ScChangeActionDel::ScChangeActionDel",
+      "ScChangeActionMove::ScChangeActionMove",
+      "ScChangeTrack::AddLoadedGenerated"
     ],
     "preservedResponsibilities": [
       "Owns loaded content actions, the old and new cell values, action order and dependency links.",
-      "Owns loaded row, column and sheet insertion actions together with the preserved content snapshots."
+      "Owns loaded row, column and sheet insertion actions together with the preserved content snapshots.",
+      "Owns loaded deletion and movement actions, original cutoffs and separate generated cell snapshots."
     ],
     "omittedResponsibilities": [
-      "Interactive change recording, deletion and movement actions, accept/reject commands and desktop notification are outside this slice."
+      "Interactive change recording, accept/reject commands and desktop notification are outside this slice."
     ]
   }
 }

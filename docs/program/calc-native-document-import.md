@@ -119,4 +119,7 @@ ODS writes the original author/date anonymization under the two
 Security/Scripting flags. The tracked changes key crosses the native
 configuration settings item. Loaded row, column and sheet insertions keep
 their native whole-axis ranges and dependencies through ODS and Worker.
-Deletion, movement and interactive change recording remain outside this slice.
+Loaded deletion and movement actions retain source and target ranges, linked
+and generated cell snapshots, multi-deletion offsets and cutoff references.
+Interactive change recording and the accept/reject commands remain outside
+this slice.

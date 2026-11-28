@@ -8,7 +8,10 @@
       "ScXMLTrackedChangesContext",
       "ScXMLChangeTextPContext",
       "ScXMLInsertionContext",
-      "ScXMLRejectionContext"
+      "ScXMLRejectionContext",
+      "ScXMLDeletionContext",
+      "ScXMLMovementContext",
+      "ScXMLDeletionsContext"
     ],
     "status": "mapped",
     "evidence": {
@@ -42,6 +45,18 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/filter/xml/XMLTrackedChangesContext.cxx",
           "marker": "ScXMLRejectionContext::ScXMLRejectionContext"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/XMLTrackedChangesContext.cxx",
+          "marker": "ScXMLDeletionContext::ScXMLDeletionContext"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/XMLTrackedChangesContext.cxx",
+          "marker": "ScXMLMovementContext::ScXMLMovementContext"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/XMLTrackedChangesContext.cxx",
+          "marker": "ScXMLDeletionsContext::createFastChildContext"
         }
       ]
     },
@@ -51,15 +66,19 @@
       "ScXMLContentChangeContext::endFastElement",
       "ScXMLChangeTextPContext::createFastChildContext",
       "ScXMLInsertionContext::ScXMLInsertionContext",
-      "ScXMLRejectionContext::ScXMLRejectionContext"
+      "ScXMLRejectionContext::ScXMLRejectionContext",
+      "ScXMLDeletionContext::ScXMLDeletionContext",
+      "ScXMLMovementContext::ScXMLMovementContext",
+      "ScXMLDeletionsContext::createFastChildContext"
     ],
     "preservedResponsibilities": [
       "Imports native change information, action identifiers, previous cells and dependency IDs.",
       "Decodes original scalar, formula and formatted previous-cell payloads with a first-paragraph fast path.",
-      "Imports row, column and sheet insertion axes and follows the original rejection dispatch into an incomplete move action."
+      "Imports row, column and sheet insertion axes and follows the original rejection dispatch into an incomplete move action.",
+      "Imports original deletion sequences, movement ranges, inline historical cells and both cutoff spellings."
     ],
     "omittedResponsibilities": [
-      "Deletion and movement snapshots are outside this slice."
+      "Interactive change operations are outside this parser."
     ]
   }
 }

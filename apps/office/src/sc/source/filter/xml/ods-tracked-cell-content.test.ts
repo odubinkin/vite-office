@@ -27,7 +27,9 @@ import { ScBigRange } from "../../../inc/bigrange";
 import { GetString as getEditString } from "../../core/tool/editutil";
 import {
   ScChangeActionContent,
+  ScChangeActionDel,
   ScChangeActionIns,
+  ScChangeActionMove,
   ScChangeActionType,
 } from "../../core/tool/chgtrack";
 import { ODS_MIMETYPE, readOdsDocument, writeOdsDocument, writeOdsXml } from "./xmlwrap";
@@ -96,6 +98,76 @@ it("testChangesAuthorDate retains actual previous cells and anonymizes author an
     SetOption(keep, oldKeep);
     document.Dispose();
     reopened?.Dispose();
+  }
+});
+
+it("roundtrips loaded moves, deleted snapshots, deletion groups and cutoff links", async () => {
+  const ns = `xmlns:office="${ODF_NAMESPACES.office}" xmlns:table="${ODF_NAMESPACES.table}" xmlns:text="${ODF_NAMESPACES.text}"`;
+  const manifest = createManifestXml([
+    [createManifestProperty("FullPath", "/"), createManifestProperty("MediaType", ODS_MIMETYPE)],
+    [
+      createManifestProperty("FullPath", "content.xml"),
+      createManifestProperty("MediaType", "text/xml"),
+    ],
+  ]);
+  const actions = [
+    '<table:insertion table:id="ct1" table:type="row" table:position="0"/>',
+    '<table:cell-content-change table:id="ct2"><table:cell-address table:column="1" table:row="0" table:table="0"/><table:previous><table:change-track-table-cell office:value-type="float" office:value="2"/></table:previous></table:cell-content-change>',
+    '<table:movement table:id="ct3"><table:source-range-address table:column="0" table:row="0" table:table="0"/><table:target-range-address table:column="1" table:row="0" table:table="0"/><table:deletions><table:cell-content-deletion table:id="ct2"><table:change-track-table-cell office:value-type="float" office:value="42"/></table:cell-content-deletion><table:cell-content-deletion><table:cell-address table:column="2" table:row="0" table:table="0"/><table:change-track-table-cell office:value-type="string"><text:p>Historical</text:p></table:change-track-table-cell></table:cell-content-deletion></table:deletions></table:movement>',
+    '<table:deletion table:id="ct4" table:type="row" table:position="3" table:multi-deletion-spanned="2"><table:cut_offs><table:insertion-cut-off table:id="ct1" table:position="1"/><table:movement-cut-off table:id="ct3" table:start-position="-2" table:end-position="-1"/></table:cut_offs></table:deletion>',
+    '<table:deletion table:id="ct5" table:type="row" table:position="3"/>',
+  ].join("");
+  const bytes = await packXmlPackage({
+    mimetype: ODS_MIMETYPE,
+    "META-INF/manifest.xml": manifest,
+    "content.xml": `<office:document-content ${ns}><office:body><office:spreadsheet><table:tracked-changes>${actions}</table:tracked-changes><table:table table:name="Sheet1"><table:table-row><table:table-cell/><table:table-cell office:value-type="float" office:value="8"/></table:table-row></table:table></office:spreadsheet></office:body></office:document-content>`,
+  });
+  const original = await readOdsDocument(bytes);
+  const documents = [original];
+  try {
+    const worker = decodeCalcDocument(structuredClone(encodeCalcDocument(original)));
+    documents.push(worker);
+    const saved = await writeOdsDocument(worker);
+    const exported = await (await DocumentArchive.open(saved)).readTextEntry("content.xml");
+    expect(exported).toContain('table:multi-deletion-spanned="2"');
+    expect(exported).toContain(
+      '<table:cut-offs><table:insertion-cut-off table:id="ct1" table:position="1"/>',
+    );
+    expect(exported).toContain(
+      '<table:movement-cut-off table:id="ct3" table:start-position="-2" table:end-position="-1"/>',
+    );
+    documents.push(await readOdsDocument(saved));
+    for (const document of documents) {
+      const track = document.GetChangeTrack();
+      const content = track?.GetAction(2);
+      const move = track?.GetAction(3);
+      const first = track?.GetAction(4);
+      const second = track?.GetAction(5);
+      assert(
+        track &&
+          content instanceof ScChangeActionContent &&
+          move instanceof ScChangeActionMove &&
+          first instanceof ScChangeActionDel &&
+          second instanceof ScChangeActionDel,
+      );
+      expect(move.GetFromRange().GetVars()).toEqual([0n, 0n, 0n, 0n, 0n, 0n]);
+      expect(move.GetBigRange().GetVars()).toEqual([1n, 0n, 0n, 1n, 0n, 0n]);
+      expect(content.IsDeletedIn()).toBe(true);
+      expect(content.GetNewCell().getDouble()).toBe(42);
+      const [generated, reference] = move.GetDeleted();
+      assert(generated instanceof ScChangeActionContent);
+      expect(reference).toBe(content);
+      expect(generated.GetActionNumber()).toBe(0xffffffef);
+      expect(text(generated.GetNewCell().getSharedString().getString())).toBe("Historical");
+      expect(track.GetActionMax()).toBe(5);
+      expect(first.GetDy()).toBe(0);
+      expect(second.GetDy()).toBe(1);
+      expect(first.GetCutOffInsert()).toEqual({ action: track.GetAction(1), count: 1 });
+      expect(first.GetMoveCutOffs()).toEqual([{ action: move, from: -2, to: -1 }]);
+      expect(document.GetValue(new ScAddress(1, 0, 0))).toBe(8);
+    }
+  } finally {
+    for (const document of documents) document.Dispose();
   }
 });
 

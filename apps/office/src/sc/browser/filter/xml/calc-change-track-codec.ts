@@ -1,4 +1,4 @@
-/** @fileoverview Cloneable transport of loaded native Calc content change actions. */
+/** @fileoverview Cloneable transport of loaded native Calc change actions. */
 import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { FormulaGrammar } from "../../../../formula/inc/grammar";
 import { FormulaError } from "../../../../formula/inc/errorcodes";
@@ -14,10 +14,13 @@ import { ScMatrixMode } from "../../../source/core/data/formulacell";
 import {
   ScChangeActionContent,
   ScChangeActionIns,
+  ScChangeActionDel,
+  ScChangeActionMove,
   ScChangeActionState,
   ScChangeActionType,
   ScChangeTrack,
   type ScChangeActionInfo,
+  type ScChangeActionDeletionType,
   type ScChangeActionInsertionType,
 } from "../../../source/core/tool/chgtrack";
 import {
@@ -58,6 +61,7 @@ interface ActionRecord {
   readonly time: bigint;
   readonly comment: string;
   readonly dependencies: readonly number[];
+  readonly deleted?: readonly number[];
 }
 
 /** Loaded cell content and its historical snapshots. */
@@ -66,6 +70,7 @@ interface ContentActionRecord extends ActionRecord {
   readonly oldCell: ChangeCell;
   readonly oldValue: string;
   readonly newCell?: ChangeCell;
+  readonly newValue?: string;
   readonly previous: number;
 }
 
@@ -75,12 +80,41 @@ interface InsertActionRecord extends ActionRecord {
   readonly endOfList?: boolean;
 }
 
+/** Loaded movement with its separate source range. */
+interface MoveActionRecord extends ActionRecord {
+  readonly type: ScChangeActionType.SC_CAT_MOVE;
+  readonly from: ReturnType<ScBigRange["GetVars"]>;
+}
+
+/** Loaded deletion with original multi-deletion and cutoff data. */
+interface DeleteActionRecord extends ActionRecord {
+  readonly type: ScChangeActionDeletionType;
+  readonly offset: number;
+  readonly insertCutOff?: readonly [id: number, count: number];
+  readonly moveCutOffs?: readonly (readonly [id: number, from: number, to: number])[];
+}
+
 /** Represented native action records accepted by the Worker transport. */
-type ChangeActionRecord = ContentActionRecord | InsertActionRecord;
+type ChangeActionRecord =
+  ContentActionRecord | InsertActionRecord | MoveActionRecord | DeleteActionRecord;
+
+/** Includes older content records without an explicit type. @param record - Loaded wire action. @returns Whether the action carries cell snapshots. */
+function isContentRecord(record: ChangeActionRecord): record is ContentActionRecord {
+  return record.type === undefined || record.type === ScChangeActionType.SC_CAT_CONTENT;
+}
+
+/** Native generated cell stored independently of ordinary actions. */
+interface GeneratedRecord {
+  readonly id: number;
+  readonly range: ReturnType<ScBigRange["GetVars"]>;
+  readonly value: ChangeCell;
+  readonly input: string;
+}
 
 /** Detached workbook change track. */
 export interface CalcChangeTrackRecord {
   readonly actions: readonly ChangeActionRecord[];
+  readonly generated?: readonly GeneratedRecord[];
   readonly protection: Uint8Array;
   readonly max: number;
   readonly lastSaved: number;
@@ -143,6 +177,7 @@ export function encodeCalcChangeTrack(
     /** Copies an actual action and its link identities. @param action - Source action. @returns Transfer record. */
     (action): ChangeActionRecord => {
       const timestamp = action.GetDateTimeUTC();
+      const deleted = action.GetDeleted();
       const info: ActionRecord = {
         id: action.GetActionNumber(),
         rejecting: action.GetRejectingNumber(),
@@ -156,6 +191,7 @@ export function encodeCalcChangeTrack(
           /** Reads native action identity. @param dependent - Native linked action. @returns Identity. */
           (dependent) => dependent.GetActionNumber(),
         ),
+        ...(deleted.length ? { deleted: deleted.map((link) => link.GetActionNumber()) } : {}),
       };
       if (action instanceof ScChangeActionContent)
         return {
@@ -163,6 +199,7 @@ export function encodeCalcChangeTrack(
           oldCell: encodeCell(action.GetOldCell(), textStyles),
           oldValue: action.GetOldValue(),
           newCell: encodeCell(action.GetNewCell(), textStyles),
+          ...(action.GetNewValue() ? { newValue: action.GetNewValue() } : {}),
           previous: action.GetPrevContent()?.GetActionNumber() ?? 0,
         };
       if (action instanceof ScChangeActionIns)
@@ -171,15 +208,52 @@ export function encodeCalcChangeTrack(
           type: action.GetType(),
           ...(action.IsEndOfList() ? { endOfList: true } : {}),
         };
+      if (action instanceof ScChangeActionMove)
+        return { ...info, type: action.GetType(), from: action.GetFromRange().GetVars() };
+      if (action instanceof ScChangeActionDel) {
+        const insertion = action.GetCutOffInsert();
+        const moves = action.GetMoveCutOffs();
+        return {
+          ...info,
+          type: action.GetType(),
+          offset: action.GetDx() || action.GetDy(),
+          ...(insertion
+            ? { insertCutOff: [insertion.action.GetActionNumber(), insertion.count] as const }
+            : {}),
+          ...(moves.length
+            ? {
+                moveCutOffs: moves.map(
+                  ({ action, from, to }) => [action.GetActionNumber(), from, to] as const,
+                ),
+              }
+            : {}),
+        };
+      }
       throw new Error("Calc worker change action type is unsupported");
     },
   );
+  const generated = Array.from(track.generatedEntries(), (action): GeneratedRecord => ({
+    id: action.GetActionNumber(),
+    range: action.GetBigRange().GetVars(),
+    value: encodeCell(action.GetNewCell(), textStyles),
+    input: action.GetNewValue(),
+  }));
   return {
     actions,
+    ...(generated.length ? { generated } : {}),
     protection: track.GetProtection(),
     max: track.GetActionMax(),
     lastSaved: track.GetLastSavedActionNumber(),
   };
+}
+
+/** Checks the native signed64 representation. @param range - Possible range endpoints. @returns Whether all six coordinates are retained. */
+function validRange(range: unknown): range is ReturnType<ScBigRange["GetVars"]> {
+  return (
+    Array.isArray(range) &&
+    range.length === 6 &&
+    range.every((value: unknown) => typeof value === "bigint" && BigInt.asIntN(64, value) === value)
+  );
 }
 
 /** Checks a serialized action number in the supported model. @param id - Target ID. @returns Whether valid. */
@@ -241,6 +315,7 @@ export function decodeCalcChangeTrack(importer: ScXMLImport, record: CalcChangeT
   if (
     !record ||
     !Array.isArray(record.actions) ||
+    (record.generated !== undefined && !Array.isArray(record.generated)) ||
     !ArrayBuffer.isView(record.protection) ||
     Object.prototype.toString.call(record.protection) !== "[object Uint8Array]" ||
     !validId(record.max) ||
@@ -249,6 +324,27 @@ export function decodeCalcChangeTrack(importer: ScXMLImport, record: CalcChangeT
     throw new Error("Calc worker change track is invalid");
   const track = new ScChangeTrack(document);
   try {
+    for (const entry of record.generated ?? []) {
+      if (
+        !entry ||
+        !validId(entry.id) ||
+        !validRange(entry.range) ||
+        typeof entry.input !== "string"
+      )
+        throw new Error("Calc worker generated action is invalid");
+      const cell = decodeCell(importer, entry.value);
+      try {
+        if (
+          cell.isEmpty() ||
+          track
+            .AddLoadedGenerated(cell, new ScBigRange(...entry.range), entry.input)
+            .GetActionNumber() !== entry.id
+        )
+          throw new Error("Calc worker generated action ID is invalid");
+      } finally {
+        cell.clear();
+      }
+    }
     for (const data of record.actions as readonly ChangeActionRecord[]) {
       if (
         !data ||
@@ -258,14 +354,11 @@ export function decodeCalcChangeTrack(importer: ScXMLImport, record: CalcChangeT
         !Number.isInteger(data.state) ||
         data.state < ScChangeActionState.SC_CAS_VIRGIN ||
         data.state > ScChangeActionState.SC_CAS_REJECTED ||
-        !Array.isArray(data.range) ||
-        data.range.length !== 6 ||
-        !data.range.every(
-          /** Tests one raw BigRange coordinate. @param value - Wire coordinate. @returns Whether it fits in signed64. */
-          (value) => typeof value === "bigint" && BigInt.asIntN(64, value) === value,
-        ) ||
+        !validRange(data.range) ||
         !Array.isArray(data.dependencies) ||
         !data.dependencies.every(validId) ||
+        (data.deleted !== undefined &&
+          (!Array.isArray(data.deleted) || !data.deleted.every(validId))) ||
         typeof data.user !== "string" ||
         typeof data.comment !== "string" ||
         !Number.isInteger(data.date) ||
@@ -283,19 +376,16 @@ export function decodeCalcChangeTrack(importer: ScXMLImport, record: CalcChangeT
         comment: data.comment,
         dateTimeUTC: new DateTime(new Date(data.date), Time.fromEncodedTime(data.time)),
       };
-      if (data.type !== undefined && data.type !== ScChangeActionType.SC_CAT_CONTENT) {
-        if (
-          (data.type !== ScChangeActionType.SC_CAT_INSERT_COLS &&
-            data.type !== ScChangeActionType.SC_CAT_INSERT_ROWS &&
-            data.type !== ScChangeActionType.SC_CAT_INSERT_TABS) ||
-          (data.endOfList !== undefined && typeof data.endOfList !== "boolean")
-        )
-          throw new Error("Calc worker insertion action is invalid");
-        if (!track.AppendLoaded(new ScChangeActionIns(data.type, info, data.endOfList)))
+      if (!isContentRecord(data)) {
+        if (!track.AppendLoaded(decodeStructuralAction(data, info)))
           throw new Error("Calc worker change action ID is duplicated");
         continue;
       }
-      if (!validId(data.previous) || typeof data.oldValue !== "string")
+      if (
+        !validId(data.previous) ||
+        typeof data.oldValue !== "string" ||
+        (data.newValue !== undefined && typeof data.newValue !== "string")
+      )
         throw new Error("Calc worker content action is invalid");
       const oldCell = decodeCell(importer, data.oldCell);
       let action: ScChangeActionContent;
@@ -309,7 +399,7 @@ export function decodeCalcChangeTrack(importer: ScXMLImport, record: CalcChangeT
       if (data.newCell !== undefined) {
         const value = decodeCell(importer, data.newCell);
         try {
-          action.SetNewCell(value);
+          action.SetNewCell(value, data.newValue);
         } finally {
           value.clear();
         }
@@ -332,17 +422,20 @@ export function decodeCalcChangeTrack(importer: ScXMLImport, record: CalcChangeT
     for (const data of record.actions) {
       const action = track.GetAction(data.id);
       if (!action) continue;
-      if (
-        action instanceof ScChangeActionContent &&
-        (data.type === undefined || data.type === ScChangeActionType.SC_CAT_CONTENT)
-      ) {
+      if (action instanceof ScChangeActionContent && isContentRecord(data)) {
         const previous = track.GetAction(data.previous);
         if (previous instanceof ScChangeActionContent) action.SetPrevContent(previous);
       }
       for (const id of [...data.dependencies].reverse()) {
-        const dependent = track.GetAction(id);
+        const dependent = track.GetActionOrGenerated(id);
         if (dependent) action.AddDependent(dependent);
       }
+      for (const id of [...(data.deleted ?? [])].reverse()) {
+        const deleted = track.GetActionOrGenerated(id);
+        if (deleted) action.SetDeletedInThis(deleted);
+      }
+      if (action instanceof ScChangeActionDel && "offset" in data)
+        decodeCutOffs(action, data, track);
     }
     track.SetActionMax(record.max);
     track.SetLastSavedActionNumber(record.lastSaved);
@@ -351,5 +444,64 @@ export function decodeCalcChangeTrack(importer: ScXMLImport, record: CalcChangeT
   } catch (error) {
     track.Dispose();
     throw error;
+  }
+}
+
+/** Restores a loaded non-content action with native ownership. @param data - Structural record. @param info - Common trusted action properties. @returns New native action. */
+function decodeStructuralAction(
+  data: InsertActionRecord | MoveActionRecord | DeleteActionRecord,
+  info: ScChangeActionInfo,
+): ScChangeActionIns | ScChangeActionMove | ScChangeActionDel {
+  switch (data.type) {
+    case ScChangeActionType.SC_CAT_INSERT_COLS:
+    case ScChangeActionType.SC_CAT_INSERT_ROWS:
+    case ScChangeActionType.SC_CAT_INSERT_TABS:
+      if (data.endOfList === undefined || typeof data.endOfList === "boolean")
+        return new ScChangeActionIns(data.type, info, data.endOfList);
+      break;
+    case ScChangeActionType.SC_CAT_DELETE_COLS:
+    case ScChangeActionType.SC_CAT_DELETE_ROWS:
+    case ScChangeActionType.SC_CAT_DELETE_TABS:
+      if (Number.isInteger(data.offset)) return new ScChangeActionDel(data.type, info, data.offset);
+      break;
+    case ScChangeActionType.SC_CAT_MOVE:
+      if (validRange(data.from)) return new ScChangeActionMove(info, new ScBigRange(...data.from));
+      break;
+  }
+  throw new Error("Calc worker structural change action is invalid");
+}
+
+/** Restores cutoff links after all action identifiers exist. @param action - Native deletion. @param data - Original cutoff record. @param track - Existing action lookup. */
+function decodeCutOffs(
+  action: ScChangeActionDel,
+  data: DeleteActionRecord,
+  track: ScChangeTrack,
+): void {
+  if (data.insertCutOff !== undefined) {
+    if (
+      !Array.isArray(data.insertCutOff) ||
+      data.insertCutOff.length !== 2 ||
+      !validId(data.insertCutOff[0]) ||
+      !Number.isInteger(data.insertCutOff[1])
+    )
+      throw new Error("Calc worker insertion cutoff is invalid");
+    const insertion = track.GetAction(data.insertCutOff[0]);
+    if (insertion instanceof ScChangeActionIns)
+      action.SetCutOffInsert(insertion, data.insertCutOff[1]);
+  }
+  if (data.moveCutOffs !== undefined && !Array.isArray(data.moveCutOffs))
+    throw new Error("Calc worker movement cutoffs are invalid");
+  for (const cutOff of [...(data.moveCutOffs ?? [])].reverse()) {
+    if (
+      !Array.isArray(cutOff) ||
+      cutOff.length !== 3 ||
+      !validId(cutOff[0]) ||
+      !Number.isInteger(cutOff[1]) ||
+      !Number.isInteger(cutOff[2])
+    )
+      throw new Error("Calc worker movement cutoff is invalid");
+    const movement = track.GetAction(cutOff[0]);
+    if (movement instanceof ScChangeActionMove)
+      action.AddCutOffMove(movement, cutOff[1], cutOff[2]);
   }
 }

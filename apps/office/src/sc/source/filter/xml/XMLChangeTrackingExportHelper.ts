@@ -20,6 +20,8 @@ import {
   ScChangeActionState,
   ScChangeActionType,
   ScChangeActionIns,
+  ScChangeActionDel,
+  ScChangeActionMove,
   type ScChangeAction,
   ScChangeActionContent,
 } from "../../core/tool/chgtrack";
@@ -47,6 +49,8 @@ export class ScChangeTrackingExportHelper {
     for (const action of track.entries()) {
       if (action instanceof ScChangeActionContent) changes += this.WriteContentChange(action);
       else if (action instanceof ScChangeActionIns) changes += this.WriteInsertion(action);
+      else if (action instanceof ScChangeActionDel) changes += this.WriteDeletion(action);
+      else if (action instanceof ScChangeActionMove) changes += this.WriteMovement(action);
     }
     return changes
       ? `<table:tracked-changes>${changes}</table:tracked-changes>`
@@ -67,10 +71,11 @@ export class ScChangeTrackingExportHelper {
     return ` table:id="ct${action.GetActionNumber()}"${acceptance}${rejection}`;
   }
 
-  /** Writes the original ordered dependency identifiers. @param action - Native action. @returns Optional ODF dependency element. */
+  /** Writes the original ordered dependency identifiers and deleted records. @param action - Native action. @returns Optional ODF link elements. */
   private WriteDependings(action: ScChangeAction): string {
     const dependencies = action.GetDependents();
-    return dependencies.length
+    const deleted = action.GetDeleted();
+    const dependings = dependencies.length
       ? `<table:dependencies>${dependencies
           .map(
             /** Emits the original dependency ID. @param dependency - Dependent action. @returns Reference. */
@@ -78,6 +83,26 @@ export class ScChangeTrackingExportHelper {
           )
           .join("")}</table:dependencies>`
       : "";
+    const deletions = deleted.length
+      ? `<table:deletions>${deleted.map(this.WriteDeleted.bind(this)).join("")}</table:deletions>`
+      : "";
+    return dependings + deletions;
+  }
+
+  /** Writes an original deleted action reference or generated cell snapshot. @param action - Deleted native action. @returns ODF deletion reference. */
+  private WriteDeleted(action: ScChangeAction): string {
+    const id = action.GetActionNumber();
+    if (!(action instanceof ScChangeActionContent))
+      return `<table:change-deletion table:id="ct${id}"/>`;
+    if (this.document.GetChangeTrack()?.IsGenerated(id))
+      return `<table:cell-content-deletion>${writeBigRange(action.GetBigRange())}${this.WriteCell(action.GetNewCell(), action.GetNewValue())}</table:cell-content-deletion>`;
+    const value =
+      action.IsTopContent() && action.IsDeletedIn()
+        ? this.WriteCell(action.GetNewCell(), action.GetNewValue())
+        : "";
+    return value
+      ? `<table:cell-content-deletion table:id="ct${id}">${value}</table:cell-content-deletion>`
+      : `<table:cell-content-deletion table:id="ct${id}"/>`;
   }
 
   /** Writes the native cell content change and previous cell. @param action - Native content action. @returns ODF element. */
@@ -101,6 +126,57 @@ export class ScChangeTrackingExportHelper {
     const span = count > 1n ? ` table:count="${count}"` : "";
     const sheet = type === ScChangeActionType.SC_CAT_INSERT_TABS ? "" : ` table:table="${table}"`;
     return `<table:insertion${this.AddActionAttributes(action)} table:type="${axis}" table:position="${position}"${span}${sheet}>${this.WriteChangeInfo(action)}${this.WriteDependings(action)}</table:insertion>`;
+  }
+
+  /** Writes the native deletion and the leading span for a multi-deletion. @param action - Original deletion. @returns ODF deletion element. */
+  private WriteDeletion(action: ScChangeActionDel): string {
+    const type = action.GetType();
+    const range = action.GetBigRange();
+    const [column, row, table] = range.GetVars();
+    const [axis, position] =
+      type === ScChangeActionType.SC_CAT_DELETE_COLS
+        ? ["column", column]
+        : type === ScChangeActionType.SC_CAT_DELETE_ROWS
+          ? ["row", row]
+          : ["table", table];
+    let attributes = ` table:type="${axis}" table:position="${position}"`;
+    if (type !== ScChangeActionType.SC_CAT_DELETE_TABS) {
+      attributes += ` table:table="${table}"`;
+      if (!action.GetDx() && !action.GetDy()) {
+        let count = 1;
+        for (
+          let next = action.GetNext();
+          next instanceof ScChangeActionDel && next.GetType() === type;
+          next = next.GetNext()
+        ) {
+          if ((!next.GetDx() && !next.GetDy()) || !next.GetBigRange().equals(range)) break;
+          count++;
+        }
+        if (count > 1) attributes += ` table:multi-deletion-spanned="${count}"`;
+      }
+    }
+    return `<table:deletion${this.AddActionAttributes(action)}${attributes}>${this.WriteChangeInfo(action)}${this.WriteDependings(action)}${this.WriteCutOffs(action)}</table:deletion>`;
+  }
+
+  /** Writes the native cutoff relationships in insertion and movement order. @param action - Original deletion. @returns Optional ODF cutoff list. */
+  private WriteCutOffs(action: ScChangeActionDel): string {
+    const insertion = action.GetCutOffInsert();
+    let cutoffs = insertion
+      ? `<table:insertion-cut-off table:id="ct${insertion.action.GetActionNumber()}" table:position="${insertion.count}"/>`
+      : "";
+    for (const movement of action.GetMoveCutOffs()) {
+      const position =
+        movement.from === movement.to
+          ? ` table:position="${movement.from}"`
+          : ` table:start-position="${movement.from}" table:end-position="${movement.to}"`;
+      cutoffs += `<table:movement-cut-off table:id="ct${movement.action.GetActionNumber()}"${position}/>`;
+    }
+    return cutoffs ? `<table:cut-offs>${cutoffs}</table:cut-offs>` : "";
+  }
+
+  /** Writes the native movement of the original source to its target. @param action - Original movement. @returns ODF movement element. */
+  private WriteMovement(action: ScChangeActionMove): string {
+    return `<table:movement${this.AddActionAttributes(action)}>${writeBigRange(action.GetFromRange(), "source-range-address")}${writeBigRange(action.GetBigRange(), "target-range-address")}${this.WriteChangeInfo(action)}${this.WriteDependings(action)}</table:movement>`;
   }
 
   /** Writes the native change author and UTC time, applying the original privacy policy. @param action - Native change. @returns ODF info element. */
@@ -214,10 +290,10 @@ function writeTrackedString(value: string, attributes = ""): string {
     : `${element}/>`;
 }
 
-/** Writes the original compact or ranged address. @param range - Native bounds. @returns ODF cell address. */
-function writeBigRange(range: ScBigRange): string {
+/** Writes the original compact or ranged address. @param range - Native bounds. @param element - Original range element. @returns ODF range address. */
+function writeBigRange(range: ScBigRange, element = "cell-address"): string {
   const [column, row, tab, endColumn, endRow, endTab] = range.GetVars();
   if (column === endColumn && row === endRow && tab === endTab)
-    return `<table:cell-address table:column="${column}" table:row="${row}" table:table="${tab}"/>`;
-  return `<table:cell-address table:start-column="${column}" table:start-row="${row}" table:start-table="${tab}" table:end-column="${endColumn}" table:end-row="${endRow}" table:end-table="${endTab}"/>`;
+    return `<table:${element} table:column="${column}" table:row="${row}" table:table="${tab}"/>`;
+  return `<table:${element} table:start-column="${column}" table:start-row="${row}" table:start-table="${tab}" table:end-column="${endColumn}" table:end-row="${endRow}" table:end-table="${endTab}"/>`;
 }

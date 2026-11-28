@@ -29,7 +29,8 @@
     "responsibilities": [
       "Transfers native Calc content changes and original action references through the browser Worker graph.",
       "Transports the formula positions and matrix metadata and the workbook text styles of native previous and linked change cells.",
-      "Transfers native insertion types and raw whole-axis ranges alongside compatible previous content records."
+      "Transfers native insertion types and raw whole-axis ranges alongside compatible previous content records.",
+      "Transfers original deletion and movement ranges, generated values and actual cutoff links."
     ],
     "stackDivergence": {
       "kind": "local-infrastructure",

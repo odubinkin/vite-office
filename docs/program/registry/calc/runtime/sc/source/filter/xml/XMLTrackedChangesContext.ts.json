@@ -20,13 +20,16 @@
         "apps/office/src/sc/source/filter/xml/ods-tracked-cell-content.test.ts",
         "vendor/libreoffice-reference/sc/source/filter/xml/XMLTrackedChangesContext.cxx"
       ],
-      "justification": "Imports native change information, action identifiers, previous cells and dependency IDs. Deletion and movement snapshots are outside this slice. Decodes original scalar, formula and formatted previous-cell payloads with a first-paragraph fast path. Imports row, column and sheet insertion axes and follows the original rejection dispatch into an incomplete move action.",
+      "justification": "Imports native change information, action identifiers, previous cells and dependency IDs. Interactive change operations are outside this parser. Decodes original scalar, formula and formatted previous-cell payloads with a first-paragraph fast path. Imports row, column and sheet insertion axes and follows the original rejection dispatch into an incomplete move action. Imports original deletion sequences, movement ranges, inline historical cells and both cutoff spellings.",
       "knownViolations": [],
       "localSymbols": [
         "ScXMLTrackedChangesContext",
         "ScXMLChangeTextPContext",
         "ScXMLInsertionContext",
-        "ScXMLRejectionContext"
+        "ScXMLRejectionContext",
+        "ScXMLDeletionContext",
+        "ScXMLMovementContext",
+        "ScXMLDeletionsContext"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sc/source/filter/xml/XMLTrackedChangesContext.cxx",
@@ -35,7 +38,10 @@
         "ScXMLContentChangeContext::endFastElement",
         "ScXMLChangeTextPContext::createFastChildContext",
         "ScXMLInsertionContext::ScXMLInsertionContext",
-        "ScXMLRejectionContext::ScXMLRejectionContext"
+        "ScXMLRejectionContext::ScXMLRejectionContext",
+        "ScXMLDeletionContext::ScXMLDeletionContext",
+        "ScXMLMovementContext::ScXMLMovementContext",
+        "ScXMLDeletionsContext::createFastChildContext"
       ]
     }
   }

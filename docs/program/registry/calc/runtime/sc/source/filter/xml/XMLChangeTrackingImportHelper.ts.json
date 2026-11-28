@@ -20,13 +20,15 @@
         "apps/office/src/sc/source/filter/xml/ods-tracked-cell-content.test.ts",
         "vendor/libreoffice-reference/sc/source/filter/xml/XMLChangeTrackingImportHelper.cxx"
       ],
-      "justification": "Reconstructs native content actions in insertion, dependency and current-cell passes. Deletion and movement actions and generated-cell branches remain outside this slice. Reconstructs formula snapshots using the authored position, grammar and matrix metadata, and creates edit cells through the native text engine. Converts insertion position, count and sheet into native whole-axis ranges before resolving action dependencies.",
+      "justification": "Reconstructs native content actions in insertion, dependency and current-cell passes. Interactive acceptance and rejection are outside this loader. Reconstructs formula snapshots using the authored position, grammar and matrix metadata, and creates edit cells through the native text engine. Converts insertion position, count and sheet into native whole-axis ranges before resolving action dependencies. Loads generated deleted cells, original action links and deletion cutoffs during the native multi-pass import.",
       "knownViolations": [],
       "localSymbols": [
         "ScXMLChangeTrackingImportHelper",
         "ScMyCellInfo",
         "createPreviousFormulaCell",
-        "SetPosition"
+        "SetPosition",
+        "CreateGeneratedActions",
+        "SetDeletionDependencies"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sc/source/filter/xml/XMLChangeTrackingImportHelper.cxx",
@@ -35,7 +37,9 @@
         "ScXMLChangeTrackingImportHelper::GetIDFromString",
         "ScMyCellInfo::CreateCell",
         "ScXMLChangeTrackingImportHelper::SetPosition",
-        "ScXMLChangeTrackingImportHelper::CreateInsertAction"
+        "ScXMLChangeTrackingImportHelper::CreateInsertAction",
+        "ScXMLChangeTrackingImportHelper::CreateGeneratedActions",
+        "ScXMLChangeTrackingImportHelper::SetDeletionDependencies"
       ]
     }
   }

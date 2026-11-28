@@ -8,7 +8,9 @@
       "ScXMLChangeTrackingImportHelper",
       "ScMyCellInfo",
       "createPreviousFormulaCell",
-      "SetPosition"
+      "SetPosition",
+      "CreateGeneratedActions",
+      "SetDeletionDependencies"
     ],
     "status": "mapped",
     "evidence": {
@@ -42,6 +44,14 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/filter/xml/XMLChangeTrackingImportHelper.cxx",
           "marker": "ScXMLChangeTrackingImportHelper::CreateInsertAction"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/XMLChangeTrackingImportHelper.cxx",
+          "marker": "ScXMLChangeTrackingImportHelper::CreateGeneratedActions"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/XMLChangeTrackingImportHelper.cxx",
+          "marker": "ScXMLChangeTrackingImportHelper::SetDeletionDependencies"
         }
       ]
     },
@@ -51,15 +61,18 @@
       "ScXMLChangeTrackingImportHelper::GetIDFromString",
       "ScMyCellInfo::CreateCell",
       "ScXMLChangeTrackingImportHelper::SetPosition",
-      "ScXMLChangeTrackingImportHelper::CreateInsertAction"
+      "ScXMLChangeTrackingImportHelper::CreateInsertAction",
+      "ScXMLChangeTrackingImportHelper::CreateGeneratedActions",
+      "ScXMLChangeTrackingImportHelper::SetDeletionDependencies"
     ],
     "preservedResponsibilities": [
       "Reconstructs native content actions in insertion, dependency and current-cell passes.",
       "Reconstructs formula snapshots using the authored position, grammar and matrix metadata, and creates edit cells through the native text engine.",
-      "Converts insertion position, count and sheet into native whole-axis ranges before resolving action dependencies."
+      "Converts insertion position, count and sheet into native whole-axis ranges before resolving action dependencies.",
+      "Loads generated deleted cells, original action links and deletion cutoffs during the native multi-pass import."
     ],
     "omittedResponsibilities": [
-      "Deletion and movement actions and generated-cell branches remain outside this slice."
+      "Interactive acceptance and rejection are outside this loader."
     ]
   }
 }

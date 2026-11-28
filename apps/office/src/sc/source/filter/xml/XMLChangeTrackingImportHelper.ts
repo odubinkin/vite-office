@@ -10,11 +10,14 @@ import { ScFormulaCell, ScMatrixMode } from "../../core/data/formulacell";
 import { ScRangeStringConverter } from "../../core/tool/rangeutl";
 import {
   ScChangeActionContent,
+  ScChangeActionDel,
   ScChangeActionIns,
+  ScChangeActionMove,
   ScChangeActionType,
   ScChangeTrack,
   type ScChangeAction,
   type ScChangeActionInfo,
+  type ScChangeActionDeletionType,
   type ScChangeActionInsertionType,
 } from "../../core/tool/chgtrack";
 import { createCellEditText } from "./xmlcelli.edit";
@@ -67,6 +70,14 @@ export class ScMyCellInfo {
 /** Original shared deferred action data. */
 interface ScMyBaseAction extends ScChangeActionInfo {
   readonly dependencies: readonly number[];
+  readonly deleted: readonly ScMyDeleted[];
+}
+
+/** Original parsed deleted cell or action reference. */
+export interface ScMyDeleted {
+  readonly id: number;
+  readonly cell?: ScMyCellInfo;
+  readonly range?: ScBigRange;
 }
 
 /** Loaded content change before linking its dependencies. */
@@ -81,18 +92,29 @@ export interface ScMyInsAction extends ScMyBaseAction {
   readonly type: ScChangeActionInsertionType;
 }
 
-/** Original rejection import enters the move branch without its source or target ranges. */
-interface ScMyRejectionAction extends ScMyBaseAction {
+/** Original deferred movement. A rejection enters the same branch without a source range. */
+interface ScMyMoveAction extends ScMyBaseAction {
   readonly type: ScChangeActionType.SC_CAT_MOVE;
+  readonly from?: ScBigRange;
+}
+
+/** Deferred deletion, including native multi-deletion and cutoff metadata. */
+interface ScMyDelAction extends ScMyBaseAction {
+  readonly type: ScChangeActionDeletionType;
+  readonly offset: number;
+  readonly insertCutOff?: Readonly<{ id: number; count: number }>;
+  readonly moveCutOffs: readonly Readonly<{ id: number; from: number; to: number }>[];
 }
 
 /** Original deferred action before the native loading pass. */
-type ScMyAction = ScMyContentAction | ScMyInsAction | ScMyRejectionAction;
+type ScMyAction = ScMyContentAction | ScMyInsAction | ScMyMoveAction | ScMyDelAction;
 
 /** Owns the parsed actions until the real document cells are ready. */
 export class ScXMLChangeTrackingImportHelper {
   private readonly actions: ScMyAction[] = [];
   private protection = new Uint8Array();
+  private multiSpanned = 0;
+  private multiSpannedSlaveCount = 0;
 
   /** Parses the original ct identifier and signed-32 range. @param value - Authored identifier. @returns Action number or zero. */
   public static GetIDFromString(value: string | null): number {
@@ -111,9 +133,9 @@ export class ScXMLChangeTrackingImportHelper {
     if (action.actionNumber > 0) this.actions.push(action);
   }
 
-  /** Maps a loaded insertion to the native whole-axis range. @param type - Inserted axis. @param position - First inserted index. @param count - Inserted count. @param table - Sheet for row or column insertions. @returns Original raw endpoints. */
+  /** Maps a loaded insertion or deletion to the native whole-axis range. @param type - Affected axis. @param position - First affected index. @param count - Affected count. @param table - Sheet for row or column changes. @returns Original raw endpoints. */
   public SetPosition(
-    type: ScChangeActionInsertionType,
+    type: ScChangeActionInsertionType | ScChangeActionDeletionType,
     position: number,
     count: number,
     table: number,
@@ -125,12 +147,31 @@ export class ScXMLChangeTrackingImportHelper {
     const sheet = BigInt(table);
     switch (type) {
       case ScChangeActionType.SC_CAT_INSERT_COLS:
+      case ScChangeActionType.SC_CAT_DELETE_COLS:
         return new ScBigRange(start, min, sheet, end, max, sheet);
       case ScChangeActionType.SC_CAT_INSERT_ROWS:
+      case ScChangeActionType.SC_CAT_DELETE_ROWS:
         return new ScBigRange(min, start, sheet, max, end, sheet);
       case ScChangeActionType.SC_CAT_INSERT_TABS:
+      case ScChangeActionType.SC_CAT_DELETE_TABS:
         return new ScBigRange(min, min, start, max, max, end);
     }
+  }
+
+  /** Advances the native offset after reading one member of a multi-deletion. @param type - Deleted axis. @param count - Authored span count. @returns Original slave offset. */
+  public GetMultiSpannedRange(type: ScChangeActionDeletionType, count: number): number {
+    const span = (count << 16) >> 16;
+    if (span) {
+      this.multiSpanned = span;
+      this.multiSpannedSlaveCount = 0;
+    }
+    if (type === ScChangeActionType.SC_CAT_DELETE_TABS) return 0;
+    const offset = this.multiSpannedSlaveCount++;
+    if (this.multiSpannedSlaveCount >= this.multiSpanned) {
+      this.multiSpanned = 0;
+      this.multiSpannedSlaveCount = 0;
+    }
+    return offset;
   }
 
   /** Reconstructs the native actions in their original three import passes. @param importer - Importer for the fully populated workbook. */
@@ -138,9 +179,16 @@ export class ScXMLChangeTrackingImportHelper {
     const document = importer.GetDocument();
     const track = new ScChangeTrack(document);
     const loaded: ScMyAction[] = [];
+    const generated = new Map<ScMyAction, readonly ScChangeActionContent[]>();
     try {
       for (const action of this.actions) {
         const loadedAction = this.CreateAction(action, importer);
+        if (
+          action.type === ScChangeActionType.SC_CAT_DELETE_COLS ||
+          action.type === ScChangeActionType.SC_CAT_DELETE_ROWS ||
+          action.type === ScChangeActionType.SC_CAT_MOVE
+        )
+          generated.set(action, this.CreateGeneratedActions(action.deleted, importer, track));
         if (loadedAction && track.AppendLoaded(loadedAction)) loaded.push(action);
       }
       const last = track.GetLast()?.GetActionNumber() ?? 0;
@@ -149,9 +197,17 @@ export class ScXMLChangeTrackingImportHelper {
         const current = track.GetAction(action.actionNumber);
         if (!current) continue;
         for (let index = action.dependencies.length - 1; index >= 0; index--) {
-          const dependent = track.GetAction(action.dependencies[index] as number);
+          const dependent = track.GetActionOrGenerated(action.dependencies[index] as number);
           if (dependent) current.AddDependent(dependent);
         }
+        this.SetDeletedActions(current, action.deleted, importer, track);
+        for (const cell of generated.get(action) ?? []) current.SetDeletedInThis(cell);
+        if (
+          current instanceof ScChangeActionDel &&
+          current.GetType() !== ScChangeActionType.SC_CAT_DELETE_TABS &&
+          "moveCutOffs" in action
+        )
+          this.SetDeletionDependencies(current, action, track);
         if (
           action.type !== ScChangeActionType.SC_CAT_CONTENT ||
           !(current instanceof ScChangeActionContent)
@@ -165,16 +221,26 @@ export class ScXMLChangeTrackingImportHelper {
         }
       }
       for (const content of track.entries()) {
-        if (!(content instanceof ScChangeActionContent) || !content.IsTopContent()) continue;
+        if (
+          !(content instanceof ScChangeActionContent) ||
+          !content.IsTopContent() ||
+          content.IsDeletedIn()
+        )
+          continue;
         const [column, row, tab] = content.GetBigRange().aStart.GetVars().map(Number) as [
           number,
           number,
           number,
         ];
         if (!document.ValidColRow(column, row) || !document.FetchTable(tab)) continue;
-        const cell = new ScCellValue(document.GetRefCellValue(new ScAddress(column, row, tab)));
+        const address = new ScAddress(column, row, tab);
+        const cell = new ScCellValue(document.GetRefCellValue(address));
         try {
-          if (!cell.isEmpty()) content.SetNewCell(cell);
+          if (!cell.isEmpty()) {
+            const format =
+              document.GetPattern(address)?.GetNumberFormat(document.GetFormatTable()) ?? 0;
+            content.SetNewCell(cell, "", format);
+          }
         } finally {
           cell.clear();
         }
@@ -194,9 +260,73 @@ export class ScXMLChangeTrackingImportHelper {
     }
   }
 
+  /** Adopts original generated cell snapshots in track allocation order. @param deleted - Parsed deleted cells. @param importer - Document and styles. @param track - Actual change tracker. @returns Generated actions. */
+  private CreateGeneratedActions(
+    deleted: readonly ScMyDeleted[],
+    importer: ScXMLImport,
+    track: ScChangeTrack,
+  ): ScChangeActionContent[] {
+    const generated: ScChangeActionContent[] = [];
+    for (const entry of deleted) {
+      if (entry.id || !entry.cell || !entry.range) continue;
+      const cell = entry.cell.CreateCell(importer);
+      try {
+        if (!cell.isEmpty())
+          generated.push(track.AddLoadedGenerated(cell, entry.range, entry.cell.inputString));
+      } finally {
+        cell.clear();
+      }
+    }
+    return generated;
+  }
+
+  /** Resolves original action deletions and restores a deleted cell's newer content. @param action - Native deleting action. @param deleted - Deferred references. @param importer - Workbook importer. @param track - Track lookup. */
+  private SetDeletedActions(
+    action: ScChangeAction,
+    deleted: readonly ScMyDeleted[],
+    importer: ScXMLImport,
+    track: ScChangeTrack,
+  ): void {
+    for (const entry of [...deleted].reverse()) {
+      if (!entry.id) continue;
+      const referenced = track.GetActionOrGenerated(entry.id);
+      if (!referenced) continue;
+      action.SetDeletedInThis(referenced);
+      if (referenced instanceof ScChangeActionContent && entry.cell) {
+        const value = entry.cell.CreateCell(importer);
+        try {
+          if (!value.equalsWithoutFormat(referenced.GetNewCell()))
+            referenced.SetNewCell(value, entry.cell.inputString);
+        } finally {
+          value.clear();
+        }
+      }
+    }
+  }
+
+  /** Resolves cutoff action types after the original load pass. @param deletion - Native deletion. @param info - Parsed cutoff references. @param track - Track lookup. */
+  private SetDeletionDependencies(
+    deletion: ScChangeActionDel,
+    info: ScMyDelAction,
+    track: ScChangeTrack,
+  ): void {
+    if (info.insertCutOff) {
+      const insertion = track.GetAction(info.insertCutOff.id);
+      if (insertion instanceof ScChangeActionIns)
+        deletion.SetCutOffInsert(insertion, (info.insertCutOff.count << 16) >> 16);
+    }
+    for (const cutOff of [...info.moveCutOffs].reverse()) {
+      const movement = track.GetAction(cutOff.id);
+      if (movement instanceof ScChangeActionMove)
+        deletion.AddCutOffMove(movement, (cutOff.from << 16) >> 16, (cutOff.to << 16) >> 16);
+    }
+  }
+
   /** Materializes a deferred action in native insertion order. @param action - Parsed action. @param importer - Document and styles. @returns Owned action when the loader admits it. */
   private CreateAction(action: ScMyAction, importer: ScXMLImport): ScChangeAction | undefined {
-    if (action.type === ScChangeActionType.SC_CAT_MOVE) return undefined;
+    if (action.type === ScChangeActionType.SC_CAT_MOVE)
+      return action.from ? new ScChangeActionMove(action, action.from) : undefined;
+    if ("offset" in action) return new ScChangeActionDel(action.type, action, action.offset);
     if (action.type !== ScChangeActionType.SC_CAT_CONTENT)
       return new ScChangeActionIns(action.type, action);
     const cell = action.oldCell.CreateCell(importer);

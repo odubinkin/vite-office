@@ -16,6 +16,7 @@ import { ScBigRange } from "../../../inc/bigrange";
 import {
   ScChangeActionState as State,
   ScChangeActionType as Type,
+  type ScChangeActionDeletionType,
   type ScChangeActionInsertionType,
 } from "../../core/tool/chgtrack";
 import { ScMatrixMode } from "../../core/data/formulacell";
@@ -24,6 +25,7 @@ import { ScXMLImportContext } from "./importcontext";
 import {
   ScXMLChangeTrackingImportHelper,
   ScMyCellInfo,
+  type ScMyDeleted,
   type ScMyFormulaInfo,
 } from "./XMLChangeTrackingImportHelper";
 import type { ScXMLImport } from "./xmlimprt";
@@ -52,6 +54,10 @@ export class ScXMLTrackedChangesContext extends ScXMLImportContext {
         return new ScXMLContentChangeContext(this.GetScImport(), attributes, this.helper);
       case X.TABLE_INSERTION:
         return new ScXMLInsertionContext(this.GetScImport(), attributes, this.helper);
+      case X.TABLE_DELETION:
+        return new ScXMLDeletionContext(this.GetScImport(), attributes, this.helper);
+      case X.TABLE_MOVEMENT:
+        return new ScXMLMovementContext(this.GetScImport(), attributes, this.helper);
       case X.TABLE_REJECTION:
         return new ScXMLRejectionContext(this.GetScImport(), attributes, this.helper);
       default:
@@ -75,6 +81,7 @@ abstract class ScXMLChangeActionContext extends ScXMLImportContext {
   private timestamp = new DateTime(DateTime.EMPTY);
   private comment = "";
   private readonly dependencies: number[] = [];
+  private readonly deleted: ScMyDeleted[] = [];
 
   /** Reads the original action ID and acceptance. @param owner - Workbook importer. @param attributes - Action attributes. @param helper - Deferred track owner. */
   public constructor(
@@ -110,6 +117,8 @@ abstract class ScXMLChangeActionContext extends ScXMLImportContext {
         });
       case X.TABLE_DEPENDENCIES:
         return new ScXMLDependingsContext(this.dependencies);
+      case X.TABLE_DELETIONS:
+        return new ScXMLDeletionsContext(this.GetScImport(), this.deleted);
       default:
         return this.createUnknownChildContext();
     }
@@ -126,6 +135,7 @@ abstract class ScXMLChangeActionContext extends ScXMLImportContext {
       dateTimeUTC: this.timestamp,
       comment: this.comment,
       dependencies: this.dependencies,
+      deleted: this.deleted,
     };
   }
 
@@ -203,6 +213,186 @@ class ScXMLInsertionContext extends ScXMLChangeActionContext {
   /** Publishes the original completed insertion. */
   public override endFastElement(): void {
     this.helper.EndChangeAction({ ...this.GetActionInfo(), type: this.type });
+  }
+}
+
+/** Native deletion action attributes and its optional cutoff records. */
+class ScXMLDeletionContext extends ScXMLChangeActionContext {
+  private readonly type: ScChangeActionDeletionType;
+  private readonly multiSpanned: number;
+  private insertCutOff: { id: number; count: number } | undefined;
+  private readonly moveCutOffs: { id: number; from: number; to: number }[] = [];
+
+  /** Reads the original deleted axis and one-row, column or sheet range. @param owner - Workbook importer. @param attributes - Action attributes. @param helper - Deferred track owner. */
+  public constructor(
+    owner: ScXMLImport,
+    attributes: FastAttributeList,
+    helper: ScXMLChangeTrackingImportHelper,
+  ) {
+    super(owner, attributes, helper);
+    const axis = attributes.get(X.TABLE_TYPE);
+    this.type =
+      axis === "row"
+        ? Type.SC_CAT_DELETE_ROWS
+        : axis === "table"
+          ? Type.SC_CAT_DELETE_TABS
+          : Type.SC_CAT_DELETE_COLS;
+    this.range = helper.SetPosition(
+      this.type,
+      attributes.getAsInteger(X.TABLE_POSITION) ?? 0,
+      1,
+      attributes.getAsInteger(X.TABLE_TABLE) ?? 0,
+    );
+    this.multiSpanned = attributes.getAsInteger(X.TABLE_MULTI_DELETION_SPANNED) ?? 0;
+  }
+
+  /** Reads cutoff references before their target actions have been loaded. @param element - Child element. @param attributes - Child attributes. @returns Child context. */
+  public override createFastChildContext(
+    element: X,
+    attributes: FastAttributeList,
+  ): SvXMLImportContext {
+    if (element !== X.TABLE_CUT_OFFS) return super.createFastChildContext(element, attributes);
+    return new ScXMLCutOffsContext(
+      (id, count) => {
+        this.insertCutOff = { id, count };
+      },
+      (id, from, to) => {
+        this.moveCutOffs.push({ id, from, to });
+      },
+    );
+  }
+
+  /** Publishes the original completed deletion. */
+  public override endFastElement(): void {
+    this.helper.EndChangeAction({
+      ...this.GetActionInfo(),
+      type: this.type,
+      offset: this.helper.GetMultiSpannedRange(this.type, this.multiSpanned),
+      ...(this.insertCutOff ? { insertCutOff: this.insertCutOff } : {}),
+      moveCutOffs: this.moveCutOffs,
+    });
+  }
+}
+
+/** Native movement action with independent authored source and target ranges. */
+class ScXMLMovementContext extends ScXMLChangeActionContext {
+  private source = new ScBigRange();
+
+  /** Reads the original source and target ranges. @param element - Child element. @param attributes - Child attributes. @returns Child context. */
+  public override createFastChildContext(
+    element: X,
+    attributes: FastAttributeList,
+  ): SvXMLImportContext {
+    if (element === X.TABLE_SOURCE_RANGE_ADDRESS) {
+      this.source = readBigRange(attributes);
+      return new SvXMLIgnoreContext(true);
+    }
+    if (element === X.TABLE_TARGET_RANGE_ADDRESS) {
+      this.range = readBigRange(attributes);
+      return new SvXMLIgnoreContext(true);
+    }
+    return super.createFastChildContext(element, attributes);
+  }
+
+  /** Publishes the native movement ranges. */
+  public override endFastElement(): void {
+    this.helper.EndChangeAction({
+      ...this.GetActionInfo(),
+      type: Type.SC_CAT_MOVE,
+      from: this.source,
+    });
+  }
+}
+
+/** Original cutoff list under a tracked deletion. */
+class ScXMLCutOffsContext extends SvXMLImportContext {
+  /** Binds insertion and movement cutoff receivers. @param insert - Insertion cutoff receiver. @param move - Movement cutoff receiver. */
+  public constructor(
+    private readonly insert: (id: number, count: number) => void,
+    private readonly move: (id: number, from: number, to: number) => void,
+  ) {
+    super();
+  }
+
+  /** Collects original cutoff IDs and their explicit or compact positions. @param element - Cutoff token. @param attributes - Cutoff attributes. @returns Leaf context. */
+  public override createFastChildContext(
+    element: X,
+    attributes: FastAttributeList,
+  ): SvXMLImportContext {
+    const id = ScXMLChangeTrackingImportHelper.GetIDFromString(attributes.get(X.TABLE_ID));
+    const position =
+      attributes.get(X.TABLE_POSITION) === null
+        ? undefined
+        : (attributes.getAsInteger(X.TABLE_POSITION) ?? 0);
+    if (element === X.TABLE_INSERTION_CUT_OFF) this.insert(id, position ?? 0);
+    else if (element === X.TABLE_MOVEMENT_CUT_OFF)
+      this.move(
+        id,
+        position ?? attributes.getAsInteger(X.TABLE_START_POSITION) ?? 0,
+        position ?? attributes.getAsInteger(X.TABLE_END_POSITION) ?? 0,
+      );
+    return new SvXMLIgnoreContext(true);
+  }
+}
+
+/** Original references and historical snapshots inside the deletion list. */
+class ScXMLDeletionsContext extends ScXMLImportContext {
+  /** Shares the action's ordered deleted-data list. @param owner - Workbook importer. @param deleted - Parsed deletion target. */
+  public constructor(
+    owner: ScXMLImport,
+    private readonly deleted: ScMyDeleted[],
+  ) {
+    super(owner);
+  }
+
+  /** Admits plain action references or full cell snapshots. @param element - Deleted child. @param attributes - XML attributes. @returns Child context. */
+  public override createFastChildContext(
+    element: X,
+    attributes: FastAttributeList,
+  ): SvXMLImportContext {
+    const id = ScXMLChangeTrackingImportHelper.GetIDFromString(attributes.get(X.TABLE_ID));
+    if (element === X.TABLE_CHANGE_DELETION) this.deleted.push({ id });
+    else if (element === X.TABLE_CELL_CONTENT_DELETION)
+      return new ScXMLCellContentDeletionContext(this.GetScImport(), id, this.deleted);
+    return new SvXMLIgnoreContext(true);
+  }
+}
+
+/** Original deleted cell stores either a generated position or an action ID. */
+class ScXMLCellContentDeletionContext extends ScXMLImportContext {
+  private range = new ScBigRange();
+  private cell = new ScMyCellInfo();
+
+  /** Binds a deleted cell to its original optional action ID. @param owner - Workbook importer. @param id - Referenced action. @param deleted - Parsed deletion target. */
+  public constructor(
+    owner: ScXMLImport,
+    private readonly id: number,
+    private readonly deleted: ScMyDeleted[],
+  ) {
+    super(owner);
+  }
+
+  /** Reads the normal change cell subtree and its original address. @param element - Child token. @param attributes - Child attributes. @returns Child context. */
+  public override createFastChildContext(
+    element: X,
+    attributes: FastAttributeList,
+  ): SvXMLImportContext {
+    if (element === X.TABLE_CELL_ADDRESS) this.range = readBigRange(attributes);
+    else if (element === X.TABLE_CHANGE_TRACK_TABLE_CELL)
+      return new ScXMLChangeCellContext(
+        this.GetScImport(),
+        attributes,
+        Number(this.range.aStart.GetVars()[2]),
+        (cell) => {
+          this.cell = cell;
+        },
+      );
+    return new SvXMLIgnoreContext(true);
+  }
+
+  /** Adds the completed parsed snapshot to the containing action. */
+  public override endFastElement(): void {
+    this.deleted.push({ id: this.id, range: this.range, cell: this.cell });
   }
 }
 
