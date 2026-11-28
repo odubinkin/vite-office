@@ -6,7 +6,8 @@
     "localPath": "apps/office/src/sc/source/filter/xml/XMLChangeTrackingExportHelper.ts",
     "localSymbols": [
       "ScChangeTrackingExportHelper",
-      "WriteFormulaCell"
+      "WriteFormulaCell",
+      "WriteInsertion"
     ],
     "status": "mapped",
     "evidence": {
@@ -36,6 +37,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/filter/xml/XMLChangeTrackingExportHelper.cxx",
           "marker": "ScChangeTrackingExportHelper::WriteEditCell"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/XMLChangeTrackingExportHelper.cxx",
+          "marker": "ScChangeTrackingExportHelper::WriteInsertion"
         }
       ]
     },
@@ -44,14 +49,16 @@
       "ScChangeTrackingExportHelper::CollectAndWriteChanges",
       "ScChangeTrackingExportHelper::WriteChangeInfo",
       "ScChangeTrackingExportHelper::WriteFormulaCell",
-      "ScChangeTrackingExportHelper::WriteEditCell"
+      "ScChangeTrackingExportHelper::WriteEditCell",
+      "ScChangeTrackingExportHelper::WriteInsertion"
     ],
     "preservedResponsibilities": [
       "Writes native content actions, previous cells and change author/date privacy rules.",
-      "Writes historical formula addresses, grammar, matrix flags and results and exports historical edit text using workbook text styles."
+      "Writes historical formula addresses, grammar, matrix flags and results and exports historical edit text using workbook text styles.",
+      "Writes native insertion metadata, whole-axis position and ordered dependency identifiers."
     ],
     "omittedResponsibilities": [
-      "Structural actions and generated-cell branches remain outside this slice."
+      "Deletion, movement and generated-cell branches remain outside this slice."
     ]
   }
 }

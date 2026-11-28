@@ -7,7 +7,8 @@
     "localSymbols": [
       "ScChangeAction",
       "ScChangeActionContent",
-      "ScChangeTrack"
+      "ScChangeTrack",
+      "ScChangeActionIns"
     ],
     "status": "mapped",
     "evidence": {
@@ -29,19 +30,25 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/core/tool/chgtrack.cxx",
           "marker": "ScChangeTrack::AppendLoaded"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/chgtrack.cxx",
+          "marker": "ScChangeActionIns::ScChangeActionIns"
         }
       ]
     },
     "upstreamPath": "sc/source/core/tool/chgtrack.cxx",
     "upstreamSymbols": [
       "ScChangeActionContent::ScChangeActionContent",
-      "ScChangeTrack::AppendLoaded"
+      "ScChangeTrack::AppendLoaded",
+      "ScChangeActionIns::ScChangeActionIns"
     ],
     "preservedResponsibilities": [
-      "Owns loaded content actions, the old and new cell values, action order and dependency links."
+      "Owns loaded content actions, the old and new cell values, action order and dependency links.",
+      "Owns loaded row, column and sheet insertion actions together with the preserved content snapshots."
     ],
     "omittedResponsibilities": [
-      "Interactive change recording, structural changes, accept/reject commands and desktop notification are outside this slice."
+      "Interactive change recording, deletion and movement actions, accept/reject commands and desktop notification are outside this slice."
     ]
   }
 }

@@ -8418,3 +8418,14 @@ paragraph switches to formatted edit text, the shared text importer uses the
 space element's own attributes. Calc follows the original transition.
 
 - [Original tracked first-paragraph child handling](../../vendor/libreoffice-reference/sc/source/filter/xml/XMLTrackedChangesContext.cxx#L657)
+
+### CALC-877 — The tracked rejection context dispatches to a move without ranges
+
+The rejection context starts a move action and reads the ordinary change
+metadata without supplying source or target ranges. The move loader returns
+an empty action for those missing ranges, and the track import drops the
+entry. Calc preserves that result for the rejection marker.
+
+- [Original rejection dispatch](../../vendor/libreoffice-reference/sc/source/filter/xml/XMLTrackedChangesContext.cxx#L1327)
+- [Original move construction](../../vendor/libreoffice-reference/sc/source/filter/xml/XMLChangeTrackingImportHelper.cxx#L431)
+- [Original handling of malformed actions](../../vendor/libreoffice-reference/sc/source/filter/xml/XMLChangeTrackingImportHelper.cxx#L774)

@@ -13,8 +13,12 @@ import { CellType } from "../../../inc/global";
 import { ScMatrixMode } from "../../../source/core/data/formulacell";
 import {
   ScChangeActionContent,
+  ScChangeActionIns,
   ScChangeActionState,
+  ScChangeActionType,
   ScChangeTrack,
+  type ScChangeActionInfo,
+  type ScChangeActionInsertionType,
 } from "../../../source/core/tool/chgtrack";
 import {
   createPreviousCell,
@@ -43,8 +47,8 @@ type ChangeCell =
       readonly cache?: number | string;
     };
 
-/** Loaded action before connecting its original links. */
-interface ContentActionRecord {
+/** Common loaded action attributes before connecting links. */
+interface ActionRecord {
   readonly id: number;
   readonly rejecting: number;
   readonly state: ScChangeActionState;
@@ -53,16 +57,30 @@ interface ContentActionRecord {
   readonly date: number;
   readonly time: bigint;
   readonly comment: string;
+  readonly dependencies: readonly number[];
+}
+
+/** Loaded cell content and its historical snapshots. */
+interface ContentActionRecord extends ActionRecord {
+  readonly type?: ScChangeActionType.SC_CAT_CONTENT;
   readonly oldCell: ChangeCell;
   readonly oldValue: string;
   readonly newCell?: ChangeCell;
   readonly previous: number;
-  readonly dependencies: readonly number[];
 }
+
+/** Loaded insertion with the original whole-axis range. */
+interface InsertActionRecord extends ActionRecord {
+  readonly type: ScChangeActionInsertionType;
+  readonly endOfList?: boolean;
+}
+
+/** Represented native action records accepted by the Worker transport. */
+type ChangeActionRecord = ContentActionRecord | InsertActionRecord;
 
 /** Detached workbook change track. */
 export interface CalcChangeTrackRecord {
-  readonly actions: readonly ContentActionRecord[];
+  readonly actions: readonly ChangeActionRecord[];
   readonly protection: Uint8Array;
   readonly max: number;
   readonly lastSaved: number;
@@ -123,9 +141,9 @@ export function encodeCalcChangeTrack(
   const actions = Array.from(
     track.entries(),
     /** Copies an actual action and its link identities. @param action - Source action. @returns Transfer record. */
-    (action): ContentActionRecord => {
+    (action): ChangeActionRecord => {
       const timestamp = action.GetDateTimeUTC();
-      return {
+      const info: ActionRecord = {
         id: action.GetActionNumber(),
         rejecting: action.GetRejectingNumber(),
         state: action.GetState(),
@@ -134,15 +152,26 @@ export function encodeCalcChangeTrack(
         date: timestamp.GetDate(),
         time: timestamp.GetTime(),
         comment: action.GetComment(),
-        oldCell: encodeCell(action.GetOldCell(), textStyles),
-        oldValue: action.GetOldValue(),
-        newCell: encodeCell(action.GetNewCell(), textStyles),
-        previous: action.GetPrevContent()?.GetActionNumber() ?? 0,
         dependencies: action.GetDependents().map(
           /** Reads native action identity. @param dependent - Native linked action. @returns Identity. */
           (dependent) => dependent.GetActionNumber(),
         ),
       };
+      if (action instanceof ScChangeActionContent)
+        return {
+          ...info,
+          oldCell: encodeCell(action.GetOldCell(), textStyles),
+          oldValue: action.GetOldValue(),
+          newCell: encodeCell(action.GetNewCell(), textStyles),
+          previous: action.GetPrevContent()?.GetActionNumber() ?? 0,
+        };
+      if (action instanceof ScChangeActionIns)
+        return {
+          ...info,
+          type: action.GetType(),
+          ...(action.IsEndOfList() ? { endOfList: true } : {}),
+        };
+      throw new Error("Calc worker change action type is unsupported");
     },
   );
   return {
@@ -220,13 +249,12 @@ export function decodeCalcChangeTrack(importer: ScXMLImport, record: CalcChangeT
     throw new Error("Calc worker change track is invalid");
   const track = new ScChangeTrack(document);
   try {
-    for (const data of record.actions as readonly ContentActionRecord[]) {
+    for (const data of record.actions as readonly ChangeActionRecord[]) {
       if (
         !data ||
         !validId(data.id) ||
         data.id === 0 ||
         !validId(data.rejecting) ||
-        !validId(data.previous) ||
         !Number.isInteger(data.state) ||
         data.state < ScChangeActionState.SC_CAS_VIRGIN ||
         data.state > ScChangeActionState.SC_CAS_REJECTED ||
@@ -240,30 +268,39 @@ export function decodeCalcChangeTrack(importer: ScXMLImport, record: CalcChangeT
         !data.dependencies.every(validId) ||
         typeof data.user !== "string" ||
         typeof data.comment !== "string" ||
-        typeof data.oldValue !== "string" ||
         !Number.isInteger(data.date) ||
         (data.date | 0) !== data.date ||
         typeof data.time !== "bigint" ||
         BigInt.asIntN(64, data.time) !== data.time
       )
         throw new Error("Calc worker change action is invalid");
+      const info: ScChangeActionInfo = {
+        actionNumber: data.id,
+        rejectingNumber: data.rejecting,
+        state: data.state,
+        range: new ScBigRange(...data.range),
+        user: data.user,
+        comment: data.comment,
+        dateTimeUTC: new DateTime(new Date(data.date), Time.fromEncodedTime(data.time)),
+      };
+      if (data.type !== undefined && data.type !== ScChangeActionType.SC_CAT_CONTENT) {
+        if (
+          (data.type !== ScChangeActionType.SC_CAT_INSERT_COLS &&
+            data.type !== ScChangeActionType.SC_CAT_INSERT_ROWS &&
+            data.type !== ScChangeActionType.SC_CAT_INSERT_TABS) ||
+          (data.endOfList !== undefined && typeof data.endOfList !== "boolean")
+        )
+          throw new Error("Calc worker insertion action is invalid");
+        if (!track.AppendLoaded(new ScChangeActionIns(data.type, info, data.endOfList)))
+          throw new Error("Calc worker change action ID is duplicated");
+        continue;
+      }
+      if (!validId(data.previous) || typeof data.oldValue !== "string")
+        throw new Error("Calc worker content action is invalid");
       const oldCell = decodeCell(importer, data.oldCell);
       let action: ScChangeActionContent;
       try {
-        action = new ScChangeActionContent(
-          {
-            actionNumber: data.id,
-            rejectingNumber: data.rejecting,
-            state: data.state,
-            range: new ScBigRange(...data.range),
-            user: data.user,
-            comment: data.comment,
-            dateTimeUTC: new DateTime(new Date(data.date), Time.fromEncodedTime(data.time)),
-          },
-          oldCell,
-          document,
-          data.oldValue,
-        );
+        action = new ScChangeActionContent(info, oldCell, document, data.oldValue);
       } finally {
         oldCell.clear();
       }
@@ -295,8 +332,13 @@ export function decodeCalcChangeTrack(importer: ScXMLImport, record: CalcChangeT
     for (const data of record.actions) {
       const action = track.GetAction(data.id);
       if (!action) continue;
-      const previous = track.GetAction(data.previous);
-      if (previous) action.SetPrevContent(previous);
+      if (
+        action instanceof ScChangeActionContent &&
+        (data.type === undefined || data.type === ScChangeActionType.SC_CAT_CONTENT)
+      ) {
+        const previous = track.GetAction(data.previous);
+        if (previous instanceof ScChangeActionContent) action.SetPrevContent(previous);
+      }
       for (const id of [...data.dependencies].reverse()) {
         const dependent = track.GetAction(id);
         if (dependent) action.AddDependent(dependent);

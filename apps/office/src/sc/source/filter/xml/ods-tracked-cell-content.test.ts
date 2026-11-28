@@ -23,8 +23,14 @@ import {
 import { processOdsWorkerRequest } from "../../../browser/filter/xml/ods-worker-runtime";
 import type { ScDocument } from "../../../inc/document";
 import { ScAddress } from "../../../inc/address";
+import { ScBigRange } from "../../../inc/bigrange";
 import { GetString as getEditString } from "../../core/tool/editutil";
-import { ODS_MIMETYPE, readOdsDocument, writeOdsDocument } from "./xmlwrap";
+import {
+  ScChangeActionContent,
+  ScChangeActionIns,
+  ScChangeActionType,
+} from "../../core/tool/chgtrack";
+import { ODS_MIMETYPE, readOdsDocument, writeOdsDocument, writeOdsXml } from "./xmlwrap";
 
 it("testChangesAuthorDate retains actual previous cells and anonymizes author and date on export", async () => {
   const fixture = readFileSync(
@@ -42,7 +48,9 @@ it("testChangesAuthorDate retains actual previous cells and anonymizes author an
     const track = document.GetChangeTrack();
     const first = track?.GetAction(1);
     const second = track?.GetAction(2);
-    assert(track && first && second);
+    assert(
+      track && first instanceof ScChangeActionContent && second instanceof ScChangeActionContent,
+    );
     expect(track.GetActionMax()).toBe(2);
     expect(first.GetBigRange().GetVars()).toEqual([1n, 0n, 0n, 1n, 0n, 0n]);
     expect(first.GetOldCell().isEmpty()).toBe(true);
@@ -113,12 +121,14 @@ it("roundtrips historical formulas and formatted text with their original action
   try {
     const source = documents[0];
     assert(source);
-    expect(source.GetChangeTrack()?.GetAction(1)?.GetOldCell().getFormula()?.GetValue()).toBe(6);
+    const sourceAction = source.GetChangeTrack()?.GetAction(1);
+    assert(sourceAction instanceof ScChangeActionContent);
+    expect(sourceAction.GetOldCell().getFormula()?.GetValue()).toBe(6);
     const worker = decodeCalcDocument(structuredClone(encodeCalcDocument(source)));
     documents.push(worker);
-    expect(worker.GetChangeTrack()?.GetAction(1)?.GetOldCell().getFormula()?.GetDirty()).toBe(
-      false,
-    );
+    const workerAction = worker.GetChangeTrack()?.GetAction(1);
+    assert(workerAction instanceof ScChangeActionContent);
+    expect(workerAction.GetOldCell().getFormula()?.GetDirty()).toBe(false);
     const saved = await writeOdsDocument(worker);
     const exported = await (await DocumentArchive.open(saved)).readTextEntry("content.xml");
     expect(exported).toMatch(
@@ -133,7 +143,7 @@ it("roundtrips historical formulas and formatted text with their original action
       const track = document.GetChangeTrack();
       const before = track?.GetAction(1);
       const after = track?.GetAction(2);
-      assert(before && after);
+      assert(before instanceof ScChangeActionContent && after instanceof ScChangeActionContent);
       const formula = before.GetOldCell().getFormula();
       const edit = after.GetOldCell().getEditText();
       assert(formula && edit);
@@ -148,6 +158,62 @@ it("roundtrips historical formulas and formatted text with their original action
         value.dispose();
       }
       expect(document.GetValue(new ScAddress(0, 0, 0))).toBe(9);
+    }
+  } finally {
+    for (const document of documents) document.Dispose();
+  }
+});
+
+it("keeps the native tracked insertion from LibreOffice test_tdf131907 through ODS and Worker", async () => {
+  const bytes = readFileSync("../../vendor/libreoffice-reference/sc/qa/uitest/data/tdf131907.ods");
+  const original = await readOdsDocument(new Uint8Array(bytes));
+  const documents = [original];
+  try {
+    const track = original.GetChangeTrack();
+    const row = track?.GetAction(1);
+    assert(track && row instanceof ScChangeActionIns);
+    expect(row.GetType()).toBe(ScChangeActionType.SC_CAT_INSERT_ROWS);
+    expect(row.IsEndOfList()).toBe(false);
+    expect(row.GetDateTimeUTC().GetNanoSec()).toBe(811000000);
+    const { nRangeMin: min, nRangeMax: max } = ScBigRange;
+    expect(row.GetBigRange().GetVars()).toEqual([min, 0n, 0n, max, 0n, 0n]);
+
+    const base = await writeOdsXml(original);
+    const dependent = '<table:dependencies><table:dependency table:id="ct2"/></table:dependencies>';
+    const additions =
+      '<table:insertion table:id="ct2" table:position="2" table:count="3"/><table:insertion table:id="ct3" table:type="table" table:position="1"/><table:rejection table:id="ct4"/>';
+    const content = (base.files["content.xml"] as string)
+      .replace("</table:insertion>", `${dependent}</table:insertion>`)
+      .replace("</table:tracked-changes>", `${additions}</table:tracked-changes>`);
+    const imported = await readOdsDocument({
+      ...base,
+      files: { ...base.files, "content.xml": content },
+    });
+    documents.push(imported);
+    const worker = decodeCalcDocument(structuredClone(encodeCalcDocument(imported)));
+    documents.push(worker);
+    const saved = await writeOdsDocument(worker);
+    const exported = await (await DocumentArchive.open(saved)).readTextEntry("content.xml");
+    expect(exported).toContain(
+      '<table:insertion table:id="ct2" table:type="column" table:position="2" table:count="3" table:table="0">',
+    );
+    expect(exported).toContain(
+      '<table:insertion table:id="ct3" table:type="table" table:position="1">',
+    );
+    expect(exported).not.toContain("<table:rejection");
+    const reopened = await readOdsDocument(saved);
+    documents.push(reopened);
+    for (const document of [imported, worker, reopened]) {
+      const changes = document.GetChangeTrack();
+      const insertedRow = changes?.GetAction(1);
+      const columns = changes?.GetAction(2);
+      const sheet = changes?.GetAction(3);
+      assert(changes && insertedRow && columns && sheet);
+      expect(changes.GetActionMax()).toBe(3);
+      expect(insertedRow.GetDependents()).toEqual([columns]);
+      expect(columns.GetBigRange().GetVars()).toEqual([2n, min, 0n, 4n, max, 0n]);
+      expect(sheet.GetBigRange().GetVars()).toEqual([min, min, 1n, max, max, 1n]);
+      expect(document.GetTableCount()).toBe(original.GetTableCount());
     }
   } finally {
     for (const document of documents) document.Dispose();

@@ -13,7 +13,11 @@ import {
 import { XMLToken as X } from "../../../../xmloff/source/core/xmltoken";
 import { SvXMLUnitConverter } from "../../../../xmloff/source/core/xmluconv";
 import { ScBigRange } from "../../../inc/bigrange";
-import { ScChangeActionState as State } from "../../core/tool/chgtrack";
+import {
+  ScChangeActionState as State,
+  ScChangeActionType as Type,
+  type ScChangeActionInsertionType,
+} from "../../core/tool/chgtrack";
 import { ScMatrixMode } from "../../core/data/formulacell";
 import { ScXMLCellTextParaContext } from "./celltextparacontext";
 import { ScXMLImportContext } from "./importcontext";
@@ -25,7 +29,7 @@ import {
 import type { ScXMLImport } from "./xmlimprt";
 import type { CellTextParagraph } from "./xmlexprt.celltext";
 
-/** Dispatches the represented original tracked cell content actions. */
+/** Dispatches the represented original tracked actions. */
 export class ScXMLTrackedChangesContext extends ScXMLImportContext {
   /** Binds the native helper and reads the track key. @param owner - Workbook importer. @param attributes - Collection attributes. @param helper - Deferred track owner. */
   public constructor(
@@ -38,14 +42,21 @@ export class ScXMLTrackedChangesContext extends ScXMLImportContext {
     if (key) helper.SetProtection(decodeBase64(key));
   }
 
-  /** Handles the original cell-content-change element. @param element - Action element. @param attributes - Action attributes. @returns Action context. */
+  /** Handles original represented action elements. @param element - Action element. @param attributes - Action attributes. @returns Action context. */
   public override createFastChildContext(
     element: X,
     attributes: FastAttributeList,
   ): SvXMLImportContext {
-    if (element === X.TABLE_CELL_CONTENT_CHANGE)
-      return new ScXMLContentChangeContext(this.GetScImport(), attributes, this.helper);
-    throw new Error("ODS structural tracked change actions are not implemented");
+    switch (element) {
+      case X.TABLE_CELL_CONTENT_CHANGE:
+        return new ScXMLContentChangeContext(this.GetScImport(), attributes, this.helper);
+      case X.TABLE_INSERTION:
+        return new ScXMLInsertionContext(this.GetScImport(), attributes, this.helper);
+      case X.TABLE_REJECTION:
+        return new ScXMLRejectionContext(this.GetScImport(), attributes, this.helper);
+      default:
+        return this.createUnknownChildContext();
+    }
   }
 
   /** Prevents unsupported change actions from being dropped. @returns No child. */
@@ -54,24 +65,22 @@ export class ScXMLTrackedChangesContext extends ScXMLImportContext {
   }
 }
 
-/** Collects one original cell content change. */
-class ScXMLContentChangeContext extends ScXMLImportContext {
+/** Reads the original attributes and children shared by tracked actions. */
+abstract class ScXMLChangeActionContext extends ScXMLImportContext {
   private readonly actionNumber: number;
   private readonly state: State;
   private readonly rejectingNumber: number;
-  private range = new ScBigRange();
+  protected range = new ScBigRange();
   private user = "";
   private timestamp = new DateTime(DateTime.EMPTY);
   private comment = "";
-  private previousAction = 0;
-  private oldCell = new ScMyCellInfo();
   private readonly dependencies: number[] = [];
 
   /** Reads the original action ID and acceptance. @param owner - Workbook importer. @param attributes - Action attributes. @param helper - Deferred track owner. */
   public constructor(
     owner: ScXMLImport,
     attributes: FastAttributeList,
-    private readonly helper: ScXMLChangeTrackingImportHelper,
+    protected readonly helper: ScXMLChangeTrackingImportHelper,
   ) {
     super(owner);
     this.actionNumber = ScXMLChangeTrackingImportHelper.GetIDFromString(attributes.get(X.TABLE_ID));
@@ -87,7 +96,7 @@ class ScXMLContentChangeContext extends ScXMLImportContext {
           : State.SC_CAS_VIRGIN;
   }
 
-  /** Collects original metadata, coordinates, dependencies and the preceding cell. @param element - Child element. @param attributes - Child attributes. @returns Child parser. */
+  /** Collects change information and dependent action IDs. @param element - Child element. @param attributes - Child attributes. @returns Child parser. */
   public override createFastChildContext(
     element: X,
     attributes: FastAttributeList,
@@ -99,30 +108,16 @@ class ScXMLContentChangeContext extends ScXMLImportContext {
           this.timestamp = timestamp;
           this.comment = comment;
         });
-      case X.TABLE_CELL_ADDRESS:
-        this.range = readBigRange(attributes);
-        return new SvXMLImportContext();
       case X.TABLE_DEPENDENCIES:
         return new ScXMLDependingsContext(this.dependencies);
-      case X.TABLE_PREVIOUS:
-        this.previousAction = ScXMLChangeTrackingImportHelper.GetIDFromString(
-          attributes.get(X.TABLE_ID),
-        );
-        return new ScXMLPreviousContext(
-          this.GetScImport(),
-          Number(this.range.aStart.GetVars()[2]),
-          (cell) => {
-            this.oldCell = cell;
-          },
-        );
       default:
         return this.createUnknownChildContext();
     }
   }
 
-  /** Publishes the action only after all of its children have been read. */
-  public override endFastElement(): void {
-    this.helper.EndChangeAction({
+  /** Copies shared action metadata and the parsed links. @returns Common deferred action fields. */
+  protected GetActionInfo() {
+    return {
       actionNumber: this.actionNumber,
       state: this.state,
       rejectingNumber: this.rejectingNumber,
@@ -130,15 +125,92 @@ class ScXMLContentChangeContext extends ScXMLImportContext {
       user: this.user,
       dateTimeUTC: this.timestamp,
       comment: this.comment,
-      previousAction: this.previousAction,
-      oldCell: this.oldCell,
       dependencies: this.dependencies,
-    });
+    };
   }
 
   /** Prevents unsupported change children from being dropped. @returns No child. */
   public override createUnknownChildContext(): never {
-    throw new Error("ODS tracked content action contains an unsupported child");
+    throw new Error("ODS tracked action contains an unsupported child");
+  }
+}
+
+/** Collects one original cell content change. */
+class ScXMLContentChangeContext extends ScXMLChangeActionContext {
+  private previousAction = 0;
+  private oldCell = new ScMyCellInfo();
+
+  /** Collects the content position and the preceding cell. @param element - Child element. @param attributes - Child attributes. @returns Child parser. */
+  public override createFastChildContext(
+    element: X,
+    attributes: FastAttributeList,
+  ): SvXMLImportContext {
+    if (element === X.TABLE_CELL_ADDRESS) {
+      this.range = readBigRange(attributes);
+      return new SvXMLImportContext();
+    }
+    if (element === X.TABLE_PREVIOUS) {
+      this.previousAction = ScXMLChangeTrackingImportHelper.GetIDFromString(
+        attributes.get(X.TABLE_ID),
+      );
+      return new ScXMLPreviousContext(
+        this.GetScImport(),
+        Number(this.range.aStart.GetVars()[2]),
+        (cell) => {
+          this.oldCell = cell;
+        },
+      );
+    }
+    return super.createFastChildContext(element, attributes);
+  }
+
+  /** Publishes the original completed content action. */
+  public override endFastElement(): void {
+    this.helper.EndChangeAction({
+      ...this.GetActionInfo(),
+      type: Type.SC_CAT_CONTENT,
+      previousAction: this.previousAction,
+      oldCell: this.oldCell,
+    });
+  }
+}
+
+/** Original row, column and sheet insertion context. */
+class ScXMLInsertionContext extends ScXMLChangeActionContext {
+  private readonly type: ScChangeActionInsertionType;
+
+  /** Parses the inserted axis and original default coordinates. @param owner - Workbook importer. @param attributes - Insertion attributes. @param helper - Deferred track owner. */
+  public constructor(
+    owner: ScXMLImport,
+    attributes: FastAttributeList,
+    helper: ScXMLChangeTrackingImportHelper,
+  ) {
+    super(owner, attributes, helper);
+    const axis = attributes.get(X.TABLE_TYPE);
+    this.type =
+      axis === "row"
+        ? Type.SC_CAT_INSERT_ROWS
+        : axis === "table"
+          ? Type.SC_CAT_INSERT_TABS
+          : Type.SC_CAT_INSERT_COLS;
+    const position = attributes.getAsInteger(X.TABLE_POSITION) ?? 0;
+    const count =
+      attributes.get(X.TABLE_COUNT) === null ? 1 : (attributes.getAsInteger(X.TABLE_COUNT) ?? 0);
+    const table = attributes.getAsInteger(X.TABLE_TABLE) ?? 0;
+    this.range = helper.SetPosition(this.type, position, count, table);
+  }
+
+  /** Publishes the original completed insertion. */
+  public override endFastElement(): void {
+    this.helper.EndChangeAction({ ...this.GetActionInfo(), type: this.type });
+  }
+}
+
+/** Original rejection context queues an action in the move branch without movement ranges. */
+class ScXMLRejectionContext extends ScXMLChangeActionContext {
+  /** Publishes the malformed move action for the native loader to discard. */
+  public override endFastElement(): void {
+    this.helper.EndChangeAction({ ...this.GetActionInfo(), type: Type.SC_CAT_MOVE });
   }
 }
 

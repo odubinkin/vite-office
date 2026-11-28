@@ -7,7 +7,8 @@
     "localSymbols": [
       "ScXMLChangeTrackingImportHelper",
       "ScMyCellInfo",
-      "createPreviousFormulaCell"
+      "createPreviousFormulaCell",
+      "SetPosition"
     ],
     "status": "mapped",
     "evidence": {
@@ -33,6 +34,14 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/filter/xml/XMLChangeTrackingImportHelper.cxx",
           "marker": "ScMyCellInfo::CreateCell"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/XMLChangeTrackingImportHelper.cxx",
+          "marker": "ScXMLChangeTrackingImportHelper::SetPosition"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/XMLChangeTrackingImportHelper.cxx",
+          "marker": "ScXMLChangeTrackingImportHelper::CreateInsertAction"
         }
       ]
     },
@@ -40,14 +49,17 @@
     "upstreamSymbols": [
       "ScXMLChangeTrackingImportHelper::CreateChangeTrack",
       "ScXMLChangeTrackingImportHelper::GetIDFromString",
-      "ScMyCellInfo::CreateCell"
+      "ScMyCellInfo::CreateCell",
+      "ScXMLChangeTrackingImportHelper::SetPosition",
+      "ScXMLChangeTrackingImportHelper::CreateInsertAction"
     ],
     "preservedResponsibilities": [
       "Reconstructs native content actions in insertion, dependency and current-cell passes.",
-      "Reconstructs formula snapshots using the authored position, grammar and matrix metadata, and creates edit cells through the native text engine."
+      "Reconstructs formula snapshots using the authored position, grammar and matrix metadata, and creates edit cells through the native text engine.",
+      "Converts insertion position, count and sheet into native whole-axis ranges before resolving action dependencies."
     ],
     "omittedResponsibilities": [
-      "Other change action types and generated-cell branches remain outside this slice."
+      "Deletion and movement actions and generated-cell branches remain outside this slice."
     ]
   }
 }

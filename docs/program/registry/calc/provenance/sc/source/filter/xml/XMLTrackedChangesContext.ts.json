@@ -6,7 +6,9 @@
     "localPath": "apps/office/src/sc/source/filter/xml/XMLTrackedChangesContext.ts",
     "localSymbols": [
       "ScXMLTrackedChangesContext",
-      "ScXMLChangeTextPContext"
+      "ScXMLChangeTextPContext",
+      "ScXMLInsertionContext",
+      "ScXMLRejectionContext"
     ],
     "status": "mapped",
     "evidence": {
@@ -32,6 +34,14 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/filter/xml/XMLTrackedChangesContext.cxx",
           "marker": "ScXMLChangeTextPContext::createFastChildContext"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/XMLTrackedChangesContext.cxx",
+          "marker": "ScXMLInsertionContext::ScXMLInsertionContext"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/XMLTrackedChangesContext.cxx",
+          "marker": "ScXMLRejectionContext::ScXMLRejectionContext"
         }
       ]
     },
@@ -39,14 +49,17 @@
     "upstreamSymbols": [
       "ScXMLTrackedChangesContext::createFastChildContext",
       "ScXMLContentChangeContext::endFastElement",
-      "ScXMLChangeTextPContext::createFastChildContext"
+      "ScXMLChangeTextPContext::createFastChildContext",
+      "ScXMLInsertionContext::ScXMLInsertionContext",
+      "ScXMLRejectionContext::ScXMLRejectionContext"
     ],
     "preservedResponsibilities": [
       "Imports native change information, action identifiers, previous cells and dependency IDs.",
-      "Decodes original scalar, formula and formatted previous-cell payloads with a first-paragraph fast path."
+      "Decodes original scalar, formula and formatted previous-cell payloads with a first-paragraph fast path.",
+      "Imports row, column and sheet insertion axes and follows the original rejection dispatch into an incomplete move action."
     ],
     "omittedResponsibilities": [
-      "Structural actions are outside this slice."
+      "Deletion and movement snapshots are outside this slice."
     ]
   }
 }

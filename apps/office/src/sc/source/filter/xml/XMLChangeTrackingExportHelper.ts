@@ -18,8 +18,10 @@ import { ScRangeStringConverter } from "../../core/tool/rangeutl";
 import { GetString as getEditString } from "../../core/tool/editutil";
 import {
   ScChangeActionState,
+  ScChangeActionType,
+  ScChangeActionIns,
   type ScChangeAction,
-  type ScChangeActionContent,
+  ScChangeActionContent,
 } from "../../core/tool/chgtrack";
 import { type CellTextStylePool, writeCellParagraphs } from "./xmlexprt.celltext";
 
@@ -42,14 +44,17 @@ export class ScChangeTrackingExportHelper {
     const track = this.document.GetChangeTrack();
     if (!track) return "";
     let changes = "";
-    for (const action of track.entries()) changes += this.WriteContentChange(action);
+    for (const action of track.entries()) {
+      if (action instanceof ScChangeActionContent) changes += this.WriteContentChange(action);
+      else if (action instanceof ScChangeActionIns) changes += this.WriteInsertion(action);
+    }
     return changes
       ? `<table:tracked-changes>${changes}</table:tracked-changes>`
       : "<table:tracked-changes/>";
   }
 
-  /** Writes the native cell content change, metadata, dependencies and previous cell. @param action - Native content action. @returns ODF element. */
-  private WriteContentChange(action: ScChangeActionContent): string {
+  /** Writes the original attributes common to change actions. @param action - Native action. @returns ODF attributes. */
+  private AddActionAttributes(action: ScChangeAction): string {
     const state = action.GetState();
     const acceptance =
       state === ScChangeActionState.SC_CAS_ACCEPTED
@@ -59,10 +64,13 @@ export class ScChangeTrackingExportHelper {
           : "";
     const rejecting = action.GetRejectingNumber();
     const rejection = rejecting ? ` table:rejecting-change-id="ct${rejecting}"` : "";
-    const previous = action.GetPrevContent();
-    const prior = previous ? ` table:id="ct${previous.GetActionNumber()}"` : "";
+    return ` table:id="ct${action.GetActionNumber()}"${acceptance}${rejection}`;
+  }
+
+  /** Writes the original ordered dependency identifiers. @param action - Native action. @returns Optional ODF dependency element. */
+  private WriteDependings(action: ScChangeAction): string {
     const dependencies = action.GetDependents();
-    const dependent = dependencies.length
+    return dependencies.length
       ? `<table:dependencies>${dependencies
           .map(
             /** Emits the original dependency ID. @param dependency - Dependent action. @returns Reference. */
@@ -70,7 +78,29 @@ export class ScChangeTrackingExportHelper {
           )
           .join("")}</table:dependencies>`
       : "";
-    return `<table:cell-content-change table:id="ct${action.GetActionNumber()}"${acceptance}${rejection}>${writeBigRange(action.GetBigRange())}${this.WriteChangeInfo(action)}${dependent}<table:previous${prior}>${this.WriteCell(action.GetOldCell(), action.GetOldValue())}</table:previous></table:cell-content-change>`;
+  }
+
+  /** Writes the native cell content change and previous cell. @param action - Native content action. @returns ODF element. */
+  private WriteContentChange(action: ScChangeActionContent): string {
+    const previous = action.GetPrevContent();
+    const prior = previous ? ` table:id="ct${previous.GetActionNumber()}"` : "";
+    return `<table:cell-content-change${this.AddActionAttributes(action)}>${writeBigRange(action.GetBigRange())}${this.WriteChangeInfo(action)}${this.WriteDependings(action)}<table:previous${prior}>${this.WriteCell(action.GetOldCell(), action.GetOldValue())}</table:previous></table:cell-content-change>`;
+  }
+
+  /** Writes the original row, column or sheet insertion. @param action - Native insertion. @returns ODF insertion element. */
+  private WriteInsertion(action: ScChangeActionIns): string {
+    const [column, row, table, lastColumn, lastRow, lastTable] = action.GetBigRange().GetVars();
+    const type = action.GetType();
+    const [axis, position, last] =
+      type === ScChangeActionType.SC_CAT_INSERT_COLS
+        ? ["column", column, lastColumn]
+        : type === ScChangeActionType.SC_CAT_INSERT_ROWS
+          ? ["row", row, lastRow]
+          : ["table", table, lastTable];
+    const count = last - position + 1n;
+    const span = count > 1n ? ` table:count="${count}"` : "";
+    const sheet = type === ScChangeActionType.SC_CAT_INSERT_TABS ? "" : ` table:table="${table}"`;
+    return `<table:insertion${this.AddActionAttributes(action)} table:type="${axis}" table:position="${position}"${span}${sheet}>${this.WriteChangeInfo(action)}${this.WriteDependings(action)}</table:insertion>`;
   }
 
   /** Writes the native change author and UTC time, applying the original privacy policy. @param action - Native change. @returns ODF info element. */

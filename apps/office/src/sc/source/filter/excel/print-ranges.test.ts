@@ -11,6 +11,7 @@ import {
 import { ScAddress, ScRange, ScRefFlags } from "../../../inc/address";
 import { ScDocument } from "../../../inc/document";
 import { FormulaGrammar } from "../../../../formula/inc/grammar";
+import { ODF_NAMESPACES } from "../../../../xmloff/source/core/xmltoken";
 import { InsertRangeNames, RangeDataType } from "../../core/tool/rangenam";
 import { extractCellRangeList } from "../oox/formulabase";
 import { ExcelFilter } from "../oox/excelfilter";
@@ -96,7 +97,12 @@ it("keeps quoted print areas, excluded sheets and repeating headers across ODS a
 
     const xml = (await writeOdsXml(source)).files["content.xml"];
     expect(xml).toContain("O&apos;&apos;Brien. Sales&apos;.B3");
-    expect(xml).toContain('table:name="Excluded" table:print="false"');
+    const content = new DOMParser().parseFromString(xml as string, "application/xml");
+    const tableNamespace = ODF_NAMESPACES.table;
+    const excluded = Array.from(content.getElementsByTagNameNS(tableNamespace, "table")).find(
+      (table) => table.getAttributeNS(tableNamespace, "name") === "Excluded",
+    );
+    expect(excluded?.getAttributeNS(tableNamespace, "print")).toBe("false");
     expect((xml as string).match(/<table:table-header-rows>/gu)).toHaveLength(3);
     reopened = await readOdsDocument(await writeOdsDocument(source));
     transferred = decodeCalcDocument(encodeCalcDocument(reopened));

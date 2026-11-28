@@ -20,18 +20,22 @@
         "apps/office/src/sc/source/filter/xml/ods-tracked-cell-content.test.ts",
         "vendor/libreoffice-reference/sc/source/filter/xml/XMLTrackedChangesContext.cxx"
       ],
-      "justification": "Imports native change information, action identifiers, previous cells and dependency IDs. Structural actions are outside this slice. Decodes original scalar, formula and formatted previous-cell payloads with a first-paragraph fast path.",
+      "justification": "Imports native change information, action identifiers, previous cells and dependency IDs. Deletion and movement snapshots are outside this slice. Decodes original scalar, formula and formatted previous-cell payloads with a first-paragraph fast path. Imports row, column and sheet insertion axes and follows the original rejection dispatch into an incomplete move action.",
       "knownViolations": [],
       "localSymbols": [
         "ScXMLTrackedChangesContext",
-        "ScXMLChangeTextPContext"
+        "ScXMLChangeTextPContext",
+        "ScXMLInsertionContext",
+        "ScXMLRejectionContext"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sc/source/filter/xml/XMLTrackedChangesContext.cxx",
       "upstreamSymbols": [
         "ScXMLTrackedChangesContext::createFastChildContext",
         "ScXMLContentChangeContext::endFastElement",
-        "ScXMLChangeTextPContext::createFastChildContext"
+        "ScXMLChangeTextPContext::createFastChildContext",
+        "ScXMLInsertionContext::ScXMLInsertionContext",
+        "ScXMLRejectionContext::ScXMLRejectionContext"
       ]
     }
   }

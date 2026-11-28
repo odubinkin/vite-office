@@ -28,7 +28,8 @@
     "rationale": "Transfers native Calc content changes and original action references through the browser Worker graph.",
     "responsibilities": [
       "Transfers native Calc content changes and original action references through the browser Worker graph.",
-      "Transports the formula positions and matrix metadata and the workbook text styles of native previous and linked change cells."
+      "Transports the formula positions and matrix metadata and the workbook text styles of native previous and linked change cells.",
+      "Transfers native insertion types and raw whole-axis ranges alongside compatible previous content records."
     ],
     "stackDivergence": {
       "kind": "local-infrastructure",

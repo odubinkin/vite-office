@@ -117,5 +117,6 @@ cell model when the document is imported.
 
 ODS writes the original author/date anonymization under the two
 Security/Scripting flags. The tracked changes key crosses the native
-configuration settings item. Structural actions and interactive change
-recording remain outside this slice.
+configuration settings item. Loaded row, column and sheet insertions keep
+their native whole-axis ranges and dependencies through ODS and Worker.
+Deletion, movement and interactive change recording remain outside this slice.
