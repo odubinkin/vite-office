@@ -102,6 +102,33 @@ it("ports the upstream Define, edit repeat titles and clear scenario", /** Ports
   session.Close();
 });
 
+it("toggles the open print range child window without saving the draft", /** Exercises the modeless slot when its own dialog is already active. @returns Completion. */ async () => {
+  const session = mountPrintAreas();
+  try {
+    const sheet = session.controller.shell.GetDocument().FetchTable(0);
+    assert(sheet);
+    const before = sheet.GetRepeatRowRange();
+    const history = session.controller.shell.GetUndoManager();
+    const actions = history.GetUndoActionCount();
+    fireEvent.click(printCommand("Edit…"));
+    expect(screen.getByRole("dialog", { name: "Edit Print Ranges" })).toBeVisible();
+    fireEvent.change(screen.getByRole("textbox", { name: "Rows to Repeat" }), {
+      target: { value: "$2" },
+    });
+    await act(
+      /** Invokes the same edit slot while the child window owns the input. @returns Completion. */ async () => {
+        session.frame.GetDispatcher().Execute(".uno:EditPrintArea");
+      },
+    );
+    expect(screen.queryByRole("dialog", { name: "Edit Print Ranges" })).toBeNull();
+    expect(sheet.GetRepeatRowRange()).toEqual(before);
+    expect(history.GetUndoActionCount()).toBe(actions);
+  } finally {
+    cleanup();
+    session.Close();
+  }
+});
+
 it("applies typed areas to marked sheets and restores workbook print history", /** Applies typed areas to marked sheets and restores workbook print history. @returns Nothing. */ () => {
   const session = createCalcSession();
   const controller = session.controller;

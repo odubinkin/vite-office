@@ -139,6 +139,23 @@ describe("native outline movement", /** Registers source-shaped outline behavior
     expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(0);
   });
 
+  it("moves counted outline styles through the document numbering command", /** Verifies both directions when the caller enters through the core rather than the editing shell. @returns Nothing. */ () => {
+    const f = fixture();
+    heading(f.first, 2);
+    f.first.SetAttr(new SwNumRuleItem(f.doc.GetOutlineNumRule().GetName()));
+    const selection = range(f.first);
+    try {
+      expect(f.doc.CanNumUpDown(selection, false)).toBe(true);
+      expect(f.doc.NumUpDown(selection, false)).toBe(true);
+      expect(f.first.GetParagraphStyle()).toBe("heading-1");
+      expect(f.doc.CanNumUpDown(selection, false)).toBe(false);
+      expect(f.doc.NumUpDown(selection, true)).toBe(true);
+      expect(f.first.GetParagraphStyle()).toBe("heading-2");
+    } finally {
+      selection.Dispose();
+    }
+  });
+
   it("rejects an empty outline index and zero movement without materializing styles", /** Checks actual native early exits. @returns Nothing. */ () => {
     const f = fixture(),
       pam = range(f.first);
