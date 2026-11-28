@@ -1,10 +1,11 @@
 ---
 id: "202611280829-F6M8VX"
 title: "Connect Writer Navigator table actions and cursor eligibility"
-status: "DOING"
+result_summary: "Connected table selection, properties, inline rename, deletion and retained undo with verified targeted Writer and Chromium coverage."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
     - "output/playwright/writer-navigator-table-chromium.log"
   findings:
     - "Protected traversal, grouped deletion, original cell and bookmark restoration, and the complete browser flow passed."
-commit: null
+commit:
+  hash: "4efd1c127c603ecbccbcd4ec5db49a7fb7359bac"
+  message: "🧩 F6M8VX code: Connect Writer Navigator table actions"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: connected Navigator table actions and cursor eligibility."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "40 focused Writer tests passed with six optional probes skipped. Chromium table selection, properties, inline rename, deletion and Undo passed. TypeScript, Vite build, Writer resources, source tree, module boundaries, scoped lint, format and provenance passed."
+  -
+    type: "status"
+    at: "2026-11-28T09:11:53.298Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: connected Navigator table actions and cursor eligibility."
 doc_version: 3
-doc_updated_at: "2026-11-28T09:00:51.616Z"
+doc_updated_at: "2026-11-28T09:11:53.300Z"
 doc_updated_by: "CODER"
 description: "Connect native Navigator table selection, table properties, rename and deletion to the existing Writer table model and undo owners. Follow native table context admission and directional traversal to accessible cells, including nested tables supported by the core."
 sections:
