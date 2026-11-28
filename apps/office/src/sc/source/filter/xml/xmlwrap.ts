@@ -22,7 +22,7 @@ import {
 import { ScDocument } from "../../../inc/document";
 import { ScXMLImport, type ScXMLImportOptions } from "./xmlimprt";
 import { ScXMLExport, type ScXMLExportOptions } from "./xmlexprt";
-import { prepareTableProtection } from "./xmlexprt.protection";
+import { prepareDocProtection, prepareTableProtection } from "./xmlexprt.protection";
 import {
   XMLDocumentSettingsContext,
   type ViewSettings,
@@ -173,6 +173,7 @@ export class ScXMLImportWrapper {
   async ExportXml(options: ScXMLExportOptions = {}): Promise<XmlPackage> {
     if (options.isCancelled?.()) throw new Error("ODS operation was cancelled");
     const tableProtection = await prepareTableProtection(this.document);
+    const docProtection = await prepareDocProtection(this.document);
     if (options.isCancelled?.()) throw new Error("ODS operation was cancelled");
     const properties = this.document.documentProperties;
     await initializeLibXml2();
@@ -184,7 +185,7 @@ export class ScXMLImportWrapper {
     prepareDocumentMetaExport(native, native.m_xDoc);
     const fonts = this.document.IsEmbedFonts() ? this.document.GetEmbeddedFonts() : [];
     const exporter = new ScXMLExport(this.document, options),
-      content = exporter.exportContent(tableProtection),
+      content = exporter.exportContent(tableProtection, docProtection),
       styles = exporter.exportStyles(),
       views = WriteUserDataSequence(this.document),
       files: Record<string, string | Uint8Array> = {},

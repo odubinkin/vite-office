@@ -7,20 +7,23 @@
     "status": "mapped",
     "upstreamPath": "sc/source/core/data/tabprotection.cxx",
     "localSymbols": [
-      "ScTableProtection"
+      "ScTableProtection",
+      "ScDocProtection"
     ],
     "upstreamSymbols": [
       "ScTableProtection::ScTableProtection",
-      "ScTableProtection::setPasswordHash"
+      "ScTableProtection::setPasswordHash",
+      "ScDocProtection::ScDocProtection"
     ],
     "preservedResponsibilities": [
       "Preserves the original sheet flag, owned copy, permissions and the two imported Excel verifier representations.",
       "Stores the native legacy and ODF verifier in the same primary/secondary format and checks native sheet-workbook hash compatibility.",
       "Retains enhanced protection records and evaluates the original direct and union predicates for uncredentialed ranges.",
-      "Requires each enhanced protection range in the marked selection to pass the native block rule."
+      "Requires each enhanced protection range in the marked selection to pass the native block rule.",
+      "Owns workbook structure protection and its original ODF verifier through the shared protection implementation."
     ],
     "omittedResponsibilities": [
-      "Password verification, range updates and whole-document structure protection remain pending."
+      "Enhanced protection range updates remain pending."
     ],
     "evidence": {
       "local": [
@@ -39,6 +42,10 @@
         {
           "path": "apps/office/src/sc/source/filter/oox/excelfilter.enhanced-protection.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-workbook-protection.test.ts",
+          "marker": "testProtectionKeyODS_UTF16LErtlSHA1"
         }
       ],
       "upstream": [
@@ -49,6 +56,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/core/data/tabprotection.cxx",
           "marker": "ScTableProtection::setPasswordHash"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/tabprotection.cxx",
+          "marker": "ScDocProtection::ScDocProtection"
         }
       ]
     }

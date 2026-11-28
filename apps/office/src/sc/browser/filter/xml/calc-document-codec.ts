@@ -65,12 +65,13 @@ import { runCooperatively, runSynchronously } from "../../../../framework/browse
 import { ScDocument } from "../../../inc/document";
 import {
   ScTableProtectionOption as ProtectionOption,
+  ScDocProtectionOption,
   ScPasswordHash,
   type ScOoxPasswordHash,
   type ScEnhancedProtection,
   type ScStoredPasswordHash,
 } from "../../../inc/tabprotection";
-import { ScTableProtection } from "../../../source/core/data/tabprotection";
+import { ScDocProtection, ScTableProtection } from "../../../source/core/data/tabprotection";
 import { ScRangeList } from "../../../inc/rangelst";
 import { ScAddress, ScRange, MAXCOL, MAXROW } from "../../../inc/address";
 import { ScHorizontalCellIterator } from "../../../inc/dociter";
@@ -204,6 +205,66 @@ function isOoxPasswordHash(hash: ScOoxPasswordHash | undefined): boolean {
     hash.spinCount <= 0xffffffff,
   );
 }
+
+/** Browser record shared by workbook and sheet protection. */
+interface ProtectionRecord {
+  readonly enabled: boolean;
+  readonly options: boolean[];
+  readonly ooxHash: ScOoxPasswordHash | undefined;
+  readonly storedHash: ScStoredPasswordHash | undefined;
+}
+
+/** Copies a native protection owner into the Worker record. @param protection - Workbook or sheet protection. @param optionCount - Native option count. @returns Detached state. */
+function encodeProtection(
+  protection: Readonly<ScDocProtection | ScTableProtection>,
+  optionCount: number,
+): ProtectionRecord {
+  return {
+    enabled: protection.isProtected(),
+    options: Array.from(
+      { length: optionCount },
+      /** Reads a native option in enum order. @param _value - Uninitialized slot. @param option - Native option. @returns Permission. */
+      (_value, option) => protection.isOptionEnabled(option),
+    ),
+    ooxHash: protection.getOoxPasswordHash(),
+    storedHash: protection.getStoredPasswordHash(),
+  };
+}
+
+/** Validates and restores the native state before it is adopted. @param protection - Detached protection owner. @param record - Realm-neutral state. @param optionCount - Native option count. @param owner - Error label. */
+function decodeProtection(
+  protection: ScDocProtection | ScTableProtection,
+  record: ProtectionRecord,
+  optionCount: number,
+  owner: string,
+): void {
+  if (!record) throw new Error(`Calc worker ${owner} protection is invalid.`);
+  const { enabled, options, ooxHash, storedHash } = record;
+  if (
+    typeof enabled !== "boolean" ||
+    !Array.isArray(options) ||
+    options.length !== optionCount ||
+    Array.from(options).some(
+      /** Validates the option, including a missing slot. @param value - Transferred value. @returns Whether invalid. */
+      (value) => typeof value !== "boolean",
+    ) ||
+    (storedHash &&
+      (!ArrayBuffer.isView(storedHash.bytes) ||
+        Object.prototype.toString.call(storedHash.bytes) !== "[object Uint8Array]" ||
+        !Number.isInteger(storedHash.primary) ||
+        storedHash.primary < ScPasswordHash.SHA1 ||
+        storedHash.primary > ScPasswordHash.UNSPECIFIED ||
+        !Number.isInteger(storedHash.secondary) ||
+        storedHash.secondary < ScPasswordHash.SHA1 ||
+        storedHash.secondary > ScPasswordHash.UNSPECIFIED)) ||
+    (ooxHash && !isOoxPasswordHash(ooxHash))
+  )
+    throw new Error(`Calc worker ${owner} protection is invalid.`);
+  protection.setProtected(enabled);
+  for (const [option, value] of options.entries()) protection.setOption(option, value);
+  if (ooxHash) protection.setOoxPasswordHash(ooxHash);
+  protection.setStoredPasswordHash(storedHash);
+}
 /** Native sparse sheet transfer record. */
 interface Sheet {
   readonly scenario?: {
@@ -218,11 +279,7 @@ interface Sheet {
   readonly link?: CalcSheetLinkRecord;
   readonly tabColor?: number;
   readonly pageStyle?: string;
-  readonly protection?: {
-    readonly enabled: boolean;
-    readonly options: boolean[];
-    readonly ooxHash: ScOoxPasswordHash | undefined;
-    readonly storedHash: ScStoredPasswordHash | undefined;
+  readonly protection?: ProtectionRecord & {
     readonly enhanced?: readonly (Omit<ScEnhancedProtection, "ranges"> & {
       readonly ranges: readonly PrintRange[];
     })[];
@@ -317,6 +374,7 @@ export interface CalcDocumentRecord {
   readonly embeddedFonts?: readonly OdfFontResource[];
   readonly consolidation?: CalcConsolidationRecord;
   readonly documentMetaXml?: string;
+  readonly docProtection?: ProtectionRecord;
   readonly version: 1;
   readonly storageGrammar?: typeof FormulaGrammar.Grammar.GRAM_PODF;
   readonly styles: string;
@@ -458,14 +516,7 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
       ...(protection
         ? {
             protection: {
-              enabled: protection.isProtected(),
-              options: Array.from(
-                { length: ProtectionOption.NONE },
-                /** Transfers a native option in enum order. @param _value - Uninitialized slot. @param option - Native option. @returns Permission. */
-                (_value, option) => protection.isOptionEnabled(option),
-              ),
-              ooxHash: protection.getOoxPasswordHash(),
-              storedHash: protection.getStoredPasswordHash(),
+              ...encodeProtection(protection, ProtectionOption.NONE),
               enhanced: protection.getEnhancedProtection().map(
                 /** Copies a native enhanced range into a realm-neutral record. @param entry - Native range record. @returns Transferrable record. */
                 (entry) => ({ ...entry, ranges: Array.from(entry.ranges, encodePrintRange) }),
@@ -720,6 +771,7 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
   const databaseRanges = encodeCalcDatabaseRanges(document);
   const validations = encodeCalcValidations(document);
   const documentMetaXml = document.documentProperties.GetTransferXml();
+  const docProtection = document.GetDocProtection();
   const consolidation = document.GetConsolidateDlgData();
   const embeddedFonts = document.GetEmbeddedFonts();
   const fontEmbedding = [
@@ -746,6 +798,9 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
     ...(embeddedFonts.length ? { embeddedFonts } : {}),
     ...(consolidation === undefined ? {} : { consolidation: encodeConsolidation(consolidation) }),
     ...(documentMetaXml === undefined ? {} : { documentMetaXml }),
+    ...(docProtection
+      ? { docProtection: encodeProtection(docProtection, ScDocProtectionOption.NONE) }
+      : {}),
     ...(FormulaGrammar.isPODF(document.GetStorageGrammar())
       ? { storageGrammar: FormulaGrammar.Grammar.GRAM_PODF }
       : {}),
@@ -1098,31 +1153,8 @@ function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
     for (const [tab, sheet] of record.sheets.entries()) {
       const table = document.FetchTable(tab) as ScTable;
       if (sheet.protection) {
-        const { enabled, options, ooxHash, storedHash } = sheet.protection;
-        if (
-          typeof enabled !== "boolean" ||
-          options.length !== ProtectionOption.NONE ||
-          Array.from(options).some(
-            /** Validates the option, including an absent slot. @param option - Transferred value. @returns Whether the value is invalid. */
-            (option) => typeof option !== "boolean",
-          ) ||
-          (storedHash &&
-            (!ArrayBuffer.isView(storedHash.bytes) ||
-              Object.prototype.toString.call(storedHash.bytes) !== "[object Uint8Array]" ||
-              !Number.isInteger(storedHash.primary) ||
-              storedHash.primary < ScPasswordHash.SHA1 ||
-              storedHash.primary > ScPasswordHash.UNSPECIFIED ||
-              !Number.isInteger(storedHash.secondary) ||
-              storedHash.secondary < ScPasswordHash.SHA1 ||
-              storedHash.secondary > ScPasswordHash.UNSPECIFIED)) ||
-          (ooxHash && !isOoxPasswordHash(ooxHash))
-        )
-          throw new Error("Calc worker sheet protection is invalid.");
         const protection = new ScTableProtection();
-        protection.setProtected(enabled);
-        for (const [option, value] of options.entries()) protection.setOption(option, value);
-        if (ooxHash) protection.setOoxPasswordHash(ooxHash);
-        protection.setStoredPasswordHash(storedHash);
+        decodeProtection(protection, sheet.protection, ProtectionOption.NONE, "sheet");
         protection.setEnhancedProtection(
           (sheet.protection.enhanced ?? []).map(
             /** Reconstructs the original enhanced range list. @param entry - Realm-neutral record. @returns Native record. */
@@ -1343,6 +1375,11 @@ function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
     for (const [tab, sheet] of record.sheets.entries()) {
       const table = document.FetchTable(tab);
       if (table && sheet.conditionalIconSets) decodeCalcIconSets(table, sheet.conditionalIconSets);
+    }
+    if (record.docProtection !== undefined) {
+      const protection = new ScDocProtection();
+      decodeProtection(protection, record.docProtection, ScDocProtectionOption.NONE, "workbook");
+      document.SetDocProtection(protection);
     }
     document.SetAutoCalc(record.autoCalculate ?? true);
     complete = true;

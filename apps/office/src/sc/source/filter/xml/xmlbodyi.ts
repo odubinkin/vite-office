@@ -18,9 +18,12 @@ import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { createExternalRefTable } from "./xmlexternaltabi";
 import { ScXMLContentValidationsContext } from "./xmlcvali";
 import { ScXMLConsolidationContext } from "./XMLConsolidationContext";
+import { ScDocProtection } from "../../core/data/tabprotection";
+import { readProtectionHash } from "./xmlsubti";
 /** Spreadsheet content owns table creation,not a separate workbook model. */
 export class ScXMLBodyContext extends ScXMLImportContext {
   private hadCalculationSettings = false;
+  private protection: ScDocProtection | undefined;
   /** Binds importer. @param owner - Owner. @returns Context. */
   constructor(private readonly owner: ScXMLImport) {
     super(owner);
@@ -36,12 +39,22 @@ export class ScXMLBodyContext extends ScXMLImportContext {
       version.dispose();
     }
   }
+  /** Reads the original protection attributes for adoption after the sheets. @param _element - Spreadsheet token. @param attributes - Spreadsheet attributes. */
+  override startFastElement(_element: XMLToken, attributes: FastAttributeList): void {
+    if (attributes.get(XMLToken.TABLE_STRUCTURE_PROTECTED) !== "true") return;
+    const protection = new ScDocProtection();
+    protection.setProtected(true);
+    protection.setStoredPasswordHash(readProtectionHash(attributes));
+    this.protection = protection;
+  }
   /** Creates actual sheets. @param element - Token. @param attributes - Attributes. @returns Context. */
   override createFastChildContext(
     element: XMLToken,
     attributes: FastAttributeList,
   ): SvXMLImportContext {
     if (element === XMLToken.LOEXT_PERSONS) return new ScXMLPersonsContext(this.owner);
+    if (element === XMLToken.TABLE_TRACKED_CHANGES)
+      return new ScXMLTrackedChangesContext(this.owner);
     if (element === XMLToken.TABLE_CONTENT_VALIDATIONS)
       return new ScXMLContentValidationsContext(this.owner);
     if (element === XMLToken.TABLE_DATABASE_RANGES)
@@ -68,6 +81,20 @@ export class ScXMLBodyContext extends ScXMLImportContext {
   override endFastElement(): void {
     if (!this.hadCalculationSettings)
       new ScXMLCalculationSettingsContext(this.owner).endFastElement();
+    if (this.protection) this.owner.GetDocument().SetDocProtection(this.protection);
+  }
+}
+
+/** Handles the empty form of the native tracked-changes collection. */
+class ScXMLTrackedChangesContext extends ScXMLImportContext {
+  /** Preserves the unsupported-range boundary for change records. @returns No child. */
+  override createFastChildContext(): never {
+    throw new Error("ODS tracked change entries are not implemented");
+  }
+
+  /** Preserves the unsupported-range boundary for change records. @returns No child. */
+  override createUnknownChildContext(): never {
+    throw new Error("ODS tracked change entries are not implemented");
   }
 }
 

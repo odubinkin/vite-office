@@ -280,9 +280,10 @@ export class ScXMLExport {
     }
     return { endRow, ranges };
   }
-  /** Traverses native content and attribute row runs without expanding styled empty cells or default-column tails. @param tableProtection - Prepared ODF protection attributes. @returns ODF content. */
+  /** Traverses native content and attribute row runs without expanding styled empty cells or default-column tails. @param tableProtection - Prepared sheet protection attributes. @param docProtection - Prepared workbook protection attributes. @returns ODF content. */
   exportContent(
     tableProtection: ReadonlyMap<Readonly<ScTableProtection>, string> = new Map(),
+    docProtection = "",
   ): string {
     this.fontPool = new XMLFontAutoStylePool();
     if (this.document.IsEmbedFonts())
@@ -597,7 +598,7 @@ export class ScXMLExport {
       const hmm = Number(convert(BigInt(Number(width)), Length.twip, Length.mm100));
       automatic += `<style:style style:name="${name}" style:family="table-column"><style:table-column-properties fo:break-before="${pageBreak}" style:column-width="${new SvXMLUnitConverter("mm100").convertMeasureToXML(hmm)}"/></style:style>`;
     }
-    return `<?xml version="1.0" encoding="UTF-8"?><office:document-content xmlns:calcext="${ODF_NAMESPACES.calcext}" xmlns:office="${ODF_NAMESPACES.office}" xmlns:dc="${ODF_NAMESPACES.dc}" xmlns:meta="${ODF_NAMESPACES.meta}" xmlns:number="${ODF_NAMESPACES.number}" xmlns:table="${ODF_NAMESPACES.table}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:of="${ODF_NAMESPACES.of}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:fo="${ODF_NAMESPACES.fo}" xmlns:css3t="${ODF_NAMESPACES.css3t}" xmlns:svg="${ODF_NAMESPACES.svg}" xmlns:loext="${ODF_NAMESPACES.loext}" xmlns:xlink="${ODF_NAMESPACES.xlink}" office:version="1.3">${this.fontPool.exportXML()}<office:automatic-styles>${automatic}</office:automatic-styles><office:body><office:spreadsheet>${calculationSettings}${validations.WriteValidations()}${body}</office:spreadsheet></office:body></office:document-content>`;
+    return `<?xml version="1.0" encoding="UTF-8"?><office:document-content xmlns:calcext="${ODF_NAMESPACES.calcext}" xmlns:office="${ODF_NAMESPACES.office}" xmlns:dc="${ODF_NAMESPACES.dc}" xmlns:meta="${ODF_NAMESPACES.meta}" xmlns:number="${ODF_NAMESPACES.number}" xmlns:table="${ODF_NAMESPACES.table}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:of="${ODF_NAMESPACES.of}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:fo="${ODF_NAMESPACES.fo}" xmlns:css3t="${ODF_NAMESPACES.css3t}" xmlns:svg="${ODF_NAMESPACES.svg}" xmlns:loext="${ODF_NAMESPACES.loext}" xmlns:xlink="${ODF_NAMESPACES.xlink}" office:version="1.3">${this.fontPool.exportXML()}<office:automatic-styles>${automatic}</office:automatic-styles><office:body><office:spreadsheet${docProtection}>${calculationSettings}${validations.WriteValidations()}${body}</office:spreadsheet></office:body></office:document-content>`;
   }
 
   /** Emits original sheet scenario flags and scenario-mark ranges. @param table - Native scenario sheet. @returns ODS scenario XML. */

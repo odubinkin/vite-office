@@ -9,6 +9,7 @@ import { DocumentLinkManager } from "../../ui/docshell/documentlinkmgr";
 import type { LinkManager } from "../../../../sfx2/source/appl/linkmgr2";
 import { SfxDocumentProperties } from "../../../../sfx2/source/doc/sfxbasemodel";
 import type { ScValidationData } from "./validat";
+import type { ScDocProtection } from "./tabprotection";
 import { ScValidationDataList } from "./validat.list";
 import { ScPostIt, type NoteEntry, type ScPersonData } from "../../../inc/postit";
 import { ScRangePairList } from "../../../inc/rangelst";
@@ -153,6 +154,22 @@ export class ScDocument {
   IsDefaultTabBgColor = documen3.IsDefaultTabBgColor;
   GetTabProtection = documen3.GetTabProtection;
   SetTabProtection = documen3.SetTabProtection;
+  private pDocProtection: ScDocProtection | undefined;
+
+  /** Borrows the native workbook protection owner. @returns Workbook protection if present. */
+  GetDocProtection(): ScDocProtection | undefined {
+    return this.pDocProtection;
+  }
+
+  /** Copies or clears the native workbook protection owner. @param protection - Source protection. */
+  SetDocProtection(protection?: ScDocProtection): void {
+    this.pDocProtection = protection?.Clone();
+  }
+
+  /** Tests the protection flag rather than the presence of an owner. @returns Whether protected. */
+  IsDocProtected(): boolean {
+    return this.pDocProtection?.isProtected() ?? false;
+  }
   DoMergeContents = documen3.DoMergeContents;
   DoEmptyBlock = documen3.DoEmptyBlock;
   DoMerge = documen3.DoMerge;

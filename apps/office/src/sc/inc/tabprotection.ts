@@ -1,6 +1,13 @@
 /** @fileoverview Calc sheet protection types from sc/inc/tabprotection.hxx. */
 import type { ScRangeList } from "./rangelst";
 
+/** Original ScDocProtection option order. */
+export enum ScDocProtectionOption {
+  STRUCTURE,
+  WINDOWS,
+  NONE,
+}
+
 /** Original ScTableProtection option order. */
 export enum ScTableProtectionOption {
   AUTOFILTER,

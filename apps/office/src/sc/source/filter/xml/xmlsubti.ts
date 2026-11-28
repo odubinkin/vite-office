@@ -5,6 +5,7 @@ import type { FastAttributeList } from "../../../../xmloff/source/core/xmlimp";
 import {
   ScPasswordHash as Hash,
   ScTableProtectionOption as Option,
+  type ScStoredPasswordHash,
 } from "../../../inc/tabprotection";
 import { ScTableProtection } from "../../core/data/tabprotection";
 
@@ -48,21 +49,33 @@ function digestType(uri: string): Hash {
   }
 }
 
+/** Reads the original key and digest families in attribute order. @param attributes - Spreadsheet or table attributes. @returns Imported verifier or absence. */
+export function readProtectionHash(
+  attributes: FastAttributeList,
+): ScStoredPasswordHash | undefined {
+  const key = attributes.get(XMLToken.TABLE_PROTECTION_KEY);
+  if (!key) return undefined;
+  const primary = attributes.get(XMLToken.TABLE_PROTECTION_KEY_DIGEST_ALGORITHM);
+  let secondary = Hash.UNSPECIFIED;
+  for (const [token, value] of attributes)
+    if (
+      token === XMLToken.TABLE_PROTECTION_KEY_DIGEST_ALGORITHM_2 ||
+      token === XMLToken.LOEXT_PROTECTION_KEY_DIGEST_ALGORITHM_2
+    )
+      secondary = digestType(value);
+  return {
+    bytes: decodeBase64(key),
+    primary: primary === null ? Hash.SHA1 : digestType(primary),
+    secondary,
+  };
+}
+
 /** Builds the original protection owner for an ODF sheet marked protected. @param attributes - Table attributes. @returns Protection or absence. */
 export function readTableProtection(attributes: FastAttributeList): ScTableProtection | undefined {
   if (attributes.get(XMLToken.TABLE_PROTECTED) !== "true") return undefined;
   const protection = new ScTableProtection();
   protection.setProtected(true);
-  const key = attributes.get(XMLToken.TABLE_PROTECTION_KEY);
-  if (key) {
-    const primary = attributes.get(XMLToken.TABLE_PROTECTION_KEY_DIGEST_ALGORITHM);
-    const secondary = attributes.get(XMLToken.TABLE_PROTECTION_KEY_DIGEST_ALGORITHM_2);
-    protection.setStoredPasswordHash({
-      bytes: decodeBase64(key),
-      primary: primary === null ? Hash.SHA1 : digestType(primary),
-      secondary: secondary === null ? Hash.UNSPECIFIED : digestType(secondary),
-    });
-  }
+  protection.setStoredPasswordHash(readProtectionHash(attributes));
   return protection;
 }
 

@@ -863,7 +863,7 @@ export function CalcWorkbench({
           <div ref={tabs} hidden={!showSheetTabs} inert={referenceOpen}>
             <ScTabControl
               viewData={view}
-              canInsert={doc.GetTableCount() <= MAXTAB}
+              canInsert={!doc.IsDocProtected() && doc.GetTableCount() <= MAXTAB}
               onContextPopup={
                 /** Admits native selection/formula policy before mounting the shared Writer popup. @param tab - Original target. @param point - Device anchor. @param owner - Actual sheet-tab button. @returns Nothing. */ (
                   tab,

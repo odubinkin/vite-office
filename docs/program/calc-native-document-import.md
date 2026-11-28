@@ -94,3 +94,13 @@ original automatic color is carried as a packed value through the Worker and
 written as `window-font-color` for text or `transparent` for backgrounds.
 The filter reads and writes numeric criteria with the RTL conversions and
 keeps lexical criteria, including date strings, in their original form.
+
+## ODS workbook structure protection
+
+Calc adopts the native workbook protection owner after importing the sheets.
+The spreadsheet and sheet protection owners share the original option and
+verifier implementation. ODS export uses the native digest preference,
+normalizes both accepted SHA-256 URIs to the original ODF output URI, and
+preserves the extended legacy Excel double hash. The Worker preserves the workbook
+state separately from sheet protection. The existing sheet insertion command
+uses the workbook editability guard.

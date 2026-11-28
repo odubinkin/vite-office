@@ -881,8 +881,8 @@ export class CalcViewController {
   }
   /** Appends a real uniquely named sheet and records a reversible action. @returns Nothing. */
   InsertSheet(): void {
-    if (!this.Commit()) return;
     const doc = this.shell.GetDocument();
+    if (doc.IsDocProtected() || !this.Commit()) return;
     let index = 1;
     while (!doc.ValidNewTabName(unicode(`Sheet${index}`))) index++;
     const tab = doc.GetTableCount(),

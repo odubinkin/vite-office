@@ -1,6 +1,7 @@
 /** @fileoverview Native sheet protection flags and imported password hash records. */
 import {
   ScTableProtectionOption as Option,
+  ScDocProtectionOption as DocOption,
   type ScOoxPasswordHash,
   ScPasswordHash as Hash,
   type ScStoredPasswordHash,
@@ -17,6 +18,8 @@ export function needsPassHashRegen(
   primary: Hash,
   secondary = Hash.UNSPECIFIED,
 ): boolean {
+  const workbook = document.GetDocProtection();
+  if (workbook?.isProtected() && !workbook.hasPasswordHash(primary, secondary)) return true;
   for (let tab = 0; tab < document.GetTableCount(); ++tab) {
     const protection = document.GetTabProtection(tab);
     if (protection?.isProtected() && !protection.hasPasswordHash(primary, secondary)) return true;
@@ -95,20 +98,172 @@ async function verifyOoxPassword(record: ScOoxPasswordHash, password: string): P
   return encodeBase64(hash) === record.hashValue;
 }
 
-/** Native sheet protection state stored by ScTable. */
-export class ScTableProtection {
+/** Shared native protection options and password state. */
+class ScTableProtectionImpl {
   private readonly options: boolean[];
   private protected: boolean;
   private ooxHash: Readonly<ScOoxPasswordHash> | undefined;
   private storedHash: ScStoredPasswordHash | undefined;
-  private enhancedProtection: readonly ScEnhancedProtection[];
 
-  /** Copies the native state or constructs the default options. @param source - Optional state to copy. @returns Sheet protection. */
-  constructor(source?: ScTableProtection) {
-    this.options = source ? [...source.options] : Array<boolean>(Option.NONE).fill(false);
+  /** Copies native state or builds the original false-initialized option vector. @param optionCount - Native option count. @param source - Optional protection state to copy. */
+  constructor(optionCount: number, source?: ScTableProtectionImpl) {
+    this.options = source ? [...source.options] : Array<boolean>(optionCount).fill(false);
     this.protected = source?.protected ?? false;
     this.ooxHash = source?.ooxHash;
     this.storedHash = source?.storedHash;
+  }
+
+  /** Gets the original protection flag. @returns Protection state. */
+  isProtected(): boolean {
+    return this.protected;
+  }
+
+  /** Updates the protection flag while retaining options and hashes. @param enabled - Protection state. @returns Nothing. */
+  setProtected(enabled: boolean): void {
+    this.protected = enabled;
+  }
+
+  /** Gets a native permission. @param option - Permission to look up. @returns Whether the operation is enabled. */
+  isOptionEnabled(option: number): boolean {
+    return this.options[option] ?? false;
+  }
+
+  /** Sets a native permission. @param option - Permission to update. @param enabled - Whether the operation is enabled. @returns Nothing. */
+  setOption(option: number, enabled: boolean): void {
+    if (option >= 0 && option < this.options.length) this.options[option] = enabled;
+  }
+
+  /** Gets the stored OOXML hash record. @returns OOXML hash or absence. */
+  getOoxPasswordHash(): Readonly<ScOoxPasswordHash> | undefined {
+    return this.ooxHash;
+  }
+
+  /** Sets the OOXML record and clears the prior simple hash when the new hash is present. @param hash - Source OOXML hash. @returns Nothing. */
+  setOoxPasswordHash(hash: ScOoxPasswordHash): void {
+    this.ooxHash = Object.freeze({ ...hash });
+    if (hash.hashValue) this.storedHash = undefined;
+  }
+
+  /** Tests whether a stored verifier is present. @returns Whether there is a verifier of either family. */
+  hasPassword(): boolean {
+    return Boolean(this.storedHash?.bytes.length || this.ooxHash?.hashValue);
+  }
+
+  /** Tests the current lock and password presence. @returns Whether the original prompt is needed. */
+  isProtectedWithPass(): boolean {
+    return this.isProtected() && this.hasPassword();
+  }
+
+  /** Sets an entered password in the native preferred ODF verifier format. @param password - Entered text. @returns Completion. */
+  async setPassword(password: string): Promise<void> {
+    const bytes = password ? await digest("SHA-1", passwordBytes(password)) : undefined;
+    this.ooxHash = undefined;
+    this.setStoredPasswordHash(bytes && { bytes, primary: Hash.SHA1, secondary: Hash.UNSPECIFIED });
+  }
+
+  /** Verifies only the entered value against the stored protection record. @param password - Entered text. @returns Match. */
+  async verifyPassword(password: string): Promise<boolean> {
+    if (!this.hasPassword()) return password.length === 0;
+    const stored = this.storedHash;
+    if (stored?.bytes.length) {
+      const computed = await hashPassword(stored.primary, password);
+      if (computed) {
+        const actual = stored.secondary === Hash.SHA1 ? await digest("SHA-1", computed) : computed;
+        if (matchesPasswordHash(stored.bytes, actual)) return true;
+      }
+      if (stored.primary === Hash.SHA1 && stored.secondary === Hash.UNSPECIFIED)
+        return matchesPasswordHash(
+          stored.bytes,
+          await digest("SHA-1", new TextEncoder().encode(password)),
+        );
+    }
+    return this.ooxHash ? verifyOoxPassword(this.ooxHash, password) : false;
+  }
+
+  /** Checks whether the stored password can supply the requested digest family. @param primary - First digest. @param secondary - Optional second digest. @returns Compatibility. */
+  hasPasswordHash(primary: Hash, secondary = Hash.UNSPECIFIED): boolean {
+    const stored = this.storedHash;
+    return (
+      !this.hasPassword() ||
+      (stored?.primary === primary &&
+        (stored.secondary === Hash.UNSPECIFIED || stored.secondary === secondary))
+    );
+  }
+
+  /** Reads the original stored digest or applies the supported second digest. @param primary - Primary digest type. @param secondary - Optional second digest type. @returns Requested verifier bytes. */
+  async getPasswordHash(primary: Hash, secondary = Hash.UNSPECIFIED): Promise<Uint8Array> {
+    const stored = this.storedHash;
+    if (
+      !stored ||
+      stored.primary !== primary ||
+      (stored.secondary !== Hash.UNSPECIFIED && stored.secondary !== secondary)
+    )
+      return new Uint8Array();
+    const bytes = new Uint8Array(stored.bytes);
+    if (bytes.length && stored.secondary !== secondary && secondary === Hash.SHA1)
+      return digest("SHA-1", bytes);
+    return bytes;
+  }
+
+  /** Copies the original stored verifier and digest metadata. @returns Independent verifier or absence. */
+  getStoredPasswordHash(): ScStoredPasswordHash | undefined {
+    const hash = this.storedHash;
+    return hash && { ...hash, bytes: hash.bytes.slice() };
+  }
+
+  /** Installs the stored native verifier. @param hash - Digest and algorithms or absence. @returns Nothing. */
+  setStoredPasswordHash(hash?: ScStoredPasswordHash): void {
+    this.storedHash = hash && { ...hash, bytes: hash.bytes.slice() };
+  }
+
+  /** Gets the stored little Excel protection verifier as a 16-bit value. @returns Verifier or zero. */
+  getXlPasswordHash(): number {
+    const hash = this.storedHash;
+    if (hash?.primary !== Hash.XL || hash.secondary !== Hash.UNSPECIFIED || hash.bytes.length < 2)
+      return 0;
+    return ((hash.bytes[0] as number) << 8) | (hash.bytes[1] as number);
+  }
+
+  /** Stores the legacy Excel verifier alongside the OOXML hash. @param hash - 16-bit verifier. @returns Nothing. */
+  setXlPasswordHash(hash: number): void {
+    this.setStoredPasswordHash(
+      hash
+        ? {
+            bytes: Uint8Array.of(hash >>> 8, hash & 0xff),
+            primary: Hash.XL,
+            secondary: Hash.UNSPECIFIED,
+          }
+        : undefined,
+    );
+  }
+}
+
+/** Native workbook protection state stored by ScDocument. */
+export class ScDocProtection extends ScTableProtectionImpl {
+  /** Initializes or copies the original document options. @param source - State to copy. */
+  constructor(source?: ScDocProtection) {
+    super(DocOption.NONE, source);
+  }
+
+  /** Copies the state before adopting it into the document. @returns Independent protection state. */
+  Clone(): ScDocProtection {
+    return new ScDocProtection(this);
+  }
+
+  /** Updates workbook protection and its original linked structure option. @param enabled - Protection state. */
+  override setProtected(enabled: boolean): void {
+    super.setProtected(enabled);
+    this.setOption(DocOption.STRUCTURE, enabled);
+  }
+}
+
+/** Native sheet protection state stored by ScTable. */
+export class ScTableProtection extends ScTableProtectionImpl {
+  private enhancedProtection: readonly ScEnhancedProtection[];
+
+  /** Copies the native state or constructs the default permissions. @param source - Optional state to copy. */
+  constructor(source?: ScTableProtection) {
+    super(Option.NONE, source);
     this.enhancedProtection = source?.enhancedProtection ?? [];
     if (!source) {
       this.setOption(Option.SELECT_LOCKED_CELLS, true);
@@ -158,119 +313,10 @@ export class ScTableProtection {
     return result.size() === 1 && result.at(0).equals(range);
   }
 
-  /** Gets the original sheet flag. @returns Protection state. */
-  isProtected(): boolean {
-    return this.protected;
-  }
-
-  /** Updates the protection flag while retaining options and hashes. @param enabled - Sheet protection state. @returns Nothing. */
-  setProtected(enabled: boolean): void {
-    this.protected = enabled;
-  }
-
-  /** Gets a native permission. @param option - Permission to look up. @returns Whether the operation is enabled. */
-  isOptionEnabled(option: Option): boolean {
-    return this.options[option] ?? false;
-  }
-
-  /** Sets a native permission. @param option - Permission to update. @param enabled - Whether the operation is enabled. @returns Nothing. */
-  setOption(option: Option, enabled: boolean): void {
-    if (option >= 0 && option < Option.NONE) this.options[option] = enabled;
-  }
-
-  /** Gets the stored OOXML hash record. @returns OOXML hash or absence. */
-  getOoxPasswordHash(): Readonly<ScOoxPasswordHash> | undefined {
-    return this.ooxHash;
-  }
-
-  /** Sets the OOXML record and clears the prior simple hash when the new hash is present. @param hash - Source OOXML hash. @returns Nothing. */
-  setOoxPasswordHash(hash: ScOoxPasswordHash): void {
-    this.ooxHash = Object.freeze({ ...hash });
-    if (hash.hashValue) this.storedHash = undefined;
-  }
-
   /** Tests every marked range against the original edit exceptions. @param ranges - Marked ranges. @returns Whether each range is explicitly editable. */
   isSelectionEditable(ranges: ScRangeList): boolean {
     if (ranges.empty()) return false;
     for (const range of ranges) if (!this.isBlockEditable(range)) return false;
     return true;
-  }
-
-  /** Tests whether a stored verifier is present. @returns Whether there is a verifier of either family. */
-  hasPassword(): boolean {
-    return Boolean(this.storedHash?.bytes.length || this.ooxHash?.hashValue);
-  }
-
-  /** Tests the current sheet lock and password presence. @returns Whether the original prompt is needed. */
-  isProtectedWithPass(): boolean {
-    return this.isProtected() && this.hasPassword();
-  }
-
-  /** Sets an entered password in the native preferred ODF verifier format. @param password - Entered text. @returns Completion. */
-  async setPassword(password: string): Promise<void> {
-    const bytes = password ? await digest("SHA-1", passwordBytes(password)) : undefined;
-    this.ooxHash = undefined;
-    this.setStoredPasswordHash(bytes && { bytes, primary: Hash.SHA1, secondary: Hash.UNSPECIFIED });
-  }
-
-  /** Verifies only the entered value against the sheet-owned record. @param password - Entered text. @returns Match. */
-  async verifyPassword(password: string): Promise<boolean> {
-    if (!this.hasPassword()) return password.length === 0;
-    const stored = this.storedHash;
-    if (stored?.bytes.length) {
-      const computed = await hashPassword(stored.primary, password);
-      if (computed) {
-        const actual = stored.secondary === Hash.SHA1 ? await digest("SHA-1", computed) : computed;
-        if (matchesPasswordHash(stored.bytes, actual)) return true;
-      }
-      if (stored.primary === Hash.SHA1 && stored.secondary === Hash.UNSPECIFIED)
-        return matchesPasswordHash(
-          stored.bytes,
-          await digest("SHA-1", new TextEncoder().encode(password)),
-        );
-    }
-    return this.ooxHash ? verifyOoxPassword(this.ooxHash, password) : false;
-  }
-
-  /** Checks whether the stored password can supply the requested digest family. @param primary - First digest. @param secondary - Optional second digest. @returns Compatibility. */
-  hasPasswordHash(primary: Hash, secondary = Hash.UNSPECIFIED): boolean {
-    const stored = this.storedHash;
-    return (
-      !this.hasPassword() ||
-      (stored?.primary === primary &&
-        (stored.secondary === Hash.UNSPECIFIED || stored.secondary === secondary))
-    );
-  }
-
-  /** Copies the original stored verifier and digest metadata. @returns Independent verifier or absence. */
-  getStoredPasswordHash(): ScStoredPasswordHash | undefined {
-    const hash = this.storedHash;
-    return hash && { ...hash, bytes: hash.bytes.slice() };
-  }
-
-  /** Installs the stored native verifier. @param hash - Digest and algorithms or absence. @returns Nothing. */
-  setStoredPasswordHash(hash?: ScStoredPasswordHash): void {
-    this.storedHash = hash && { ...hash, bytes: hash.bytes.slice() };
-  }
-
-  /** Gets the stored little Excel protection verifier as a 16-bit value. @returns Verifier or zero. */
-  getXlPasswordHash(): number {
-    const hash = this.storedHash;
-    if (hash?.primary !== Hash.XL || hash.secondary !== Hash.UNSPECIFIED || hash.bytes.length < 2)
-      return 0;
-    return ((hash.bytes[0] as number) << 8) | (hash.bytes[1] as number);
-  }
-
-  /** Stores the legacy Excel verifier alongside the OOXML hash. @param hash - 16-bit verifier. @returns Nothing. */
-  setXlPasswordHash(hash: number): void {
-    this.setStoredPasswordHash(
-      hash
-        ? {
-            bytes: Uint8Array.of(hash >>> 8, hash & 0xff),
-            primary: Hash.XL,
-            secondary: Hash.UNSPECIFIED,
-          }
-        : undefined,
-    );
   }
 }
