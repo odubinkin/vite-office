@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202611280746-Q216GP",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-28T07:54:19.148Z",
+  "verdict": "pass",
+  "summary": "Native numeric placeholder and exponent XML round trips verified in ODS and Writer consumers.",
+  "evaluated_sha": "ea1764883a406604c0e1fc5fbf0914da4d461ee5",
+  "blueprint_digest": "d3ee5bb27abdc6a332d6bf6fc5a24553b97bf7aa376a1daacca7933f30f58d6b",
+  "findings": [
+    "All original format strings and the mandatory exponent zero normalization survived ODS"
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611280746-Q216GP/README.md",
+    "output/playwright/odf-next-checkpoint/calc-number-format-verification.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
