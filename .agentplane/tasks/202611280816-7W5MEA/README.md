@@ -1,10 +1,11 @@
 ---
 id: "202611280816-7W5MEA"
 title: "Align Calc ODS row styles and height scheduling"
-status: "DOING"
+result_summary: "Aligned native ODS row style ownership, saved row sizing and selected height updates."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "output/playwright/odf-next-checkpoint/calc-ods-row-styles-verification.md"
   findings:
     - "Original manual and automatic row settings survive ODS and imported row backgrounds become actual cell patterns."
-commit: null
+commit:
+  hash: "b2b3eee89c7a76198e14df97cdf872822e66ab59"
+  message: "🧩 7W5MEA calc: align ODS row styles and height scheduling"
 comments:
   -
     author: "CODER"
     body: "Start: align ODS row-style properties, native cell-pattern routing, and the bounded saved-height recalculation pass."
+  -
+    author: "CODER"
+    body: "Verified: twelve related Calc tests and associated static checks."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Twelve related Calc tests passed, including the original row-height-import ODS, row background with explicit cell override and native row height core. TypeScript, lint, formatting, dependencies, provenance and zero Calc parity violations passed. No full suite."
+  -
+    type: "status"
+    at: "2026-11-28T08:23:37.778Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: twelve related Calc tests and associated static checks."
 doc_version: 3
-doc_updated_at: "2026-11-28T08:22:14.396Z"
+doc_updated_at: "2026-11-28T08:23:37.779Z"
 doc_updated_by: "CODER"
 description: "Port the pinned row-property mapping, saved and calculated height scheduling, and imported row cell backgrounds into their native Calc owners. Verify original row-height fixtures and the affected ODS geometry and style modules."
 sections:
