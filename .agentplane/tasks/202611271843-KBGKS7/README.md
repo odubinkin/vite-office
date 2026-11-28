@@ -1,10 +1,11 @@
 ---
 id: "202611271843-KBGKS7"
 title: "Port native Calc ODS database filter item values"
-status: "DOING"
+result_summary: "Calc ODS filters preserve native color values, number conversion, and lexical criteria."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - "output/playwright/odf-next-checkpoint/ods-filter-query-verification.md"
   findings:
     - "The original RGB, automatic styling and date filters retain their XML values through the represented package and Worker paths. CALC-873 records the native non-empty overwrite."
-commit: null
+commit:
+  hash: "b405230303d6b18d6c4dfacbc1ab8ef6d67a526e"
+  message: "🧩 KBGKS7 calc: preserve native ODS database filter item values"
 comments:
   -
     author: "CODER"
     body: "Start: bind ODS database filter input and output to actual native query item values."
+  -
+    author: "CODER"
+    body: "Verified: nine focused Calc tests and source, type, and boundary checks pass."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "All 9 focused Calc tests pass, including the two original LibreOffice filter documents. Office typecheck, ESLint, Prettier, module boundaries, source provenance and Calc parity inventory passed; zero semantic violations."
+  -
+    type: "status"
+    at: "2026-11-28T04:32:04.807Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: nine focused Calc tests and source, type, and boundary checks pass."
 doc_version: 3
-doc_updated_at: "2026-11-28T04:29:42.876Z"
+doc_updated_at: "2026-11-28T04:32:04.809Z"
 doc_updated_by: "CODER"
 description: "Use actual native Calc colors in database query items and preserve the filter operators and lexical values in ODS. Apply the original color and automatic-color conversions, dialect property admission and Worker binding with existing-record compatibility. Port native ODS autofilter color assertions and preserve and document the original non-empty filter parser behavior."
 sections:
