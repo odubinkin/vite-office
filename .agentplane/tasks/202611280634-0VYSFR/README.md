@@ -4,7 +4,7 @@ title: "Port Calc ODS tracked formula and formatted text snapshots"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 4
+revision: 6
 origin:
   system: "manual"
 depends_on: []
@@ -19,11 +19,27 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-11-28T06:43:43.956Z"
+  updated_by: "CODER"
+  note: "40 closely related ODS tests passed, then all 17 tracked formula, matrix, edit and Worker tests passed after preserving the clean formula cache. Typecheck, lint, dependencies, source provenance and zero Calc parity violations. CALC-876 records the pinned first-paragraph space behavior."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-11-28T06:43:44.970Z"
+  updated_by: "EVALUATOR"
+  note: "Calc retains native historical formulas and formatted snapshots through ODS and Worker."
+  evaluated_sha: "db73873e93616825c61d45db97551ea7c315d5bb"
+  blueprint_digest: "cd6de32815c76a025c22fcc8ad376eeabfb391b01772f76c9e033d6e4cb4a2da"
+  evidence_refs:
+    - ".agentplane/tasks/202611280634-0VYSFR/README.md"
+    - ".agentplane/tasks/202611280634-0VYSFR/quality/20261128-064344970-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202611280634-0VYSFR/quality/20261128-064344970-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202611280634-0VYSFR/quality/20261128-064344970-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202611280634-0VYSFR/blueprint/resolved-snapshot.json"
+    - "output/playwright/odf-next-checkpoint/calc-historical-formula-verification.md"
+  findings:
+    - "The roundtrip preserves the original historical position, real recalculated value and clean cache, text spans and old/new action ownership."
 commit: null
 comments:
   -
@@ -37,8 +53,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: use the original historical formula and edit-text ownership paths."
+  -
+    type: "verify"
+    at: "2026-11-28T06:43:43.956Z"
+    author: "CODER"
+    state: "ok"
+    note: "40 closely related ODS tests passed, then all 17 tracked formula, matrix, edit and Worker tests passed after preserving the clean formula cache. Typecheck, lint, dependencies, source provenance and zero Calc parity violations. CALC-876 records the pinned first-paragraph space behavior."
 doc_version: 3
-doc_updated_at: "2026-11-28T06:34:29.774Z"
+doc_updated_at: "2026-11-28T06:43:44.073Z"
 doc_updated_by: "CODER"
 description: "Restore and export historical formula and EditEngine cell snapshots through native change tracking XML and the ODS Worker. Reuse existing formula grammars, address conversion, matrix ownership and text style pools. Keep scalar actions and their previously tracked behavior intact."
 sections:
@@ -58,6 +80,36 @@ sections:
     3. Compare the final result against ## Scope and record any residual follow-up in ## Findings. Expected: open edges are explicit rather than implicit.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-11-28T06:43:43.956Z — VERIFY — ok
+
+    By: CODER
+
+    Note: 40 closely related ODS tests passed, then all 17 tracked formula, matrix, edit and Worker tests passed after preserving the clean formula cache. Typecheck, lint, dependencies, source provenance and zero Calc parity violations. CALC-876 records the pinned first-paragraph space behavior.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-28T06:34:29.774Z, excerpt_hash=sha256:699759231ced31c1b0915b95e28ae91d8c769d1a68aff8e255ed234b0705f1eb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611280634-0VYSFR/blueprint/resolved-snapshot.json
+    - old_digest: cd6de32815c76a025c22fcc8ad376eeabfb391b01772f76c9e033d6e4cb4a2da
+    - current_digest: cd6de32815c76a025c22fcc8ad376eeabfb391b01772f76c9e033d6e4cb4a2da
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202611280634-0VYSFR
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202611280634-0VYSFR
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -91,6 +143,36 @@ PLANNER fallback scaffold for "Port Calc ODS tracked formula and formatted text 
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-11-28T06:43:43.956Z — VERIFY — ok
+
+By: CODER
+
+Note: 40 closely related ODS tests passed, then all 17 tracked formula, matrix, edit and Worker tests passed after preserving the clean formula cache. Typecheck, lint, dependencies, source provenance and zero Calc parity violations. CALC-876 records the pinned first-paragraph space behavior.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-28T06:34:29.774Z, excerpt_hash=sha256:699759231ced31c1b0915b95e28ae91d8c769d1a68aff8e255ed234b0705f1eb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611280634-0VYSFR/blueprint/resolved-snapshot.json
+- old_digest: cd6de32815c76a025c22fcc8ad376eeabfb391b01772f76c9e033d6e4cb4a2da
+- current_digest: cd6de32815c76a025c22fcc8ad376eeabfb391b01772f76c9e033d6e4cb4a2da
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202611280634-0VYSFR
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202611280634-0VYSFR
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
