@@ -1,10 +1,11 @@
 ---
 id: "202611280646-M5TH2R"
 title: "Port native Writer ODT custom document information fields"
-status: "DOING"
+result_summary: "Writer retains native named custom document-property fields and typed or fixed presentations through ODT and Worker."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "output/playwright/odf-next-checkpoint/writer-docinfo-custom-verification.md"
   findings:
     - "The original classification fixture covers a first-page style field, and the existing body roundtrip covers named scalar and typed properties and the source fallback."
-commit: null
+commit:
+  hash: "0010c23ae7a6204c8d0b634f0f014c5aba08d85d"
+  message: "🧩 M5TH2R writer: roundtrip native custom document information fields"
 comments:
   -
     author: "CODER"
     body: "Start: port original named document-property field expansion and ODF service."
+  -
+    author: "CODER"
+    body: "Verified: 27 focused Writer/shared tests, original classified header fixture, typecheck, lint, formatting, provenance, module boundaries and Writer parity."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "27 focused Writer/shared tests passed, including original tdf160877.odt classification field in styles.xml and typed custom properties through Worker. Typecheck, lint, formatting, dependencies, provenance and zero Writer parity violations passed. WRITER-779/780 preserve original missing-property and duration behavior."
+  -
+    type: "status"
+    at: "2026-11-28T06:56:08.379Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: 27 focused Writer/shared tests, original classified header fixture, typecheck, lint, formatting, provenance, module boundaries and Writer parity."
 doc_version: 3
-doc_updated_at: "2026-11-28T06:53:33.827Z"
+doc_updated_at: "2026-11-28T06:56:08.381Z"
 doc_updated_by: "CODER"
 description: "Bind text:user-defined fields to the actual UNO document property bag. Implement the native fixed and live presentations, typed date/date-time/duration and scalar conversion, supported header/footer and body ODF paths, and portable name and number format state through the Worker."
 sections:
