@@ -20,9 +20,10 @@
         "apps/office/src/sw/source/core/bastyp/calc.ts",
         "apps/office/src/sw/source/filter/xml/odt-sequence-fields.test.ts",
         "vendor/libreoffice-reference/sw/source/core/bastyp/calc.cxx",
-        "vendor/libreoffice-reference/sw/qa/extras/uiwriter/uiwriter6.cxx"
+        "vendor/libreoffice-reference/sw/qa/extras/uiwriter/uiwriter6.cxx",
+        "apps/office/src/sw/source/filter/xml/odt-hidden-paragraph.test.ts"
       ],
-      "justification": "Evaluates the represented Writer sequence expressions with native additive, term, primary and variable ownership.",
+      "justification": "Evaluates represented Writer numeric and string field expressions with native additive, term, primary and variable ownership.",
       "knownViolations": [],
       "localSymbols": [
         "SwCalc"

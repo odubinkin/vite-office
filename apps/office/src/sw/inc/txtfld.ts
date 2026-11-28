@@ -4,6 +4,7 @@ import type {
   SwDocInfoField,
   SwDocStatField,
   SwHiddenTextField,
+  SwHiddenParaField,
   SwPostItField,
 } from "../source/core/fields/docufld";
 import type { SwGetRefField } from "../source/core/fields/reffld";
@@ -88,6 +89,9 @@ export type SwTextUserField = SwTextField<SwUserField>;
 /** Text attribute carrying the original conditional or hidden text field. */
 export type SwTextHiddenTextField = SwTextField<SwHiddenTextField>;
 
+/** Text attribute carrying the original hidden paragraph field. */
+export type SwTextHiddenParaField = SwTextField<SwHiddenParaField>;
+
 /** Represented native ordinary text fields. */
 export type SwTextOrdinaryField =
   | SwTextReferenceField
@@ -99,6 +103,7 @@ export type SwTextOrdinaryField =
   | SwTextJumpEditField
   | SwTextDropDownField
   | SwTextHiddenTextField
+  | SwTextHiddenParaField
   | SwTextSequenceField
   | SwTextGetExpField
   | SwTextUserField;

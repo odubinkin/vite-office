@@ -33,6 +33,8 @@ export class SwViewOption {
   private readonly m_aColorConfig = new SwViewColors(SwViewOption.s_aInitialColorConfig);
   private m_bReadonly = false;
   private m_bIsPagePreview = false;
+  private showHiddenPara = false;
+  private fieldName = false;
   private horizontalRulerVisible = true;
   private verticalRulerVisible = true;
   private sidebarVisible = true;
@@ -76,6 +78,30 @@ export class SwViewOption {
     this.baselineGridVisible = visible;
     this.changed();
   }
+  /** Returns the configured Writer hidden paragraph visibility. @returns Whether hidden paragraphs are displayed. */
+  public IsShowHiddenPara(): boolean {
+    return this.showHiddenPara;
+  }
+
+  /** Updates native hidden paragraph visibility. @param visible - Current view setting. */
+  public SetShowHiddenPara(visible: boolean): void {
+    if (visible === this.showHiddenPara) return;
+    this.showHiddenPara = visible;
+    this.changed();
+  }
+
+  /** Reads the native show-field-names mode. @returns Whether field names are shown. */
+  public IsFieldName(): boolean {
+    return this.fieldName;
+  }
+
+  /** Updates the view mode that exposes hidden paragraphs. @param visible - Whether field names are shown. */
+  public SetFieldName(visible: boolean): void {
+    if (visible === this.fieldName) return;
+    this.fieldName = visible;
+    this.changed();
+  }
+
   /** Reads native read-only view state. @returns Whether read-only. */
   public IsReadonly(): boolean {
     return this.m_bReadonly;

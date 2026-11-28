@@ -454,6 +454,7 @@ export function compareParagraphMarkers(
       case "placeholder-field":
       case "drop-down-field":
       case "hidden-text-field":
+      case "hidden-paragraph-field":
       case "date-time-field":
         return 6;
     }

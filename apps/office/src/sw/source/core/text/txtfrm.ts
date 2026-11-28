@@ -61,6 +61,7 @@ export function projectSwLineNumbers(
       return page.textFrames.map(
         /** Numbers one text-frame fragment. @param frame - Fragment. @returns Visible marks. */
         (frame) => {
+          if (frame.IsHiddenNow()) return [];
           const input = byId.get(frame.nodeId);
           if (input === undefined) throw new Error("Line-number frame has no measured text node.");
           if (frame.start === 0 && input.countLineNumbers !== false && input.lineNumberStartValue)
@@ -101,6 +102,7 @@ export interface SwTextFrameMeasurement {
 
 /** Core layout values of one canonical text node paired with device-shaped lines. */
 export interface SwTextFrameInput {
+  readonly hidden?: boolean;
   readonly node: SwTextNode;
   readonly id: string;
   readonly lines: readonly SwTextLine[];
@@ -121,15 +123,33 @@ export interface SwTextFrameInput {
   readonly register?: SwRegisterMetrics & { readonly naturalHeight: number };
 }
 
-/** Reads layout-owned values from canonical Writer nodes, pairing them only with measured lines. @param document - Active Writer document. @param measurements - Browser device line geometry in document order. @returns Core frame inputs. */
+/** Identifies the first body content kept visible when fields hide every body text frame. @param document - Native document. @returns First body text node, including table content, or absence. */
+export function FindHiddenBodyFallback(document: SwDoc): SwTextNode | undefined {
+  const nodes = document.GetNodes();
+  const entries = nodes.entries();
+  const end = nodes.GetEndOfContent().GetIndex();
+  let first: SwTextNode | undefined;
+  for (let index = nodes.GetEndOfExtras().GetIndex() + 1; index < end; index++) {
+    const text = entries[index]?.GetTextNode();
+    if (!text) continue;
+    if (!text.IsHiddenByParaField()) return undefined;
+    first ??= text;
+  }
+  return first;
+}
+
+/** Reads layout-owned values from canonical Writer nodes, pairing them only with measured lines. @param document - Active Writer document. @param measurements - Browser device line geometry in document order. @param settings - Layout view switches. @returns Core frame inputs. */
 export function createSwTextFrameInputs(
   document: SwDoc,
   measurements: readonly SwTextFrameMeasurement[],
+  settings?: SwTextFrameSettings,
 ): readonly SwTextFrameInput[] {
   if (measurements.length === 0) return [];
   const nodes = document.paragraphs;
   if (nodes.length !== measurements.length)
     throw new Error("Writer layout measurements must match the current text nodes.");
+  const hideParagraphs = !settings?.showHiddenPara && !settings?.fieldName;
+  const fallback = hideParagraphs ? FindHiddenBodyFallback(document) : undefined;
   return nodes.map(
     /** Pairs one node's pooled values with its device lines. @param node - Canonical node. @param index - Document order. @returns Core frame input. */ (
       node,
@@ -146,6 +166,9 @@ export function createSwTextFrameInputs(
       return {
         node,
         id: measurement.id,
+        ...(hideParagraphs && node !== fallback && node.IsHiddenByParaField()
+          ? { hidden: true }
+          : {}),
         lines: measurement.lines,
         lowerSpacing: spacing.GetLower(),
         style: node.GetParagraphStyle(),
@@ -173,6 +196,8 @@ export function createSwTextFrameInputs(
 export interface SwTextFrameSettings {
   readonly paraSpaceMax: boolean;
   readonly paraSpaceMaxAtPages: boolean;
+  readonly showHiddenPara?: boolean;
+  readonly fieldName?: boolean;
 }
 
 /** Pinned LibreOffice compatibility defaults from Office/Compatibility.xcs. */
@@ -208,7 +233,7 @@ export class SwTextFrame extends SwContentFrame {
       this.SetCompletePaint();
     }
   }
-  /** Registers the original node and retains the browser device fragment fields. @param node - Original text owner. @param nodeId - Device projection identity. @param start - Frame start. @param end - Frame end. @param topSpacing - Frame spacing. @param lines - Device-shaped lines. @param sibling - Existing native frame supplying the original root. @returns Frame. */
+  /** Registers the original node and retains the browser device fragment fields. @param node - Original text owner. @param nodeId - Device projection identity. @param start - Frame start. @param end - Frame end. @param topSpacing - Frame spacing. @param lines - Device-shaped lines. @param sibling - Existing native frame supplying the original root. @param hidden - Whether the original frame has zero height and skips paint. @returns Frame. */
   public constructor(
     node: SwTextNode,
     public readonly nodeId: string,
@@ -217,10 +242,15 @@ export class SwTextFrame extends SwContentFrame {
     public readonly topSpacing: number,
     lines: readonly SwTextLine[],
     sibling?: SwFrame,
+    private readonly hidden = false,
   ) {
     super(node, sibling);
     this.mnFrameType = SwFrameType.Txt;
     this.#para = createSwParaPortion(lines);
+  }
+  /** Reports field-induced hidden layout state. @returns Whether this frame skips formatting and paint. */
+  public IsHiddenNow(): boolean {
+    return this.hidden;
   }
   /** Resolves the original first node in the represented unmerged frame. @returns Original registered text owner. */
   public GetTextNodeFirst(): SwTextNode {

@@ -177,6 +177,7 @@ export function WriterEditableParagraph({
     <div
       className="relative shrink-0"
       data-active={isActive}
+      hidden={paragraph.hiddenByParaField}
       style={{
         backgroundColor: paragraph.computedStyle.backgroundColor,
         ...paragraph.borderStyle,

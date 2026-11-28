@@ -1,14 +1,24 @@
-/** @fileoverview Writer's native numeric field-expression parser and variable table. */
+/** @fileoverview Writer's native scalar field-expression parser and variable table. */
+import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { rtl_math_uStringToDouble } from "../../../../sal/inc/rtl/math.h";
+import {
+  getSystemDecimalSeparator,
+  getSystemThousandSeparator,
+} from "../../../../unotools/source/misc/syslocale";
+
+/** Scalar members of the represented SwSbxValue. */
+type CalcValue = number | string;
 
 /** One token in the native numeric expression grammar. */
 type CalcToken =
   | { kind: "number"; value: number }
+  | { kind: "string"; value: string }
   | { kind: "name"; value: string }
   | { kind: "operator"; value: string }
   | { kind: "end" };
 
 const tokenPattern =
-  /\s*(?:(\d+(?:\.\d*)?|\.\d+)([Ee][+-]?\d+)?|([\p{Letter}_][\p{Letter}\p{Number}_.]*)|\[((?:\\\]|[^\]])*)\]|(==|!=|<=|>=|[=+\-*/^()%<>!|]))/uy;
+  /\s*(?:(\d+(?:\.\d*)?|\.\d+)([Ee][+-]?\d+)?|([\p{Letter}_][\p{Letter}\p{Number}_.]*)|\[((?:\\\]|[^\]])*)\]|(==|!=|<=|>=|[=+\-*/^()%<>!|])|"((?:[^"]|"")*)")/uy;
 const termOperators = new Set([
   "*",
   "/",
@@ -60,9 +70,31 @@ const unaryFunctions: Readonly<Record<string, (value: number) => number>> = {
   tan: Math.tan,
 };
 
-/** Numeric portion of the original Writer field calculator. */
+/** Projects the native SwSbxValue numeric coercion. @param value - Original scalar or void. @returns Numeric cell/formula value. */
+function getDouble(value: CalcValue | undefined): number {
+  if (typeof value !== "string") return value ?? 0;
+  const source = unicode(value);
+  try {
+    return rtl_math_uStringToDouble(
+      source.getStr(),
+      source.getLength(),
+      getSystemDecimalSeparator().charCodeAt(0),
+      getSystemThousandSeparator().charCodeAt(0) || 0,
+    );
+  } finally {
+    source.dispose();
+  }
+}
+
+/** Compares numeric and string Sbx variants in native order. @param left - First operand. @param right - Second operand. @returns Relative order. */
+function compare(left: CalcValue, right: CalcValue): number {
+  if (typeof left !== typeof right) return typeof left === "number" ? -1 : 1;
+  return left === right ? 0 : left < right ? -1 : 1;
+}
+
+/** Scalar portion of the original Writer field calculator. */
 export class SwCalc {
-  private readonly variables = new Map<string, number>([
+  private readonly variables = new Map<string, CalcValue>([
     ["false", 0],
     ["true", 1],
     ["pi", Math.PI],
@@ -74,30 +106,46 @@ export class SwCalc {
   private error = false;
   private list: { operator: string; length: number; hasNumber: boolean } | undefined;
 
-  /** Changes the original case-insensitive numeric variable table. @param name - Writer variable name. @param value - Native numeric value. */
-  public VarChange(name: string, value: number): void {
+  /** Changes the original case-insensitive scalar variable table. @param name - Writer variable name. @param value - Native scalar value. */
+  public VarChange(name: string, value: CalcValue): void {
     this.variables.set(name.toLowerCase(), value);
   }
 
-  /** Reads the existing value of an original named expression. @param name - Writer variable name. @returns Last assigned numeric value. */
-  public GetVariable(name: string): number | undefined {
+  /** Reads the existing value of an original named expression. @param name - Writer variable name. @returns Last assigned scalar value. */
+  public GetVariable(name: string): CalcValue | undefined {
     return this.variables.get(name.toLowerCase());
   }
 
   /** Evaluates a native numeric field expression. @param formula - Writer expression. @returns Calculated value when the expression is valid and non-void. */
   public Calculate(formula: string): number | undefined {
+    const result = this.CalculateValue(formula);
+    if (result === undefined) return undefined;
+    const number = getDouble(result);
+    return Number.isFinite(number) ? number : undefined;
+  }
+
+  /** Calculates native SwSbxValue truthiness, preserving a void expression. @param formula - Original condition. @returns Logical value or void. */
+  public CalculateCondition(formula: string): boolean | undefined {
+    const result = this.CalculateValue(formula);
+    return result === undefined ? undefined : Boolean(result);
+  }
+
+  /** Evaluates the represented scalar expression. @param formula - Original expression. @returns Scalar result or void. */
+  private CalculateValue(formula: string): CalcValue | undefined {
     this.expression = formula.trim();
     this.index = 0;
     this.error = false;
     this.list = undefined;
     this.GetToken();
     const result = this.Expr();
-    return this.error || this.current.kind !== "end" || !Number.isFinite(result)
+    return this.error ||
+      this.current.kind !== "end" ||
+      (typeof result === "number" && !Number.isFinite(result))
       ? undefined
       : result;
   }
 
-  /** Reads the next numeric token of the original expression. */
+  /** Reads the next scalar token of the original expression. */
   private GetToken(): void {
     if (this.index >= this.expression.length) {
       this.current = { kind: "end" };
@@ -122,6 +170,8 @@ export class SwCalc {
         operator !== undefined || termOperators.has(name) || name === "not"
           ? { kind: "operator", value: operator ?? name }
           : { kind: "name", value: name };
+    } else if (match[6] !== undefined) {
+      this.current = { kind: "string", value: match[6].replaceAll('""', '"') };
     } else if (match[5] === "|" && this.list) {
       ++this.list.length;
       this.current = { kind: "operator", value: this.list.operator };
@@ -135,20 +185,20 @@ export class SwCalc {
     return this.current.kind === "operator" && this.current.value === operator;
   }
 
-  /** Original additive expression level. @returns Number or void. */
-  private Expr(): number | undefined {
+  /** Original additive expression level. @returns Scalar value or void. */
+  private Expr(): CalcValue | undefined {
     let left = this.Term();
     while (this.At("+") || this.At("-")) {
       const add = this.At("+");
       this.GetToken();
-      const right = this.Term() ?? 0;
-      left = (left ?? 0) + (add ? right : -right);
+      const right = getDouble(this.Term());
+      left = getDouble(left) + (add ? right : -right);
     }
     return left;
   }
 
-  /** Original shared level for multiplication, comparison and numeric boolean operators. @returns Number or void. */
-  private Term(): number | undefined {
+  /** Original shared level for multiplication, comparison and numeric boolean operators. @returns Scalar value or void. */
+  private Term(): CalcValue | undefined {
     let left = this.Prim();
     while (this.current.kind === "operator" && termOperators.has(this.current.value)) {
       const operator = this.current.value;
@@ -157,37 +207,37 @@ export class SwCalc {
       const a = left ?? 0;
       switch (operator) {
         case "*":
-          left = a * right;
+          left = getDouble(a) * getDouble(right);
           break;
         case "/":
-          left = a / right;
+          left = getDouble(a) / getDouble(right);
           break;
         case "mod":
-          left = (a | 0) % (right | 0);
+          left = (getDouble(a) | 0) % (getDouble(right) | 0);
           break;
         case "min-in":
-          left = Math.min(a, right);
+          left = getDouble(a) < getDouble(right) ? a : right;
           break;
         case "max-in":
-          left = Math.max(a, right);
+          left = getDouble(a) > getDouble(right) ? a : right;
           break;
         case "==":
-          left = Number(a === right);
+          left = Number(compare(a, right) === 0);
           break;
         case "!=":
-          left = Number(a !== right);
+          left = Number(compare(a, right) !== 0);
           break;
         case "<":
-          left = Number(a < right);
+          left = Number(compare(a, right) < 0);
           break;
         case ">":
-          left = Number(a > right);
+          left = Number(compare(a, right) > 0);
           break;
         case "<=":
-          left = Number(a <= right);
+          left = Number(compare(a, right) <= 0);
           break;
         case ">=":
-          left = Number(a >= right);
+          left = Number(compare(a, right) >= 0);
           break;
         case "and":
           left = Number(Boolean(a) && Boolean(right));
@@ -199,20 +249,20 @@ export class SwCalc {
           left = Number(Boolean(a) !== Boolean(right));
           break;
       }
-      if (!Number.isFinite(left)) this.error = true;
+      if (typeof left === "number" && !Number.isFinite(left)) this.error = true;
     }
     return left;
   }
 
-  /** Original right-recursive power and primary expression level. @returns Number or void. */
-  private Prim(): number | undefined {
+  /** Original right-recursive power and primary expression level. @returns Scalar value or void. */
+  private Prim(): CalcValue | undefined {
     const token = this.current;
     if (token.kind === "name") {
       const operator = listOperators.get(token.value);
       if (operator) return this.ReadList(token.value, operator);
     }
     this.GetToken();
-    let value: number | undefined;
+    let value: CalcValue | undefined;
     switch (token.kind) {
       case "number":
         if (this.list) this.list.hasNumber = true;
@@ -220,6 +270,9 @@ export class SwCalc {
           this.GetToken();
           return token.value * 0.01;
         }
+        value = token.value;
+        break;
+      case "string":
         value = token.value;
         break;
       case "name": {
@@ -232,14 +285,14 @@ export class SwCalc {
         const func = Object.hasOwn(unaryFunctions, token.value)
           ? unaryFunctions[token.value]
           : undefined;
-        if (func) return func(this.Prim() ?? 0);
+        if (func) return func(getDouble(this.Prim()));
         value = this.variables.get(token.value);
-        if (value !== undefined && this.list) this.list.hasNumber = true;
+        if (typeof value === "number" && this.list) this.list.hasNumber = true;
         if (value === undefined && this.At("(")) this.error = true;
         break;
       }
       case "operator":
-        if (token.value === "-") return -(this.Prim() ?? 0);
+        if (token.value === "-") return -getDouble(this.Prim());
         if (token.value === "!" || token.value === "not") return Number(!(this.Prim() ?? 0));
         if (token.value !== "(") {
           this.error = true;
@@ -259,14 +312,14 @@ export class SwCalc {
     }
     if (this.At("^")) {
       this.GetToken();
-      value = (value ?? 0) ** (this.Prim() ?? 0);
+      value = getDouble(value) ** getDouble(this.Prim());
       if (!Number.isFinite(value)) this.error = true;
     }
     return value;
   }
 
   /** Applies the original list operation and count while parsing the nested expression. @param name - Native aggregate. @param operator - Active list separator operation. @returns Aggregated numeric result. */
-  private ReadList(name: string, operator: string): number | undefined {
+  private ReadList(name: string, operator: string): CalcValue | undefined {
     const parent = this.list;
     const list = { operator, length: 1, hasNumber: false };
     this.list = list;
@@ -279,7 +332,7 @@ export class SwCalc {
           this.error = true;
           return undefined;
         }
-        return (value ?? 0) / list.length;
+        return getDouble(value) / list.length;
       }
       return value;
     } finally {

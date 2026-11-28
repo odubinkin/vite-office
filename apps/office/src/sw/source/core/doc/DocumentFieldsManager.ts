@@ -2,6 +2,8 @@
 import {
   SwDocInfoFieldType,
   SwDocStatFieldType,
+  SwHiddenParaField,
+  SwHiddenParaFieldType,
   SwHiddenTextField,
   SwHiddenTextFieldType,
   SwPostItFieldType,
@@ -38,6 +40,7 @@ export class DocumentFieldsManager {
   private readonly jumpEdit: SwJumpEditFieldType;
   private readonly dropDown: SwDropDownFieldType;
   private readonly hiddenText: SwHiddenTextFieldType;
+  private readonly hiddenPara: SwHiddenParaFieldType;
   private readonly chapter: SwChapterFieldType;
   private readonly pageNumber: SwPageNumberFieldType;
   private readonly docStat: SwDocStatFieldType;
@@ -52,6 +55,7 @@ export class DocumentFieldsManager {
     this.jumpEdit = new SwJumpEditFieldType(document);
     this.dropDown = new SwDropDownFieldType(document);
     this.hiddenText = new SwHiddenTextFieldType(document);
+    this.hiddenPara = new SwHiddenParaFieldType(document);
     this.chapter = new SwChapterFieldType(document);
     this.pageNumber = new SwPageNumberFieldType(document);
     this.docStat = new SwDocStatFieldType(document);
@@ -134,6 +138,11 @@ export class DocumentFieldsManager {
     return this.hiddenText;
   }
 
+  /** Borrows the original HiddenParagraph system type. @returns Document field type. */
+  public GetHiddenParaFieldType(): SwHiddenParaFieldType {
+    return this.hiddenPara;
+  }
+
   /** Borrows the original Chapter system type. @returns Field type. */
   public GetChapterFieldType(): SwChapterFieldType {
     return this.chapter;
@@ -174,8 +183,8 @@ export class DocumentFieldsManager {
     const calculator = new SwCalc();
     const strings = new Map<string, string>();
     for (const type of this.users.values()) {
-      if (type.expression) calculator.VarChange(type.name, type.value);
-      else strings.set(type.name, type.content);
+      calculator.VarChange(type.name, type.expression ? type.value : type.content);
+      if (!type.expression) strings.set(type.name, type.content);
     }
     const outlines = new Map<SwSetExpFieldType, SwTextNode | undefined>();
     for (const node of this.document.GetNodes().entries()) {
@@ -189,12 +198,15 @@ export class DocumentFieldsManager {
           if (value !== undefined) field.SetValue(value);
           continue;
         }
-        if (field instanceof SwHiddenTextField) {
+        if (field instanceof SwHiddenParaField || field instanceof SwHiddenTextField) {
           const condition = field.GetPar1();
-          const value = condition === "" ? 0 : calculator.Calculate(condition);
+          const value = condition === "" ? false : calculator.CalculateCondition(condition);
           if (value !== undefined) {
-            field.SetValue(!value);
-            field.Evaluate();
+            if (field instanceof SwHiddenParaField) field.SetHidden(value);
+            else {
+              field.SetValue(!value);
+              field.Evaluate();
+            }
           }
           continue;
         }
@@ -205,6 +217,7 @@ export class DocumentFieldsManager {
           const formula = field.GetFormula();
           const value = strings.get(formula) || formula;
           strings.set(name, value);
+          calculator.VarChange(name, value);
           field.ChgExpStr(value);
           continue;
         }

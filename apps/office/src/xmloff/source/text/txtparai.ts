@@ -23,6 +23,7 @@ import {
   XMLPlaceholderFieldImportContext,
   XMLDropDownFieldImportContext,
   XMLHiddenTextImportContext,
+  XMLHiddenParagraphImportContext,
   XMLReferenceFieldImportContext,
   XMLRevisionDocInfoImportContext,
   XMLDateTimeDocInfoImportContext,
@@ -491,6 +492,10 @@ function createInlineContext(
     return annotation
       ? null
       : new XMLVarFieldImportContext(element, paragraph, properties, hyperlink, namedStyles);
+  if (element === XMLToken.TEXT_HIDDEN_PARAGRAPH)
+    return annotation
+      ? null
+      : new XMLHiddenParagraphImportContext(paragraph, properties, hyperlink, namedStyles);
   if (element === XMLToken.TEXT_CONDITIONAL_TEXT || element === XMLToken.TEXT_HIDDEN_TEXT)
     return annotation
       ? null

@@ -25,7 +25,7 @@ import { SwDropDownField } from "../fields/flddropdown";
 import { SwChapterField } from "../fields/chpfld";
 import { SwGetRefField } from "../fields/reffld";
 import { SwPageNumberField } from "../fields/docufld.pagenumber";
-import { SwDocInfoField, SwDocStatField } from "../fields/docufld";
+import { SwDocInfoField, SwDocStatField, SwHiddenParaField } from "../fields/docufld";
 import { SwDateTimeField } from "../fields/flddat";
 import { SwTextFlyCnt } from "../../../inc/txtflcnt";
 import { TryInsertTextNodeHint, DestroyTextNodeAttribute } from "./thints-insert";
@@ -429,6 +429,18 @@ export class SwpHints {
       (hint): hint is SwTextReferenceField =>
         hint instanceof SwTextField && hint.GetAttr().GetField() instanceof SwGetRefField,
     );
+  }
+
+  /** Applies native equal-weight HiddenParagraph precedence to the current fields. @returns Whether a hidden-paragraph field hides this owner. */
+  public IsHiddenByParaField(): boolean {
+    let hidden = false;
+    for (const hint of this.GetOrdinaryFields()) {
+      const field = hint.GetAttr().GetField();
+      if (!(field instanceof SwHiddenParaField)) continue;
+      if (!field.IsHidden()) return false;
+      hidden = true;
+    }
+    return hidden;
   }
 
   /** Borrows the native ordinary field points in text order. @returns Ordered field hints. */

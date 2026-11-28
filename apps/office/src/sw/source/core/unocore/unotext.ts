@@ -25,6 +25,7 @@ import type {
   SwXUserField,
   SwXDropDownField,
   SwXHiddenTextField,
+  SwXHiddenParaField,
   SwXJumpEditField,
   SwXGetReferenceField,
   SwXTextField,
@@ -365,6 +366,7 @@ export class SwXText implements SwXTextOwner {
       | SwXUserField
       | SwXDropDownField
       | SwXHiddenTextField
+      | SwXHiddenParaField
       | SwXJumpEditField
       | SwXPageNumberField
       | SwXDateTimeField,
@@ -396,6 +398,7 @@ export class SwXText implements SwXTextOwner {
       | SwXUserField
       | SwXDropDownField
       | SwXHiddenTextField
+      | SwXHiddenParaField
       | SwXJumpEditField
       | SwXPageNumberField
       | SwXDateTimeField,

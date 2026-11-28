@@ -116,6 +116,7 @@ import { SfxBoolItem } from "../../../svl/source/items/cenumitm";
 import { WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL } from "../../inc/poolfmt";
 import type { WriterPageDescriptorValue } from "../../source/core/layout/pagedesc";
 import { projectWriterParagraphLineLayout } from "../../source/core/text/itrform2";
+import { FindHiddenBodyFallback } from "../../source/core/text/txtfrm";
 import type { SwViewOption } from "../../inc/viewopt";
 import {
   projectWriterListMarker,
@@ -130,6 +131,7 @@ export type WriterParagraphStyleOption = StyleToolboxEntry;
 
 /** Primitive/resource-ID projection of one text node, owned only by the browser presenter. */
 export interface WriterParagraphProjection extends WriterListMarkerProjection {
+  readonly hiddenByParaField?: boolean;
   /** Device caret painting follows the current native cursor's before-label state. */
   readonly inFrontOfLabel?: boolean;
   /** Minimum occupied label gap, separate from authored list indentation. */
@@ -251,6 +253,8 @@ export interface WriterPresentationProjection {
   readonly paragraphSpacingSettings: Readonly<{
     paraSpaceMax: boolean;
     paraSpaceMaxAtPages: boolean;
+    showHiddenPara?: boolean;
+    fieldName?: boolean;
   }>;
 }
 
@@ -329,6 +333,10 @@ export class WriterViewProjection {
     const tabsRelativeToIndent = document
       .GetDocumentSettingManager()
       .get("TABS_RELATIVE_TO_INDENT");
+    const bodyNodes = document.paragraphs;
+    const bodyNodeSet = new Set(bodyNodes);
+    const hideParagraphs = !viewOptions?.IsShowHiddenPara() && !viewOptions?.IsFieldName();
+    const hiddenBodyFallback = hideParagraphs ? FindHiddenBodyFallback(document) : undefined;
     const nodes = document.nodes.entries().filter(
       /** Selects connected text owners across body and cell sections. @param node - Actual node. @returns Whether text. */
       (node): node is SwTextNode => node instanceof SwTextNode,
@@ -526,6 +534,12 @@ export class WriterViewProjection {
           borderStyle: projectWriterParagraphBorders(node),
           numRuleName: node.GetNumRuleName(),
           nodeIndex: node.GetIndex(),
+          ...(hideParagraphs &&
+          node !== hiddenBodyFallback &&
+          !bodyNodeSet.has(node) &&
+          node.IsHiddenByParaField()
+            ? { hiddenByParaField: true }
+            : {}),
           runs: projectTextPortions(node, hyphenation.hyphen),
           style: node.GetParagraphStyle(),
           styleDisplayName: node.GetTextFormatColl().GetName(),
@@ -537,7 +551,6 @@ export class WriterViewProjection {
         });
       },
     );
-    const bodyNodes = document.paragraphs;
     const paragraphs = bodyNodes.map(
       /** Keeps body layout separate from cell text owners. @param node - Body node. @returns Immutable display paragraph. */
       (node) => textNodes[nodes.indexOf(node)] as WriterParagraphProjection,
@@ -626,6 +639,8 @@ export class WriterViewProjection {
       paragraphSpacingSettings: Object.freeze({
         paraSpaceMax: document.GetDocumentSettingManager().get("PARA_SPACE_MAX"),
         paraSpaceMaxAtPages: document.GetDocumentSettingManager().get("PARA_SPACE_MAX_AT_PAGES"),
+        ...(viewOptions?.IsShowHiddenPara() ? { showHiddenPara: true } : {}),
+        ...(viewOptions?.IsFieldName() ? { fieldName: true } : {}),
       }),
     });
   }
@@ -704,6 +719,8 @@ function createParagraphStyleOptions(document: SwDoc): readonly WriterParagraphS
 /** Owns browser projection caching and external-store subscriptions outside SwView. */
 export class WriterViewStore {
   private cachedSnapshot: WriterViewSnapshot | undefined;
+  private lastFieldDocument: SwDoc | undefined;
+  private lastFieldRevision = -1;
   private readonly listeners = new Set<() => void>();
   private readonly unsubscribe: () => void;
   private readonly formatObserver: WriterNativeFormatObserver;
@@ -731,6 +748,12 @@ export class WriterViewStore {
     (): WriterViewSnapshot => {
       if (this.cachedSnapshot !== undefined) return this.cachedSnapshot;
       const document = this.view.GetDocShell().GetDoc();
+      const revision = document.GetDocumentStateManager().GetModelRevision();
+      if (this.lastFieldDocument !== document || this.lastFieldRevision !== revision) {
+        document.getIDocumentFieldsAccess().UpdateExpFields();
+        this.lastFieldDocument = document;
+        this.lastFieldRevision = revision;
+      }
       const wrtShell = this.view.GetWrtShell();
       const projected = this.projection.Project(
         document,

@@ -145,6 +145,23 @@ export interface XMLPlaceholderExportMarker {
   readonly presentation: string;
 }
 
+/** Native hidden paragraph marker. */
+export interface XMLHiddenParagraphExportMarker {
+  readonly kind: "hidden-paragraph-field";
+  readonly offset: number;
+  readonly condition: string;
+  readonly hidden: boolean;
+}
+
+/** Writes the original empty field element. @param field - Native field marker. @param escapeXml - XML encoder. @returns ODF markup. */
+export function exportHiddenParagraphField(
+  field: XMLHiddenParagraphExportMarker,
+  escapeXml: (value: string) => string,
+): string {
+  const hidden = field.hidden ? ' text:is-hidden="true"' : "";
+  return `<text:hidden-paragraph text:condition="ooow:${escapeXml(field.condition)}"${hidden}/>`;
+}
+
 /** Native conditional and hidden text field portion. */
 export interface XMLHiddenTextExportMarker {
   readonly kind: "hidden-text-field";

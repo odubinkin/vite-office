@@ -807,3 +807,66 @@ export class SwHiddenTextField implements SwField<SwHiddenTextField> {
   /** Disposes the field, whose parameter storage is owned by JavaScript. */
   public Dispose(): void {}
 }
+
+/** Native document-owned hidden paragraph field type. */
+export class SwHiddenParaFieldType {
+  /** Binds the canonical document. @param document - Source model. */
+  public constructor(private readonly document: SwDoc) {}
+
+  /** Borrows the original document owner. @returns Native document. */
+  public GetDoc(): SwDoc {
+    return this.document;
+  }
+}
+
+/** Original paragraph condition and its current hidden flag. */
+export class SwHiddenParaField implements SwField<SwHiddenParaField> {
+  /** Creates a native hidden paragraph field. @param type - Document type. @param condition - Writer expression. @param hidden - Hidden value. */
+  public constructor(
+    private readonly type: SwHiddenParaFieldType,
+    private readonly condition: string,
+    private hidden = false,
+  ) {}
+
+  /** Borrows the system field type. @returns Document field type. */
+  public GetTyp(): SwHiddenParaFieldType {
+    return this.type;
+  }
+
+  /** Reads the native condition. @returns Writer expression. */
+  public GetPar1(): string {
+    return this.condition;
+  }
+
+  /** Reads the current native hidden flag. @returns Whether the field hides its paragraph. */
+  public IsHidden(): boolean {
+    return this.hidden;
+  }
+
+  /** Updates the original cached visibility. @param hidden - Calculated state. */
+  public SetHidden(hidden: boolean): void {
+    this.hidden = hidden;
+  }
+
+  /** Hidden paragraph fields always have an empty presentation. @returns Empty text. */
+  public Expand(): string {
+    return "";
+  }
+
+  /** Copies the field under its current system type. @returns Detached field. */
+  public Copy(): SwHiddenParaField {
+    return new SwHiddenParaField(this.type, this.condition, this.hidden);
+  }
+
+  /** Binds the field to its destination document. @param doc - Destination model. @returns Detached field. */
+  public CopyToDocument(doc: SwDoc): SwHiddenParaField {
+    return new SwHiddenParaField(
+      doc.getIDocumentFieldsAccess().GetHiddenParaFieldType(),
+      this.condition,
+      this.hidden,
+    );
+  }
+
+  /** Disposes the scalar field parameters. */
+  public Dispose(): void {}
+}

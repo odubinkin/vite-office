@@ -17,9 +17,10 @@
       "divergenceClass": "B",
       "evidence": [
         "apps/office/src/sw/browser/filter/xml/writer-hidden-text-field-codec.ts",
-        "apps/office/src/sw/source/filter/xml/odt-hidden-text-fields.test.ts"
+        "apps/office/src/sw/source/filter/xml/odt-hidden-text-fields.test.ts",
+        "apps/office/src/sw/source/filter/xml/odt-hidden-paragraph.test.ts"
       ],
-      "justification": "Transfers native conditional and hidden text field state and their point offsets between Worker documents.",
+      "justification": "Transfers Writer conditional text, hidden text and hidden paragraph field state and their point offsets between Worker documents.",
       "knownViolations": [],
       "localSymbols": [
         "encodeHiddenTextFields",

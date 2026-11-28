@@ -16,10 +16,10 @@
       "SwCalc::Expr"
     ],
     "preservedResponsibilities": [
-      "Evaluates the represented Writer sequence expressions with native additive, term, primary and variable ownership."
+      "Evaluates represented Writer numeric and string field expressions with native additive, term, primary and variable ownership."
     ],
     "omittedResponsibilities": [
-      "Database lookups, string variants and the complete legacy formula function set are outside the represented numeric sequence evaluator."
+      "Database lookups and the complete legacy formula function set remain outside the represented field evaluator."
     ],
     "evidence": {
       "local": [
@@ -30,6 +30,10 @@
         {
           "path": "apps/office/src/sw/source/filter/xml/odt-sequence-fields.test.ts",
           "marker": "testTdf99689TableOfFigures"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-hidden-paragraph.test.ts",
+          "marker": "preserves the pinned hidden paragraph"
         }
       ],
       "upstream": [

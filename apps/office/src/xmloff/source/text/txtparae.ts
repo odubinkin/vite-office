@@ -19,6 +19,7 @@ import {
   exportPlaceholderField,
   exportDropDownField,
   exportHiddenTextField,
+  exportHiddenParagraphField,
   exportReferenceField,
   type XMLAnnotationExportMarker,
   type XMLCountExportMarker,
@@ -31,6 +32,7 @@ import {
   type XMLPlaceholderExportMarker,
   type XMLDropDownExportMarker,
   type XMLHiddenTextExportMarker,
+  type XMLHiddenParagraphExportMarker,
   type XMLReferenceFieldExportMarker,
 } from "./txtflde";
 import type { XMLTextFrameExportSource } from "./XMLTextFrameExport";
@@ -195,6 +197,7 @@ export type XMLTextParagraphMarker =
   | XMLPlaceholderExportMarker
   | XMLDropDownExportMarker
   | XMLHiddenTextExportMarker
+  | XMLHiddenParagraphExportMarker
   | XMLCountExportMarker
   | XMLDateTimeExportMarker
   | XMLRedlineExportMarker
@@ -674,6 +677,7 @@ function exportParagraphElement(
               marker.kind === "placeholder-field" ||
               marker.kind === "drop-down-field" ||
               marker.kind === "hidden-text-field" ||
+              marker.kind === "hidden-paragraph-field" ||
               marker.kind === "date-time-field" ||
               (marker.kind === "annotation" && marker.consumesMarker),
           );
@@ -778,6 +782,8 @@ function exportMarker(
   if (marker.kind === "placeholder-field") return exportPlaceholderField(marker, escapeXml);
   if (marker.kind === "drop-down-field") return exportDropDownField(marker, escapeXml);
   if (marker.kind === "hidden-text-field") return exportHiddenTextField(marker, escapeXml);
+  if (marker.kind === "hidden-paragraph-field")
+    return exportHiddenParagraphField(marker, escapeXml);
   if (marker.kind === "sequence-field") return exportSequenceField(marker, escapeXml);
   if (marker.kind === "variable-field") return exportVariableField(marker, escapeXml);
   if (marker.kind === "chapter-field") return exportChapterField(marker, escapeXml);

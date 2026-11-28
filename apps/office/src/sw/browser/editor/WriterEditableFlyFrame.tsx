@@ -103,6 +103,7 @@ export function WriterEditableFlyFrame({
             );
           const paragraph = paragraphs.get(node.GetIndex());
           if (!paragraph) throw new Error("Writer text fly paragraph has no connected projection.");
+          if (paragraph.hiddenByParaField) return null;
           return (
             <div key={paragraph.id}>
               {renderAnchoredFrames(node.GetIndex(), width)}

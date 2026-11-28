@@ -294,6 +294,7 @@ export type RenderAnchoredFrames = (nodeIndex: number, availableWidth: number) =
                               throw new Error(
                                 "Writer table cell has no connected paragraph projection.",
                               );
+                            if (projection.hiddenByParaField) return null;
                             const paragraphElement = (
                               <WriterEditableParagraph
                                 cellPosition={{ rowIndex, cellIndex, paragraphIndex: index }}

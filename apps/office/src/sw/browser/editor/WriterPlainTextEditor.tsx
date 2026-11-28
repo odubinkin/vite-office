@@ -717,6 +717,7 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
                     frame,
                     frameIndex,
                   ) => {
+                    if (frame.IsHiddenNow()) return null;
                     const paragraph = paragraphById.get(frame.nodeId) as WriterParagraph;
                     const index = props.paragraphs.indexOf(paragraph);
                     const marks = (numberedFrames[pageIndex] as (typeof numberedFrames)[number])[

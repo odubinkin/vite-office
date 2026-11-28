@@ -35,6 +35,63 @@ import * as NumberingType from "../../../offapi/com/sun/star/style/NumberingType
 import { SvXMLUnitConverter } from "../core/xmluconv";
 import type { XMLCountField } from "./txtflde";
 
+/** Imports the native paragraph condition field and its cached visibility. */
+export class XMLHiddenParagraphImportContext extends SvXMLImportContext {
+  private condition: string | undefined;
+  private hidden = false;
+  private content = "";
+
+  /** Binds the styled field point. @param helper - Native text importer. @param properties - Run properties. @param hyperlink - Surrounding link. @param characterStyles - Applied style names. */
+  public constructor(
+    private readonly helper: XMLTextImportHelper,
+    private readonly properties: OdfCharacterProperties,
+    private readonly hyperlink: OdfHyperlink | undefined,
+    private readonly characterStyles: readonly XMLCharacterStyleLayer[],
+  ) {
+    super();
+  }
+
+  /** Admits only a condition in the original Writer formula namespace. @param _element - Field element. @param attributes - Source attributes. */
+  public override startFastElement(_element: XMLToken, attributes: FastAttributeList): void {
+    const condition = attributes.get(XMLToken.TEXT_CONDITION);
+    const colon = condition?.indexOf(":") ?? -1;
+    if (
+      condition !== null &&
+      colon >= 0 &&
+      attributes.getNamespaceUri(condition.slice(0, colon)) === ODF_NAMESPACES.ooow
+    )
+      this.condition = condition.slice(colon + 1);
+    const raw = attributes.get(XMLToken.TEXT_IS_HIDDEN);
+    const value: [boolean] = [false];
+    if (raw !== null && Converter.convertBool(value, raw)) this.hidden = value[0];
+  }
+
+  /** Retains the source presentation for the invalid-field fallback. @param value - Decoded text. */
+  public override characters(value: string): void {
+    this.content += value;
+  }
+
+  /** Attaches the native field or retains authored characters. */
+  public override endFastElement(): void {
+    const condition = this.condition;
+    if (condition === undefined) {
+      this.helper.InsertString(this.content, this.properties, this.hyperlink, this.characterStyles);
+      return;
+    }
+    this.helper.InsertTextField(
+      "HiddenParagraph",
+      /** Writes the original native field properties. @param field - Detached descriptor. */
+      (field) => {
+        this.helper.SetProperty(field, "Condition", condition);
+        this.helper.SetProperty(field, "IsHidden", this.hidden);
+      },
+      this.properties,
+      this.hyperlink,
+      this.characterStyles,
+    );
+  }
+}
+
 /** Imports the two native inline condition field services. */
 export class XMLHiddenTextImportContext extends SvXMLImportContext {
   private condition: string | undefined;

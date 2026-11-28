@@ -19,6 +19,7 @@ import {
   type SwTextChapterField,
   type SwTextDropDownField,
   type SwTextHiddenTextField,
+  type SwTextHiddenParaField,
   type SwTextJumpEditField,
   type SwTextSequenceField,
   type SwTextGetExpField,
@@ -53,6 +54,7 @@ import {
   SwDocInfoField,
   SwDocStatField,
   SwHiddenTextField,
+  SwHiddenParaField,
   type SwHiddenTextFieldData,
   type SwDocStatSubType,
   SwDocInfoSubType,
@@ -686,6 +688,45 @@ export class SwXGetExpField {
   }
 
   /** Removes the attached native point. */
+  public dispose(): void {
+    const hint = this.hint;
+    this.hint = undefined;
+    if (hint) hint.GetTextNode()?.EraseText(hint.GetStart(), 1);
+  }
+}
+
+/** UNO HiddenParagraph descriptor and original point field attachment. */
+export class SwXHiddenParaField {
+  private condition = "";
+  private hidden = false;
+  private hint: SwTextHiddenParaField | undefined;
+
+  /** Sets the original paragraph condition or cached visibility. @param name - UNO property. @param input - Typed value. */
+  public setPropertyValue(name: OUStringConstReference, input: Any): void {
+    if (this.hint) invalid("Writer hidden paragraph field is attached.");
+    const property = text(name);
+    if (property === "Condition") this.condition = stringValue(input);
+    else if (property === "IsHidden") this.hidden = scalar(input, "bool") as boolean;
+    else unknown(property);
+  }
+
+  /** Attaches the original field dummy. @param range - Writer range. */
+  public attach(range: SwXTextRange): void {
+    if (this.hint) invalid("Writer hidden paragraph field is already attached.");
+    const position = range.GetPaM().Start();
+    const node = position.GetNode().GetTextNode();
+    if (!node) illegal("Writer hidden paragraph field must be in text.");
+    const type = node.GetDoc().getIDocumentFieldsAccess().GetHiddenParaFieldType();
+    const field = new SwHiddenParaField(type, this.condition, this.hidden);
+    const hint = new SwTextField(
+      new SwFormatField(field, RES_TXTATR_FIELD),
+      position.GetContentIndex(),
+    );
+    if (!node.InsertHint(hint)) invalid("Writer hidden paragraph field could not be inserted.");
+    this.hint = hint;
+  }
+
+  /** Removes the attached point. */
   public dispose(): void {
     const hint = this.hint;
     this.hint = undefined;

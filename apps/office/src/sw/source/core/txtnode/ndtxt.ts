@@ -176,6 +176,11 @@ export class SwTextNode extends SwContentNode {
     return this.mText.length;
   }
 
+  /** Reports whether the native paragraph field hides this node. @returns Current hidden state. */
+  public IsHiddenByParaField(): boolean {
+    return this.GetpSwpHints()?.IsHiddenByParaField() ?? false;
+  }
+
   /** Returns the optional direct-format hint container. @returns Owned hints, when allocated. */
   public GetpSwpHints(): SwpHints | undefined {
     return this.pSwpHints;

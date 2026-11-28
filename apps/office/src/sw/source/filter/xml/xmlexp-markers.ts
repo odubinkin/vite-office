@@ -53,6 +53,7 @@ import {
   docStatServiceSubTypes,
   SwDocInfoSubType,
   SwHiddenTextField,
+  SwHiddenParaField,
 } from "../../core/fields/docufld";
 import type { SwSectionBlock } from "../../core/docnode/nodes";
 import { getUserIndexProgrammaticName } from "../../core/unocore/unoidx";
@@ -158,6 +159,15 @@ export function projectParagraphMarkers(
       /** Projects a native conditional or hidden inline point. @param hint - Attached field. @returns ODF portion when handled. */
       (hint): XMLTextParagraphMarker[] => {
         const field = hint.GetAttr().GetField();
+        if (field instanceof SwHiddenParaField)
+          return [
+            {
+              kind: "hidden-paragraph-field",
+              offset: hint.GetStart(),
+              condition: field.GetPar1(),
+              hidden: field.IsHidden(),
+            },
+          ];
         return field instanceof SwHiddenTextField
           ? [
               {

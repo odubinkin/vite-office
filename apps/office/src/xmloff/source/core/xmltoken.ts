@@ -80,6 +80,7 @@ const entries: readonly (readonly [string, string, XMLToken])[] = [
   [ODF_NAMESPACES.text, "drop-down", XMLToken.TEXT_DROP_DOWN],
   [ODF_NAMESPACES.text, "conditional-text", XMLToken.TEXT_CONDITIONAL_TEXT],
   [ODF_NAMESPACES.text, "hidden-text", XMLToken.TEXT_HIDDEN_TEXT],
+  [ODF_NAMESPACES.text, "hidden-paragraph", XMLToken.TEXT_HIDDEN_PARAGRAPH],
   [ODF_NAMESPACES.text, "current-value", XMLToken.TEXT_CURRENT_VALUE],
   [ODF_NAMESPACES.text, "string-value-if-true", XMLToken.TEXT_STRING_VALUE_IF_TRUE],
   [ODF_NAMESPACES.text, "string-value-if-false", XMLToken.TEXT_STRING_VALUE_IF_FALSE],

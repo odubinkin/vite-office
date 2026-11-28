@@ -359,7 +359,8 @@ export class SwRootFrame extends SwLayoutFrame {
       this.snapshot !== undefined
     )
       return this.snapshot;
-    const paragraphs = createSwTextFrameInputs(document, measurements);
+    document.getIDocumentFieldsAccess().UpdateExpFields(this);
+    const paragraphs = createSwTextFrameInputs(document, measurements, settings);
     const previousTables = this.snapshot?.tableFrames ?? [];
     const tableFrames: SwTabFrame[] = [];
     try {
@@ -597,7 +598,9 @@ function textFrameSettingsEqual(
     (left !== undefined &&
       right !== undefined &&
       left.paraSpaceMax === right.paraSpaceMax &&
-      left.paraSpaceMaxAtPages === right.paraSpaceMaxAtPages)
+      left.paraSpaceMaxAtPages === right.paraSpaceMaxAtPages &&
+      left.showHiddenPara === right.showHiddenPara &&
+      left.fieldName === right.fieldName)
   );
 }
 
@@ -663,6 +666,7 @@ function textFrameInputEqual(left: SwTextFrameInput, right: SwTextFrameInput | u
     left.node === right.node &&
     left.id === right.id &&
     left.style === right.style &&
+    left.hidden === right.hidden &&
     left.upperSpacing === right.upperSpacing &&
     left.lowerSpacing === right.lowerSpacing &&
     left.contextualSpacing === right.contextualSpacing &&
@@ -689,6 +693,7 @@ function textFrameEqual(left: SwTextFrame, right: SwTextFrame | undefined): bool
     left.start === right.start &&
     left.end === right.end &&
     left.IsFollow() === right.IsFollow() &&
+    left.IsHiddenNow() === right.IsHiddenNow() &&
     left.topSpacing === right.topSpacing
   );
 }
@@ -782,8 +787,10 @@ export function createSwPageFrames(
   /** Checks whether either kind of content already occupies the page. @returns Whether the current page has content. */
   function hasContent(): boolean {
     return (
-      (pages[pages.length - 1] as SwTextFrame[]).length > 0 ||
-      (pageTables[pageTables.length - 1] as SwTableFrame[]).length > 0
+      (pages[pages.length - 1] as SwTextFrame[]).some(
+        /** Hidden zero-height frames do not occupy the physical page. @param frame - Current text frame. @returns Whether laid out. */
+        (frame) => !frame.IsHiddenNow(),
+      ) || (pageTables[pageTables.length - 1] as SwTableFrame[]).length > 0
     );
   }
   /** Flows tables immediately after one body paragraph, splitting only between rows. @param afterParagraphIndex - Body paragraph position. @returns Nothing. */
@@ -895,9 +902,8 @@ export function createSwPageFrames(
   }
   try {
     placeTables(-1);
+    let previousVisible: SwTextFrameInput | undefined;
     for (const [paragraphIndex, paragraph] of paragraphs.entries()) {
-      const gap = getSwTextFrameGap(paragraphs[paragraphIndex - 1], paragraph, settings);
-      const nextParagraph = paragraphs[paragraphIndex + 1];
       const requestedStyle = paragraph.pageStyleName;
       if (
         (requestedStyle !== undefined &&
@@ -924,6 +930,28 @@ export function createSwPageFrames(
       if (paragraph.breakBefore && hasContent()) {
         startFollowPage();
       }
+      if (paragraph.hidden) {
+        (pages[pages.length - 1] as SwTextFrame[]).push(
+          new SwTextFrame(
+            paragraph.node,
+            paragraph.id,
+            0,
+            paragraph.node.Len(),
+            0,
+            [],
+            sibling,
+            true,
+          ),
+        );
+        if (paragraph.breakAfter && paragraphIndex + 1 < paragraphs.length) startFollowPage();
+        placeTables(paragraphIndex);
+        continue;
+      }
+      const gap = getSwTextFrameGap(previousVisible, paragraph, settings);
+      previousVisible = paragraph;
+      let nextIndex = paragraphIndex + 1;
+      while (paragraphs[nextIndex]?.hidden) nextIndex++;
+      const nextParagraph = paragraphs[nextIndex];
       const currentDescriptor = pageDescriptors[pages.length - 1] as WriterPageDescriptorValue;
       const availableHeight =
         currentDescriptor.height - currentDescriptor.topMargin - currentDescriptor.bottomMargin;
@@ -1018,7 +1046,7 @@ export function createSwPageFrames(
           startFollowPage();
         }
       }
-      if (paragraph.breakAfter && nextParagraph !== undefined) {
+      if (paragraph.breakAfter && paragraphIndex + 1 < paragraphs.length) {
         startFollowPage();
       }
       placeTables(paragraphIndex);
