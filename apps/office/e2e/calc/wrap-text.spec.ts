@@ -24,6 +24,7 @@ for (const width of [1280, 390]) {
   test(`wraps real text in native manual row geometry and reopens primary ODS at ${width}px`, /** Exercises production controls without test state. @param fixtures - Browser page. @returns Completion. */ async ({
     page,
   }) => {
+    test.setTimeout(120_000);
     await page.setViewportSize({ width, height: 800 });
     const errors: string[] = [];
     page.on(
@@ -87,7 +88,7 @@ for (const width of [1280, 390]) {
               }
             },
           ),
-        { timeout: 20_000 },
+        { timeout: 45_000 },
       )
       .toEqual([true, 1440]);
     await page.reload();

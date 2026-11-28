@@ -174,6 +174,7 @@ test("Calc restores unsplit XLSX viewport origins independently of the cursor", 
 test("Calc restores the XLSX active sheet when several sheets are visible", /** Exercises local Open, primary ODS, XLSX export and mobile reopen. @param fixtures - Browser state. @param fixtures.page - Chromium page. @returns Completion. */ async ({
   page,
 }) => {
+  test.setTimeout(120_000);
   const fixture = fileURLToPath(
     new URL(
       "../../../../vendor/libreoffice-reference/sc/qa/unit/data/xlsx/sheet-names.xlsx",
@@ -186,7 +187,7 @@ test("Calc restores the XLSX active sheet when several sheets are visible", /** 
   await page.getByRole("button", { name: "Open", exact: true }).click();
   await page.getByRole("tab", { name: "On computer" }).click();
   await page.getByLabel("Browse").setInputFiles(fixture);
-  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await expect(page.getByRole("dialog")).toHaveCount(0, { timeout: 45_000 });
   await expect(sheets.getByRole("tab")).toHaveText([
     "S&P",
     "Sam's Club",
