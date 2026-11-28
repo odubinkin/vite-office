@@ -165,7 +165,7 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
           .CreateItem({ which: RES_MARGIN_FIRSTLINE, value: [0, 1] }) as SvxFirstLineIndentItem
       ).IsAutoFirst(),
     ).toBe(true);
-    const inherited = writer.GetTextFormatColl("heading-1");
+    const inherited = writer.MakeTextFormatColl("Pagination", writer.GetDfltTextFormatColl());
     inherited.SetFormatAttr(new ParaItems.SvxOrphansItem(3, RES_PARATR_ORPHANS));
     inherited.SetFormatAttr(new ParaItems.SvxFormatSplitItem(false, RES_PARATR_SPLIT));
     inherited.SetFormatAttr(
@@ -207,6 +207,8 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
     expect(content).toContain('fo:orphans="0"');
     const reopened = await readOdtDocument(bytes, metadata);
     const node = reopened.document.paragraphs[0];
+    expect(node?.GetTextFormatColl().GetName()).toBe("Pagination");
+    expect(node?.GetNum()?.GetNumRule()).toBeUndefined();
     expect((node?.GetAttr(RES_PARATR_SPLIT) as SfxBoolItem).GetValue()).toBe(false);
     expect((node?.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem).IsAutoFirst()).toBe(
       true,

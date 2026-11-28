@@ -6628,3 +6628,15 @@ from creating an undo entry when neither numbering family moves.
 
 - [Original numbering family classification and initial result](../../vendor/libreoffice-reference/sw/source/core/doc/docnum.cxx#L1846)
 - [Original return after the two mutation branches](../../vendor/libreoffice-reference/sw/source/core/doc/docnum.cxx#L1947)
+
+### WRITER-793 — An invisible outline label can suppress automatic first-line indentation
+
+`SwTextNode::GetFirstLineOfsWithNum` reports numbering whenever the text
+node has a rule, including an outline level with numbering type NONE.
+`SwTextMargin` computes the automatic first-line indent only when that
+call reports no rule. A heading can therefore retain its explicit
+`style:auto-text-indent` setting while its geometry follows the outline
+rule even when the label is invisible. Writer preserves this ordering.
+
+- [Original first-line offset for a bound numbering rule](../../vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx#L3440)
+- [Original automatic first-line layout gate](../../vendor/libreoffice-reference/sw/source/core/text/itrcrsr.cxx#L257)
