@@ -3,6 +3,7 @@ import { SvXMLIgnoreContext, SvXMLImportContext, type FastAttributeList } from "
 import { XMLToken } from "../core/xmltoken";
 import { SvXMLUnitConverter } from "../core/xmluconv";
 import { Converter } from "../../../sax/source/tools/converter";
+import * as NumberingType from "../../../offapi/com/sun/star/style/NumberingType";
 import { PageStyleLayout } from "../../../offapi/com/sun/star/style/PageStyleLayout";
 import { TextGridMode } from "../../../offapi/com/sun/star/text/TextGridMode";
 import {
@@ -17,6 +18,16 @@ import {
   type OdfBackgroundImage,
   type OdfBackgroundColor,
 } from "./XMLBackgroundImageContext";
+
+/** Loads the merged original num-format/num-letter-sync property, including an explicitly empty format. @param attributes - Page layout properties. @returns Native numbering type or absence. */
+export function importPageNumbering(attributes: FastAttributeList): number | undefined {
+  const format = attributes.get(XMLToken.STYLE_NUM_FORMAT);
+  const sync = attributes.get(XMLToken.STYLE_NUM_LETTER_SYNC) ?? "";
+  if (format === null) return sync === "true" ? NumberingType.CHARS_LOWER_LETTER_N : undefined;
+  const numbering = { value: NumberingType.NUMBER_NONE as number };
+  new SvXMLUnitConverter("mm100").convertNumFormat(numbering, format, sync, true);
+  return numbering.value;
+}
 
 const pageUsage = new Map<string, PageStyleLayout>([
   ["all", PageStyleLayout.ALL],

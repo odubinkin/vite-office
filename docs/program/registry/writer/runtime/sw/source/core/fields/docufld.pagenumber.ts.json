@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/fields/docufld.pagenumber.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "document-core",
+    "capabilityIds": [
+      "CAP-0128",
+      "CAP-0129"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/core/fields/docufld.pagenumber.ts",
+        "apps/office/src/sw/source/filter/xml/odt-page-number-fields.test.ts",
+        "vendor/libreoffice-reference/sw/source/core/fields/docufld.cxx",
+        "vendor/libreoffice-reference/sw/qa/extras/odfexport/odfexport3.cxx"
+      ],
+      "justification": "Owns the native page-number and continuation field, selection and signed adjustment, with expansion from the represented body layout.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwPageNumberFieldType",
+        "SwPageNumberField",
+        "SwPageNumSubType"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/fields/docufld.cxx",
+      "upstreamSymbols": [
+        "SwPageNumberFieldType::Expand",
+        "SwPageNumberFieldType::ChangeExpansion",
+        "SwPageNumberField::ExpandImpl"
+      ]
+    }
+  }
+}

@@ -12,11 +12,13 @@ import {
   exportCountField,
   exportDateTimeField,
   exportDocInfoField,
+  exportPageNumberField,
   exportReferenceField,
   type XMLAnnotationExportMarker,
   type XMLCountExportMarker,
   type XMLDateTimeExportMarker,
   type XMLDocInfoExportMarker,
+  type XMLPageNumberExportMarker,
   type XMLReferenceFieldExportMarker,
 } from "./txtflde";
 import type { XMLTextFrameExportSource } from "./XMLTextFrameExport";
@@ -171,6 +173,7 @@ export type XMLTextParagraphMarker =
   | XMLAnnotationExportMarker
   | XMLReferenceFieldExportMarker
   | XMLDocInfoExportMarker
+  | XMLPageNumberExportMarker
   | XMLCountExportMarker
   | XMLDateTimeExportMarker
   | XMLRedlineExportMarker
@@ -643,6 +646,7 @@ function exportParagraphElement(
               marker.kind === "reference-field" ||
               marker.kind === "doc-info-field" ||
               marker.kind === "count-field" ||
+              marker.kind === "page-number-field" ||
               marker.kind === "date-time-field" ||
               (marker.kind === "annotation" && marker.consumesMarker),
           );
@@ -738,6 +742,7 @@ function exportMarker(
   if (marker.kind === "annotation" || marker.kind === "annotation-end")
     return exportAnnotation(marker, escapeXml, exportText, exportAnnotationParagraph);
   if (marker.kind === "reference-field") return exportReferenceField(marker, escapeXml);
+  if (marker.kind === "page-number-field") return exportPageNumberField(marker, escapeXml);
   if (marker.kind === "count-field") return exportCountField(marker, escapeXml);
   if (marker.kind === "doc-info-field") return exportDocInfoField(marker, escapeXml);
   if (marker.kind === "date-time-field") return exportDateTimeField(marker, escapeXml);

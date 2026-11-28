@@ -2,6 +2,7 @@
 import { SwTextAttr } from "../source/core/txtnode/txatbase";
 import type { SwDocInfoField, SwDocStatField, SwPostItField } from "../source/core/fields/docufld";
 import type { SwGetRefField } from "../source/core/fields/reffld";
+import type { SwPageNumberField } from "../source/core/fields/docufld.pagenumber";
 import type { SwDateTimeField } from "../source/core/fields/flddat";
 import type { SwTextNode } from "../source/core/txtnode/ndtxt";
 import type { SwDoc } from "../source/core/doc/doc";
@@ -53,9 +54,16 @@ export type SwTextDateTimeField = SwTextField<SwDateTimeField>;
 /** Text attribute carrying a native statistic field. */
 export type SwTextDocStatField = SwTextField<SwDocStatField>;
 
+/** Text attribute carrying the original page number or continuation field. */
+export type SwTextPageNumberField = SwTextField<SwPageNumberField>;
+
 /** Represented native ordinary text fields. */
 export type SwTextOrdinaryField =
-  SwTextReferenceField | SwTextDocInfoField | SwTextDateTimeField | SwTextDocStatField;
+  | SwTextReferenceField
+  | SwTextDocInfoField
+  | SwTextDateTimeField
+  | SwTextDocStatField
+  | SwTextPageNumberField;
 
 /** Identifies the original annotation subclass contract without treating other fields as comments. @param hint - Indexed hint. @returns Whether this is an attached annotation attribute. */
 export function isAnnotationTextField(hint: unknown): hint is SwTextField {

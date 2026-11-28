@@ -18,6 +18,7 @@ import type {
   SwXDateTimeField,
   SwXDocInfoField,
   SwXDocStatField,
+  SwXPageNumberField,
   SwXGetReferenceField,
   SwXTextField,
 } from "./unofield";
@@ -351,6 +352,7 @@ export class SwXText implements SwXTextOwner {
       | SwXGetReferenceField
       | SwXDocInfoField
       | SwXDocStatField
+      | SwXPageNumberField
       | SwXDateTimeField,
     absorb: boolean,
   ): void {
@@ -374,6 +376,7 @@ export class SwXText implements SwXTextOwner {
       | SwXGetReferenceField
       | SwXDocInfoField
       | SwXDocStatField
+      | SwXPageNumberField
       | SwXDateTimeField,
   ): void {
     content.dispose();

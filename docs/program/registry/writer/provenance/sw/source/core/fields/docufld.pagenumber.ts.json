@@ -1,0 +1,61 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/core/fields/docufld.pagenumber.ts",
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/fields/docufld.cxx",
+    "localSymbols": [
+      "SwPageNumberFieldType",
+      "SwPageNumberField",
+      "SwPageNumSubType"
+    ],
+    "upstreamSymbols": [
+      "SwPageNumberFieldType::Expand",
+      "SwPageNumberFieldType::ChangeExpansion",
+      "SwPageNumberField::ExpandImpl"
+    ],
+    "preservedResponsibilities": [
+      "Owns the native page-number and continuation field, selection and signed adjustment, with expansion from the represented body layout."
+    ],
+    "omittedResponsibilities": [
+      "Repeated header or footer layout occurrences and locale numbering families outside the represented formatter."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/fields/docufld.pagenumber.ts",
+          "marker": "SwPageNumberFieldType"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-page-number-fields.test.ts",
+          "marker": "testWhitespace"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/fields/docufld.cxx",
+          "marker": "SwPageNumberFieldType::Expand"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/fields/docufld.cxx",
+          "marker": "SwPageNumberFieldType::ChangeExpansion"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/fields/docufld.cxx",
+          "marker": "SwPageNumberField::ExpandImpl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/qa/extras/odfexport/odfexport3.cxx",
+          "marker": "testWhitespace"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/core/fields/docufld.pagenumber.ts",
+      "rationale": "Keeps the PageNumber field and its native system type together in the page-number section of the TypeScript docufld source split.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

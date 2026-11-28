@@ -4,8 +4,53 @@ import type { XMLTextParagraphSource } from "./txtparae";
 import { ReferenceFieldPart } from "../../../offapi/com/sun/star/text/ReferenceFieldPart";
 import { ReferenceFieldSource } from "../../../offapi/com/sun/star/text/ReferenceFieldSource";
 import { XMLToken } from "../core/xmltoken";
+import { PageNumberType } from "../../../offapi/com/sun/star/text/PageNumberType";
 import * as NumberingType from "../../../offapi/com/sun/star/style/NumberingType";
 import { SvXMLUnitConverter } from "../core/xmluconv";
+
+/** Original page number and continuation field portion. */
+export interface XMLPageNumberExportMarker {
+  readonly kind: "page-number-field";
+  readonly offset: number;
+  readonly selection: PageNumberType;
+  readonly numberingType: number;
+  readonly adjustment: number;
+  readonly userText: string;
+  readonly presentation: string;
+}
+
+/** Writes the original page selector and adjustment, removing the base next/previous displacement. @param field - Writer page field portion. @param escapeXml - XML escaping. @returns ODF field. */
+export function exportPageNumberField(
+  field: XMLPageNumberExportMarker,
+  escapeXml: (value: string) => string,
+): string {
+  const selector =
+    field.selection === PageNumberType.PREV
+      ? "previous"
+      : field.selection === PageNumberType.NEXT
+        ? "next"
+        : "current";
+  const select = ` text:select-page="${selector}"`;
+  const presentation = escapeXml(field.presentation);
+  if (field.numberingType === NumberingType.CHAR_SPECIAL) {
+    const content =
+      field.userText === field.presentation
+        ? ""
+        : ` text:string-value="${escapeXml(field.userText)}"`;
+    return `<text:page-continuation${content}${select}>${presentation}</text:page-continuation>`;
+  }
+  const adjustment = field.adjustment - (field.selection - PageNumberType.CURRENT);
+  const adjust = adjustment === 0 ? "" : ` text:page-adjust="${adjustment}"`;
+  return `<text:page-number${exportFieldNumbering(field.numberingType, escapeXml)}${select}${adjust}>${presentation}</text:page-number>`;
+}
+
+/** Writes the original optional field numbering format and alphabetic repetition attribute. @param type - Native numbering style. @param escapeXml - XML escaping. @returns Attributes. */
+function exportFieldNumbering(type: number, escapeXml: (value: string) => string): string {
+  if (type === NumberingType.PAGE_DESCRIPTOR) return "";
+  const format = escapeXml(new SvXMLUnitConverter("mm100").convertNumFormat(type));
+  const sync = SvXMLUnitConverter.convertNumLetterSync(type);
+  return ` style:num-format="${format}"${sync ? ` style:num-letter-sync="${sync}"` : ""}`;
+}
 
 /** Native count field element names and UNO services. */
 export const countFields = [
@@ -36,13 +81,7 @@ export function exportCountField(
   field: XMLCountExportMarker,
   escapeXml: (value: string) => string,
 ): string {
-  const type = field.numberingType;
-  const format =
-    type === NumberingType.PAGE_DESCRIPTOR
-      ? ""
-      : ` style:num-format="${escapeXml(new SvXMLUnitConverter("mm100").convertNumFormat(type))}"`;
-  const sync = SvXMLUnitConverter.convertNumLetterSync(type);
-  return `<${field.element}${format}${sync ? ` style:num-letter-sync="${sync}"` : ""}>${escapeXml(field.presentation)}</${field.element}>`;
+  return `<${field.element}${exportFieldNumbering(field.numberingType, escapeXml)}>${escapeXml(field.presentation)}</${field.element}>`;
 }
 
 import type { DateTime } from "../../../offapi/com/sun/star/util/DateTime";

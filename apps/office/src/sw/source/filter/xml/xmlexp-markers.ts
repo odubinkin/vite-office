@@ -39,6 +39,8 @@ import {
 import { getParagraphOdfStyleName } from "./xmlexp-style-names";
 import { AnnotationMark } from "../../core/crsr/annotationmark";
 import { SwBookmark } from "../../core/doc/docbm";
+import { PageNumberType } from "../../../../offapi/com/sun/star/text/PageNumberType";
+import { SwPageNumSubType } from "../../core/fields/docufld.pagenumber";
 import { ReferenceFieldSource } from "../../../../offapi/com/sun/star/text/ReferenceFieldSource";
 import { ReferencesSubtype } from "../../../inc/reffldsubtype";
 import { countFields, docInfoFields } from "../../../../xmloff/source/text/txtflde";
@@ -115,6 +117,27 @@ export function projectParagraphMarkers(
           value: field.GetDateTimeValue(),
           presentation: field.Expand(),
           ...(styleName ? { styleName } : {}),
+        };
+      },
+    ),
+    ...(node.GetpSwpHints()?.GetPageNumberFields() ?? []).map(
+      /** Projects the actual page number or continuation field. @param hint - Original text field. @returns ODF portion. */
+      (hint): XMLTextParagraphMarker => {
+        const field = hint.GetAttr().GetField();
+        const subtype = field.GetSubType();
+        return {
+          kind: "page-number-field",
+          offset: hint.GetStart(),
+          selection:
+            subtype === SwPageNumSubType.Previous
+              ? PageNumberType.PREV
+              : subtype === SwPageNumSubType.Next
+                ? PageNumberType.NEXT
+                : PageNumberType.CURRENT,
+          numberingType: field.GetFormat(),
+          adjustment: field.GetOffset(),
+          userText: field.GetUserString(),
+          presentation: field.Expand(),
         };
       },
     ),

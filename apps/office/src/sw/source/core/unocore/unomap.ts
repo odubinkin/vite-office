@@ -766,7 +766,11 @@ export const SwUnoCharAutoStylePropertyMap: ReadonlyMap<string, SwUnoPropertyEnt
 import * as MapId from "../../../inc/unomap";
 import * as Command from "../../../inc/cmdid";
 import { SID_ATTR_PAGE, SID_ATTR_PAGE_SIZE } from "../../../../svx/inc/svxids";
-import { MID_PAGE_ORIENTATION, MID_PAGE_LAYOUT } from "../../../../svx/inc/unomid";
+import {
+  MID_PAGE_ORIENTATION,
+  MID_PAGE_LAYOUT,
+  MID_PAGE_NUMTYPE,
+} from "../../../../svx/inc/unomid";
 import { MID_SIZE_WIDTH, MID_SIZE_HEIGHT } from "../../../../svl/inc/memberid";
 import { cppu_detail_getUnoType as indexReplaceType } from "../../../../cppu/inc/com/sun/star/container/XIndexReplace";
 import { cppu_detail_getUnoType_PageStyleLayout as pageLayoutType } from "../../../../offapi/com/sun/star/style/PageStyleLayout";
@@ -967,6 +971,7 @@ export class SwUnoPropertyMapProvider {
           ["Height", row(SID_ATTR_PAGE_SIZE, "sal_Int32", MID_SIZE_HEIGHT | CONVERT_TWIPS)],
           ["IsLandscape", row(SID_ATTR_PAGE, "bool", MID_PAGE_ORIENTATION)],
           ["PageStyleLayout", row(SID_ATTR_PAGE, pageLayoutType, MID_PAGE_LAYOUT)],
+          ["NumberingType", row(SID_ATTR_PAGE, "sal_Int16", MID_PAGE_NUMTYPE)],
           ["FillBitmapName", row(XATTR_FILLBITMAP, "OUString", 16)],
           ["FillBitmapMode", row(OWN_ATTR_VALUE_START + 45, bitmapModeType)],
         ]);

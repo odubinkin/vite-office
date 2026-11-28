@@ -50,6 +50,7 @@ import {
 import { SwUnoPageStylePropertyMap } from "./unomap";
 import { UseOnPage } from "../layout/pagedesc";
 import { SvxPageItem, SvxPageUsage } from "../../../../svx/inc/pageitem";
+import { SvxNumType } from "../../../../editeng/inc/svxenum";
 import { MID_PAGE_LAYOUT } from "../../../../svx/inc/unomid";
 import {
   BitmapMode,
@@ -205,6 +206,11 @@ export class SwXStyle {
       const entry = SwUnoPageStylePropertyMap.get(n) ?? pageStoryPropertyEntries.get(n);
       if (entry && !pageFields[n]) {
         (this.owner as SwPageDesc).GetMaster().ResetFormatAttr(entry.which);
+        return;
+      }
+      if (n === "NumberingType") {
+        (this.owner as SwPageDesc).SetNumType(SvxNumType.SVX_NUM_ARABIC);
+        this.doc.NotifyModelChange({ kind: "page-descriptor-changed" });
         return;
       }
       if (n === "PageStyleLayout") {
@@ -440,6 +446,7 @@ export class SwXStyle {
         putItem(this.doc.GetAttrPool().GetUserOrPoolDefaultItem(entry.which), entry, value);
       else if (n === "FollowStyle") stringValue(value);
       else if (n === "IsLandscape") scalar(value, "bool");
+      else if (n === "NumberingType") scalar(value, "sal_Int16");
       else if (n === "FillBitmapName") stringValue(value);
       else if (n === "FillBitmapMode") readBitmapMode(value);
       else if (pageFields[n]) scalar(value, "sal_Int32");
@@ -621,7 +628,8 @@ export class SwXStyle {
       item.QueryValue(out, MID_PAGE_LAYOUT);
       return out;
     }
-    if (n === "IsLandscape") out.insert([value.landscape], "bool");
+    if (n === "NumberingType") out.insert([page.GetNumType().GetNumberingType()], "sal_Int16");
+    else if (n === "IsLandscape") out.insert([value.landscape], "bool");
     else {
       const key = pageFields[n];
       if (!key) unknown("Unknown property: " + n);
@@ -668,6 +676,14 @@ export class SwXStyle {
       item.SetPageUsage(page.GetUseOn() as unknown as SvxPageUsage);
       if (!item.PutValue(v, MID_PAGE_LAYOUT)) illegal("Invalid page style layout");
       page.SetUseOn(item.GetPageUsage() as unknown as UseOnPage);
+      return;
+    }
+    if (n === "NumberingType") {
+      const type = scalar(v, "sal_Int16") as SvxNumType;
+      if (page.GetNumType().GetNumberingType() !== type) {
+        page.SetNumType(type);
+        this.doc.NotifyModelChange({ kind: "page-descriptor-changed" });
+      }
       return;
     }
     if (n === "IsLandscape") page.SetValue({ ...old, landscape: scalar(v, "bool") as boolean });

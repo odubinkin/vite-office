@@ -19,6 +19,7 @@ import { ExportNumberFormat } from "../../../../xmloff/source/style/xmlnumfe";
 import { IsSquaredPageMode } from "../../core/doc/docdesc";
 import { UseOnPage } from "../../core/layout/pagedesc";
 import { PageStyleLayout } from "../../../../offapi/com/sun/star/style/PageStyleLayout";
+import { SvXMLUnitConverter } from "../../../../xmloff/source/core/xmluconv";
 import { exportPageUsage } from "../../../../xmloff/source/style/PageMasterStyleMap";
 import { convertTwipToMm100 } from "../../../../tools/inc/UnitConversion";
 import { Converter } from "../../../../sax/source/tools/converter";
@@ -411,7 +412,13 @@ export function exportStylesXml(
     const registerProperty = register
       ? ` style:register-truth-ref-style-name="${escapeXml(getParagraphOdfStyleName(document, register.id))}"`
       : "";
-    const properties = `<style:page-layout-properties fo:page-width="${exportOdfLength(page.width)}" fo:page-height="${exportOdfLength(page.height)}" style:print-orientation="${page.landscape ? "landscape" : "portrait"}" fo:margin-top="${top}" fo:margin-bottom="${exportPageMargin(page.bottomMargin)}" fo:margin-left="${left}" fo:margin-right="${right}"${exportPageLayoutBox(master, exportOdfLength)}${exportPageWritingAndGrid(master)}${registerProperty}${background.attributes}`;
+    const numberingType = descriptor.GetNumType().GetNumberingType();
+    const numberingFormat = new SvXMLUnitConverter("mm100").convertNumFormat(numberingType);
+    const letterSync = SvXMLUnitConverter.convertNumLetterSync(numberingType);
+    const numbering =
+      ` style:num-format="${escapeXml(numberingFormat)}"` +
+      (letterSync ? ` style:num-letter-sync="${letterSync}"` : "");
+    const properties = `<style:page-layout-properties fo:page-width="${exportOdfLength(page.width)}" fo:page-height="${exportOdfLength(page.height)}" style:print-orientation="${page.landscape ? "landscape" : "portrait"}" fo:margin-top="${top}" fo:margin-bottom="${exportPageMargin(page.bottomMargin)}" fo:margin-left="${left}" fo:margin-right="${right}"${exportPageLayoutBox(master, exportOdfLength)}${exportPageWritingAndGrid(master)}${registerProperty}${background.attributes}${numbering}`;
     const content = background.children
       ? `${properties}>${background.children}</style:page-layout-properties>`
       : `${properties}/>`;

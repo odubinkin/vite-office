@@ -6509,3 +6509,13 @@ behavior when no originating layout has formatted the document.
 - [Original metadata import](../../vendor/libreoffice-reference/sw/source/filter/xml/xmlmeta.cxx#L100)
 - [Original statistics recalculation](../../vendor/libreoffice-reference/sw/source/core/doc/DocumentStatisticsManager.cxx#L145)
 - [Original count field creation and range update](../../vendor/libreoffice-reference/sw/source/core/fields/docufld.cxx#L789)
+
+### WRITER-782 — Previous-page expansion can display zero on the first page
+
+The PageNumber UNO enum describes the previous selection as empty when
+there is no preceding page. Native field expansion checks whether the
+adjusted page is below zero, so a previous-page field on page one can still
+format zero. The represented Arabic numbering path preserves this behavior.
+
+- [Original UNO selection contract](../../vendor/libreoffice-reference/offapi/com/sun/star/text/PageNumberType.idl#L26)
+- [Original page number bound and expansion](../../vendor/libreoffice-reference/sw/source/core/fields/docufld.cxx#L105)

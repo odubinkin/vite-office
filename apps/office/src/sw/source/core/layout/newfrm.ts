@@ -515,6 +515,7 @@ export class SwRootFrame extends SwLayoutFrame {
         tableFrames: Object.freeze(tableFrames),
       });
       document.getIDocumentFieldsAccess().GetDocStatFieldType().UpdateRangeFields(this);
+      document.getIDocumentFieldsAccess().GetPageNumberFieldType().UpdateFields(this);
       return this.snapshot;
     } catch (error) {
       for (const frame of tableFrames)

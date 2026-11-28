@@ -20,6 +20,11 @@ import {
   type WriterDocInfoFieldRecord,
 } from "./writer-doc-info-field-codec";
 import {
+  decodePageNumberFields,
+  encodePageNumberFields,
+  type WriterPageNumberFieldRecord,
+} from "./writer-page-number-field-codec";
+import {
   decodeDocStatFields,
   encodeDocStatFields,
   type WriterDocStatFieldRecord,
@@ -98,6 +103,7 @@ export interface WriterTextNodeRecord {
   readonly referenceMarks?: readonly WriterReferenceMarkRecord[];
   readonly referenceFields?: readonly WriterReferenceFieldRecord[];
   readonly docInfoFields?: readonly WriterDocInfoFieldRecord[];
+  readonly pageNumberFields?: readonly WriterPageNumberFieldRecord[];
   readonly docStatFields?: readonly WriterDocStatFieldRecord[];
   readonly dateTimeFields?: readonly WriterDateTimeFieldRecord[];
   readonly listGeometryWins?: boolean;
@@ -368,6 +374,7 @@ export function encodeTextNode(document: SwDoc, node: SwTextNode): WriterTextNod
   const docInfoFields = encodeDocInfoFields(node);
   const dateTimeFields = encodeDateTimeFields(node);
   const docStatFields = encodeDocStatFields(node);
+  const pageNumberFields = encodePageNumberFields(node);
   return {
     ...(indexMarks.length ? { indexMarks } : {}),
     ...(referenceMarks.length ? { referenceMarks } : {}),
@@ -375,6 +382,7 @@ export function encodeTextNode(document: SwDoc, node: SwTextNode): WriterTextNod
     ...(docInfoFields.length ? { docInfoFields } : {}),
     ...(dateTimeFields.length ? { dateTimeFields } : {}),
     ...(docStatFields.length ? { docStatFields } : {}),
+    ...(pageNumberFields.length ? { pageNumberFields } : {}),
     autoAttributes: direct === undefined ? [] : encodeSfxItemSet(direct),
     formatCollId: node.GetTextFormatColl().id,
     ...(node.DoesListGeometryWin() ? { listGeometryWins: true } : {}),
@@ -454,6 +462,7 @@ export function decodeTextNode(
   decodeDocInfoFields(node, nodeRecord.docInfoFields);
   decodeDateTimeFields(node, nodeRecord.dateTimeFields);
   decodeDocStatFields(node, nodeRecord.docStatFields);
+  decodePageNumberFields(node, nodeRecord.pageNumberFields);
   if (nodeRecord.annotations) decodeLegacyAnnotations(node, nodeRecord.annotations);
   node.AddToList();
   for (const offset of nodeRecord.softPageBreaks ?? [])

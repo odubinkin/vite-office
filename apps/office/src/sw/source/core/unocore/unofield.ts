@@ -12,9 +12,15 @@ import {
   type SwTextDocInfoField,
   type SwTextDocStatField,
   type SwTextReferenceField,
+  type SwTextPageNumberField,
 } from "../../../inc/txtfld";
 import { SwFormatField } from "../../../inc/fmtfld";
 import { SwDateTimeSubType } from "../../../inc/fldbas";
+import {
+  PageNumberType,
+  cppu_detail_getUnoType_PageNumberType,
+} from "../../../../offapi/com/sun/star/text/PageNumberType";
+import { SwPageNumberField, SwPageNumSubType } from "../fields/docufld.pagenumber";
 import { SvxNumType } from "../../../../editeng/inc/svxenum";
 import { SwDateTimeField } from "../fields/flddat";
 import { RES_TXTATR_FIELD } from "../../../inc/hintids";
@@ -366,6 +372,85 @@ export class SwXDocInfoField {
       (this.subtype & SwDocInfoSubType.LowerMask) === SwDocInfoSubType.Edit ||
       this.subtype === SwDocInfoSubType.Custom
     );
+  }
+}
+
+/** Native PageNumber UNO descriptor shared with continuation strings. */
+export class SwXPageNumberField {
+  private subtype = SwPageNumSubType.Previous;
+  private format = SvxNumType.SVX_NUM_CHARS_UPPER_LETTER;
+  private offset = 0;
+  private userText = "";
+  private hint: SwTextPageNumberField | undefined;
+
+  /** Reads the original PageNumber descriptor properties. @param name - UNO field property. @param input - Typed value. */
+  public setPropertyValue(name: OUStringConstReference, input: Any): void {
+    if (this.hint) invalid("Writer page number field is attached.");
+    const property = text(name);
+    switch (property) {
+      case "SubType": {
+        const selection: [number] = [0];
+        if (
+          !input.extract(selection, cppu_detail_getUnoType_PageNumberType) &&
+          !input.extract(selection, "sal_Int32")
+        )
+          illegal("Invalid page number field selection.");
+        switch (selection[0]) {
+          case PageNumberType.PREV:
+            this.subtype = SwPageNumSubType.Previous;
+            break;
+          case PageNumberType.CURRENT:
+            this.subtype = SwPageNumSubType.Random;
+            break;
+          case PageNumberType.NEXT:
+            this.subtype = SwPageNumSubType.Next;
+            break;
+          default:
+            illegal("Invalid page number field selection.");
+        }
+        break;
+      }
+      case "NumberingType":
+        this.format = scalar(input, "sal_Int16") as SvxNumType;
+        break;
+      case "Offset":
+        this.offset = scalar(input, "sal_Int16") as number;
+        break;
+      case "UserText":
+        this.userText = stringValue(input);
+        break;
+      default:
+        unknown(property);
+    }
+  }
+
+  /** Attaches the original native field and its dummy character. @param range - Writer range. */
+  public attach(range: SwXTextRange): void {
+    if (this.hint) invalid("Writer page number field is already attached.");
+    const position = range.GetPaM().Start();
+    const node = position.GetNode().GetTextNode();
+    if (!node) illegal("Writer page number field must be in text.");
+    const type = node.GetDoc().getIDocumentFieldsAccess().GetPageNumberFieldType();
+    const field = new SwPageNumberField(
+      type,
+      this.subtype,
+      this.format,
+      this.offset,
+      this.userText,
+    );
+    const hint = new SwTextField(
+      new SwFormatField(field, RES_TXTATR_FIELD),
+      position.GetContentIndex(),
+    );
+    if (!node.InsertHint(hint)) invalid("Writer page number field could not be inserted.");
+    this.hint = hint;
+  }
+
+  /** Removes the attached native point. */
+  public dispose(): void {
+    const hint = this.hint;
+    this.hint = undefined;
+    if (hint) hint.GetTextNode()?.EraseText(hint.GetStart(), 1);
   }
 }
 

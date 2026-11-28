@@ -3,6 +3,7 @@ import {
   type SwPageDesc,
   validateWriterPageDescriptor,
 } from "../../../source/core/layout/pagedesc";
+import { SvxNumType } from "../../../../editeng/inc/svxenum";
 import type { SwDoc } from "../../../source/core/doc/doc";
 import { RES_FOOTER, RES_HEADER, RES_TEXTGRID } from "../../../inc/hintids";
 import type { SfxPoolItemSnapshot } from "../../../../svl/source/items/poolitem";
@@ -11,6 +12,7 @@ import { encodeSfxPoolItem, decodeSfxItemSet, decodeSfxPoolItem } from "./item-c
 /** Page geometry/follow identity stays in its existing record; this record carries canonical item deltas and usage flags. */
 export interface WriterPageFormatRecord {
   readonly useOn: number;
+  readonly numberingType?: SvxNumType;
   readonly formats: readonly (readonly SfxPoolItemSnapshot[])[];
   readonly names?: readonly string[];
   readonly poolIds?: readonly number[];
@@ -19,8 +21,10 @@ export interface WriterPageFormatRecord {
 /** Serializes the four actual frame item sets without flattening inherited/default attributes. @param page - Native descriptor. @returns Record. */
 export function encodePageFormats(page: SwPageDesc): WriterPageFormatRecord {
   const register = page.GetRegisterFormatColl();
+  const numberingType = page.GetNumType().GetNumberingType();
   return {
     ...(register ? { registerStyleId: register.id } : {}),
+    ...(numberingType === SvxNumType.SVX_NUM_ARABIC ? {} : { numberingType }),
     poolIds: [page.GetMaster(), page.GetLeft(), page.GetFirstMaster(), page.GetFirstLeft()].map(
       /** Copies original per-frame pool identities, including UNKNOWN. @param frame - Actual frame. @returns Native unsigned16 ID. */
       (frame) => frame.GetPoolFormatId(),
@@ -115,6 +119,12 @@ export function restorePageFormats(page: SwPageDesc, candidate: unknown): void {
     decodeSfxItemSet(frame.GetAttrSet(), row as SfxPoolItemSnapshot[]);
   }
   page.WriteUseOn(candidate.useOn);
+  if ("numberingType" in candidate) {
+    const type = candidate.numberingType;
+    if (typeof type !== "number" || !Number.isInteger(type) || type < -32768 || type > 32767)
+      throw new Error("Writer page numbering type is invalid.");
+    page.SetNumType(type as SvxNumType);
+  }
   validateWriterPageDescriptor(page.GetValue(), true);
 }
 /** Encodes a real document-pool grid override; absence retains native static defaults. @param doc - Document. @returns Snapshot or undefined. */

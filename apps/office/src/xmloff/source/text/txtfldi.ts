@@ -16,9 +16,96 @@ import { referenceFieldFormats, type XMLDocInfoField, type XMLReferenceField } f
 import { toBoolean } from "../../../sal/rtl/strtmpl";
 import { approxFloor } from "../../../sal/inc/rtl/math";
 import { convertDurationToDays } from "../../../sax/source/tools/converter.duration";
+import {
+  PageNumberType,
+  cppu_detail_getUnoType_PageNumberType,
+} from "../../../offapi/com/sun/star/text/PageNumberType";
 import * as NumberingType from "../../../offapi/com/sun/star/style/NumberingType";
 import { SvXMLUnitConverter } from "../core/xmluconv";
 import type { XMLCountField } from "./txtflde";
+
+/** Imports either of the two original ODF elements backed by the PageNumber service. */
+export class XMLPageNumberImportContext extends SvXMLImportContext {
+  private selection = PageNumberType.CURRENT;
+  private numbering: number = NumberingType.PAGE_DESCRIPTOR;
+  private offset = 0;
+  private continuation: string | undefined;
+  private presentation = "";
+
+  /** Binds the count field to the styled text position. @param helper - Text import owner. @param isContinuation - Whether to load authored continuation text. @param properties - Character properties. @param hyperlink - Surrounding link. @param characterStyles - Applied character styles. */
+  public constructor(
+    private readonly helper: XMLTextImportHelper,
+    private readonly isContinuation: boolean,
+    private readonly properties: OdfCharacterProperties,
+    private readonly hyperlink: OdfHyperlink | undefined,
+    private readonly characterStyles: readonly XMLCharacterStyleLayer[],
+  ) {
+    super();
+  }
+
+  /** Decodes the original select-page, numbering, and signed page adjustment. @param _element - Source token. @param attributes - Authored attributes. */
+  public override startFastElement(_element: XMLToken, attributes: FastAttributeList): void {
+    const page = attributes.get(XMLToken.TEXT_SELECT_PAGE);
+    if (page === "previous") this.selection = PageNumberType.PREV;
+    else if (page === "next") this.selection = PageNumberType.NEXT;
+    if (this.isContinuation) {
+      this.numbering = NumberingType.CHAR_SPECIAL;
+      for (const [token, value] of attributes)
+        if (token === XMLToken.TEXT_STRING_VALUE || token === XMLToken.OFFICE_STRING_VALUE)
+          this.continuation = value;
+      return;
+    }
+    this.numbering = readFieldNumberingType(attributes);
+    const adjust = attributes.getAsInteger(XMLToken.TEXT_PAGE_ADJUST) ?? 0;
+    this.offset = ((adjust + this.selection - PageNumberType.CURRENT) << 16) >> 16;
+  }
+
+  /** Retains source display only as the fallback authored continuation string. @param value - SAX string. */
+  public override characters(value: string): void {
+    if (this.isContinuation) this.presentation += value;
+  }
+
+  /** Attaches the original PageNumber service descriptor. */
+  public override endFastElement(): void {
+    this.helper.InsertTextField(
+      "PageNumber",
+      this.PrepareField.bind(this),
+      this.properties,
+      this.hyperlink,
+      this.characterStyles,
+    );
+  }
+
+  /** Populates the original typed UNO page selection and related properties. @param field - Detached field. */
+  private PrepareField(field: XMLTextContent): void {
+    const name = xmlTextString("SubType");
+    const value = new Any([this.selection], cppu_detail_getUnoType_PageNumberType);
+    try {
+      field.setPropertyValue(name, value);
+    } finally {
+      value.dispose();
+      name.dispose();
+    }
+    this.helper.SetProperty(field, "NumberingType", this.numbering, "sal_Int16");
+    if (this.isContinuation)
+      this.helper.SetProperty(field, "UserText", this.continuation ?? this.presentation);
+    else this.helper.SetProperty(field, "Offset", this.offset, "sal_Int16");
+  }
+}
+
+/** Reads the shared original optional numbering-type attributes. @param attributes - Field attributes. @returns Native numbering style. */
+function readFieldNumberingType(attributes: FastAttributeList): number {
+  const format = attributes.get(XMLToken.STYLE_NUM_FORMAT);
+  if (format === null) return NumberingType.PAGE_DESCRIPTOR;
+  const type = { value: NumberingType.ARABIC as number };
+  new SvXMLUnitConverter("mm100").convertNumFormat(
+    type,
+    format,
+    attributes.get(XMLToken.STYLE_NUM_LETTER_SYNC) ?? "",
+    false,
+  );
+  return type.value;
+}
 
 /** Original XMLCountFieldImportContext for the document statistic fields. */
 export class XMLCountFieldImportContext extends SvXMLImportContext {
@@ -37,16 +124,7 @@ export class XMLCountFieldImportContext extends SvXMLImportContext {
 
   /** Decodes the optional numbering style and its alphabetic repetition flag. @param _element - Count element. @param attributes - Native attributes. */
   public override startFastElement(_element: XMLToken, attributes: FastAttributeList): void {
-    const format = attributes.get(XMLToken.STYLE_NUM_FORMAT);
-    if (format === null) return;
-    const type = { value: NumberingType.ARABIC as number };
-    new SvXMLUnitConverter("mm100").convertNumFormat(
-      type,
-      format,
-      attributes.get(XMLToken.STYLE_NUM_LETTER_SYNC) ?? "",
-      false,
-    );
-    this.numberingType = type.value;
+    this.numberingType = readFieldNumberingType(attributes);
   }
 
   /** Attaches the live count field. */

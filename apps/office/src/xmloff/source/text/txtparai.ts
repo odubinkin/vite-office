@@ -17,6 +17,7 @@ import { XMLAnnotationImportContext } from "./txtfldi";
 import { XMLTextMarkImportContext } from "./XMLTextMarkImportContext";
 import {
   XMLCountFieldImportContext,
+  XMLPageNumberImportContext,
   XMLReferenceFieldImportContext,
   XMLRevisionDocInfoImportContext,
   XMLDateTimeDocInfoImportContext,
@@ -453,6 +454,16 @@ function createInlineContext(
       element === XMLToken.TEXT_DATE ? XMLDateFieldImportContext : XMLTimeFieldImportContext;
     return new Context(paragraph, properties, hyperlink, namedStyles);
   }
+  if (element === XMLToken.TEXT_PAGE_NUMBER || element === XMLToken.TEXT_PAGE_CONTINUATION)
+    return annotation
+      ? null
+      : new XMLPageNumberImportContext(
+          paragraph,
+          element === XMLToken.TEXT_PAGE_CONTINUATION,
+          properties,
+          hyperlink,
+          namedStyles,
+        );
   const count = countFields.find(([token]) => token === element);
   if (count)
     return annotation

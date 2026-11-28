@@ -1007,6 +1007,8 @@ class SwXMLImport
           setProperty("Width", "sal_Int32", Number(convertTwipToMm100(BigInt(layout.width))));
           setProperty("Height", "sal_Int32", Number(convertTwipToMm100(BigInt(layout.height))));
           setProperty("IsLandscape", "bool", layout.landscape);
+          if (layout.numberingType !== undefined)
+            setProperty("NumberingType", "sal_Int16", layout.numberingType);
           if (layout.direction !== undefined)
             setProperty("WritingMode", "sal_Int16", layout.direction);
           if (layout.rtlGutter !== undefined) setProperty("RtlGutter", "bool", layout.rtlGutter);

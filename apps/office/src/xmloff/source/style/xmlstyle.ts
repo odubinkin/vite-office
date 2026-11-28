@@ -10,6 +10,7 @@ import {
   importPageGrid,
   importPageMargins,
   importPageUsage,
+  importPageNumbering,
   type OdfPageGridProperty,
   type OdfPageBackground,
   type OdfPageMargins,
@@ -90,6 +91,7 @@ export interface OdfPageLayout {
   readonly margins: OdfPageMargins;
   readonly explicitMargins: ReadonlySet<string>;
   readonly usage?: PageStyleLayout;
+  readonly numberingType?: number;
   readonly direction?: number;
   readonly rtlGutter?: boolean;
   readonly registerParagraphStyle?: string;
@@ -301,11 +303,13 @@ class XMLPageLayoutContext extends SvXMLImportContext {
     const register = attributes.get(XMLToken.STYLE_REGISTER_TRUTH_REF_STYLE_NAME);
     const direction = writing === null ? undefined : importWritingDirection(writing);
     const { margins, explicit: explicitMargins } = importPageMargins(attributes);
+    const numberingType = importPageNumbering(attributes);
     this.layout = {
       ...(Object.keys(box).length ? { box } : {}),
       ...(shadow === undefined ? {} : { shadow }),
       ...(gutter === null ? {} : { gutter }),
       ...(this.usage === undefined ? {} : { usage: this.usage }),
+      ...(numberingType === undefined ? {} : { numberingType }),
       ...(direction === undefined ? {} : { direction }),
       ...(writing === null ? {} : { rtlGutter: ["rl-tb", "tb-rl", "rl", "tb"].includes(writing) }),
       ...(register ? { registerParagraphStyle: register } : {}),

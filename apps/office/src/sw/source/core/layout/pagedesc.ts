@@ -5,6 +5,8 @@ import {
   getPageFrameMargins,
   SwFrameFormat,
 } from "./atrfrm";
+import { SvxNumberType } from "../../../../editeng/source/items/numitem";
+import type { SvxNumType } from "../../../../editeng/inc/svxenum";
 import { FormatBodyTextGrid } from "./pagechg";
 import type { SwFormatHeader, SwFormatFooter } from "../../../inc/fmthdft";
 import { SwPoolFormatId } from "../../../inc/poolfmt";
@@ -85,6 +87,7 @@ export class SwPageDesc extends BroadcastingModify {
       }
     },
   );
+  private readonly m_NumType = new SvxNumberType();
   private m_IsLandscape = false;
   private readonly stashedStoryFormats = new Map<number, SwFormatHeader | SwFormatFooter>();
   private m_eUse: UseOnPage =
@@ -127,11 +130,22 @@ export class SwPageDesc extends BroadcastingModify {
     this.m_pFollow = typeof source === "string" ? this : source.m_pFollow;
     if (typeof source !== "string") {
       this.m_IsLandscape = source.m_IsLandscape;
+      this.SetNumType(source.GetNumType().GetNumberingType());
       this.m_eUse = source.m_eUse;
       this.CopyStashedStoryFormats(source);
       this.SetRegisterFormatColl(source.GetRegisterFormatColl());
     }
   }
+  /** Borrows the original page numbering type. @returns Native numbering owner. */
+  public GetNumType(): Readonly<SvxNumberType> {
+    return this.m_NumType;
+  }
+
+  /** Applies the descriptor's original format independently of physical geometry. @param value - Native numbering type. */
+  public SetNumType(value: SvxNumType): void {
+    this.m_NumType.SetNumberingType(value);
+  }
+
   /** Follows the live style used to compute page line-spacing metrics. @param format - Document-owned reference paragraph style. @returns Nothing. */
   public SetRegisterFormatColl(format?: SwTextFormatColl): void {
     if (format === this.m_pTextFormatColl) return;

@@ -1,0 +1,30 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "local-infrastructure",
+    "localPath": "apps/office/src/sw/browser/filter/xml/writer-page-number-field-codec.ts",
+    "status": "local-only",
+    "rationale": "Transfers native page number and continuation fields, authored text and the source layout cache at their model points.",
+    "responsibilities": [
+      "Transfers native page number and continuation fields, authored text and the source layout cache at their model points."
+    ],
+    "stackDivergence": {
+      "kind": "local-infrastructure",
+      "rationale": "Structured Worker transport of the native page number field."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/filter/xml/writer-page-number-field-codec.ts",
+          "marker": "encodePageNumberFields"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-page-number-fields.test.ts",
+          "marker": "testWhitespace"
+        }
+      ],
+      "upstream": []
+    }
+  }
+}

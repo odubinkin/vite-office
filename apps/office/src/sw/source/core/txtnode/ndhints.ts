@@ -11,10 +11,12 @@ import {
   type SwTextDateTimeField,
   type SwTextDocInfoField,
   type SwTextDocStatField,
+  type SwTextPageNumberField,
   type SwTextOrdinaryField,
   type SwTextReferenceField,
 } from "../../../inc/txtfld";
 import { SwGetRefField } from "../fields/reffld";
+import { SwPageNumberField } from "../fields/docufld.pagenumber";
 import { SwDocInfoField, SwDocStatField } from "../fields/docufld";
 import { SwDateTimeField } from "../fields/flddat";
 import { SwTextFlyCnt } from "../../../inc/txtflcnt";
@@ -418,6 +420,15 @@ export class SwpHints {
       /** Selects the represented ordinary field type. @param hint - Indexed hint. @returns Whether a reference field. */
       (hint): hint is SwTextReferenceField =>
         hint instanceof SwTextField && hint.GetAttr().GetField() instanceof SwGetRefField,
+    );
+  }
+
+  /** Returns native PageNumber fields at their original text anchors. @returns Ordered fields. */
+  public GetPageNumberFields(): readonly SwTextPageNumberField[] {
+    return this.hintsByStart.filter(
+      /** Identifies the actual page number field. @param hint - Text attribute. @returns Whether this is a native page number. */
+      (hint): hint is SwTextPageNumberField =>
+        hint instanceof SwTextField && hint.GetAttr().GetField() instanceof SwPageNumberField,
     );
   }
 
