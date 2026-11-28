@@ -1,10 +1,11 @@
 ---
 id: "202611280908-EMZTQQ"
 title: "Align Calc ODS label-range interchange and formula resolution"
-status: "DOING"
+result_summary: "Aligned ODS label range and intersection behavior with the pinned Calc core and preserved both label lists in the Worker."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "output/playwright/odf-next-checkpoint/calc-label-odf-verification.md"
   findings:
     - "Both original shared formula label fixtures recalculate correctly. Worker and ODS preserve explicit label ranges and formula results with automatic label lookup disabled."
-commit: null
+commit:
+  hash: "f799ba7ae40f2b35ded9c8cbddde09d434274059"
+  message: "🧩 EMZTQQ calc: preserve ODS label ranges and intersections"
 comments:
   -
     author: "CODER"
     body: "Start: Align ODS label declaration addresses and deferred label ownership with pinned Calc. Verify pinned label formula fixtures and the Worker roundtrip."
+  -
+    author: "CODER"
+    body: "Verified: 55 affected tests passed. TypeScript, scoped lint, module boundaries, provenance and Calc registry checks passed."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "46 affected Calc tests and nine shared compiler tests passed. TypeScript, scoped ESLint, module boundaries, source provenance and Calc registry checks passed. The Calc registry reported zero semantic violations."
+  -
+    type: "status"
+    at: "2026-11-28T09:23:30.709Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: 55 affected tests passed. TypeScript, scoped lint, module boundaries, provenance and Calc registry checks passed."
 doc_version: 3
-doc_updated_at: "2026-11-28T09:22:15.089Z"
+doc_updated_at: "2026-11-28T09:23:30.712Z"
 doc_updated_by: "CODER"
 description: "Port the native column and row label-range address conventions through ODS, preserve label pairs before names and formulas are restored through the Worker, and replay the pinned Calc shared-formula label fixtures."
 sections:
