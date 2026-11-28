@@ -1,11 +1,14 @@
 /** @fileoverview Verifies the connected native page offset XML/property/worker contracts and source scalar discontinuities. */
 import { expect, it } from "vitest";
+import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
 import { SwDoc } from "../../core/doc/doc";
 import { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
 import { RES_PAGEDESC } from "../../../inc/hintids";
 import { importWriterXml } from "./xmlimp";
 import { exportContentXml, exportStylesXml } from "./xmlexp";
 import { createOdtFilterDocument } from "./odt-filter-service";
+import { readOdtDocument } from "./swxml";
+import { writeOdtDocument } from "./wrtxml";
 import {
   createOdtWorkerDocument,
   restoreOdtWorkerDocument,
@@ -61,6 +64,22 @@ it("uses native signed16 saturation and invalid-property fallback at actual ODT 
     expect(
       (result.document.paragraphs[0]?.GetAttr(RES_PAGEDESC) as SwFormatPageDesc).GetNumOffset(),
       input,
+    ).toBe(offset);
+  }
+});
+
+it("round-trips source page-number offset boundaries without the dialog widget range truncating them", /** Native unsigned 16-bit offsets include zero and values above 55535. @returns Completion. */ async () => {
+  const metadata = { title: "Offsets" };
+  for (const offset of [0, 55535, 65535]) {
+    const document = new SwDoc();
+    document.paragraphs[0]?.SetAttr(new SwFormatPageDesc("Standard", offset));
+    const bytes = await writeOdtDocument(document, metadata);
+    expect(await (await DocumentArchive.open(bytes)).readTextEntry("content.xml")).toContain(
+      `style:page-number="${(offset << 16) >> 16}"`,
+    );
+    const reopened = await readOdtDocument(bytes, metadata);
+    expect(
+      (reopened.document.paragraphs[0]?.GetAttr(RES_PAGEDESC) as SwFormatPageDesc).GetNumOffset(),
     ).toBe(offset);
   }
 });

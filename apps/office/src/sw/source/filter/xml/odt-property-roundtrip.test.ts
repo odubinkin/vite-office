@@ -983,18 +983,3 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
     }
   });
 });
-
-it("round-trips source page-number offset boundaries without the dialog widget range truncating them", /** Native unsigned16 offsets include zero and imported values above55535. @returns Completion. */ async () => {
-  for (const offset of [0, 55535, 65535]) {
-    const writer = createWriterDocument();
-    writer.paragraphs[0]?.SetAttr(new SwFormatPageDesc("Standard", offset));
-    const bytes = await writeOdtDocument(writer, metadata);
-    expect(await (await DocumentArchive.open(bytes)).readTextEntry("content.xml")).toContain(
-      `style:page-number="${(offset << 16) >> 16}"`,
-    );
-    const reopened = await readOdtDocument(bytes, metadata);
-    expect(
-      (reopened.document.paragraphs[0]?.GetAttr(RES_PAGEDESC) as SwFormatPageDesc).GetNumOffset(),
-    ).toBe(offset);
-  }
-});

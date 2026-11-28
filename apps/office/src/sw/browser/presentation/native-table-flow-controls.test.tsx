@@ -64,6 +64,7 @@ it("shows a separate source-ordered contextual toolbar and updates checked cell 
     "Insert Rows Below",
     "Insert Columns Before",
     "Insert Columns After",
+    "Delete Table",
     "Select Cell",
     "Select Table",
     "Top",
