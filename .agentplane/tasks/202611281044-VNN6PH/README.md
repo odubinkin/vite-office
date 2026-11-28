@@ -4,7 +4,7 @@ title: "Align Writer ODT conditional and hidden text fields with native field ow
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 4
+revision: 6
 origin:
   system: "manual"
 depends_on: []
@@ -19,11 +19,27 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-11-28T10:52:38.833Z"
+  updated_by: "CODER"
+  note: "8 focused Writer checks including both pinned conditional fixtures through Worker and ODT, TypeScript, lint, boundaries, provenance and Writer inventory passed."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-11-28T10:52:39.282Z"
+  updated_by: "EVALUATOR"
+  note: "Original Writer condition fields persist and update through the native document model."
+  evaluated_sha: "f0559c622c8774db11a5120662d2875d297bc7df"
+  blueprint_digest: "39beaf0d875f4a5fae9ad34898c2ae18b78fc7aef94e42a41b4271c8858cecdf"
+  evidence_refs:
+    - ".agentplane/tasks/202611281044-VNN6PH/README.md"
+    - ".agentplane/tasks/202611281044-VNN6PH/quality/20261128-105239282-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202611281044-VNN6PH/quality/20261128-105239282-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202611281044-VNN6PH/quality/20261128-105239282-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202611281044-VNN6PH/blueprint/resolved-snapshot.json"
+    - "output/playwright/odf-next-checkpoint/writer-conditional-verification.md"
+  findings:
+    - "Preserved the inverse hidden flag on IsConditionTrue. Hidden paragraph and database expansion are separate."
 commit: null
 comments:
   -
@@ -37,8 +53,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: model conditional and hidden text through pinned inline-field owners, ODT and Worker."
+  -
+    type: "verify"
+    at: "2026-11-28T10:52:38.833Z"
+    author: "CODER"
+    state: "ok"
+    note: "8 focused Writer checks including both pinned conditional fixtures through Worker and ODT, TypeScript, lint, boundaries, provenance and Writer inventory passed."
 doc_version: 3
-doc_updated_at: "2026-11-28T10:44:08.223Z"
+doc_updated_at: "2026-11-28T10:52:38.885Z"
 doc_updated_by: "CODER"
 description: "Implement the represented SwHiddenTextField family, UNO descriptors, namespace-aware ODT import/export, numeric expression updates and Worker transfer. Replay the pinned native conditional text and preceding variable fixtures using focused checks. Preserve the existing save and open UI contracts."
 sections:
@@ -58,6 +80,36 @@ sections:
     3. Compare the final result against ## Scope and record any residual follow-up in ## Findings. Expected: open edges are explicit rather than implicit.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-11-28T10:52:38.833Z — VERIFY — ok
+
+    By: CODER
+
+    Note: 8 focused Writer checks including both pinned conditional fixtures through Worker and ODT, TypeScript, lint, boundaries, provenance and Writer inventory passed.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-28T10:44:08.223Z, excerpt_hash=sha256:a9ebcde4a080f033c1f31e2457644786ab02adb76b9bae85b91ccc22cc6c47de
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611281044-VNN6PH/blueprint/resolved-snapshot.json
+    - old_digest: 39beaf0d875f4a5fae9ad34898c2ae18b78fc7aef94e42a41b4271c8858cecdf
+    - current_digest: 39beaf0d875f4a5fae9ad34898c2ae18b78fc7aef94e42a41b4271c8858cecdf
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202611281044-VNN6PH
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202611281044-VNN6PH
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -91,6 +143,36 @@ PLANNER fallback scaffold for "Align Writer ODT conditional and hidden text fiel
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-11-28T10:52:38.833Z — VERIFY — ok
+
+By: CODER
+
+Note: 8 focused Writer checks including both pinned conditional fixtures through Worker and ODT, TypeScript, lint, boundaries, provenance and Writer inventory passed.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-28T10:44:08.223Z, excerpt_hash=sha256:a9ebcde4a080f033c1f31e2457644786ab02adb76b9bae85b91ccc22cc6c47de
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611281044-VNN6PH/blueprint/resolved-snapshot.json
+- old_digest: 39beaf0d875f4a5fae9ad34898c2ae18b78fc7aef94e42a41b4271c8858cecdf
+- current_digest: 39beaf0d875f4a5fae9ad34898c2ae18b78fc7aef94e42a41b4271c8858cecdf
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202611281044-VNN6PH
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202611281044-VNN6PH
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan

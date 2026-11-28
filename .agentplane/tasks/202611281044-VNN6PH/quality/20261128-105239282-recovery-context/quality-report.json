@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202611281044-VNN6PH",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-28T10:52:39.282Z",
+  "verdict": "pass",
+  "summary": "Original Writer condition fields persist and update through the native document model.",
+  "evaluated_sha": "f0559c622c8774db11a5120662d2875d297bc7df",
+  "blueprint_digest": "39beaf0d875f4a5fae9ad34898c2ae18b78fc7aef94e42a41b4271c8858cecdf",
+  "findings": [
+    "Preserved the inverse hidden flag on IsConditionTrue. Hidden paragraph and database expansion are separate."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611281044-VNN6PH/README.md",
+    "output/playwright/odf-next-checkpoint/writer-conditional-verification.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
