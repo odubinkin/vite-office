@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202611280908-EMZTQQ",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-28T09:22:15.545Z",
+  "verdict": "pass",
+  "summary": "ODS label range and formula intersection contracts match the pinned Calc source within the represented reference slice.",
+  "evaluated_sha": "f799ba7ae40f2b35ded9c8cbddde09d434274059",
+  "blueprint_digest": "6f75916310056c7bae2ae81f7bd36d887ffdb08c92197d823655e8702d349c26",
+  "findings": [
+    "Both original shared formula label fixtures recalculate correctly. Worker and ODS preserve explicit label ranges and formula results with automatic label lookup disabled."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611280908-EMZTQQ/README.md",
+    "output/playwright/odf-next-checkpoint/calc-label-odf-verification.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
