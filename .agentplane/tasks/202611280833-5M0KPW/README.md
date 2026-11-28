@@ -1,10 +1,11 @@
 ---
 id: "202611280833-5M0KPW"
 title: "Connect Calc value highlighting and formula marks to the native view"
-status: "DOING"
+result_summary: "Connected Calc value highlighting and formula indicators to the view, options and ODS."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -39,11 +40,16 @@ quality_review:
     - "output/calc-next/5M0KPW-vitest.log"
   findings:
     - "The production Chromium scenario confirms the real menu dispatch, a formula syntax color and one anchored formula mark with the correct hint."
-commit: null
+commit:
+  hash: "bb91f4620b6048448608900872fc54c0df7ca4af"
+  message: "🧩 5M0KPW code: document View page navigation callback"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: 34 focused Calc scenarios, production build and Chromium menu and formula marker scenario."
 events:
   -
     type: "status"
@@ -58,8 +64,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "34 focused Calc tests, the Office build and the Chromium combined view scenario passed. Scoped source checks passed."
+  -
+    type: "status"
+    at: "2026-11-28T09:21:41.020Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: 34 focused Calc scenarios, production build and Chromium menu and formula marker scenario."
 doc_version: 3
-doc_updated_at: "2026-11-28T09:13:27.789Z"
+doc_updated_at: "2026-11-28T09:21:41.021Z"
 doc_updated_by: "CODER"
 description: "Connect the existing Calc ScViewOptions value-highlighting and formula-mark state to the browser grid, the original View menu command, and the native Calc View options surface. Preserve the original Sfx syntax dispatch and state, formula marks and source color configuration defaults, foreground precedence, merged/hidden cell handling and ODS view settings. Reuse the established Calc Options dialog, ScViewData and text painter. Keep renderer and accessibility semantics tied to the underlying cell type and stored formula."
 sections:
