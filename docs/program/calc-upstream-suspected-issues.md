@@ -8567,3 +8567,16 @@ For example, a protected formula cell containing `=1+2` can supply that
 expression as its hint with Hide formula enabled. The formula hint setting
 defaults to off. Whether this behavior is intentional has not been confirmed.
 The browser grid uses the same formula lookup for the indicator and hint.
+
+### CALC-892 — ODF styles that share a format key also share its title
+
+The ODF number-style importer reuses a matching formatter entry and
+writes a nonempty `number:title` to that entry. If two styles resolve to
+the same format key and carry different titles, the last one resolved
+replaces the title for both. An imported title on a built-in entry is
+also lost on export, which writes titles only for user-defined formats.
+Calc retains the shared formatter entry and the original export rule.
+
+- [Original format key reuse](../../vendor/libreoffice-reference/xmloff/source/style/xmlnumfi.cxx#L1666)
+- [Original title assignment](../../vendor/libreoffice-reference/xmloff/source/style/xmlnumfi.cxx#L1715)
+- [Original title export](../../vendor/libreoffice-reference/xmloff/source/style/xmlnumfe.cxx#L1181)

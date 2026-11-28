@@ -3,6 +3,7 @@ import { FormulaError } from "../../../../formula/inc/errorcodes";
 import { OpCode } from "../../../../formula/inc/opcode";
 import { FormulaByteToken, type FormulaToken } from "../../../../formula/inc/token";
 import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { approxFloor } from "../../../../sal/inc/rtl/math";
 import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { SAL_MAX_INT32 } from "../../../../sal/inc/types";
 import { SvNumFormatType } from "../../../../svl/inc/zforlist";
@@ -13,6 +14,16 @@ import { DetectSearchType } from "./queryentry";
 
 /** Native maximum Calc formula string length, in UTF-16 code units. */
 export const kScInterpreterMaxStrLen = Math.trunc(SAL_MAX_INT32 / 8);
+
+/** Rounds down and checks the native signed string-position argument. @param interpreter - Active interpreter. @returns Position or minus one on error. */
+function GetStringPositionArgument(interpreter: ScInterpreter): number {
+  const value = approxFloor(interpreter["GetDouble"]());
+  if (!Number.isFinite(value) || value < 0 || value > SAL_MAX_INT32) {
+    interpreter.SetError(FormulaError.IllegalArgument);
+    return -1;
+  }
+  return value;
+}
 
 /** Counts original code points until the given UTF-16 position. @param value - Source string. @param end - Exclusive bound. @returns Code-point count. */
 function CountCodePoints(value: OUStringConstReference, end: number): number {
@@ -56,7 +67,7 @@ function ScFind(this: ScInterpreter, count: number): void {
 
 /** Evaluates the original case-insensitive SEARCH with document-specific patterns. @param this - Active interpreter. @param count - Arguments. */
 function ScSearch(this: ScInterpreter, count: number): void {
-  const start = count === 3 ? this["GetStringPositionArgument"]() : 1;
+  const start = count === 3 ? GetStringPositionArgument(this) : 1;
   if (start < 1) {
     this.SetError(FormulaError.IllegalArgument);
     return;
@@ -89,7 +100,7 @@ function ScSearch(this: ScInterpreter, count: number): void {
 
 /** Implements original LEFT and RIGHT character slicing. @param this - Active interpreter. @param count - Arguments. @param fromRight - Whether to start from the right edge. */
 function ScLeftRight(this: ScInterpreter, count: number, fromRight: boolean): void {
-  let length = count === 2 ? this["GetStringPositionArgument"]() : 1;
+  let length = count === 2 ? GetStringPositionArgument(this) : 1;
   if (length < 0) return;
   const source = this["GetString"]();
   if (length >= source.length) {
@@ -113,8 +124,8 @@ function ScLeftRight(this: ScInterpreter, count: number, fromRight: boolean): vo
 /** Implements original MID and REPLACE forward code-point spans. @param this - Active interpreter. @param replace - Whether to substitute a string. */
 function ScMidReplace(this: ScInterpreter, replace: boolean): void {
   const replacement = replace ? this["GetString"]() : "";
-  const count = this["GetStringPositionArgument"]();
-  const start = this["GetStringPositionArgument"]();
+  const count = GetStringPositionArgument(this);
+  const start = GetStringPositionArgument(this);
   const source = this["GetString"]();
   if (start < 1 || count < 0) {
     this.SetError(FormulaError.IllegalArgument);

@@ -323,15 +323,6 @@ export class ScInterpreter {
       source.dispose();
     }
   }
-  /** Rounds down and checks the native signed string-position argument. @returns Position or minus one on error. */
-  private GetStringPositionArgument(): number {
-    const value = approxFloor(this.GetDouble());
-    if (!Number.isFinite(value) || value < 0 || value > SAL_MAX_INT32) {
-      this.SetError(FormulaError.IllegalArgument);
-      return -1;
-    }
-    return value;
-  }
   /** Original string-result size check. @param length - Current UTF16 length. @param increase - Appended UTF16 length. @returns Whether the result fits. */
   private CheckStringResultLen(length: number, increase: number): boolean {
     if (increase <= kScInterpreterMaxStrLen - length) return true;

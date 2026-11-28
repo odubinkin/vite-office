@@ -1,7 +1,6 @@
 /** @fileoverview Owns the pinned ndnum.cxx sorted normal-document outline index without inline-heading adapters. */
 import type { SwNode } from "./node";
 import type { SwTextNode } from "../txtnode/ndtxt";
-import type { SwNode } from "./node";
 
 /** Maintains native document-index ordering and index-equivalent membership. */
 export class SwOutlineNodes {

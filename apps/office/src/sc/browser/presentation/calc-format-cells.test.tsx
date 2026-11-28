@@ -580,6 +580,15 @@ it("rolls back a newly added format on Cancel and accepts a comment on implicit 
   const saved = formatter.GetEntry(doc.GetNumberFormat(0, 0, 0));
   assert(saved);
   expect(text(saved.GetComment())).toBe("Reviewed");
+
+  const reopened = await readOdsDocument(await writeOdsDocument(doc));
+  try {
+    const reopenedEntry = reopened.GetFormatTable().GetEntry(reopened.GetNumberFormat(0, 0, 0));
+    assert(reopenedEntry);
+    expect(text(reopenedEntry.GetComment())).toBe("Reviewed");
+  } finally {
+    reopened.Dispose();
+  }
 });
 
 /** Opens the shared Area presentation through the native Calc Background tab. @returns Dialog and background queries. */

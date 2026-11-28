@@ -6592,7 +6592,7 @@ If iteration ends first, the result is false even when a bookmark contains
 the cursor. This can hide Edit Bookmark for the last bookmark until the
 entry is activated. Writer preserves the same decision.
 
-- [Original Navigator cursor comparison and bookmark activation](../../vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx)
+- [Original Navigator cursor comparison and bookmark activation](../../vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx#L5748)
 
 ### WRITER-790 — Previous heading skips the sole heading from a preceding paragraph
 
@@ -6604,3 +6604,16 @@ paragraph. Next heading from that position reaches the heading. Writer
 preserves this behavior.
 
 - [Original previous and next heading traversal](../../vendor/libreoffice-reference/sw/source/core/crsr/crstrvl.cxx#L1275)
+
+### WRITER-791 — ODF table-cell styles that share a format key also share its title
+
+Writer table-cell data styles use the shared ODF number-format importer.
+It reuses equal format codes and writes a nonempty `number:title` to the
+reused formatter entry. If two styles map to the same key with distinct
+titles, the last one resolved determines the title for both. The shared
+exporter writes titles only for user-defined formats, so a title imported
+on a built-in entry is lost on save. Writer retains this shared behavior.
+
+- [Original format key reuse](../../vendor/libreoffice-reference/xmloff/source/style/xmlnumfi.cxx#L1666)
+- [Original title assignment](../../vendor/libreoffice-reference/xmloff/source/style/xmlnumfi.cxx#L1715)
+- [Original title export](../../vendor/libreoffice-reference/xmloff/source/style/xmlnumfe.cxx#L1181)
