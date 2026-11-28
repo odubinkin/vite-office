@@ -1,10 +1,11 @@
 ---
 id: "202611281044-VNN6PH"
 title: "Align Writer ODT conditional and hidden text fields with native field ownership"
-status: "DOING"
+result_summary: "Aligned native Writer conditional and hidden text field ownership, expression updates and ODT serialization."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "output/playwright/odf-next-checkpoint/writer-conditional-verification.md"
   findings:
     - "Preserved the inverse hidden flag on IsConditionTrue. Hidden paragraph and database expansion are separate."
-commit: null
+commit:
+  hash: "f0559c622c8774db11a5120662d2875d297bc7df"
+  message: "🧩 VNN6PH writer: preserve native conditional and hidden text fields"
 comments:
   -
     author: "CODER"
     body: "Start: model conditional and hidden text through pinned inline-field owners, ODT and Worker."
+  -
+    author: "CODER"
+    body: "Verified: pinned Writer conditional text and preceding variable fixtures, hidden text and ODT Worker round trips; 8 focused and static checks passed."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "8 focused Writer checks including both pinned conditional fixtures through Worker and ODT, TypeScript, lint, boundaries, provenance and Writer inventory passed."
+  -
+    type: "status"
+    at: "2026-11-28T10:53:42.771Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: pinned Writer conditional text and preceding variable fixtures, hidden text and ODT Worker round trips; 8 focused and static checks passed."
 doc_version: 3
-doc_updated_at: "2026-11-28T10:52:38.885Z"
+doc_updated_at: "2026-11-28T10:53:42.771Z"
 doc_updated_by: "CODER"
 description: "Implement the represented SwHiddenTextField family, UNO descriptors, namespace-aware ODT import/export, numeric expression updates and Worker transfer. Replay the pinned native conditional text and preceding variable fixtures using focused checks. Preserve the existing save and open UI contracts."
 sections:
