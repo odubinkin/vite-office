@@ -1,10 +1,11 @@
 ---
 id: "202611280550-5KK1Q8"
 title: "Port native Calc ODS tracked cell content changes"
-status: "DOING"
+result_summary: "Calc roundtrips native ODS cell content changes, metadata, dependencies, protection and original author/date privacy through the Worker."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - "output/playwright/odf-next-checkpoint/change-track-verification.md"
   findings:
     - "The pinned change-tracking.ods and focused settings and workbook tests exercise action metadata, previous scalar values, privacy preferences and protection."
-commit: null
+commit:
+  hash: "a4cc0df5cf7029770e186acec2b4204cd0681fa7"
+  message: "🧩 5KK1Q8 calc: include ODS change track Worker transport"
 comments:
   -
     author: "CODER"
     body: "Start: adopt and export native Calc ODS cell content change actions."
+  -
+    author: "CODER"
+    body: "Verified: 21 focused Calc/shared tests, original change-tracking.ods, typecheck, lint, dependencies, provenance and zero Calc parity violations."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Pinned LibreOffice content-change fixture and 21 focused Calc/shared tests passed after updating the shared configuration assertion. Typecheck, lint, dependency boundaries, provenance and Calc parity passed. CALC-874/875 record original scalar behavior. Implementation 0d3fe7913 and Worker transport a4cc0df5c."
+  -
+    type: "status"
+    at: "2026-11-28T06:13:17.058Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: 21 focused Calc/shared tests, original change-tracking.ods, typecheck, lint, dependencies, provenance and zero Calc parity violations."
 doc_version: 3
-doc_updated_at: "2026-11-28T06:10:46.560Z"
+doc_updated_at: "2026-11-28T06:13:17.062Z"
 doc_updated_by: "CODER"
 description: "Build the native ScChangeTrack and ScChangeActionContent ownership needed for existing Calc cells, with ODF change info, previous values and content dependencies, export and Worker transport. Port the actual change-tracking.ods fixture and the original author/date privacy behavior for the represented change actions."
 sections:
