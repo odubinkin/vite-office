@@ -1,10 +1,11 @@
 ---
 id: "202611281054-0HRQHN"
 title: "Align Calc ODS text search and character-position functions with LibreOffice"
-status: "DOING"
+result_summary: "Aligned eight Calc text-position formulas, original parameter and error contracts, and shared TextSearch initialization."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "output/playwright/odf-next-checkpoint/calc-text-position-verification.md"
   findings:
     - "Documented the original mixed UTF-16 and code-point positions. The browser search service continues to bind the represented regex dialect."
-commit: null
+commit:
+  hash: "5301227c3932655f9f860db68b4c345930e1ea57"
+  message: "🧩 0HRQHN calc: evaluate ODS text position and search formulas"
 comments:
   -
     author: "CODER"
     body: "Start: align native text search and character-position formula families."
+  -
+    author: "CODER"
+    body: "Verified: pinned scalar FODS fixtures, SEARCH through Worker and ODS reopen, and mixed Unicode coordinates. All 22 focused tests and static checks passed."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "22 focused Calc/shared tests across six files, including pinned scalar FODS assertions and ODS Worker/reopen; TypeScript, lint, boundaries, provenance and inventory passed."
+  -
+    type: "status"
+    at: "2026-11-28T11:02:01.326Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: pinned scalar FODS fixtures, SEARCH through Worker and ODS reopen, and mixed Unicode coordinates. All 22 focused tests and static checks passed."
 doc_version: 3
-doc_updated_at: "2026-11-28T11:00:42.817Z"
+doc_updated_at: "2026-11-28T11:02:01.326Z"
 doc_updated_by: "CODER"
 description: "Implement native FIND, SEARCH, LEN, EXACT, LEFT, RIGHT, MID and REPLACE across the formula compiler and interpreter. Use native TextSearch parameter conversion and imported document search mode. Replay the relevant pinned FODS function assertions and ODS round trips with focused checks."
 sections:
