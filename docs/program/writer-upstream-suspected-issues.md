@@ -6454,3 +6454,24 @@ without the previous-day carry. Writer preserves the conversion.
 
 - [Original date and time property expansion](../../vendor/libreoffice-reference/sw/source/core/fields/flddat.cxx#L136)
 - [Original normalization of a negative time](../../vendor/libreoffice-reference/tools/source/datetime/datetime.cxx#L75)
+
+### WRITER-777 — Document information date and time fields omit the authored value
+
+The document-information date, time and editing-duration context imports the
+number style and fixed presentation. It ignores the authored numeric or
+calendar value. Export writes the optional data style and fixed flag without
+a value attribute. Live fields use the document properties, and fixed fields
+keep the stored presentation. Writer follows the original contract.
+
+- [Original document-information field input](../../vendor/libreoffice-reference/xmloff/source/text/txtfldi.cxx#L1634)
+- [Original field output and comment about missing value](../../vendor/libreoffice-reference/xmloff/source/text/txtflde.cxx#L1434)
+
+### WRITER-778 — Editing duration wraps after 24 hours without a number style
+
+The default editing-duration expansion passes the total hours to the locale's
+clock formatter. That formatter reduces hours modulo 24, so 25 hours appears
+as one hour. Explicit number formats receive the original elapsed-day value.
+Writer preserves the default and formatted paths.
+
+- [Original editing-duration expansion](../../vendor/libreoffice-reference/sw/source/core/fields/docufld.cxx#L965)
+- [Original locale time formatting](../../vendor/libreoffice-reference/unotools/source/i18n/localedatawrapper.cxx#L1173)

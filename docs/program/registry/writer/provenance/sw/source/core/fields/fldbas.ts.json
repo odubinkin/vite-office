@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/core/fields/fldbas.ts",
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/fields/fldbas.cxx",
+    "localSymbols": [
+      "SwValueFieldType"
+    ],
+    "upstreamSymbols": [
+      "SwValueFieldType::SwValueFieldType",
+      "SwValueFieldType::ExpandValue"
+    ],
+    "preservedResponsibilities": [
+      "Expands Writer numeric fields through the owning formatter, including original language-specific built-in formats and text value formatting."
+    ],
+    "omittedResponsibilities": [
+      "Calculated-field error resources and field families outside the represented date/time slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/fields/fldbas.ts",
+          "marker": "SwValueFieldType"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-doc-info-fields.test.ts",
+          "marker": "roundtrips live metadata"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/fields/fldbas.cxx",
+          "marker": "SwValueFieldType::SwValueFieldType"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/fields/fldbas.cxx",
+          "marker": "SwValueFieldType::ExpandValue"
+        }
+      ]
+    }
+  }
+}

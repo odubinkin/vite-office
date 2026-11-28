@@ -265,6 +265,9 @@ export class SwXGetReferenceField {
 /** Native descriptor for the represented document information services. */
 export class SwXDocInfoField {
   private fixed = false;
+  private date = false;
+  private automaticLanguage = true;
+  private format = 0;
   private presentation = "";
   private hint: SwTextDocInfoField | undefined;
 
@@ -289,6 +292,18 @@ export class SwXDocInfoField {
       case "Revision":
         scalar(input, "sal_Int32");
         break;
+      case "IsDate":
+        if (!this.HasDateTime()) unknown(property);
+        this.date = scalar(input, "bool") as boolean;
+        break;
+      case "NumberFormat":
+        if (!this.HasNumberFormat()) unknown(property);
+        this.format = (scalar(input, "sal_Int32") as number) >>> 0;
+        break;
+      case "IsFixedLanguage":
+        if (!this.HasNumberFormat()) unknown(property);
+        this.automaticLanguage = !(scalar(input, "bool") as boolean);
+        break;
       default:
         unknown(property);
     }
@@ -301,11 +316,19 @@ export class SwXDocInfoField {
     const node = position.GetNode().GetTextNode();
     if (!node) illegal("Writer document information field must be in text.");
     const type = node.GetDoc().getIDocumentFieldsAccess().GetDocInfoFieldType();
+    let subtype = this.subtype;
+    if (this.HasDateTime())
+      subtype =
+        (subtype & SwDocInfoSubType.LowerMask) |
+        (this.date ? SwDocInfoSubType.SubDate : SwDocInfoSubType.SubTime);
     const field = new SwDocInfoField(
       type,
-      this.subtype | (this.fixed ? SwDocInfoSubType.SubFixed : 0),
+      subtype | (this.fixed ? SwDocInfoSubType.SubFixed : 0),
+      undefined,
+      this.format,
     );
     if (this.presentation) field.SetExpansion(this.presentation);
+    field.SetAutomaticLanguage(this.automaticLanguage);
     const hint = new SwTextField(
       new SwFormatField(field, RES_TXTATR_FIELD),
       position.GetContentIndex(),
@@ -319,6 +342,18 @@ export class SwXDocInfoField {
     const hint = this.hint;
     this.hint = undefined;
     if (hint) hint.GetTextNode()?.EraseText(hint.GetStart(), 1);
+  }
+
+  /** Tests whether the service exposes the native IsDate property. @returns Calendar or clock service. */
+  private HasDateTime(): boolean {
+    return (this.subtype & SwDocInfoSubType.SubMask) === SwDocInfoSubType.SubDate;
+  }
+
+  /** Tests whether the original service exposes numeric formatting. @returns Format property availability. */
+  private HasNumberFormat(): boolean {
+    return (
+      this.HasDateTime() || (this.subtype & SwDocInfoSubType.LowerMask) === SwDocInfoSubType.Edit
+    );
   }
 }
 

@@ -129,7 +129,7 @@ export class XMLSimpleDocInfoImportContext extends SvXMLImportContext {
   /** Binds the native field service chosen by the element. @param helper - Text importer. @param field - Original service mapping. @param properties - Direct formatting. @param hyperlink - Optional link. @param characterStyles - Applied styles. */
   public constructor(
     protected readonly helper: XMLTextImportHelper,
-    private readonly field: XMLDocInfoField,
+    protected readonly field: XMLDocInfoField,
     private readonly properties: OdfCharacterProperties,
     private readonly hyperlink: OdfHyperlink | undefined,
     private readonly characterStyles: readonly XMLCharacterStyleLayer[],
@@ -178,6 +178,29 @@ export class XMLRevisionDocInfoImportContext extends XMLSimpleDocInfoImportConte
     const revision: [number] = [0];
     if (Converter.convertNumber(revision, this.content))
       this.helper.SetProperty(field, "Revision", revision[0], "sal_Int32");
+  }
+}
+
+/** Original DocInfo calendar and duration importer. The native descriptor accepts a presentation and format. */
+export class XMLDateTimeDocInfoImportContext extends XMLSimpleDocInfoImportContext {
+  private format: { key: number; systemLanguage: boolean } | undefined;
+
+  /** Collects native fixed and data style attributes. @param element - Field token. @param attributes - Source field attributes. */
+  public override startFastElement(element: XMLToken, attributes: FastAttributeList): void {
+    super.startFastElement(element, attributes);
+    const style = attributes.get(XMLToken.STYLE_DATA_STYLE_NAME);
+    if (style !== null) this.format = this.helper.GetDataStyleKey(style);
+  }
+
+  /** Prepares the format and date discriminator for the detached field. @param field - Native UNO descriptor. */
+  protected override PrepareField(field: XMLTextContent): void {
+    super.PrepareField(field);
+    const date = this.field[4];
+    if (date !== undefined) this.helper.SetProperty(field, "IsDate", date);
+    if (this.format) {
+      this.helper.SetProperty(field, "NumberFormat", this.format.key, "sal_Int32");
+      this.helper.SetProperty(field, "IsFixedLanguage", !this.format.systemLanguage);
+    }
   }
 }
 

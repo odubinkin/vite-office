@@ -51,7 +51,7 @@ export function exportDateTimeField(
   return `<text:${element}${style} text:${element}-value="${escapeXml(value)}"${fixed}${adjust}>${escapeXml(field.presentation)}</text:${element}>`;
 }
 
-/** Native ODF tag, UNO service suffix and fixed content property for each text DocInfo field. */
+/** Native ODF tag, UNO service, fixed content property and date discriminator for DocInfo fields. */
 export const docInfoFields = [
   [XMLToken.TEXT_TITLE, "title", "DocInfo.Title", "Content"],
   [XMLToken.TEXT_SUBJECT, "subject", "DocInfo.Subject", "Content"],
@@ -61,6 +61,19 @@ export const docInfoFields = [
   [XMLToken.TEXT_CREATOR, "creator", "DocInfo.ChangeAuthor", "Author"],
   [XMLToken.TEXT_PRINTED_BY, "printed-by", "DocInfo.PrintAuthor", "Author"],
   [XMLToken.TEXT_EDITING_CYCLES, "editing-cycles", "DocInfo.Revision", undefined],
+  [XMLToken.TEXT_CREATION_DATE, "creation-date", "DocInfo.CreateDateTime", undefined, true],
+  [XMLToken.TEXT_CREATION_TIME, "creation-time", "DocInfo.CreateDateTime", undefined, false],
+  [XMLToken.TEXT_MODIFICATION_DATE, "modification-date", "DocInfo.ChangeDateTime", undefined, true],
+  [
+    XMLToken.TEXT_MODIFICATION_TIME,
+    "modification-time",
+    "DocInfo.ChangeDateTime",
+    undefined,
+    false,
+  ],
+  [XMLToken.TEXT_PRINT_DATE, "print-date", "DocInfo.PrintDateTime", undefined, true],
+  [XMLToken.TEXT_PRINT_TIME, "print-time", "DocInfo.PrintDateTime", undefined, false],
+  [XMLToken.TEXT_EDITING_DURATION, "editing-duration", "DocInfo.EditTime", undefined],
 ] as const;
 
 /** One native simple DocInfo service mapping. */
@@ -73,6 +86,7 @@ export interface XMLDocInfoExportMarker {
   readonly element: XMLDocInfoField[1];
   readonly fixed: boolean;
   readonly presentation: string;
+  readonly styleName?: string;
 }
 
 /** Exports the native XMLTextFieldExport element and nondefault fixed flag. @param marker - Model portion. @param escapeXml - XML escaping. @returns Xml text field. */
@@ -81,7 +95,8 @@ export function exportDocInfoField(
   escapeXml: (value: string) => string,
 ): string {
   const fixed = marker.fixed ? ' text:fixed="true"' : "";
-  return `<text:${marker.element}${fixed}>${escapeXml(marker.presentation)}</text:${marker.element}>`;
+  const style = marker.styleName ? ` style:data-style-name="${escapeXml(marker.styleName)}"` : "";
+  return `<text:${marker.element}${style}${fixed}>${escapeXml(marker.presentation)}</text:${marker.element}>`;
 }
 
 /** Original ODF mapping of reference field parts. */

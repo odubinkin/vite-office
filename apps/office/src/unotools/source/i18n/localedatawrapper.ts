@@ -1,7 +1,8 @@
 /** @fileoverview Source LocaleDataWrapper measurement,numeric/date and loaded-Locale field projections over actual locale resources;no complete wrapper service is fabricated. */
 import type { DateConstReference } from "../../../tools/source/datetime/tdate";
+import type { TimeConstReference } from "../../../tools/source/datetime/ttime";
 import { Sequence } from "../../../cppu/inc/com/sun/star/uno/Sequence";
-import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
+import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { NumberFormatCodeMapper } from "../../../i18npool/inc/numberformatcode";
 import {
   getAllInstalledLocaleNames,
@@ -519,6 +520,18 @@ export class LocaleDataWrapper {
       default:
         return unicode(year + sep + month + sep + day);
     }
+  }
+  /** Formats the native 24-hour clock in the locale's separators. @param time - Native clock. @param seconds - Whether to include seconds. @param subseconds - Whether to include nanoseconds after seconds. @returns Owned locale time text. */
+  getTime(time: TimeConstReference, seconds: boolean, subseconds = false): OUString {
+    const hour = String(time.GetHour() % 24).padStart(2, "0");
+    const minute = String(time.GetMin()).padStart(2, "0");
+    const separator = text(this.timeSep);
+    let value = hour + separator + minute;
+    if (seconds) {
+      value += separator + String(time.GetSec()).padStart(2, "0");
+      if (subseconds) value += text(this.time100Sec) + String(time.GetNanoSec()).padStart(9, "0");
+    }
+    return unicode(value);
   }
   /** Original cached short date order. @returns DateOrder. */
   getDateOrder(): DateOrder {

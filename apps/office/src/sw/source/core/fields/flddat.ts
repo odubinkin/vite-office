@@ -1,27 +1,15 @@
 /** @fileoverview Native Writer date and time fields over the document number formatter. */
-import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { LANGUAGE_SYSTEM } from "../../../../i18nlangtag/inc/lang";
-import { doubleToUStringBuffer } from "../../../../sal/inc/rtl/math";
-import { rtl_math_StringFormat } from "../../../../sal/inc/rtl/math-values";
-import { OUStringBuffer } from "../../../../sal/inc/rtl/ustrbuf";
-import { OUString } from "../../../../sal/inc/rtl/ustring";
-import { NfIndexTableOffset, NUMBERFORMAT_ENTRY_NOT_FOUND } from "../../../../svl/inc/zforlist";
+import { NfIndexTableOffset } from "../../../../svl/inc/zforlist";
 import { DateTime } from "../../../../tools/source/datetime/datetime";
 import { Date } from "../../../../tools/source/datetime/tdate";
 import type { DateTime as UnoDateTime } from "../../../../offapi/com/sun/star/util/DateTime";
 import { SwDateTimeSubType, type SwField } from "../../../inc/fldbas";
 import type { SwDoc } from "../doc/doc";
+import { SwValueFieldType } from "./fldbas";
 
 /** Native document-owned date/time field type. */
-export class SwDateTimeFieldType {
-  /** Binds the system field type to its document. @param document - Owning document. */
-  public constructor(private readonly document: SwDoc) {}
-
-  /** Borrows the native owner. @returns Owning document. */
-  public GetDoc(): SwDoc {
-    return this.document;
-  }
-}
+export class SwDateTimeFieldType extends SwValueFieldType {}
 
 /** Original fixed or live scalar date/time field. */
 export class SwDateTimeField implements SwField<SwDateTimeField> {
@@ -102,12 +90,19 @@ export class SwDateTimeField implements SwField<SwDateTimeField> {
 
   /** Stores a date/time relative to the actual document null date. @param dateTime - Native value. */
   public SetDateTime(dateTime: DateTime): void {
-    this.SetValue(this.SerialValue(dateTime));
+    this.SetValue(SwDateTimeField.GetDateTime(this.type.GetDoc(), dateTime));
+  }
+
+  /** Converts native date/time using the actual formatter's null date. @param document - Owning document. @param value - Calendar date and clock. @returns Serial days. */
+  public static GetDateTime(document: SwDoc, value: DateTime): number {
+    return DateTime.Sub(value, new DateTime(document.GetNumberFormatter().GetNullDate()));
   }
 
   /** Reads the original fixed serial or the current local clock. @returns Date/time in serial days. */
   public GetValue(): number {
-    return this.IsFixed() ? this.value : this.SerialValue(new DateTime(DateTime.SYSTEM));
+    return this.IsFixed()
+      ? this.value
+      : SwDateTimeField.GetDateTime(this.type.GetDoc(), new DateTime(DateTime.SYSTEM));
   }
 
   /** Converts the original unadjusted presentation value back to UNO. @returns Date/time property. */
@@ -122,37 +117,8 @@ export class SwDateTimeField implements SwField<SwDateTimeField> {
 
   /** Expands the original value plus its minute offset in its native number format. @returns Field text. */
   public Expand(): string {
-    const formatter = this.type.GetDoc().GetNumberFormatter();
     const value = this.GetValue() + this.offset * (60 / 86400);
-    const output = new OUString();
-    try {
-      if (formatter.IsTextFormat(this.format)) {
-        const buffer = new OUStringBuffer();
-        const separator = formatter.GetFormatDecimalSep(this.format);
-        try {
-          doubleToUStringBuffer(
-            buffer,
-            value,
-            rtl_math_StringFormat.rtl_math_StringFormat_F,
-            12,
-            separator.getStr()[0] ?? 46,
-            true,
-          );
-          const input = buffer.makeStringAndClear();
-          try {
-            formatter.GetOutputString(input, this.format, output, [null]);
-          } finally {
-            input.dispose();
-          }
-        } finally {
-          separator.dispose();
-          buffer.dispose();
-        }
-      } else formatter.GetOutputString(value, this.format, output, [null]);
-      return text(output);
-    } finally {
-      output.dispose();
-    }
+    return this.type.ExpandValue(value, this.format);
   }
 
   /** Copies the native field state with the same document owner. @returns Detached field. */
@@ -163,29 +129,14 @@ export class SwDateTimeField implements SwField<SwDateTimeField> {
   /** Copies the field and remaps its document-local number format. @param document - Destination document. @returns Detached field. */
   public CopyToDocument(document: SwDoc): SwDateTimeField {
     if (document === this.type.GetDoc()) return this.Copy();
-    const entry = this.type.GetDoc().GetNumberFormatter().GetEntry(this.format);
-    const key: [number] = [0];
-    if (entry) {
-      const format = new OUString(entry.GetFormatstring());
-      try {
-        document.GetNumberFormatter().PutEntry(format, [0], [0], key, entry.GetLanguage());
-      } finally {
-        format.dispose();
-      }
-    }
     return this.CopyWithType(
       document.getIDocumentFieldsAccess().GetDateTimeFieldType(),
-      key[0] === NUMBERFORMAT_ENTRY_NOT_FOUND ? 0 : key[0],
+      this.type.CopyFormatToDocument(this.format, document),
     );
   }
 
   /** Releases field-specific state. The formatter remains owned by the document. */
   public Dispose(): void {}
-
-  /** Converts native date/time using the actual formatter's null date. @param value - Calendar date and clock. @returns Serial days. */
-  private SerialValue(value: DateTime): number {
-    return DateTime.Sub(value, new DateTime(this.type.GetDoc().GetNumberFormatter().GetNullDate()));
-  }
 
   /** Copies the source field state after selecting the native owner and its formatter key. @param type - Destination field type. @param format - Destination format key. @returns Detached field. */
   private CopyWithType(type: SwDateTimeFieldType, format: number): SwDateTimeField {

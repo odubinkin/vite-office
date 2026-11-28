@@ -73,12 +73,12 @@ it("retains the title field presentation from LibreOffice testFieldRotation", as
 });
 
 it("roundtrips live metadata and fixed presentations through the Worker", async () => {
-  const ns = `xmlns:office="${ODF_NAMESPACES.office}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:dc="${ODF_NAMESPACES.dc}" xmlns:meta="${ODF_NAMESPACES.meta}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:fo="${ODF_NAMESPACES.fo}"`;
+  const ns = `xmlns:office="${ODF_NAMESPACES.office}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:dc="${ODF_NAMESPACES.dc}" xmlns:meta="${ODF_NAMESPACES.meta}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:fo="${ODF_NAMESPACES.fo}" xmlns:number="${ODF_NAMESPACES.number}"`;
   const bytes = await packXmlPackage({
     mimetype: mime,
     "META-INF/manifest.xml": manifest,
-    "meta.xml": `<office:document-meta ${ns}><office:meta><dc:title>Live title</dc:title><dc:subject>Live subject</dc:subject><dc:description>Summary</dc:description><meta:keyword>one</meta:keyword><meta:keyword>two</meta:keyword><meta:initial-creator>Creator</meta:initial-creator><meta:creation-date>2020-02-07T13:06:45</meta:creation-date><dc:creator>Editor</dc:creator><dc:date>2020-02-07T14:00:00</dc:date><meta:printed-by>Print author without date</meta:printed-by><meta:editing-cycles>3</meta:editing-cycles></office:meta></office:document-meta>`,
-    "content.xml": `<office:document-content ${ns}><office:automatic-styles><style:style style:name="T1" style:family="text"><style:text-properties fo:font-weight="bold"/></style:style></office:automatic-styles><office:body><office:text><text:p><text:span text:style-name="T1"><text:title>Stale title</text:title></text:span>|<text:subject text:fixed="true">Fixed subject</text:subject>|<text:description/>|<text:keywords/>|<text:initial-creator/>|<text:creator/>|<text:printed-by>Stale</text:printed-by>|<text:editing-cycles text:fixed="true">0007</text:editing-cycles></text:p></office:text></office:body></office:document-content>`,
+    "meta.xml": `<office:document-meta ${ns}><office:meta><dc:title>Live title</dc:title><dc:subject>Live subject</dc:subject><dc:description>Summary</dc:description><meta:keyword>one</meta:keyword><meta:keyword>two</meta:keyword><meta:initial-creator>Creator</meta:initial-creator><meta:creation-date>2020-02-07T13:06:45</meta:creation-date><dc:creator>Editor</dc:creator><dc:date>2020-02-07T14:00:00</dc:date><meta:printed-by>Print author without date</meta:printed-by><meta:editing-cycles>3</meta:editing-cycles><meta:editing-duration>PT25H2M3S</meta:editing-duration></office:meta></office:document-meta>`,
+    "content.xml": `<office:document-content ${ns}><office:automatic-styles><style:style style:name="T1" style:family="text"><style:text-properties fo:font-weight="bold"/></style:style><number:date-style style:name="D" fo:language="en" fo:country="US"><number:year number:style="long"/><number:text>-</number:text><number:month number:style="long"/><number:text>-</number:text><number:day number:style="long"/></number:date-style></office:automatic-styles><office:body><office:text><text:p><text:span text:style-name="T1"><text:title>Stale title</text:title></text:span>|<text:subject text:fixed="true">Fixed subject</text:subject>|<text:description/>|<text:keywords/>|<text:initial-creator/>|<text:creator/>|<text:printed-by>Stale</text:printed-by>|<text:editing-cycles text:fixed="true">0007</text:editing-cycles>|<text:creation-date style:data-style-name="D" text:date-value="1999-01-01T00:00:00">Stale</text:creation-date>|<text:creation-time/>|<text:modification-time/>|<text:print-date text:fixed="true">Fixed date</text:print-date>|<text:editing-duration/></text:p></office:text></office:body></office:document-content>`,
   });
   const source = await readOdtDocument(bytes, metadata);
   let restored: SwDoc | undefined;
@@ -99,6 +99,11 @@ it("roundtrips live metadata and fixed presentations through the Worker", async 
       "Editor",
       "",
       "0007",
+      "2020-02-07",
+      "13:06",
+      "14:00",
+      "Fixed date",
+      "01:02:03",
     ];
     expect(fields(restored).map((hint) => hint.GetAttr().GetField().Expand())).toEqual(old);
     const title = unicode("Changed title");
@@ -111,6 +116,12 @@ it("roundtrips live metadata and fixed presentations through the Worker", async 
     const content = await (await DocumentArchive.open(saved)).readTextEntry("content.xml");
     expect(content).toMatch(/<text:span[^>]+><text:title>Changed title<\/text:title><\/text:span>/);
     expect(content).toContain('<text:subject text:fixed="true">Fixed subject</text:subject>');
+    expect(content).toMatch(
+      /<text:creation-date style:data-style-name="[^"]+">2020-02-07<\/text:creation-date>/,
+    );
+    expect(content).toMatch(
+      /<text:print-date style:data-style-name="[^"]+" text:fixed="true">Fixed date<\/text:print-date>/,
+    );
     expect(content).not.toContain(CH_TXTATR_BREAKWORD);
     reopened = (await readOdtDocument(saved, metadata)).document;
     expect(fields(reopened).map((hint) => hint.GetAttr().GetField().Expand())).toEqual([
@@ -121,5 +132,28 @@ it("roundtrips live metadata and fixed presentations through the Worker", async 
     source.document.Dispose();
     restored?.Dispose();
     reopened?.Dispose();
+  }
+});
+
+it("reads the native modification fields from the LibreOffice testBadSplitSection fixture", async () => {
+  const fixture = readFileSync(
+    "../../vendor/libreoffice-reference/sw/qa/core/layout/data/bad-split-section.odt",
+  );
+  const { document } = await readOdtDocument(new Uint8Array(fixture), metadata);
+  try {
+    const formats = fields(document).map((hint) => hint.GetAttr().GetField());
+    const date = formats.find(
+      (field) => field.GetSubType() === (SwDocInfoSubType.Change | SwDocInfoSubType.SubDate),
+    );
+    const time = formats.find(
+      (field) => field.GetSubType() === (SwDocInfoSubType.Change | SwDocInfoSubType.SubTime),
+    );
+    // The source references missing N36 and N61 definitions, so both fields use the locale defaults.
+    expect(date?.GetFormat()).toBe(0);
+    expect(time?.GetFormat()).toBe(0);
+    expect(date?.Expand()).toBe("03/06/2024");
+    expect(time?.Expand()).toBe("15:14");
+  } finally {
+    document.Dispose();
   }
 });

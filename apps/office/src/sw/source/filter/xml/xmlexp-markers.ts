@@ -121,15 +121,27 @@ export function projectParagraphMarkers(
         const subtype = field.GetSubType() & ~SwDocInfoSubType.SubFixed;
         const mapping = docInfoFields.find(
           /** Matches the native service selected by the subtype. @param entry - ODF service mapping. @returns Whether matched. */
-          ([, , service]) => docInfoServiceSubTypes[service] === subtype,
+          ([, , service, , date]) => {
+            const canonical = docInfoServiceSubTypes[service];
+            return (
+              (date === false
+                ? (canonical & SwDocInfoSubType.LowerMask) | SwDocInfoSubType.SubTime
+                : canonical) === subtype
+            );
+          },
         );
         if (!mapping) throw new Error("Unsupported Writer document information field subtype.");
+        const numeric = mapping[4] !== undefined || mapping[2] === "DocInfo.EditTime";
+        const styleName = numeric
+          ? anchored?.exportNumberStyle?.(field.GetFormat(), field.IsAutomaticLanguage())
+          : undefined;
         return {
           kind: "doc-info-field",
           offset: hint.GetStart(),
           element: mapping[1],
           fixed: field.IsFixed(),
           presentation: field.Expand(),
+          ...(styleName ? { styleName } : {}),
         };
       },
     ),

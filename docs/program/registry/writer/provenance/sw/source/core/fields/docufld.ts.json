@@ -16,12 +16,14 @@
       "SwPostItFieldType",
       "SwPostItField",
       "SwDocInfoFieldType",
-      "SwDocInfoField"
+      "SwDocInfoField",
+      "SwDocInfoFieldType::Expand"
     ],
     "preservedResponsibilities": [
       "Retains the document annotation type, native author and thread data, generated or imported identifier, and optional copied edit text snapshot.",
       "The system annotation field owner tracks the formats attached to this document and publishes their native names.",
-      "Expands textual document information through the native document properties owner and retains fixed presentations."
+      "Expands textual document information through the native document properties owner and retains fixed presentations.",
+      "Expands original creation, modification and print dates or times and editing duration using the document metadata and locale or format key."
     ],
     "omittedResponsibilities": [
       "Other field families and Writer sidebar interactions remain outside this represented slice."
@@ -65,6 +67,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/core/fields/docufld.cxx",
           "marker": "SwDocInfoField::SwDocInfoField"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/fields/docufld.cxx",
+          "marker": "SwDocInfoFieldType::Expand"
         }
       ]
     }

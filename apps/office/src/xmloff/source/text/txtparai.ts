@@ -18,6 +18,7 @@ import { XMLTextMarkImportContext } from "./XMLTextMarkImportContext";
 import {
   XMLReferenceFieldImportContext,
   XMLRevisionDocInfoImportContext,
+  XMLDateTimeDocInfoImportContext,
   XMLSimpleDocInfoImportContext,
   XMLDateFieldImportContext,
   XMLTimeFieldImportContext,
@@ -459,7 +460,9 @@ function createInlineContext(
     const Context =
       element === XMLToken.TEXT_EDITING_CYCLES
         ? XMLRevisionDocInfoImportContext
-        : XMLSimpleDocInfoImportContext;
+        : docInfo[4] !== undefined || element === XMLToken.TEXT_EDITING_DURATION
+          ? XMLDateTimeDocInfoImportContext
+          : XMLSimpleDocInfoImportContext;
     return new Context(paragraph, docInfo, properties, hyperlink, namedStyles);
   }
   if (element === XMLToken.TEXT_SOFT_PAGE_BREAK) {

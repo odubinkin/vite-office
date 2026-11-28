@@ -5,10 +5,16 @@ import { isAnnotationTextField } from "../../../inc/txtfld";
 import type { SwDoc } from "../doc/doc";
 import type { EditTextObject } from "../../../../editeng/source/editeng/editobj";
 import { DateTime } from "../../../../tools/source/datetime/datetime";
+import { Time } from "../../../../tools/source/datetime/ttime";
 import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { LANGUAGE_SYSTEM } from "../../../../i18nlangtag/inc/lang";
+import { convertLanguageToLocale } from "../../../../i18nlangtag/source/isolang/mslangid";
+import { LocaleDataWrapper } from "../../../../unotools/source/i18n/localedatawrapper";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
 import type { rtl_uStringSlot } from "../../../../sal/inc/rtl/ustring.h";
 import type { SwField } from "../../../inc/fldbas";
+import { SwDateTimeField } from "./flddat";
+import { SwValueFieldType } from "./fldbas";
 
 /** Original document information subtype and flag values. */
 export enum SwDocInfoSubType {
@@ -20,12 +26,16 @@ export enum SwDocInfoSubType {
   Change = 5,
   Print = 6,
   DocNo = 7,
+  Edit = 8,
   LowerMask = 0x00ff,
+  SubMask = 0x0f00,
   SubAuthor = 0x0100,
+  SubTime = 0x0200,
+  SubDate = 0x0300,
   SubFixed = 0x1000,
 }
 
-/** Native textual DocInfo values admitted from the represented UNO services. */
+/** Native DocInfo subtypes admitted from the represented UNO services. */
 export const docInfoServiceSubTypes = {
   "DocInfo.Title": SwDocInfoSubType.Title,
   "DocInfo.Subject": SwDocInfoSubType.Subject,
@@ -35,6 +45,10 @@ export const docInfoServiceSubTypes = {
   "DocInfo.ChangeAuthor": SwDocInfoSubType.Change | SwDocInfoSubType.SubAuthor,
   "DocInfo.PrintAuthor": SwDocInfoSubType.Print | SwDocInfoSubType.SubAuthor,
   "DocInfo.Revision": SwDocInfoSubType.DocNo,
+  "DocInfo.CreateDateTime": SwDocInfoSubType.Create | SwDocInfoSubType.SubDate,
+  "DocInfo.ChangeDateTime": SwDocInfoSubType.Change | SwDocInfoSubType.SubDate,
+  "DocInfo.PrintDateTime": SwDocInfoSubType.Print | SwDocInfoSubType.SubDate,
+  "DocInfo.EditTime": SwDocInfoSubType.Edit | SwDocInfoSubType.SubTime,
 } as const;
 
 /** Converts an owned string from the native document properties service. @param value - Owned result. @returns Text. */
@@ -47,18 +61,10 @@ function readDocInfoString(value: OUString): string {
 }
 
 /** System field type that expands metadata through its actual document owner. */
-export class SwDocInfoFieldType {
-  /** Binds the system field type to its document. @param document - Owning document. */
-  public constructor(private readonly document: SwDoc) {}
-
-  /** Returns the canonical document for this field type. @returns Owning document. */
-  public GetDoc(): SwDoc {
-    return this.document;
-  }
-
-  /** Expands the original textual property identified by the subtype. @param subtype - Native subtype and flags. @returns Property presentation. */
-  public Expand(subtype: number): string {
-    const properties = this.document.documentProperties.GetDocumentProperties();
+export class SwDocInfoFieldType extends SwValueFieldType {
+  /** Expands the original property identified by the subtype. @param subtype - Native subtype and flags. @param format - Document number format. @param language - Field language. @returns Property presentation. */
+  public Expand(subtype: number, format = 0, language = LANGUAGE_SYSTEM): string {
+    const properties = this.GetDoc().documentProperties.GetDocumentProperties();
     switch (subtype & SwDocInfoSubType.LowerMask) {
       case SwDocInfoSubType.Title:
         return readDocInfoString(properties.getTitle());
@@ -68,6 +74,17 @@ export class SwDocInfoFieldType {
         return readDocInfoString(properties.getDescription());
       case SwDocInfoSubType.DocNo:
         return String(properties.getEditingCycles());
+      case SwDocInfoSubType.Edit: {
+        const duration = properties.getEditingDuration();
+        if (format) return this.ExpandValue(duration / Number(Time.secondPerDay), format, language);
+        const seconds = duration % 60;
+        return this.FormatClock(
+          new Time(Math.trunc(duration / 3600), Math.trunc((duration % 3600) / 60), seconds),
+          false,
+          seconds > 0,
+          language,
+        );
+      }
       case SwDocInfoSubType.Keys: {
         const keywords = properties.getKeywords();
         try {
@@ -84,19 +101,70 @@ export class SwDocInfoFieldType {
         }
       }
       case SwDocInfoSubType.Create:
-        return new DateTime(properties.getCreationDate()).IsValidAndGregorian()
-          ? readDocInfoString(properties.getAuthor())
-          : "";
+        return this.ExpandStamp(
+          subtype,
+          new DateTime(properties.getCreationDate()),
+          format,
+          language,
+          () => properties.getAuthor(),
+        );
       case SwDocInfoSubType.Change:
-        return new DateTime(properties.getModificationDate()).IsValidAndGregorian()
-          ? readDocInfoString(properties.getModifiedBy())
-          : "";
+        return this.ExpandStamp(
+          subtype,
+          new DateTime(properties.getModificationDate()),
+          format,
+          language,
+          () => properties.getModifiedBy(),
+        );
       case SwDocInfoSubType.Print:
-        return new DateTime(properties.getPrintDate()).IsValidAndGregorian()
-          ? readDocInfoString(properties.getPrintedBy())
-          : "";
+        return this.ExpandStamp(
+          subtype,
+          new DateTime(properties.getPrintDate()),
+          format,
+          language,
+          () => properties.getPrintedBy(),
+        );
       default:
         return "";
+    }
+  }
+
+  /** Expands a valid timestamp or its author according to the original subtype. @param subtype - Native flags. @param stamp - Calendar value. @param format - Number format. @param language - Field language. @param author - Owned author property. @returns Field text. */
+  private ExpandStamp(
+    subtype: number,
+    stamp: DateTime,
+    format: number,
+    language: number,
+    author: () => OUString,
+  ): string {
+    if (!stamp.IsValidAndGregorian()) return "";
+    const display = subtype & SwDocInfoSubType.SubMask;
+    if (display === SwDocInfoSubType.SubAuthor) return readDocInfoString(author());
+    if (!display) return "";
+    if (format)
+      return this.ExpandValue(SwDateTimeField.GetDateTime(this.GetDoc(), stamp), format, language);
+    return this.FormatClock(stamp, display === SwDocInfoSubType.SubDate, false, language);
+  }
+
+  /** Formats a date or a clock with the original locale owner. @param time - Native calendar or clock. @param date - Whether to show the date. @param seconds - Whether to include clock seconds. @param language - Field language. @returns Date or time presentation. */
+  private FormatClock(
+    time: DateTime | Time,
+    date: boolean,
+    seconds: boolean,
+    language: number,
+  ): string {
+    const locale = convertLanguageToLocale(language, false);
+    try {
+      const data = new LocaleDataWrapper(locale);
+      try {
+        return readDocInfoString(
+          date && time instanceof DateTime ? data.getDate(time) : data.getTime(time, seconds),
+        );
+      } finally {
+        data.dispose();
+      }
+    } finally {
+      locale.dispose();
     }
   }
 }
@@ -104,14 +172,16 @@ export class SwDocInfoFieldType {
 /** Native text document-information field and its expansion state. */
 export class SwDocInfoField implements SwField<SwDocInfoField> {
   private content: string;
+  private automaticLanguage = true;
 
-  /** Initializes the original expansion from document properties. @param type - System field type. @param subtype - Native subtype and flags. */
+  /** Initializes the original expansion from document properties. @param type - System field type. @param subtype - Native subtype and flags. @param content - Stored presentation. @param format - Document number-format key. */
   public constructor(
     private readonly type: SwDocInfoFieldType,
     private readonly subtype: number,
     content?: string,
+    private readonly format = 0,
   ) {
-    this.content = content ?? type.Expand(subtype);
+    this.content = content ?? type.Expand(subtype, format);
   }
 
   /** Borrows the original system field type. @returns Field type. */
@@ -129,6 +199,21 @@ export class SwDocInfoField implements SwField<SwDocInfoField> {
     return Boolean(this.subtype & SwDocInfoSubType.SubFixed);
   }
 
+  /** Reads the original number-format key. @returns Document format. */
+  public GetFormat(): number {
+    return this.format;
+  }
+
+  /** Reads whether the field follows automatic language selection. @returns Native flag. */
+  public IsAutomaticLanguage(): boolean {
+    return this.automaticLanguage;
+  }
+
+  /** Sets the native automatic language flag. @param automatic - Whether language follows the field context. */
+  public SetAutomaticLanguage(automatic: boolean): void {
+    this.automaticLanguage = automatic;
+  }
+
   /** Updates the native stored presentation. @param content - Current presentation. */
   public SetExpansion(content: string): void {
     this.content = content;
@@ -137,26 +222,33 @@ export class SwDocInfoField implements SwField<SwDocInfoField> {
   /** Expands live metadata and retains the presentation of fixed fields. @returns Current text. */
   public Expand(): string {
     if (!this.IsFixed() && this.type.GetDoc().documentProperties.GetPendingXml() === undefined)
-      this.content = this.type.Expand(this.subtype);
+      this.content = this.type.Expand(this.subtype, this.format);
     return this.content;
   }
 
   /** Copies field and stored expansion. @returns Copy for the same owner. */
   public Copy(): SwDocInfoField {
-    return new SwDocInfoField(this.type, this.subtype, this.content);
+    return this.CopyWithType(this.type, this.format);
   }
 
   /** Copies the field into its destination's original system field type. @param document - Destination model. @returns Detached copy. */
   public CopyToDocument(document: SwDoc): SwDocInfoField {
-    return new SwDocInfoField(
+    if (document === this.type.GetDoc()) return this.Copy();
+    return this.CopyWithType(
       document.getIDocumentFieldsAccess().GetDocInfoFieldType(),
-      this.subtype,
-      this.content,
+      this.type.CopyFormatToDocument(this.format, document),
     );
   }
 
-  /** Releases field-specific state. Textual document information owns no disposable values. */
+  /** Releases field-specific state. */
   public Dispose(): void {}
+
+  /** Copies native state after choosing the destination type and format. @param type - Destination system type. @param format - Destination format. @returns Detached field. */
+  private CopyWithType(type: SwDocInfoFieldType, format: number): SwDocInfoField {
+    const result = new SwDocInfoField(type, this.subtype, this.content, format);
+    result.SetAutomaticLanguage(this.automaticLanguage);
+    return result;
+  }
 }
 
 let nextPostItId = 1;
