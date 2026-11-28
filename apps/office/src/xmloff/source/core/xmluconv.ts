@@ -231,3 +231,19 @@ export function encodeStyleName(name: string): string {
   }
   return encoded.length <= 0x7fff ? encoded : name;
 }
+
+/** Serializes a bounded twip margin as an ODF centimetre length. @param twips - Margin in twips. @returns ODF length. */
+export function exportOdfLength(twips: number): string {
+  const centimetres = (twips * 2.54) / 1440;
+  return `${Number(centimetres.toFixed(4))}cm`;
+}
+
+/** Escapes XML character data. @param value - Raw text. @returns XML-safe text. */
+export function escapeXml(value: string): string {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&apos;");
+}

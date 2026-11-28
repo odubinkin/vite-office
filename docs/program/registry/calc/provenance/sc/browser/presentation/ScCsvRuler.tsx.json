@@ -20,7 +20,7 @@
           "marker": "ScCsvRuler"
         },
         {
-          "path": "apps/office/src/sc/browser/presentation/calc-cell-clipboard.test.tsx",
+          "path": "apps/office/src/sc/browser/presentation/calc-clipboard-text-import.test.tsx",
           "marker": "keeps Unicode fixed-width preview and pasted columns on the same ruler positions"
         }
       ]

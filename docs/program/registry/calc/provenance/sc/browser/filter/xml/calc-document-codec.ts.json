@@ -22,7 +22,7 @@
           "path": "apps/office/src/sc/browser/filter/xml/calc-document-codec.ts"
         },
         {
-          "path": "apps/office/src/sc/browser/filter/xml/calc-document-codec.ts",
+          "path": "apps/office/src/sc/browser/filter/xml/calc-document-encode.ts",
           "marker": "textStyles.collect"
         },
         {
@@ -58,7 +58,7 @@
           "marker": "round-trips native ODF cache formats and source filter metadata"
         },
         {
-          "path": "apps/office/src/sc/browser/filter/xml/calc-document-codec.ts",
+          "path": "apps/office/src/sc/browser/filter/xml/calc-document-encode.ts",
           "marker": "encodeCalcCellNote"
         },
         {
@@ -70,7 +70,7 @@
           "marker": "testThreadedCommentOdsRoundtrip"
         },
         {
-          "path": "apps/office/src/sc/browser/filter/xml/calc-document-codec.ts",
+          "path": "apps/office/src/sc/browser/filter/xml/calc-document-encode.ts",
           "marker": "encodeCalcDatabaseRanges"
         },
         {

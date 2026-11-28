@@ -52,8 +52,9 @@ class XMLChangeElementImportContext extends SvXMLImportContext {
   ): SvXMLImportContext | null {
     if (element === XMLToken.OFFICE_CHANGE_INFO)
       return new XMLChangeInfoContext(
-        /** Completes the metadata for this change layer. @param info - Metadata. */ (info) =>
-          this.owner.SetChangeInfo(this.kind, info),
+        /** Completes the metadata for this change layer. @param info - Metadata. @returns Nothing. */ (
+          info,
+        ) => this.owner.SetChangeInfo(this.kind, info),
       );
     return this.kind === "deletion" ? this.owner.UseRedlineText(element, attributes) : null;
   }

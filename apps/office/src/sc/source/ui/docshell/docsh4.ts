@@ -36,7 +36,7 @@ export function RenamePageStyle(style: SfxStyleSheetBase, name: string): boolean
   }
 }
 
-/** Initializes the original page style dialog using a retained snapshot. @param shell - Workbook shell. @param style - Active page style. @param snapshot - Original style snapshot. @returns Dialog request. */
+/** Initializes the original page style dialog using a retained snapshot. @param shell - Workbook shell. @param style - Active page style. @param snapshot - Original style snapshot. @param tab - Index of the sheet supplying the page context. @returns Dialog request. */
 export function CreatePageStyleRequest(
   shell: ScDocShell,
   style: SfxStyleSheetBase,

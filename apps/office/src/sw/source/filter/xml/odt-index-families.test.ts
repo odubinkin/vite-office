@@ -74,9 +74,15 @@ it("preserves the configured alphabetical index and the separator template", /**
     );
     expect(tox.form.GetFormMax()).toBe(5);
     expect(tox.form.GetTemplate(1)).toBe("Index Separator");
-    expect(tox.form.GetPattern(1).map((token) => token.eTokenType)).toEqual([
-      FormTokenType.EntryText,
-    ]);
+    expect(
+      tox.form
+        .GetPattern(1)
+        .map(
+          /** Reads the entry's `eTokenType` field. @param token - Collection entry. @returns The field value. */ (
+            token,
+          ) => token.eTokenType,
+        ),
+    ).toEqual([FormTokenType.EntryText]);
     const [title] = document.GetNodes().GetSectionBlocks(node);
     expect(title instanceof SwSectionNode && title.GetSection().GetSectionData().type).toBe(
       SectionType.ToxHeader,
@@ -152,7 +158,15 @@ it.each([
       expect(tox.fromObjectNames).toBe(false);
       expect(tox.form.GetFormMax()).toBe(2);
       expect(tox.form.GetTemplate(1)).toBe(fixture.style);
-      expect(tox.form.GetPattern(1).map((token) => token.eTokenType)).toEqual([
+      expect(
+        tox.form
+          .GetPattern(1)
+          .map(
+            /** Reads the entry's `eTokenType` field. @param token - Collection entry. @returns The field value. */ (
+              token,
+            ) => token.eTokenType,
+          ),
+      ).toEqual([
         FormTokenType.LinkStart,
         FormTokenType.Entry,
         FormTokenType.TabStop,

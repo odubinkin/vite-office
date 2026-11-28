@@ -652,11 +652,11 @@ export class XMLTextImportHelper {
   }
 
   private readonly sequenceIds = new XMLPropertyBackpatcher<number>(
-    /** Sets the original UNO sequence number. @param field - Dependent reference. @param id - Native sequence identity. */
+    /** Sets the original UNO sequence number. @param field - Dependent reference. @param id - Native sequence identity. @returns Nothing. */
     (field, id) => this.SetProperty(field, "SequenceNumber", id, "sal_Int16"),
   );
   private readonly sequenceNames = new XMLPropertyBackpatcher<string>(
-    /** Sets the original UNO reference source name. @param field - Dependent reference. @param name - Sequence master name. */
+    /** Sets the original UNO reference source name. @param field - Dependent reference. @param name - Sequence master name. @returns Nothing. */
     (field, name) => this.SetProperty(field, "SourceName", name),
   );
 

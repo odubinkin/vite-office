@@ -1,9 +1,30 @@
 /** @fileoverview Replays complete original lookup, width and iterator streams with actual shared owners and initialized-field masks. */
 import { createHash } from "node:crypto";
+import { readFileSync } from "node:fs";
+import { URL } from "node:url";
 import { gunzipSync } from "node:zlib";
 import { expect, test, vi } from "vitest";
-import fixture from "./native-casefolding-iterator-cases.json";
 import type { MappingElement as State } from "../../inc/casefolding";
+
+/** Original initialized values read directly from the capture file. */
+interface NativeFixture {
+  readonly captures: Record<
+    "tables" | "lookup" | "points" | "histories",
+    { readonly gzipBase64: string; readonly rawBytes: number; readonly rawHash: string }
+  >;
+  readonly getters: readonly string[];
+  readonly moduleNames: readonly string[];
+  readonly extraNames: readonly string[];
+  readonly flagNames: readonly string[];
+  readonly pointFlags: readonly number[];
+  readonly lookupFlags: readonly number[];
+  readonly histories: readonly (readonly number[])[];
+  readonly languages: readonly string[];
+}
+
+const fixture = JSON.parse(
+  readFileSync(new URL("./native-casefolding-iterator-cases.json", import.meta.url), "utf8"),
+) as NativeFixture;
 
 /** Whole lossless initialized native stream reader. */
 class NativeWords {

@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "local-infrastructure",
+    "localPath": "apps/office/src/sc/browser/filter/xml/calc-document-encode.ts",
+    "status": "local-only",
+    "rationale": "Encodes native Calc workbook state for ODF worker transfer without changing the existing snapshot format.",
+    "responsibilities": [
+      "Encodes native Calc workbook state for ODF worker transfer without changing the existing snapshot format."
+    ],
+    "stackDivergence": {
+      "kind": "local-infrastructure",
+      "rationale": "Browser workers exchange detached workbook records outside the native ODF document format."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/browser/filter/xml/calc-document-encode.ts",
+          "marker": "encodeSteps"
+        },
+        {
+          "path": "apps/office/src/sc/browser/filter/xml/calc-document-codec.ts",
+          "marker": "encodeCalcDocumentAsync"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods.test.ts",
+          "marker": "processOdsWorkerRequest"
+        }
+      ]
+    }
+  }
+}

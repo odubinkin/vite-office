@@ -20,11 +20,11 @@
           "marker": "ScClipboardFormatDlg"
         },
         {
-          "path": "apps/office/src/sc/browser/presentation/calc-cell-clipboard.test.tsx",
+          "path": "apps/office/src/sc/browser/presentation/calc-clipboard-text-import.test.tsx",
           "marker": "uses the available external text format"
         },
         {
-          "path": "apps/office/src/sc/browser/presentation/calc-cell-clipboard.test.tsx",
+          "path": "apps/office/src/sc/browser/presentation/calc-clipboard-text-import.test.tsx",
           "marker": "dispatches the explicit text import command"
         }
       ]

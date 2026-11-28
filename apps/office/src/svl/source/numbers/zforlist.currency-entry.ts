@@ -66,15 +66,16 @@ export class NfCurrencyEntry {
   private readonly negativeFormat: number;
   private readonly digits: number;
   private readonly cZeroChar: number;
-  /** Initializes the source wrapper fallback or Currency2 row, preserving the row's own digits. @param first - Wrapper or currency row. @param second - Language or wrapper. @param third - Row language.  @returns Constructed instance. */
+  /** Copies the existing entry and its owned symbols. @param source - Original entry. @returns The copied currency entry. */
   constructor(source: NfCurrencyEntry);
+  /** Reads the default currency for a locale. @param wrapper - Locale data provider. @param language - Currency entry language. @returns The initialized currency entry. */
   constructor(wrapper: LocaleDataWrapper, language: number);
-  /** Computes the currency result. @param currency - Currency. @param wrapper - Wrapper. @param language - Language. @returns Constructed instance. */ constructor(
+  /** Reads the specified currency row and preserves its own digit count. @param currency - Selected locale currency. @param wrapper - Locale data provider. @param language - Currency entry language. @returns The initialized currency entry. */ constructor(
     currency: LocaleCurrency,
     wrapper: LocaleDataWrapper,
     language: number,
   );
-  /** Computes the first result. @param first - First. @param second - Second. @param third - Third. @returns Constructed instance. */ constructor(
+  /** Dispatches the copy, locale-default and explicit currency-row constructors. @param first - Existing entry, locale provider or currency row. @param second - Locale-default language or provider for the specified row. @param third - Language for the specified row. @returns The initialized currency entry. */ constructor(
     first: LocaleDataWrapper | LocaleCurrency | NfCurrencyEntry,
     second?: number | LocaleDataWrapper,
     third?: number,

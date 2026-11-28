@@ -3,6 +3,7 @@ import { expect, it } from "vitest";
 import { ScDocShell } from "../docshell/docsh";
 import { ScTabViewShell } from "./tabvwsh4";
 import { ScAddress, ScRange } from "../../../inc/address";
+import { ScMarkData } from "../../../inc/markdata";
 import { ATTR_BACKGROUND, ATTR_FONT_WEIGHT } from "../../../inc/scitems";
 import { ScTableProtection } from "../../core/data/tabprotection";
 import { SvxBrushItem } from "../../../../editeng/inc/brushitem";
@@ -10,6 +11,28 @@ import { SvxWeightItem } from "../../../../editeng/inc/wghtitem";
 import { FontWeight } from "../../../../tools/inc/fontenum";
 import { Color } from "../../../../tools/inc/color";
 import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+
+it("applies a style to the surviving sheet when a saved selection includes a deleted sheet", /** Checks a selection captured before a worksheet was deleted. @returns Nothing. */ () => {
+  const shell = new ScDocShell();
+  const doc = shell.GetDocument();
+  try {
+    expect(doc.InsertTab(1, unicode("Temporary"))).toBe(true);
+    const marks = new ScMarkData(doc.GetSheetLimits());
+    marks.SelectTable(0, true);
+    marks.SelectTable(1, true);
+    marks.SetMarkArea(new ScRange(0, 0, 0, 0, 0, 0));
+    expect(doc.DeleteTab(1)).toBe(true);
+    const style = doc.GetStyleSheetPool()?.EnsureStandardCellStyle("Good");
+    if (!style) throw new Error("Missing Calc style");
+
+    doc.ApplySelectionStyle(style, marks);
+
+    expect(doc.GetPattern(new ScAddress(0, 0, 0))?.GetStyleSheet()).toBe(style);
+    expect(doc.GetTableCount()).toBe(1);
+  } finally {
+    shell.Close();
+  }
+});
 
 it("applies a named style on the real cursor and restores selective hard formatting with Undo", /** Covers source SetStyleSheetToMarked and ScUndoSelectionStyle single-cell behavior. @returns Nothing. */ () => {
   const shell = new ScDocShell(),

@@ -23,7 +23,11 @@
       "knownViolations": [],
       "localSymbols": [
         "paragraphPropertiesKey",
-        "parseParagraphPropertiesKey"
+        "parseParagraphPropertiesKey",
+        "exportParagraphAttributes",
+        "exportParagraphPropertyChildren",
+        "exportCharacterAttributes",
+        "exportCharacterPropertyElement"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "xmloff/source/text/txtparae.cxx",

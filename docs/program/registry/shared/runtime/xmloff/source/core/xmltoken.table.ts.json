@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/xmloff/source/core/xmltoken.table.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "odf-filter",
+    "capabilityIds": [
+      "CAP-0113"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "justification": "Registers the original expanded-name tokens for tracked spreadsheet changes, linked data, database ranges and scenarios.",
+      "evidence": [
+        "apps/office/src/xmloff/source/core/xmltoken.table.ts#createTrackedChangeTokens",
+        "apps/office/src/xmloff/source/core/xmltoken.table.ts#createSheetDataTokens",
+        "vendor/libreoffice-reference/xmloff/source/core/xmltoken.cxx#XML_TRACKED_CHANGES",
+        "vendor/libreoffice-reference/xmloff/source/core/xmltoken.cxx#XML_DATABASE_RANGES"
+      ],
+      "knownViolations": [],
+      "localSymbols": [
+        "createTrackedChangeTokens",
+        "createSheetDataTokens"
+      ],
+      "upstreamSymbols": [
+        "XML_TRACKED_CHANGES",
+        "XML_DATABASE_RANGES"
+      ],
+      "upstreamFile": "xmloff/source/core/xmltoken.cxx",
+      "sourceResponsibility": "unverified"
+    }
+  }
+}

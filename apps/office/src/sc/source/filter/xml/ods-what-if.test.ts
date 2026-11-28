@@ -128,9 +128,13 @@ it("preserves original per-sheet scenario flags and marked ranges", /** Verifies
       );
       expect(color.toUInt32()).toBe(0);
       expect(comment).toBe("Variant");
-      expect([...table.GetScenarioRanges()].map((range) => range.GetVars())).toEqual([
-        [1, 1, 1, 2, 3, 1],
-      ]);
+      expect(
+        [...table.GetScenarioRanges()].map(
+          /** Calls `GetVars` for each entry. @param range - Collection entry. @returns The projected entry value. */ (
+            range,
+          ) => range.GetVars(),
+        ),
+      ).toEqual([[1, 1, 1, 2, 3, 1]]);
     },
   );
   expect(saved).toContain('table:scenario-ranges="Alternate.B2:Alternate.C4"');

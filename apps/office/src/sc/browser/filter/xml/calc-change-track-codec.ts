@@ -191,7 +191,15 @@ export function encodeCalcChangeTrack(
           /** Reads native action identity. @param dependent - Native linked action. @returns Identity. */
           (dependent) => dependent.GetActionNumber(),
         ),
-        ...(deleted.length ? { deleted: deleted.map((link) => link.GetActionNumber()) } : {}),
+        ...(deleted.length
+          ? {
+              deleted: deleted.map(
+                /** Calls `GetActionNumber` for each entry. @param link - Collection entry. @returns The projected entry value. */ (
+                  link,
+                ) => link.GetActionNumber(),
+              ),
+            }
+          : {}),
       };
       if (action instanceof ScChangeActionContent)
         return {

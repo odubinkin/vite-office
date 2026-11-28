@@ -2,10 +2,6 @@
  * @fileoverview Reimplements the bounded ODF text paragraph export boundary from pinned LibreOffice `xmloff/source/text/txtparae.cxx`.
  */
 import { exportRedlineMarker, type XMLRedlineExportMarker } from "./XMLRedlineExport";
-import { FontPitch } from "../../../tools/inc/fontenum";
-import { RTL_TEXTENCODING_DONTKNOW } from "../../../sal/inc/rtl/textenc";
-import { exportInlineFont, getFontFamilyFromGeneric } from "../style/fonthdl";
-import { XMLShadowPropHdl } from "../style/shadwhdl";
 import { exportIndexMark, type XMLIndexMarkExportMarker } from "./XMLIndexMarkExport";
 import {
   exportAnnotation,
@@ -36,15 +32,15 @@ import {
   type XMLReferenceFieldExportMarker,
 } from "./txtflde";
 import type { XMLTextFrameExportSource } from "./XMLTextFrameExport";
-import { exportFillProperties } from "../draw/fill-properties";
-import { paragraphPropertiesKey, parseParagraphPropertiesKey } from "./txtparae-properties";
-import { exportTextConstant } from "./txtprhdl";
-import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
-import { exportParagraphAsianTypography } from "./txtprhdl";
-import { exportWritingDirection } from "../style/prhdlfac";
-import { encodeStyleName, SvXMLUnitConverter } from "../core/xmluconv";
-import { exportParagraphJustification, type OdfParagraphAlignment } from "../style/adjushdl";
-import { XMLNumberWithAutoForVoidPropHdl } from "../style/xmlbahdl";
+import {
+  exportCharacterPropertyElement,
+  exportParagraphAttributes,
+  exportParagraphPropertyChildren,
+  paragraphPropertiesKey,
+  parseParagraphPropertiesKey,
+} from "./txtparae-properties";
+import { encodeStyleName, escapeXml, exportOdfLength } from "../core/xmluconv";
+import type { OdfParagraphAlignment } from "../style/adjushdl";
 import type { SvXMLGraphicHelper } from "../core/xmlgrhlp";
 import { SvxXMLNumRuleExport, type XMLListLevelExport } from "../style/xmlnume";
 import { exportRubyStyle } from "./txtprhdl";
@@ -55,14 +51,15 @@ import type {
   OdfCharacterProperties,
   OdfParagraphProperties,
 } from "./txtparae.types";
-import { createOdfThemeColor, exportComplexColor } from "./XMLComplexColorContext";
-import {
-  exportParagraphHyphenation,
-  exportTextCharacterProperties,
-  exportTextLanguageProperties,
-} from "./txtprmap";
 import { XMLTextNumRuleInfo } from "./XMLTextNumRuleInfo";
 export { ODF_NAMESPACES } from "../core/xmltoken";
+export { escapeXml, exportOdfLength } from "../core/xmluconv";
+export {
+  exportCharacterAttributes,
+  exportCharacterPropertyElement,
+  exportParagraphAttributes,
+  exportParagraphPropertyChildren,
+} from "./txtparae-properties";
 
 export type { OdfCharacterProperties, OdfParagraphProperties, OdfTabStop } from "./txtparae.types";
 
@@ -490,7 +487,7 @@ export function exportTextParagraphs(
   ).Export();
 }
 
-/** Emits the ordered paragraph stream, nesting list paragraphs in text:list/text:list-item elements. @param paragraphs - Flat paragraph sequence. @param paragraphStyleNames - Automatic paragraph styles. @param characterStyleNames - Automatic text styles. @param listStyleNames - Automatic list styles. @param isCancelled - Cancellation probe. @param listIdentities - Shared export-pass list catalogue. @param usedXmlIds - Shared unique XML identities. @param renderFrame - Native frame body exporter. @returns ODF body fragment. */
+/** Emits the ordered paragraph stream, nesting list paragraphs in text:list/text:list-item elements. @param paragraphs - Flat paragraph sequence. @param paragraphStyleNames - Automatic paragraph styles. @param characterStyleNames - Automatic text styles. @param listStyleNames - Automatic list styles. @param isCancelled - Cancellation probe. @param listIdentities - Shared export-pass list catalogue. @param usedXmlIds - Shared unique XML identities. @param renderFrame - Native frame body exporter. @param rubyStyleNames - Automatic ruby style names keyed by the projected properties. @returns ODF body fragment. */
 function exportParagraphBody(
   paragraphs: Iterable<XMLTextParagraphSource>,
   paragraphStyleNames: ReadonlyMap<string, string>,
@@ -609,7 +606,7 @@ function exportParagraphBody(
   return body;
 }
 
-/** Emits one paragraph or heading element without list containers. @param paragraph - Neutral paragraph. @param paragraphStyleNames - Automatic paragraph styles. @param characterStyleNames - Automatic text styles. @param renderFrame - Native frame body exporter. @returns Element XML. */
+/** Emits one paragraph or heading element without list containers. @param paragraph - Neutral paragraph. @param paragraphStyleNames - Automatic paragraph styles. @param characterStyleNames - Automatic text styles. @param renderFrame - Native frame body exporter. @param rubyStyleNames - Automatic ruby style names keyed by the projected properties. @returns Element XML. */
 function exportParagraphElement(
   paragraph: XMLTextParagraphSource,
   paragraphStyleNames: ReadonlyMap<string, string>,
@@ -879,147 +876,14 @@ function paragraphStyleKey(
   ]);
 }
 
-/** Emits supported ODF paragraph-property attributes. @param properties - Direct properties. @returns Attributes. */
-export function exportParagraphAttributes(properties: OdfParagraphProperties): string[] {
-  const verticalAlign = exportTextConstant("paragraphVerticalAlign", properties.verticalAlign);
-  return [
-    ...exportFillProperties(properties),
-    ...(properties.joinBorder === undefined
-      ? []
-      : [`style:join-border="${properties.joinBorder}"`]),
-    ...(properties.paragraphShadow === undefined
-      ? []
-      : [`style:shadow="${new XMLShadowPropHdl().exportXML(properties.paragraphShadow)}"`]),
-    ...(["Top", "Bottom", "Left", "Right"] as const).flatMap(
-      /** Computes the side result. @param side - Side. @returns The computed result. */ (side) => {
-        const suffix = side.toLowerCase();
-        const border = properties[`border${side}`];
-        const width = properties[`borderLineWidth${side}`];
-        const padding = properties[`padding${side}`];
-        return [
-          ...(padding === undefined ? [] : [`fo:padding-${suffix}="${exportOdfLength(padding)}"`]),
-          ...(border === undefined ? [] : [`fo:border-${suffix}="${escapeXml(border)}"`]),
-          ...(width === undefined
-            ? []
-            : [`style:border-line-width-${suffix}="${escapeXml(width)}"`]),
-        ];
-      },
-    ),
-    ...(properties.firstLineIndent === undefined
-      ? []
-      : [`fo:text-indent="${exportOdfLength(properties.firstLineIndent)}"`]),
-    ...(properties.autoTextIndent === undefined
-      ? []
-      : [`style:auto-text-indent="${properties.autoTextIndent}"`]),
-    ...(properties.pageNumber === undefined
-      ? []
-      : [`style:page-number="${exportPageNumber(properties.pageNumber)}"`]),
-    ...(properties.rightMargin === undefined
-      ? []
-      : [`fo:margin-right="${exportOdfLength(properties.rightMargin)}"`]),
-    ...(properties.upperSpacing === undefined
-      ? []
-      : [`fo:margin-top="${exportOdfLength(properties.upperSpacing)}"`]),
-    ...(properties.lowerSpacing === undefined
-      ? []
-      : [`fo:margin-bottom="${exportOdfLength(properties.lowerSpacing)}"`]),
-    ...(properties.lineHeightPercent === undefined
-      ? []
-      : [`fo:line-height="${properties.lineHeightPercent}%"`]),
-    ...(properties.lineHeightTwips === undefined
-      ? []
-      : [`fo:line-height="${exportOdfLength(properties.lineHeightTwips)}"`]),
-    ...(properties.lineHeightAtLeastTwips === undefined
-      ? []
-      : [`style:line-height-at-least="${exportOdfLength(properties.lineHeightAtLeastTwips)}"`]),
-    ...(properties.lineSpacingTwips === undefined
-      ? []
-      : [`style:line-spacing="${exportOdfLength(properties.lineSpacingTwips)}"`]),
-    ...(properties.fontIndependentLineSpacing === undefined
-      ? []
-      : [`style:font-independent-line-spacing="${properties.fontIndependentLineSpacing}"`]),
-    ...(properties.contextualSpacing === undefined
-      ? []
-      : [`style:contextual-spacing="${properties.contextualSpacing}"`]),
-    ...exportParagraphHyphenation(properties.hyphenation),
-    ...exportParagraphJustification(properties.justification),
-    ...exportParagraphAsianTypography(properties.asianTypography),
-    ...(properties.writingMode === undefined
-      ? []
-      : [`style:writing-mode="${exportWritingDirection(properties.writingMode)}"`]),
-    ...(properties.writingModeAutomatic === undefined
-      ? []
-      : [`style:writing-mode-automatic="${properties.writingModeAutomatic}"`]),
-    ...(properties.snapToGrid === undefined
-      ? []
-      : [`style:snap-to-layout-grid="${properties.snapToGrid}"`]),
-    ...(properties.registerModeActive === undefined
-      ? []
-      : [`style:register-true="${properties.registerModeActive}"`]),
-    ...(properties.keepWithNext === undefined
-      ? []
-      : [`fo:keep-with-next="${properties.keepWithNext ? "always" : "auto"}"`]),
-    ...(properties.keepTogether === undefined
-      ? []
-      : [`fo:keep-together="${properties.keepTogether ? "always" : "auto"}"`]),
-    ...(properties.widows === undefined ? [] : [`fo:widows="${properties.widows}"`]),
-    ...(verticalAlign === undefined ? [] : [`style:vertical-align="${verticalAlign}"`]),
-    ...(properties.orphans === undefined ? [] : [`fo:orphans="${properties.orphans}"`]),
-    ...(properties.breakBefore === undefined
-      ? []
-      : [`fo:break-before="${properties.breakBefore}"`]),
-    ...(properties.breakAfter === undefined ? [] : [`fo:break-after="${properties.breakAfter}"`]),
-    ...(properties.countLineNumbers === undefined
-      ? []
-      : [`text:number-lines="${properties.countLineNumbers}"`]),
-    ...(properties.lineNumberStartValue === undefined
-      ? []
-      : [`text:line-number="${properties.lineNumberStartValue}"`]),
-  ];
-}
-
-/** Emits child elements of supported ODF paragraph properties. @param properties - Direct properties. @returns XML fragment. */
-export function exportParagraphPropertyChildren(properties: OdfParagraphProperties): string {
-  if (properties.tabStopDetails !== undefined)
-    return properties.tabStopDetails.length === 0
-      ? "<style:tab-stops/>"
-      : `<style:tab-stops>${properties.tabStopDetails
-          .map(
-            /** Serializes one ODF tab. @param stop - Tab properties. @returns XML. */
-            (stop) =>
-              `<style:tab-stop style:position="${exportOdfLength(stop.position)}" style:type="${stop.alignment}"${stop.alignment === "char" ? ` style:char="${escapeXml(stop.decimal)}"` : ""}${stop.fill === " " ? "" : ` style:leader-style="${stop.fill === "." ? "dotted" : "solid"}" style:leader-text="${escapeXml(stop.fill)}"`}/>`,
-          )
-          .join("")}</style:tab-stops>`;
-  return "";
-}
-
-/** Serializes a bounded twip margin as an ODF centimetre length. @param twips - Margin in twips. @returns ODF length. */
-export function exportOdfLength(twips: number): string {
-  const centimetres = (twips * 2.54) / 1440;
-  return `${Number(centimetres.toFixed(4))}cm`;
-}
-
-/** Escapes XML character data. @param value - Raw text. @returns XML-safe text. */
-export function escapeXml(value: string): string {
-  return value
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&apos;");
-}
-
 /** Serializes ODF significant spaces, tabs, and line breaks. @param value - Raw run text. @returns ODF inline XML. */
 export function exportText(value: string): string {
   let output = "";
   let plain = "";
-  /** Flushes accumulated ordinary XML characters. @returns Nothing. */
-  const flush =
-    /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
-    (): void => {
-      output += escapeXml(plain);
-      plain = "";
-    };
+  const flush = /** Flushes accumulated ordinary XML characters. @returns Nothing. */ (): void => {
+    output += escapeXml(plain);
+    plain = "";
+  };
   for (let index = 0; index < value.length; index += 1) {
     const character = value[index] as string;
     if (character === " ") {
@@ -1087,117 +951,6 @@ function parseCharacterPropertiesKey(key: string): Partial<OdfCharacterPropertie
   return JSON.parse(key) as Partial<OdfCharacterProperties>;
 }
 
-/** Emits native face references and permitted inline members of each script. @param properties - Actual font values. @param fontFaceName - Optional font-face pool. @param includeInlineFont - Named-style compatibility flag. @returns XML attributes. */
-function exportCharacterFonts(
-  properties: Partial<OdfCharacterProperties>,
-  fontFaceName?: FontFaceNameResolver,
-  includeInlineFont = false,
-): string {
-  let result = "";
-  for (const [script, suffix] of [
-    ["", ""],
-    ["Asian", "-asian"],
-    ["Complex", "-complex"],
-  ] as const) {
-    const family = properties[`fontFamily${script}`];
-    if (family === undefined) continue;
-    const generic = properties[`fontFamilyGeneric${script}`];
-    const style = properties[`fontStyleName${script}`];
-    const pitch = properties[`fontPitch${script}`];
-    const encoding = properties[`fontCharSet${script}`];
-    if (fontFaceName) {
-      result += ` style:font-name${suffix}="${escapeXml(fontFaceName(family, generic, style, pitch, encoding))}"`;
-    }
-    if (includeInlineFont || !fontFaceName)
-      for (const [name, value] of exportInlineFont(
-        {
-          familyName: family,
-          styleName: style ?? "",
-          family: getFontFamilyFromGeneric(generic),
-          pitch: pitch ?? FontPitch.PITCH_DONTKNOW,
-          charSet: encoding ?? RTL_TEXTENCODING_DONTKNOW,
-        },
-        suffix,
-      ))
-        result += ` ${name}="${escapeXml(value)}"`;
-  }
-  return result;
-}
-
-/** Emits supported ODF text-property attributes. @param properties - Direct properties. @param fontFaceName - Optional family-to-face resolver. @returns Attribute fragment. */
-export function exportCharacterAttributes(
-  properties: Partial<OdfCharacterProperties>,
-  fontFaceName?: FontFaceNameResolver,
-  paragraphStyle = false,
-  includeInlineFont = false,
-): string {
-  assertOdfColor(properties.color, "auto", "font color");
-  assertOdfColor(properties.highlight, "transparent", "highlight color");
-  return [
-    properties.color === undefined
-      ? ""
-      : properties.color === "auto"
-        ? ' style:use-window-font-color="true"'
-        : ` fo:color="${escapeXml(properties.color)}"`,
-    properties.textTransparency === undefined
-      ? ""
-      : ` loext:opacity="${100 - properties.textTransparency}%"`,
-    exportCharacterFonts(properties, fontFaceName, includeInlineFont),
-    properties.fontSizeTwips === undefined
-      ? ""
-      : ` fo:font-size="${properties.fontSizeTwips / 20}pt"`,
-    properties.highlight === undefined
-      ? ""
-      : ` fo:background-color="${escapeXml(properties.highlight)}"`,
-    properties.fontSizeTwipsAsian === undefined
-      ? ""
-      : ` style:font-size-asian="${properties.fontSizeTwipsAsian / 20}pt"`,
-    properties.fontSizeTwipsComplex === undefined
-      ? ""
-      : ` style:font-size-complex="${properties.fontSizeTwipsComplex / 20}pt"`,
-    ...exportTextLanguageProperties(properties).map(
-      /** Escapes a locale attribute through the text property serializer. @param attribute - Qualified name and value. @returns XML attribute. */ ([
-        name,
-        value,
-      ]) => ` ${name}="${escapeXml(value)}"`,
-    ),
-    exportTextCharacterProperties(properties, paragraphStyle),
-  ].join("");
-}
-
-/** Writes the original text property group, with its element-valued character color when present. @param properties - Native direct properties. @param fontFaceName - Font face resolver. @returns Complete text-properties element. */
-export function exportCharacterPropertyElement(
-  properties: Partial<OdfCharacterProperties>,
-  fontFaceName?: FontFaceNameResolver,
-  paragraph?: OdfParagraphProperties,
-  includeInlineFont = false,
-): string {
-  const hyphenation = exportParagraphHyphenation(paragraph?.hyphenation, "text");
-  const attributes =
-    exportCharacterAttributes(
-      properties,
-      fontFaceName,
-      paragraph !== undefined,
-      includeInlineFont,
-    ) + (hyphenation.length ? ` ${hyphenation.join(" ")}` : "");
-  const child = properties.themeColor
-    ? exportComplexColor(createOdfThemeColor(properties.themeColor), "char-complex-color")
-    : "";
-  return child
-    ? `<style:text-properties${attributes}>${child}</style:text-properties>`
-    : `<style:text-properties${attributes}/>`;
-}
-
-/** Rejects character colors outside the bounded upstream color mapping. @param value - Color value. @param special - Allowed Writer special value. @param label - Diagnostic label. @returns Nothing. */
-function assertOdfColor(
-  value: string | undefined,
-  special: "auto" | "transparent",
-  label: string,
-): void {
-  if (value !== undefined && !/^#[0-9a-f]{6}$/iu.test(value) && value !== special)
-    throw new Error(`Unsupported ODF ${label}: ${value}`);
-}
-
 /** Selects the Writer-projected ODF name while retaining the neutral legacy fallback. @param paragraph - Model paragraph projection. @returns ODF name. */
 function getOdfStyleName(paragraph: XMLTextParagraphSource): string {
   return (
@@ -1208,13 +961,4 @@ function getOdfStyleName(paragraph: XMLTextParagraphSource): string {
         ? "Heading_20_1"
         : paragraph.style)
   );
-}
-
-/** Projects the represented Writer unsigned16 offset through the original signed UNO/XML property. @param offset - Offset or void sentinel. @returns Native XML lexeme. */
-function exportPageNumber(offset: number | "auto"): string {
-  const value = new Any(),
-    output: [string] = [""];
-  if (offset !== "auto") value.insert([(offset << 16) >> 16], "sal_Int16");
-  new XMLNumberWithAutoForVoidPropHdl().exportXML(output, value, new SvXMLUnitConverter("twip"));
-  return output[0];
 }

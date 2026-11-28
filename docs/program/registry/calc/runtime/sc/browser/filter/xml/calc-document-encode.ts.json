@@ -1,0 +1,32 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/browser/filter/xml/calc-document-encode.ts",
+    "classification": "local-infrastructure",
+    "state": "active",
+    "suite": "calc",
+    "subsystem": "document-lifecycle",
+    "capabilityIds": [
+      "CAP-f15476e9-2d48-48f8-9cc5-6c90aa523b01"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/browser/filter/xml/calc-document-encode.ts#encodeSteps",
+        "apps/office/src/sc/source/filter/xml/ods.test.ts"
+      ],
+      "justification": "Encodes native Calc workbook state for ODF worker transfer without changing the existing snapshot format.",
+      "knownViolations": [],
+      "localSymbols": [
+        "encodeSteps"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

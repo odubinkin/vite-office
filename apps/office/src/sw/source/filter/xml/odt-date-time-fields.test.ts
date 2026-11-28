@@ -73,7 +73,13 @@ it("roundtrips actual date and time styles and native adjustments through Worker
     for (const model of [document, worker]) {
       const fields = dateTimeFields(model).map((hint) => hint.GetAttr().GetField());
       expect(fields.map((field) => field.Expand())).toEqual(expansions);
-      expect(fields.map((field) => field.GetOffset())).toEqual([720, 20]);
+      expect(
+        fields.map(
+          /** Calls `GetOffset` for each entry. @param field - Collection entry. @returns The projected entry value. */ (
+            field,
+          ) => field.GetOffset(),
+        ),
+      ).toEqual([720, 20]);
       expect(fields[0]?.IsAutomaticLanguage()).toBe(false);
     }
     const bytes = await writeOdtDocument(worker, metadata);

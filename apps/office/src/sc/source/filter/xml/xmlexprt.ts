@@ -10,7 +10,7 @@ import { ScMyValidationsContainer } from "./XMLStylesExportHelper";
 import { WriteDatabaseRanges } from "./XMLExportDatabaseRanges";
 import { WriteLabelRanges } from "./xmllabri";
 import { ExportConditionalFormat } from "./xmlcondformat";
-import { exportPageStyles } from "./xmlstyle.page";
+import { exportPageStyles, ScPageBreakRanges } from "./xmlstyle.page";
 import { externalRefCacheStyle, WriteExternalRefCaches } from "./xmlexprt.external";
 import { GetPrintRanges } from "../../core/data/table1";
 import { ScMyOpenCloseColumnRowGroup } from "./XMLColumnRowGroupExport";
@@ -95,37 +95,6 @@ export interface ScXMLExportOptions {
   readonly maxOutputBytes?: number;
   readonly securityOptions?: SecurityOptionsSnapshot;
 }
-/** Streams native page breaks as runs of equal break state for ODS automatic styles. */
-class ScPageBreakRanges {
-  private readonly positions: Iterator<number>;
-  private next: number | undefined;
-  private start = -1;
-  private end = -1;
-  readonly last: number;
-
-  /** Collects one ordered native manual-break axis. @param table - Native sheet. @param rows - Row or column axis. @returns Export cursor. */
-  constructor(table: ScTable, rows: boolean) {
-    const breaks = new Set<number>();
-    if (rows) table.GetAllRowBreaks(breaks, false, true);
-    else table.GetAllColBreaks(breaks, false, true);
-    let last = -1;
-    for (const position of breaks) last = position;
-    this.last = last;
-    this.positions = breaks.values();
-    this.next = this.positions.next().value;
-  }
-
-  /** Clips a format span at the next break-state change. @param first - Current position. @param last - End of the format span. @returns End and manual-break state. */
-  ClipRange(first: number, last: number): { last: number; manual: boolean } {
-    while (this.next !== undefined && this.next <= first) {
-      this.start = this.end = this.next;
-      while ((this.next = this.positions.next().value) === this.end + 1) this.end = this.next;
-    }
-    const manual = first >= this.start && first <= this.end;
-    return { last: Math.min(last, manual ? this.end : (this.next ?? last + 1) - 1), manual };
-  }
-}
-
 /** Native spreadsheet content export, including row and column automatic styles. */
 export class ScXMLExport {
   private fontPool = new XMLFontAutoStylePool();

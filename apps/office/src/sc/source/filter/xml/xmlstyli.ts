@@ -193,7 +193,7 @@ class XMLSheetStyleContext extends ScXMLImportContext {
         importCellBackgroundColor(
           this.background,
           background,
-          /** Reports the original background property failure. @param name - Diagnostic name. */
+          /** Reports the original background property failure. @param name - Diagnostic name. @returns Nothing. */
           (name) => this.owner.unsupported(name),
         );
       }
@@ -540,7 +540,7 @@ class XMLTableRowStyleContext extends ScXMLImportContext {
       importCellBackgroundColor(
         this.GetBackground(),
         background,
-        /** Reports invalid imported background color. @param name - Diagnostic name. */
+        /** Reports invalid imported background color. @param name - Diagnostic name. @returns Nothing. */
         (name) => this.owner.unsupported(name),
       );
     return new XMLTableStylePropertyContext(
@@ -548,7 +548,7 @@ class XMLTableRowStyleContext extends ScXMLImportContext {
       new Map([
         [
           XMLToken.LOEXT_BACKGROUND_COMPLEX_COLOR,
-          /** Applies the native theme-based row background. @param color - Imported complex color. */
+          /** Applies the native theme-based row background. @param color - Imported complex color. @returns Nothing. */
           (color: ComplexColor) => this.GetBackground().setComplexColor(color),
         ],
       ]),

@@ -9,7 +9,7 @@ import {
 } from "../../../package/source/zippackage/document-archive";
 import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { createDocument } from "../../../sfx2/source/doc/objsh";
-import { COL_BLACK, COL_RED } from "../../../tools/inc/color";
+import { COL_BLACK, COL_RED, Color } from "../../../tools/inc/color";
 import { ScAddress } from "../../inc/address";
 import { ScColorScaleEntryType, ScDataBarFormat, ScIconSetFormat } from "../../inc/colorscale";
 import { ATTR_BACKGROUND } from "../../inc/scitems";
@@ -24,18 +24,20 @@ import { CalcWorkbench } from "./calc-workbench";
 import { ScCellDataBar } from "./ScCellDataBar";
 
 let session: ReturnType<typeof createCalcSession> | undefined;
-afterEach(() => {
-  cleanup();
-  session?.Close();
-  session = undefined;
-});
+afterEach(
+  /** Unmounts Calc and releases the current document after each rule test. @returns Nothing. */ () => {
+    cleanup();
+    session?.Close();
+    session = undefined;
+  },
+);
 
 it("paints a solid negative data bar to the left of an interior zero axis", /** Checks the rendered color and geometry of the solid fill. @returns Nothing. */ () => {
   const { container } = render(
     <ScCellDataBar
       info={{
-        maAxisColor: COL_BLACK,
-        maColor: COL_RED,
+        maAxisColor: new Color(COL_BLACK),
+        maColor: new Color(COL_RED),
         mbGradient: false,
         mbShowValue: true,
         mnLength: -50,
@@ -69,19 +71,28 @@ function mount(workbook?: ScDocument): ScDocument {
 
 /** Sends a source command through its real dispatcher. @param command - UNO command. @returns Nothing. */
 function open(command: string): void {
-  act(() => {
-    session?.frame.GetDispatcher().Execute(command);
-  });
+  act(
+    /** Updates the mounted frame after dispatch. @returns Nothing. */ () => {
+      session?.frame.GetDispatcher().Execute(command);
+    },
+  );
 }
 
 /** Responds to a source dialog and lets its Sfx callback complete. @param dialog - Dialog wrapper. @param caption - Actual response label. @returns Completion. */
 async function respond(dialog: HTMLElement, caption: string): Promise<void> {
-  await act(async () => {
-    fireEvent.click(within(dialog).getByRole("button", { name: caption }));
-  });
+  await act(
+    /** Waits for the dialog response to reach the controller. @returns Completion. */ async () => {
+      fireEvent.click(within(dialog).getByRole("button", { name: caption }));
+    },
+  );
   const dispatcher = session?.frame.GetDispatcher();
   if (dispatcher instanceof BrowserSfxDispatcher)
     expect(dispatcher.GetLastCommandError()).toBeUndefined();
+}
+
+/** Finds the conditional-format manager for the active sheet. @returns The open manager dialog. */
+function manager(): HTMLElement {
+  return screen.getByRole("dialog", { name: "Manage Conditional Formatting" });
 }
 
 it("applies a quick rule to the edited range, paints the native style, and round-trips both formats", /** Applies a quick rule to the edited range, paints the native style, and round-trips both formats. @returns Completion. */ async () => {
@@ -108,9 +119,17 @@ it("applies a quick rule to the edited range, paints the native style, and round
   expect(rule.GetOperation()).toBe(ScConditionMode.Greater);
   expect(doc.GetCondResult(point)?.Get(ATTR_BACKGROUND)).toBeInstanceOf(SvxBrushItem);
   expect(doc.GetCondResult(new ScAddress(0, 0, 0))).toBeUndefined();
-  act(() => expect(session?.controller.Undo()).toBe(true));
+  act(
+    /** Removes the committed rule through undo. @returns Nothing. */ () => {
+      expect(session?.controller.Undo()).toBe(true);
+    },
+  );
   expect(doc.GetCondResult(point)).toBeUndefined();
-  act(() => expect(session?.controller.Redo()).toBe(true));
+  act(
+    /** Restores the committed rule through redo. @returns Nothing. */ () => {
+      expect(session?.controller.Redo()).toBe(true);
+    },
+  );
   expect(doc.GetCondResult(point)).toBeDefined();
 
   for (const reopened of [
@@ -143,10 +162,12 @@ it("ports tdf163897 by retaining staged deletions across the editor and undoing 
     archive.putNextEntry(part, data);
   }
   const doc = mount(await readOdsDocument(await archive.finish()));
-  const list = () => doc.FetchTable(0)?.GetCondFormList();
+  /** Borrows the sheet's current conditional-format list. @returns The active rule list. */
+  function list() {
+    return doc.FetchTable(0)?.GetCondFormList();
+  }
   expect(list()?.size()).toBe(4);
   open(".uno:ConditionalFormatManagerDialog");
-  const manager = () => screen.getByRole("dialog", { name: "Manage Conditional Formatting" });
   for (let count = 4; count > 0; count--) {
     expect(within(manager()).getAllByRole("row")).toHaveLength(count + 1);
     fireEvent.click(within(manager()).getByRole("button", { name: "Remove" }));
@@ -157,9 +178,17 @@ it("ports tdf163897 by retaining staged deletions across the editor and undoing 
   expect(list()?.size()).toBe(4);
   await respond(manager(), "OK");
   expect(list()?.size()).toBe(0);
-  act(() => expect(session?.controller.Undo()).toBe(true));
+  act(
+    /** Restores the rules removed by the manager. @returns Nothing. */ () => {
+      expect(session?.controller.Undo()).toBe(true);
+    },
+  );
   expect(list()?.size()).toBe(4);
-  act(() => expect(session?.controller.Redo()).toBe(true));
+  act(
+    /** Replays the removal of the rules. @returns Nothing. */ () => {
+      expect(session?.controller.Redo()).toBe(true);
+    },
+  );
   expect(list()?.size()).toBe(0);
 });
 
@@ -209,7 +238,6 @@ it("edits an imported ODS data-bar limit through the manager and preserves the r
   const originalAxis = original.meAxisPosition;
 
   open(".uno:ConditionalFormatManagerDialog");
-  const manager = () => screen.getByRole("dialog", { name: "Manage Conditional Formatting" });
   expect(within(manager()).getAllByText("Data Bar")).toHaveLength(5);
   fireEvent.click(within(manager()).getByRole("button", { name: "B3:B6" }));
   await respond(manager(), "Edit");
@@ -247,7 +275,6 @@ it("edits an imported ODS icon threshold through the native rule manager", /** O
   );
   const document = mount(await readOdsDocument(fixture));
   open(".uno:ConditionalFormatManagerDialog");
-  const manager = () => screen.getByRole("dialog", { name: "Manage Conditional Formatting" });
   expect(within(manager()).getByText("Icon Set")).toBeInTheDocument();
   fireEvent.click(within(manager()).getByRole("button", { name: "A1:A10" }));
   await respond(manager(), "Edit");
@@ -270,7 +297,7 @@ it("edits an imported ODS icon threshold through the native rule manager", /** O
   expect(format.GetIconSetInfo(new ScAddress(0, 1, 0))?.nIconIndex).toBe(1);
 });
 
-it("projects the original conditional commands into the formatting toolbar menu", async () => {
+it("projects the original conditional commands into the formatting toolbar menu", /** Verifies that the toolbar exposes the native dialog commands. @returns Completion. */ async () => {
   mount();
   fireEvent.click(screen.getByRole("button", { name: "Conditional" }));
   const popup = screen.getByRole("menu", { name: "Conditional" });

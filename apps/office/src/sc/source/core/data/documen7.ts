@@ -297,7 +297,7 @@ export function GetDataArea(
   this.FetchTable(tab)?.GetDataArea(firstCol, firstRow, lastCol, lastRow, includeOld, onlyDown);
 }
 
-/** Delegates the source used-data-area query to the requested sheet. @param this - Document. @param shrunk - Bound change result. @param tab - Sheet. @param args - Native bound references and sticky-edge options. @returns Whether the area contains data. */
+/** Delegates the source used-data-area query to the requested sheet. @param this - Document. @param shrunk - Bound change result. @param tab - Sheet. @param startCol - Mutable first column. @param startRow - Mutable first row. @param endCol - Mutable last column. @param endRow - Mutable last row. @param columnsOnly - Whether row bounds stay unchanged. @param stickyTopRow - Whether to retain the starting row on an empty edge. @param stickyLeftCol - Whether to retain the starting column on an empty edge. @returns Whether the area contains data. */
 export function ShrinkToUsedDataArea(
   this: ScDocument,
   shrunk: [boolean],

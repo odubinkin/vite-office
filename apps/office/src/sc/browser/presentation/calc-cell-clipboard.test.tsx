@@ -1,8 +1,7 @@
 /** @fileoverview Native Calc cell clipboard through the mounted workspace and browser data transfer. */
-import { act, cleanup, fireEvent, render, screen, within } from "@testing-library/react";
-import { afterEach, assert, expect, it, vi } from "vitest";
+import { act, fireEvent, screen, within } from "@testing-library/react";
+import { assert, expect, it } from "vitest";
 import { FormulaError } from "../../../formula/inc/errorcodes";
-import { LANGUAGE_GERMAN } from "../../../i18nlangtag/inc/lang";
 import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { SvNumFormatType } from "../../../svl/inc/zforlist";
 import { SvxFontHeightItem } from "../../../editeng/inc/fhgtitem";
@@ -15,83 +14,10 @@ import { ScProtectionAttr } from "../../inc/attrib";
 import { ScTableProtection } from "../../source/core/data/tabprotection";
 import { ScPatternAttr } from "../../inc/patattr";
 import { CellType } from "../../inc/global";
-import { createCalcSession } from "../composition/calc-module";
-import { CalcWorkbench } from "./calc-workbench";
+import { createCalcClipboardFixture } from "../../../test/calc-clipboard-fixture";
 
-let active: ReturnType<typeof createCalcSession> | undefined;
-let restoreClipboard: (() => void) | undefined;
-afterEach(() => {
-  cleanup();
-  active?.Close();
-  active = undefined;
-  restoreClipboard?.();
-  restoreClipboard = undefined;
-});
-
-/** Mounts the actual Calc command frame and workbench. @returns Active view. */
-function mount() {
-  active = createCalcSession();
-  render(<CalcWorkbench {...active} />);
-  return active.controller;
-}
-
-/** Provides native-shaped synchronous browser clipboard data without OS permissions. @param initial - Optional external plain text. @returns Transfer fixture. */
-function transfer(initial?: string) {
-  const values = new Map<string, string>();
-  if (initial !== undefined) values.set("text/plain", initial);
-  return {
-    /** Exposes the MIME types carried by the transfer. @returns Types. */
-    get types() {
-      return [...values.keys()];
-    },
-    getData: (type: string) => values.get(type) ?? "",
-    setData: vi.fn((type: string, value: string) => {
-      values.set(type, value);
-    }),
-  };
-}
-
-/** Returns the keyboard-focusable native grid. @returns Grid. */
-function grid(): HTMLElement {
-  return screen.getByRole("grid", { name: "Spreadsheet" });
-}
-
-/** Selects a source range using the real position box. @param range - Native address string. @returns Nothing. */
-function select(range: string): void {
-  const box = screen.getByRole("textbox", { name: "Name Box" });
-  fireEvent.change(box, { target: { value: range } });
-  fireEvent.keyDown(box, { key: "Enter" });
-}
-
-/** Installs a test clipboard at the native browser API boundary. @param native - Optional native grid transfer. @returns Clipboard fixture. */
-function browserClipboard(native?: ReturnType<typeof transfer>) {
-  const descriptor = Object.getOwnPropertyDescriptor(navigator, "clipboard");
-  let plain = "";
-  const clipboard = {
-    writeText: vi.fn(async (value: string) => {
-      plain = value;
-    }),
-    readText: vi.fn(async () => plain),
-    read: vi.fn(async () =>
-      native
-        ? [
-            {
-              types: native.types.map((type) => (type === "text/plain" ? type : "web " + type)),
-              getType: async (type: string) => ({
-                text: async () => native.getData(type.replace(/^web /, "")),
-              }),
-            },
-          ]
-        : [],
-    ),
-  };
-  Object.defineProperty(navigator, "clipboard", { configurable: true, value: clipboard });
-  restoreClipboard = () => {
-    if (descriptor) Object.defineProperty(navigator, "clipboard", descriptor);
-    else Reflect.deleteProperty(navigator, "clipboard");
-  };
-  return clipboard;
-}
+const { mount, transfer, grid, select, browserClipboard, openPasteSpecial } =
+  createCalcClipboardFixture();
 
 /** Executes the typed command from the native Paste Special submenu. @param name - Original menu caption suffix. @returns Completion. */
 async function pasteOnly(name: "Text" | "Numbers" | "Formula"): Promise<void> {
@@ -103,20 +29,10 @@ async function pasteSpecial(name: string): Promise<void> {
   fireEvent.click(screen.getByRole("menuitem", { name: "Edit" }));
   fireEvent.click(screen.getByRole("menuitem", { name: "Paste Special" }));
   const item = screen.getByRole("menuitem", { name });
-  await act(async () => fireEvent.click(item));
-}
-
-/** Opens the source Paste Special dialog from the active grid shortcut. @returns Contents dialog. */
-async function openPasteSpecial() {
-  await act(async () =>
-    fireEvent.keyDown(grid(), {
-      key: "V",
-      code: "KeyV",
-      ctrlKey: true,
-      shiftKey: true,
-    }),
+  await act(
+    /** Clicks the selected control. @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(item),
   );
-  return within(screen.getByRole("dialog", { name: "Paste Special" }));
 }
 
 it("copies cells and their formats, then pastes relative formulas through one native Undo action", /** Copies cells and their formats, then pastes relative formulas through one native Undo action. @returns Completion. */ async () => {
@@ -324,10 +240,16 @@ it("confirms the transposed selection size and preserves rich cells and styled e
   await pasteSpecial("Paste Transposed");
   let dialog = within(screen.getByRole("alertdialog", { name: "Paste" }));
   expect(dialog.getByText(/bigger than the range/)).toBeVisible();
-  await act(async () => fireEvent.click(dialog.getByRole("button", { name: "Yes" })));
+  await act(
+    /** Clicks the button named "Yes". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(dialog.getByRole("button", { name: "Yes" })),
+  );
   dialog = within(screen.getByRole("alertdialog", { name: "Paste" }));
   expect(dialog.getByText(/overwrite the existing data/)).toBeVisible();
-  await act(async () => fireEvent.click(dialog.getByRole("button", { name: "Yes" })));
+  await act(
+    /** Clicks the button named "Yes". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(dialog.getByRole("button", { name: "Yes" })),
+  );
   const value = doc.GetRefCellValue(rich).getEditText()?.GetText();
   assert(value);
   expect(text(value)).toBe("first\nsecond");
@@ -365,7 +287,10 @@ it("ports tdf69450 by pasting formats from populated and empty cells without del
     fireEvent.click(field);
   }
   fireEvent.click(dialog.getByRole("checkbox", { name: "Formats" }));
-  await act(async () => fireEvent.click(dialog.getByRole("button", { name: "OK" })));
+  await act(
+    /** Clicks the button named "OK". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(dialog.getByRole("button", { name: "OK" })),
+  );
   expect(screen.queryByRole("alertdialog", { name: "Paste" })).toBeNull();
   select("A2");
   fireEvent.copy(grid(), { clipboardData: clipboard });
@@ -373,7 +298,10 @@ it("ports tdf69450 by pasting formats from populated and empty cells without del
   dialog = await openPasteSpecial();
   expect(dialog.getByRole("checkbox", { name: "Formats" })).toBeChecked();
   expect(dialog.getByRole("checkbox", { name: "Numbers" })).not.toBeChecked();
-  await act(async () => fireEvent.click(dialog.getByRole("button", { name: "OK" })));
+  await act(
+    /** Clicks the button named "OK". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(dialog.getByRole("button", { name: "OK" })),
+  );
   const value = doc.GetRefCellValue(b1).getSharedString();
   assert(value);
   expect(text(value.getString())).toBe("B");
@@ -410,192 +338,20 @@ it("applies a preset draft with Skip Empty Cells to values and formats", /** App
   fireEvent.click(dialog.getByRole("button", { name: "Values & Formats" }));
   expect(dialog.getByRole("checkbox", { name: "Formats" })).toBeChecked();
   fireEvent.click(dialog.getByRole("checkbox", { name: "Skip empty cells" }));
-  await act(async () => fireEvent.click(dialog.getByRole("button", { name: "OK" })));
+  await act(
+    /** Clicks the button named "OK". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(dialog.getByRole("button", { name: "OK" })),
+  );
   const warning = within(screen.getByRole("alertdialog", { name: "Paste" }));
-  await act(async () => fireEvent.click(warning.getByRole("button", { name: "Yes" })));
+  await act(
+    /** Clicks the button named "Yes". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(warning.getByRole("button", { name: "Yes" })),
+  );
   expect(doc.GetValue(target)).toBe(5);
   expect(doc.GetFormulaCell(target)).toBeNull();
   expect(doc.GetValue(hole)).toBe(27);
   expect((doc.GetPattern(target)?.GetItem(101) as SvxFontHeightItem).GetHeight()).toBe(320);
   expect((doc.GetPattern(hole)?.GetItem(101) as SvxFontHeightItem).GetHeight()).not.toBe(320);
-});
-
-it("uses the available external text format and then opens the existing import controls", /** Uses the available external text format and then opens the existing import controls. @returns Completion. */ async () => {
-  browserClipboard(transfer("1\t2\n3\t4"));
-  const controller = mount(),
-    doc = controller.shell.GetDocument();
-  const dialog = await openPasteSpecial();
-  expect(dialog.getByRole("option", { name: "Unformatted text" })).toBeVisible();
-  await act(async () => fireEvent.click(dialog.getByRole("button", { name: "OK" })));
-  const textImport = within(screen.getByRole("dialog", { name: "Text Import" }));
-  await act(async () => fireEvent.click(textImport.getByRole("button", { name: "OK" })));
-  expect(doc.GetValue(new ScAddress(1, 1, 0))).toBe(4);
-});
-
-it("dispatches the explicit text import command for a single clipboard line and keeps it undoable", /** Dispatches the explicit text import command for a single clipboard line and keeps it undoable. @returns Completion. */ async () => {
-  const clipboard = browserClipboard(transfer("14\t28"));
-  const controller = mount(),
-    doc = controller.shell.GetDocument();
-  const start = new ScAddress(1, 1, 0);
-  const end = new ScAddress(2, 1, 0);
-  select("B2");
-  const dialog = await openPasteSpecial();
-  fireEvent.change(dialog.getByRole("listbox", { name: "Selection" }), {
-    target: { value: ".uno:PasteTextImportDialog" },
-  });
-  await act(async () => fireEvent.click(dialog.getByRole("button", { name: "OK" })));
-  const textImport = within(screen.getByRole("dialog", { name: "Text Import" }));
-  expect(clipboard.read).toHaveBeenCalledTimes(2);
-  expect(doc.GetCellType(start)).toBe(CellType.CELLTYPE_NONE);
-  await act(async () => fireEvent.click(textImport.getByRole("button", { name: "Cancel" })));
-  expect(doc.GetCellType(start)).toBe(CellType.CELLTYPE_NONE);
-
-  const reopened = await openPasteSpecial();
-  fireEvent.change(reopened.getByRole("listbox", { name: "Selection" }), {
-    target: { value: ".uno:PasteTextImportDialog" },
-  });
-  await act(async () => fireEvent.click(reopened.getByRole("button", { name: "OK" })));
-  const confirmed = within(screen.getByRole("dialog", { name: "Text Import" }));
-  act(() => controller.MeasureViewport(0, 0, 390, 600));
-  await act(async () => fireEvent.click(confirmed.getByRole("button", { name: "OK" })));
-  expect(doc.GetValue(start)).toBe(14);
-  expect(doc.GetValue(end)).toBe(28);
-  act(() => expect(controller.Undo()).toBe(true));
-  expect(doc.GetCellType(start)).toBe(CellType.CELLTYPE_NONE);
-  expect(doc.GetCellType(end)).toBe(CellType.CELLTYPE_NONE);
-});
-
-it("rejects a text import if its active cell changes while options are open", /** Rejects a text import if its active cell changes while options are open. @returns Completion. */ async () => {
-  const controller = mount();
-  const doc = controller.shell.GetDocument();
-  await act(async () => fireEvent.paste(grid(), { clipboardData: transfer("10\t20\n30\t40") }));
-  const dialog = within(screen.getByRole("dialog", { name: "Text Import" }));
-  act(() => controller.Select(2, 2));
-  await act(async () => fireEvent.click(dialog.getByRole("button", { name: "OK" })));
-  expect(doc.GetCellType(new ScAddress(0, 0, 0))).toBe(CellType.CELLTYPE_NONE);
-  expect(doc.GetCellType(new ScAddress(2, 2, 0))).toBe(CellType.CELLTYPE_NONE);
-});
-
-it("ports tdf117868 pipe detection to the clipboard text import dialog", /** Ports tdf117868 pipe detection to the clipboard text import dialog. @returns Completion. */ async () => {
-  const controller = mount();
-  const doc = controller.shell.GetDocument();
-  const source = 'sep=|\n"LETTER"|"ANIMAL"\n"a"|"aardvark"\n"b"|"bear"\n"c"|"cow"\n';
-  await act(async () => fireEvent.paste(grid(), { clipboardData: transfer(source) }));
-  const dialog = within(screen.getByRole("dialog", { name: "Text Import" }));
-  expect(dialog.getByRole("radio", { name: "Detected (|)" })).toBeChecked();
-  expect(dialog.getByRole("checkbox", { name: "Tab" })).toBeDisabled();
-  expect(dialog.getByRole("spinbutton", { name: "From row" })).toHaveValue(1);
-  fireEvent.click(dialog.getByRole("radio", { name: "Separated by" }));
-  expect(dialog.getByRole("checkbox", { name: "Tab" })).toBeChecked();
-  expect(dialog.getByRole("checkbox", { name: "Tab" })).toBeEnabled();
-  fireEvent.click(dialog.getByRole("radio", { name: "Detected (|)" }));
-  const preview = within(dialog.getByRole("table", { name: "Import preview" }));
-  expect(preview.getByRole("cell", { name: "LETTER" })).toBeVisible();
-  expect(preview.getByRole("cell", { name: "aardvark" })).toBeVisible();
-  await act(async () => fireEvent.click(dialog.getByRole("button", { name: "OK" })));
-  [
-    ["LETTER", "ANIMAL"],
-    ["a", "aardvark"],
-    ["b", "bear"],
-    ["c", "cow"],
-  ].forEach((row, index) =>
-    row.forEach((value, column) =>
-      expect(text(doc.GetSharedString(new ScAddress(column, index + 1, 0)).getString())).toBe(
-        value,
-      ),
-    ),
-  );
-});
-
-it("ports tdf92503 fixed-width DMY timestamps through the clipboard column type", /** Ports tdf92503 fixed-width DMY timestamps through the clipboard column type. @returns Completion. */ async () => {
-  const controller = mount();
-  const doc = controller.shell.GetDocument();
-  const source = [
-    "31 Mar 2013, 01:00",
-    "31 Mar 2013, 02:00",
-    "31 Mar 2013, 03:00",
-    "30 Mar 2014, 01:00",
-    "30 Mar 2014, 02:00",
-    "30 Mar 2014, 03:00",
-    "29 Mar 2015, 01:00",
-    "29 Mar 2015, 02:00",
-    "29 Mar 2015, 03:00",
-  ].join("\n");
-  await act(async () => fireEvent.paste(grid(), { clipboardData: transfer(source) }));
-  const dialog = within(screen.getByRole("dialog", { name: "Text Import" }));
-  const fixed = dialog.getByRole("radio", { name: "Fixed width" });
-  fireEvent.click(fixed);
-  expect(fixed).toBeChecked();
-  expect(dialog.getByRole("textbox", { name: "String delimiter" })).toBeDisabled();
-  fireEvent.change(dialog.getByRole("combobox", { name: "Column type" }), {
-    target: { value: "4" },
-  });
-  expect(dialog.getByRole("combobox", { name: "Column type" })).toHaveDisplayValue("Date (DMY)");
-  await act(async () => fireEvent.click(dialog.getByRole("button", { name: "OK" })));
-  const begin = Date.UTC(1899, 11, 30);
-  for (let row = 0; row < 9; row++) {
-    const year = Math.floor(row / 3);
-    const serial = (Date.UTC(2013 + year, 2, 31 - year, (row % 3) + 1) - begin) / 86_400_000;
-    const address = new ScAddress(0, row, 0);
-    expect(doc.GetValue(address)).toBeCloseTo(serial, 10);
-    const format = doc.GetPattern(address)?.GetNumberFormat(doc.GetNonThreadedContext()) ?? 0;
-    expect(
-      doc.GetFormatTable().GetType(format) & (SvNumFormatType.DATE | SvNumFormatType.TIME),
-    ).toBe(SvNumFormatType.DATE | SvNumFormatType.TIME);
-  }
-  expect(doc.GetCellType(new ScAddress(1, 0, 0))).toBe(CellType.CELLTYPE_NONE);
-});
-
-it("uses the selected clipboard locale and remembers the manual separator only after acceptance", /** Uses the selected clipboard locale and remembers the manual separator only after acceptance. @returns Completion. */ async () => {
-  const controller = mount();
-  const doc = controller.shell.GetDocument();
-  const clipboard = transfer("1,5;2,5\n3,5;4,5");
-  await act(async () => fireEvent.paste(grid(), { clipboardData: clipboard }));
-  const dialog = within(screen.getByRole("dialog", { name: "Text Import" }));
-  fireEvent.click(dialog.getByRole("radio", { name: "Separated by" }));
-  fireEvent.click(dialog.getByRole("checkbox", { name: "Tab" }));
-  fireEvent.click(dialog.getByRole("checkbox", { name: "Semicolon" }));
-  fireEvent.change(dialog.getByRole("combobox", { name: "Locale" }), {
-    target: { value: String(LANGUAGE_GERMAN) },
-  });
-  await act(async () => fireEvent.click(dialog.getByRole("button", { name: "OK" })));
-  expect(doc.GetValue(new ScAddress(0, 0, 0))).toBe(1.5);
-  expect(doc.GetValue(new ScAddress(1, 1, 0))).toBe(4.5);
-  select("D4");
-  await act(async () => fireEvent.paste(grid(), { clipboardData: clipboard }));
-  const reopened = within(screen.getByRole("dialog", { name: "Text Import" }));
-  expect(reopened.getByRole("radio", { name: "Separated by" })).toBeChecked();
-  expect(reopened.getByRole("checkbox", { name: "Semicolon" })).toBeChecked();
-  expect(reopened.getByRole("combobox", { name: "Locale" })).toHaveValue(String(LANGUAGE_GERMAN));
-  fireEvent.click(reopened.getByRole("radio", { name: "Fixed width" }));
-  await act(async () => fireEvent.click(reopened.getByRole("button", { name: "Cancel" })));
-  expect(doc.GetCellType(new ScAddress(3, 3, 0))).toBe(CellType.CELLTYPE_NONE);
-  await act(async () => fireEvent.paste(grid(), { clipboardData: clipboard }));
-  const afterCancel = within(screen.getByRole("dialog", { name: "Text Import" }));
-  expect(afterCancel.getByRole("radio", { name: "Separated by" })).toBeChecked();
-});
-
-it("keeps Unicode fixed-width preview and pasted columns on the same ruler positions", /** Keeps Unicode fixed-width preview and pasted columns on the same ruler positions. @returns Completion. */ async () => {
-  const controller = mount();
-  const doc = controller.shell.GetDocument();
-  const source = transfer("A漢B\nC字D");
-  await act(async () => fireEvent.paste(grid(), { clipboardData: source }));
-  const dialog = within(screen.getByRole("dialog", { name: "Text Import" }));
-  fireEvent.click(dialog.getByRole("radio", { name: "Fixed width" }));
-  const ruler = dialog.getByRole("button", { name: "Fixed width ruler" });
-  fireEvent.keyDown(ruler, { key: "Insert" });
-  fireEvent.keyDown(ruler, { key: "ArrowRight" });
-  fireEvent.keyDown(ruler, { key: "ArrowRight" });
-  fireEvent.keyDown(ruler, { key: "Insert" });
-  const preview = within(dialog.getByRole("table", { name: "Import preview" }));
-  const firstRow = within(preview.getAllByRole("row")[1] as HTMLElement);
-  expect(firstRow.getAllByRole("cell").map((cell) => cell.textContent)).toEqual(["A", "漢", "B"]);
-  await act(async () => fireEvent.click(dialog.getByRole("button", { name: "OK" })));
-  ["A", "漢", "B"].forEach((value, column) =>
-    expect(text(doc.GetSharedString(new ScAddress(column, 0, 0)).getString())).toBe(value),
-  );
-  act(() => expect(controller.Undo()).toBe(true));
-  expect(doc.GetCellType(new ScAddress(1, 0, 0))).toBe(CellType.CELLTYPE_NONE);
 });
 
 it("runs Formats Only from the menu immediately and keeps the original formula owner", async () => {
@@ -619,7 +375,10 @@ it("runs Formats Only from the menu immediately and keeps the original formula o
   select("C1");
   await pasteSpecial("Paste Special…");
   const dialog = within(screen.getByRole("dialog", { name: "Paste Special" }));
-  await act(async () => fireEvent.click(dialog.getByRole("button", { name: "Formats Only" })));
+  await act(
+    /** Clicks the button named "Formats Only". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(dialog.getByRole("button", { name: "Formats Only" })),
+  );
   expect(screen.queryByRole("dialog", { name: "Paste Special" })).toBeNull();
   expect(screen.queryByRole("alertdialog", { name: "Paste" })).toBeNull();
   expect(doc.GetFormulaCell(target)).toBe(original);
@@ -654,7 +413,10 @@ it("pastes numbers without dates, keeps result errors and restores overwritten c
   select("C1");
   await pasteOnly("Numbers");
   const dialog = within(screen.getByRole("alertdialog", { name: "Paste" }));
-  await act(async () => fireEvent.click(dialog.getByRole("button", { name: "Yes" })));
+  await act(
+    /** Clicks the button named "Yes". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(dialog.getByRole("button", { name: "Yes" })),
+  );
   const c1 = new ScAddress(2, 0, 0),
     c2 = new ScAddress(2, 1, 0);
   expect(doc.GetCellType(c1)).toBe(CellType.CELLTYPE_VALUE);
@@ -716,7 +478,10 @@ it("asks for Text Import settings, preserves leading zeroes and skips empty cell
   await act(async () => fireEvent.paste(grid(), { clipboardData: data }));
   let dialog = screen.getByRole("dialog", { name: "Text Import" });
   expect(within(dialog).getByRole("table", { name: "Import preview" })).toHaveTextContent("amount");
-  await act(async () => fireEvent.click(within(dialog).getByRole("button", { name: "Cancel" })));
+  await act(
+    /** Clicks the button named "Cancel". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(within(dialog).getByRole("button", { name: "Cancel" })),
+  );
   expect(doc.GetCellType(b2)).toBe(CellType.CELLTYPE_NONE);
   expect(controller.shell.GetUndoManager().GetUndoActionCount()).toBe(count);
   await act(async () => fireEvent.paste(grid(), { clipboardData: data }));
@@ -728,7 +493,10 @@ it("asks for Text Import settings, preserves leading zeroes and skips empty cell
   fireEvent.change(within(dialog).getByRole("combobox", { name: "Column type" }), {
     target: { value: "2" },
   });
-  await act(async () => fireEvent.click(within(dialog).getByRole("button", { name: "OK" })));
+  await act(
+    /** Clicks the button named "OK". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(within(dialog).getByRole("button", { name: "OK" })),
+  );
   expect(doc.GetCellType(b2)).toBe(CellType.CELLTYPE_STRING);
   const imported = doc.GetRefCellValue(b2).getSharedString(),
     preserved = doc.GetRefCellValue(b3).getSharedString();
@@ -763,25 +531,37 @@ it("asks to extend a short selection and then to replace existing cells before c
   let dialog = within(screen.getByRole("alertdialog", { name: "Paste" }));
   expect(dialog.getByText(/bigger than the range/)).toBeVisible();
   expect(dialog.getByRole("button", { name: "No" })).toHaveFocus();
-  await act(async () => fireEvent.click(dialog.getByRole("button", { name: "No" })));
+  await act(
+    /** Clicks the button named "No". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(dialog.getByRole("button", { name: "No" })),
+  );
   expect(doc.GetValue(existing)).toBe(41);
   expect(controller.shell.GetUndoManager().GetUndoActionCount()).toBe(count);
 
   await act(async () => fireEvent.paste(grid(), { clipboardData: clipboard }));
   dialog = within(screen.getByRole("alertdialog", { name: "Paste" }));
-  await act(async () => fireEvent.click(dialog.getByRole("button", { name: "Yes" })));
+  await act(
+    /** Clicks the button named "Yes". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(dialog.getByRole("button", { name: "Yes" })),
+  );
   dialog = within(screen.getByRole("alertdialog", { name: "Paste" }));
   expect(dialog.getByRole("button", { name: "Yes" })).toHaveFocus();
   const warn = dialog.getByRole("checkbox", { name: /Warn me/ });
   expect(warn).toBeChecked();
   fireEvent.click(warn);
-  await act(async () => fireEvent.click(dialog.getByRole("button", { name: "No" })));
+  await act(
+    /** Clicks the button named "No". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(dialog.getByRole("button", { name: "No" })),
+  );
   expect(doc.GetValue(existing)).toBe(41);
   expect(controller.shell.GetUndoManager().GetUndoActionCount()).toBe(count);
 
   await act(async () => fireEvent.paste(grid(), { clipboardData: clipboard }));
   dialog = within(screen.getByRole("alertdialog", { name: "Paste" }));
-  await act(async () => fireEvent.click(dialog.getByRole("button", { name: "Yes" })));
+  await act(
+    /** Clicks the button named "Yes". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(dialog.getByRole("button", { name: "Yes" })),
+  );
   expect(screen.queryByRole("alertdialog", { name: "Paste" })).toBeNull();
   expect(doc.GetValue(existing)).toBe(29);
   expect(controller.shell.GetUndoManager().GetUndoActionCount()).toBe(count + 1);
@@ -795,13 +575,17 @@ it("uses the native menu for browser text Copy and Paste Unformatted without reu
     doc = controller.shell.GetDocument();
   act(() => expect(controller.EnterString("=2+3")).toBe(true));
   fireEvent.click(screen.getByRole("menuitem", { name: "Edit" }));
-  await act(async () => fireEvent.click(screen.getByRole("menuitem", { name: "Copy" })));
+  await act(
+    /** Clicks the menuitem named "Copy". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(screen.getByRole("menuitem", { name: "Copy" })),
+  );
   expect(clipboard.writeText).toHaveBeenCalledWith("5");
   select("B2");
   fireEvent.click(screen.getByRole("menuitem", { name: "Edit" }));
   fireEvent.click(screen.getByRole("menuitem", { name: "Paste Special" }));
-  await act(async () =>
-    fireEvent.click(screen.getByRole("menuitem", { name: /Unformatted Text/ })),
+  await act(
+    /** Clicks the selected control. @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(screen.getByRole("menuitem", { name: /Unformatted Text/ })),
   );
   expect(doc.GetValue(new ScAddress(1, 1, 0))).toBe(5);
   expect(doc.GetFormulaCell(new ScAddress(1, 1, 0))).toBeNull();
@@ -840,7 +624,10 @@ it("imports quoted multiline cells and detected dates with number-format undo", 
     }),
   );
   const dialog = within(screen.getByRole("dialog", { name: "Text Import" }));
-  await act(async () => fireEvent.click(dialog.getByRole("button", { name: "OK" })));
+  await act(
+    /** Clicks the button named "OK". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(dialog.getByRole("button", { name: "OK" })),
+  );
   const rich = new ScAddress(1, 1, 0),
     date = new ScAddress(2, 1, 0);
   expect(doc.GetCellType(rich)).toBe(CellType.CELLTYPE_EDIT);
@@ -875,7 +662,10 @@ it("reports clipboard overflow at the sheet boundary and can undo the imported p
   const count = controller.shell.GetUndoManager().GetUndoActionCount();
   await act(async () => fireEvent.paste(grid(), { clipboardData: transfer("4\n5") }));
   const dialog = within(screen.getByRole("dialog", { name: "Text Import" }));
-  await act(async () => fireEvent.click(dialog.getByRole("button", { name: "OK" })));
+  await act(
+    /** Clicks the button named "OK". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(dialog.getByRole("button", { name: "OK" })),
+  );
   expect(screen.getByRole("alert")).toHaveTextContent(
     "The contents of the clipboard could not be pasted.",
   );

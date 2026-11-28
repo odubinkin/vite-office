@@ -56,7 +56,9 @@
         "importOdfLength",
         "SvXMLUnitConverter",
         "convertMeasureToXML",
-        "convertNumLetterSync"
+        "convertNumLetterSync",
+        "escapeXml",
+        "exportOdfLength"
       ],
       "sourceResponsibility": "aligned",
       "upstreamFile": "xmloff/source/core/xmluconv.cxx",

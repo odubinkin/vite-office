@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/xmloff/source/text/txtprmap-hyphenation.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "odf-filter",
+    "capabilityIds": [
+      "CAP-c13ec941-1af7-4a09-810f-df267da27388"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "justification": "Reads and writes the native ODF paragraph hyphenation attributes using the original token map and scalar conversions.",
+      "evidence": [
+        "apps/office/src/xmloff/source/text/txtprmap-hyphenation.ts#importParagraphHyphenation",
+        "apps/office/src/xmloff/source/text/txtprmap-hyphenation.ts#exportParagraphHyphenation",
+        "vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx#PROP_ParaIsHyphenation",
+        "vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx#PROP_ParaHyphenationZone"
+      ],
+      "knownViolations": [],
+      "localSymbols": [
+        "importParagraphHyphenation",
+        "exportParagraphHyphenation"
+      ],
+      "upstreamSymbols": [
+        "PROP_ParaIsHyphenation",
+        "PROP_ParaHyphenationZone"
+      ],
+      "upstreamFile": "xmloff/source/text/txtprmap.cxx",
+      "sourceResponsibility": "unverified"
+    }
+  }
+}

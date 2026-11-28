@@ -86,7 +86,10 @@ it("ports tdf86214 validation and saves a sheet-local name after choosing its ra
   });
   fireEvent.pointerUp(window, { button: 0, pointerId: 1 });
   expect(expression).toHaveValue("$Sheet1.$B$3");
-  await act(async () => fireEvent.click(add));
+  await act(
+    /** Clicks the selected control. @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(add),
+  );
   expect(screen.queryByRole("dialog", { name: "Define Name" })).toBeNull();
   const nameList = document.GetRangeName(0);
   const entry = nameList?.findByUpperName("VALID_NAME");
@@ -146,9 +149,11 @@ it("ports tdf87474 with manager rename, formula updates, cancellation and atomic
   fireEvent.change(within(manager).getByRole("textbox", { name: "Name" }), {
     target: { value: "UnusedTotal" },
   });
-  await act(async () => {
-    fireEvent.click(within(manager).getByRole("button", { name: "Cancel" }));
-  });
+  await act(
+    /** Clicks the button named "Cancel". @returns Completion. */ async () => {
+      fireEvent.click(within(manager).getByRole("button", { name: "Cancel" }));
+    },
+  );
   expect(document.GetRangeName()?.findByUpperName("UNUSEDTOTAL")).toBeUndefined();
   openNameMenu(/^Manage Names/);
   manager = screen.getByRole("dialog", { name: "Manage Names" });
@@ -158,9 +163,11 @@ it("ports tdf87474 with manager rename, formula updates, cancellation and atomic
   fireEvent.change(within(manager).getByRole("textbox", { name: "Range or formula expression" }), {
     target: { value: "$Sheet1.$B$1" },
   });
-  await act(async () => {
-    fireEvent.click(within(manager).getByRole("button", { name: "OK" }));
-  });
+  await act(
+    /** Clicks the button named "OK". @returns Completion. */ async () => {
+      fireEvent.click(within(manager).getByRole("button", { name: "OK" }));
+    },
+  );
   expect(document.GetRangeName()?.findByUpperName("SOURCETOTAL")).toBeUndefined();
   const formula = () => {
     const value = document.GetFormulaCell(position)?.GetFormula(document.GetGrammar());
@@ -193,9 +200,11 @@ it("pastes a selected name into input and writes an undoable name list from the 
   act(() => controller.Select(1, 2));
   openNameMenu(/^Insert…$/);
   let dialog = screen.getByRole("dialog", { name: "Paste Names" });
-  await act(async () => {
-    fireEvent.click(within(dialog).getByRole("button", { name: /^Paste$/ }));
-  });
+  await act(
+    /** Clicks the selected control. @returns Completion. */ async () => {
+      fireEvent.click(within(dialog).getByRole("button", { name: /^Paste$/ }));
+    },
+  );
   expect(controller.Input()).toBe("=Revenue ");
   act(() => controller.Cancel());
   act(() => {
@@ -204,16 +213,20 @@ it("pastes a selected name into input and writes an undoable name list from the 
   });
   openNameMenu(/^Insert…$/);
   dialog = screen.getByRole("dialog", { name: "Paste Names" });
-  await act(async () => {
-    fireEvent.click(within(dialog).getByRole("button", { name: /^Paste$/ }));
-  });
+  await act(
+    /** Clicks the selected control. @returns Completion. */ async () => {
+      fireEvent.click(within(dialog).getByRole("button", { name: /^Paste$/ }));
+    },
+  );
   expect(controller.Input()).toBe("=SUM(Revenue )");
   act(() => controller.Cancel());
   openNameMenu(/^Insert…$/);
   dialog = screen.getByRole("dialog", { name: "Paste Names" });
-  await act(async () => {
-    fireEvent.click(within(dialog).getByRole("button", { name: "Paste All" }));
-  });
+  await act(
+    /** Clicks the button named "Paste All". @returns Completion. */ async () => {
+      fireEvent.click(within(dialog).getByRole("button", { name: "Paste All" }));
+    },
+  );
   /** Reads source list text at one cell. @param at - Cell location. @returns Text or absence. */
   function readText(at: ScAddress) {
     const stored = new ScRefCellValue(document, at).getSharedString();
@@ -233,9 +246,11 @@ it("keeps nested Add and Delete staged and restores all scopes with one Undo", /
   enterNameBox("OriginalName");
   openNameMenu(/^Manage Names/);
   let manager = screen.getByRole("dialog", { name: "Manage Names" });
-  await act(async () => {
-    fireEvent.click(within(manager).getByRole("button", { name: "Add" }));
-  });
+  await act(
+    /** Clicks the button named "Add". @returns Completion. */ async () => {
+      fireEvent.click(within(manager).getByRole("button", { name: "Add" }));
+    },
+  );
   const add = screen.getByRole("dialog", { name: "Define Name" });
   fireEvent.change(within(add).getByRole("textbox", { name: "Name" }), {
     target: { value: "NestedName" },
@@ -243,18 +258,22 @@ it("keeps nested Add and Delete staged and restores all scopes with one Undo", /
   fireEvent.change(within(add).getByRole("combobox", { name: "Scope" }), {
     target: { value: "0" },
   });
-  await act(async () => {
-    fireEvent.click(within(add).getByRole("button", { name: "Add" }));
-  });
+  await act(
+    /** Clicks the button named "Add". @returns Completion. */ async () => {
+      fireEvent.click(within(add).getByRole("button", { name: "Add" }));
+    },
+  );
   manager = screen.getByRole("dialog", { name: "Manage Names" });
   expect(within(manager).getByRole("textbox", { name: "Name" })).toHaveValue("NestedName");
   fireEvent.click(within(manager).getByRole("button", { name: "OriginalName" }));
   fireEvent.click(within(manager).getByRole("button", { name: "Delete" }));
   expect(document.GetRangeName()?.findByUpperName("ORIGINALNAME")).toBeDefined();
   expect(document.GetRangeName(0)?.findByUpperName("NESTEDNAME")).toBeUndefined();
-  await act(async () => {
-    fireEvent.click(within(manager).getByRole("button", { name: "OK" }));
-  });
+  await act(
+    /** Clicks the button named "OK". @returns Completion. */ async () => {
+      fireEvent.click(within(manager).getByRole("button", { name: "OK" }));
+    },
+  );
   expect(document.GetRangeName()?.findByUpperName("ORIGINALNAME")).toBeUndefined();
   expect(document.GetRangeName(0)?.findByUpperName("NESTEDNAME")).toBeDefined();
   act(() => expect(controller.Undo()).toBe(true));
@@ -277,7 +296,10 @@ it("ports tdf137617 Create Names defaults and named position text in Calc A1 and
   expect(within(dialog).getByRole("checkbox", { name: "Left column" })).toBeChecked();
   for (const label of ["Top row", "Bottom row", "Right column"])
     expect(within(dialog).getByRole("checkbox", { name: label })).not.toBeChecked();
-  await act(async () => fireEvent.click(within(dialog).getByRole("button", { name: "OK" })));
+  await act(
+    /** Clicks the button named "OK". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(within(dialog).getByRole("button", { name: "OK" })),
+  );
   act(() => controller.Select(1, 0));
   expect(screen.getByRole("textbox", { name: "Name Box" })).toHaveValue("Result1");
   act(() => controller.Select(1, 1));
@@ -292,7 +314,10 @@ it("ports tdf137617 Create Names defaults and named position text in Calc A1 and
     fireEvent.change(options.getByRole("combobox", { name: /Formula syntax/ }), {
       target: { value },
     });
-    await act(async () => fireEvent.click(options.getByRole("button", { name: "OK" })));
+    await act(
+      /** Clicks the button named "OK". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+        fireEvent.click(options.getByRole("button", { name: "OK" })),
+    );
   }
   await setSyntax("2");
   expect(document.GetGrammar()).toBe(FormulaGrammar.Grammar.GRAM_NATIVE_XL_R1C1);
@@ -308,7 +333,10 @@ it("ports tdf137617 Create Names defaults and named position text in Calc A1 and
   expect(within(dialog).getByRole("checkbox", { name: "Top row" })).toBeChecked();
   for (const label of ["Left column", "Bottom row", "Right column"])
     expect(within(dialog).getByRole("checkbox", { name: label })).not.toBeChecked();
-  await act(async () => fireEvent.click(within(dialog).getByRole("button", { name: "OK" })));
+  await act(
+    /** Clicks the button named "OK". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(within(dialog).getByRole("button", { name: "OK" })),
+  );
   act(() => controller.Select(2, 1));
   expect(screen.getByRole("textbox", { name: "Name Box" })).toHaveValue("Result3");
   act(() => controller.Select(3, 1));
@@ -344,11 +372,17 @@ it("creates names in edge order and stops at Cancel while preserving earlier acc
   enterNameBox("A3:C4");
   openNameMenu(/^Create Names/);
   const dialog = screen.getByRole("dialog", { name: "Create Names" });
-  await act(async () => fireEvent.click(within(dialog).getByRole("button", { name: "OK" })));
+  await act(
+    /** Clicks the button named "OK". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(within(dialog).getByRole("button", { name: "OK" })),
+  );
   const replace = screen.getByRole("alertdialog", { name: "Create Names" });
   expect(within(replace).getByText("Replace existing definition of ToReplace?")).toBeVisible();
   expect(document.GetRangeName()?.findByUpperName("GROSS_PROFIT")).toBeUndefined();
-  await act(async () => fireEvent.click(within(replace).getByRole("button", { name: "Cancel" })));
+  await act(
+    /** Clicks the button named "Cancel". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(within(replace).getByRole("button", { name: "Cancel" })),
+  );
   expect(
     document.GetRangeName()?.findByUpperName("GROSS_PROFIT")?.GetSymbol(document.GetGrammar()),
   ).toBe("$Sheet1.$A$4");
@@ -384,13 +418,22 @@ it("applies Yes and No to separate name conflicts and recalculates formulas thro
   enterNameBox("A3:B4");
   openNameMenu(/^Create Names/);
   const dialog = screen.getByRole("dialog", { name: "Create Names" });
-  await act(async () => fireEvent.click(within(dialog).getByRole("button", { name: "OK" })));
+  await act(
+    /** Clicks the button named "OK". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(within(dialog).getByRole("button", { name: "OK" })),
+  );
   let question = screen.getByRole("alertdialog", { name: "Create Names" });
   expect(within(question).getByText("Replace existing definition of MoveThis?")).toBeVisible();
-  await act(async () => fireEvent.click(within(question).getByRole("button", { name: "Yes" })));
+  await act(
+    /** Clicks the button named "Yes". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(within(question).getByRole("button", { name: "Yes" })),
+  );
   question = screen.getByRole("alertdialog", { name: "Create Names" });
   expect(within(question).getByText("Replace existing definition of KeepThis?")).toBeVisible();
-  await act(async () => fireEvent.click(within(question).getByRole("button", { name: "No" })));
+  await act(
+    /** Clicks the button named "No". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(within(question).getByRole("button", { name: "No" })),
+  );
   expect(document.GetValue(total)).toBe(30);
   act(() => expect(controller.Undo()).toBe(true));
   expect(document.GetValue(total)).toBe(33);

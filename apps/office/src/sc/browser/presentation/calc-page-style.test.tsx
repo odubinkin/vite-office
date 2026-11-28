@@ -77,7 +77,11 @@ it("ports tdf123508 dimension fitting and reloads the accepted Sheet controls", 
   expect(
     within(dialog)
       .getAllByRole("tab")
-      .map((node) => node.textContent),
+      .map(
+        /** Reads the entry's `textContent` field. @param node - Collection entry. @returns The field value. */ (
+          node,
+        ) => node.textContent,
+      ),
   ).toEqual(["General", "Page", "Borders", "Background", "Header", "Footer", "Sheet"]);
   fireEvent.click(within(dialog).getByRole("tab", { name: "Sheet" }));
   fireEvent.change(within(dialog).getByRole("combobox", { name: "Scaling mode" }), {
@@ -89,9 +93,11 @@ it("ports tdf123508 dimension fitting and reloads the accepted Sheet controls", 
   fireEvent.change(within(dialog).getByRole("spinbutton", { name: "Height in pages value" }), {
     target: { value: "2" },
   });
-  await act(async () => {
-    fireEvent.click(within(dialog).getByRole("button", { name: "OK" }));
-  });
+  await act(
+    /** Clicks the button named "OK". @returns Completion. */ async () => {
+      fireEvent.click(within(dialog).getByRole("button", { name: "OK" }));
+    },
+  );
   expect(items(workbook).Get(ATTR_PAGE_SCALETO)).toEqual(new ScPageScaleToItem(2, 2));
   const again = open();
   fireEvent.click(within(again).getByRole("tab", { name: "Sheet" }));
@@ -130,9 +136,11 @@ it("ports tdf144940 first-page sharing and keeps common geometry, printing and h
   fireEvent.click(within(dialog).getByRole("checkbox", { name: "Formulas" }));
   fireEvent.click(within(dialog).getByRole("checkbox", { name: "Zero values" }));
   fireEvent.click(within(dialog).getByRole("checkbox", { name: "Drawing objects" }));
-  await act(async () => {
-    fireEvent.click(within(dialog).getByRole("button", { name: "OK" }));
-  });
+  await act(
+    /** Clicks the button named "OK". @returns Completion. */ async () => {
+      fireEvent.click(within(dialog).getByRole("button", { name: "OK" }));
+    },
+  );
   expect(doc.GetPageStyle(0)).toBe(doc.GetPageStyle(1));
   expect(GetPageStyleGeometry(items(doc, 1))).toMatchObject({
     landscape: true,
@@ -206,9 +214,11 @@ it("renames a shared custom page style and persists its border and fill", /** Re
     target: { value: "color" },
   });
   fireEvent.change(within(dialog).getByLabelText("Color"), { target: { value: "#946833" } });
-  await act(async () => {
-    fireEvent.click(within(dialog).getByRole("button", { name: "OK" }));
-  });
+  await act(
+    /** Clicks the button named "OK". @returns Completion. */ async () => {
+      fireEvent.click(within(dialog).getByRole("button", { name: "OK" }));
+    },
+  );
   expect([doc.GetPageStyle(0), doc.GetPageStyle(1)]).toEqual(["Invoice print", "Invoice print"]);
   expect((items(doc).Get(ATTR_BORDER) as SvxBoxItem).GetTop()?.GetWidth()).toBeGreaterThan(0);
   act(() => {

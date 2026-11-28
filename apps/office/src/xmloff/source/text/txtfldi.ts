@@ -462,7 +462,7 @@ export class XMLCountFieldImportContext extends SvXMLImportContext {
   public override endFastElement(): void {
     this.helper.InsertTextField(
       this.field[2],
-      /** Populates the count descriptor. @param field - Native UNO field. */
+      /** Populates the count descriptor. @param field - Native UNO field. @returns Nothing. */
       (field) => this.helper.SetProperty(field, "NumberingType", this.numberingType, "sal_Int16"),
       this.properties,
       this.hyperlink,

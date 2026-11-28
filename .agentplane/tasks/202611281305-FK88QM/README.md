@@ -4,7 +4,7 @@ title: "Integrate November 28 Writer and Calc branch updates"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 7
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: integrate and verify the current Writer and Calc heads, then synchronize the published branches."
 doc_version: 3
-doc_updated_at: "2026-11-28T13:19:43.446Z"
+doc_updated_at: "2026-11-28T14:05:29.341Z"
 doc_updated_by: "CODER"
 description: "Publish current feature heads, merge both into main, resolve conflicts with targeted checks, repair failures found by full verification, document suspected upstream issues and merge verified main back into both published feature branches."
 sections:
@@ -50,7 +50,16 @@ sections:
     4. Check git diff --check, tracked working-tree status, branch and remote tip equality, and ancestry of the published main in writer and calc.
   Verification: "Pending execution."
   Rollback Plan: "Preserve original branch tips and untracked artifacts. Follow normal fast-forward publication and use explicit revert commits if published integration needs reversing."
-  Findings: "Pending execution."
+  Findings: |-
+    Pending execution.
+
+    - Observation: Published Writer f219f0ad2 and Calc d286bb44b over HTTPS, then merged both heads locally. Focused integrated tests passed twice; post-decomposition validation passed 91 cases. A complete initial inventory run passed 130 tests and found one uncovered metadata classifier branch. The new real ODT settings case covers that branch and brings the diagnostic file to 100 percent in all four metrics.
+      Impact: Main publication and reverse synchronization remain gated by a successful full npm run verify. The base main already failed JSDoc and file size gates. Initial wide application and browser runs have failures under investigation.
+      Resolution: User explicitly requires every npm run verify gate to pass before publication. Preserve official thresholds and existing test discovery. Continue functional retries, document validation, file decomposition and coverage work on local main.
+
+    - Observation: The focused current integration run passed all 24 Writer, Calc and shared ODF tests, typechecking passed, and registry validation passed after relocating provenance markers. Eight slow XLSX application cases and eight Writer list browser cases passed their isolated retries.
+      Impact: The standard full gate is still required before publication. The observed static backlog remains broader than the merge conflicts.
+      Resolution: Retain verified conflict repairs and behavior-preserving refactors on local main. Continue whole-repository JSDoc, source file limits and remaining full suites without changing the verification contract.
 id_source: "generated"
 ---
 ## Summary
@@ -83,3 +92,11 @@ Preserve original branch tips and untracked artifacts. Follow normal fast-forwar
 ## Findings
 
 Pending execution.
+
+- Observation: Published Writer f219f0ad2 and Calc d286bb44b over HTTPS, then merged both heads locally. Focused integrated tests passed twice; post-decomposition validation passed 91 cases. A complete initial inventory run passed 130 tests and found one uncovered metadata classifier branch. The new real ODT settings case covers that branch and brings the diagnostic file to 100 percent in all four metrics.
+  Impact: Main publication and reverse synchronization remain gated by a successful full npm run verify. The base main already failed JSDoc and file size gates. Initial wide application and browser runs have failures under investigation.
+  Resolution: User explicitly requires every npm run verify gate to pass before publication. Preserve official thresholds and existing test discovery. Continue functional retries, document validation, file decomposition and coverage work on local main.
+
+- Observation: The focused current integration run passed all 24 Writer, Calc and shared ODF tests, typechecking passed, and registry validation passed after relocating provenance markers. Eight slow XLSX application cases and eight Writer list browser cases passed their isolated retries.
+  Impact: The standard full gate is still required before publication. The observed static backlog remains broader than the merge conflicts.
+  Resolution: Retain verified conflict repairs and behavior-preserving refactors on local main. Continue whole-repository JSDoc, source file limits and remaining full suites without changing the verification contract.

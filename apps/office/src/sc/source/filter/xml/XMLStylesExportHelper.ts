@@ -139,7 +139,7 @@ function getCondition(document: ScDocument, rule: ScValidationData): string {
   return condition ? prefix + condition : "";
 }
 
-/** Writes original help or alert text and visibility. @param tag - Message element. @param display - Whether enabled. @param title - Saved title. @param message - Saved message. @param alert - Optional error style token. @returns Message element. */
+/** Writes original help or alert text and visibility. @param tag - Message element. @param display - Whether enabled. @param title - Saved title. @param message - Saved message. @param alert - Optional error style token. @param force - Whether to emit the element despite an empty title and message. @returns Message element. */
 function writeMessage(
   tag: "help-message" | "error-message",
   display: boolean,

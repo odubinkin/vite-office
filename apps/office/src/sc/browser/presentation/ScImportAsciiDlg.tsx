@@ -172,7 +172,16 @@ export function ScImportAsciiDlg({ request, onRespond }: Props): React.JSX.Eleme
   });
   const { lines: rows, visualWidth } = Preview(text, active, fixedStarts);
   const rulerWidth = Math.max(visualWidth, (splits.at(-1) ?? 0) + 1);
-  const width = fixed ? fixedStarts.length : Math.max(1, ...rows.map((row) => row.length));
+  const width = fixed
+    ? fixedStarts.length
+    : Math.max(
+        1,
+        ...rows.map(
+          /** Reads the entry's `length` field. @param row - Collection entry. @returns The field value. */ (
+            row,
+          ) => row.length,
+        ),
+      );
   const currentColumn = Math.min(column, width);
   const sourceColumn = fixed ? (fixedStarts[currentColumn - 1] ?? 0) : currentColumn;
   const type = (fixed ? fixedTypes : separatedTypes).get(sourceColumn) ?? SC_COL_STANDARD;

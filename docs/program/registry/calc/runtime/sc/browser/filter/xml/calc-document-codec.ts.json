@@ -20,7 +20,7 @@
         "apps/office/src/sc/browser/filter/xml/calc-document-codec.ts#decodeCalcDocument",
         "apps/office/src/sc/browser/filter/xml/calc-document-codec.ts#encodeCalcDocumentAsync",
         "apps/office/src/sc/browser/filter/xml/calc-document-codec.ts#decodeCalcDocumentAsync",
-        "apps/office/src/sc/browser/filter/xml/calc-document-codec.ts#textStyles.collect",
+        "apps/office/src/sc/browser/filter/xml/calc-document-encode.ts#textStyles.collect",
         "apps/office/src/sc/source/filter/oox/worksheethelper.test.ts",
         "apps/office/src/sc/source/filter/oox/excelfilter.alignment.test.ts",
         "apps/office/src/sc/source/filter/oox/excelfilter.sheet-protection.test.ts",

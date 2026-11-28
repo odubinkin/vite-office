@@ -750,7 +750,7 @@ function exportWriterText(
             /** Projects all master-page text under the shared automatic style owner. @returns Ordered sections. */
             sections() {
               return sections.map(
-                /** Projects one direct native text section. @param start - Section. @returns First-level XML blocks. */
+                /** Projects one direct native text section. @param start - Section. @param index - Position in the document section list. @returns First-level XML blocks. */
                 (start, index) => {
                   const used = new Set<string>();
                   const currentStory: XMLBoundWriterFrames = {

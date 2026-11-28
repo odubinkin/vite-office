@@ -41,7 +41,10 @@ function command(): HTMLElement {
 /** Executes the visible command and waits for its dialog. @returns Completion. */
 async function openTextToColumns(): Promise<void> {
   const item = command();
-  await act(async () => fireEvent.click(item));
+  await act(
+    /** Clicks the selected control. @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(item),
+  );
 }
 
 /** Fills one single-column row in the real sheet. @param row - Zero-based row. @param input - Source text. @returns Nothing. */
@@ -73,7 +76,10 @@ it("ports tdf51700 whole-column selection and restores the entire transformation
   expect(dialog.getByRole("checkbox", { name: "Detect special numbers" })).toBeDisabled();
   fireEvent.click(dialog.getByRole("radio", { name: "Separated by" }));
   fireEvent.click(dialog.getByRole("checkbox", { name: "Comma" }));
-  await act(async () => fireEvent.click(dialog.getByRole("button", { name: "OK" })));
+  await act(
+    /** Clicks the button named "OK". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(dialog.getByRole("button", { name: "OK" })),
+  );
   expect(doc.GetCellType(new ScAddress())).toBe(CellType.CELLTYPE_NONE);
   expect(doc.GetValue(new ScAddress(1, 1, 0))).toBe(43242);
   expect(text(doc.GetSharedString(new ScAddress(3, 2, 0)).getString())).toBe("fsad");
@@ -101,17 +107,29 @@ it("warns about occupied columns to the right and leaves a declined conversion i
   await openTextToColumns();
   const dialog = within(screen.getByRole("dialog", { name: "Text to Columns" }));
   expect(dialog.getByRole("radio", { name: "Detected (;)" })).toBeChecked();
-  await act(async () => fireEvent.click(dialog.getByRole("button", { name: "OK" })));
+  await act(
+    /** Clicks the button named "OK". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(dialog.getByRole("button", { name: "OK" })),
+  );
   let warning = within(screen.getByRole("alertdialog", { name: "Paste" }));
-  await act(async () => fireEvent.click(warning.getByRole("button", { name: "No" })));
+  await act(
+    /** Clicks the button named "No". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(warning.getByRole("button", { name: "No" })),
+  );
   expect(doc.GetValue(target)).toBe(88);
   expect(controller.shell.GetUndoManager().GetUndoActionCount()).toBe(0);
 
   await openTextToColumns();
   const reopened = within(screen.getByRole("dialog", { name: "Text to Columns" }));
-  await act(async () => fireEvent.click(reopened.getByRole("button", { name: "OK" })));
+  await act(
+    /** Clicks the button named "OK". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(reopened.getByRole("button", { name: "OK" })),
+  );
   warning = within(screen.getByRole("alertdialog", { name: "Paste" }));
-  await act(async () => fireEvent.click(warning.getByRole("button", { name: "Yes" })));
+  await act(
+    /** Clicks the button named "Yes". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(warning.getByRole("button", { name: "Yes" })),
+  );
   expect(doc.GetValue(target)).toBe(2);
   expect(doc.GetValue(new ScAddress(0, 1, 0))).toBe(1);
   expect(doc.GetValue(new ScAddress(1, 2, 0))).toBe(4);
@@ -136,9 +154,15 @@ it("ports the original tdf69981 workbook and preserves explicit empty and traili
   fireEvent.click(dialog.getByRole("radio", { name: "Separated by" }));
   fireEvent.click(dialog.getByRole("checkbox", { name: "Tab" }));
   fireEvent.click(dialog.getByRole("checkbox", { name: "Comma" }));
-  await act(async () => fireEvent.click(dialog.getByRole("button", { name: "OK" })));
+  await act(
+    /** Clicks the button named "OK". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(dialog.getByRole("button", { name: "OK" })),
+  );
   const warning = within(screen.getByRole("alertdialog", { name: "Paste" }));
-  await act(async () => fireEvent.click(warning.getByRole("button", { name: "Yes" })));
+  await act(
+    /** Clicks the button named "Yes". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(warning.getByRole("button", { name: "Yes" })),
+  );
   const expected = [
     ["Original", "Copy", ""],
     ["a", "b", "c"],
@@ -182,7 +206,10 @@ it("ports tdf92423 and applies Text to Columns to the selection created by paste
   const dialog = within(screen.getByRole("dialog", { name: "Text to Columns" }));
   fireEvent.click(dialog.getByRole("radio", { name: "Separated by" }));
   fireEvent.click(dialog.getByRole("checkbox", { name: "Semicolon" }));
-  await act(async () => fireEvent.click(dialog.getByRole("button", { name: "OK" })));
+  await act(
+    /** Clicks the button named "OK". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(dialog.getByRole("button", { name: "OK" })),
+  );
   expect(text(doc.GetSharedString(new ScAddress()).getString())).toBe("1;2");
   for (let row = 6; row <= 8; row++) {
     expect(doc.GetValue(new ScAddress(0, row, 0))).toBe(row - 5);
@@ -212,7 +239,10 @@ it("ports tdf82398 custom separators on a date-formatted input range", /** Ports
   fireEvent.change(dialog.getByRole("textbox", { name: "Other separators" }), {
     target: { value: "." },
   });
-  await act(async () => fireEvent.click(dialog.getByRole("button", { name: "OK" })));
+  await act(
+    /** Clicks the button named "OK". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(dialog.getByRole("button", { name: "OK" })),
+  );
   const rows = [
     ["afasdfs", "fdfasd", "fsadf", "fasd"],
     [3242, 43242, 3242, 2342],
@@ -241,11 +271,17 @@ it("leaves the workbook intact on dialog cancellation or when the command target
   select("A1");
   await openTextToColumns();
   let dialog = within(screen.getByRole("dialog", { name: "Text to Columns" }));
-  await act(async () => fireEvent.click(dialog.getByRole("button", { name: "Cancel" })));
+  await act(
+    /** Clicks the button named "Cancel". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(dialog.getByRole("button", { name: "Cancel" })),
+  );
   await openTextToColumns();
   dialog = within(screen.getByRole("dialog", { name: "Text to Columns" }));
   act(() => controller.Select(3, 3));
-  await act(async () => fireEvent.click(dialog.getByRole("button", { name: "OK" })));
+  await act(
+    /** Clicks the button named "OK". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(dialog.getByRole("button", { name: "OK" })),
+  );
   expect(text(doc.GetSharedString(new ScAddress()).getString())).toBe("1;2");
   expect(doc.GetCellType(new ScAddress(1, 0, 0))).toBe(CellType.CELLTYPE_NONE);
   expect(controller.shell.GetUndoManager().GetUndoActionCount()).toBe(0);

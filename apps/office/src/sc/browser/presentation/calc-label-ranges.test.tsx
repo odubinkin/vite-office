@@ -69,7 +69,11 @@ it("ports tdf131170 deletion from the pinned ODS fixture and keeps Cancel transa
   const options = () =>
     within(dialog)
       .getAllByRole("option")
-      .map((option) => option.textContent);
+      .map(
+        /** Reads the entry's `textContent` field. @param option - Collection entry. @returns The field value. */ (
+          option,
+        ) => option.textContent,
+      );
   expect(options()).toEqual([
     "--- Column ---",
     "$Sheet1.$I$6:$K$6 [AA, BB, CC]",
@@ -93,13 +97,19 @@ it("ports tdf131170 deletion from the pinned ODS fixture and keeps Cancel transa
   expect(options()).toEqual(["--- Column ---", "--- Row ---", "$Sheet1.$H$7:$H$9 [X, Y, Z]"]);
   remove("0");
   expect(options()).toEqual(["--- Column ---", "--- Row ---"]);
-  await act(async () => fireEvent.click(within(dialog).getByRole("button", { name: "Cancel" })));
+  await act(
+    /** Clicks the button named "Cancel". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(within(dialog).getByRole("button", { name: "Cancel" })),
+  );
   expect(doc.GetColNameRanges().size()).toBe(1);
   expect(doc.GetRowNameRanges().size()).toBe(1);
 
   dialog = open();
   remove("1");
-  await act(async () => fireEvent.click(within(dialog).getByRole("button", { name: "OK" })));
+  await act(
+    /** Clicks the button named "OK". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(within(dialog).getByRole("button", { name: "OK" })),
+  );
   expect(doc.GetColNameRanges().size()).toBe(1);
   expect(doc.GetRowNameRanges().size()).toBe(0);
 });
@@ -134,7 +144,10 @@ it("connects both sheet reference edits to label formulas and persists their lex
   fireEvent.pointerUp(window, { button: 0, pointerId: 2 });
   expect(data).toHaveValue("$Sheet1.$A$2");
   fireEvent.change(data, { target: { value: "$Sheet1.$A$2:$A$3" } });
-  await act(async () => fireEvent.click(within(dialog).getByRole("button", { name: "OK" })));
+  await act(
+    /** Clicks the button named "OK". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(within(dialog).getByRole("button", { name: "OK" })),
+  );
   expect(doc.GetColNameRanges().Find(header)?.GetRange(1).aEnd.Row()).toBe(2);
 
   act(() => {
@@ -163,7 +176,10 @@ it("connects both sheet reference edits to label formulas and persists their lex
   fireEvent.click(
     options.getByRole("checkbox", { name: "Automatically find column and row labels" }),
   );
-  await act(async () => fireEvent.click(options.getByRole("button", { name: "OK" })));
+  await act(
+    /** Clicks the button named "OK". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(options.getByRole("button", { name: "OK" })),
+  );
 
   dialog = open();
   fireEvent.change(within(dialog).getByRole("listbox", { name: "Label ranges" }), {
@@ -175,7 +191,10 @@ it("connects both sheet reference edits to label formulas and persists their lex
       name: "Yes",
     }),
   );
-  await act(async () => fireEvent.click(within(dialog).getByRole("button", { name: "OK" })));
+  await act(
+    /** Clicks the button named "OK". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(within(dialog).getByRole("button", { name: "OK" })),
+  );
   expect(doc.GetFormulaCell(formula)?.GetCode().GetCodeError()).toBe(FormulaError.NoName);
   const removed = await readOdsDocument(await writeOdsDocument(doc));
   try {
@@ -200,7 +219,10 @@ it("resolves a row label and relocates the document pair when preceding sheets c
   fireEvent.change(within(dialog).getByRole("textbox", { name: "For data range" }), {
     target: { value: "$Sheet1.$B$1:$C$1" },
   });
-  await act(async () => fireEvent.click(within(dialog).getByRole("button", { name: "OK" })));
+  await act(
+    /** Clicks the button named "OK". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(within(dialog).getByRole("button", { name: "OK" })),
+  );
   expect(doc.GetRowNameRanges().size()).toBe(1);
   act(() => {
     controller.Select(1, 1);

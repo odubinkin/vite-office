@@ -64,7 +64,13 @@ it("joins equal maps while preserving rule order and the relative formula origin
       const [format] = formats;
       assert(format);
       expect(format.size()).toBe(2);
-      expect([...format.GetRange()].map((range) => range.GetVars())).toEqual([
+      expect(
+        [...format.GetRange()].map(
+          /** Calls `GetVars` for each entry. @param range - Collection entry. @returns The projected entry value. */ (
+            range,
+          ) => range.GetVars(),
+        ),
+      ).toEqual([
         [0, 1, 0, 0, 2, 0],
         [0, 4, 0, 0, 4, 0],
       ]);

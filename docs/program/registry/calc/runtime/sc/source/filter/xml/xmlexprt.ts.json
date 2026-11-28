@@ -33,7 +33,7 @@
         "apps/office/src/sc/source/filter/xml/ods-sparse-export.test.ts",
         "apps/office/src/sc/browser/workflows/calc-large-ods.test.ts",
         "apps/office/src/sc/source/core/data/formula-copy.test.ts",
-        "apps/office/src/sc/source/filter/xml/xmlexprt.ts#GetParagraphText",
+        "apps/office/src/sc/source/filter/xml/xmlexprt.celltext.ts#GetAllSections",
         "apps/office/src/sc/source/ui/docshell/docsh.csv-export.test.ts",
         "sc/source/filter/xml/xmlexprt.cxx",
         "editeng/source/editeng/editeng.cxx",

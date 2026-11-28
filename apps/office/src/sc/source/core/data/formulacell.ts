@@ -9,7 +9,6 @@ import { SfxHint, SfxHintId } from "../../../../svl/inc/hint";
 import {
   ScSingleRefToken,
   ScDoubleRefToken,
-  ScTableRefToken,
   ScEmptyCellToken,
   ScMatrixCellResultToken,
 } from "../../../inc/token";
@@ -17,13 +16,8 @@ import {
   StackVar,
   FormulaDoubleToken,
   FormulaStringToken,
-  FormulaIndexToken,
-  FormulaByteToken,
-  FormulaExternalToken,
-  FormulaErrorToken,
   type FormulaToken,
 } from "../../../../formula/inc/token";
-import { approxEqual } from "../../../../sal/inc/rtl/math";
 import { SharedString, type SharedStringConstReference } from "../../../../svl/inc/sharedstring";
 import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { FormulaGrammar, type Grammar } from "../../../../formula/inc/grammar";
@@ -42,24 +36,19 @@ import { FormulaResultValue } from "../../../inc/formularesult";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { unicode, text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import type { ScConstMatrixRef } from "../../../inc/types";
-import { ScFormulaCellGroup } from "./formulacellgroup";
+import { CompareFormulaGroupTokens, CompareState, ScFormulaCellGroup } from "./formulacellgroup";
 import { SV_COUNTRY_LANGUAGE_OFFSET, SvNumFormatType } from "../../../../svl/inc/zforlist";
 import { OpCode } from "../../../../formula/inc/opcode";
 import { SC_LISTENER_QUERY_FORMULA_GROUP_POS } from "../../../inc/listenerqueryids";
 import { RefQueryFormulaGroup } from "../../../inc/listenerquery";
 import { TransposeReference } from "./formulacell.transpose";
+export { CompareState } from "./formulacellgroup";
+
 /** Original formula-cell matrix discriminator for scalar cells, masters and references. */
 export enum ScMatrixMode {
   NONE = 0,
   Formula = 1,
   Reference = 2,
-}
-
-/** Original ScFormulaCell::CompareState discriminator. */
-export enum CompareState {
-  NotEqual,
-  EqualInvariant,
-  EqualRelativeRef,
 }
 
 /** Formula content is stored as actual code/RPN tokens with the existing result owner. */
@@ -585,137 +574,7 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
   CompareByTokenArray(other: ScFormulaCell): CompareState {
     if (this.GetMatrixFlag() !== ScMatrixMode.NONE) return CompareState.NotEqual;
     if (this.GetHash() !== other.GetHash()) return CompareState.NotEqual;
-    if (!this.pCode.IsShareable() || !other.pCode.IsShareable()) return CompareState.NotEqual;
-    let left = this.pCode.GetCode(),
-      right = other.pCode.GetCode(),
-      length = this.pCode.GetCodeLen(),
-      otherLength = other.pCode.GetCodeLen();
-    if (!left || !right) return CompareState.NotEqual;
-    if (length !== otherLength) return CompareState.NotEqual;
-    if (this.pCode.GetCodeError() !== other.pCode.GetCodeError()) return CompareState.NotEqual;
-    let invariant = true;
-    for (let index = 0; index < length; index++) {
-      const a = left[index] as FormulaToken,
-        b = right[index] as FormulaToken;
-      if (
-        a.GetType() !== b.GetType() ||
-        a.GetOpCode() !== b.GetOpCode() ||
-        a.GetParamCount() !== b.GetParamCount()
-      )
-        return CompareState.NotEqual;
-      switch (a.GetType()) {
-        case StackVar.svMatrix:
-        case StackVar.svExternalSingleRef:
-        case StackVar.svExternalDoubleRef:
-          return CompareState.NotEqual;
-        case StackVar.svSingleRef: {
-          const reference = (a as ScSingleRefToken).GetSingleRef();
-          if (!reference.equals((b as ScSingleRefToken).GetSingleRef()))
-            return CompareState.NotEqual;
-          if (reference.IsRowRel()) invariant = false;
-          break;
-        }
-        case StackVar.svDoubleRef: {
-          const first = (a as ScDoubleRefToken).GetSingleRef(),
-            second = (a as ScDoubleRefToken).GetSingleRef2();
-          if (!first.equals((b as ScDoubleRefToken).GetSingleRef())) return CompareState.NotEqual;
-          if (!second.equals((b as ScDoubleRefToken).GetSingleRef2())) return CompareState.NotEqual;
-          if (first.IsRowRel()) invariant = false;
-          if (second.IsRowRel()) invariant = false;
-          break;
-        }
-        case StackVar.svDouble:
-          if (
-            !approxEqual(
-              (a as FormulaDoubleToken).GetDouble(),
-              (b as FormulaDoubleToken).GetDouble(),
-            )
-          )
-            return CompareState.NotEqual;
-          break;
-        case StackVar.svString:
-          if (!(a as FormulaStringToken).GetString().equals((b as FormulaStringToken).GetString()))
-            return CompareState.NotEqual;
-          break;
-        case StackVar.svIndex:
-          if (a.GetOpCode() === OpCode.ocName || a.GetOpCode() === OpCode.ocDBArea) {
-            const first = a as FormulaIndexToken,
-              second = b as FormulaIndexToken;
-            if (first.GetIndex() !== second.GetIndex() || first.GetSheet() !== second.GetSheet())
-              return CompareState.NotEqual;
-          } else if ((a as ScTableRefToken).GetIndex() !== (b as ScTableRefToken).GetIndex())
-            return CompareState.NotEqual;
-          break;
-        case StackVar.svByte:
-          if ((a as FormulaByteToken).GetByte() !== (b as FormulaByteToken).GetByte())
-            return CompareState.NotEqual;
-          break;
-        case StackVar.svExternal:
-          if (
-            !(a as FormulaExternalToken)
-              .GetExternal()
-              .equals((b as FormulaExternalToken).GetExternal())
-          )
-            return CompareState.NotEqual;
-          if ((a as FormulaExternalToken).GetByte() !== (b as FormulaExternalToken).GetByte())
-            return CompareState.NotEqual;
-          break;
-        case StackVar.svError:
-          if ((a as FormulaErrorToken).GetError() !== (b as FormulaErrorToken).GetError())
-            return CompareState.NotEqual;
-          break;
-        default:
-          break;
-      }
-    }
-    left = this.pCode.GetArray();
-    right = other.pCode.GetArray();
-    length = this.pCode.GetLen();
-    otherLength = other.pCode.GetLen();
-    if (!left || !right) return CompareState.NotEqual;
-    if (length !== otherLength) return CompareState.NotEqual;
-    for (let index = 0; index < length; index++) {
-      const a = left[index] as FormulaToken,
-        b = right[index] as FormulaToken;
-      if (
-        a.GetType() !== b.GetType() ||
-        a.GetOpCode() !== b.GetOpCode() ||
-        a.GetParamCount() !== b.GetParamCount()
-      )
-        return CompareState.NotEqual;
-      switch (a.GetType()) {
-        case StackVar.svSingleRef: {
-          const reference = (a as ScSingleRefToken).GetSingleRef();
-          if (!reference.equals((b as ScSingleRefToken).GetSingleRef()))
-            return CompareState.NotEqual;
-          if (reference.IsRowRel()) invariant = false;
-          break;
-        }
-        case StackVar.svDoubleRef: {
-          const first = (a as ScDoubleRefToken).GetSingleRef(),
-            second = (a as ScDoubleRefToken).GetSingleRef2();
-          if (!first.equals((b as ScDoubleRefToken).GetSingleRef())) return CompareState.NotEqual;
-          if (!second.equals((b as ScDoubleRefToken).GetSingleRef2())) return CompareState.NotEqual;
-          if (first.IsRowRel()) invariant = false;
-          if (second.IsRowRel()) invariant = false;
-          break;
-        }
-        case StackVar.svIndex:
-          if (a.GetOpCode() === OpCode.ocTableRef) {
-            if ((a as ScTableRefToken).GetIndex() !== (b as ScTableRefToken).GetIndex())
-              return CompareState.NotEqual;
-          } else {
-            const first = a as FormulaIndexToken,
-              second = b as FormulaIndexToken;
-            if (first.GetIndex() !== second.GetIndex() || first.GetSheet() !== second.GetSheet())
-              return CompareState.NotEqual;
-          }
-          break;
-        default:
-          break;
-      }
-    }
-    return invariant ? CompareState.EqualInvariant : CompareState.EqualRelativeRef;
+    return CompareFormulaGroupTokens(this.pCode, other.pCode);
   }
   /** Original mutable numeric/no-error query runs lazy interpretation first. @returns Numeric result without a code error. */
   IsValueNoError(): boolean {

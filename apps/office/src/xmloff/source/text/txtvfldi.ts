@@ -178,7 +178,7 @@ export class XMLSequenceFieldImportContext extends SvXMLImportContext {
     }
     const field = this.helper.InsertTextField(
       "SetExpression",
-      /** Connects the native field master before attaching the field. @param field - Detached sequence field. */
+      /** Connects the native field master before attaching the field. @param field - Detached sequence field. @returns Nothing. */
       (field) => (field as XMLDependentTextField).attachTextFieldMaster(master.properties),
       this.properties,
       this.hyperlink,
@@ -287,7 +287,7 @@ export class XMLVarFieldImportContext extends SvXMLImportContext {
     }
     const field = this.helper.InsertTextField(
       user ? "User" : "SetExpression",
-      /** Attaches the named field master before insertion. @param field - Native descriptor. */
+      /** Attaches the named field master before insertion. @param field - Native descriptor. @returns Nothing. */
       (field) => (field as XMLDependentTextField).attachTextFieldMaster(master.properties),
       this.properties,
       this.hyperlink,

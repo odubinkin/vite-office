@@ -125,7 +125,12 @@ import {
 import type { SwNumberingTabSettings } from "../../source/core/text/txttab";
 import { getFontFamilyGeneric } from "../../../xmloff/source/style/fonthdl";
 import type { WriterParagraphComputedStyle } from "./writer-view-projection.types";
+import {
+  projectInlineGraphic,
+  type WriterInlineGraphicProjection,
+} from "./writer-inline-graphic-projection";
 export type { WriterParagraphComputedStyle } from "./writer-view-projection.types";
+export type { WriterInlineGraphicProjection } from "./writer-inline-graphic-projection";
 /** Detached document style selector metadata. */
 export type WriterParagraphStyleOption = StyleToolboxEntry;
 
@@ -217,18 +222,6 @@ export interface WriterTextPortion {
   readonly hyperlink?: Readonly<{ url: string; targetFrame?: string }>;
   readonly startOffset: number;
   readonly text: string;
-}
-
-/** Visual form of an as-character fly occupying one native text position. */
-export interface WriterInlineGraphicProjection {
-  readonly image: import("../../../vcl/source/gdi/graph").Graphic;
-  readonly name: string;
-  readonly width: number;
-  readonly height: number;
-  readonly left: number;
-  readonly right: number;
-  readonly upper: number;
-  readonly lower: number;
 }
 
 /** Immutable browser presentation value with no mutable model references. */
@@ -982,32 +975,4 @@ function projectTextPortions(
     start = end;
   }
   return Object.freeze(portions);
-}
-
-/** Projects a graphic's native point and frame attributes as a single device portion. @param node - Anchor paragraph. @param start - Native UTF16 position. @returns Inline image or absence. */
-function projectInlineGraphic(
-  node: SwTextNode,
-  start: number,
-): WriterInlineGraphicProjection | undefined {
-  const format = node.GetpSwpHints()?.GetTextAttrForCharAt(start)?.GetAttr().GetFrameFormat();
-  const section = format?.GetContent().GetContentIdx()?.GetNode();
-  if (!format || !section?.IsStartNode()) return undefined;
-  const graphic = node
-    .GetNodes()
-    .at(section.GetIndex() + 1)
-    .GetGrfNode();
-  if (!graphic) return undefined;
-  const size = format.GetFrameSize();
-  const horizontal = format.GetLRSpace();
-  const vertical = format.GetULSpace();
-  return Object.freeze({
-    image: graphic.GetGraphic(),
-    name: format.GetName(),
-    width: size.GetWidth(),
-    height: size.GetHeight(),
-    left: horizontal.ResolveLeft(),
-    right: horizontal.ResolveRight(),
-    upper: vertical.GetUpper(),
-    lower: vertical.GetLower(),
-  });
 }

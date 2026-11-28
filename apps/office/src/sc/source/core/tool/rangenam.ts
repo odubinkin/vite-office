@@ -247,7 +247,7 @@ export class ScRangeName {
     return this.indexToData.get(index);
   }
 
-  /** Inserts one definition at a free name and native token index. @param value - Actual definition. @returns Whether inserted. */
+  /** Inserts one definition at a free name and native token index. @param value - Actual definition. @param reuseFreeIndex - Whether to reuse a free index when the incoming range has none. @returns Whether inserted. */
   insert(value: ScRangeData, reuseFreeIndex = true): boolean {
     const name = value.GetUpperName();
     if (!name || this.data.has(name)) return false;

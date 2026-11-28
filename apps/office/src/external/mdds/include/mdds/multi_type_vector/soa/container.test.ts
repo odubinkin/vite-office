@@ -1,9 +1,10 @@
 /** @fileoverview Complete unchanged original container constructor/lifetime/operator states over real shared SoA ownership and typed scalar callbacks. */
+import { readFileSync } from "node:fs";
+import { URL } from "node:url";
 import { describe, it, expect } from "vitest";
-import fixture from "./native-container-cases.json";
 import scalarFixture from "./native-scalar-release-cases.json";
 /** Complete native corpus; both operation groups share the same full-field decoder and observer. */
-type NativeFixture = typeof fixture | typeof scalarFixture;
+type NativeFixture = typeof scalarFixture;
 import {
   is_previous_block_of_type,
   is_next_block_of_type,
@@ -23,6 +24,11 @@ import { invalid_arg_error, general_error } from "../../global.ts";
 import * as standard from "../standard_element_blocks.ts";
 import { type iterator_updater, type iterator_base, type const_iterator_base } from "./iterator.ts";
 import { type BlockPosition } from "../util.ts";
+
+const fixture = JSON.parse(
+  readFileSync(new URL("./native-container-cases.json", import.meta.url), "utf8"),
+) as NativeFixture;
+
 /** Erased existing original block type witness. */
 type BlockType = ReturnType<typeof default_element_block<DelayedVectorValue>>;
 /** Full native valid-live payload. */

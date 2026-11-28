@@ -458,9 +458,11 @@ export class SwFormatRuby extends SfxPoolItem {
     );
   }
 
-  /** Returns the original UNO member with the native scalar width and style name. @param result - Destination Any. @param member - Original member identifier. @returns Whether the member is represented. */
+  /** Reads the text of the ruby annotation. @returns The ruby text. */
   override QueryValue(): string;
+  /** Writes the requested native ruby property to a UNO value. @param result - Property destination. @param member - Original member identifier. @returns Whether the member is supported. */
   override QueryValue(result: Any, member?: number): boolean;
+  /** Reads the ruby text or writes the selected property with its native scalar type. @param result - Optional property destination. @param member - Original member identifier. @returns Ruby text or whether the property was written. */
   override QueryValue(result?: Any, member = RubyMember.MID_RUBY_TEXT): string | boolean {
     if (result === undefined) return text(this.m_sRubyText);
     switch (member & ~CONVERT_TWIPS) {

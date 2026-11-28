@@ -497,7 +497,7 @@ class ScXMLDependingsContext extends SvXMLImportContext {
 
 /** Reads the native previous cell wrapper. */
 class ScXMLPreviousContext extends ScXMLImportContext {
-  /** Binds the old cell to the current action. @param owner - Workbook importer. @param receive - Cell callback. @returns The initialized ScXMLPreviousContext instance. */
+  /** Binds the old cell to the current action. @param owner - Workbook importer. @param receive - Cell callback. @param tab - Sheet index of the tracked cell. @returns The initialized ScXMLPreviousContext instance. */
   public constructor(
     owner: ScXMLImport,
     private readonly tab: number,

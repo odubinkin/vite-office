@@ -50,7 +50,13 @@ it("retains the native SimpleTOC index, level forms and cached linked contents",
       expect(tox.form.GetTemplate(0)).toBe("Contents Heading");
       expect(tox.form.GetTemplate(1)).toBe("Contents 1");
       const fields = tox.form.GetPattern(1);
-      expect(fields.map((field) => field.eTokenType)).toEqual([
+      expect(
+        fields.map(
+          /** Reads the entry's `eTokenType` field. @param field - Collection entry. @returns The field value. */ (
+            field,
+          ) => field.eTokenType,
+        ),
+      ).toEqual([
         FormTokenType.LinkStart,
         FormTokenType.EntryNo,
         FormTokenType.EntryText,

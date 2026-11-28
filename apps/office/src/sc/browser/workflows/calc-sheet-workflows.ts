@@ -1,7 +1,6 @@
 /** @fileoverview Coordinates Calc sheet commands, confirmation dialogs and document-sheet operations. */
 import { CalcCellFormatWorkflow, createCellFormatSlot } from "./calc-cell-format-workflow";
 import { CalcClipboardWorkflow } from "./calc-clipboard-workflow";
-/** @fileoverview Browser async adapter for native ScTabViewShell::ExecGoToTab and JumpToTable/Nr;real sheet/cursor ownership remains with Calc. */
 import { CalcOptionsWorkflow } from "./calc-options-workflow";
 import { CalcLabelRangeWorkflow } from "./calc-label-range-workflow";
 import { CalcMergeWorkflow } from "./calc-merge-workflow";

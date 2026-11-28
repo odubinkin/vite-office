@@ -13,7 +13,7 @@ export class SwSetExpFieldType extends SwValueFieldType {
   private outlineLevel = 0xff;
   private delimiter = ".";
 
-  /** Binds a sequence type to the native document. @param document - Writer owner. @param name - Field master name. @returns The initialized SwSetExpFieldType instance. */
+  /** Binds a sequence type to the native document. @param document - Writer owner. @param name - Field master name. @param type - Native expression subtype. @returns The initialized SwSetExpFieldType instance. */
   public constructor(
     document: SwDoc,
     private readonly name: string,
@@ -259,7 +259,7 @@ export class SwGetExpFieldType extends SwValueFieldType {}
 
 /** Original expression reader or formula at a Writer text point. */
 export class SwGetExpField implements SwField<SwGetExpField> {
-  /** Constructs the field and its imported presentation. @param type - Document field type. @param formula - Name or formula. @param subtype - Native subtype. @param format - Document format key. @param showFormula - Command display. @param presentation - Imported presentation. @returns The initialized SwGetExpField instance. */
+  /** Constructs the field and its imported presentation. @param type - Document field type. @param formula - Name or formula. @param subtype - Native subtype. @param format - Document format key. @param showFormula - Command display. @param presentation - Imported presentation. @param value - Cached numeric expression value. @returns The initialized SwGetExpField instance. */
   public constructor(
     private readonly type: SwGetExpFieldType,
     public readonly formula: string,

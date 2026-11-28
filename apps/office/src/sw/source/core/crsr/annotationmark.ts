@@ -6,7 +6,7 @@ import type { SwPaM } from "./pam";
 /** An expanded annotation owns its range independently from the point text attribute. */
 export class AnnotationMark extends MarkBase {
   private readonly name: string;
-  /** Binds a registered range to the annotation at its end. @param range - Native text range. @param field - Owning annotation format. @returns Annotation mark. */
+  /** Binds a registered range to the annotation at its end. @param range - Native text range. @param field - Owning annotation format. @param name - Optional imported mark name. @returns Annotation mark. */
   constructor(
     range: SwPaM,
     private readonly field: SwFormatField,

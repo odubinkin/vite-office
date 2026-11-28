@@ -233,7 +233,7 @@ export function ReadConditionalRule(
   };
 }
 
-/** Rebuilds one edited native conditional threshold. @param stop - Editable threshold. @param doc - Workbook. @param origin - Formula context. @returns Owned threshold. */
+/** Rebuilds one edited native conditional threshold. @param stop - Editable threshold. @param doc - Workbook. @param origin - Formula context. @param value - Numeric value carried by the threshold. @returns Owned threshold. */
 function createStop(
   stop: ConditionalScaleDraft,
   doc: ScDocument,

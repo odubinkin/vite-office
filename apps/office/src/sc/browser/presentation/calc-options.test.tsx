@@ -55,7 +55,10 @@ it("validates Calculate before leaving the page, resets controls and applies doc
   expect(dialog.getByRole("checkbox", { name: "Iterations" })).not.toBeChecked();
   expect(dialog.queryByRole("alert")).toBeNull();
   fireEvent.click(dialog.getByRole("checkbox", { name: "Case sensitive" }));
-  await act(async () => fireEvent.click(dialog.getByRole("button", { name: "Cancel" })));
+  await act(
+    /** Clicks the button named "Cancel". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(dialog.getByRole("button", { name: "Cancel" })),
+  );
   expect(doc.GetDocOptions().IsIgnoreCase()).toBe(false);
 
   dialog = options();
@@ -66,7 +69,10 @@ it("validates Calculate before leaving the page, resets controls and applies doc
   fireEvent.change(dialog.getByLabelText("Decimal places"), { target: { value: "2" } });
   fireEvent.click(dialog.getByRole("radio", { name: "1904-01-01" }));
   fireEvent.click(dialog.getByRole("radio", { name: "Enable regular expressions in formulas" }));
-  await act(async () => fireEvent.click(dialog.getByRole("button", { name: "OK" })));
+  await act(
+    /** Clicks the button named "OK". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(dialog.getByRole("button", { name: "OK" })),
+  );
 
   expect(doc.GetValue(target)).toBe(1);
   expect(doc.GetDocOptions().IsFormulaRegexEnabled()).toBe(true);
@@ -101,7 +107,10 @@ it("uses the automatic label switch for formula admission and the connected data
   let dialog = options();
   const lookup = dialog.getByRole("checkbox", { name: "Automatically find column and row labels" });
   if (!lookup.matches(":checked")) fireEvent.click(lookup);
-  await act(async () => fireEvent.click(dialog.getByRole("button", { name: "OK" })));
+  await act(
+    /** Clicks the button named "OK". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(dialog.getByRole("button", { name: "OK" })),
+  );
   act(() => {
     controller.Select(2, 1);
     expect(controller.EnterString("=SUM('Net Sales')")).toBe(true);
@@ -122,7 +131,10 @@ it("uses the automatic label switch for formula admission and the connected data
   fireEvent.click(
     dialog.getByRole("checkbox", { name: "Automatically find column and row labels" }),
   );
-  await act(async () => fireEvent.click(dialog.getByRole("button", { name: "OK" })));
+  await act(
+    /** Clicks the button named "OK". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(dialog.getByRole("button", { name: "OK" })),
+  );
   act(() => {
     controller.Select(2, 2);
     expect(controller.EnterString("=SUM('Net Sales')")).toBe(false);
@@ -164,7 +176,10 @@ it("applies Excel A1 references and confirmed details without changing global co
     details.getByRole("checkbox", { name: "Apply those settings to current document only" }),
   );
   fireEvent.click(details.getByRole("button", { name: "OK" }));
-  await act(async () => fireEvent.click(dialog.getByRole("button", { name: "OK" })));
+  await act(
+    /** Clicks the button named "OK". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(dialog.getByRole("button", { name: "OK" })),
+  );
 
   expect(doc.GetGrammar()).toBe(FormulaGrammar.Grammar.GRAM_ENGLISH_XL_A1);
   expect(doc.GetDocOptions().IsWriteCalcConfig()).toBe(false);

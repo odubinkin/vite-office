@@ -8,6 +8,8 @@ import { CalcViewController } from "./calc-view-controller";
 import { ScDocShell } from "../../source/ui/docshell/docsh";
 import { ScDocument } from "../../inc/document";
 import { ScAddress, MAXCOL, MAXROW } from "../../inc/address";
+import { ScTableProtectionOption } from "../../inc/tabprotection";
+import { ScTableProtection } from "../../source/core/data/tabprotection";
 import { cellInputText, cellPresentation } from "../editor/cell-input";
 import { FormulaGrammar } from "../../../formula/inc/grammar";
 import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
@@ -24,6 +26,26 @@ import { ScHSplitPos, ScSplitPos, ScVSplitPos } from "../../source/ui/view/viewd
 import { CalcGridAxis } from "../presentation/calc-grid-axis";
 import { columnPixels } from "../presentation/column-geometry";
 import { rowPixels } from "../presentation/row-geometry";
+
+it("keeps the formula draft when a protected sheet disallows reference selection", /** Exercises keyboard reference navigation after sheet selection becomes unavailable. @returns Nothing. */ () => {
+  const controller = new CalcViewController();
+  try {
+    expect(controller.StartInput(ScInputMode.SC_INPUT_TYPE, "=SUM(")).toBe(true);
+    const protection = new ScTableProtection();
+    protection.setProtected(true);
+    protection.setOption(ScTableProtectionOption.SELECT_LOCKED_CELLS, false);
+    protection.setOption(ScTableProtectionOption.SELECT_UNLOCKED_CELLS, false);
+    controller.shell.GetDocument().SetTabProtection(0, protection);
+
+    controller.NavigateReference(1, 0, false);
+
+    expect(controller.Input()).toBe("=SUM(");
+    expect(controller.ReferenceRange()).toBeNull();
+    expect(controller.Address()).toBe("A1");
+  } finally {
+    controller.Close();
+  }
+});
 
 it("displays and edits native rich-text cells without reading an absent shared-string variant", /** Checks repeated display ownership and preservation of text that resembles a number. @returns Nothing. */ () => {
   const shell = new ScDocShell();

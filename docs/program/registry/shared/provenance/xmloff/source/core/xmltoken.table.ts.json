@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/xmloff/source/core/xmltoken.table.ts",
+    "upstreamPath": "xmloff/source/core/xmltoken.cxx",
+    "localSymbols": [
+      "createTrackedChangeTokens",
+      "createSheetDataTokens"
+    ],
+    "upstreamSymbols": [
+      "XML_TRACKED_CHANGES",
+      "XML_DATABASE_RANGES"
+    ],
+    "preservedResponsibilities": [
+      "Registers the original expanded-name tokens for tracked spreadsheet changes, linked data, database ranges and scenarios."
+    ],
+    "omittedResponsibilities": [
+      "Tokens for other ODF elements continue to be registered by the existing lookup module."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/xmloff/source/core/xmltoken.table.ts",
+      "rationale": "Keeps spreadsheet token tables together while retaining their original lookup order.",
+      "stackNecessity": "responsibility-split"
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/xmloff/source/core/xmltoken.table.ts",
+          "marker": "createTrackedChangeTokens"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/core/xmltoken.table.ts",
+          "marker": "createSheetDataTokens"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/core/xmltoken.cxx",
+          "marker": "XML_TRACKED_CHANGES"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/core/xmltoken.cxx",
+          "marker": "XML_DATABASE_RANGES"
+        }
+      ]
+    }
+  }
+}

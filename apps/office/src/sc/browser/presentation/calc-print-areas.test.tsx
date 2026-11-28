@@ -73,9 +73,11 @@ it("ports the upstream Define, edit repeat titles and clear scenario", /** Ports
   expect(screen.getByRole("textbox", { name: "Print Range" })).toHaveValue("$A$1:$F$20");
   expect(screen.getByRole("textbox", { name: "Rows to Repeat" })).toHaveValue("$1");
   expect(screen.getByRole("textbox", { name: "Columns to Repeat" })).toHaveValue("$A");
-  await act(async () => {
-    fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
-  });
+  await act(
+    /** Clicks the button named "Cancel". @returns Completion. */ async () => {
+      fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
+    },
+  );
 
   fireEvent.click(printCommand("Clear"));
   expect(sheet.IsPrintEntireSheet()).toBe(true);

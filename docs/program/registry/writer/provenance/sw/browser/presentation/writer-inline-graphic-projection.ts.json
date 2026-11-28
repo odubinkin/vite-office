@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/sw/browser/presentation/writer-inline-graphic-projection.ts",
+    "rationale": "Resolves an as-character graphic and frame spacing from the original Writer paragraph hint for browser text layout.",
+    "responsibilities": [
+      "Resolves an as-character graphic and frame spacing from the original Writer paragraph hint for browser text layout."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-inline-graphic-projection.ts",
+          "marker": "projectInlineGraphic"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view-projection.ts",
+          "marker": "projectInlineGraphic"
+        }
+      ]
+    },
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "An inline browser graphic uses the native frame dimensions and margins in place of output-device painting."
+    }
+  }
+}

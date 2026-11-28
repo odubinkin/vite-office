@@ -249,7 +249,7 @@ export abstract class SwNode extends SwContentIndexRegistry {
 export class SwStartNode extends SwNode {
   private endOfSection?: SwEndNode;
 
-  /** Creates a section start sentinel. @param nodes - Owning node array. @param parent - Optional parent section. @param startNodeType - Original structural section tag. @returns Nothing. */
+  /** Creates a section start sentinel. @param nodes - Owning node array. @param parent - Optional parent section. @param startNodeType - Original structural section tag. @param nodeType - Whether this node starts an ordinary or a named section. @returns Nothing. */
   public constructor(
     nodes: SwNodes,
     parent?: SwStartNode,

@@ -329,7 +329,7 @@ export class SvxXMLListStyleContext extends SvXMLImportContext {
   private readonly levelStyles: SvxXMLListLevelStyleContext_Impl[] = [];
   private readonly name: string;
   private readonly ruleName: string;
-  /** Reads identity while retaining declarations in their own contexts. @param target - Writer numbering consumer. @param attributes - List identity attributes. @returns Context.  @param automatic - Native operation input. */
+  /** Reads identity while retaining declarations in their own contexts. @param target - Writer numbering consumer. @param attributes - List identity attributes. @param outline - Whether this style represents document outline numbering. @returns Context.  @param automatic - Native operation input. */
   public constructor(
     private readonly target: XMLListStyleImportTarget,
     attributes: FastAttributeList,

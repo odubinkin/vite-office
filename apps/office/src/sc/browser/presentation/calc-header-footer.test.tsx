@@ -88,7 +88,10 @@ function content(workbook: ScDocument, which: number): ScPageHFItem | undefined 
 
 /** Closes the dialog via its normal response and waits for Sfx dispatch. @param dialog - Source dialog. @param name - Response button. @returns Completion. */
 async function response(dialog: HTMLElement, name: "OK" | "Cancel"): Promise<void> {
-  await act(async () => fireEvent.click(within(dialog).getByRole("button", { name })));
+  await act(
+    /** Clicks the selected control. @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(within(dialog).getByRole("button", { name })),
+  );
 }
 
 it.each([
@@ -104,7 +107,11 @@ it.each([
     expect(
       within(dialog)
         .getAllByRole("tab")
-        .map((tab) => tab.textContent),
+        .map(
+          /** Reads the entry's `textContent` field. @param tab - Collection entry. @returns The field value. */ (
+            tab,
+          ) => tab.textContent,
+        ),
     ).toEqual([name + " (first)", name + " (right)"]);
     const left = within(dialog).getByRole("textbox", { name: "Left area" });
     const center = within(dialog).getByRole("textbox", { name: "Center area" });
@@ -144,7 +151,13 @@ it("ports tdf166756 and expands the title and decoded file fields in both import
     const parent = openPage(name);
     const dialog = edit(parent);
     const lines = within(dialog).getByRole("textbox", { name: "Left area" }).children;
-    expect([...lines].map((line) => line.textContent)).toEqual([
+    expect(
+      [...lines].map(
+        /** Reads the entry's `textContent` field. @param line - Collection entry. @returns The field value. */ (
+          line,
+        ) => line.textContent,
+      ),
+    ).toEqual([
       "Title: tdf166756_[1]",
       "FileName: tdf166756_[1].ods",
       "Path Name: file:///tmp/tdf166756_[1].ods",
@@ -162,7 +175,11 @@ it("opens the standalone source dialog and persists field edits through ODS and 
   expect(
     within(dialog)
       .getAllByRole("tab")
-      .map((tab) => tab.textContent),
+      .map(
+        /** Reads the entry's `textContent` field. @param tab - Collection entry. @returns The field value. */ (
+          tab,
+        ) => tab.textContent,
+      ),
   ).toEqual(["Header", "Footer"]);
   expect(within(dialog).getByRole("textbox", { name: "Center area" })).toHaveTextContent("Sheet1");
   expect(within(dialog).getByRole("combobox", { name: "Preset" })).toHaveValue("3");

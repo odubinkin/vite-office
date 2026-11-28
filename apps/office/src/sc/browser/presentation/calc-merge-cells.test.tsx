@@ -41,14 +41,20 @@ function command(name: string, checkable = false): HTMLElement {
 /** Dispatches the source command after its menus have rendered. @param name - Command label. @param checkable - Whether to query the toggle role. @returns Completion. */
 async function execute(name: string, checkable = false): Promise<void> {
   const item = command(name, checkable);
-  await act(async () => fireEvent.click(item));
+  await act(
+    /** Clicks the selected control. @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(item),
+  );
 }
 
 /** Accepts the current source policy. @param name - Radio label prefix. @returns Completion. */
 async function choose(name: RegExp): Promise<void> {
   const dialog = within(screen.getByRole("dialog", { name: "Merge Cells" }));
   fireEvent.click(dialog.getByRole("radio", { name }));
-  await act(async () => fireEvent.click(dialog.getByRole("button", { name: "OK" })));
+  await act(
+    /** Clicks the button named "OK". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(dialog.getByRole("button", { name: "OK" })),
+  );
 }
 
 /** Reopens the original LibreOffice test workbook in the live Calc document. @param filename - ODS fixture. @returns Mounted session. */
@@ -98,12 +104,18 @@ it("ports tdf117367 and keeps the three merge policies mutually exclusive", /** 
   expect(move).not.toBeChecked();
   expect(keep).toBeChecked();
   expect(empty).not.toBeChecked();
-  await act(async () => fireEvent.click(dialog.getByRole("button", { name: "OK" })));
+  await act(
+    /** Clicks the button named "OK". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(dialog.getByRole("button", { name: "OK" })),
+  );
   expect(doc.IsMerged(a1)).toBe(true);
   expect(text(doc.GetSharedString(a2).getString())).toBe("BBB");
   expect(screen.getByRole("gridcell", { name: "A1 AAA" })).toHaveAttribute("aria-rowspan", "4");
   expect(command("Merge and Center Cells", true)).toBeChecked();
-  await act(async () => fireEvent.click(screen.getByRole("menuitem", { name: "Unmerge Cells" })));
+  await act(
+    /** Clicks the menuitem named "Unmerge Cells". @returns Whether the event's default action is allowed, after dispatch. */ async () =>
+      fireEvent.click(screen.getByRole("menuitem", { name: "Unmerge Cells" })),
+  );
   expect(doc.IsMerged(a1)).toBe(false);
   expect(screen.getByRole("gridcell", { name: "A2 BBB" })).toBeVisible();
   act(() => expect(controller.Undo()).toBe(true));

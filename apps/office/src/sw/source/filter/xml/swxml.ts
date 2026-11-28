@@ -144,7 +144,7 @@ export class SwXMLReader {
         names,
         manifest,
         packageFile.readEntry.bind(packageFile),
-        /** Keeps the original Writer import progress checkpoint. */ () =>
+        /** Keeps the original Writer import progress checkpoint. @returns Completion of the import checkpoint. */ () =>
           checkpoint(control, "mapping"),
       );
       for (const font of fonts)

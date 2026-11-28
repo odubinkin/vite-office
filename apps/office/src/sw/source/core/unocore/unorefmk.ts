@@ -35,7 +35,7 @@ export class SwXReferenceMark {
     );
   }
 
-  /** Rejects writes to the original reference mark properties. */
+  /** Rejects writes to the original reference mark properties. @returns Never. Writes throw a UNO property error. */
   public setPropertyValue(): never {
     illegal("Writer reference mark properties are read-only.");
   }
