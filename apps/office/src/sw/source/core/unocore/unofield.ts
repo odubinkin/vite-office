@@ -6,14 +6,24 @@ import {
 } from "../../../../offapi/com/sun/star/util/DateTime";
 import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { DateTime } from "../../../../tools/source/datetime/datetime";
-import { SwTextField, type SwTextReferenceField } from "../../../inc/txtfld";
+import {
+  SwTextField,
+  type SwTextDocInfoField,
+  type SwTextReferenceField,
+} from "../../../inc/txtfld";
 import { SwFormatField } from "../../../inc/fmtfld";
 import { RES_TXTATR_FIELD } from "../../../inc/hintids";
 import { RefFieldFormat } from "../../../inc/reffld";
 import { ReferencesSubtype } from "../../../inc/reffldsubtype";
 import { ReferenceFieldSource } from "../../../../offapi/com/sun/star/text/ReferenceFieldSource";
 import { SwPaM, SwPosition } from "../crsr/pam";
-import { SwPostItField, SwPostItFieldType, type SwPostItFieldData } from "../fields/docufld";
+import {
+  SwDocInfoField,
+  SwDocInfoSubType,
+  SwPostItField,
+  SwPostItFieldType,
+  type SwPostItFieldData,
+} from "../fields/docufld";
 import { SwGetRefField, type SwGetRefFieldData } from "../fields/reffld";
 import { SwTextAPIObject } from "../fields/textapi";
 import { SwXTextRange, type SwXTextOwner } from "./unoobj2";
@@ -242,6 +252,66 @@ export class SwXGetReferenceField {
   }
 
   /** Removes the attached native field point. */
+  public dispose(): void {
+    const hint = this.hint;
+    this.hint = undefined;
+    if (hint) hint.GetTextNode()?.EraseText(hint.GetStart(), 1);
+  }
+}
+
+/** Native descriptor for the represented document information services. */
+export class SwXDocInfoField {
+  private fixed = false;
+  private presentation = "";
+  private hint: SwTextDocInfoField | undefined;
+
+  /** Binds the subtype selected by the UNO service. @param subtype - Native document information subtype. */
+  public constructor(private readonly subtype: number) {}
+
+  /** Assigns the original importer properties on the detached descriptor. @param name - UNO property name. @param input - Typed UNO property value. */
+  public setPropertyValue(name: OUStringConstReference, input: Any): void {
+    if (this.hint) invalid("Writer document information field is attached.");
+    const property = text(name);
+    switch (property) {
+      case "IsFixed":
+        this.fixed = scalar(input, "bool") as boolean;
+        break;
+      case "CurrentPresentation":
+        this.presentation = stringValue(input);
+        break;
+      case "Content":
+      case "Author":
+        stringValue(input);
+        break;
+      case "Revision":
+        scalar(input, "sal_Int32");
+        break;
+      default:
+        unknown(property);
+    }
+  }
+
+  /** Attaches the document's native field to the current text point. @param range - Writer text range. */
+  public attach(range: SwXTextRange): void {
+    if (this.hint) invalid("Writer document information field is already attached.");
+    const position = range.GetPaM().Start();
+    const node = position.GetNode().GetTextNode();
+    if (!node) illegal("Writer document information field must be in text.");
+    const type = node.GetDoc().getIDocumentFieldsAccess().GetDocInfoFieldType();
+    const field = new SwDocInfoField(
+      type,
+      this.subtype | (this.fixed ? SwDocInfoSubType.SubFixed : 0),
+    );
+    if (this.presentation) field.SetExpansion(this.presentation);
+    const hint = new SwTextField(
+      new SwFormatField(field, RES_TXTATR_FIELD),
+      position.GetContentIndex(),
+    );
+    if (!node.InsertHint(hint)) invalid("Writer document information field could not be inserted.");
+    this.hint = hint;
+  }
+
+  /** Disposes the native field by removing its point from the document. */
   public dispose(): void {
     const hint = this.hint;
     this.hint = undefined;

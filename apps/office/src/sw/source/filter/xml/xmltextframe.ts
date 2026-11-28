@@ -443,6 +443,7 @@ export function compareParagraphMarkers(
       case "index-mark":
       case "reference-mark":
       case "reference-field":
+      case "doc-info-field":
         return 6;
     }
   }

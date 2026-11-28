@@ -7,7 +7,8 @@ import { SwUnoTextDocumentPropertyMap, aSwMapProvider } from "../../core/unocore
 import { unknown } from "../../core/unocore/unocrsrhelper";
 import { SwXAutoStyles } from "../../core/unocore/unostyle-auto";
 
-import { SwXGetReferenceField, SwXTextField } from "../../core/unocore/unofield";
+import { SwXDocInfoField, SwXGetReferenceField, SwXTextField } from "../../core/unocore/unofield";
+import { docInfoServiceSubTypes } from "../../core/fields/docufld";
 import { SwXBookmark } from "../../core/unocore/unobkm";
 import { SwXReferenceMark } from "../../core/unocore/unorefmk";
 import type { SwDoc } from "../../core/doc/doc";
@@ -118,7 +119,8 @@ export class SwXTextDocument {
     | SwXBookmark
     | SwXReferenceMark
     | SwXTextField
-    | SwXGetReferenceField {
+    | SwXGetReferenceField
+    | SwXDocInfoField {
     const n = text(name),
       doc = this.GetDoc();
     switch (n) {
@@ -143,6 +145,13 @@ export class SwXTextDocument {
       case "com.sun.star.text.NumberingRules":
         return new SwXNumberingRules(doc);
       default:
+        if (/^com\.sun\.star\.text\.(TextField|textfield)\.DocInfo\./.test(n)) {
+          const suffix = n.slice("com.sun.star.text.TextField.".length);
+          if (Object.hasOwn(docInfoServiceSubTypes, suffix))
+            return new SwXDocInfoField(
+              docInfoServiceSubTypes[suffix as keyof typeof docInfoServiceSubTypes],
+            );
+        }
         invalid(`Unported Writer service: ${n}`);
     }
   }

@@ -15,7 +15,12 @@ import { FastAttributeList, SvXMLImportContext, SvXMLIgnoreContext } from "../co
 import { XMLToken } from "../core/xmltoken";
 import { XMLAnnotationImportContext } from "./txtfldi";
 import { XMLTextMarkImportContext } from "./XMLTextMarkImportContext";
-import { XMLReferenceFieldImportContext } from "./txtfldi";
+import {
+  XMLReferenceFieldImportContext,
+  XMLRevisionDocInfoImportContext,
+  XMLSimpleDocInfoImportContext,
+} from "./txtfldi";
+import { docInfoFields } from "./txtflde";
 import { ReferenceFieldSource } from "../../../offapi/com/sun/star/text/ReferenceFieldSource";
 import type {
   OdfCharacterProperties,
@@ -436,6 +441,18 @@ function createInlineContext(
         );
   if (XMLIndexMarkImportContext.IsIndexMark(element))
     return annotation || !target.insertIndexMark ? null : new XMLIndexMarkImportContext(paragraph);
+  const docInfo = docInfoFields.find(
+    /** Matches an original element token. @param field - Service mapping. @returns Whether matched. */
+    ([token]) => token === element,
+  );
+  if (docInfo) {
+    if (annotation) return null;
+    const Context =
+      element === XMLToken.TEXT_EDITING_CYCLES
+        ? XMLRevisionDocInfoImportContext
+        : XMLSimpleDocInfoImportContext;
+    return new Context(paragraph, docInfo, properties, hyperlink, namedStyles);
+  }
   if (element === XMLToken.TEXT_SOFT_PAGE_BREAK) {
     attributes.assertOnly([], "soft page break");
     // Native text import ignores pagination hints; these are produced by layout on export.

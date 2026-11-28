@@ -164,6 +164,13 @@ language and stored display text through ODT and Worker transfer. Writer can
 update text references from the current registered target. Formats that need
 page layout retain the imported display text in this filter slice.
 
+Document information fields for title, subject, description, keywords,
+creation, modification and print authors, and revision survive ODT and Worker
+transfer as native field hints. Live fields expand from the document's
+metadata and fixed fields keep the original presentation. Print and other
+author fields follow the native Gregorian date checks. The ODT Worker restores
+the native metadata owner before adopting the document.
+
 Images, other field types, annotations, sections, objects, scripts,
 signatures, encryption, RDF, non-decimal numbering,
 and merged or nested tables remain unsupported. Table rows are

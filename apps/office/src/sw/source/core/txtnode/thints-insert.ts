@@ -3,7 +3,7 @@ import type { SwFormatRuby } from "./fmtatr2";
 import type { SwTextNode } from "./ndtxt";
 import type { SwpHints, TextNodeAttribute } from "./ndhints";
 import { SwTextFlyCnt } from "../../../inc/txtflcnt";
-import { SwTextField, type SwTextReferenceField } from "../../../inc/txtfld";
+import { SwTextField, type SwTextOrdinaryField } from "../../../inc/txtfld";
 import { SwTextTOXMark } from "./atrtox";
 import { SwTextRefMark } from "./atrref";
 import {
@@ -153,7 +153,7 @@ export function InsertTextNodeHint(
 /** Applies the native point-hint insertion order, inserting its dummy before binding the owned point. @param node - Owning text node. @param hint - Detached point. @param mode - Native insertion flags. @returns Whether inserted. */
 function InsertPointHint(
   node: SwTextNode,
-  hint: SwTextFlyCnt | SwTextField | SwTextReferenceField | SwTextTOXMark | SwTextRefMark,
+  hint: SwTextFlyCnt | SwTextField | SwTextOrdinaryField | SwTextTOXMark | SwTextRefMark,
   mode: SetAttrMode,
 ): boolean {
   const format = hint instanceof SwTextFlyCnt ? hint.GetAttr().GetFrameFormat() : undefined;

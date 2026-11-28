@@ -5,7 +5,9 @@
     "classification": "upstream-mechanism",
     "localPath": "apps/office/src/xmloff/source/text/txtfldi.ts",
     "localSymbols": [
-      "XMLAnnotationImportContext"
+      "XMLAnnotationImportContext",
+      "XMLSimpleDocInfoImportContext",
+      "XMLRevisionDocInfoImportContext"
     ],
     "status": "mapped",
     "evidence": {
@@ -21,6 +23,10 @@
         {
           "path": "apps/office/src/sw/source/filter/xml/odt-annotation.test.ts",
           "marker": "original Writer annotation list"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-doc-info-fields.test.ts",
+          "marker": "testFieldRotation"
         }
       ],
       "upstream": [
@@ -31,17 +37,28 @@
         {
           "path": "vendor/libreoffice-reference/xmloff/source/text/txtfldi.cxx",
           "marker": "XMLAnnotationImportContext::createFastChildContext"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtfldi.cxx",
+          "marker": "XMLSimpleDocInfoImportContext::XMLSimpleDocInfoImportContext"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtfldi.cxx",
+          "marker": "XMLRevisionDocInfoImportContext::XMLRevisionDocInfoImportContext"
         }
       ]
     },
     "upstreamPath": "xmloff/source/text/txtfldi.cxx",
     "upstreamSymbols": [
       "XMLAnnotationImportContext::createFastChildContext",
-      "XMLAnnotationImportContext::endFastElement"
+      "XMLAnnotationImportContext::endFastElement",
+      "XMLSimpleDocInfoImportContext",
+      "XMLRevisionDocInfoImportContext"
     ],
     "preservedResponsibilities": [
       "Imports annotation metadata, delegates editable text to the shared paragraph importer using the annotation TextRange cursor, and completes named annotation ranges.",
-      "Uses the shared shape text child dispatcher with isolated annotation list state and completes named ranges through the TextRange cursor."
+      "Uses the shared shape text child dispatcher with isolated annotation list state and completes named ranges through the TextRange cursor.",
+      "Imports the native simple document information services and the fixed revision descriptor."
     ],
     "omittedResponsibilities": [
       "Annotation hyperlinks and unrepresented EditEngine fields remain outside this mapping."

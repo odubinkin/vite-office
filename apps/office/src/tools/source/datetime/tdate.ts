@@ -2,6 +2,7 @@
 import {
   convertDateToDays,
   convertDaysToDate,
+  getDaysInMonth,
   isValidDate,
   normalize,
   type DateFields,
@@ -104,6 +105,14 @@ export class Date implements DateConstReference {
   /** Original validity delegates actual extracted fields to comphelper. @returns Validity. */
   IsValidDate(): boolean {
     return isValidDate(this.GetDay(), this.GetMonth(), this.GetYear());
+  }
+  /** Checks the calendar date and the original Gregorian cutover. @returns Whether the date is valid and Gregorian. */
+  IsValidAndGregorian(): boolean {
+    const day = this.GetDay();
+    const month = this.GetMonth();
+    const year = this.GetYear();
+    if (!month || month > 12 || !day || day > getDaysInMonth(month, year)) return false;
+    return year > 1582 || (year === 1582 && (month > 10 || (month === 10 && day >= 15)));
   }
   /** Original null-date fast path and normalized day conversion without changing this packed value. @returns Day number from zero. */
   GetAsNormalizedDays(): number {

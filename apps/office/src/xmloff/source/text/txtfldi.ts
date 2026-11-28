@@ -5,14 +5,75 @@ import {
   cppu_detail_getUnoType_DateTime,
 } from "../../../offapi/com/sun/star/util/DateTime";
 import { Converter } from "../../../sax/source/tools/converter";
-import type { XMLAnnotationTextContent, XMLTextCursor } from "../../inc/txtimp";
+import type { XMLAnnotationTextContent, XMLTextContent, XMLTextCursor } from "../../inc/txtimp";
 import { type FastAttributeList, SvXMLImportContext } from "../core/xmlimp";
 import { XMLToken } from "../core/xmltoken";
-import type { XMLTextImportHelper } from "./txtimp";
+import type { XMLCharacterStyleLayer, XMLTextImportHelper } from "./txtimp";
+import type { OdfCharacterProperties, OdfHyperlink } from "./txtparae";
 import { xmlTextString } from "./txtprmap";
 import { ReferenceFieldPart } from "../../../offapi/com/sun/star/text/ReferenceFieldPart";
-import { referenceFieldFormats, type XMLReferenceField } from "./txtflde";
+import { referenceFieldFormats, type XMLDocInfoField, type XMLReferenceField } from "./txtflde";
 import { toBoolean } from "../../../sal/rtl/strtmpl";
+
+/** Original simple document information field importer. */
+export class XMLSimpleDocInfoImportContext extends SvXMLImportContext {
+  protected readonly fixed: [boolean] = [false];
+  protected content = "";
+
+  /** Binds the native field service chosen by the element. @param helper - Text importer. @param field - Original service mapping. @param properties - Direct formatting. @param hyperlink - Optional link. @param characterStyles - Applied styles. */
+  public constructor(
+    protected readonly helper: XMLTextImportHelper,
+    private readonly field: XMLDocInfoField,
+    private readonly properties: OdfCharacterProperties,
+    private readonly hyperlink: OdfHyperlink | undefined,
+    private readonly characterStyles: readonly XMLCharacterStyleLayer[],
+  ) {
+    super();
+  }
+
+  /** Reads text:fixed with the original converter. @param _element - Opening token. @param attributes - Field attributes. */
+  public override startFastElement(_element: XMLToken, attributes: FastAttributeList): void {
+    const fixed = attributes.get(XMLToken.TEXT_FIXED);
+    if (fixed !== null) Converter.convertBool(this.fixed, fixed);
+  }
+
+  /** Appends original field presentation text. @param value - Character data. */
+  public override characters(value: string): void {
+    this.content += value;
+  }
+
+  /** Prepares the fixed presentation before attaching the native field. */
+  public override endFastElement(): void {
+    this.helper.InsertTextField(
+      this.field[2],
+      this.PrepareField.bind(this),
+      this.properties,
+      this.hyperlink,
+      this.characterStyles,
+    );
+  }
+
+  /** Sets the native simple DocInfo properties. @param field - Detached UNO text field. */
+  protected PrepareField(field: XMLTextContent): void {
+    this.helper.SetProperty(field, "IsFixed", this.fixed[0]);
+    if (!this.fixed[0]) return;
+    const property = this.field[3];
+    if (property) this.helper.SetProperty(field, property, this.content);
+    this.helper.SetProperty(field, "CurrentPresentation", this.content);
+  }
+}
+
+/** Native revision field importer also supplies a parsed revision to the descriptor. */
+export class XMLRevisionDocInfoImportContext extends XMLSimpleDocInfoImportContext {
+  /** Prepares the fixed revision's additional numeric value. @param field - Detached UNO text field. */
+  protected override PrepareField(field: XMLTextContent): void {
+    super.PrepareField(field);
+    if (!this.fixed[0]) return;
+    const revision: [number] = [0];
+    if (Converter.convertNumber(revision, this.content))
+      this.helper.SetProperty(field, "Revision", revision[0], "sal_Int32");
+  }
+}
 
 /** Original named GetReference field import and remembered presentation. */
 export class XMLReferenceFieldImportContext extends SvXMLImportContext {

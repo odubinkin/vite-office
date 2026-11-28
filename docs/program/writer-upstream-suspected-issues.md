@@ -6419,3 +6419,16 @@ reference this removes the selected text and reinserts a collapsed point.
 Writer preserves this path.
 
 - [Native reference-mark rename](../../vendor/libreoffice-reference/sw/source/core/unocore/unorefmk.cxx#L363)
+
+### WRITER-774 — Fixed document information uses only a nonempty presentation on attachment
+
+The ODF revision importer sets both the original lexical presentation and a
+parsed numeric revision on the UNO descriptor. Attachment consumes the
+nonempty presentation and does not apply the numeric descriptor member. A
+fixed revision such as `0007` retains its leading zeros. A fixed field with
+an empty presentation retains the initial metadata expansion. Writer
+preserves the native descriptor and attachment behavior.
+
+- [Original simple document information preparation](../../vendor/libreoffice-reference/xmloff/source/text/txtfldi.cxx#L1447)
+- [Original revision import](../../vendor/libreoffice-reference/xmloff/source/text/txtfldi.cxx#L1565)
+- [Original attachment](../../vendor/libreoffice-reference/sw/source/core/unocore/unofield.cxx#L1589)

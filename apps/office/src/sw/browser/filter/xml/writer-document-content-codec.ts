@@ -15,6 +15,11 @@ import {
   type WriterReferenceFieldRecord,
 } from "./writer-reference-field-codec";
 import {
+  decodeDocInfoFields,
+  encodeDocInfoFields,
+  type WriterDocInfoFieldRecord,
+} from "./writer-doc-info-field-codec";
+import {
   decodeLegacyAnnotations,
   type LegacyWriterAnnotationRecord,
 } from "./writer-annotation-codec";
@@ -82,6 +87,7 @@ export interface WriterTextNodeRecord {
   readonly indexMarks?: readonly WriterIndexMarkRecord[];
   readonly referenceMarks?: readonly WriterReferenceMarkRecord[];
   readonly referenceFields?: readonly WriterReferenceFieldRecord[];
+  readonly docInfoFields?: readonly WriterDocInfoFieldRecord[];
   readonly listGeometryWins?: boolean;
   /** True only for the model's synthesized empty numbering item; absence keeps legacy explicit items distinct. */
   readonly emptyListStyle?: true;
@@ -347,10 +353,12 @@ export function encodeTextNode(document: SwDoc, node: SwTextNode): WriterTextNod
   const indexMarks = encodeIndexMarks(node);
   const referenceMarks = encodeReferenceMarks(node);
   const referenceFields = encodeReferenceFields(node);
+  const docInfoFields = encodeDocInfoFields(node);
   return {
     ...(indexMarks.length ? { indexMarks } : {}),
     ...(referenceMarks.length ? { referenceMarks } : {}),
     ...(referenceFields.length ? { referenceFields } : {}),
+    ...(docInfoFields.length ? { docInfoFields } : {}),
     autoAttributes: direct === undefined ? [] : encodeSfxItemSet(direct),
     formatCollId: node.GetTextFormatColl().id,
     ...(node.DoesListGeometryWin() ? { listGeometryWins: true } : {}),
@@ -427,6 +435,7 @@ export function decodeTextNode(
   decodeIndexMarks(node, nodeRecord.indexMarks);
   decodeReferenceMarks(node, nodeRecord.referenceMarks);
   decodeReferenceFields(node, nodeRecord.referenceFields);
+  decodeDocInfoFields(node, nodeRecord.docInfoFields);
   if (nodeRecord.annotations) decodeLegacyAnnotations(node, nodeRecord.annotations);
   node.AddToList();
   for (const offset of nodeRecord.softPageBreaks ?? [])

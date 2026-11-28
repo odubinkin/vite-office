@@ -63,6 +63,14 @@ export class SwXMLWriter {
       },
     };
     const fonts = document.GetEmbeddedFonts();
+    const properties = document.documentProperties;
+    const transferMeta = properties.GetPendingXml();
+    if (transferMeta !== undefined)
+      importDocumentMetaXml(transferMeta, properties.LoadFromDocument.bind(properties), control);
+    if (properties.HasDocumentProperties()) {
+      const native = properties.GetDocumentProperties();
+      prepareDocumentMetaExport(native, native.m_xDoc, metadata.title, document.GetLocale());
+    }
     const graphics = new SvXMLGraphicHelper();
     const bitmapStyles = new XMLBitmapStyleExport(graphics);
     const { styles, content } = document.GetIDocumentRedlineAccess().WithRedlinesHiddenForExport(
@@ -91,14 +99,6 @@ export class SwXMLWriter {
     output.putNextEntry("styles.xml", styles);
     output.putNextEntry("content.xml", content);
     checkpoint(control, "metadata");
-    const properties = document.documentProperties;
-    const transferMeta = properties.GetPendingXml();
-    if (transferMeta !== undefined)
-      importDocumentMetaXml(transferMeta, properties.LoadFromDocument.bind(properties), control);
-    if (properties.HasDocumentProperties()) {
-      const native = properties.GetDocumentProperties();
-      prepareDocumentMetaExport(native, native.m_xDoc, metadata.title, document.GetLocale());
-    }
     output.putNextEntry(
       "meta.xml",
       properties.GetTransferXml() ?? exportMetaXml(metadata.title, document.GetLocale()),

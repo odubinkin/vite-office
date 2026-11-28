@@ -3,6 +3,40 @@
 import type { XMLTextParagraphSource } from "./txtparae";
 import { ReferenceFieldPart } from "../../../offapi/com/sun/star/text/ReferenceFieldPart";
 import { ReferenceFieldSource } from "../../../offapi/com/sun/star/text/ReferenceFieldSource";
+import { XMLToken } from "../core/xmltoken";
+
+/** Native ODF tag, UNO service suffix and fixed content property for each text DocInfo field. */
+export const docInfoFields = [
+  [XMLToken.TEXT_TITLE, "title", "DocInfo.Title", "Content"],
+  [XMLToken.TEXT_SUBJECT, "subject", "DocInfo.Subject", "Content"],
+  [XMLToken.TEXT_DESCRIPTION, "description", "DocInfo.Description", "Content"],
+  [XMLToken.TEXT_KEYWORDS, "keywords", "DocInfo.KeyWords", "Content"],
+  [XMLToken.TEXT_INITIAL_CREATOR, "initial-creator", "DocInfo.CreateAuthor", "Author"],
+  [XMLToken.TEXT_CREATOR, "creator", "DocInfo.ChangeAuthor", "Author"],
+  [XMLToken.TEXT_PRINTED_BY, "printed-by", "DocInfo.PrintAuthor", "Author"],
+  [XMLToken.TEXT_EDITING_CYCLES, "editing-cycles", "DocInfo.Revision", undefined],
+] as const;
+
+/** One native simple DocInfo service mapping. */
+export type XMLDocInfoField = (typeof docInfoFields)[number];
+
+/** A one-character Writer document information field portion. */
+export interface XMLDocInfoExportMarker {
+  readonly kind: "doc-info-field";
+  readonly offset: number;
+  readonly element: XMLDocInfoField[1];
+  readonly fixed: boolean;
+  readonly presentation: string;
+}
+
+/** Exports the native XMLTextFieldExport element and nondefault fixed flag. @param marker - Model portion. @param escapeXml - XML escaping. @returns Xml text field. */
+export function exportDocInfoField(
+  marker: XMLDocInfoExportMarker,
+  escapeXml: (value: string) => string,
+): string {
+  const fixed = marker.fixed ? ' text:fixed="true"' : "";
+  return `<text:${marker.element}${fixed}>${escapeXml(marker.presentation)}</text:${marker.element}>`;
+}
 
 /** Original ODF mapping of reference field parts. */
 export const referenceFieldFormats = [

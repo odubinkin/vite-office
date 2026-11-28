@@ -204,6 +204,8 @@ export function importWriterXml(
   xmlImport.document.SetInXMLImport(true);
   let complete = false;
   try {
+    if (options.documentProperties)
+      xmlImport.document.documentProperties.Assign(options.documentProperties);
     if (options.settingsXml !== undefined)
       xmlImport.parse(options.settingsXml, XMLToken.OFFICE_DOCUMENT_SETTINGS, options);
     if (stylesXml !== undefined) {
@@ -214,8 +216,6 @@ export function importWriterXml(
       xmlImport.parse(contentXml, XMLToken.OFFICE_DOCUMENT_CONTENT, options);
       xmlImport.finishContent();
     }
-    if (options.documentProperties)
-      xmlImport.document.documentProperties.Assign(options.documentProperties);
     complete = true;
     return { document: xmlImport.document, title };
   } finally {

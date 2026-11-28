@@ -1,0 +1,30 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "local-infrastructure",
+    "localPath": "apps/office/src/sw/browser/filter/xml/writer-doc-info-field-codec.ts",
+    "status": "local-only",
+    "rationale": "Transfers the native document information subtype, presentation and paragraph offset through the Worker.",
+    "responsibilities": [
+      "Transfers the native document information subtype, presentation and paragraph offset through the Worker."
+    ],
+    "stackDivergence": {
+      "kind": "local-infrastructure",
+      "rationale": "Structured Worker transport of native document information fields."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/filter/xml/writer-doc-info-field-codec.ts",
+          "marker": "encodeDocInfoFields"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-doc-info-fields.test.ts",
+          "marker": "testFieldRotation"
+        }
+      ],
+      "upstream": []
+    }
+  }
+}

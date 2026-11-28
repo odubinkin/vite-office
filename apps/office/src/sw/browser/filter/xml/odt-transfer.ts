@@ -1,5 +1,7 @@
 /** @fileoverview Defines the ODT worker envelope around the canonical Writer graph record. */
 
+import { initializeLibXml2 } from "../../../../external/libxml2/libxml2";
+import { importDocumentMetaXml } from "../../../../xmloff/source/meta/xmlmetai";
 import type { SwDoc } from "../../../source/core/doc/doc";
 import type { DefaultFontDevice } from "../../../source/core/doc/default-font";
 import {
@@ -94,8 +96,19 @@ export async function restoreOdtWorkerDocumentAsync(
 ): Promise<OdtFilterDocument> {
   if (input.document.transferVersion !== 5 || typeof input.metadata.title !== "string")
     throw new Error("ODT worker transfer schema is unsupported.");
-  return createOdtFilterDocument(
-    await decodeWriterDocumentAsync(input.document.graph, device, cancelled),
-    input.metadata.title,
-  );
+  const document = await decodeWriterDocumentAsync(input.document.graph, device, cancelled);
+  try {
+    const properties = document.documentProperties;
+    const xml = properties.GetPendingXml();
+    if (xml !== undefined) {
+      await initializeLibXml2();
+      importDocumentMetaXml(xml, properties.LoadFromDocument.bind(properties), {
+        isCancelled: cancelled,
+      });
+    }
+    return createOdtFilterDocument(document, input.metadata.title);
+  } catch (error) {
+    document.Dispose();
+    throw error;
+  }
 }

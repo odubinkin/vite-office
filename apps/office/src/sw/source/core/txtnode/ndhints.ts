@@ -6,7 +6,14 @@ import type { SwFormatRuby } from "./fmtatr2";
 import { SwTextTOXMark } from "./atrtox";
 import { SwTextRefMark } from "./atrref";
 import { RES_TXTATR_REFMARK, RES_TXTATR_TOXMARK } from "../../../inc/hintids";
-import { SwTextField, type SwTextReferenceField } from "../../../inc/txtfld";
+import {
+  SwTextField,
+  type SwTextDocInfoField,
+  type SwTextOrdinaryField,
+  type SwTextReferenceField,
+} from "../../../inc/txtfld";
+import { SwGetRefField } from "../fields/reffld";
+import { SwDocInfoField } from "../fields/docufld";
 import { SwTextFlyCnt } from "../../../inc/txtflcnt";
 import { TryInsertTextNodeHint, DestroyTextNodeAttribute } from "./thints-insert";
 import { TryInsertNesting, type NestingAttribute } from "./thints-nesting";
@@ -73,12 +80,7 @@ type RangedTextAttr = SwTextAttrEnd<
 >;
 /** Point and ranged attributes share the three native indexes. */
 export type TextNodeAttribute =
-  | RangedTextAttr
-  | SwTextFlyCnt
-  | SwTextField
-  | SwTextReferenceField
-  | SwTextTOXMark
-  | SwTextRefMark;
+  RangedTextAttr | SwTextFlyCnt | SwTextField | SwTextOrdinaryField | SwTextTOXMark | SwTextRefMark;
 
 /** Stores directly formatted text portions in three native ordered maps. */
 export class SwpHints {
@@ -362,11 +364,11 @@ export class SwpHints {
     offset: number,
     which: typeof RES_TXTATR_ANNOTATION,
   ): SwTextField | undefined;
-  /** Looks up an ordinary reference field at its point. @param offset - Text offset. @param which - Native field identity. @returns Original field. */
+  /** Looks up an ordinary field at its point. @param offset - Text offset. @param which - Native field identity. @returns Original field. */
   public GetTextAttrForCharAt(
     offset: number,
     which: typeof RES_TXTATR_FIELD,
-  ): SwTextReferenceField | undefined;
+  ): SwTextOrdinaryField | undefined;
   /** Looks up the original single index mark at its marker. @param offset - Text offset. @param which - Index hint WhichId. @returns Native point hint. */
   public GetTextAttrForCharAt(
     offset: number,
@@ -381,7 +383,7 @@ export class SwpHints {
   public GetTextAttrForCharAt(
     offset: number,
     which: number = RES_TXTATR_FLYCNT,
-  ): SwTextFlyCnt | SwTextField | SwTextReferenceField | SwTextTOXMark | SwTextRefMark | undefined {
+  ): SwTextFlyCnt | SwTextField | SwTextOrdinaryField | SwTextTOXMark | SwTextRefMark | undefined {
     const hints = this.hintsByStart;
     for (let i = hintPositionBound(hints, offset, false); hints[i]?.GetStart() === offset; ++i) {
       const hint = hints[i];
@@ -412,7 +414,16 @@ export class SwpHints {
     return this.hintsByStart.filter(
       /** Selects the represented ordinary field type. @param hint - Indexed hint. @returns Whether a reference field. */
       (hint): hint is SwTextReferenceField =>
-        hint instanceof SwTextField && hint.Which() === RES_TXTATR_FIELD,
+        hint instanceof SwTextField && hint.GetAttr().GetField() instanceof SwGetRefField,
+    );
+  }
+
+  /** Returns native document information fields in start order. @returns Native field hints. */
+  public GetDocInfoFields(): readonly SwTextDocInfoField[] {
+    return this.hintsByStart.filter(
+      /** Selects the actual value class. @param hint - Text attribute. @returns Whether a DocInfo field. */
+      (hint): hint is SwTextDocInfoField =>
+        hint instanceof SwTextField && hint.GetAttr().GetField() instanceof SwDocInfoField,
     );
   }
 

@@ -8,18 +8,23 @@
     "upstreamPath": "sw/source/core/fields/docufld.cxx",
     "localSymbols": [
       "SwPostItFieldType",
-      "SwPostItField"
+      "SwPostItField",
+      "SwDocInfoFieldType",
+      "SwDocInfoField"
     ],
     "upstreamSymbols": [
       "SwPostItFieldType",
-      "SwPostItField"
+      "SwPostItField",
+      "SwDocInfoFieldType",
+      "SwDocInfoField"
     ],
     "preservedResponsibilities": [
       "Retains the document annotation type, native author and thread data, generated or imported identifier, and optional copied edit text snapshot.",
-      "The system annotation field owner tracks the formats attached to this document and publishes their native names."
+      "The system annotation field owner tracks the formats attached to this document and publishes their native names.",
+      "Expands textual document information through the native document properties owner and retains fixed presentations."
     ],
     "omittedResponsibilities": [
-      "Full field families, annotation range marks, import/export, and Writer sidebar interactions remain outside this represented slice."
+      "Other field families and Writer sidebar interactions remain outside this represented slice."
     ],
     "evidence": {
       "local": [
@@ -34,6 +39,10 @@
         {
           "path": "apps/office/src/sw/source/filter/xml/odt-annotation-range.test.ts",
           "marker": "preserves original comment text and anchors"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-doc-info-fields.test.ts",
+          "marker": "testFieldRotation"
         }
       ],
       "upstream": [
@@ -48,6 +57,14 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/core/fields/docufld.cxx",
           "marker": "SwPostItField::SetName"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/fields/docufld.cxx",
+          "marker": "SwDocInfoFieldType::SwDocInfoFieldType"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/fields/docufld.cxx",
+          "marker": "SwDocInfoField::SwDocInfoField"
         }
       ]
     }

@@ -9,8 +9,10 @@ import { XMLShadowPropHdl } from "../style/shadwhdl";
 import { exportIndexMark, type XMLIndexMarkExportMarker } from "./XMLIndexMarkExport";
 import {
   exportAnnotation,
+  exportDocInfoField,
   exportReferenceField,
   type XMLAnnotationExportMarker,
+  type XMLDocInfoExportMarker,
   type XMLReferenceFieldExportMarker,
 } from "./txtflde";
 import type { XMLTextFrameExportSource } from "./XMLTextFrameExport";
@@ -164,6 +166,7 @@ export type XMLTextParagraphMarker =
     }>
   | XMLAnnotationExportMarker
   | XMLReferenceFieldExportMarker
+  | XMLDocInfoExportMarker
   | XMLRedlineExportMarker
   | Readonly<{ kind: "frame"; frame: XMLTextFrameExportSource; offset: number }>;
 
@@ -632,6 +635,7 @@ function exportParagraphElement(
               marker.kind === "index-mark" ||
               marker.kind === "reference-mark" ||
               marker.kind === "reference-field" ||
+              marker.kind === "doc-info-field" ||
               (marker.kind === "annotation" && marker.consumesMarker),
           );
         markerIndex += 1;
@@ -726,6 +730,7 @@ function exportMarker(
   if (marker.kind === "annotation" || marker.kind === "annotation-end")
     return exportAnnotation(marker, escapeXml, exportText, exportAnnotationParagraph);
   if (marker.kind === "reference-field") return exportReferenceField(marker, escapeXml);
+  if (marker.kind === "doc-info-field") return exportDocInfoField(marker, escapeXml);
   if (
     marker.kind === "index-mark" ||
     marker.kind === "index-mark-start" ||

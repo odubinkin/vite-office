@@ -41,6 +41,8 @@ import { AnnotationMark } from "../../core/crsr/annotationmark";
 import { SwBookmark } from "../../core/doc/docbm";
 import { ReferenceFieldSource } from "../../../../offapi/com/sun/star/text/ReferenceFieldSource";
 import { ReferencesSubtype } from "../../../inc/reffldsubtype";
+import { docInfoFields } from "../../../../xmloff/source/text/txtflde";
+import { docInfoServiceSubTypes, SwDocInfoSubType } from "../../core/fields/docufld";
 import type { SwSectionBlock } from "../../core/docnode/nodes";
 import { getUserIndexProgrammaticName } from "../../core/unocore/unoidx";
 import { TOXTypes } from "../../core/tox/tox";
@@ -92,6 +94,25 @@ export function projectParagraphMarkers(
     ...projectAnnotationMarkers(node),
     ...projectIndexMarks(node),
     ...projectReferenceMarks(node),
+    ...(node.GetpSwpHints()?.GetDocInfoFields() ?? []).map(
+      /** Projects native document information at its point marker. @param hint - Actual field hint. @returns ODF field portion. */
+      (hint): XMLTextParagraphMarker => {
+        const field = hint.GetAttr().GetField();
+        const subtype = field.GetSubType() & ~SwDocInfoSubType.SubFixed;
+        const mapping = docInfoFields.find(
+          /** Matches the native service selected by the subtype. @param entry - ODF service mapping. @returns Whether matched. */
+          ([, , service]) => docInfoServiceSubTypes[service] === subtype,
+        );
+        if (!mapping) throw new Error("Unsupported Writer document information field subtype.");
+        return {
+          kind: "doc-info-field",
+          offset: hint.GetStart(),
+          element: mapping[1],
+          fixed: field.IsFixed(),
+          presentation: field.Expand(),
+        };
+      },
+    ),
     ...(node.GetpSwpHints()?.GetReferenceFields() ?? []).map(
       /** Projects the actual native field at its dummy character. @param hint - Reference attribute. @returns ODF field portion. */
       (hint): XMLTextParagraphMarker => {

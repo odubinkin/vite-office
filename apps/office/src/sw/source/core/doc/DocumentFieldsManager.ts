@@ -1,5 +1,5 @@
 /** @fileoverview Native document ownership of Writer system field types. */
-import { SwPostItFieldType } from "../fields/docufld";
+import { SwDocInfoFieldType, SwPostItFieldType } from "../fields/docufld";
 import { SwGetRefFieldType } from "../fields/reffld";
 import type { SwDoc } from "./doc";
 
@@ -7,11 +7,18 @@ import type { SwDoc } from "./doc";
 export class DocumentFieldsManager {
   private readonly postIt: SwPostItFieldType;
   private readonly getRef: SwGetRefFieldType;
+  private readonly docInfo: SwDocInfoFieldType;
 
   /** Creates the system field types for this document. @param document - Actual Writer model. */
   public constructor(document: SwDoc) {
     this.postIt = new SwPostItFieldType(document);
     this.getRef = new SwGetRefFieldType(document);
+    this.docInfo = new SwDocInfoFieldType(document);
+  }
+
+  /** Borrows the original document information field type. @returns System field type. */
+  public GetDocInfoFieldType(): SwDocInfoFieldType {
+    return this.docInfo;
   }
 
   /** Borrows the original annotation field type. @returns Document type. */

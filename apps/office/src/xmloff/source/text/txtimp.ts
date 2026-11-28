@@ -395,7 +395,7 @@ export class XMLTextImportHelper {
     cursor: Pick<XMLPropertySet, "setPropertyValue">,
     name: string,
     value: string | boolean | number,
-    numeric?: "sal_Int16",
+    numeric?: "sal_Int16" | "sal_Int32",
   ): void {
     const key = xmlTextString(name),
       string = typeof value === "string" ? xmlTextString(value) : undefined,
@@ -423,21 +423,31 @@ export class XMLTextImportHelper {
       value = xmlTextString(characters);
     try {
       cursor.getText().insertString(cursor, value, false);
-      if (Object.keys(properties).length || hyperlink || characterStyles.length)
-        this.hints.push({
-          start,
-          end: cursor.getStart(),
-          properties,
-          characterStyles,
-          ...(hyperlink ? { hyperlink } : {}),
-        });
-      else start.dispose();
+      this.AddCharacterHint(start, properties, hyperlink, characterStyles);
     } catch (error) {
       start.dispose();
       throw error;
     } finally {
       value.dispose();
     }
+  }
+
+  /** Records formatting over the range just inserted by the active text cursor. @param start - Owned starting range. @param properties - Direct formatting. @param hyperlink - Optional link. @param characterStyles - Applied named styles. */
+  private AddCharacterHint(
+    start: XMLTextRange,
+    properties: OdfCharacterProperties,
+    hyperlink: OdfHyperlink | undefined,
+    characterStyles: readonly XMLCharacterStyleLayer[],
+  ): void {
+    if (Object.keys(properties).length || hyperlink || characterStyles.length)
+      this.hints.push({
+        start,
+        end: this.GetCursor().getStart(),
+        properties,
+        characterStyles,
+        ...(hyperlink ? { hyperlink } : {}),
+      });
+    else start.dispose();
   }
   /** Completes the paragraph through XSimpleText before applying style, automatic properties and character hints. @returns Nothing. */
   public EndParagraph(): void {
@@ -613,6 +623,32 @@ export class XMLTextImportHelper {
       this.SetProperty(field, "CurrentPresentation", value.presentation);
       const cursor = this.GetCursor();
       cursor.getText().insertTextContent(cursor, field, false);
+    } finally {
+      service.dispose();
+    }
+  }
+
+  /** Creates and attaches a native text field. @param suffix - Native UNO service suffix. @param prepare - Field importer. @param properties - Direct formatting. @param hyperlink - Optional link. @param characterStyles - Applied styles. */
+  public InsertTextField(
+    suffix: string,
+    prepare: (descriptor: XMLTextContent) => void,
+    properties: OdfCharacterProperties,
+    hyperlink: OdfHyperlink | undefined,
+    characterStyles: readonly XMLCharacterStyleLayer[],
+  ): void {
+    const service = xmlTextString(`com.sun.star.text.TextField.${suffix}`);
+    try {
+      const field = this.model.createInstance(service) as XMLTextContent;
+      prepare(field);
+      const cursor = this.GetCursor();
+      const start = cursor.getStart();
+      try {
+        cursor.getText().insertTextContent(cursor, field, false);
+        this.AddCharacterHint(start, properties, hyperlink, characterStyles);
+      } catch (error) {
+        start.dispose();
+        throw error;
+      }
     } finally {
       service.dispose();
     }
