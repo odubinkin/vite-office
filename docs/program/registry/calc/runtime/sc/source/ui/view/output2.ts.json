@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/ui/view/output2.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "calc",
+    "subsystem": "cell-formatting",
+    "capabilityIds": [
+      "CAP-0fca5c56-238e-49a4-b93d-9509e8a9032e"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sc/source/ui/view/output2.ts",
+        "apps/office/src/sc/browser/presentation/calc-cell-text-layout.test.tsx",
+        "vendor/libreoffice-reference/sc/source/ui/view/output2.cxx#ScOutputData::DrawRotated"
+      ],
+      "justification": "Resolves Calc cell wrapping, stacked and rotated output decisions through effective pattern attributes.",
+      "knownViolations": [],
+      "localSymbols": [
+        "getCellTextLayout"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/source/ui/view/output2.cxx",
+      "upstreamSymbols": [
+        "ScOutputData::DrawRotated",
+        "ScOutputData::DrawEditStacked"
+      ]
+    }
+  }
+}

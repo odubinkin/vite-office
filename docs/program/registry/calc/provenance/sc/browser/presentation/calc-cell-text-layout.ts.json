@@ -1,0 +1,25 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/sc/browser/presentation/calc-cell-text-layout.ts",
+    "rationale": "Projects effective Calc output decisions to CSS writing modes and transforms while browser grid positioning and clipping continue to own the text box.",
+    "responsibilities": [
+      "Projects effective Calc output decisions to CSS writing modes and transforms while browser grid positioning and clipping continue to own the text box."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser writing modes and transforms consume the original Calc paint decisions."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-cell-text-layout.ts",
+          "marker": "calcCellTextLayoutStyle"
+        }
+      ]
+    }
+  }
+}

@@ -16,12 +16,7 @@ import { ScCellDiagonalBorders } from "./ScCellDiagonalBorders";
 import { ScCellDataBar } from "./ScCellDataBar";
 import { ScCellIconSet } from "./ScCellIconSet";
 import { handleConditionalFormat } from "../../source/core/data/fillinfo";
-import {
-  ScIndentItem,
-  ScLineBreakCell,
-  type ScMergeAttr,
-  type ScMergeFlagAttr,
-} from "../../inc/attrib";
+import { ScIndentItem, type ScMergeAttr, type ScMergeFlagAttr } from "../../inc/attrib";
 import type { ScDocument } from "../../inc/document";
 import type { SvxBoxItem } from "../../../editeng/source/items/frmitems";
 import { SvxMarginItem } from "../../../svx/source/items/algitem";
@@ -31,7 +26,7 @@ import { SpecialText } from "../../../vcl/browser/special-text";
 import { SvxShadowedItem, SvxCharReliefItem } from "../../../editeng/source/items/textitem";
 import type { SvxWordLineModeItem } from "../../../editeng/source/items/textitem";
 import type { SvxShadowItem } from "../../../editeng/source/items/frmitems.shadow";
-import type { SvxHorJustifyItem, SvxVerJustifyItem } from "../../../editeng/inc/justifyitem";
+import type { SvxHorJustifyItem } from "../../../editeng/inc/justifyitem";
 import type { ScTable } from "../../inc/table";
 import {
   CALC_SPLIT_HANDLE_SIZE,
@@ -73,6 +68,8 @@ import {
 } from "../../inc/scitems";
 import type { SvxFontItem } from "../../../editeng/inc/fontitem";
 import { ScCellText } from "./ScCellText";
+import { getCellTextLayout } from "../../source/ui/view/output2";
+import { calcCellTextLayoutStyle } from "./calc-cell-text-layout";
 import type { SvxBrushItem } from "../../../editeng/inc/brushitem";
 import { COL_AUTO, COL_BLACK, COL_WHITE, type Color } from "../../../tools/inc/color";
 import { browserColor } from "../../../vcl/browser/color";
@@ -286,7 +283,7 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
   function part(x: CalcPaintBand, y: CalcPaintBand): ScSplitPos {
     return ((xAxis.bands.length > 1 && !x.leading ? 1 : 0) | (!y.leading ? 2 : 0)) as ScSplitPos;
   }
-  /** Produces distinct ARIA IDs when a normal split can show the same cell twice. @param col - Column. @param rowIndex - Row. @param pane - Pane. @returns Cell ID. */
+  /** Produces distinct ARIA IDs when a normal split can show the same cell twice. @param col - Column. @param rowIndex - Row. @param pane - Pane. @param merged - Whether this ID covers a merged range. @returns Cell ID. */
   function idFor(col: number, rowIndex: number, pane: ScSplitPos, merged = false): string {
     return `${props.idPrefix}-${tab}-${col}-${rowIndex}${normal || (merged && xAxis.bands.length * yAxis.bands.length > 1) ? `-${pane}` : ""}`;
   }
@@ -687,7 +684,7 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                           marks.GetMarkArea().Contains(position)
                         ));
                     const writing = (
-                      pattern.GetItem(ATTR_WRITINGDIR) as SvxFrameDirectionItem
+                      pattern.GetItem(ATTR_WRITINGDIR, conditional) as SvxFrameDirectionItem
                     ).GetValue();
                     const textDirection =
                       writing === D.Horizontal_RL_TB
@@ -705,13 +702,15 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                     const [clipTop, clipBottom] = merge
                       ? yAxis.ClipSpan(band, top, height)
                       : cellInsets(band, top, height);
+                    const textLayout = getCellTextLayout(document, position, pattern, conditional);
+                    const textAlign =
+                      ([undefined, "left", "center", "right", "justify", "left"] as const)[
+                        textLayout.horizontal
+                      ] ?? cell.alignment;
                     const cellStyle: CSSProperties = {
                       ...fontStyle,
                       color: browserColor(color),
-                      whiteSpace: (pattern.GetItem(139) as ScLineBreakCell).GetValue()
-                        ? "pre-wrap"
-                        : "nowrap",
-                      overflowWrap: "anywhere",
+                      whiteSpace: textLayout.lineBreak ? "pre-wrap" : "nowrap",
                       ...(merge
                         ? calcMergedBorderStyle(
                             pattern.GetItem(ATTR_BORDER, conditional) as SvxBoxItem,
@@ -739,10 +738,7 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                       ),
                       backgroundColor:
                         background.GetAlpha() === 0 ? undefined : browserColor(background),
-                      textAlign:
-                        ([undefined, "left", "center", "right", "justify", "left"] as const)[
-                          (pattern.GetItem(129) as SvxHorJustifyItem).GetValue()
-                        ] ?? cell.alignment,
+                      textAlign,
                       display: "flex",
                       flexDirection: "column",
                       justifyContent: [
@@ -751,7 +747,7 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                         "center",
                         "flex-end",
                         "flex-start",
-                      ][(pattern.GetItem(132) as SvxVerJustifyItem).GetValue()],
+                      ][textLayout.vertical],
                       left: headerWidth + viewport.scrollLeft + left,
                       top: merge ? top - yAxis.Position(band, r) : undefined,
                       clipPath: paneClip(clipTop, clipRight, clipBottom, clipLeft),
@@ -829,6 +825,7 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                               dataBar || iconSet ? "relative w-full shrink-0" : "w-full shrink-0"
                             }
                             dir={textDirection}
+                            style={calcCellTextLayoutStyle(textLayout, textAlign)}
                           >
                             <SpecialText
                               enabled={outlined}

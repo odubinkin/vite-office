@@ -8138,3 +8138,9 @@ later. Calc preserves the original ordering gate.
 The pinned `lcl_SetJustifyMethodToItemSet` in `cui/source/tabpages/align.cxx` derives the outgoing method from the active combo row even when that row was untouched. A combined selection may retain an explicit Distribute method while its horizontal alignment is mixed. The inactive row resolves to Auto, so accepting the visited page changes both cells' methods and preserves their distinct alignment values.
 
 Calc preserves this exchange rule. The regression combines a justified cell and a left-aligned cell with the same stored method, then checks the unvisited and visited acceptance paths and grouped history.
+
+### CALC-853 — Exact half-turn paints at 179.5 degrees
+
+The pinned `ScOutputData::DrawRotated` clamps angles within half a degree of horizontal to avoid excessive skew. The half-turn branch chooses the upper edge only for angles strictly above 180 degrees. An exact 180-degree cell therefore paints at 179.5 degrees with inside-cell rotation even if the cell stores a different reference edge.
+
+Calc preserves the stored angle and reference while applying the original paint decision. The mounted grid regression checks the exact half-turn.

@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/ui/view/output2.ts",
+    "upstreamPath": "sc/source/ui/view/output2.cxx",
+    "localSymbols": [
+      "getCellTextLayout"
+    ],
+    "upstreamSymbols": [
+      "ScOutputData::DrawRotated",
+      "ScOutputData::DrawEditStacked"
+    ],
+    "preservedResponsibilities": [
+      "Resolves Calc cell wrapping, stacked and rotated output decisions through effective pattern attributes."
+    ],
+    "omittedResponsibilities": [
+      "Native device drawing and overflow into neighboring cells are outside the browser cell box."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/ui/view/output2.ts",
+          "marker": "getCellTextLayout"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/output2.cxx",
+          "marker": "ScOutputData::DrawRotated"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/output2.cxx",
+          "marker": "ScOutputData::DrawEditStacked"
+        }
+      ]
+    }
+  }
+}
