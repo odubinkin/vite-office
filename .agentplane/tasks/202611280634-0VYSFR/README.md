@@ -1,10 +1,11 @@
 ---
 id: "202611280634-0VYSFR"
 title: "Port Calc ODS tracked formula and formatted text snapshots"
-status: "DOING"
+result_summary: "Calc roundtrips historical formula and EditEngine snapshots with linked change actions and native ODF metadata through the Worker."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "output/playwright/odf-next-checkpoint/calc-historical-formula-verification.md"
   findings:
     - "The roundtrip preserves the original historical position, real recalculated value and clean cache, text spans and old/new action ownership."
-commit: null
+commit:
+  hash: "db73873e93616825c61d45db97551ea7c315d5bb"
+  message: "🧩 0VYSFR calc: roundtrip historical formulas and formatted tracked cells"
 comments:
   -
     author: "CODER"
     body: "Start: use the original historical formula and edit-text ownership paths."
+  -
+    author: "CODER"
+    body: "Verified: 40 targeted ODS tests and final 17 tracked formula, matrix, rich text and Worker tests; static and Calc parity checks passed."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "40 closely related ODS tests passed, then all 17 tracked formula, matrix, edit and Worker tests passed after preserving the clean formula cache. Typecheck, lint, dependencies, source provenance and zero Calc parity violations. CALC-876 records the pinned first-paragraph space behavior."
+  -
+    type: "status"
+    at: "2026-11-28T06:45:56.394Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: 40 targeted ODS tests and final 17 tracked formula, matrix, rich text and Worker tests; static and Calc parity checks passed."
 doc_version: 3
-doc_updated_at: "2026-11-28T06:43:44.073Z"
+doc_updated_at: "2026-11-28T06:45:56.395Z"
 doc_updated_by: "CODER"
 description: "Restore and export historical formula and EditEngine cell snapshots through native change tracking XML and the ODS Worker. Reuse existing formula grammars, address conversion, matrix ownership and text style pools. Keep scalar actions and their previously tracked behavior intact."
 sections:
