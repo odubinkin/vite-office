@@ -1,10 +1,11 @@
 ---
 id: "202611280959-E7Z476"
 title: "Align Writer ODT named variable field families"
-status: "DOING"
+result_summary: "Aligned Writer ODT named variable families and header field declarations with pinned LibreOffice."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "output/playwright/odf-next-checkpoint/writer-variable-fields-verification.md"
   findings:
     - "Pinned table and fly fields retain their scoped header declarations. Focused checks passed."
-commit: null
+commit:
+  hash: "e2517c7ac9c576d24dd95b4f0f0793a0540b9331"
+  message: "🧩 E7Z476 writer: preserve native ODT variable fields"
 comments:
   -
     author: "CODER"
     body: "Start: align named variable masters, represented field occurrences and ODT persistence."
+  -
+    author: "CODER"
+    body: "Verified: native variable and user fields, both pinned header-declaration fixture assertions, and Worker transport. Sixteen focused Writer tests and static checks passed."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Both pinned ODT header declaration fixtures passed through Worker and ODT export. Sixteen affected Writer tests, TypeScript, scoped ESLint, module boundaries, provenance, Writer inventory and diff checks passed."
+  -
+    type: "status"
+    at: "2026-11-28T10:15:54.770Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native variable and user fields, both pinned header-declaration fixture assertions, and Worker transport. Sixteen focused Writer tests and static checks passed."
 doc_version: 3
-doc_updated_at: "2026-11-28T10:14:32.388Z"
+doc_updated_at: "2026-11-28T10:15:54.773Z"
 doc_updated_by: "CODER"
 description: "Restore native variable and user-field owners, ODT declarations, set/get and user field occurrences, expression updates and Worker transport for represented numeric and string values. Preserve native typed properties, defaults and collision renaming. Replay pinned LibreOffice field fixtures and run the focused Writer tests."
 sections:
