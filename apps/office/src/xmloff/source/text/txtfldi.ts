@@ -16,6 +16,51 @@ import { referenceFieldFormats, type XMLDocInfoField, type XMLReferenceField } f
 import { toBoolean } from "../../../sal/rtl/strtmpl";
 import { approxFloor } from "../../../sal/inc/rtl/math";
 import { convertDurationToDays } from "../../../sax/source/tools/converter.duration";
+import * as NumberingType from "../../../offapi/com/sun/star/style/NumberingType";
+import { SvXMLUnitConverter } from "../core/xmluconv";
+import type { XMLCountField } from "./txtflde";
+
+/** Original XMLCountFieldImportContext for the document statistic fields. */
+export class XMLCountFieldImportContext extends SvXMLImportContext {
+  private numberingType = NumberingType.PAGE_DESCRIPTOR as number;
+
+  /** Binds the count service and styled point. @param helper - Text import owner. @param field - Element mapping. @param properties - Point formatting. @param hyperlink - Enclosing link. @param characterStyles - Named styles. */
+  public constructor(
+    private readonly helper: XMLTextImportHelper,
+    private readonly field: XMLCountField,
+    private readonly properties: OdfCharacterProperties,
+    private readonly hyperlink: OdfHyperlink | undefined,
+    private readonly characterStyles: readonly XMLCharacterStyleLayer[],
+  ) {
+    super();
+  }
+
+  /** Decodes the optional numbering style and its alphabetic repetition flag. @param _element - Count element. @param attributes - Native attributes. */
+  public override startFastElement(_element: XMLToken, attributes: FastAttributeList): void {
+    const format = attributes.get(XMLToken.STYLE_NUM_FORMAT);
+    if (format === null) return;
+    const type = { value: NumberingType.ARABIC as number };
+    new SvXMLUnitConverter("mm100").convertNumFormat(
+      type,
+      format,
+      attributes.get(XMLToken.STYLE_NUM_LETTER_SYNC) ?? "",
+      false,
+    );
+    this.numberingType = type.value;
+  }
+
+  /** Attaches the live count field. */
+  public override endFastElement(): void {
+    this.helper.InsertTextField(
+      this.field[2],
+      /** Populates the count descriptor. @param field - Native UNO field. */
+      (field) => this.helper.SetProperty(field, "NumberingType", this.numberingType, "sal_Int16"),
+      this.properties,
+      this.hyperlink,
+      this.characterStyles,
+    );
+  }
+}
 
 /** Original time field context, also used as the base for date fields. */
 export class XMLTimeFieldImportContext extends SvXMLImportContext {

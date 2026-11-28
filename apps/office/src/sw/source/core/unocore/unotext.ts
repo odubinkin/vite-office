@@ -17,6 +17,7 @@ import type { SwXReferenceMark } from "./unorefmk";
 import type {
   SwXDateTimeField,
   SwXDocInfoField,
+  SwXDocStatField,
   SwXGetReferenceField,
   SwXTextField,
 } from "./unofield";
@@ -349,6 +350,7 @@ export class SwXText implements SwXTextOwner {
       | SwXTextField
       | SwXGetReferenceField
       | SwXDocInfoField
+      | SwXDocStatField
       | SwXDateTimeField,
     absorb: boolean,
   ): void {
@@ -371,6 +373,7 @@ export class SwXText implements SwXTextOwner {
       | SwXTextField
       | SwXGetReferenceField
       | SwXDocInfoField
+      | SwXDocStatField
       | SwXDateTimeField,
   ): void {
     content.dispose();

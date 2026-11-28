@@ -10,10 +10,11 @@ import { SwXAutoStyles } from "../../core/unocore/unostyle-auto";
 import {
   SwXDateTimeField,
   SwXDocInfoField,
+  SwXDocStatField,
   SwXGetReferenceField,
   SwXTextField,
 } from "../../core/unocore/unofield";
-import { docInfoServiceSubTypes } from "../../core/fields/docufld";
+import { docInfoServiceSubTypes, docStatServiceSubTypes } from "../../core/fields/docufld";
 import { SwXBookmark } from "../../core/unocore/unobkm";
 import { SwXReferenceMark } from "../../core/unocore/unorefmk";
 import type { SwDoc } from "../../core/doc/doc";
@@ -126,6 +127,7 @@ export class SwXTextDocument {
     | SwXTextField
     | SwXGetReferenceField
     | SwXDocInfoField
+    | SwXDocStatField
     | SwXDateTimeField {
     const n = text(name),
       doc = this.GetDoc();
@@ -154,8 +156,12 @@ export class SwXTextDocument {
       case "com.sun.star.text.NumberingRules":
         return new SwXNumberingRules(doc);
       default:
-        if (/^com\.sun\.star\.text\.(TextField|textfield)\.DocInfo\./.test(n)) {
+        if (/^com\.sun\.star\.text\.(TextField|textfield)\./.test(n)) {
           const suffix = n.slice("com.sun.star.text.TextField.".length);
+          if (Object.hasOwn(docStatServiceSubTypes, suffix))
+            return new SwXDocStatField(
+              docStatServiceSubTypes[suffix as keyof typeof docStatServiceSubTypes],
+            );
           if (Object.hasOwn(docInfoServiceSubTypes, suffix))
             return new SwXDocInfoField(
               docInfoServiceSubTypes[suffix as keyof typeof docInfoServiceSubTypes],

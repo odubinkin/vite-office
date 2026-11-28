@@ -39,6 +39,7 @@ import { GetRegisterLineOffset } from "../text/itrform2";
 export interface SwPageFrame {
   readonly descriptor: WriterPageDescriptorValue;
   readonly number: number;
+  readonly numberRestart?: true;
   readonly textFrames: readonly SwTextFrame[];
   readonly tableFrames: readonly SwTableFrame[];
 }
@@ -270,6 +271,30 @@ export class SwRootFrame extends SwLayoutFrame {
     return this.lastDocument === this.getDocument() ? (this.snapshot?.pages ?? []) : [];
   }
 
+  /** Reads the physical page count owned by the current layout. @returns Page count. */
+  public GetPageNum(): number {
+    return this.GetFormattedPages().length;
+  }
+
+  /** Finds the first body frame and counts its virtual numbering range. @param node - Original count field anchor. @returns Layout range size or undefined before formatting. */
+  public GetVirtPageCount(node: SwTextNode): number | undefined {
+    const pages = this.GetFormattedPages();
+    const page = pages.findIndex(
+      /** Selects the first body occurrence. @param page - Physical page. @returns Whether it owns this paragraph. */
+      (page) =>
+        page.textFrames.some(
+          /** Matches the original Writer node. @param frame - Formatted body text. @returns Whether anchored to the node. */
+          (frame) => frame.GetTextNodeFirst() === node,
+        ),
+    );
+    if (page < 0) return undefined;
+    let start = page;
+    while (start > 0 && !pages[start]?.numberRestart) --start;
+    let end = page + 1;
+    while (end < pages.length && !pages[end]?.numberRestart) ++end;
+    return end - start;
+  }
+
   /** Invalidates the formatted graph from a changed Writer node onward. @param nodeIndex - Optional SwNodes index; absent means all frames. @returns Nothing. */
   public Invalidate(nodeIndex?: number): void {
     this.dirty = true;
@@ -404,6 +429,8 @@ export class SwRootFrame extends SwLayoutFrame {
             );
             if (
               oldPage !== undefined &&
+              oldPage.number === page.number &&
+              oldPage.numberRestart === page.numberRestart &&
               pageDescriptorEqual(oldPage.descriptor, page.descriptor) &&
               tableFramesEqual(oldPage.tableFrames, page.tableFrames) &&
               oldPage.textFrames.length === textFrames.length &&
@@ -487,6 +514,7 @@ export class SwRootFrame extends SwLayoutFrame {
         lineNumbers,
         tableFrames: Object.freeze(tableFrames),
       });
+      document.getIDocumentFieldsAccess().GetDocStatFieldType().UpdateRangeFields(this);
       return this.snapshot;
     } catch (error) {
       for (const frame of tableFrames)
@@ -1002,6 +1030,7 @@ export function createSwPageFrames(
           return Object.freeze({
             descriptor: pageDescriptors[index] as WriterPageDescriptorValue,
             number: numberedPage,
+            ...(pageNumberOverrides.has(index) ? { numberRestart: true as const } : {}),
             textFrames: Object.freeze(textFrames),
             tableFrames: Object.freeze(pageTables[index] as SwTableFrame[]),
           });

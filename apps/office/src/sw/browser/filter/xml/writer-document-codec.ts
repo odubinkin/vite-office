@@ -173,6 +173,7 @@ interface WriterAnnotationMarkRecord {
 export interface WriterDocumentRecord {
   readonly redlines?: WriterRedlineRecord;
   readonly documentMetaXml?: string;
+  readonly layoutPageCount?: number;
   readonly theme?: ThemeRecord;
   readonly bodyOrder?: readonly ("text" | "table")[];
   readonly bodyBlocks?: readonly WriterSectionBlock[];
@@ -270,8 +271,10 @@ export function* encodeWriterDocumentSteps(document: SwDoc): Generator<void, Wri
     document.interopGrabBag.GetGrabBag().get("DocumentProtection"),
   );
   const documentMetaXml = document.documentProperties.GetTransferXml();
+  const layoutPageCount = document.getIDocumentStatistics().GetLayoutPageCount();
   return {
     ...(redlines === undefined ? {} : { redlines }),
+    ...(layoutPageCount === undefined ? {} : { layoutPageCount }),
     ...(documentProtection === undefined ? {} : { documentProtection }),
     ...(document.theme ? { theme: encodeTheme(document.theme) } : {}),
     ...(document.themeFontLanguages ? { themeFontLanguages: document.themeFontLanguages } : {}),
@@ -429,6 +432,15 @@ export function* decodeWriterDocumentSteps(
   try {
     if (record.documentMetaXml !== undefined)
       document.documentProperties.SetTransferXml(record.documentMetaXml);
+    if (record.layoutPageCount !== undefined) {
+      if (
+        !Number.isInteger(record.layoutPageCount) ||
+        record.layoutPageCount < 0 ||
+        record.layoutPageCount > 65535
+      )
+        throw new Error("Stored Writer layout page count is invalid.");
+      document.getIDocumentStatistics().SetLayoutPageCount(record.layoutPageCount);
+    }
     if (record.theme !== undefined) document.theme = decodeTheme(record.theme);
     if (record.tableStyles !== undefined) {
       const model = new SwXTextDocument(document);

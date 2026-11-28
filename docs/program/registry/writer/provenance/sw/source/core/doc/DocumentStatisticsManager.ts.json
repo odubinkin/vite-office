@@ -1,0 +1,62 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/core/doc/DocumentStatisticsManager.ts",
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/doc/DocumentStatisticsManager.cxx",
+    "localSymbols": [
+      "DocumentStatisticsManager",
+      "GetDocStat",
+      "GetUpdatedDocStat",
+      "SetDocStat"
+    ],
+    "upstreamSymbols": [
+      "DocumentStatisticsManager::GetDocStat",
+      "DocumentStatisticsManager::GetUpdatedDocStat",
+      "DocumentStatisticsManager::SetDocStat",
+      "DocumentStatisticsManager::IncrementalDocStatCalculate"
+    ],
+    "preservedResponsibilities": [
+      "Owns imported and calculated Writer statistics and publishes the native UNO document statistics."
+    ],
+    "omittedResponsibilities": [
+      "Idle counting, OLE nodes, note expansion and layout types outside the represented Writer core."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/doc/DocumentStatisticsManager.ts",
+          "marker": "DocumentStatisticsManager"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-statistics-fields.test.ts",
+          "marker": "testTdf71583"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentStatisticsManager.cxx",
+          "marker": "DocumentStatisticsManager::GetDocStat"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentStatisticsManager.cxx",
+          "marker": "DocumentStatisticsManager::GetUpdatedDocStat"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentStatisticsManager.cxx",
+          "marker": "DocumentStatisticsManager::SetDocStat"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentStatisticsManager.cxx",
+          "marker": "DocumentStatisticsManager::IncrementalDocStatCalculate"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/qa/extras/odfexport/odfexport4.cxx",
+          "marker": "testTdf71583"
+        }
+      ]
+    }
+  }
+}

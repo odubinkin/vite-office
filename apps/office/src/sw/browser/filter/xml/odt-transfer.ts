@@ -105,6 +105,7 @@ export async function restoreOdtWorkerDocumentAsync(
       importDocumentMetaXml(xml, properties.LoadFromDocument.bind(properties), {
         isCancelled: cancelled,
       });
+      document.getIDocumentStatistics().SetStatistics(properties.GetDocumentProperties());
     }
     return createOdtFilterDocument(document, input.metadata.title);
   } catch (error) {

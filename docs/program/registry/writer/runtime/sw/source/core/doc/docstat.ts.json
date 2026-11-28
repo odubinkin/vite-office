@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/doc/docstat.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "document-core",
+    "capabilityIds": [
+      "CAP-0128",
+      "CAP-0129"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/core/doc/docstat.ts",
+        "apps/office/src/sw/source/filter/xml/odt-statistics-fields.test.ts",
+        "vendor/libreoffice-reference/sw/source/core/doc/docstat.cxx",
+        "vendor/libreoffice-reference/sw/qa/extras/odfexport/odfexport4.cxx"
+      ],
+      "justification": "Preserves the original Writer document statistic members and initial defaults.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwDocStat"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/doc/docstat.cxx",
+      "upstreamSymbols": [
+        "SwDocStat::SwDocStat"
+      ]
+    }
+  }
+}

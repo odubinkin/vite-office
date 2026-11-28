@@ -1,4 +1,4 @@
-/** @fileoverview Original ICU stock word instance construction from named brkitr resources. */
+/** @fileoverview Original ICU stock break instance construction from named brkitr resources. */
 import { registerBrkitrCommonData } from "../data/in/icudt78l.brkitr";
 import { Locale } from "./locid";
 import { RuleBasedBreakIterator } from "./rbbi";
@@ -20,6 +20,23 @@ export function createWordInstance(
   locale: Locale,
   status: [number],
 ): RuleBasedBreakIterator | null {
+  return buildInstance(locale, "word", status);
+}
+
+/** Original stock character break iterator. @param locale - Requested locale. @param status - Sticky source status. @returns Owned rule iterator or null. */
+export function createCharacterInstance(
+  locale: Pick<Locale, "getName">,
+  status: [number],
+): RuleBasedBreakIterator | null {
+  return buildInstance(new Locale(locale.getName()), "grapheme", status);
+}
+
+/** Selects and opens the corresponding directory entry. @param locale - Requested locale. @param kind - Resource key. @param status - Sticky source status. @returns Owned rule iterator or null. */
+function buildInstance(
+  locale: Locale,
+  kind: "word" | "grapheme",
+  status: [number],
+): RuleBasedBreakIterator | null {
   if (U_FAILURE(status[0])) return null;
   const root = ures_openNoDefault(U_ICUDATA_BRKITR, locale.getName(), status);
   const rules = new UResourceBundle();
@@ -30,7 +47,7 @@ export function createWordInstance(
     let fileName: string;
     try {
       ures_getByKeyWithFallback(root, "boundaries", rules, status);
-      ures_getByKeyWithFallback(rules, "word", name, status);
+      ures_getByKeyWithFallback(rules, kind, name, status);
       const length: [number] = [0];
       const filename = ures_getString(name, length, status);
       if (U_FAILURE(status[0]) || filename === null) return null;

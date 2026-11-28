@@ -204,8 +204,12 @@ export function importWriterXml(
   xmlImport.document.SetInXMLImport(true);
   let complete = false;
   try {
-    if (options.documentProperties)
+    if (options.documentProperties) {
       xmlImport.document.documentProperties.Assign(options.documentProperties);
+      xmlImport.document
+        .getIDocumentStatistics()
+        .SetStatistics(xmlImport.document.documentProperties.GetDocumentProperties());
+    }
     if (options.settingsXml !== undefined)
       xmlImport.parse(options.settingsXml, XMLToken.OFFICE_DOCUMENT_SETTINGS, options);
     if (stylesXml !== undefined) {

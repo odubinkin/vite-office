@@ -41,8 +41,12 @@ import { AnnotationMark } from "../../core/crsr/annotationmark";
 import { SwBookmark } from "../../core/doc/docbm";
 import { ReferenceFieldSource } from "../../../../offapi/com/sun/star/text/ReferenceFieldSource";
 import { ReferencesSubtype } from "../../../inc/reffldsubtype";
-import { docInfoFields } from "../../../../xmloff/source/text/txtflde";
-import { docInfoServiceSubTypes, SwDocInfoSubType } from "../../core/fields/docufld";
+import { countFields, docInfoFields } from "../../../../xmloff/source/text/txtflde";
+import {
+  docInfoServiceSubTypes,
+  docStatServiceSubTypes,
+  SwDocInfoSubType,
+} from "../../core/fields/docufld";
 import type { SwSectionBlock } from "../../core/docnode/nodes";
 import { getUserIndexProgrammaticName } from "../../core/unocore/unoidx";
 import { TOXTypes } from "../../core/tox/tox";
@@ -111,6 +115,24 @@ export function projectParagraphMarkers(
           value: field.GetDateTimeValue(),
           presentation: field.Expand(),
           ...(styleName ? { styleName } : {}),
+        };
+      },
+    ),
+    ...(node.GetpSwpHints()?.GetDocStatFields() ?? []).map(
+      /** Projects the original count attached at this dummy. @param hint - Count hint. @returns ODF field portion. */
+      (hint): XMLTextParagraphMarker => {
+        const field = hint.GetAttr().GetField();
+        const mapping = countFields.find(
+          /** Matches the original UNO service. @param entry - Element mapping. @returns Whether matched. */
+          ([, , service]) => docStatServiceSubTypes[service] === field.GetSubType(),
+        );
+        if (!mapping) throw new Error("Unsupported Writer statistic field subtype.");
+        return {
+          kind: "count-field",
+          offset: hint.GetStart(),
+          element: mapping[1],
+          numberingType: field.GetFormat(),
+          presentation: field.Expand(),
         };
       },
     ),

@@ -3,6 +3,7 @@ import type { SwFormatField } from "../../../inc/fmtfld";
 import { RES_TXTATR_ANNOTATION } from "../../../inc/hintids";
 import { isAnnotationTextField } from "../../../inc/txtfld";
 import type { SwDoc } from "../doc/doc";
+import type { SwRootFrame } from "../layout/newfrm";
 import type { EditTextObject } from "../../../../editeng/source/editeng/editobj";
 import { DateTime } from "../../../../tools/source/datetime/datetime";
 import { Date as ToolsDate } from "../../../../tools/source/datetime/tdate";
@@ -37,6 +38,137 @@ import type { SwField } from "../../../inc/fldbas";
 import { STR_DURATION_FORMAT } from "../../../inc/strings";
 import { SwDateTimeField } from "./flddat";
 import { SwValueFieldType } from "./fldbas";
+import { SvxNumberType } from "../../../../editeng/source/items/numitem";
+import { SvxNumType } from "../../../../editeng/inc/svxenum";
+
+/** Original document statistic subtype order. */
+export enum SwDocStatSubType {
+  Page,
+  PageRange,
+  Paragraph,
+  Word,
+  Character,
+  Table,
+  Graphic,
+  OLE,
+}
+
+/** Writer statistic field service to native subtype mapping. */
+export const docStatServiceSubTypes = {
+  PageCount: SwDocStatSubType.Page,
+  PageCountRange: SwDocStatSubType.PageRange,
+  ParagraphCount: SwDocStatSubType.Paragraph,
+  WordCount: SwDocStatSubType.Word,
+  CharacterCount: SwDocStatSubType.Character,
+  TableCount: SwDocStatSubType.Table,
+  GraphicObjectCount: SwDocStatSubType.Graphic,
+  EmbeddedObjectCount: SwDocStatSubType.OLE,
+} as const;
+
+/** Document-owned type for all count fields. */
+export class SwDocStatFieldType {
+  /** Binds the original statistic owner. @param document - Actual Writer document. */
+  public constructor(private readonly document: SwDoc) {}
+
+  /** Borrows the original document for native point insertion. @returns Writer document. */
+  public GetDoc(): SwDoc {
+    return this.document;
+  }
+
+  /** Updates range fields from the first body frame of each anchor. @param layout - Newly formatted Writer root. */
+  public UpdateRangeFields(layout: SwRootFrame): void {
+    for (const node of this.document.GetNodes().entries()) {
+      const paragraph = node.GetTextNode();
+      const fields = paragraph?.GetpSwpHints()?.GetDocStatFields();
+      if (!paragraph || !fields?.length) continue;
+      for (const hint of fields) {
+        const field = hint.GetAttr().GetField();
+        if (field.GetSubType() !== SwDocStatSubType.PageRange) continue;
+        const count = layout.GetVirtPageCount(paragraph);
+        if (count !== undefined) field.ChangeExpansion(count);
+      }
+    }
+  }
+
+  /** Reads the statistic or page range and applies the original signed-short formatting limit. @param subtype - Native count kind. @param format - Native numbering type. @param virtualPages - Count in the anchor range. @returns Current expansion. */
+  public Expand(subtype: SwDocStatSubType, format: SvxNumType, virtualPages: number): string {
+    const statistics = this.document.getIDocumentStatistics();
+    const stats = statistics.GetDocStat();
+    const count =
+      [
+        subtype === SwDocStatSubType.Page ? statistics.GetPageCount() : stats.nPage,
+        virtualPages,
+        stats.nPara,
+        stats.nWord,
+        stats.nChar,
+        stats.nTable,
+        stats.nGrf,
+        stats.nOLE,
+      ][subtype] ?? 0;
+    return count > 0x7fff || format === SvxNumType.SVX_NUM_PAGEDESC
+      ? String(count)
+      : new SvxNumberType(format).GetNumStr(count);
+  }
+}
+
+/** Native count field and the layout-supplied state for a virtual page range. */
+export class SwDocStatField implements SwField<SwDocStatField> {
+  /** Initializes the count or virtual page field. @param type - Original system type. @param subtype - Statistic kind. @param format - Numbering type. @param virtualPages - Last calculated range count. */
+  public constructor(
+    private readonly type: SwDocStatFieldType,
+    private readonly subtype: SwDocStatSubType,
+    private readonly format: SvxNumType,
+    private virtualPages = 0,
+  ) {}
+
+  /** Borrows the original system field type. @returns Native statistic field type. */
+  public GetTyp(): SwDocStatFieldType {
+    return this.type;
+  }
+
+  /** Reads the registered statistic kind. @returns Native subtype. */
+  public GetSubType(): SwDocStatSubType {
+    return this.subtype;
+  }
+
+  /** Reads the original numbering format. @returns Native numbering enumeration. */
+  public GetFormat(): SvxNumType {
+    return this.format;
+  }
+
+  /** Retains the last calculated range count for copying and Worker transport. @returns Page count. */
+  public GetVirtPageCount(): number {
+    return this.virtualPages;
+  }
+
+  /** Receives the actual first body frame’s count. @param count - Layout count. */
+  public ChangeExpansion(count: number): void {
+    this.virtualPages = count;
+  }
+
+  /** Expands the active native count. @returns Readable field value. */
+  public Expand(): string {
+    return this.type.Expand(this.subtype, this.format, this.virtualPages);
+  }
+
+  /** Copies the original values. @returns Independent field. */
+  public Copy(): SwDocStatField {
+    return new SwDocStatField(this.type, this.subtype, this.format, this.virtualPages);
+  }
+
+  /** Rebinds the field to the destination statistic owner. @param document - Destination Writer document. @returns Detached copy. */
+  public CopyToDocument(document: SwDoc): SwDocStatField {
+    return new SwDocStatField(
+      document.getIDocumentFieldsAccess().GetDocStatFieldType(),
+      this.subtype,
+      this.format,
+      this.virtualPages,
+    );
+  }
+
+  /** Releases field-specific state. */
+  public Dispose(): void {}
+}
 
 /** Original document information subtype and flag values. */
 export enum SwDocInfoSubType {

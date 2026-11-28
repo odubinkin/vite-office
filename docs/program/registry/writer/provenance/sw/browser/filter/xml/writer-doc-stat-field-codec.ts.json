@@ -1,0 +1,30 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "local-infrastructure",
+    "localPath": "apps/office/src/sw/browser/filter/xml/writer-doc-stat-field-codec.ts",
+    "status": "local-only",
+    "rationale": "Transfers a native Writer count field, explicit number format and the originating layout page range at its paragraph offset.",
+    "responsibilities": [
+      "Transfers a native Writer count field, explicit number format and the originating layout page range at its paragraph offset."
+    ],
+    "stackDivergence": {
+      "kind": "local-infrastructure",
+      "rationale": "Structured Worker transport of native statistic fields."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/filter/xml/writer-doc-stat-field-codec.ts",
+          "marker": "encodeDocStatFields"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-statistics-fields.test.ts",
+          "marker": "testTdf71583"
+        }
+      ],
+      "upstream": []
+    }
+  }
+}

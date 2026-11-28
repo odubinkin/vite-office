@@ -6496,3 +6496,16 @@ Writer preserves these two behaviors.
 
 - [Original custom field update](../../vendor/libreoffice-reference/sw/source/core/fields/docufld.cxx#L1130)
 - [Original fixed-only presentation import](../../vendor/libreoffice-reference/xmloff/source/text/txtfldi.cxx#L1455)
+
+### WRITER-781 — Recounting statistics without a layout drops the imported page count
+
+The Writer ODT importer can initialize the document statistics with a page
+count from metadata. When the statistics are recalculated without a current
+layout, the statistics manager assigns zero pages and omits the PageCount
+property. The page-range field derives its value from a body frame and its
+initial value is zero until layout supplies a range. Writer follows this
+behavior when no originating layout has formatted the document.
+
+- [Original metadata import](../../vendor/libreoffice-reference/sw/source/filter/xml/xmlmeta.cxx#L100)
+- [Original statistics recalculation](../../vendor/libreoffice-reference/sw/source/core/doc/DocumentStatisticsManager.cxx#L145)
+- [Original count field creation and range update](../../vendor/libreoffice-reference/sw/source/core/fields/docufld.cxx#L789)

@@ -10,11 +10,12 @@ import {
   SwTextField,
   type SwTextDateTimeField,
   type SwTextDocInfoField,
+  type SwTextDocStatField,
   type SwTextOrdinaryField,
   type SwTextReferenceField,
 } from "../../../inc/txtfld";
 import { SwGetRefField } from "../fields/reffld";
-import { SwDocInfoField } from "../fields/docufld";
+import { SwDocInfoField, SwDocStatField } from "../fields/docufld";
 import { SwDateTimeField } from "../fields/flddat";
 import { SwTextFlyCnt } from "../../../inc/txtflcnt";
 import { TryInsertTextNodeHint, DestroyTextNodeAttribute } from "./thints-insert";
@@ -420,7 +421,16 @@ export class SwpHints {
     );
   }
 
-  /** Returns native document information fields in start order. @returns Native field hints. */
+  /** Returns native statistic fields in start order. @returns Native field hints. */
+  public GetDocStatFields(): readonly SwTextDocStatField[] {
+    return this.hintsByStart.filter(
+      /** Identifies the actual statistic field type. @param hint - Native hint. @returns Whether a count field. */
+      (hint): hint is SwTextDocStatField =>
+        hint instanceof SwTextField && hint.GetAttr().GetField() instanceof SwDocStatField,
+    );
+  }
+
+  /** Finds the actual document information fields. @returns Ordered native hints. */
   public GetDocInfoFields(): readonly SwTextDocInfoField[] {
     return this.hintsByStart.filter(
       /** Selects the actual value class. @param hint - Text attribute. @returns Whether a DocInfo field. */

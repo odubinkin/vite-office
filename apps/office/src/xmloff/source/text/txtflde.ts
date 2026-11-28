@@ -4,6 +4,47 @@ import type { XMLTextParagraphSource } from "./txtparae";
 import { ReferenceFieldPart } from "../../../offapi/com/sun/star/text/ReferenceFieldPart";
 import { ReferenceFieldSource } from "../../../offapi/com/sun/star/text/ReferenceFieldSource";
 import { XMLToken } from "../core/xmltoken";
+import * as NumberingType from "../../../offapi/com/sun/star/style/NumberingType";
+import { SvXMLUnitConverter } from "../core/xmluconv";
+
+/** Native count field element names and UNO services. */
+export const countFields = [
+  [XMLToken.TEXT_PAGE_COUNT, "text:page-count", "PageCount"],
+  [XMLToken.LOEXT_PAGE_COUNT_RANGE, "loext:page-count-range", "PageCountRange"],
+  [XMLToken.TEXT_PARAGRAPH_COUNT, "text:paragraph-count", "ParagraphCount"],
+  [XMLToken.TEXT_WORD_COUNT, "text:word-count", "WordCount"],
+  [XMLToken.TEXT_CHARACTER_COUNT, "text:character-count", "CharacterCount"],
+  [XMLToken.TEXT_TABLE_COUNT, "text:table-count", "TableCount"],
+  [XMLToken.TEXT_IMAGE_COUNT, "text:image-count", "GraphicObjectCount"],
+  [XMLToken.TEXT_OBJECT_COUNT, "text:object-count", "EmbeddedObjectCount"],
+] as const;
+
+/** Mapping shared by the original count import and export. */
+export type XMLCountField = (typeof countFields)[number];
+
+/** One count field at a native text attribute. */
+export interface XMLCountExportMarker {
+  readonly kind: "count-field";
+  readonly offset: number;
+  readonly element: XMLCountField[1];
+  readonly numberingType: number;
+  readonly presentation: string;
+}
+
+/** Writes the original count field and optional explicit numbering type. @param field - Count field portion. @param escapeXml - XML escaping. @returns ODF element. */
+export function exportCountField(
+  field: XMLCountExportMarker,
+  escapeXml: (value: string) => string,
+): string {
+  const type = field.numberingType;
+  const format =
+    type === NumberingType.PAGE_DESCRIPTOR
+      ? ""
+      : ` style:num-format="${escapeXml(new SvXMLUnitConverter("mm100").convertNumFormat(type))}"`;
+  const sync = SvXMLUnitConverter.convertNumLetterSync(type);
+  return `<${field.element}${format}${sync ? ` style:num-letter-sync="${sync}"` : ""}>${escapeXml(field.presentation)}</${field.element}>`;
+}
+
 import type { DateTime } from "../../../offapi/com/sun/star/util/DateTime";
 import { OUStringBuffer } from "../../../sal/inc/rtl/ustrbuf";
 import { approxFloor } from "../../../sal/inc/rtl/math";

@@ -16,6 +16,7 @@ import { XMLToken } from "../core/xmltoken";
 import { XMLAnnotationImportContext } from "./txtfldi";
 import { XMLTextMarkImportContext } from "./XMLTextMarkImportContext";
 import {
+  XMLCountFieldImportContext,
   XMLReferenceFieldImportContext,
   XMLRevisionDocInfoImportContext,
   XMLDateTimeDocInfoImportContext,
@@ -24,7 +25,7 @@ import {
   XMLDateFieldImportContext,
   XMLTimeFieldImportContext,
 } from "./txtfldi";
-import { docInfoFields } from "./txtflde";
+import { countFields, docInfoFields } from "./txtflde";
 import { ReferenceFieldSource } from "../../../offapi/com/sun/star/text/ReferenceFieldSource";
 import type {
   OdfCharacterProperties,
@@ -452,6 +453,11 @@ function createInlineContext(
       element === XMLToken.TEXT_DATE ? XMLDateFieldImportContext : XMLTimeFieldImportContext;
     return new Context(paragraph, properties, hyperlink, namedStyles);
   }
+  const count = countFields.find(([token]) => token === element);
+  if (count)
+    return annotation
+      ? null
+      : new XMLCountFieldImportContext(paragraph, count, properties, hyperlink, namedStyles);
   const docInfo = docInfoFields.find(
     /** Matches an original element token. @param field - Service mapping. @returns Whether matched. */
     ([token]) => token === element,

@@ -1,6 +1,6 @@
 /** @fileoverview Native point text attribute that attaches a field to Writer model text. */
 import { SwTextAttr } from "../source/core/txtnode/txatbase";
-import type { SwDocInfoField, SwPostItField } from "../source/core/fields/docufld";
+import type { SwDocInfoField, SwDocStatField, SwPostItField } from "../source/core/fields/docufld";
 import type { SwGetRefField } from "../source/core/fields/reffld";
 import type { SwDateTimeField } from "../source/core/fields/flddat";
 import type { SwTextNode } from "../source/core/txtnode/ndtxt";
@@ -50,8 +50,12 @@ export type SwTextDocInfoField = SwTextField<SwDocInfoField>;
 /** Text attribute carrying the original date or time field. */
 export type SwTextDateTimeField = SwTextField<SwDateTimeField>;
 
+/** Text attribute carrying a native statistic field. */
+export type SwTextDocStatField = SwTextField<SwDocStatField>;
+
 /** Represented native ordinary text fields. */
-export type SwTextOrdinaryField = SwTextReferenceField | SwTextDocInfoField | SwTextDateTimeField;
+export type SwTextOrdinaryField =
+  SwTextReferenceField | SwTextDocInfoField | SwTextDateTimeField | SwTextDocStatField;
 
 /** Identifies the original annotation subclass contract without treating other fields as comments. @param hint - Indexed hint. @returns Whether this is an attached annotation attribute. */
 export function isAnnotationTextField(hint: unknown): hint is SwTextField {

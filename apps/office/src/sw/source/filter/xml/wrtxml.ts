@@ -64,6 +64,7 @@ export class SwXMLWriter {
     };
     const fonts = document.GetEmbeddedFonts();
     const properties = document.documentProperties;
+    const statistics = document.getIDocumentStatistics();
     const transferMeta = properties.GetPendingXml();
     if (transferMeta !== undefined)
       importDocumentMetaXml(transferMeta, properties.LoadFromDocument.bind(properties), control);
@@ -78,6 +79,9 @@ export class SwXMLWriter {
       /** Writes both original XML streams with deletion sections in their package state. @returns Styles and content XML. */
       () => {
         checkpoint(control, "styles");
+        statistics.GetUpdatedDocStat();
+        if (properties.HasDocumentProperties())
+          statistics.StoreStatistics(properties.GetDocumentProperties());
         const styles = exportStylesXml(document, graphics, bitmapStyles);
         checkpoint(control, "content");
         const content = exportContentXml(document, control.isCancelled, graphics, bitmapStyles);
@@ -101,7 +105,8 @@ export class SwXMLWriter {
     checkpoint(control, "metadata");
     output.putNextEntry(
       "meta.xml",
-      properties.GetTransferXml() ?? exportMetaXml(metadata.title, document.GetLocale()),
+      properties.GetTransferXml() ??
+        exportMetaXml(metadata.title, document.GetLocale(), statistics.ExportStatistics()),
     );
     output.putNextEntry("settings.xml", exportSettingsXml(document));
     for (const font of fonts) {

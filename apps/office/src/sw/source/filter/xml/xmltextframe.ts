@@ -445,6 +445,7 @@ export function compareParagraphMarkers(
       case "reference-mark":
       case "reference-field":
       case "doc-info-field":
+      case "count-field":
       case "date-time-field":
         return 6;
     }

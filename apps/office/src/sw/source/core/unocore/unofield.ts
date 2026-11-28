@@ -10,10 +10,12 @@ import {
   SwTextField,
   type SwTextDateTimeField,
   type SwTextDocInfoField,
+  type SwTextDocStatField,
   type SwTextReferenceField,
 } from "../../../inc/txtfld";
 import { SwFormatField } from "../../../inc/fmtfld";
 import { SwDateTimeSubType } from "../../../inc/fldbas";
+import { SvxNumType } from "../../../../editeng/inc/svxenum";
 import { SwDateTimeField } from "../fields/flddat";
 import { RES_TXTATR_FIELD } from "../../../inc/hintids";
 import { RefFieldFormat } from "../../../inc/reffld";
@@ -22,6 +24,8 @@ import { ReferenceFieldSource } from "../../../../offapi/com/sun/star/text/Refer
 import { SwPaM, SwPosition } from "../crsr/pam";
 import {
   SwDocInfoField,
+  SwDocStatField,
+  type SwDocStatSubType,
   SwDocInfoSubType,
   SwPostItField,
   SwPostItFieldType,
@@ -362,6 +366,45 @@ export class SwXDocInfoField {
       (this.subtype & SwDocInfoSubType.LowerMask) === SwDocInfoSubType.Edit ||
       this.subtype === SwDocInfoSubType.Custom
     );
+  }
+}
+
+/** Original UNO count field descriptor and its attachment. */
+export class SwXDocStatField {
+  private format = SvxNumType.SVX_NUM_CHARS_UPPER_LETTER;
+  private hint: SwTextDocStatField | undefined;
+
+  /** Selects the native subtype for this service. @param subtype - Count kind. */
+  public constructor(private readonly subtype: SwDocStatSubType) {}
+
+  /** Sets the original sal_Int16 NumberingType. @param name - UNO property name. @param input - Typed source value. */
+  public setPropertyValue(name: OUStringConstReference, input: Any): void {
+    const property = text(name);
+    if (property !== "NumberingType") unknown(property);
+    this.format = scalar(input, "sal_Int16") as SvxNumType;
+  }
+
+  /** Attaches the original count field to its document and text point. @param range - Native text range. */
+  public attach(range: SwXTextRange): void {
+    if (this.hint) invalid("Writer statistic field is already attached.");
+    const position = range.GetPaM().Start();
+    const node = position.GetNode().GetTextNode();
+    if (!node) illegal("Writer statistic field must be in text.");
+    const type = node.GetDoc().getIDocumentFieldsAccess().GetDocStatFieldType();
+    const field = new SwDocStatField(type, this.subtype, this.format);
+    const hint = new SwTextField(
+      new SwFormatField(field, RES_TXTATR_FIELD),
+      position.GetContentIndex(),
+    );
+    if (!node.InsertHint(hint)) invalid("Writer statistic field could not be inserted.");
+    this.hint = hint;
+  }
+
+  /** Removes the attached text point. */
+  public dispose(): void {
+    const hint = this.hint;
+    this.hint = undefined;
+    if (hint) hint.GetTextNode()?.EraseText(hint.GetStart(), 1);
   }
 }
 

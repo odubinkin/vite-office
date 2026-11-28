@@ -9,10 +9,12 @@ import { XMLShadowPropHdl } from "../style/shadwhdl";
 import { exportIndexMark, type XMLIndexMarkExportMarker } from "./XMLIndexMarkExport";
 import {
   exportAnnotation,
+  exportCountField,
   exportDateTimeField,
   exportDocInfoField,
   exportReferenceField,
   type XMLAnnotationExportMarker,
+  type XMLCountExportMarker,
   type XMLDateTimeExportMarker,
   type XMLDocInfoExportMarker,
   type XMLReferenceFieldExportMarker,
@@ -169,6 +171,7 @@ export type XMLTextParagraphMarker =
   | XMLAnnotationExportMarker
   | XMLReferenceFieldExportMarker
   | XMLDocInfoExportMarker
+  | XMLCountExportMarker
   | XMLDateTimeExportMarker
   | XMLRedlineExportMarker
   | Readonly<{ kind: "frame"; frame: XMLTextFrameExportSource; offset: number }>;
@@ -639,6 +642,7 @@ function exportParagraphElement(
               marker.kind === "reference-mark" ||
               marker.kind === "reference-field" ||
               marker.kind === "doc-info-field" ||
+              marker.kind === "count-field" ||
               marker.kind === "date-time-field" ||
               (marker.kind === "annotation" && marker.consumesMarker),
           );
@@ -734,6 +738,7 @@ function exportMarker(
   if (marker.kind === "annotation" || marker.kind === "annotation-end")
     return exportAnnotation(marker, escapeXml, exportText, exportAnnotationParagraph);
   if (marker.kind === "reference-field") return exportReferenceField(marker, escapeXml);
+  if (marker.kind === "count-field") return exportCountField(marker, escapeXml);
   if (marker.kind === "doc-info-field") return exportDocInfoField(marker, escapeXml);
   if (marker.kind === "date-time-field") return exportDateTimeField(marker, escapeXml);
   if (

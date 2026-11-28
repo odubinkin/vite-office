@@ -5,6 +5,15 @@ import type { XBreakIteratorService } from "../../../../offapi/com/sun/star/i18n
 import type { Reference } from "../../../../cppu/inc/com/sun/star/uno/Reference";
 import type { XComponentContext } from "../../../../udkapi/com/sun/star/uno/XComponentContext";
 import { BreakIteratorImpl } from "../../../../i18npool/source/breakiterator/breakiteratorImpl";
+import { createCharacterInstance } from "../../../../external/icu/source/common/brkiter";
+import { Locale } from "../../../../external/icu/source/common/locid";
+import {
+  UTextStorage,
+  type OpenUText,
+  utext_openUChars,
+} from "../../../../external/icu/source/common/unicode/utext";
+import { U_FAILURE } from "../../../../external/icu/source/common/unicode/utypes";
+import type { RuleBasedBreakIterator } from "../../../../external/icu/source/common/rbbi";
 import { u_charType } from "../../../../external/icu/source/common/uchar";
 import * as ScriptType from "../../../../offapi/com/sun/star/i18n/ScriptType";
 import { GetI18NScriptTypeOfLanguage, SvtScriptType } from "../../../../svl/inc/languageoptions";
@@ -19,6 +28,7 @@ export function GetWriterTextUnits(text: string): Uint16Array {
 }
 /** Native script owner; the core module binding supplies the process instance at Writer initialization. */
 export class SwBreakIt {
+  private charBreak: RuleBasedBreakIterator | undefined;
   private readonly m_xBreak = new BreakIteratorImpl();
   private wordBreak: Reference<XBreakIteratorService> | undefined;
   private m_xLanguageTag: LanguageTag | undefined;
@@ -67,6 +77,26 @@ export class SwBreakIt {
     if (script === ScriptType.WEAK)
       script = GetI18NScriptTypeOfLanguage(getConfiguredSystemLanguage());
     return script;
+  }
+  /** Counts the original SKIPCELL graphemes, treating a space as an independent character. @param value - Counted text. @returns Grapheme count. */
+  public getGraphemeCount(value: string): number {
+    if (!value.length) return 0;
+    const status: [number] = [0];
+    const iterator = (this.charBreak ??=
+      createCharacterInstance(Locale.getRoot(), status) ?? undefined);
+    const units = GetWriterTextUnits(value);
+    const input = utext_openUChars(new UTextStorage(), units, units.length, status);
+    if (!iterator || !input || U_FAILURE(status[0]))
+      throw new Error("Writer cannot initialize the ICU character iterator.");
+    iterator.setText(input as OpenUText, status);
+    if (U_FAILURE(status[0])) throw new Error("Writer cannot set the ICU character iterator text.");
+    let count = 0;
+    for (let offset = 0; offset < units.length; ++count) {
+      const next = units[offset] === 0x20 ? offset + 1 : iterator.following(offset);
+      if (next <= offset) break;
+      offset = next;
+    }
+    return count;
   }
   /** Original all-script accumulation; an initial weak run returns all three strong bits. @param text - Logical native text. @returns Native SvtScriptType mask. */
   public GetAllScriptsOfText(text: string): SvtScriptType {
