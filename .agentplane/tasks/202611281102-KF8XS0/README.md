@@ -1,10 +1,11 @@
 ---
 id: "202611281102-KF8XS0"
 title: "Align Writer ODT hidden paragraph fields and conditional visibility"
-status: "DOING"
+result_summary: "Aligned hidden paragraph field ownership and ODT, numeric and string conditions, and represented layout visibility."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "output/playwright/odf-next-checkpoint/writer-hidden-paragraph-verification.md"
   findings:
     - "Preserves the non-hiding field precedence and a usable first body frame. Desktop field-name UI and PDF geometry remain outside the represented slice."
-commit: null
+commit:
+  hash: "7fde1272b270feeb12f6f519ded7066ad9569502"
+  message: "🧩 KF8XS0 writer: preserve hidden paragraph fields and layout visibility"
 comments:
   -
     author: "CODER"
     body: "Start: model the native hidden-paragraph field and its condition and layout behavior."
+  -
+    author: "CODER"
+    body: "Verified: pinned Writer hidden paragraph in a fly and Worker/ODT round trip; visibility and original first body caret fallback. 48 focused tests and static checks passed."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "48 focused Writer checks across six suites including the pinned text fly, Worker and same-model ODT; TypeScript, lint, boundaries, provenance and inventory passed."
+  -
+    type: "status"
+    at: "2026-11-28T11:14:57.416Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: pinned Writer hidden paragraph in a fly and Worker/ODT round trip; visibility and original first body caret fallback. 48 focused tests and static checks passed."
 doc_version: 3
-doc_updated_at: "2026-11-28T11:13:46.157Z"
+doc_updated_at: "2026-11-28T11:14:57.416Z"
 doc_updated_by: "CODER"
 description: "Implement the native HiddenParagraph field, ODT and Worker persistence, SwCalc string comparison in document order, and represented layout visibility for body and nested stories. Replay the pinned fly-hidden-paragraph fixture and focused existing tests."
 sections:
