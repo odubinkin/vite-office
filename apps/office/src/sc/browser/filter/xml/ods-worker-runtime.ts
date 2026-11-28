@@ -1,6 +1,7 @@
 /** @fileoverview Full Calc ODS/XML filtering and native row-height computation in a Dedicated Worker. */
 import type { XmlPackage } from "../../../../svl/source/misc/storage";
 import type { OdsImportOptions } from "../../../source/filter/xml/xmlwrap";
+import type { SecurityOptionsSnapshot } from "../../../../unotools/source/config/securityoptions";
 import { readOdsDocument, writeOdsDocument, writeOdsXml } from "../../../source/filter/xml/xmlwrap";
 import {
   encodeCalcDocument,
@@ -14,7 +15,11 @@ export type OdsWorkerRequest = { id: number } & (
       input: ArrayBuffer | XmlPackage;
       options: Pick<OdsImportOptions, "limits" | "maxExpandedCells" | "zipLimits" | "baseUrl">;
     }
-  | { operation: "export" | "export-xml"; document: CalcDocumentRecord }
+  | {
+      operation: "export" | "export-xml";
+      document: CalcDocumentRecord;
+      securityOptions?: SecurityOptionsSnapshot;
+    }
 );
 /** Worker success alternative, with native classes encoded only at transport boundaries. */
 export type OdsWorkerResult = CalcDocumentRecord | XmlPackage | ArrayBuffer;
@@ -33,8 +38,9 @@ export async function processOdsWorkerRequest(request: OdsWorkerRequest): Promis
   }
   const document = decodeCalcDocument(request.document);
   try {
-    if (request.operation === "export-xml") return await writeOdsXml(document);
-    return (await writeOdsDocument(document)).buffer as ArrayBuffer;
+    const options = request.securityOptions ? { securityOptions: request.securityOptions } : {};
+    if (request.operation === "export-xml") return await writeOdsXml(document, options);
+    return (await writeOdsDocument(document, options)).buffer as ArrayBuffer;
   } finally {
     document.Dispose();
   }

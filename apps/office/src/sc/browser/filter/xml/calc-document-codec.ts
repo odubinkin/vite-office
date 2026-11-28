@@ -2,6 +2,11 @@ import {
   isOdfFontBytes,
   type OdfFontResource,
 } from "../../../../package/source/zippackage/odf-font-resources";
+import {
+  decodeCalcChangeTrack,
+  encodeCalcChangeTrack,
+  type CalcChangeTrackRecord,
+} from "./calc-change-track-codec";
 import { ScAreaLink } from "../../../source/ui/docshell/arealink";
 import {
   decodeCalcAreaLink,
@@ -375,6 +380,7 @@ export interface CalcDocumentRecord {
   readonly consolidation?: CalcConsolidationRecord;
   readonly documentMetaXml?: string;
   readonly docProtection?: ProtectionRecord;
+  readonly changeTrack?: CalcChangeTrackRecord;
   readonly version: 1;
   readonly storageGrammar?: typeof FormulaGrammar.Grammar.GRAM_PODF;
   readonly styles: string;
@@ -772,6 +778,7 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
   const validations = encodeCalcValidations(document);
   const documentMetaXml = document.documentProperties.GetTransferXml();
   const docProtection = document.GetDocProtection();
+  const changeTrack = encodeCalcChangeTrack(document);
   const consolidation = document.GetConsolidateDlgData();
   const embeddedFonts = document.GetEmbeddedFonts();
   const fontEmbedding = [
@@ -801,6 +808,7 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
     ...(docProtection
       ? { docProtection: encodeProtection(docProtection, ScDocProtectionOption.NONE) }
       : {}),
+    ...(changeTrack ? { changeTrack } : {}),
     ...(FormulaGrammar.isPODF(document.GetStorageGrammar())
       ? { storageGrammar: FormulaGrammar.Grammar.GRAM_PODF }
       : {}),
@@ -1381,6 +1389,7 @@ function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
       decodeProtection(protection, record.docProtection, ScDocProtectionOption.NONE, "workbook");
       document.SetDocProtection(protection);
     }
+    if (record.changeTrack !== undefined) decodeCalcChangeTrack(document, record.changeTrack);
     document.SetAutoCalc(record.autoCalculate ?? true);
     complete = true;
     return document;

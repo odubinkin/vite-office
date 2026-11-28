@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "local-infrastructure",
+    "localPath": "apps/office/src/sc/browser/filter/xml/calc-change-track-codec.ts",
+    "localSymbols": [
+      "encodeCalcChangeTrack",
+      "decodeCalcChangeTrack"
+    ],
+    "status": "local-only",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/browser/filter/xml/calc-change-track-codec.ts",
+          "marker": "encodeCalcChangeTrack"
+        },
+        {
+          "path": "apps/office/src/sc/browser/filter/xml/calc-change-track-codec.ts",
+          "marker": "decodeCalcChangeTrack"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-tracked-cell-content.test.ts",
+          "marker": "testChangesAuthorDate"
+        }
+      ]
+    },
+    "rationale": "Transfers native Calc content changes and original action references through the browser Worker graph.",
+    "responsibilities": [
+      "Transfers native Calc content changes and original action references through the browser Worker graph."
+    ],
+    "stackDivergence": {
+      "kind": "local-infrastructure",
+      "rationale": "Structured clone is the browser graph transport boundary."
+    }
+  }
+}

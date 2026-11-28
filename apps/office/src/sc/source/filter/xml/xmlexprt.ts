@@ -72,6 +72,13 @@ import { ExportNumberFormat } from "../../../../xmloff/source/style/xmlnumfe";
 import { CellTextStylePool, writeCellParagraphs } from "./xmlexprt.celltext";
 import { writeTableProtectionOptions } from "./xmlexprt.protection";
 import type { ScTableProtection } from "../../core/data/tabprotection";
+import { ScChangeTrackingExportHelper } from "./XMLChangeTrackingExportHelper";
+import {
+  captureSecurityOptions,
+  type SecurityOptionsSnapshot,
+} from "../../../../unotools/source/config/securityoptions";
+import { encodeBase64 } from "../../../../comphelper/source/misc/base64";
+import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 /** Effective style and merge state within a horizontal row run. */
 interface RowCellRange {
   readonly validation: number;
@@ -86,6 +93,7 @@ interface RowCellRange {
 export interface ScXMLExportOptions {
   readonly isCancelled?: () => boolean;
   readonly maxOutputBytes?: number;
+  readonly securityOptions?: SecurityOptionsSnapshot;
 }
 /** Streams native page breaks as runs of equal break state for ODS automatic styles. */
 class ScPageBreakRanges {
@@ -147,7 +155,22 @@ export class ScXMLExport {
   }
   /** Returns the original configuration property vector for the settings stream. @returns Owned workbook properties. */
   GetConfigurationSettings(): ConfigurationProperties {
-    return SvXMLUnitConverter.convertPropertySet(new ScDocumentConfiguration(this.document));
+    const configuration = SvXMLUnitConverter.convertPropertySet(
+      new ScDocumentConfiguration(this.document),
+    );
+    const protection = this.document.GetChangeTrack()?.GetProtection();
+    if (!protection?.length) return configuration;
+    const key = unicode(encodeBase64(protection));
+    const value = new Any(key.getDataAddress(), "OUString");
+    try {
+      return [
+        ...configuration,
+        SvXMLUnitConverter.createPropertyValue("TrackedChangesProtectionKey", value),
+      ];
+    } finally {
+      key.dispose();
+      value.dispose();
+    }
   }
 
   /** Writes the original linked-sheet source independently of formula caches. @param table - Native sheet. @returns Optional ODF table-source element. */
@@ -285,6 +308,10 @@ export class ScXMLExport {
     tableProtection: ReadonlyMap<Readonly<ScTableProtection>, string> = new Map(),
     docProtection = "",
   ): string {
+    const trackedChanges = new ScChangeTrackingExportHelper(
+      this.document,
+      this.options.securityOptions ?? captureSecurityOptions(),
+    ).CollectAndWriteChanges();
     this.fontPool = new XMLFontAutoStylePool();
     if (this.document.IsEmbedFonts())
       for (const font of this.document.GetEmbeddedFonts()) this.fontPool.AddEmbedded(font);
@@ -598,7 +625,7 @@ export class ScXMLExport {
       const hmm = Number(convert(BigInt(Number(width)), Length.twip, Length.mm100));
       automatic += `<style:style style:name="${name}" style:family="table-column"><style:table-column-properties fo:break-before="${pageBreak}" style:column-width="${new SvXMLUnitConverter("mm100").convertMeasureToXML(hmm)}"/></style:style>`;
     }
-    return `<?xml version="1.0" encoding="UTF-8"?><office:document-content xmlns:calcext="${ODF_NAMESPACES.calcext}" xmlns:office="${ODF_NAMESPACES.office}" xmlns:dc="${ODF_NAMESPACES.dc}" xmlns:meta="${ODF_NAMESPACES.meta}" xmlns:number="${ODF_NAMESPACES.number}" xmlns:table="${ODF_NAMESPACES.table}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:of="${ODF_NAMESPACES.of}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:fo="${ODF_NAMESPACES.fo}" xmlns:css3t="${ODF_NAMESPACES.css3t}" xmlns:svg="${ODF_NAMESPACES.svg}" xmlns:loext="${ODF_NAMESPACES.loext}" xmlns:xlink="${ODF_NAMESPACES.xlink}" office:version="1.3">${this.fontPool.exportXML()}<office:automatic-styles>${automatic}</office:automatic-styles><office:body><office:spreadsheet${docProtection}>${calculationSettings}${validations.WriteValidations()}${body}</office:spreadsheet></office:body></office:document-content>`;
+    return `<?xml version="1.0" encoding="UTF-8"?><office:document-content xmlns:calcext="${ODF_NAMESPACES.calcext}" xmlns:office="${ODF_NAMESPACES.office}" xmlns:dc="${ODF_NAMESPACES.dc}" xmlns:meta="${ODF_NAMESPACES.meta}" xmlns:number="${ODF_NAMESPACES.number}" xmlns:table="${ODF_NAMESPACES.table}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:of="${ODF_NAMESPACES.of}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:fo="${ODF_NAMESPACES.fo}" xmlns:css3t="${ODF_NAMESPACES.css3t}" xmlns:svg="${ODF_NAMESPACES.svg}" xmlns:loext="${ODF_NAMESPACES.loext}" xmlns:xlink="${ODF_NAMESPACES.xlink}" office:version="1.3">${this.fontPool.exportXML()}<office:automatic-styles>${automatic}</office:automatic-styles><office:body><office:spreadsheet${docProtection}>${trackedChanges}${calculationSettings}${validations.WriteValidations()}${body}</office:spreadsheet></office:body></office:document-content>`;
   }
 
   /** Emits original sheet scenario flags and scenario-mark ranges. @param table - Native scenario sheet. @returns ODS scenario XML. */

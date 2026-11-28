@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/tool/chgtrack.ts",
+    "localSymbols": [
+      "ScChangeAction",
+      "ScChangeActionContent",
+      "ScChangeTrack"
+    ],
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/chgtrack.ts",
+          "marker": "ScChangeAction"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-tracked-cell-content.test.ts",
+          "marker": "testChangesAuthorDate"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/chgtrack.cxx",
+          "marker": "ScChangeActionContent::ScChangeActionContent"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/chgtrack.cxx",
+          "marker": "ScChangeTrack::AppendLoaded"
+        }
+      ]
+    },
+    "upstreamPath": "sc/source/core/tool/chgtrack.cxx",
+    "upstreamSymbols": [
+      "ScChangeActionContent::ScChangeActionContent",
+      "ScChangeTrack::AppendLoaded"
+    ],
+    "preservedResponsibilities": [
+      "Owns loaded content actions, the old and new cell values, action order and dependency links."
+    ],
+    "omittedResponsibilities": [
+      "Interactive change recording, structural changes, accept/reject commands and desktop notification are outside this slice."
+    ]
+  }
+}

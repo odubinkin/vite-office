@@ -20,6 +20,7 @@ import { ScXMLContentValidationsContext } from "./xmlcvali";
 import { ScXMLConsolidationContext } from "./XMLConsolidationContext";
 import { ScDocProtection } from "../../core/data/tabprotection";
 import { readProtectionHash } from "./xmlsubti";
+import { ScXMLTrackedChangesContext } from "./XMLTrackedChangesContext";
 /** Spreadsheet content owns table creation,not a separate workbook model. */
 export class ScXMLBodyContext extends ScXMLImportContext {
   private hadCalculationSettings = false;
@@ -54,7 +55,11 @@ export class ScXMLBodyContext extends ScXMLImportContext {
   ): SvXMLImportContext {
     if (element === XMLToken.LOEXT_PERSONS) return new ScXMLPersonsContext(this.owner);
     if (element === XMLToken.TABLE_TRACKED_CHANGES)
-      return new ScXMLTrackedChangesContext(this.owner);
+      return new ScXMLTrackedChangesContext(
+        this.owner,
+        attributes,
+        this.owner.GetChangeTrackingImportHelper(),
+      );
     if (element === XMLToken.TABLE_CONTENT_VALIDATIONS)
       return new ScXMLContentValidationsContext(this.owner);
     if (element === XMLToken.TABLE_DATABASE_RANGES)
@@ -82,19 +87,6 @@ export class ScXMLBodyContext extends ScXMLImportContext {
     if (!this.hadCalculationSettings)
       new ScXMLCalculationSettingsContext(this.owner).endFastElement();
     if (this.protection) this.owner.GetDocument().SetDocProtection(this.protection);
-  }
-}
-
-/** Handles the empty form of the native tracked-changes collection. */
-class ScXMLTrackedChangesContext extends ScXMLImportContext {
-  /** Preserves the unsupported-range boundary for change records. @returns No child. */
-  override createFastChildContext(): never {
-    throw new Error("ODS tracked change entries are not implemented");
-  }
-
-  /** Preserves the unsupported-range boundary for change records. @returns No child. */
-  override createUnknownChildContext(): never {
-    throw new Error("ODS tracked change entries are not implemented");
   }
 }
 

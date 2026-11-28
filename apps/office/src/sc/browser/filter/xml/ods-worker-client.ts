@@ -1,4 +1,5 @@
 /** @fileoverview Calc worker filtering with bounded main-thread graph transfer, stale-result rejection and explicit worker teardown. */
+import { captureSecurityOptions } from "../../../../unotools/source/config/securityoptions";
 import type { OdsFilterService } from "../../../source/filter/xml/ods-filter-service";
 import type { OdsImportOptions } from "../../../source/filter/xml/xmlwrap";
 import type { ScDocument } from "../../../inc/document";
@@ -95,6 +96,7 @@ export class OdsWorkerClient implements OdsFilterService {
       id: generation,
       operation: xml ? "export-xml" : "export",
       document: snapshot,
+      securityOptions: captureSecurityOptions(),
     });
     return xml ? (result as XmlPackage) : new Uint8Array(result as ArrayBuffer);
   }

@@ -10,6 +10,7 @@ import type { LinkManager } from "../../../../sfx2/source/appl/linkmgr2";
 import { SfxDocumentProperties } from "../../../../sfx2/source/doc/sfxbasemodel";
 import type { ScValidationData } from "./validat";
 import type { ScDocProtection } from "./tabprotection";
+import type { ScChangeTrack } from "../tool/chgtrack";
 import { ScValidationDataList } from "./validat.list";
 import { ScPostIt, type NoteEntry, type ScPersonData } from "../../../inc/postit";
 import { ScRangePairList } from "../../../inc/rangelst";
@@ -155,6 +156,19 @@ export class ScDocument {
   GetTabProtection = documen3.GetTabProtection;
   SetTabProtection = documen3.SetTabProtection;
   private pDocProtection: ScDocProtection | undefined;
+  private pChangeTrack: ScChangeTrack | undefined;
+
+  /** Borrows the native change track for this workbook. @returns Current change track. */
+  GetChangeTrack(): ScChangeTrack | undefined {
+    return this.pChangeTrack;
+  }
+
+  /** Adopts a track owned by this workbook. @param track - Candidate owner. */
+  SetChangeTrack(track: ScChangeTrack): void {
+    if (track === this.pChangeTrack || track.GetDocument() !== this) return;
+    this.pChangeTrack?.Dispose();
+    this.pChangeTrack = track;
+  }
 
   /** Borrows the native workbook protection owner. @returns Workbook protection if present. */
   GetDocProtection(): ScDocProtection | undefined {
@@ -933,6 +947,8 @@ export class ScDocument {
   }
   /** Releases consumed native document observer lifetime,starting with area destruction before formula-cell destruction as in documen2. GC owns physical stores. @returns Nothing. */
   Dispose(): void {
+    this.pChangeTrack?.Dispose();
+    this.pChangeTrack = undefined;
     this.documentProperties.Dispose();
     this.mpDocLinkMgr.Dispose();
     this.pValidationList?.Dispose();

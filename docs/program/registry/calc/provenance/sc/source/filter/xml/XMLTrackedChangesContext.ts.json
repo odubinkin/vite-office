@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/filter/xml/XMLTrackedChangesContext.ts",
+    "localSymbols": [
+      "ScXMLTrackedChangesContext"
+    ],
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/xml/XMLTrackedChangesContext.ts",
+          "marker": "ScXMLTrackedChangesContext"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-tracked-cell-content.test.ts",
+          "marker": "testChangesAuthorDate"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/XMLTrackedChangesContext.cxx",
+          "marker": "ScXMLTrackedChangesContext::createFastChildContext"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/XMLTrackedChangesContext.cxx",
+          "marker": "ScXMLContentChangeContext::endFastElement"
+        }
+      ]
+    },
+    "upstreamPath": "sc/source/filter/xml/XMLTrackedChangesContext.cxx",
+    "upstreamSymbols": [
+      "ScXMLTrackedChangesContext::createFastChildContext",
+      "ScXMLContentChangeContext::endFastElement"
+    ],
+    "preservedResponsibilities": [
+      "Imports native change information, action identifiers, previous scalar cells and dependency IDs."
+    ],
+    "omittedResponsibilities": [
+      "Structural and non-scalar previous-cell branches are not admitted."
+    ]
+  }
+}

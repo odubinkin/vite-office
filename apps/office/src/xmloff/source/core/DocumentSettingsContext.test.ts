@@ -2,6 +2,7 @@
 import { expect, it } from "vitest";
 import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
 import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
+import { OUString } from "../../../sal/inc/rtl/ustring";
 import { PropertyState } from "../../../udkapi/com/sun/star/beans/PropertyState";
 import { PropertyValue } from "../../../udkapi/com/sun/star/beans/PropertyValue";
 import { XMLDocumentSettingsContext, type ViewSettings } from "./DocumentSettingsContext";
@@ -18,7 +19,7 @@ function settingsDocument(settings: string): string {
 /** Parses the shared settings stream and retains copied scalar properties. @param xml - Native XML text. @returns Published view and configuration values. */
 function readSettings(xml: string) {
   let views: ViewSettings | undefined;
-  const flags: [string, boolean][] = [];
+  const configuration: [string, boolean | string][] = [];
   parseOdfXmlStream(xml, {
     /** Selects the settings document root. @returns Root context. */
     createFastContext() {
@@ -31,9 +32,19 @@ function readSettings(xml: string) {
                 /** Copies the represented settings values. @param properties - Borrowed values. @returns Nothing. */
                 (properties) => {
                   for (const property of properties) {
+                    const name = text(property.Name);
                     const value: [boolean] = [false];
-                    expect(property.Value.extract(value, "bool")).toBe(true);
-                    flags.push([text(property.Name), value[0]]);
+                    if (property.Value.extract(value, "bool")) {
+                      configuration.push([name, value[0]]);
+                      continue;
+                    }
+                    const string = new OUString();
+                    try {
+                      expect(property.Value.extract(string, "OUString")).toBe(true);
+                      configuration.push([name, text(string)]);
+                    } finally {
+                      string.dispose();
+                    }
                   }
                 },
                 /** Receives the represented index map. @param values - Parsed views. @returns Nothing. */
@@ -47,10 +58,10 @@ function readSettings(xml: string) {
     /** Leaves an unrelated root unsupported. @returns Absent context. */
     createUnknownContext: () => null,
   });
-  return { views, flags };
+  return { views, configuration };
 }
 
-it("decodes string view records in position order and independent boolean settings", /** Verifies native group QNames, property types and nested content boundaries. @returns Nothing. */ () => {
+it("decodes string view records in position order and independent configuration settings", /** Verifies native group QNames, property types and nested content boundaries. @returns Nothing. */ () => {
   const result = readSettings(
     settingsDocument(`
     <foreign:other><c:config-item-set c:name="app:configuration-settings"/></foreign:other>
@@ -86,7 +97,7 @@ it("decodes string view records in position order and independent boolean settin
     <c:config-item-set c:name="app:configuration-settings">
       <c:config-item c:name="True" c:type="boolean">true</c:config-item>
       <c:config-item c:name="False" c:type="boolean">false</c:config-item>
-      <c:config-item c:name="Skipped" c:type="string">true</c:config-item>
+      <c:config-item c:name="String" c:type="string">true</c:config-item>
       <foreign:other><c:config-item c:name="Nested" c:type="boolean">true</c:config-item></foreign:other>
     </c:config-item-set>`),
   );
@@ -110,13 +121,14 @@ it("decodes string view records in position order and independent boolean settin
       ],
     ],
   ]);
-  expect(result.flags).toEqual([
+  expect(result.configuration).toEqual([
     ["True", true],
     ["False", false],
+    ["String", "true"],
   ]);
 });
 
-it("skips nonboolean native configuration values", /** Exercises typed export admission without affecting the view group. @returns Nothing. */ () => {
+it("skips absent native configuration values", /** Exercises typed export admission without affecting the view group. @returns Nothing. */ () => {
   const value = new PropertyValue();
   const name = unicode("Show & Layout");
   const flag = new Any(false);
@@ -124,7 +136,7 @@ it("skips nonboolean native configuration values", /** Exercises typed export ad
   try {
     expect(readSettings(exportConfigurationSettings([value, supported]))).toEqual({
       views: undefined,
-      flags: [["Show & Layout", false]],
+      configuration: [["Show & Layout", false]],
     });
   } finally {
     supported.dispose();
@@ -159,17 +171,17 @@ it("round-trips escaped view data and distinguishes absent and empty views", /**
   expect(exportViewSettings(views)).toContain(
     'config:name="HorizontalSplitMode" config:type="short">2<',
   );
-  expect(readSettings(exportViewSettings(views))).toEqual({ views, flags: [] });
-  expect(readSettings(exportViewSettings([]))).toEqual({ views: [], flags: [] });
+  expect(readSettings(exportViewSettings(views))).toEqual({ views, configuration: [] });
+  expect(readSettings(exportViewSettings([]))).toEqual({ views: [], configuration: [] });
   expect(
     readSettings(
       settingsDocument(
         '<c:config-item-set c:name="app:view-settings"><c:config-item-map-indexed c:name="Views"/></c:config-item-set><c:config-item-set c:name="app:view-settings"/>',
       ),
     ),
-  ).toEqual({ views: undefined, flags: [] });
+  ).toEqual({ views: undefined, configuration: [] });
   expect(readSettings(settingsDocument('<c:config-item-set c:name="view-settings"/>'))).toEqual({
     views: undefined,
-    flags: [],
+    configuration: [],
   });
 });

@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/unotools/source/config/securityoptions.ts",
+    "localSymbols": [
+      "IsOptionSet",
+      "SetOption"
+    ],
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/unotools/source/config/securityoptions.ts",
+          "marker": "IsOptionSet"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-tracked-cell-content.test.ts",
+          "marker": "testChangesAuthorDate"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/unotools/source/config/securityoptions.cxx",
+          "marker": "IsOptionSet"
+        },
+        {
+          "path": "vendor/libreoffice-reference/unotools/source/config/securityoptions.cxx",
+          "marker": "SetOption"
+        }
+      ]
+    },
+    "upstreamPath": "unotools/source/config/securityoptions.cxx",
+    "upstreamSymbols": [
+      "IsOptionSet",
+      "SetOption"
+    ],
+    "preservedResponsibilities": [
+      "Retains the original two consumed Security/Scripting flags and defaults for changing personal information on export."
+    ],
+    "omittedResponsibilities": [
+      "The browser binding uses active realm state and a Worker snapshot. Desktop configuration persistence and other security preferences remain outside this slice."
+    ]
+  }
+}

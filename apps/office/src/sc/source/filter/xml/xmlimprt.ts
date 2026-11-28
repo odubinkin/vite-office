@@ -8,6 +8,10 @@ import { ScDocumentConfiguration } from "../../ui/unoobj/confuno";
 import { SetLabelRanges, type ScMyLabelRange } from "./xmllabri";
 import type { ScMyImportValidation } from "./xmlcvali";
 import { ScValidationData } from "../../core/data/validat";
+import { ScXMLChangeTrackingImportHelper } from "./XMLChangeTrackingImportHelper";
+import { ScChangeTrack } from "../../core/tool/chgtrack";
+import { decodeBase64 } from "../../../../comphelper/source/misc/base64";
+import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { ScCompiler } from "../../../inc/compiler";
 import type { ScTokenArray } from "../../../inc/tokenarray";
 import { ScRangeStringConverter } from "../../core/tool/rangeutl";
@@ -107,6 +111,12 @@ export interface ScXMLFormula {
 
 /** Actual import root/state for scalar content;no intermediate sheet/cell data model is retained. */
 export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
+  private changeTrackingImportHelper: ScXMLChangeTrackingImportHelper | undefined;
+
+  /** Borrows the native deferred change loading helper. @returns Change tracking import owner. */
+  GetChangeTrackingImportHelper(): ScXMLChangeTrackingImportHelper {
+    return (this.changeTrackingImportHelper ??= new ScXMLChangeTrackingImportHelper());
+  }
   /** Resolves a field reference when the caller supplies the original document URI. @param href - ODF reference. @returns Document-relative or resolved URI. */
   GetAbsoluteReference(href: string): string {
     return this.options.baseUrl ? INetURLObject.GetAbsURL(this.options.baseUrl, href) : href;
@@ -857,6 +867,22 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
   }
   /** Applies represented native document settings before sheet styles and content. @param properties - Borrowed xmloff property vector. @returns Nothing. */
   SetConfigurationSettings(properties: ConfigurationProperties): void {
+    for (const property of [...properties].reverse()) {
+      if (text(property.Name) !== "TrackedChangesProtectionKey") continue;
+      const value = new OUString();
+      try {
+        if (property.Value.extract(value, "OUString")) {
+          const bytes = decodeBase64(text(value));
+          if (bytes.length) {
+            const track = this.document.GetChangeTrack() ?? new ScChangeTrack(this.document);
+            track.SetProtection(bytes);
+            this.document.SetChangeTrack(track);
+          }
+        }
+      } finally {
+        value.dispose();
+      }
+    }
     SvXMLUnitConverter.convertPropertySet(
       new ScDocumentConfiguration(this.document),
       [...properties].reverse(),
@@ -941,6 +967,7 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
         }
       }
       this.docImport.finalize();
+      this.changeTrackingImportHelper?.CreateChangeTrack(this.document);
       this.SetStringRefSyntaxIfMissing();
       this.FinalizeConditionalFormats();
       this.FinalizeValidations();

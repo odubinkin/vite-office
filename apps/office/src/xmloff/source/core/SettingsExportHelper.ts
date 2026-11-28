@@ -1,6 +1,8 @@
 /** @fileoverview Original ODF configuration settings export for represented typed properties. */
 import { TypeClass } from "../../../udkapi/com/sun/star/uno/TypeClass";
 import type { PropertyValue } from "../../../udkapi/com/sun/star/beans/PropertyValue";
+import { OUString } from "../../../sal/inc/rtl/ustring";
+import { text } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { escapeXml } from "../text/txtparae";
 import { ODF_NAMESPACES } from "./xmltoken";
 import type { ViewItem, ViewSettings } from "./DocumentSettingsContext";
@@ -49,6 +51,13 @@ function exportConfigurationGroup(properties: readonly PropertyValue[], output: 
     if (type === TypeClass.BOOLEAN) {
       const boolean: [boolean] = [false];
       if (Value.extract(boolean, "bool")) output.push(exportViewItem(name, boolean[0]));
+    } else if (type === TypeClass.STRING) {
+      const value = new OUString();
+      try {
+        if (Value.extract(value, "OUString")) output.push(exportViewItem(name, text(value)));
+      } finally {
+        value.dispose();
+      }
     } else if (type === TypeClass.SHORT || type === TypeClass.LONG) {
       const number: [number] = [0];
       const short = type === TypeClass.SHORT;

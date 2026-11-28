@@ -68,12 +68,10 @@ export class SvXMLUnitConverter {
     const result: PropertyValue[] = [];
     try {
       for (const key of owner.getPropertyNames()) {
-        const name = unicode(key);
         const value = owner.getPropertyValue(key);
         try {
-          result.push(new PropertyValue(name, 0, value, PropertyState.DIRECT_VALUE));
+          result.push(this.createPropertyValue(key, value));
         } finally {
-          name.dispose();
           value.dispose();
         }
       }
@@ -81,6 +79,16 @@ export class SvXMLUnitConverter {
     } catch (error) {
       for (const property of result) property.dispose();
       throw error;
+    }
+  }
+
+  /** Builds a native direct-value setting. @param key - Property name. @param value - Borrowed UNO value. @returns Owned property. */
+  static createPropertyValue(key: string, value: Any): PropertyValue {
+    const name = unicode(key);
+    try {
+      return new PropertyValue(name, 0, value, PropertyState.DIRECT_VALUE);
+    } finally {
+      name.dispose();
     }
   }
 

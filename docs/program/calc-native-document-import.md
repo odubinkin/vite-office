@@ -104,3 +104,16 @@ normalizes both accepted SHA-256 URIs to the original ODF output URI, and
 preserves the extended legacy Excel double hash. The Worker preserves the workbook
 state separately from sheet protection. The existing sheet insertion command
 uses the workbook editability guard.
+
+## ODS tracked cell content
+
+Calc adopts the native change track after sheets and their cell values are
+available. The original content action number, range, acceptance state,
+previous scalar cell, dependencies, author, comment and timestamp cross ODS
+and Worker transport. The track restores the latest content value from the
+actual cell model when the document is imported.
+
+ODS writes the original author/date anonymization under the two
+Security/Scripting flags. The tracked changes key crosses the native
+configuration settings item. Structural actions, previous rich text and
+formula cells, and interactive change recording remain outside this slice.

@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/filter/xml/XMLChangeTrackingExportHelper.ts",
+    "localSymbols": [
+      "ScChangeTrackingExportHelper"
+    ],
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/xml/XMLChangeTrackingExportHelper.ts",
+          "marker": "ScChangeTrackingExportHelper"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-tracked-cell-content.test.ts",
+          "marker": "testChangesAuthorDate"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/XMLChangeTrackingExportHelper.cxx",
+          "marker": "ScChangeTrackingExportHelper::CollectAndWriteChanges"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/XMLChangeTrackingExportHelper.cxx",
+          "marker": "ScChangeTrackingExportHelper::WriteChangeInfo"
+        }
+      ]
+    },
+    "upstreamPath": "sc/source/filter/xml/XMLChangeTrackingExportHelper.cxx",
+    "upstreamSymbols": [
+      "ScChangeTrackingExportHelper::CollectAndWriteChanges",
+      "ScChangeTrackingExportHelper::WriteChangeInfo"
+    ],
+    "preservedResponsibilities": [
+      "Writes native content actions, previous cells and change author/date privacy rules."
+    ],
+    "omittedResponsibilities": [
+      "Structural actions and specialized formula, rich text and change style branches remain outside this slice."
+    ]
+  }
+}

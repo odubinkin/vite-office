@@ -6,6 +6,7 @@ import { PropertyValue } from "../../../udkapi/com/sun/star/beans/PropertyValue"
 import { FastAttributeList, SvXMLIgnoreContext, SvXMLImportContext } from "./xmlimp";
 import { ODF_NAMESPACES, XMLToken } from "./xmltoken";
 import { Converter } from "../../../sax/source/tools/converter";
+import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 
 /** Represented scalar properties of one native view record. */
 export type ViewItem = readonly [name: string, value: string | boolean | number, type?: "short"];
@@ -23,6 +24,7 @@ export type ViewSettings = readonly (readonly ViewProperty[])[];
 /** A configuration scalar retains the original UNO width. */
 type ConfigItem =
   | readonly [name: string, type: "boolean", value: boolean]
+  | readonly [name: string, type: "string", value: string]
   | readonly [name: string, type: "short" | "int", value: number];
 
 /** Original office:settings context for the represented configuration-property sequence. */
@@ -82,8 +84,10 @@ export class XMLDocumentSettingsContext extends SvXMLImportContext {
         const units = new Uint16Array(key.length);
         for (let index = 0; index < key.length; ++index) units[index] = key.charCodeAt(index);
         const name = new OUString(units, units.length);
-        const value =
-          type === "boolean"
+        const encoded = type === "string" ? unicode(scalar) : undefined;
+        const value = encoded
+          ? new Any(encoded.getDataAddress(), "OUString")
+          : type === "boolean"
             ? new Any(scalar)
             : new Any([scalar], type === "short" ? "sal_Int16" : "sal_Int32");
         try {
@@ -91,6 +95,7 @@ export class XMLDocumentSettingsContext extends SvXMLImportContext {
         } finally {
           name.dispose();
           value.dispose();
+          encoded?.dispose();
         }
       }
       this.apply(properties);
@@ -279,13 +284,14 @@ class XMLConfigItemSetContext extends SvXMLImportContext {
     if (
       element !== XMLToken.CONFIG_ITEM ||
       !name ||
-      (type !== "boolean" && type !== "short" && type !== "int")
+      (type !== "boolean" && type !== "short" && type !== "int" && type !== "string")
     )
       return new SvXMLIgnoreContext(true);
     return new XMLConfigItemContext(
       /** Adds the native scalar with its original UNO type. @param value - Parsed value. @returns Nothing. */
       (value) => {
         if (type === "boolean") this.values.push([name, type, value === "true"]);
+        else if (type === "string") this.values.push([name, type, value]);
         else {
           const number: [number] = [0];
           Converter.convertNumber(number, value);

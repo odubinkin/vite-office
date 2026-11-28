@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/filter/xml/XMLChangeTrackingImportHelper.ts",
+    "localSymbols": [
+      "ScXMLChangeTrackingImportHelper"
+    ],
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/xml/XMLChangeTrackingImportHelper.ts",
+          "marker": "ScXMLChangeTrackingImportHelper"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-tracked-cell-content.test.ts",
+          "marker": "testChangesAuthorDate"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/XMLChangeTrackingImportHelper.cxx",
+          "marker": "ScXMLChangeTrackingImportHelper::CreateChangeTrack"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/XMLChangeTrackingImportHelper.cxx",
+          "marker": "ScXMLChangeTrackingImportHelper::GetIDFromString"
+        }
+      ]
+    },
+    "upstreamPath": "sc/source/filter/xml/XMLChangeTrackingImportHelper.cxx",
+    "upstreamSymbols": [
+      "ScXMLChangeTrackingImportHelper::CreateChangeTrack",
+      "ScXMLChangeTrackingImportHelper::GetIDFromString"
+    ],
+    "preservedResponsibilities": [
+      "Reconstructs native content actions in insertion, dependency and current-cell passes."
+    ],
+    "omittedResponsibilities": [
+      "Other change action types and generated-cell branches remain outside this slice."
+    ]
+  }
+}

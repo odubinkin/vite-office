@@ -8382,3 +8382,29 @@ the order of these assignments and the resulting export value.
 
 - [Original operator and item assignment](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlfilti.cxx#L352)
 - [Original non-empty query setter](../../vendor/libreoffice-reference/sc/source/core/tool/queryentry.cxx#L111)
+
+### CALC-874 — An empty tracked string paragraph loads as a numeric zero
+
+The tracked previous-cell importer distinguishes an empty cell from a cell
+with a paragraph before it inspects the paragraph text. A paragraph with
+no characters clears the empty-cell flag. The scalar assignment then falls
+back to the numeric member, which defaults to zero, even if the previous
+cell is declared as a string. Calc preserves the original distinction
+between an empty cell element and an empty paragraph.
+
+- [Original paragraph admission and scalar assignment](../../vendor/libreoffice-reference/sc/source/filter/xml/XMLTrackedChangesContext.cxx#L811)
+- [Original previous-cell scalar initialization](../../vendor/libreoffice-reference/sc/source/filter/xml/XMLTrackedChangesContext.cxx#L725)
+
+### CALC-875 — A tracked date or time without a paragraph can save as a float
+
+The tracked previous-cell context stores a date or time as a numeric cell and
+retains the paragraph as its input spelling. The import helper returns a
+populated cell before it reaches the date and time spelling fallback. The
+content action therefore retains the General-format input spelling when the
+paragraph is absent. Export recognizes that spelling as a number and writes
+the scalar as a float. Calc follows the same assignments.
+
+- [Original previous-cell scalar assignment](../../vendor/libreoffice-reference/sc/source/filter/xml/XMLTrackedChangesContext.cxx#L860)
+- [Original cell creation and fallback](../../vendor/libreoffice-reference/sc/source/filter/xml/XMLChangeTrackingImportHelper.cxx#L53)
+- [Original content action constructor](../../vendor/libreoffice-reference/sc/source/core/tool/chgtrack.cxx#L1244)
+- [Original value attribute selection](../../vendor/libreoffice-reference/sc/source/filter/xml/XMLChangeTrackingExportHelper.cxx#L213)
