@@ -1,10 +1,11 @@
 ---
 id: "202611280708-0XVDMS"
 title: "Port Calc ODS loaded deletion and movement actions"
-status: "DOING"
+result_summary: "Ported ODS loaded deletion and movement actions and preserved snapshots, dependencies and cutoffs through Worker and ODS."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "output/playwright/odf-next-checkpoint/calc-delete-move-verification.md"
   findings:
     - "Original fixtures and focused package round trips passed with current cell values preserved."
-commit: null
+commit:
+  hash: "ba9e4ad586681cf9c8206d65c3f564358a8ab0fe"
+  message: "🧩 0XVDMS calc: roundtrip loaded ODS delete and move actions"
 comments:
   -
     author: "CODER"
     body: "Start: port original loaded deletion and movement ownership, generated cells and cutoffs."
+  -
+    author: "CODER"
+    body: "Verified: 18 focused Calc tests plus lint, types, formatting, dependencies, provenance and Calc runtime parity."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "All 18 focused Calc tests passed, covering original fixtures, deletion and movement, generated snapshots, cutoffs, print ranges and Worker. Typecheck, lint, formatting, dependencies, provenance and zero Calc parity violations passed."
+  -
+    type: "status"
+    at: "2026-11-28T07:25:29.162Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: 18 focused Calc tests plus lint, types, formatting, dependencies, provenance and Calc runtime parity."
 doc_version: 3
-doc_updated_at: "2026-11-28T07:23:24.462Z"
+doc_updated_at: "2026-11-28T07:25:29.164Z"
 doc_updated_by: "CODER"
 description: "Implement original ODS sheet deletion and movement records, whole-axis and source/target ranges, multi-deletion offsets, deleted links, generated cell snapshots and cutoff records through the native Calc tracker and Worker. Preserve Workbook values while restoring history."
 sections:
