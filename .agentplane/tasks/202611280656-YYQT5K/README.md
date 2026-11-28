@@ -1,10 +1,11 @@
 ---
 id: "202611280656-YYQT5K"
 title: "Port Calc ODS tracked sheet insertions and preserve table metadata assertions"
-status: "DOING"
+result_summary: "Calc ports native ODS column, row and sheet insertion records, original dependencies and Worker transport."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "output/playwright/odf-next-checkpoint/calc-structural-tracking-verification.md"
   findings:
     - "The pinned insertion fixture and sentinel range checks pass. The independently reproduced checkpoint print failure is resolved by testing the namespaced attribute."
-commit: null
+commit:
+  hash: "bf7eb7aaff93fe58ab516018726b679fbdd01ec4"
+  message: "🧩 YYQT5K calc: roundtrip native ODS structural insertions"
 comments:
   -
     author: "CODER"
     body: "Start: port native insertion ownership and XML parsing/export and repair the full-checkpoint table print assertion."
+  -
+    author: "CODER"
+    body: "Verified: 17 focused Calc tests, original tdf131907.ods, fixed namespaced print check and static/source parity checks."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "All 17 focused Calc tests passed, including pinned tdf131907.ods, structural boundaries and the repaired print assertion through ODS and Worker. Typecheck, lint, format, dependencies, source provenance and zero Calc parity violations passed."
+  -
+    type: "status"
+    at: "2026-11-28T07:08:16.723Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: 17 focused Calc tests, original tdf131907.ods, fixed namespaced print check and static/source parity checks."
 doc_version: 3
-doc_updated_at: "2026-11-28T07:04:38.816Z"
+doc_updated_at: "2026-11-28T07:08:16.726Z"
 doc_updated_by: "CODER"
 description: "Add native loaded change tracking for column, row and sheet insertions with workbook ownership, range defaults, XML and Worker transport, and the original rejection dispatch. Fix the full-checkpoint print attribute assertion to examine the native XML attribute independently of serialization order."
 sections:
