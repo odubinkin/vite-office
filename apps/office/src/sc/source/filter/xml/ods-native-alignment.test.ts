@@ -4,7 +4,13 @@ import { createCalcSession } from "../../../browser/composition/calc-module";
 import { ScDocument } from "../../../inc/document";
 import { ScAddress } from "../../../inc/address";
 import { ScIndentItem } from "../../../inc/attrib";
-import { ATTR_INDENT, ATTR_VERTICAL_ASIAN } from "../../../inc/scitems";
+import {
+  ATTR_FORBIDDEN_RULES,
+  ATTR_HANGPUNCTUATION,
+  ATTR_INDENT,
+  ATTR_SCRIPTSPACE,
+  ATTR_VERTICAL_ASIAN,
+} from "../../../inc/scitems";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { ScPatternAttr } from "../../../inc/patattr";
 import { SvxHorJustifyItem, SvxVerJustifyItem } from "../../../../editeng/inc/justifyitem";
@@ -21,9 +27,16 @@ function alignment(doc: ScDocument, col = 0): readonly number[] {
     (pattern.GetItem(132) as SvxVerJustifyItem).GetValue(),
   ];
 }
-/** Produces independent XML without using the production exporter. @param groups - Explicit style property groups. @returns Document bytes as XML text. */
+/** Produces independent XML without importing or using the production exporter. @param styles - Cell styles. @param cells - Cells in the first row. @returns Document XML. */
+function documentXml(styles: string, cells: string): string {
+  return `<office:document-content xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"><office:automatic-styles>${styles}</office:automatic-styles><office:body><office:spreadsheet><table:table table:name="Data"><table:table-row>${cells}</table:table-row></table:table></office:spreadsheet></office:body></office:document-content>`;
+}
+/** Applies one alignment style to the only cell in the fixture. @param groups - Explicit style property groups. @returns Document XML. */
 function xml(groups: string): string {
-  return `<office:document-content xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"><office:automatic-styles><style:style style:name="ce" style:family="table-cell">${groups}</style:style></office:automatic-styles><office:body><office:spreadsheet><table:table table:name="Data"><table:table-row><table:table-cell table:style-name="ce"/></table:table-row></table:table></office:spreadsheet></office:body></office:document-content>`;
+  return documentXml(
+    `<style:style style:name="ce" style:family="table-cell">${groups}</style:style>`,
+    '<table:table-cell table:style-name="ce"/>',
+  );
 }
 it("writes original paragraph/cell alignment groups and keeps all native values across repeated package reopens", /** Tests real native document bytes. @returns Completion. */ async () => {
   const session = createCalcSession(),
@@ -168,5 +181,42 @@ it("preserves native glyph orientation and indent-only automatic styles in ODS",
     }
   } finally {
     session.Close();
+  }
+});
+
+it("maps the three original Asian typography paragraph flags in ODS styles" /** Exercises positive and negative controls from an independently written style stream. @returns Completion. */, async () => {
+  const contentXml = documentXml(
+    `<style:style style:name="positive" style:family="table-cell"><style:paragraph-properties style:text-autospace="ideograph-alpha" style:punctuation-wrap="hanging" style:line-break="strict"/></style:style>
+     <style:style style:name="negative" style:family="table-cell"><style:paragraph-properties style:text-autospace="none" style:punctuation-wrap="simple" style:line-break="normal"/></style:style>
+     <style:style style:name="invalid" style:family="table-cell"><style:paragraph-properties style:text-autospace="unknown" style:punctuation-wrap="unknown" style:line-break="unknown"/></style:style>`,
+    '<table:table-cell table:style-name="positive"/><table:table-cell table:style-name="negative"/><table:table-cell table:style-name="invalid"/>',
+  );
+  const doc = new ScDocument();
+  let reopened: ScDocument | undefined;
+  try {
+    new ScXMLImport(doc).importContent(contentXml);
+    const bytes = await writeOdsDocument(doc);
+    const archive = await DocumentArchive.open(bytes);
+    const content = await archive.readTextEntry("content.xml");
+    expect(content).toMatch(
+      /<style:paragraph-properties[^>]*style:text-autospace="ideograph-alpha"[^>]*style:punctuation-wrap="hanging"[^>]*style:line-break="strict"/,
+    );
+    expect(content).toMatch(
+      /<style:paragraph-properties[^>]*style:text-autospace="none"[^>]*style:punctuation-wrap="simple"[^>]*style:line-break="normal"/,
+    );
+    reopened = await readOdsDocument(bytes);
+    for (const book of [doc, reopened]) {
+      for (const which of [ATTR_SCRIPTSPACE, ATTR_HANGPUNCTUATION, ATTR_FORBIDDEN_RULES]) {
+        const on = book.GetPattern(new ScAddress(0, 0, 0))?.GetItemSet();
+        const off = book.GetPattern(new ScAddress(1, 0, 0))?.GetItemSet();
+        const invalid = book.GetPattern(new ScAddress(2, 0, 0))?.GetItemSet();
+        expect((on?.GetItemIfSet(which, false) as SfxBoolItem).GetValue()).toBe(true);
+        expect((off?.GetItemIfSet(which, false) as SfxBoolItem).GetValue()).toBe(false);
+        expect(invalid?.GetItemIfSet(which, false)).toBeUndefined();
+      }
+    }
+  } finally {
+    reopened?.Dispose();
+    doc.Dispose();
   }
 });

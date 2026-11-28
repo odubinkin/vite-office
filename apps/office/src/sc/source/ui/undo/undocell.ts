@@ -95,6 +95,7 @@ export class ScUndoEnterData extends SfxUndoAction<ScDocShell> {
    * @param oldValue - Prior value, transferred into history.
    * @param oldFormat - Original direct key or absence.
    * @param source - New input to use on redo.
+   * @returns The history action for the cell input.
    */
   constructor(
     private readonly shell: ScDocShell,

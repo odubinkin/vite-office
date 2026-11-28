@@ -62,7 +62,7 @@ function numberStyleLocale(language: number): string {
   }
 }
 
-/** Exports supported number-format sections using the real format behind substituted system entries. @param formatter - Workbook formatter. @param key - Assigned format key. @param name - Generated style reference. @returns ODF data style or null. */
+/** Exports supported number-format sections using the real format behind substituted system entries. @param formatter - Workbook formatter. @param key - Assigned format key. @param name - Generated style reference. @param systemLanguage - Whether to omit explicit locale attributes. @returns ODF data style or null. */
 export function ExportNumberFormat(
   formatter: SvNumberFormatter,
   key: number,
@@ -184,7 +184,7 @@ class NumberText {
   private content = "";
   private blankWidths = "";
 
-  /** Appends a literal or the source compatibility width of an underscore token. @param value - Literal or blank character. @param width - Whether value is a blank width control. */
+  /** Appends a literal or the source compatibility width of an underscore token. @param value - Literal or blank character. @param width - Whether value is a blank width control. @returns Nothing. */
   public Add(value: string, width = false): void {
     if (!width) {
       this.content += value;
@@ -269,7 +269,7 @@ function collectEmbeddedEntries(entry: SvNumberformatConstReference, part: numbe
   return { skip, xml, exponentText };
 }
 
-/** Emits one native part under its generated primary or volatile style name. @param entry - Actual compiled number format. @param builtin - Original format index. @param part - Section index. @param name - Main style identifier. @param defaultPart - Whether this is the last section. @param maps - Conditions on the last section. @returns XML or null for unsupported tokens. */
+/** Emits one native part under its generated primary or volatile style name. @param entry - Actual compiled number format. @param builtin - Original format index. @param part - Section index. @param name - Main style identifier. @param defaultPart - Whether this is the last section. @param maps - Conditions on the last section. @param systemLanguage - Whether to omit explicit locale attributes. @returns XML or null for unsupported tokens. */
 function exportPart(
   entry: SvNumberformatConstReference,
   builtin: number,
@@ -310,7 +310,7 @@ function exportPart(
     type === T.PERCENT;
   const embedded = supportsEmbedded ? collectEmbeddedEntries(entry, part) : undefined;
   const literal = new NumberText();
-  /** Flushes the current original literal text group before other elements. */
+  /** Flushes the current original literal text group before other elements. @returns Nothing. */
   function flushText(): void {
     const value = literal.Finish();
     if (value) parts.push(value);

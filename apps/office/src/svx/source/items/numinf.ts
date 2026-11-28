@@ -6,7 +6,7 @@ import type { SvNumberFormatter } from "../../../svl/source/numbers/zforlist";
 export class SvxNumberInfoItem extends SfxPoolItem {
   private deleted: number[] = [];
 
-  /** Creates the original formatter-only exchange item. @param formatter - Borrowed document formatter. @param which - Actual slot. */
+  /** Creates the original formatter-only exchange item. @param formatter - Borrowed document formatter. @param which - Actual slot. @returns The number-format exchange item. */
   constructor(
     private readonly formatter: SvNumberFormatter,
     which: number,

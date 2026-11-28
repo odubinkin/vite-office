@@ -210,7 +210,7 @@ export class SvXMLNumFormatContext extends SvXMLImportContext {
         this.element === X.NUMBER_CURRENCY_STYLE
           ? this.formatter.GetLocaleData().getCurrDigits()
           : undefined,
-        /** Appends the completed number and its embedded text. @param value - Compiled format code. */
+        /** Appends the completed number and its embedded text. @param value - Compiled format code. @returns Number of accumulated format parts. */
         (value) => this.parts.push(value),
       );
       if (element === X.NUMBER_NUMBER) {
@@ -463,7 +463,7 @@ function InsertBlankWidthChars(encoded: string, quoted: string): string {
 class SvXMLNumFmtElementContext extends SvXMLImportContext {
   private readonly embedded = new Map<number, string>();
 
-  /** Binds a native digit pattern to this XML number element. @param attributes - Native number attributes. @param currencyDecimals - Native default precision of a currency style. @param receive - Parent style recipient. */
+  /** Binds a native digit pattern to this XML number element. @param attributes - Native number attributes. @param currencyDecimals - Native default precision of a currency style. @param receive - Parent style recipient. @returns The context that parses the number element. */
   constructor(
     private readonly attributes: FastAttributeList,
     private readonly currencyDecimals: number | undefined,
@@ -492,7 +492,7 @@ class SvXMLNumFmtElementContext extends SvXMLImportContext {
       return new SvXMLIgnoreContext(true);
     const blanks = attributes.get(X.NUMBER_BLANK_WIDTH_CHAR);
     return new NumberTextContext(
-      /** Joins native quoted source elements in source order at this position. @param value - Literal payload. */
+      /** Joins native quoted source elements in source order at this position. @param value - Literal payload. @returns Nothing. */
       (value) => {
         if (!value) return;
         const quoted = '"' + value.replaceAll('"', '"\\""') + '"';
@@ -508,7 +508,7 @@ class SvXMLNumFmtElementContext extends SvXMLImportContext {
     );
   }
 
-  /** Reconstructs core number notation including the exponent's logical single separator. */
+  /** Reconstructs core number notation including the exponent's logical single separator. @returns Nothing. */
   override endFastElement(): void {
     const attrs = this.attributes;
     const automatic = this.HasAutomaticDecimals();

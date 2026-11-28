@@ -13,9 +13,7 @@ import { SwNumRule } from "../doc/number";
 import { goNext, goPrevious } from "./nodes.navigation";
 import { SwNodeIndex, CheckNodesRange, type SwPosition } from "../crsr/pam";
 import type { SwNodeRange } from "../../../inc/ndindex";
-import { SwClient, SwIterator } from "../../../inc/calbck";
-
-import { SwRowFrame, SwCellFrame, SwTabFrame } from "../layout/tabfrm";
+import { destroyTableBoxFrames, destroyTableFrames, destroyTableRowFrames } from "../layout/tabfrm";
 import { SwOutlineNodes } from "./ndnum";
 import type { SwDoc } from "../doc/doc";
 import {
@@ -524,59 +522,22 @@ export class SwNodes {
     this.CorrectNodeIndices(index, section.nodes.length);
     this.nodeArray.splice(index, section.nodes.length);
     table.RemoveLine(section.line);
-    writerClients2: for (const client of new SwIterator(SwClient, section.line.GetFrameFormat())) {
-      if (client instanceof SwRowFrame && client.GetTabLine() === section.line)
-        client.DestroyImpl();
-      continue writerClients2;
-    }
-    for (const box of section.line.GetTabBoxes()) this.DestroyTableBoxFrames(box);
+    destroyTableRowFrames(section.line);
     section.line.Dispose();
     this.document.NotifyModelChange({ index, kind: "node-removed" });
   }
 
-  /** Removes nested and content-cell layout clients before model-owned vectors destroy their actual children. @param box - Original model box. @returns Nothing. */
-  private DestroyTableBoxFrames(box: SwTableBox): void {
-    for (const line of box.GetTabLines()) {
-      for (const client of new SwIterator(SwClient, line.GetFrameFormat()))
-        if (client instanceof SwRowFrame && client.GetTabLine() === line) client.DestroyImpl();
-      for (const child of line.GetTabBoxes()) this.DestroyTableBoxFrames(child);
-    }
-    for (const client of new SwIterator(SwClient, box.GetFrameFormat())) {
-      if (client instanceof SwCellFrame && client.GetTabBox() === box) {
-        if (client.GetUpper() !== undefined) client.RemoveFromLayout();
-        client.DestroyImpl();
-      }
-    }
-  }
   /** Removes actual cell layout clients before releasing one erased model box. @param box - Deleted native cell. @returns Nothing. */
   private DestroyTableBox(box: SwTableBox): void {
-    this.DestroyTableBoxFrames(box);
+    destroyTableBoxFrames(box);
     box.Dispose();
   }
 
   /** Existing complete table destructor responsibility shared by source node deletion and table history deletion. @param node - Actual table start. @returns Nothing. */
   private DestroyTableNode(node: SwTableNode): void {
-    this.DeleteTableFrames(node);
-    node.GetTable().Dispose();
-  }
-
-  /** Destroys the layout representation while leaving table model owners available for undo. @param node - Native table start. @returns Nothing. */
-  private DeleteTableFrames(node: SwTableNode): void {
-    writerClients0: for (const client of new SwIterator(
-      SwClient,
-      node.GetTable().GetFrameFormat(),
-    )) {
-      if (client instanceof SwTabFrame && client.GetTable() === node.GetTable())
-        client.DestroyImpl();
-      continue writerClients0;
-    }
-    for (const row of node.GetTable().GetTabLines()) {
-      writerClients1: for (const client of new SwIterator(SwClient, row.GetFrameFormat())) {
-        if (client instanceof SwRowFrame && client.GetTabLine() === row) client.DestroyImpl();
-        continue writerClients1;
-      }
-      for (const box of row.GetTabBoxes()) this.DestroyTableBoxFrames(box);
-    }
+    const table = node.GetTable();
+    destroyTableFrames(table);
+    table.Dispose();
   }
   /** Original DelNodes outline/frame phase, including the whole-array destructor branch which retains the five fixed sentinel pairs. @param start - Actual native start index. @param count - Original positive node count. @returns Nothing. */
   public DelNodes(start: SwNodeIndex, count = 1): void {
@@ -661,7 +622,7 @@ export class SwNodes {
     const end = section.EndOfSectionNode().GetIndex();
     const detached = this.nodeArray.slice(start, end + 1);
     for (const node of detached) {
-      if (node instanceof SwTableNode) this.DeleteTableFrames(node);
+      if (node instanceof SwTableNode) destroyTableFrames(node.GetTable());
       if (node instanceof SwTextNode) {
         if (target) node.CollapseContentIndicesTo(target, 0);
         this.m_aOutlineNodes.erase(node);

@@ -69,11 +69,13 @@ export function WriterNavigatorNavigation({
       if (!host) return;
       const window = host.ownerDocument.defaultView;
       /** Reads the physical page range from the active editing host. @returns Visible pages. */
-      const getPages = () => getVisiblePages(host);
+      function getPages() {
+        return getVisiblePages(host);
+      }
       /** Refreshes the page control after the document viewport changes. @returns Nothing. */
-      const sync = () => {
+      function sync(): void {
         if (visible) setVisiblePage(getPages()?.first);
-      };
+      }
       const initial = window?.requestAnimationFrame(sync);
       window?.addEventListener("scroll", sync, true);
       window?.addEventListener("resize", sync);
@@ -85,12 +87,14 @@ export function WriterNavigatorNavigation({
             queueWriterCursorReveal(editingHost, number);
           },
       });
-      return () => {
+      /** Releases the viewport and its listeners. @returns Nothing. */
+      function releaseViewport(): void {
         if (initial !== undefined) window?.cancelAnimationFrame(initial);
         window?.removeEventListener("scroll", sync, true);
         window?.removeEventListener("resize", sync);
         view.SetNavigationViewport();
-      };
+      }
+      return releaseViewport;
     },
     [editingHost, view, visible],
   );

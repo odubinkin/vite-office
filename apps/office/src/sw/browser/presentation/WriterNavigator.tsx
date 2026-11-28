@@ -301,9 +301,15 @@ export function WriterNavigator({
       if (!visible) return;
       const owner = editingHost.current?.ownerDocument;
       /** Tracks the document or its native annotation window after leaving the tree. @returns Nothing. */
-      const onFocus = () => trackDocumentCursor();
+      function onFocus(): void {
+        trackDocumentCursor();
+      }
       owner?.addEventListener("focusin", onFocus);
-      return () => owner?.removeEventListener("focusin", onFocus);
+      /** Releases the document focus listener. @returns Nothing. */
+      function releaseFocusListener(): void {
+        owner?.removeEventListener("focusin", onFocus);
+      }
+      return releaseFocusListener;
     },
     [editingHost, visible],
   );

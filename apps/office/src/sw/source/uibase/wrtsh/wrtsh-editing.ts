@@ -27,8 +27,30 @@ import type { SwUndoRedoContext } from "../../core/undo/undobj";
 import { SwUndoSplitNode } from "../../core/undo/unspnd";
 import { getWriterTypingCharacterClass } from "./delete";
 import type { SwWrtShell } from "./wrtsh1";
+import { GetTableCursorStart } from "../../core/crsr/trvltbl";
+import { SwUndoDeleteTable } from "../../core/undo/undel-table";
 import { SvxFirstLineIndentItem } from "../../../../editeng/inc/lrspitem";
 import { RES_FRAMEDIR, RES_MARGIN_FIRSTLINE, RES_TXTATR_ANNOTATION } from "../../../inc/hintids";
+
+/** Logical paragraph indentation values accepted by the browser ruler shell boundary. */
+export interface WriterParagraphIndentValue {
+  readonly firstLine: number;
+  readonly left: number;
+  readonly right: number;
+}
+
+/** Deletes the current native table as one history action. @param shell - Active Writer shell. @returns Whether the table was removed. */
+export function DeleteCurrentTable(shell: SwWrtShell): boolean {
+  const table = shell.IsCursorInTable();
+  if (!table || shell.GetViewOptions().IsReadonly() || !GetTableCursorStart(table, false))
+    return false;
+  const before = shell.CaptureCursorState();
+  try {
+    return shell.ApplyAction(new SwUndoDeleteTable(table, before));
+  } finally {
+    before.pendingCharacterItems.Dispose();
+  }
+}
 
 /** Inserts an owned annotation value as one Writer history action. @param shell - Editing shell. @param range - Comment anchor or selected range. @param field - Owned field value. @returns Attached annotation format. */
 export function InsertPostIt(

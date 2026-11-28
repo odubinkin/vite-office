@@ -276,7 +276,7 @@ export type AsianTypographySlot = (typeof asianTypographyControls)[number][0];
 
 /** Controls the original Asian typography flags through the consuming document's slot map. */
 export class SvxAsianTabPage {
-  /** Borrows the saved original and the staged output. @param input - Original items. @param output - Pending items. */
+  /** Borrows the saved original and the staged output. @param input - Original items. @param output - Pending items. @returns The Asian typography page. */
   constructor(
     private readonly input: SfxItemSet,
     private readonly output: SfxItemSet,

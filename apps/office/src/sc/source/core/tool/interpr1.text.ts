@@ -43,7 +43,7 @@ function AdvanceCodePoints(value: OUStringConstReference, start: number, count: 
   return offset[0];
 }
 
-/** Evaluates the original FIND exact search. @param this - Active interpreter. @param count - Arguments. */
+/** Evaluates the original FIND exact search. @param this - Active interpreter. @param count - Arguments. @returns Nothing. */
 function ScFind(this: ScInterpreter, count: number): void {
   const start = count === 3 ? Math.trunc(this["GetDouble"]()) : 1;
   const value = unicode(this["GetString"]());
@@ -65,7 +65,7 @@ function ScFind(this: ScInterpreter, count: number): void {
   }
 }
 
-/** Evaluates the original case-insensitive SEARCH with document-specific patterns. @param this - Active interpreter. @param count - Arguments. */
+/** Evaluates the original case-insensitive SEARCH with document-specific patterns. @param this - Active interpreter. @param count - Arguments. @returns Nothing. */
 function ScSearch(this: ScInterpreter, count: number): void {
   const start = count === 3 ? GetStringPositionArgument(this) : 1;
   if (start < 1) {
@@ -98,7 +98,7 @@ function ScSearch(this: ScInterpreter, count: number): void {
   }
 }
 
-/** Implements original LEFT and RIGHT character slicing. @param this - Active interpreter. @param count - Arguments. @param fromRight - Whether to start from the right edge. */
+/** Implements original LEFT and RIGHT character slicing. @param this - Active interpreter. @param count - Arguments. @param fromRight - Whether to start from the right edge. @returns Nothing. */
 function ScLeftRight(this: ScInterpreter, count: number, fromRight: boolean): void {
   let length = count === 2 ? GetStringPositionArgument(this) : 1;
   if (length < 0) return;
@@ -121,7 +121,7 @@ function ScLeftRight(this: ScInterpreter, count: number, fromRight: boolean): vo
   }
 }
 
-/** Implements original MID and REPLACE forward code-point spans. @param this - Active interpreter. @param replace - Whether to substitute a string. */
+/** Implements original MID and REPLACE forward code-point spans. @param this - Active interpreter. @param replace - Whether to substitute a string. @returns Nothing. */
 function ScMidReplace(this: ScInterpreter, replace: boolean): void {
   const replacement = replace ? this["GetString"]() : "";
   const count = GetStringPositionArgument(this);

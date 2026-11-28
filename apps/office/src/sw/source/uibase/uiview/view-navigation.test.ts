@@ -34,6 +34,7 @@ it("dispatches the source navigation slots to the viewport and the real cursor",
     shell.SetCursor(originalPoint);
     view.SetMoveType(SwNavigationElement.Page);
     view.SetNavigationViewport({
+      /** Reports the visible page for the viewport fixture. @returns The sole visible page. */
       GetVisiblePageNumbers: () => ({ first: 1, last: 1 }),
       GoToPage: viewport,
     });
@@ -208,10 +209,14 @@ it("deletes the Navigator table category in one undo group", /** Checks adjacent
     const protectedTable = tables[2];
     assert(protectedTable);
     protectedTable.GetFrameFormat().SetFormatAttr(protect);
-    const bodyBefore = doc.paragraphs.map((paragraph) => paragraph.GetText());
+    /** Reads the original body text. @param paragraph - Body paragraph. @returns Its text. */
+    function paragraphText(paragraph: (typeof doc.paragraphs)[number]) {
+      return paragraph.GetText();
+    }
+    const bodyBefore = doc.paragraphs.map(paragraphText);
     expect(navigator.DeleteTables()).toBe(true);
     expect(doc.GetTables()).toEqual([protectedTable]);
-    expect(doc.paragraphs.map((paragraph) => paragraph.GetText())).toEqual(bodyBefore);
+    expect(doc.paragraphs.map(paragraphText)).toEqual(bodyBefore);
     expect(navigator.CanDeleteTable()).toBe(false);
     expect(shell.Undo()).toBe(true);
     expect(doc.GetTables()).toEqual(tables);

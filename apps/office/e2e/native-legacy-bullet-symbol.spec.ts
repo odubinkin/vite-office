@@ -92,6 +92,7 @@ for (const width of [1280, 390])
       mimeType: "application/vnd.oasis.opendocument.text",
       name: "number-font.odt",
     });
+    await expect(page.getByRole("dialog", { name: "Open", exact: true })).toBeHidden();
     await expect(
       page.locator("p[data-writer-node-index]").filter({ hasText: "Body StarBats font" }).first(),
     ).toBeVisible();

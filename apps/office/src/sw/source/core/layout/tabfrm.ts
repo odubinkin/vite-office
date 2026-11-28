@@ -30,6 +30,31 @@ import { AttrSetChangeHint, SwAttrSetChg, type SwModelHint } from "../../../inc/
 import type { SwFormatLayoutSplit } from "../../../inc/fmtlsplt";
 import type { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 
+/** Releases the row and nested cell layout clients before their model owners are detached. @param row - Native table row. @returns Nothing. */
+export function destroyTableRowFrames(row: SwTableLine): void {
+  for (const client of new SwIterator(SwClient, row.GetFrameFormat()))
+    if (client instanceof SwRowFrame && client.GetTabLine() === row) client.DestroyImpl();
+  for (const box of row.GetTabBoxes()) destroyTableBoxFrames(box);
+}
+
+/** Releases layout frames tied to a table cell and any nested rows. @param box - Native table cell. @returns Nothing. */
+export function destroyTableBoxFrames(box: SwTableBox): void {
+  for (const row of box.GetTabLines()) destroyTableRowFrames(row);
+  for (const client of new SwIterator(SwClient, box.GetFrameFormat())) {
+    if (client instanceof SwCellFrame && client.GetTabBox() === box) {
+      if (client.GetUpper() !== undefined) client.RemoveFromLayout();
+      client.DestroyImpl();
+    }
+  }
+}
+
+/** Releases layout clients without disposing the table model. @param table - Native table. @returns Nothing. */
+export function destroyTableFrames(table: SwTable): void {
+  for (const client of new SwIterator(SwClient, table.GetFrameFormat()))
+    if (client instanceof SwTabFrame && client.GetTable() === table) client.DestroyImpl();
+  for (const row of table.GetTabLines()) destroyTableRowFrames(row);
+}
+
 /** Native table invalidation mask from tabfrm.hxx; root browse-width propagation remains unrepresented. */
 export enum SwTabFrameInvFlags {
   NONE = 0x00,

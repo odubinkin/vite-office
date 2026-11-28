@@ -21,6 +21,7 @@ export class SetNormalStringOperation extends Operation {
    * @param position - Target address.
    * @param source - Normal text input.
    * @param api - API invocation.
+   * @returns The operation for the cell input.
    */
   constructor(
     private readonly docFunc: ScDocFunc,

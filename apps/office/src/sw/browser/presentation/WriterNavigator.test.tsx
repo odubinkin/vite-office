@@ -767,7 +767,9 @@ it("runs the native Navigator context actions for outline branches and bookmark 
     render(<WriterWorkbench view={session.view} isActive />);
     const navigator = within(screen.getByRole("dialog", { name: "Navigator" }));
     /** Gets the active Navigator context popup. @returns Queries scoped to the menu. */
-    const context = () => within(screen.getByRole("menu", { name: "Navigator context menu" }));
+    function context() {
+      return within(screen.getByRole("menu", { name: "Navigator context menu" }));
+    }
     const chapter = navigator.getByRole("treeitem", { name: "Chapter" });
     const headings = navigator.getByRole("treeitem", { name: "Headings" });
     const depth = navigator.getByRole("combobox", { name: "Show Up to Outline Level" });
