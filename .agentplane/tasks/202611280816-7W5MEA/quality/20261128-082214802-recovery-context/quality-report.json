@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202611280816-7W5MEA",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-28T08:22:14.802Z",
+  "verdict": "pass",
+  "summary": "ODS row styles and native selected-height update verified.",
+  "evaluated_sha": "b2b3eee89c7a76198e14df97cdf872822e66ab59",
+  "blueprint_digest": "f86caf2aeed8d95490ec208241a91a2698ed053872f4c245188d8de34ee4077c",
+  "findings": [
+    "Original manual and automatic row settings survive ODS and imported row backgrounds become actual cell patterns."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611280816-7W5MEA/README.md",
+    "output/playwright/odf-next-checkpoint/calc-ods-row-styles-verification.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

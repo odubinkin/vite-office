@@ -4,7 +4,7 @@ title: "Align Calc ODS row styles and height scheduling"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 4
+revision: 6
 origin:
   system: "manual"
 depends_on: []
@@ -19,11 +19,27 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-11-28T08:22:14.345Z"
+  updated_by: "CODER"
+  note: "Twelve related Calc tests passed, including the original row-height-import ODS, row background with explicit cell override and native row height core. TypeScript, lint, formatting, dependencies, provenance and zero Calc parity violations passed. No full suite."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-11-28T08:22:14.802Z"
+  updated_by: "EVALUATOR"
+  note: "ODS row styles and native selected-height update verified."
+  evaluated_sha: "b2b3eee89c7a76198e14df97cdf872822e66ab59"
+  blueprint_digest: "f86caf2aeed8d95490ec208241a91a2698ed053872f4c245188d8de34ee4077c"
+  evidence_refs:
+    - ".agentplane/tasks/202611280816-7W5MEA/README.md"
+    - ".agentplane/tasks/202611280816-7W5MEA/quality/20261128-082214802-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202611280816-7W5MEA/quality/20261128-082214802-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202611280816-7W5MEA/quality/20261128-082214802-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202611280816-7W5MEA/blueprint/resolved-snapshot.json"
+    - "output/playwright/odf-next-checkpoint/calc-ods-row-styles-verification.md"
+  findings:
+    - "Original manual and automatic row settings survive ODS and imported row backgrounds become actual cell patterns."
 commit: null
 comments:
   -
@@ -37,8 +53,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: align ODS row-style properties, native cell-pattern routing, and the bounded saved-height recalculation pass."
+  -
+    type: "verify"
+    at: "2026-11-28T08:22:14.345Z"
+    author: "CODER"
+    state: "ok"
+    note: "Twelve related Calc tests passed, including the original row-height-import ODS, row background with explicit cell override and native row height core. TypeScript, lint, formatting, dependencies, provenance and zero Calc parity violations passed. No full suite."
 doc_version: 3
-doc_updated_at: "2026-11-28T08:16:35.431Z"
+doc_updated_at: "2026-11-28T08:22:14.396Z"
 doc_updated_by: "CODER"
 description: "Port the pinned row-property mapping, saved and calculated height scheduling, and imported row cell backgrounds into their native Calc owners. Verify original row-height fixtures and the affected ODS geometry and style modules."
 sections:
@@ -58,6 +80,36 @@ sections:
     3. Compare the final result against ## Scope and record any residual follow-up in ## Findings. Expected: open edges are explicit rather than implicit.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-11-28T08:22:14.345Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Twelve related Calc tests passed, including the original row-height-import ODS, row background with explicit cell override and native row height core. TypeScript, lint, formatting, dependencies, provenance and zero Calc parity violations passed. No full suite.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-28T08:16:35.431Z, excerpt_hash=sha256:b31f44cbeb435fe4dbace7efb35e1bc1d5a3cd0b7d9c2de3a84ef24c93703b5d
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611280816-7W5MEA/blueprint/resolved-snapshot.json
+    - old_digest: f86caf2aeed8d95490ec208241a91a2698ed053872f4c245188d8de34ee4077c
+    - current_digest: f86caf2aeed8d95490ec208241a91a2698ed053872f4c245188d8de34ee4077c
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202611280816-7W5MEA
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202611280816-7W5MEA
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -91,6 +143,36 @@ PLANNER fallback scaffold for "Align Calc ODS row styles and height scheduling".
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-11-28T08:22:14.345Z — VERIFY — ok
+
+By: CODER
+
+Note: Twelve related Calc tests passed, including the original row-height-import ODS, row background with explicit cell override and native row height core. TypeScript, lint, formatting, dependencies, provenance and zero Calc parity violations passed. No full suite.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-28T08:16:35.431Z, excerpt_hash=sha256:b31f44cbeb435fe4dbace7efb35e1bc1d5a3cd0b7d9c2de3a84ef24c93703b5d
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611280816-7W5MEA/blueprint/resolved-snapshot.json
+- old_digest: f86caf2aeed8d95490ec208241a91a2698ed053872f4c245188d8de34ee4077c
+- current_digest: f86caf2aeed8d95490ec208241a91a2698ed053872f4c245188d8de34ee4077c
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202611280816-7W5MEA
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202611280816-7W5MEA
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
