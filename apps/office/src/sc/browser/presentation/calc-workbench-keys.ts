@@ -71,7 +71,9 @@ export function getCalcWorkspaceEventHandlers(
   modal: boolean,
 ) {
   /** Routes a clipboard event through the active Calc workflow. @param event - Workspace copy or paste event. @returns Nothing. */
-  const onClipboard = (event: ClipboardEvent) => HandleCellClipboard(event, clipboard, modal);
+  function onClipboard(event: ClipboardEvent): void {
+    HandleCellClipboard(event, clipboard, modal);
+  }
   return {
     onKeyDown:
       /** Dispatches a workspace accelerator after the active field handles its own keys. @param event - Workspace keyboard event. @returns Nothing. */

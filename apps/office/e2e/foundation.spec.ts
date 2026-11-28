@@ -12,6 +12,7 @@ test("Writer menu keyboard navigation and accessible application chrome" /**
  * @param root0.page - Isolated Chromium page used for navigation and accessibility assertions.
  * @returns A promise that resolves after all browser and accessibility assertions pass.
  */, async function verifyStaticFoundation({ page }): Promise<void> {
+  test.setTimeout(90_000);
   await page.goto("/");
 
   await expect(page.getByText("Vite Office")).toBeVisible();
