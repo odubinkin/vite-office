@@ -2,6 +2,7 @@
 import type { SwFormatRuby } from "./fmtatr2";
 import type { SwTextNode } from "./ndtxt";
 import type { SwpHints, TextNodeAttribute } from "./ndhints";
+import { SwSetExpField } from "../fields/expfld";
 import { SwTextFlyCnt } from "../../../inc/txtflcnt";
 import { SwTextField, type SwTextOrdinaryField } from "../../../inc/txtfld";
 import { SwTextTOXMark } from "./atrtox";
@@ -206,6 +207,10 @@ function InsertPointHint(
   }
   if (hint instanceof SwTextFlyCnt) hint.SetAnchor(node);
   node.GetOrCreateSwpHints().Insert(hint);
+  if (hint instanceof SwTextField) {
+    const field = hint.GetAttr().GetField();
+    if (field instanceof SwSetExpField) field.GetTyp().SetSeqRefNo(field);
+  }
   node.TriggerNodeUpdate(
     new UpdateAttrHint(undefined, new SwUpdateAttr(start, start, hint.Which())),
   );

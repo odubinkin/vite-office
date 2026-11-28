@@ -20,6 +20,7 @@ import type {
   SwXDocStatField,
   SwXPageNumberField,
   SwXChapterField,
+  SwXSetExpField,
   SwXDropDownField,
   SwXJumpEditField,
   SwXGetReferenceField,
@@ -356,6 +357,7 @@ export class SwXText implements SwXTextOwner {
       | SwXDocInfoField
       | SwXDocStatField
       | SwXChapterField
+      | SwXSetExpField
       | SwXDropDownField
       | SwXJumpEditField
       | SwXPageNumberField
@@ -383,6 +385,7 @@ export class SwXText implements SwXTextOwner {
       | SwXDocInfoField
       | SwXDocStatField
       | SwXChapterField
+      | SwXSetExpField
       | SwXDropDownField
       | SwXJumpEditField
       | SwXPageNumberField

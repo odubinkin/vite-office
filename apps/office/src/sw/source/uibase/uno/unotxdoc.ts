@@ -13,6 +13,8 @@ import {
   SwXDocStatField,
   SwXPageNumberField,
   SwXChapterField,
+  SwXSetExpField,
+  SwXSequenceFieldMaster,
   SwXDropDownField,
   SwXJumpEditField,
   SwXGetReferenceField,
@@ -91,6 +93,13 @@ export class SwXTextDocument {
     this.GetDoc();
     return this.body;
   }
+  /** Looks up the native named sequence field master. @param name - Sequence identifier. @returns Field master properties. */
+  public getSequenceFieldMaster(name: string): SwXSequenceFieldMaster {
+    return new SwXSequenceFieldMaster(
+      this.GetDoc().getIDocumentFieldsAccess().GetSequenceFieldType(name),
+    );
+  }
+
   /** Original cached chapter-numbering supplier borrows the document outline owner. @returns Native service. */
   getChapterNumberingRules(): SwXChapterNumbering {
     this.GetDoc();
@@ -133,6 +142,7 @@ export class SwXTextDocument {
     | SwXDocInfoField
     | SwXDocStatField
     | SwXChapterField
+    | SwXSetExpField
     | SwXDropDownField
     | SwXJumpEditField
     | SwXPageNumberField
@@ -146,6 +156,9 @@ export class SwXTextDocument {
       case "com.sun.star.text.TextField.GetReference":
       case "com.sun.star.text.textfield.GetReference":
         return new SwXGetReferenceField();
+      case "com.sun.star.text.TextField.SetExpression":
+      case "com.sun.star.text.textfield.SetExpression":
+        return new SwXSetExpField();
       case "com.sun.star.text.TextField.JumpEdit":
       case "com.sun.star.text.textfield.JumpEdit":
         return new SwXJumpEditField();

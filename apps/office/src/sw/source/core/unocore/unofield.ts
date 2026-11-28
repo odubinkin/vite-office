@@ -2,7 +2,7 @@
 import { Sequence } from "../../../../cppu/inc/com/sun/star/uno/Sequence";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
 import type { rtl_uStringSlot } from "../../../../sal/inc/rtl/ustring.h";
-import type { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
+import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import {
   DateTime as UnoDateTime,
   cppu_detail_getUnoType_DateTime,
@@ -19,6 +19,7 @@ import {
   type SwTextChapterField,
   type SwTextDropDownField,
   type SwTextJumpEditField,
+  type SwTextSequenceField,
 } from "../../../inc/txtfld";
 import { SwFormatField } from "../../../inc/fmtfld";
 import { SwDateTimeSubType } from "../../../inc/fldbas";
@@ -27,6 +28,7 @@ import {
   cppu_detail_getUnoType_PageNumberType,
 } from "../../../../offapi/com/sun/star/text/PageNumberType";
 import { ChapterFormat } from "../../../../offapi/com/sun/star/text/ChapterFormat";
+import { SwSetExpField, type SwSetExpFieldType } from "../fields/expfld";
 import { SwJumpEditField, SwJumpEditFormat } from "../fields/docufld.jumpedit";
 import { SwDropDownField, type SwDropDownFieldData } from "../fields/flddropdown";
 import { PutChapterFormat, SwChapterField } from "../fields/chpfld";
@@ -207,11 +209,23 @@ export class SwXGetReferenceField {
 
   /** Assigns original UNO reference field properties on the descriptor. @param name - Native property. @param input - Typed UNO value. */
   public setPropertyValue(name: OUStringConstReference, input: Any): void {
-    if (this.hint) invalid("Writer reference field is attached.");
     const property = text(name);
+    if (this.hint) {
+      const field = this.hint.GetAttr().GetField();
+      if (property === "SourceName") field.SetSetRefName(stringValue(input));
+      else if (property === "SequenceNumber") field.SetSeqNo(scalar(input, "sal_Int16") as number);
+      else invalid("Writer reference field is attached.");
+      return;
+    }
     switch (property) {
       case "SourceName":
         this.data = { ...this.data, name: stringValue(input) };
+        break;
+      case "SequenceNumber":
+        this.data = {
+          ...this.data,
+          sequenceNumber: (scalar(input, "sal_Int16") as number) & 0xffff,
+        };
         break;
       case "ReferenceFieldPart": {
         const format = scalar(input, "sal_Int16") as number;
@@ -225,7 +239,8 @@ export class SwXGetReferenceField {
         const source = scalar(input, "sal_Int16") as number;
         if (
           source !== ReferenceFieldSource.REFERENCE_MARK &&
-          source !== ReferenceFieldSource.BOOKMARK
+          source !== ReferenceFieldSource.BOOKMARK &&
+          source !== ReferenceFieldSource.SEQUENCE_FIELD
         )
           illegal(property);
         this.data = {
@@ -233,7 +248,9 @@ export class SwXGetReferenceField {
           source:
             source === ReferenceFieldSource.BOOKMARK
               ? ReferencesSubtype.Bookmark
-              : ReferencesSubtype.SetRefAttr,
+              : source === ReferenceFieldSource.SEQUENCE_FIELD
+                ? ReferencesSubtype.SequenceField
+                : ReferencesSubtype.SetRefAttr,
         };
         break;
       }
@@ -382,6 +399,99 @@ export class SwXDocInfoField {
       (this.subtype & SwDocInfoSubType.LowerMask) === SwDocInfoSubType.Edit ||
       this.subtype === SwDocInfoSubType.Custom
     );
+  }
+}
+
+/** UNO property owner for a text sequence master. */
+export class SwXSequenceFieldMaster {
+  /** Borrows the document's native field type. @param type - Numbered sequence master. */
+  public constructor(private readonly type: SwSetExpFieldType) {}
+
+  /** Borrows the actual named field type. @returns Sequence master. */
+  public GetType(): SwSetExpFieldType {
+    return this.type;
+  }
+
+  /** Updates the typed sequence master properties. @param name - UNO property name. @param input - Typed value. */
+  public setPropertyValue(name: OUStringConstReference, input: Any): void {
+    const property = text(name);
+    switch (property) {
+      case "ChapterNumberingLevel":
+        this.type.SetOutlineLvl(scalar(input, "sal_Int8") as number);
+        break;
+      case "NumberingSeparator":
+        this.type.SetDelimiter(stringValue(input));
+        break;
+      default:
+        unknown(property);
+    }
+  }
+}
+
+/** UNO SetExpression attachment for a native numbered sequence. */
+export class SwXSetExpField {
+  private master: SwSetExpFieldType | undefined;
+  private hint: SwTextSequenceField | undefined;
+
+  /** Binds the original dependent field to its sequence master. @param master - Native field master. */
+  public attachTextFieldMaster(master: unknown): void {
+    if (this.hint) invalid("Writer sequence field is already attached.");
+    if (!(master instanceof SwXSequenceFieldMaster)) illegal("Writer sequence master is invalid.");
+    this.master = master.GetType();
+  }
+
+  /** Sets sequence properties after native field attachment. @param name - UNO property name. @param input - Typed value. */
+  public setPropertyValue(name: OUStringConstReference, input: Any): void {
+    const field = this.hint?.GetAttr().GetField();
+    if (!field) invalid("Writer sequence field is detached.");
+    const property = text(name);
+    switch (property) {
+      case "Content":
+        field.SetFormula(stringValue(input));
+        break;
+      case "CurrentPresentation":
+        field.ChgExpStr(stringValue(input));
+        break;
+      case "NumberingType":
+        field.SetFormat(scalar(input, "sal_Int16") as SvxNumType);
+        break;
+      case "IsShowFormula":
+        field.SetShowFormula(scalar(input, "bool") as boolean);
+        break;
+      default:
+        unknown(property);
+    }
+  }
+
+  /** Reads the sequence reference identity used by ODF backpatching. @param name - UNO property. @returns Typed UNO value. */
+  public getPropertyValue(name: OUStringConstReference): Any {
+    const field = this.hint?.GetAttr().GetField();
+    if (!field) invalid("Writer sequence field is detached.");
+    if (text(name) !== "SequenceValue") unknown(text(name));
+    return new Any([(field.GetSeqNumber() << 16) >> 16], "sal_Int16");
+  }
+
+  /** Attaches the original owned field point to its document. @param range - Writer range. */
+  public attach(range: SwXTextRange): void {
+    if (this.hint) invalid("Writer sequence field is already attached.");
+    const position = range.GetPaM().Start();
+    const node = position.GetNode().GetTextNode();
+    if (!node || !this.master || this.master.GetDoc() !== node.GetDoc())
+      illegal("Writer sequence field requires a master in the same document.");
+    const field = new SwSetExpField(this.master, "");
+    const hint = new SwTextField(
+      new SwFormatField(field, RES_TXTATR_FIELD),
+      position.GetContentIndex(),
+    );
+    if (!node.InsertHint(hint)) invalid("Writer sequence field could not be inserted.");
+    this.hint = hint;
+  }
+
+  /** Removes the attached native point. */
+  public dispose(): void {
+    const hint = this.hint;
+    this.hint = undefined;
+    if (hint) hint.GetTextNode()?.EraseText(hint.GetStart(), 1);
   }
 }
 

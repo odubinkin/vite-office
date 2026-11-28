@@ -42,13 +42,13 @@ describe("ODT declaration import", /** Groups declaration policy assertions. @re
     );
   });
 
-  it("ignores only theme, sequence and statistic declarations with no modeled effect", /** Checks explicit metadata-only contexts. @returns Nothing. */ () => {
+  it("preserves sequence declarations alongside theme and statistic metadata", /** Checks the dedicated declaration contexts. @returns Nothing. */ () => {
     const diagnostics: OdfXmlDiagnostic[] = [];
     const themed = styles(
       '<loext:theme loext:name="Unused"><loext:theme-colors><loext:color loext:name="Accent" loext:color="#123456"/></loext:theme-colors></loext:theme>',
     );
     const body = content(
-      '<text:sequence-decls><text:sequence-decl text:name="Figure" text:display-outline-level="0"/></text:sequence-decls><text:p>Sample</text:p>',
+      '<text:sequence-decls><text:sequence-decl text:name="Example" text:display-outline-level="2" text:separation-character=":"/></text:sequence-decls><text:p>Sample</text:p>',
     );
     const meta = `<office:document-meta ${namespaces}><office:meta><meta:document-statistic meta:paragraph-count="1"/></office:meta></office:document-meta>`;
     const imported = importWriterXml(themed, body, { title: "fixture" }, meta, {
@@ -64,6 +64,9 @@ describe("ODT declaration import", /** Groups declaration policy assertions. @re
     );
     expect(imported.document.GetPageDesc().GetValue()).toEqual(
       plain.document.GetPageDesc().GetValue(),
+    );
+    expect(exportContentXml(imported.document)).toContain(
+      '<text:sequence-decl text:display-outline-level="2" text:separation-character=":" text:name="Example"/>',
     );
     expect(diagnostics).toEqual([]);
   });

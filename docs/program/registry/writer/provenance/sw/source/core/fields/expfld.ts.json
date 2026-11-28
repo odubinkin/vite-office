@@ -1,0 +1,55 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/core/fields/expfld.ts",
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/fields/expfld.cxx",
+    "localSymbols": [
+      "SwSetExpFieldType",
+      "SwSetExpField"
+    ],
+    "upstreamSymbols": [
+      "SwSetExpFieldType::SetSeqRefNo",
+      "SwSetExpFieldType::SetChapter",
+      "SwSetExpField::SetValue"
+    ],
+    "preservedResponsibilities": [
+      "Owns Writer sequence masters, numbering, chapter settings, presentation and stable reference allocation."
+    ],
+    "omittedResponsibilities": [
+      "SetExpression string and interactive input variants and redline-specific field states are outside this sequence slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/fields/expfld.ts",
+          "marker": "SwSetExpFieldType"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-sequence-fields.test.ts",
+          "marker": "testTdf99689TableOfFigures"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/fields/expfld.cxx",
+          "marker": "SwSetExpFieldType::SetSeqRefNo"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/fields/expfld.cxx",
+          "marker": "SwSetExpFieldType::SetChapter"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/fields/expfld.cxx",
+          "marker": "SwSetExpField::SetValue"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/qa/extras/uiwriter/uiwriter6.cxx",
+          "marker": "testTdf99689TableOfFigures"
+        }
+      ]
+    }
+  }
+}

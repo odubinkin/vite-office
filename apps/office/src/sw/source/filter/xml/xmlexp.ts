@@ -213,6 +213,7 @@ import {
 } from "./xmlexp-style-names";
 import { createWriterFontAutoStylePool, registerWriterFontFace } from "./xmlfonte";
 import { LineNumberPosition } from "../../../inc/lineinfo";
+import { exportSequenceDeclarations } from "../../../../xmloff/source/text/txtflde";
 import { exportLineNumberingConfiguration } from "../../../../xmloff/source/text/XMLLineNumberingExport";
 import { ExportThemeElement } from "../../../../xmloff/source/style/XMLThemeContext";
 import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
@@ -652,7 +653,19 @@ export function exportContentXml(
     Boolean(redlineAccess.GetRedlineFlags() & RedlineFlags.On),
     escapeXml,
   );
-  return `<?xml version="1.0" encoding="UTF-8"?><office:document-content ${OFFICE_NAMESPACES} office:version="1.3">${fonts.exportXML()}<office:automatic-styles>${exported.automaticStyles}</office:automatic-styles><office:body><office:text>${changes}${exported.body}</office:text></office:body></office:document-content>`;
+  const sequences = exportSequenceDeclarations(
+    Array.from(
+      document.getIDocumentFieldsAccess().GetSequenceFieldTypes(),
+      /** Reads original master values. @param type - Native sequence field type. @returns ODF declaration properties. */
+      (type) => ({
+        name: type.GetName(),
+        level: (type.GetOutlineLvl() << 24) >> 24,
+        separator: type.GetDelimiter(),
+      }),
+    ),
+    escapeXml,
+  );
+  return `<?xml version="1.0" encoding="UTF-8"?><office:document-content ${OFFICE_NAMESPACES} office:version="1.3">${fonts.exportXML()}<office:automatic-styles>${exported.automaticStyles}</office:automatic-styles><office:body><office:text>${changes}${sequences}${exported.body}</office:text></office:body></office:document-content>`;
 }
 
 /** Projects the same model source for both package streams. @param document - Writer model. @param isCancelled - Cancellation probe. @param fontFaceName - Font registry. @param existingFontFaceName - Existing face lookup. @param sections - Master-page text owners in the styles stream. @param graphicHelper - Optional package graphic owner. @param bitmapStyles - Package bitmap catalogue. @param redlineStyles - Previous formatting submitted to the same style pass. @returns Style/body fragments. */

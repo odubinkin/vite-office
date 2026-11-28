@@ -44,6 +44,11 @@ export interface XMLText {
 export interface XMLTextContent {
   setPropertyValue(name: OUStringConstReference, value: Any): void;
 }
+/** Original dependent text field service consumed by sequence import. */
+export interface XMLDependentTextField extends XMLTextContent {
+  attachTextFieldMaster(master: Pick<XMLPropertySet, "setPropertyValue">): void;
+  getPropertyValue(name: OUStringConstReference): Any;
+}
 /** The currently represented XNamed/XTextContent service. */
 export interface XMLNamedTextContent extends XMLTextContent {
   setName(name: OUStringConstReference): void;
@@ -70,6 +75,7 @@ export interface XMLTextModel {
   getText(): XMLText;
   getAutoStyles(): { getByName(name: OUStringConstReference): XMLAutoStyleFamily };
   getStyleFamilies(): { getByName(name: OUStringConstReference): XMLStyleFamily };
+  getSequenceFieldMaster?(name: string): Pick<XMLPropertySet, "setPropertyValue">;
   createInstance(name: OUStringConstReference): unknown;
 }
 

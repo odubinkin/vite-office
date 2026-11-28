@@ -13,11 +13,13 @@ import {
   type SwTextDocStatField,
   type SwTextPageNumberField,
   type SwTextChapterField,
+  type SwTextSequenceField,
   type SwTextJumpEditField,
   type SwTextDropDownField,
   type SwTextOrdinaryField,
   type SwTextReferenceField,
 } from "../../../inc/txtfld";
+import { SwSetExpField } from "../fields/expfld";
 import { SwJumpEditField } from "../fields/docufld.jumpedit";
 import { SwDropDownField } from "../fields/flddropdown";
 import { SwChapterField } from "../fields/chpfld";
@@ -426,6 +428,15 @@ export class SwpHints {
       /** Selects the represented ordinary field type. @param hint - Indexed hint. @returns Whether a reference field. */
       (hint): hint is SwTextReferenceField =>
         hint instanceof SwTextField && hint.GetAttr().GetField() instanceof SwGetRefField,
+    );
+  }
+
+  /** Returns native SetExpression sequence fields in text order. @returns Ordered field points. */
+  public GetSequenceFields(): readonly SwTextSequenceField[] {
+    return this.hintsByStart.filter(
+      /** Identifies an attached sequence field. @param hint - Original text attribute. @returns Whether this is a sequence field. */
+      (hint): hint is SwTextSequenceField =>
+        hint instanceof SwTextField && hint.GetAttr().GetField() instanceof SwSetExpField,
     );
   }
 

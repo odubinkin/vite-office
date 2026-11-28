@@ -448,6 +448,7 @@ export function compareParagraphMarkers(
       case "count-field":
       case "page-number-field":
       case "chapter-field":
+      case "sequence-field":
       case "placeholder-field":
       case "drop-down-field":
       case "date-time-field":

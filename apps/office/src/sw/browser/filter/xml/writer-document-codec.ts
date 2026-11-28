@@ -172,6 +172,11 @@ interface WriterAnnotationMarkRecord {
 /** Internal graph record. Paragraph identity is array order, never a stored UI key. */
 export interface WriterDocumentRecord {
   readonly redlines?: WriterRedlineRecord;
+  readonly sequenceFieldTypes?: readonly Readonly<{
+    name: string;
+    level: number;
+    separator: string;
+  }>[];
   readonly documentMetaXml?: string;
   readonly layoutPageCount?: number;
   readonly theme?: ThemeRecord;
@@ -312,6 +317,15 @@ export function* encodeWriterDocumentSteps(document: SwDoc): Generator<void, Wri
             : {}),
         }),
       ),
+    sequenceFieldTypes: Array.from(
+      document.getIDocumentFieldsAccess().GetSequenceFieldTypes(),
+      /** Transfers original sequence master properties. @param type - Native sequence field master. @returns Browser record. */
+      (type) => ({
+        name: type.GetName(),
+        level: type.GetOutlineLvl(),
+        separator: type.GetDelimiter(),
+      }),
+    ),
     documentSettings: document.GetDocumentSettingManager().GetValues(),
     lineNumberInfo: document.GetLineNumberInfo().QueryValue(),
     locale: document.GetLocale(),
@@ -430,6 +444,26 @@ export function* decodeWriterDocumentSteps(
   });
   let complete = false;
   try {
+    if (record.sequenceFieldTypes !== undefined) {
+      if (!Array.isArray(record.sequenceFieldTypes))
+        throw new Error("Stored Writer sequence masters are invalid.");
+      for (const value of record.sequenceFieldTypes as NonNullable<
+        WriterDocumentRecord["sequenceFieldTypes"]
+      >) {
+        if (
+          !value ||
+          typeof value.name !== "string" ||
+          !Number.isInteger(value.level) ||
+          value.level < 0 ||
+          value.level > 255 ||
+          typeof value.separator !== "string"
+        )
+          throw new Error("Stored Writer sequence master is invalid.");
+        const type = document.getIDocumentFieldsAccess().GetSequenceFieldType(value.name);
+        type.SetOutlineLvl(value.level);
+        type.SetDelimiter(value.separator);
+      }
+    }
     if (record.documentMetaXml !== undefined)
       document.documentProperties.SetTransferXml(record.documentMetaXml);
     if (record.layoutPageCount !== undefined) {

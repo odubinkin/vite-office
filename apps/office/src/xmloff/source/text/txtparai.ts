@@ -1,3 +1,4 @@
+import { XMLSequenceFieldImportContext } from "./txtvfldi";
 import { XMLChangeImportContext } from "./XMLChangeImportContext";
 import type { XMLRedlineImportTarget } from "./XMLChangedRegionImportContext";
 import {
@@ -157,7 +158,7 @@ const DEFAULT_PROPERTIES: OdfCharacterProperties = {};
 export class XMLTextBodyContext extends SvXMLImportContext {
   private readonly helper: XMLTextImportHelper;
 
-  /** Sequence declarations carry no modeled effect without sequence fields. @param element - Child token. @returns Whether declaration-only. */
+  /** Allows additional declaration metadata on the sequence container. @param element - Child token. @returns Whether declaration-only. */
   public override ignoreUnknownAttributesForChild(element: XMLToken): boolean {
     return element === XMLToken.TEXT_SEQUENCE_DECLS;
   }
@@ -458,14 +459,20 @@ function createInlineContext(
     return annotation ? null : new XMLStartReferenceContext(paragraph);
   if (element === XMLToken.TEXT_REFERENCE_MARK_END)
     return annotation ? null : new XMLEndReferenceContext(paragraph);
-  if (element === XMLToken.TEXT_REFERENCE_REF || element === XMLToken.TEXT_BOOKMARK_REF)
+  if (
+    element === XMLToken.TEXT_REFERENCE_REF ||
+    element === XMLToken.TEXT_BOOKMARK_REF ||
+    element === XMLToken.TEXT_SEQUENCE_REF
+  )
     return annotation
       ? null
       : new XMLReferenceFieldImportContext(
           paragraph,
           element === XMLToken.TEXT_BOOKMARK_REF
             ? ReferenceFieldSource.BOOKMARK
-            : ReferenceFieldSource.REFERENCE_MARK,
+            : element === XMLToken.TEXT_SEQUENCE_REF
+              ? ReferenceFieldSource.SEQUENCE_FIELD
+              : ReferenceFieldSource.REFERENCE_MARK,
         );
   if (XMLIndexMarkImportContext.IsIndexMark(element))
     return annotation || !target.insertIndexMark ? null : new XMLIndexMarkImportContext(paragraph);
@@ -475,6 +482,10 @@ function createInlineContext(
       element === XMLToken.TEXT_DATE ? XMLDateFieldImportContext : XMLTimeFieldImportContext;
     return new Context(paragraph, properties, hyperlink, namedStyles);
   }
+  if (element === XMLToken.TEXT_SEQUENCE)
+    return annotation
+      ? null
+      : new XMLSequenceFieldImportContext(paragraph, properties, hyperlink, namedStyles);
   if (element === XMLToken.TEXT_PLACEHOLDER || element === XMLToken.TEXT_DROP_DOWN) {
     if (annotation) return null;
     const Context =

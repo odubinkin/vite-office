@@ -1,4 +1,7 @@
 /** @fileoverview Owns shared Writer body/cell text child dispatch and stream list state from native txtimp.cxx. */
+import { ReferenceFieldSource } from "../../../offapi/com/sun/star/text/ReferenceFieldSource";
+import { XMLPropertyBackpatcher } from "./XMLPropertyBackpatcher";
+import { XMLVariableDeclsImportContext } from "./txtvfldi";
 import { XMLChangeImportContext } from "./XMLChangeImportContext";
 import { XMLTrackedChangesImportContext } from "./XMLTrackedChangesImportContext";
 import type { XMLIndexMarkProperties } from "./XMLIndexMarkImportContext";
@@ -644,6 +647,21 @@ export class XMLTextImportHelper {
     if (name) this.annotations.set(name, field);
   }
 
+  private readonly sequenceIds = new XMLPropertyBackpatcher<number>(
+    /** Sets the original UNO sequence number. @param field - Dependent reference. @param id - Native sequence identity. */
+    (field, id) => this.SetProperty(field, "SequenceNumber", id, "sal_Int16"),
+  );
+  private readonly sequenceNames = new XMLPropertyBackpatcher<string>(
+    /** Sets the original UNO reference source name. @param field - Dependent reference. @param name - Sequence master name. */
+    (field, name) => this.SetProperty(field, "SourceName", name),
+  );
+
+  /** Publishes a native sequence target and patches forward references. @param refName - Original XML ID. @param name - Native master name. @param id - Signed UNO sequence identity. */
+  public InsertSequenceID(refName: string, name: string, id: number): void {
+    this.sequenceIds.ResolveId(refName, id);
+    this.sequenceNames.ResolveId(refName, name);
+  }
+
   /** Creates and attaches an original GetReference field. @param value - Named reference data. */
   public InsertReferenceField(value: XMLReferenceField): void {
     const service = xmlTextString("com.sun.star.text.TextField.GetReference");
@@ -652,7 +670,10 @@ export class XMLTextImportHelper {
       this.SetProperty(field, "ReferenceFieldPart", value.part, "sal_Int16");
       this.SetProperty(field, "ReferenceFieldSource", value.source, "sal_Int16");
       this.SetProperty(field, "ReferenceFieldLanguage", value.language);
-      this.SetProperty(field, "SourceName", value.name);
+      if (value.source === ReferenceFieldSource.SEQUENCE_FIELD) {
+        this.sequenceIds.SetProperty(field, value.name);
+        this.sequenceNames.SetProperty(field, value.name);
+      } else this.SetProperty(field, "SourceName", value.name);
       this.SetProperty(field, "ReferenceFieldFlags", (value.flags << 16) >> 16, "sal_Int16");
       this.SetProperty(field, "CurrentPresentation", value.presentation);
       const cursor = this.GetCursor();
@@ -662,14 +683,21 @@ export class XMLTextImportHelper {
     }
   }
 
-  /** Creates and attaches a native text field. @param suffix - Native UNO service suffix. @param prepare - Field importer. @param properties - Direct formatting. @param hyperlink - Optional link. @param characterStyles - Applied styles. */
+  /** Looks up the original named sequence field master. @param name - Sequence name. @returns Native master properties. */
+  public FindSequenceFieldMaster(
+    name: string,
+  ): Pick<XMLPropertySet, "setPropertyValue"> | undefined {
+    return this.model.getSequenceFieldMaster?.(name);
+  }
+
+  /** Creates and attaches a native text field. @param suffix - Native UNO service suffix. @param prepare - Field importer. @param properties - Direct formatting. @param hyperlink - Optional link. @param characterStyles - Applied styles. @returns Attached text field. */
   public InsertTextField(
     suffix: string,
     prepare: (descriptor: XMLTextContent) => void,
     properties: OdfCharacterProperties,
     hyperlink: OdfHyperlink | undefined,
     characterStyles: readonly XMLCharacterStyleLayer[],
-  ): void {
+  ): XMLTextContent {
     const service = xmlTextString(`com.sun.star.text.TextField.${suffix}`);
     try {
       const field = this.model.createInstance(service) as XMLTextContent;
@@ -683,6 +711,7 @@ export class XMLTextImportHelper {
         start.dispose();
         throw error;
       }
+      return field;
     } finally {
       service.dispose();
     }
@@ -843,7 +872,9 @@ export class XMLTextImportHelper {
       return null;
     }
     if (element === XMLToken.TEXT_SEQUENCE_DECLS && type === "Body")
-      return new SvXMLIgnoreContext(true);
+      return this.model.getSequenceFieldMaster
+        ? new XMLVariableDeclsImportContext(this, this.model)
+        : new SvXMLIgnoreContext(true);
     if (XMLIndexTOCContext.IsIndex(element) && this.target.beginDocumentIndex)
       return new XMLIndexTOCContext(this, this.target.beginDocumentIndex.bind(this.target));
     if (

@@ -1,0 +1,30 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "local-infrastructure",
+    "localPath": "apps/office/src/sw/browser/filter/xml/writer-sequence-field-codec.ts",
+    "status": "local-only",
+    "rationale": "Transfers native sequence fields, identities, expression and cached values at their original text anchors.",
+    "responsibilities": [
+      "Transfers native sequence fields, identities, expression and cached values at their original text anchors."
+    ],
+    "stackDivergence": {
+      "kind": "local-infrastructure",
+      "rationale": "Structured Worker records reconnect authored sequence values and identities at native text points."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/filter/xml/writer-sequence-field-codec.ts",
+          "marker": "encodeSequenceFields"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-sequence-fields.test.ts",
+          "marker": "testTdf99689TableOfFigures"
+        }
+      ],
+      "upstream": []
+    }
+  }
+}

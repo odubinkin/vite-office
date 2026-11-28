@@ -28,6 +28,8 @@ export const LANGUAGE_GERMAN_SWISS = LanguageType(0x0807);
 export const LANGUAGE_GERMAN_AUSTRIAN = LanguageType(0x0c07);
 export const LANGUAGE_GERMAN_LUXEMBOURG = LanguageType(0x1007);
 export const LANGUAGE_GERMAN_LIECHTENSTEIN = LanguageType(0x1407);
+/** Original Hungarian ID used by Writer reference field expansion. */
+export const LANGUAGE_HUNGARIAN = LanguageType(0x040e);
 
 /** Original US English fallback/fast-path identity. */
 export const LANGUAGE_ENGLISH_US = LanguageType(0x0409);

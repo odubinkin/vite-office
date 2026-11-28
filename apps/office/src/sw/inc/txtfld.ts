@@ -2,6 +2,7 @@
 import { SwTextAttr } from "../source/core/txtnode/txatbase";
 import type { SwDocInfoField, SwDocStatField, SwPostItField } from "../source/core/fields/docufld";
 import type { SwGetRefField } from "../source/core/fields/reffld";
+import type { SwSetExpField } from "../source/core/fields/expfld";
 import type { SwJumpEditField } from "../source/core/fields/docufld.jumpedit";
 import type { SwDropDownField } from "../source/core/fields/flddropdown";
 import type { SwChapterField } from "../source/core/fields/chpfld";
@@ -69,6 +70,9 @@ export type SwTextJumpEditField = SwTextField<SwJumpEditField>;
 /** Text attribute carrying a native drop-down. */
 export type SwTextDropDownField = SwTextField<SwDropDownField>;
 
+/** Text attribute carrying an original sequence SetExpression field. */
+export type SwTextSequenceField = SwTextField<SwSetExpField>;
+
 /** Represented native ordinary text fields. */
 export type SwTextOrdinaryField =
   | SwTextReferenceField
@@ -78,7 +82,8 @@ export type SwTextOrdinaryField =
   | SwTextPageNumberField
   | SwTextChapterField
   | SwTextJumpEditField
-  | SwTextDropDownField;
+  | SwTextDropDownField
+  | SwTextSequenceField;
 
 /** Identifies the original annotation subclass contract without treating other fields as comments. @param hint - Indexed hint. @returns Whether this is an attached annotation attribute. */
 export function isAnnotationTextField(hint: unknown): hint is SwTextField {

@@ -6539,3 +6539,12 @@ and selects by value.
 
 - [Original selection handling](../../vendor/libreoffice-reference/sw/source/core/fields/flddropdown.cxx#L124)
 - [Original selection in ODF export](../../vendor/libreoffice-reference/xmloff/source/text/txtflde.cxx#L2823)
+
+### WRITER-785 — Sequence declaration import narrows the chapter separator to one byte
+
+The importer takes the first UTF-16 code unit of the declared sequence
+separator and narrows it to a C++ `char` before passing it to the field
+master. Non-ASCII separators can change on import. Writer follows the
+signed-char conversion when widening the low byte back to UTF-16.
+
+- [Original sequence declaration separator import](../../vendor/libreoffice-reference/xmloff/source/text/txtvfldi.cxx#L721)

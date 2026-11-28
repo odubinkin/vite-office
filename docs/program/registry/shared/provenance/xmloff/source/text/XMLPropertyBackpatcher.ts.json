@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/xmloff/source/text/XMLPropertyBackpatcher.ts",
+    "status": "mapped",
+    "upstreamPath": "xmloff/source/text/XMLPropertyBackpatcher.cxx",
+    "localSymbols": [
+      "XMLPropertyBackpatcher"
+    ],
+    "upstreamSymbols": [
+      "XMLPropertyBackpatcher<A>::ResolveId",
+      "XMLPropertyBackpatcher<A>::SetProperty"
+    ],
+    "preservedResponsibilities": [
+      "Resolves forward references to Writer sequence masters and their independent sequence identities."
+    ],
+    "omittedResponsibilities": [
+      "Other original consumers such as footnote references are not required by the sequence path."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/xmloff/source/text/XMLPropertyBackpatcher.ts",
+          "marker": "XMLPropertyBackpatcher"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-sequence-fields.test.ts",
+          "marker": "testTdf99689TableOfFigures"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/XMLPropertyBackpatcher.cxx",
+          "marker": "XMLPropertyBackpatcher<A>::ResolveId"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/XMLPropertyBackpatcher.cxx",
+          "marker": "XMLPropertyBackpatcher<A>::SetProperty"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/qa/extras/uiwriter/uiwriter6.cxx",
+          "marker": "testTdf99689TableOfFigures"
+        }
+      ]
+    }
+  }
+}

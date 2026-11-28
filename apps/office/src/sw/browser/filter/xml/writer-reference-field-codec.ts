@@ -41,7 +41,12 @@ export function decodeReferenceFields(
       !Number.isInteger(record.format) ||
       RefFieldFormat[record.format] === undefined ||
       (record.source !== ReferencesSubtype.SetRefAttr &&
-        record.source !== ReferencesSubtype.Bookmark) ||
+        record.source !== ReferencesSubtype.Bookmark &&
+        record.source !== ReferencesSubtype.SequenceField) ||
+      (record.sequenceNumber !== undefined &&
+        (!Number.isInteger(record.sequenceNumber) ||
+          record.sequenceNumber < 0 ||
+          record.sequenceNumber > 0xffff)) ||
       !Number.isInteger(record.flags) ||
       record.flags < 0 ||
       record.flags > 0xffff

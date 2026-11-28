@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/bastyp/calc.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "document-core",
+    "capabilityIds": [
+      "CAP-0128",
+      "CAP-0129"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/core/bastyp/calc.ts",
+        "apps/office/src/sw/source/filter/xml/odt-sequence-fields.test.ts",
+        "vendor/libreoffice-reference/sw/source/core/bastyp/calc.cxx",
+        "vendor/libreoffice-reference/sw/qa/extras/uiwriter/uiwriter6.cxx"
+      ],
+      "justification": "Evaluates the represented Writer sequence expressions with native additive, term, primary and variable ownership.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwCalc"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/bastyp/calc.cxx",
+      "upstreamSymbols": [
+        "SwCalc::Calculate",
+        "SwCalc::Term",
+        "SwCalc::Prim",
+        "SwCalc::Expr"
+      ]
+    }
+  }
+}

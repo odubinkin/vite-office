@@ -16,6 +16,7 @@ import type { OdfCharacterProperties, OdfHyperlink } from "./txtparae";
 import { xmlTextString } from "./txtprmap";
 import { ChapterFormat } from "../../../offapi/com/sun/star/text/ChapterFormat";
 import { ReferenceFieldPart } from "../../../offapi/com/sun/star/text/ReferenceFieldPart";
+import { ReferenceFieldSource } from "../../../offapi/com/sun/star/text/ReferenceFieldSource";
 import {
   chapterDisplays,
   placeholderTypes,
@@ -587,9 +588,10 @@ export class XMLReferenceFieldImportContext extends SvXMLImportContext {
           )?.[0];
           if (
             part !== undefined &&
-            part !== ReferenceFieldPart.CATEGORY_AND_NUMBER &&
-            part !== ReferenceFieldPart.ONLY_CAPTION &&
-            part !== ReferenceFieldPart.ONLY_SEQUENCE_NUMBER
+            (this.source === ReferenceFieldSource.SEQUENCE_FIELD ||
+              (part !== ReferenceFieldPart.CATEGORY_AND_NUMBER &&
+                part !== ReferenceFieldPart.ONLY_CAPTION &&
+                part !== ReferenceFieldPart.ONLY_SEQUENCE_NUMBER))
           )
             this.part = part;
           break;

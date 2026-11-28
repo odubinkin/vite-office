@@ -10,6 +10,60 @@ import { PageNumberType } from "../../../offapi/com/sun/star/text/PageNumberType
 import * as NumberingType from "../../../offapi/com/sun/star/style/NumberingType";
 import { SvXMLUnitConverter } from "../core/xmluconv";
 
+/** Native Writer caption number point. */
+export interface XMLSequenceExportMarker {
+  readonly kind: "sequence-field";
+  readonly offset: number;
+  readonly name: string;
+  readonly referenceId: number;
+  readonly formula: string;
+  readonly numbering: number;
+  readonly presentation: string;
+}
+
+/** Formats the original ODF reference name from its sequence master and signed UNO identifier. @param name - Sequence master. @param id - Native reference identity. @returns ODF reference name. */
+export function makeSequenceRefName(name: string, id: number): string {
+  return "ref" + name + ((id << 16) >> 16);
+}
+
+/** Serializes the original sequence formula, numbering style and field reference. @param field - Native sequence point. @param escapeXml - XML escaping. @returns ODF field. */
+export function exportSequenceField(
+  field: XMLSequenceExportMarker,
+  escapeXml: (value: string) => string,
+): string {
+  const formula =
+    field.formula !== field.presentation ? ` text:formula="ooow:${escapeXml(field.formula)}"` : "";
+  return `<text:sequence text:ref-name="${escapeXml(makeSequenceRefName(field.name, field.referenceId))}" text:name="${escapeXml(field.name)}"${formula}${exportFieldNumbering(field.numbering, escapeXml)}>${escapeXml(field.presentation)}</text:sequence>`;
+}
+
+/** Original sequence field master properties used in the ODF declaration stream. */
+export interface XMLSequenceDeclaration {
+  readonly name: string;
+  readonly level: number;
+  readonly separator: string;
+}
+
+/** Writes registered sequence masters before text that uses them. @param sequences - Native field master properties. @param escapeXml - Attribute escaping. @returns ODF declarations. */
+export function exportSequenceDeclarations(
+  sequences: readonly XMLSequenceDeclaration[],
+  escapeXml: (value: string) => string,
+): string {
+  if (sequences.length === 0) return "";
+  const declarations = sequences
+    .map(
+      /** Serializes one master in its source order. @param sequence - Native sequence declaration. @returns ODF element. */
+      (sequence) => {
+        const separator =
+          sequence.level >= 0
+            ? ` text:separation-character="${escapeXml(sequence.separator)}"`
+            : "";
+        return `<text:sequence-decl text:display-outline-level="${sequence.level + 1}"${separator} text:name="${escapeXml(sequence.name)}"/>`;
+      },
+    )
+    .join("");
+  return `<text:sequence-decls>${declarations}</text:sequence-decls>`;
+}
+
 /** Original ODF placeholder types indexed by the published UNO short. */
 export const placeholderTypes = {
   [PlaceholderType.TEXT]: "text",
@@ -290,7 +344,9 @@ export const referenceFieldFormats = [
 export interface XMLReferenceField {
   readonly name: string;
   readonly source:
-    typeof ReferenceFieldSource.REFERENCE_MARK | typeof ReferenceFieldSource.BOOKMARK;
+    | typeof ReferenceFieldSource.REFERENCE_MARK
+    | typeof ReferenceFieldSource.BOOKMARK
+    | typeof ReferenceFieldSource.SEQUENCE_FIELD;
   readonly part: number;
   readonly language: string;
   readonly presentation: string;
@@ -308,7 +364,12 @@ export function exportReferenceField(
   field: XMLReferenceField,
   escapeXml: (value: string) => string,
 ): string {
-  const name = field.source === ReferenceFieldSource.BOOKMARK ? "bookmark-ref" : "reference-ref";
+  const name =
+    field.source === ReferenceFieldSource.BOOKMARK
+      ? "bookmark-ref"
+      : field.source === ReferenceFieldSource.SEQUENCE_FIELD
+        ? "sequence-ref"
+        : "reference-ref";
   const token = referenceFieldFormats.find(
     /** Maps the original field part. @param format - Native part and ODF token. @returns Match. */
     ([part]) => part === field.part,

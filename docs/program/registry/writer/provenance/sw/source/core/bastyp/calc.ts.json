@@ -1,0 +1,59 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/core/bastyp/calc.ts",
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/bastyp/calc.cxx",
+    "localSymbols": [
+      "SwCalc"
+    ],
+    "upstreamSymbols": [
+      "SwCalc::Calculate",
+      "SwCalc::Term",
+      "SwCalc::Prim",
+      "SwCalc::Expr"
+    ],
+    "preservedResponsibilities": [
+      "Evaluates the represented Writer sequence expressions with native additive, term, primary and variable ownership."
+    ],
+    "omittedResponsibilities": [
+      "Database lookups, string variants and the complete legacy formula function set are outside the represented numeric sequence evaluator."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/bastyp/calc.ts",
+          "marker": "SwCalc"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-sequence-fields.test.ts",
+          "marker": "testTdf99689TableOfFigures"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/bastyp/calc.cxx",
+          "marker": "SwCalc::Calculate"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/bastyp/calc.cxx",
+          "marker": "SwCalc::Term"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/bastyp/calc.cxx",
+          "marker": "SwCalc::Prim"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/bastyp/calc.cxx",
+          "marker": "SwCalc::Expr"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/qa/extras/uiwriter/uiwriter6.cxx",
+          "marker": "testTdf99689TableOfFigures"
+        }
+      ]
+    }
+  }
+}

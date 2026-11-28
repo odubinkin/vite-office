@@ -42,6 +42,7 @@ import { SwBookmark } from "../../core/doc/docbm";
 import { PageNumberType } from "../../../../offapi/com/sun/star/text/PageNumberType";
 import { QueryChapterFormat } from "../../core/fields/chpfld";
 import { SwPageNumSubType } from "../../core/fields/docufld.pagenumber";
+import { makeSequenceRefName } from "../../../../xmloff/source/text/txtflde";
 import { ReferenceFieldSource } from "../../../../offapi/com/sun/star/text/ReferenceFieldSource";
 import { ReferencesSubtype } from "../../../inc/reffldsubtype";
 import { countFields, docInfoFields } from "../../../../xmloff/source/text/txtflde";
@@ -118,6 +119,21 @@ export function projectParagraphMarkers(
           value: field.GetDateTimeValue(),
           presentation: field.Expand(),
           ...(styleName ? { styleName } : {}),
+        };
+      },
+    ),
+    ...(node.GetpSwpHints()?.GetSequenceFields() ?? []).map(
+      /** Exports the original sequence field and its numbered master. @param hint - Native caption field. @returns ODF portion. */
+      (hint): XMLTextParagraphMarker => {
+        const field = hint.GetAttr().GetField();
+        return {
+          kind: "sequence-field",
+          offset: hint.GetStart(),
+          name: field.GetTyp().GetName(),
+          referenceId: field.GetSeqNumber(),
+          formula: field.GetFormula(),
+          numbering: field.GetFormat(),
+          presentation: field.Expand(),
         };
       },
     ),
@@ -238,12 +254,17 @@ export function projectParagraphMarkers(
         return {
           kind: "reference-field",
           offset: hint.GetStart(),
-          name: data.name,
+          name:
+            data.source === ReferencesSubtype.SequenceField
+              ? makeSequenceRefName(data.name, data.sequenceNumber ?? 0)
+              : data.name,
           part: data.format,
           source:
             data.source === ReferencesSubtype.Bookmark
               ? ReferenceFieldSource.BOOKMARK
-              : ReferenceFieldSource.REFERENCE_MARK,
+              : data.source === ReferencesSubtype.SequenceField
+                ? ReferenceFieldSource.SEQUENCE_FIELD
+                : ReferenceFieldSource.REFERENCE_MARK,
           language: data.language,
           presentation: data.presentation,
           flags: data.flags,

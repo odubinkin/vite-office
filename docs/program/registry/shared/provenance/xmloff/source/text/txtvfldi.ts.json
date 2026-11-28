@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/xmloff/source/text/txtvfldi.ts",
+    "status": "mapped",
+    "upstreamPath": "xmloff/source/text/txtvfldi.cxx",
+    "localSymbols": [
+      "XMLVariableDeclsImportContext",
+      "XMLSequenceFieldImportContext"
+    ],
+    "upstreamSymbols": [
+      "XMLVariableDeclsImportContext::createFastChildContext",
+      "XMLSequenceFieldImportContext::PrepareField"
+    ],
+    "preservedResponsibilities": [
+      "Imports native Writer sequence master declarations and their dependent caption fields through typed UNO properties."
+    ],
+    "omittedResponsibilities": [
+      "General variable, user field and DDE declaration families remain outside this sequence import."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/xmloff/source/text/txtvfldi.ts",
+          "marker": "XMLVariableDeclsImportContext"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-sequence-fields.test.ts",
+          "marker": "testTdf99689TableOfFigures"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtvfldi.cxx",
+          "marker": "XMLVariableDeclsImportContext::createFastChildContext"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtvfldi.cxx",
+          "marker": "XMLSequenceFieldImportContext::PrepareField"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/qa/extras/uiwriter/uiwriter6.cxx",
+          "marker": "testTdf99689TableOfFigures"
+        }
+      ]
+    }
+  }
+}
