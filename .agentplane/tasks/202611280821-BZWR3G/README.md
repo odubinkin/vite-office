@@ -1,10 +1,11 @@
 ---
 id: "202611280821-BZWR3G"
 title: "Paint Calc Filled alignment and Shrink to fit in the grid"
-status: "DOING"
+result_summary: "Connected Calc cell text repetition and shrink to the effective grid layout and kept the underlying accessible value and history."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "output/calc-next/BZWR3G-browser-narrow.log"
   findings:
     - "Chromium confirmed resize and merge, Undo, wrap priority, and non-fitting numeric display and accessible value."
-commit: null
+commit:
+  hash: "5b8d7a448a998655ee5d97beff50b38823658f90"
+  message: "🧩 BZWR3G code: paint Calc Filled and Shrink to fit text"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: Calc Filled and Shrink to fit paint through real measurements. The scoped tests and Chromium scenarios passed."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "26 targeted tests passed. Three Chromium scenarios passed across the main run and exact narrow-column retry. Scoped source and structural checks passed with inherited global registry and provenance diagnostics."
+  -
+    type: "status"
+    at: "2026-11-28T08:32:35.871Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Calc Filled and Shrink to fit paint through real measurements. The scoped tests and Chromium scenarios passed."
 doc_version: 3
-doc_updated_at: "2026-11-28T08:31:39.012Z"
+doc_updated_at: "2026-11-28T08:32:35.872Z"
 doc_updated_by: "CODER"
 description: "Connect Calc's Filled alignment and Shrink to fit attributes to the existing grid text painter. Preserve the ScOutputData admission order for wrapping, repetition and shrinking. Resolve text extent from the rendered script font runs in the browser content box, including margin and merged geometry. Apply the pinned repeat count and bounded scaling decisions, keeping the actual stored/displayed cell value, accessibility, in-cell editor and history contracts. Keep the resulting browser text layout under its existing drawing and clipping boundaries."
 sections:
