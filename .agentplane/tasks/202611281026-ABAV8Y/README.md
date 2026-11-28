@@ -1,10 +1,11 @@
 ---
 id: "202611281026-ABAV8Y"
 title: "Align Writer ODT table formula calculation and cached values"
-status: "DOING"
+result_summary: "Aligned represented ODT table box calculation with the pinned Writer field and cell contracts."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "output/playwright/odf-next-checkpoint/writer-table-formula-verification.md"
   findings:
     - "Both pinned formula fixtures retain results, source and native box ownership through the Worker and ODT export."
-commit: null
+commit:
+  hash: "913f93d12c01140d306a6d4806d96abdb843d880"
+  message: "🧩 ABAV8Y writer: recalculate native ODT table box formulas"
 comments:
   -
     author: "CODER"
     body: "Start: connect native table formulas and Writer field variables to the ODT load path."
+  -
+    author: "CODER"
+    body: "Verified: pinned Writer table formulas with calculated value, dependent user variables and numeric/error state across Worker and ODT. Thirty-six focused tests and static gates passed."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Passed 36 focused Writer tests. The pinned tdf91801 calculation yields 555 across Worker and ODT, and tdf139126 retains its numeric and error boxes. TypeScript, scoped ESLint, dependencies, provenance and Writer inventory passed."
+  -
+    type: "status"
+    at: "2026-11-28T10:35:21.348Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: pinned Writer table formulas with calculated value, dependent user variables and numeric/error state across Worker and ODT. Thirty-six focused tests and static gates passed."
 doc_version: 3
-doc_updated_at: "2026-11-28T10:34:20.428Z"
+doc_updated_at: "2026-11-28T10:35:21.349Z"
 doc_updated_by: "CODER"
 description: "Connect represented Writer table box formulas with the native table calculation owner, named box and range resolution, expression variables and numeric result storage. Trigger the represented field update after ODT import and keep existing Worker, number formatting, and error sentinel behavior. Replay the original tdf91801 field-variable calculation and the existing ODT table fixture."
 sections:
