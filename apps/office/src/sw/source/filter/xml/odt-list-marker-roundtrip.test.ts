@@ -24,6 +24,17 @@ interface MarkerState {
 function state(format: SwNumFormat): MarkerState {
   return format.GetMarkerProperties() as MarkerState;
 }
+
+/** Reads ordinary list declarations without the document's separate outline rule. @param bytes - Exported ODT package. @returns List style XML. */
+async function regularListStyles(bytes: Uint8Array): Promise<string> {
+  const archive = await DocumentArchive.open(bytes);
+  const xml =
+    (await archive.readTextEntry("styles.xml")) + (await archive.readTextEntry("content.xml"));
+  const styles = xml.match(/<text:list-style(?=[\s>])[^>]*>[\s\S]*?<\/text:list-style>/gu);
+  expect(styles).toHaveLength(1);
+  return styles?.[0] ?? "";
+}
+
 /** Inserts literal source declarations and two nested paragraphs into a genuine package. @param bytes - Baseline package. @param attributes - Literal declaration attributes. @param common - Common container. @param bullet - Bullet selection. @returns Package bytes. */
 async function input(
   bytes: Uint8Array,
@@ -156,9 +167,7 @@ it("preserves native marker parameters through common and automatic ODT cycles",
       );
       expect(restored.paragraphs[1]?.GetListLabel()).toBe(test.label);
       const exported = await writeOdtDocument(result.document, { title: "Markers" });
-      const xml =
-        (await (await DocumentArchive.open(exported)).readTextEntry("styles.xml")) +
-        (await (await DocumentArchive.open(exported)).readTextEntry("content.xml"));
+      const xml = await regularListStyles(exported);
       const opening = xml.match(
         /<text:list-level-style-(number|bullet) text:level="2"[^>]*>/u,
       )?.[0] as string;
@@ -250,9 +259,7 @@ it("retains native explicit pattern precedence and standard ODF 1.3 approximatio
         test.expected,
       );
       const exported = await writeOdtDocument(result.document, { title: "Patterns" });
-      const xml =
-        (await (await DocumentArchive.open(exported)).readTextEntry("styles.xml")) +
-        (await (await DocumentArchive.open(exported)).readTextEntry("content.xml"));
+      const xml = await regularListStyles(exported);
       expect(xml).not.toContain("num-list-format=");
       const reopened = await readOdtDocument(exported, { title: "Markers" });
       expect(state(reopened.document.GetNumRuleTable().slice(1)[0]?.Get(1) as SwNumFormat)).toEqual(

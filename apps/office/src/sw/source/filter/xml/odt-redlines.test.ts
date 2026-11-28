@@ -67,7 +67,9 @@ it("exports a full midnight datetime from testMidnightRedlineDatetime", /** Port
   expect(saved).toMatch(
     /<text:deletion>[\s\S]*?<text:p[^>]*>Deleted<text:s\/>text<\/text:p><\/text:deletion>/u,
   );
-  expect(saved).toMatch(/<\/text:tracked-changes><text:p[^>]*><text:change text:change-id=/u);
+  expect(saved).toMatch(
+    /<\/text:tracked-changes>(?:<text:sequence-decls>[\s\S]*?<\/text:sequence-decls>)?<text:p[^>]*><text:change text:change-id=/u,
+  );
 });
 
 it("retains the two change portions around a single space in testWhitespace", /** Ports the two original redline portion sequences. @returns Completion. */ async () => {

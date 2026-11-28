@@ -149,12 +149,15 @@ it("exports the default Writer list geometry at every supported level", /** Ensu
     const xml =
       (await (await DocumentArchive.open(exported)).readTextEntry("styles.xml")) +
       (await (await DocumentArchive.open(exported)).readTextEntry("content.xml"));
-    expect(xml.match(/text:list-level-position-and-space-mode="label-alignment"/gu)).toHaveLength(
-      10,
-    );
-    expect(xml).toContain('fo:text-indent="-0.635cm"');
-    expect(xml).toContain('fo:margin-left="1.27cm"');
-    expect(xml).toContain('text:list-tab-stop-position="1.27cm"');
+    const styles = xml.match(/<text:list-style(?=[\s>])[^>]*>[\s\S]*?<\/text:list-style>/gu);
+    expect(styles).toHaveLength(1);
+    const [regularStyle] = styles ?? [];
+    expect(
+      regularStyle?.match(/text:list-level-position-and-space-mode="label-alignment"/gu),
+    ).toHaveLength(10);
+    expect(regularStyle).toContain('fo:text-indent="-0.635cm"');
+    expect(regularStyle).toContain('fo:margin-left="1.27cm"');
+    expect(regularStyle).toContain('text:list-tab-stop-position="1.27cm"');
     const restored = (
       await readOdtDocument(exported, { title: "Default list" })
     ).document.paragraphs[0]?.GetNumRule();
