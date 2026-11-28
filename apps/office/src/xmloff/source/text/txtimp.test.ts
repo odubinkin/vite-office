@@ -7,6 +7,7 @@ import { XMLParaContext, type XMLParagraphListState, type XMLTextImportTarget } 
 import { createWriterDocument } from "../../../sw/source/core/doc/doc";
 import { SwXTextDocument } from "../../../sw/source/uibase/uno/unotxdoc";
 import { XMLTextImportHelper } from "./txtimp";
+import { XMLVariableDeclsImportContext } from "./txtvfldi";
 import { XMLTextListBlockContext } from "./XMLTextListBlockContext";
 import { XMLTextListItemContext } from "./XMLTextListItemContext";
 
@@ -142,9 +143,10 @@ it("uses the native deletion fallback only when paragraph enumeration has no com
   }
 });
 
-it("keeps native body cell dispatch and explicit unimplemented structural boundaries", /** Verifies body/cell location, inert children and retained public standalone table entry. @returns Nothing. */ () => {
+it("keeps native body cell dispatch and explicit unimplemented structural boundaries", /** Verifies body and cell declarations, unsupported structures and standalone table dispatch. @returns Nothing. */ () => {
   const records: (XMLParagraphListState | undefined)[] = [],
-    base = target(records),
+    model = new SwXTextDocument(createWriterDocument()),
+    base = target(records, model),
     helper = base.GetTextImport();
   for (const type of ["Body", "Cell"] as const)
     for (const token of [XMLToken.TEXT_P, XMLToken.TEXT_H])
@@ -152,6 +154,15 @@ it("keeps native body cell dispatch and explicit unimplemented structural bounda
   expect(records).toEqual([undefined, undefined, undefined, undefined]);
   expect(
     helper.CreateTextChildContext(XMLToken.TEXT_SEQUENCE_DECLS, attrs(), "Body"),
+  ).toBeInstanceOf(XMLVariableDeclsImportContext);
+  const withoutDeclarations = new XMLTextImportHelper(base, {
+    getText: model.getText.bind(model),
+    getAutoStyles: model.getAutoStyles.bind(model),
+    getStyleFamilies: model.getStyleFamilies.bind(model),
+    createInstance: model.createInstance.bind(model),
+  });
+  expect(
+    withoutDeclarations.CreateTextChildContext(XMLToken.TEXT_SEQUENCE_DECLS, attrs(), "Body"),
   ).toBeInstanceOf(SvXMLIgnoreContext);
   expect(helper.CreateTextChildContext(XMLToken.TEXT_SEQUENCE_DECLS, attrs(), "Cell")).toBeNull();
   expect(helper.CreateTextChildContext(XMLToken.UNKNOWN, attrs(), "Body")).toBeNull();
