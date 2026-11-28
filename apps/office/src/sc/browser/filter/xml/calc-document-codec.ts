@@ -77,8 +77,8 @@ import {
   type ScStoredPasswordHash,
 } from "../../../inc/tabprotection";
 import { ScDocProtection, ScTableProtection } from "../../../source/core/data/tabprotection";
-import { ScRangeList } from "../../../inc/rangelst";
-import { ScAddress, ScRange, MAXCOL, MAXROW } from "../../../inc/address";
+import { ScRangeList, type ScRangePairList } from "../../../inc/rangelst";
+import { ScAddress, ScRange, ScRangePair, MAXCOL, MAXROW } from "../../../inc/address";
 import { ScHorizontalCellIterator } from "../../../inc/dociter";
 import { CellType, CRFlags, ScScenarioFlags } from "../../../inc/global";
 import { ScMF } from "../../../source/core/data/attrib";
@@ -174,18 +174,18 @@ type OutlineGroup = readonly [
   visible: boolean,
 ];
 /** Native addresses of both endpoints of an area. */
-type PrintRange = readonly [number, number, number, number, number, number];
+type RangeRecord = readonly [number, number, number, number, number, number];
 
-/** Serializes the native endpoints, including the original base tab. @param range - Print or repeat range. @returns Transfer record. */
-function encodePrintRange(range: ScRange): PrintRange {
+/** Serializes both native endpoints, including their sheet positions. @param range - Owned range. @returns Transfer record. */
+function encodeRange(range: ScRange): RangeRecord {
   return [...range.aStart.GetVars(), ...range.aEnd.GetVars()];
 }
 
-/** Reconstructs a native range from valid transfer coordinates. @param input - Transferred endpoints. @param document - Native limits. @returns Print range. */
-function decodePrintRange(input: PrintRange, document: ScDocument): ScRange {
+/** Reconstructs a native range from valid transfer coordinates. @param input - Transferred endpoints. @param document - Native limits. @returns Native range. */
+function decodeRange(input: RangeRecord, document: ScDocument): ScRange {
+  if (!Array.isArray(input) || input.length !== 6) throw new Error("Calc worker range is invalid.");
   const [firstCol, firstRow, firstTab, lastCol, lastRow, lastTab] = input;
   if (
-    input.length !== 6 ||
     !input.every(Number.isInteger) ||
     !document.ValidCol(firstCol) ||
     !document.ValidCol(lastCol) ||
@@ -194,8 +194,37 @@ function decodePrintRange(input: PrintRange, document: ScDocument): ScRange {
     !document.FetchTable(firstTab) ||
     !document.FetchTable(lastTab)
   )
-    throw new Error("Calc worker print range is invalid.");
+    throw new Error("Calc worker range is invalid.");
   return new ScRange(firstCol, firstRow, firstTab, lastCol, lastRow, lastTab);
+}
+
+/** One document-owned column or row label and the data it describes. */
+type LabelRangeRecord = readonly [label: RangeRecord, data: RangeRecord];
+
+/** Preserves the original order of the native label-pair owner. @param list - Column or row labels. @returns Transfer pairs. */
+function encodeLabelRanges(list: ScRangePairList): readonly LabelRangeRecord[] {
+  const records: LabelRangeRecord[] = [];
+  for (let index = 0; index < list.size(); ++index) {
+    const pair = list.at(index);
+    records.push([encodeRange(pair.GetRange(0)), encodeRange(pair.GetRange(1))]);
+  }
+  return records;
+}
+
+/** Restores native pair values without rejoining them before formula compilation. @param document - Workbook with sheets already created. @param list - Column or row owner. @param records - Transferred pairs. */
+function decodeLabelRanges(
+  document: ScDocument,
+  list: ScRangePairList,
+  records: readonly LabelRangeRecord[],
+): void {
+  if (!Array.isArray(records)) throw new Error("Calc worker label ranges are invalid.");
+  for (const record of records as readonly LabelRangeRecord[]) {
+    if (!Array.isArray(record) || record.length !== 2)
+      throw new Error("Calc worker label range is invalid.");
+    list.Append(
+      new ScRangePair(decodeRange(record[0], document), decodeRange(record[1], document)),
+    );
+  }
 }
 
 /** Tests the primitive fields of a transferred OOXML verifier. @param hash - Source data. @returns Whether the verifier is valid. */
@@ -277,7 +306,7 @@ interface Sheet {
     readonly comment: string;
     readonly color: number;
     readonly flags: ScScenarioFlags;
-    readonly ranges: readonly PrintRange[];
+    readonly ranges: readonly RangeRecord[];
   };
   readonly visible?: boolean;
   readonly layoutRTL?: boolean;
@@ -286,17 +315,17 @@ interface Sheet {
   readonly pageStyle?: string;
   readonly protection?: ProtectionRecord & {
     readonly enhanced?: readonly (Omit<ScEnhancedProtection, "ranges"> & {
-      readonly ranges: readonly PrintRange[];
+      readonly ranges: readonly RangeRecord[];
     })[];
   };
   readonly outline?: OutlineGroup[];
   readonly rowBreaks?: number[];
   readonly columnBreaks?: number[];
-  readonly printRanges?: PrintRange[];
+  readonly printRanges?: RangeRecord[];
   readonly conditionalFormats?: string;
   readonly conditionalIconSets?: readonly CalcIconSetRecord[];
-  readonly repeatColumns?: PrintRange;
-  readonly repeatRows?: PrintRange;
+  readonly repeatColumns?: RangeRecord;
+  readonly repeatRows?: RangeRecord;
   readonly name: string;
   readonly showGrid?: boolean;
   readonly tabSelected?: boolean;
@@ -385,6 +414,10 @@ export interface CalcDocumentRecord {
   readonly storageGrammar?: typeof FormulaGrammar.Grammar.GRAM_PODF;
   readonly styles: string;
   readonly sheets: Sheet[];
+  readonly labelRanges?: readonly [
+    columns: readonly LabelRangeRecord[],
+    rows: readonly LabelRangeRecord[],
+  ];
   readonly externalFiles?: readonly ExternalFile[];
   readonly areaLinks?: readonly CalcAreaLinkRecord[];
   readonly persons?: readonly CalcPersonRecord[];
@@ -510,7 +543,7 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
               comment: scenario.comment,
               color: scenario.color.toUInt32(),
               flags: scenario.flags,
-              ranges: Array.from(table.GetScenarioRanges(), encodePrintRange),
+              ranges: Array.from(table.GetScenarioRanges(), encodeRange),
             },
           }
         : {}),
@@ -525,7 +558,7 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
               ...encodeProtection(protection, ProtectionOption.NONE),
               enhanced: protection.getEnhancedProtection().map(
                 /** Copies a native enhanced range into a realm-neutral record. @param entry - Native range record. @returns Transferrable record. */
-                (entry) => ({ ...entry, ranges: Array.from(entry.ranges, encodePrintRange) }),
+                (entry) => ({ ...entry, ranges: Array.from(entry.ranges, encodeRange) }),
               ),
             },
           }
@@ -535,11 +568,11 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
       ...(columnBreaks.size ? { columnBreaks: [...columnBreaks] } : {}),
       ...(table.IsPrintEntireSheet()
         ? {}
-        : { printRanges: GetPrintRanges(table).map(encodePrintRange) }),
+        : { printRanges: GetPrintRanges(table).map(encodeRange) }),
       ...(conditionalFormats ? { conditionalFormats } : {}),
       ...(conditionalIconSets.length ? { conditionalIconSets } : {}),
-      ...(repeatColumns ? { repeatColumns: encodePrintRange(repeatColumns) } : {}),
-      ...(repeatRows ? { repeatRows: encodePrintRange(repeatRows) } : {}),
+      ...(repeatColumns ? { repeatColumns: encodeRange(repeatColumns) } : {}),
+      ...(repeatRows ? { repeatRows: encodeRange(repeatRows) } : {}),
       name: text(table.GetName()),
       ...(document.GetSheetShowGrid(tab) ? {} : { showGrid: false }),
       ...(cursor[0] || cursor[1] ? { cursor } : {}),
@@ -793,8 +826,11 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
     if (link instanceof ScAreaLink) areaLinks.push(encodeCalcAreaLink(link));
     yield;
   }
+  const columnLabels = encodeLabelRanges(document.GetColNameRanges());
+  const rowLabels = encodeLabelRanges(document.GetRowNameRanges());
   return {
     version: 1,
+    ...(columnLabels.length || rowLabels.length ? { labelRanges: [columnLabels, rowLabels] } : {}),
     ...(fontEmbedding[0] ||
     fontEmbedding[1] ||
     !fontEmbedding[2] ||
@@ -1143,6 +1179,12 @@ function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
       record.databaseRanges === undefined
         ? []
         : decodeCalcDatabaseRanges(document, record.databaseRanges);
+    if (record.labelRanges !== undefined) {
+      if (!Array.isArray(record.labelRanges) || record.labelRanges.length !== 2)
+        throw new Error("Calc worker label ranges are invalid.");
+      decodeLabelRanges(document, document.GetColNameRanges(), record.labelRanges[0]);
+      decodeLabelRanges(document, document.GetRowNameRanges(), record.labelRanges[1]);
+    }
     InsertRangeNames(
       document,
       (record.names ?? []).map(
@@ -1179,7 +1221,7 @@ function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
               )
                 throw new Error("Calc worker enhanced protection is invalid.");
               const ranges = new ScRangeList();
-              for (const range of entry.ranges) ranges.push_back(decodePrintRange(range, document));
+              for (const range of entry.ranges) ranges.push_back(decodeRange(range, document));
               return { ...entry, ranges };
             },
           ),
@@ -1252,7 +1294,7 @@ function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
         table.SetScenarioData(comment, new Color(color), flags);
         table.SetActiveScenario(active);
         for (const range of ranges) {
-          const { aStart, aEnd } = decodePrintRange(range, document);
+          const { aStart, aEnd } = decodeRange(range, document);
           document.ApplyFlagsTab(
             aStart.Col(),
             aStart.Row(),
@@ -1295,12 +1337,10 @@ function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
       if (sheet.columnBreaks) table.SetColManualBreaks(new Set(sheet.columnBreaks));
       if (sheet.printRanges) {
         table.ClearPrintRanges();
-        for (const range of sheet.printRanges)
-          table.AddPrintRange(decodePrintRange(range, document));
+        for (const range of sheet.printRanges) table.AddPrintRange(decodeRange(range, document));
       }
-      if (sheet.repeatColumns)
-        table.SetRepeatColRange(decodePrintRange(sheet.repeatColumns, document));
-      if (sheet.repeatRows) table.SetRepeatRowRange(decodePrintRange(sheet.repeatRows, document));
+      if (sheet.repeatColumns) table.SetRepeatColRange(decodeRange(sheet.repeatColumns, document));
+      if (sheet.repeatRows) table.SetRepeatRowRange(decodeRange(sheet.repeatRows, document));
       for (const note of sheet.notes ?? []) {
         decodeCalcCellNote(importer, tab, note);
         yield;

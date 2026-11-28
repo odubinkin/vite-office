@@ -68,6 +68,20 @@ export const ScRangeStringConverter = {
       output.dispose();
     }
   },
+  /** Formats both endpoints with their native sheet qualifiers, including a repeated single-cell endpoint. @param range - Native range. @param doc - Workbook. @param convention - Output convention. @returns Formatted range or an empty string when its first sheet is absent. */
+  GetStringFromRange(range: ScRange, doc: ScDocument, convention: AddressConvention): string {
+    if (!doc.FetchTable(range.aStart.Tab())) return "";
+    const details = new ScAddress.Details(convention);
+    const flags = ScRefFlags.VALID | ScRefFlags.TAB_3D;
+    const start = range.aStart.Format(flags, doc, details);
+    const end = range.aEnd.Format(flags, doc, details);
+    try {
+      return text(start) + ":" + text(end);
+    } finally {
+      end.dispose();
+      start.dispose();
+    }
+  },
   /** Writes both endpoints with their respective sheet qualifiers, as the ODF print-range attribute requires. @param ranges - Sheet areas. @param doc - Actual workbook. @param convention - Original output convention. @returns Space-delimited range addresses. */
   GetStringFromRangeList(
     ranges: Iterable<ScRange>,
@@ -75,18 +89,9 @@ export const ScRangeStringConverter = {
     convention: AddressConvention,
   ): string {
     const parts: string[] = [];
-    const details = new ScAddress.Details(convention);
-    const flags = ScRefFlags.VALID | ScRefFlags.TAB_3D;
     for (const range of ranges) {
-      if (!doc.FetchTable(range.aStart.Tab())) continue;
-      const start = range.aStart.Format(flags, doc, details);
-      const end = range.aEnd.Format(flags, doc, details);
-      try {
-        parts.push(text(start) + ":" + text(end));
-      } finally {
-        end.dispose();
-        start.dispose();
-      }
+      const address = this.GetStringFromRange(range, doc, convention);
+      if (address) parts.push(address);
     }
     return parts.join(" ");
   },

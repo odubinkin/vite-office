@@ -1,9 +1,12 @@
 /** @fileoverview Native ODS label range declarations resolved after sheet creation. */
-import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { FormulaGrammar } from "../../../../formula/inc/grammar";
+import { CellRangeAddress } from "../../../../offapi/com/sun/star/table/CellRangeAddress";
 import { XMLToken } from "../../../../xmloff/source/core/xmltoken";
 import type { FastAttributeList, SvXMLImportContext } from "../../../../xmloff/source/core/xmlimp";
 import { escapeXml } from "../../../../xmloff/source/text/txtparae";
-import { ScAddress, ScRange, ScRangePair, ScRefFlags } from "../../../inc/address";
+import { ScRange, ScRangePair } from "../../../inc/address";
+import { ScUnoConversion } from "../../../inc/convuno";
+import { ScRangeStringConverter } from "../../core/tool/rangeutl";
 import type { ScDocument } from "../../../inc/document";
 import { ScXMLImportContext } from "./importcontext";
 import type { ScXMLImport } from "./xmlimprt";
@@ -60,14 +63,24 @@ export function SetLabelRanges(document: ScDocument, entries: readonly ScMyLabel
   }
 }
 
-/** Parses ODF addresses with native Calc flags. @param document - Workbook. @param source - ODF range text. @param range - Output. @returns Valid reference. */
+/** Reads an ODF range through the original single-sheet UNO address contract. @param document - Workbook. @param source - ODF range text. @param range - Output. @returns Valid reference. */
 function ParseRange(document: ScDocument, source: string, range: ScRange): boolean {
-  const value = unicode(source);
-  try {
-    return Boolean(range.ParseAny(value, document, ScAddress.detailsOOOa1) & ScRefFlags.VALID);
-  } finally {
-    value.dispose();
-  }
+  const offset: [number] = [0];
+  if (
+    !ScRangeStringConverter.GetRangeFromString(
+      range,
+      source,
+      document,
+      FormulaGrammar.AddressConvention.CONV_OOO,
+      offset,
+    ) ||
+    offset[0] < 0
+  )
+    return false;
+  const address = new CellRangeAddress();
+  ScUnoConversion.FillApiRange(address, range);
+  ScUnoConversion.FillScRange(range, address);
+  return true;
 }
 
 /** Writes the source table:label-ranges element. @param document - Workbook. @returns ODS fragment. */
@@ -85,15 +98,17 @@ export function WriteLabelRanges(document: ScDocument): string {
   return content ? "<table:label-ranges>" + content + "</table:label-ranges>" : "";
 }
 
-/** Formats ODS label and data addresses with explicit sheets. @param document - Workbook. @param range - Address. @returns Escaped attribute. */
+/** Formats the native UNO label or data range with explicit sheet qualifiers. @param document - Workbook. @param range - Address. @returns Escaped attribute. */
 function FormatRange(document: ScDocument, range: ScRange): string {
-  const flags = ScRefFlags.VALID | ScRefFlags.TAB_3D;
-  const start = range.aStart.Format(flags, document);
-  const end = range.aEnd.Format(flags, document);
-  try {
-    return escapeXml(text(start) + (range.aEnd.equals(range.aStart) ? "" : ":" + text(end)));
-  } finally {
-    start.dispose();
-    end.dispose();
-  }
+  const address = new CellRangeAddress();
+  ScUnoConversion.FillApiRange(address, range);
+  const native = new ScRange();
+  ScUnoConversion.FillScRange(native, address);
+  return escapeXml(
+    ScRangeStringConverter.GetStringFromRange(
+      native,
+      document,
+      FormulaGrammar.AddressConvention.CONV_OOO,
+    ),
+  );
 }

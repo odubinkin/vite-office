@@ -149,7 +149,12 @@ export class FormulaCompiler {
     let result = this.mpArr.GetLen() && this.mpArr.IsRecalcModeForced() ? "=" : "";
     for (let index = 0; index < this.mpArr.GetLen(); ++index) {
       const token = this.mpArr.TokenAt(index) as FormulaToken;
-      result += this.CreateStringFromToken(token);
+      const labelIntersection =
+        token.GetOpCode() === OpCode.ocSpaces &&
+        FormulaGrammar.isODFF(this.meGrammar) &&
+        LabelNeighbor(this.mpArr.GetArray(), index - 1, -1) === OpCode.ocColRowName &&
+        LabelNeighbor(this.mpArr.GetArray(), index + 1, 1) === OpCode.ocColRowName;
+      result += labelIntersection ? "!!" : this.CreateStringFromToken(token);
       if (
         this.meGrammar !== FormulaGrammar.Grammar.GRAM_OOXML ||
         token.GetOpCode() !== OpCode.ocOffset ||
@@ -365,11 +370,25 @@ export class FormulaCompiler {
     try {
       if (this.mpArr.GetCodeError() === FormulaError.NONE) {
         let token = this.ReadSourceToken();
+        let spaces = false;
         while (
           token &&
           (token.GetOpCode() === OpCode.ocSpaces || token.GetOpCode() === OpCode.ocWhitespace)
-        )
+        ) {
+          spaces ||= token.GetOpCode() === OpCode.ocSpaces;
           token = this.ReadSourceToken();
+        }
+        if (spaces && token?.GetOpCode() === OpCode.ocColRowName) {
+          const frame = this.nameFrames.at(-1);
+          const source = frame?.tokens ?? this.mpArr.GetArray();
+          const offset = frame?.index ?? this.index;
+          if (LabelNeighbor(source, offset - 2, -1) === OpCode.ocColRowName) {
+            if (frame) --frame.index;
+            else --this.index;
+            this.mpToken = new FormulaByteToken(OpCode.ocIntersect);
+            return true;
+          }
+        }
         if (token) {
           if (token.GetOpCode() === OpCode.ocName) {
             if (this.nameFrames.length >= 100) {
@@ -628,7 +647,17 @@ export class FormulaCompiler {
       this.UnaryLine();
       if (this.mbComputeII) this.HandleIIOpCode(token, [[this.mpCode, this.mpCode.length - 1]], 1);
       this.PutCode(token);
-    } else this.RangeLine();
+    } else this.IntersectionLine();
+  }
+  /** Parses reference intersections after range expressions and before scalar operators. @returns Nothing. */
+  private IntersectionLine(): void {
+    this.RangeLine();
+    while (this.mpToken.GetOpCode() === OpCode.ocIntersect) {
+      const operator = this.mpToken;
+      this.NextToken();
+      this.RangeLine();
+      this.PutCode(operator);
+    }
   }
   /** Original range precedence and adjacent-RPN merge over actual token identities. @returns Nothing. */
   private RangeLine(): void {

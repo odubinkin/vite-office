@@ -49,7 +49,7 @@ import { CalculateMatrixLookup, InterpretReferenceOpcode, ScAnd } from "./interp
 import { InterpretConditionalAggregate } from "./interpr1.conditional";
 import { InterpretDatabaseCount } from "./interpr1.database";
 import { CompareScalar } from "./compare";
-import { InterpretDateOpcode, ScRangeFunc } from "./interpr2";
+import { InterpretDateOpcode, ScIntersect, ScRangeFunc } from "./interpr2";
 import { ScFrequency, ScMatRef } from "./interpr5";
 import { InterpretAnalysisAddIn } from "./addincol.analysis";
 import { ScIsEmpty, ScIsError, ScIsString, ScNot, ScOffset } from "./interpr1.reference";
@@ -979,6 +979,7 @@ export class ScInterpreter {
               : power(left, right),
         );
       } else if (op === OpCode.ocRange) ScRangeFunc.call(this);
+      else if (op === OpCode.ocIntersect) ScIntersect.call(this);
       else if (
         !InterpretConditionalAggregate.call(this, token) &&
         !InterpretDatabaseCount.call(this, token) &&

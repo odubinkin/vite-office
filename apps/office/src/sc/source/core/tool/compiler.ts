@@ -683,6 +683,9 @@ export class ScCompiler extends FormulaCompiler {
   /** Scans the represented numeric ODFF subset into its actual Calc array, preserving native leading equals, forced recalc and default bracket completion. @param formula - Unicode formula. @returns Source-order token owner. */
   CompileString(formula: OUStringConstReference): ScTokenArray {
     const ooxml = this.meGrammar === FormulaGrammar.Grammar.GRAM_OOXML;
+    const odf =
+      FormulaGrammar.extractRefConvention(this.meGrammar) ===
+      FormulaGrammar.AddressConvention.CONV_ODF;
     const symbols = ooxml
       ? ooxmlSymbols
       : FormulaGrammar.isPODF(this.meGrammar)
@@ -711,6 +714,14 @@ export class ScCompiler extends FormulaCompiler {
     }
     while (index < source.length) {
       const ch = source[index] as string;
+      if (odf && source.startsWith("!!", index)) {
+        if (!array.AddToken(new FormulaByteToken(OpCode.ocSpaces, 2))) {
+          this.SetError(FormulaError.CodeOverflow);
+          break;
+        }
+        index += 2;
+        continue;
+      }
       if (ch === " ") {
         let count = 0;
         while (source[index] === " " && count < 255) {
@@ -806,9 +817,6 @@ export class ScCompiler extends FormulaCompiler {
           continue;
         }
       }
-      const odf =
-        FormulaGrammar.extractRefConvention(this.meGrammar) ===
-        FormulaGrammar.AddressConvention.CONV_ODF;
       const deleted = odf ? this.ParsePredetectedErrRefReference(remaining) : 0;
       if (deleted) {
         index += deleted;

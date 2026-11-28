@@ -8462,3 +8462,24 @@ that index. Calc follows the source range-level decision.
 
 - [Original row-style mapping](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlstyli.cxx#L245)
 - [Original repeated-row scheduling](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlrowi.cxx#L215)
+
+### CALC-881 — A 3D ODS label range retains only its starting sheet
+
+The label range importer converts the parsed address to a published
+`CellRangeAddress`. Both endpoints consequently use the starting sheet,
+even when the authored address qualifies the second endpoint with another
+sheet. Calc preserves the source conversion on import and export.
+
+- [Original label range importer](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlimprt.cxx#L1207)
+- [Original address conversion](../../vendor/libreoffice-reference/sc/inc/convuno.hxx#L87)
+
+### CALC-882 — The ODF label intersection operator is stored as whitespace
+
+The formula scanner converts `!!` to a space token. Calc evaluates that
+token as an intersection when its neighboring source tokens are labels,
+and the OpenFormula exporter emits `!!` again for those neighbors.
+Calc preserves the same representation and interpretation.
+
+- [Original scanner and source comment](../../vendor/libreoffice-reference/sc/source/core/tool/compiler.cxx#L2389)
+- [Original label intersection compilation](../../vendor/libreoffice-reference/formula/source/core/api/FormulaCompiler.cxx#L1534)
+- [Original OpenFormula serialization](../../vendor/libreoffice-reference/formula/source/core/api/FormulaCompiler.cxx#L2660)

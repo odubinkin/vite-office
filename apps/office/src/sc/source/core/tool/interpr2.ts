@@ -6,7 +6,9 @@ import { SAL_MAX_INT32, SAL_MIN_INT32 } from "../../../../sal/inc/types";
 import { SvNumFormatType } from "../../../../svl/inc/zforlist";
 import { Date } from "../../../../tools/source/datetime/tdate";
 import { FormulaError } from "../../../../formula/inc/errorcodes";
-import { extendRangeReference } from "../../../inc/token";
+import { ScRange } from "../../../inc/address";
+import { ScComplexRefData, ScSingleRefData } from "../../../inc/refdata";
+import { ScDoubleRefToken, ScSingleRefToken, extendRangeReference } from "../../../inc/token";
 import type { ScInterpreter } from "./interpr4";
 
 /** Consumes two stack tokens and pushes the original joined reference. @param this - Active interpreter. @returns Nothing. */
@@ -20,6 +22,37 @@ export function ScRangeFunc(this: ScInterpreter): void {
     extendRangeReference(this.mrDoc.GetSheetLimits(), left, right, this.aPos, false);
   if (range) this["PushWithoutError"](range);
   else this.SetError(FormulaError.IllegalArgument);
+}
+
+/** Intersects two single or double references using their absolute native endpoints. @param this - Active interpreter. */
+export function ScIntersect(this: ScInterpreter): void {
+  const right = this["pStack"].pop();
+  const left = this["pStack"].pop();
+  if (
+    this.GetError() !== FormulaError.NONE ||
+    !(left instanceof ScSingleRefToken || left instanceof ScDoubleRefToken) ||
+    !(right instanceof ScSingleRefToken || right instanceof ScDoubleRefToken)
+  ) {
+    this.SetError(FormulaError.IllegalArgument);
+    return;
+  }
+  /** Resolves a represented reference operand. @param token - Single or double reference. @returns Native bounds. */
+  const resolve = (token: ScSingleRefToken | ScDoubleRefToken): ScRange =>
+    token instanceof ScDoubleRefToken
+      ? token.GetDoubleRef().toAbs(this.mrDoc, this.aPos)
+      : new ScRange(token.GetSingleRef().toAbs(this.mrDoc, this.aPos));
+  const intersection = resolve(left).Intersection(resolve(right));
+  const limits = this.mrDoc.GetSheetLimits();
+  if (!intersection.IsValid()) this.SetError(FormulaError.NoCode);
+  else if (intersection.aStart.equals(intersection.aEnd)) {
+    const reference = new ScSingleRefData();
+    reference.InitAddress(intersection.aStart);
+    this["PushWithoutError"](new ScSingleRefToken(limits, reference));
+  } else {
+    const reference = new ScComplexRefData();
+    reference.InitRange(intersection);
+    this["PushWithoutError"](new ScDoubleRefToken(limits, reference));
+  }
 }
 
 /** Dispatches the original day-serial calendar functions. @param this - Active interpreter. @param token - Compiled opcode. @returns Whether dispatched. */
