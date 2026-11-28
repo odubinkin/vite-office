@@ -162,7 +162,14 @@ it("fills independent common and automatic numbering via native Any property seq
       ]) => value instanceof Any,
     ),
   ).toBe(true);
-  expect(levels.mock.calls).toHaveLength(2);
+  const ordinary = levels.mock.contexts.filter(
+    /** Selects the numbering services for the common and automatic lists. @param owner - Observed native service. @returns Whether this service owns an ordinary rule. */ (
+      owner,
+    ) => owner instanceof SwXNumberingRules && !owner.GetNumRule().IsOutlineRule(),
+  );
+  expect(ordinary).toHaveLength(2);
+  expect(new Set(ordinary).size).toBe(2);
+  expect(levels.mock.calls).toHaveLength(12);
   expect(assignments).toContain("NumberingRules");
   const node = doc.paragraphs[0],
     actual = node?.GetNumRule(),
