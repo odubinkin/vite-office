@@ -1,10 +1,11 @@
 ---
 id: "202611280923-SNE18T"
 title: "Port Writer ODT placeholders and drop-down text fields"
-status: "DOING"
+result_summary: "Preserved native ODT placeholders and drop-down fields through typed UNO field setup and Worker transfer."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "output/playwright/odf-next-checkpoint/writer-choice-fields-verification.md"
   findings:
     - "The original tdf106663 fixture retains three placeholders. The authored fixture verifies the DropDown sequence and selection and the JumpEdit kind, including changes after Worker restore."
-commit: null
+commit:
+  hash: "e9b9dfeafbeae2eaad947af6bf31b5303d6de305"
+  message: "🧩 SNE18T writer: preserve ODT placeholders and drop-down fields"
 comments:
   -
     author: "CODER"
     body: "Start: Port the native placeholder and drop-down Writer text field contracts through the ODT filters and Worker."
+  -
+    author: "CODER"
+    body: "Verified: Six affected Writer tests and scoped static checks passed."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Six affected Writer tests passed across three files after the focused rerun. Scoped static checks passed, including zero semantic violations in the Writer registry."
+  -
+    type: "status"
+    at: "2026-11-28T09:36:16.600Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Six affected Writer tests and scoped static checks passed."
 doc_version: 3
-doc_updated_at: "2026-11-28T09:33:16.705Z"
+doc_updated_at: "2026-11-28T09:36:16.602Z"
 doc_updated_by: "CODER"
 description: "Preserve the native JumpEdit and DropDown text field owners, UNO properties, ODF element contracts, and Worker transfer. Replay the pinned Writer placeholder fixture and verify the represented drop-down options, default presentation and authored selection."
 sections:
