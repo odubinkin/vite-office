@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202611280613-6GZ87T",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-28T06:16:20.094Z",
+  "verdict": "pass",
+  "summary": "Original Writer font fixture validates exact bytes in the native package test.",
+  "evaluated_sha": "60c760c19a3e92ac3d245e6e0e5483593775358b",
+  "blueprint_digest": "060077e71dd30507337d11072aea10dc1ee7ac8877ff07bd27ae9c2381109871",
+  "findings": [
+    "Pinned and focused failures reproduced the cross-realm typed-array assertion, while all 34 focused tests pass with the corrected expectation."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611280613-6GZ87T/README.md",
+    "output/playwright/odf-next-checkpoint/writer-font-verification.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
