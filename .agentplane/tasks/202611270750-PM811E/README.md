@@ -1,10 +1,11 @@
 ---
 id: "202611270750-PM811E"
 title: "Persist Writer Navigator content view and per-category natural ordering"
-status: "DOING"
+result_summary: "Persisted native Navigator root and per-category natural ordering."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - "output/playwright/writer-navigator-sort-chromium-verified.log"
   findings:
     - "Natural numeric order, flat heading display, original heading identities, context admission, and reload persistence were exercised."
-commit: null
+commit:
+  hash: "d9656bed842b3d78e93b1d921f167b98fd0ecd53"
+  message: "🧩 PM811E code: Persist Navigator category and natural display order"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: 31 focused tests, nine Chromium cases and production build."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: 31 focused Vitest cases, eight existing Chromium cases plus the new browser persistence case, TypeScript, production build, scoped lint and formatting, dependency, source tree, Writer resources, policy and scoped provenance checks."
+  -
+    type: "status"
+    at: "2026-11-28T08:17:12.602Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: 31 focused tests, nine Chromium cases and production build."
 doc_version: 3
-doc_updated_at: "2026-11-28T08:11:33.343Z"
+doc_updated_at: "2026-11-28T08:17:12.603Z"
 doc_updated_by: "CODER"
 description: "Connect native Navigator Display Alphabetically and Content Navigation View settings for represented categories. Persist native RootType and SortAlphabeticallyBlock, preserve stable item identities, flatten the sorted outline and admit matching native context actions."
 sections:
