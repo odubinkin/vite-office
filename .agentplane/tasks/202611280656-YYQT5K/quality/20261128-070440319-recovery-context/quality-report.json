@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202611280656-YYQT5K",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-28T07:04:40.319Z",
+  "verdict": "pass",
+  "summary": "Native Calc ODS column, row and sheet insertion records roundtrip with their original metadata and dependencies.",
+  "evaluated_sha": "bf7eb7aaff93fe58ab516018726b679fbdd01ec4",
+  "blueprint_digest": "7f1a7d1eddaa1618373143b051dc290cb719a0d2d48bdfbfae1e439c610ab9ce",
+  "findings": [
+    "The pinned insertion fixture and sentinel range checks pass. The independently reproduced checkpoint print failure is resolved by testing the namespaced attribute."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611280656-YYQT5K/README.md",
+    "output/playwright/odf-next-checkpoint/calc-structural-tracking-verification.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
