@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202611280817-ED3879",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-28T08:27:38.858Z",
+  "verdict": "pass",
+  "summary": "Writer Navigator connects the native navigation selector and directional view slots for model targets and physical pages.",
+  "evaluated_sha": "e649f15cbb14e426828d37130fd4fb3ca3e5393e",
+  "blueprint_digest": "8c95f60c1221deea8f9b0b5ba49466423e5bbcbcdc66b426f35a08b404babf44",
+  "findings": [
+    "Direction, bookmark ranges, heading edge behavior, browser focus, page wrapping and caret preservation were exercised."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611280817-ED3879/README.md",
+    "output/playwright/writer-navigator-movement-final-vitest.log",
+    "output/playwright/writer-navigator-movement-chromium.log",
+    "output/playwright/writer-navigator-movement-chromium-recheck.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
