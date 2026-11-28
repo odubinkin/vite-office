@@ -4,6 +4,8 @@ import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { FormulaGrammar } from "../../../../formula/inc/grammar";
 import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { SearchParam } from "../../../../unotools/source/i18n/textsearch";
+import { Converter } from "../../../../sax/source/tools/converter";
+import { COL_AUTO } from "../../../../tools/inc/color";
 import { escapeXml } from "../../../../xmloff/source/text/txtparae";
 import { ScAddress, ScRange, ScRefFlags } from "../../../inc/address";
 import type { ScDBData } from "../../../inc/dbdata";
@@ -11,7 +13,12 @@ import type { ScDocument } from "../../../inc/document";
 import { ScQueryConnect, ScQueryOp } from "../../../inc/global";
 import { STR_DB_GLOBAL_NONAME, STR_DB_LOCAL_NONAME } from "../../../inc/globalnames";
 import { ScSortNumberBehavior } from "../../core/data/sortparam";
-import type { ScDBQueryItem, ScQueryParam, ScQueryParamEntry } from "../../core/tool/queryparam";
+import {
+  isQueryColorItem,
+  type ScDBQueryItem,
+  type ScQueryParam,
+  type ScQueryParamEntry,
+} from "../../core/tool/queryparam";
 import { ScRangeStringConverter } from "../../core/tool/rangeutl";
 import { queryOps } from "./xmlfilti";
 import { subtotalFunctionNames } from "./XMLConverter";
@@ -22,7 +29,26 @@ for (const [token, operation] of queryOps) queryOperatorTokens.set(operation, to
 
 /** Computes the condition's legacy string source for multi-item serialization. @param item - Filter item. @returns Lexical value. */
 function lexicalValue(item: ScDBQueryItem): string {
-  return item.type === "number" ? (item.lexical ?? "") : item.value;
+  if (item.type === "number") return item.lexical ?? "";
+  return isQueryColorItem(item) ? "" : item.value;
+}
+
+/** Formats the original typed single-item criterion. @param item - Native query item. @returns ODF value. */
+function conditionValue(item: ScDBQueryItem): string {
+  if (isQueryColorItem(item)) {
+    if (item.value.equals(COL_AUTO))
+      return item.type === "text-color" ? "window-font-color" : "transparent";
+    const output: [string] = [""];
+    Converter.convertColor(output, item.value.toUInt32());
+    return output[0];
+  }
+  if (item.type !== "number") return item.value;
+  const value = OUString.numberDouble(item.value);
+  try {
+    return text(value);
+  } finally {
+    value.dispose();
+  }
 }
 
 /** Writes a table namespace language tag with the original ISO fallback. @param locale - Stored locale. @returns Locale attributes. */
@@ -125,7 +151,8 @@ function writeSubtotals(data: ScDBData): string {
 
 /** Keeps the native equality/pattern and empty-cell token spellings. @param entry - Query condition. @param query - Native query. @returns XML operator. */
 function getOperatorXML(entry: ScQueryParamEntry, query: ScQueryParam): string {
-  if (entry.empty !== undefined) return entry.empty ? "empty" : "!empty";
+  if (entry.eOp === ScQueryOp.SC_EQUAL && entry.empty !== undefined)
+    return entry.empty ? "empty" : "!empty";
   if (query.eSearchType === SearchParam.SearchType.Regexp) {
     if (entry.eOp === ScQueryOp.SC_EQUAL) return "match";
     if (entry.eOp === ScQueryOp.SC_NOT_EQUAL) return "!match";
@@ -148,10 +175,10 @@ function writeCondition(entry: ScQueryParamEntry, start: number, query: ScQueryP
   const datatype =
     item.type === "number"
       ? ' table:data-type="number"'
-      : item.type === "text-color" || item.type === "background-color"
+      : isQueryColorItem(item)
         ? ` loext:data-type="${item.type}"`
         : "";
-  return `<table:filter-condition${datatype} table:value="${escapeXml(String(item.value))}" table:operator="${escapeXml(getOperatorXML(entry, query))}"${index}${caseSensitive}/>`;
+  return `<table:filter-condition${datatype} table:value="${escapeXml(conditionValue(item))}" table:operator="${escapeXml(getOperatorXML(entry, query))}"${index}${caseSensitive}/>`;
 }
 
 /** Exports the original flat connector sequence as OR groups of consecutive AND runs. @param query - Query with absolute stored fields. @returns ODF conditions. */

@@ -8372,3 +8372,13 @@ Calc preserves that behavior.
 - [Original table import map](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlstyle.cxx#L174)
 - [Original element import gate](../../vendor/libreoffice-reference/xmloff/source/style/xmlprcon.cxx#L55)
 - [Original generic style property context](../../vendor/libreoffice-reference/xmloff/source/style/StylePropertiesContext.cxx#L30)
+
+### CALC-873 — Ordinary ODS filter import can overwrite the non-empty criterion
+
+The filter condition importer returns immediately after setting the empty-field
+criterion. For `!empty`, it sets the non-empty flag and continues through
+ordinary value parsing, which can overwrite the flagged item. Calc preserves
+the order of these assignments and the resulting export value.
+
+- [Original operator and item assignment](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlfilti.cxx#L352)
+- [Original non-empty query setter](../../vendor/libreoffice-reference/sc/source/core/tool/queryentry.cxx#L111)

@@ -2,6 +2,7 @@
 import { readFileSync } from "node:fs";
 import { assert, expect, it } from "vitest";
 import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
+import { COL_AUTO } from "../../../../tools/inc/color";
 import {
   decodeCalcDocument,
   encodeCalcDocument,
@@ -11,6 +12,7 @@ import type { ScMergeFlagAttr } from "../../../inc/attrib";
 import { ScQueryOp } from "../../../inc/global";
 import { STR_DB_LOCAL_NONAME } from "../../../inc/globalnames";
 import { ATTR_MERGE_FLAG } from "../../../inc/scitems";
+import { isQueryColorItem } from "../../core/tool/queryparam";
 import { readOdsDocument, writeOdsDocument } from "./xmlwrap";
 
 it("testDatabaseRangesODS preserves database ranges and filtered row runs", /** Ports the native range ownership and filtered geometry assertions. @returns Completion. */ async () => {
@@ -72,5 +74,72 @@ it("testDatabaseRangesODS preserves database ranges and filtered row runs", /** 
     source.Dispose();
     transferred.Dispose();
     reopened.Dispose();
+  }
+});
+
+it("testAutofilterColorsODF preserves RGB criteria and both automatic colors", async () => {
+  const source = await readOdsDocument(
+    new Uint8Array(
+      readFileSync("../../vendor/libreoffice-reference/sc/qa/unit/data/ods/autofilter-colors.ods"),
+    ),
+  );
+  const transferred = decodeCalcDocument(structuredClone(encodeCalcDocument(source)));
+  try {
+    const expected = [
+      [
+        ["background-color", "#e8f2a1", 0xe8f2a1],
+        ["text-color", "#3465a4", 0x3465a4],
+      ],
+      [["background-color", "transparent", COL_AUTO.toUInt32()]],
+      [["text-color", "window-font-color", COL_AUTO.toUInt32()]],
+    ] as const;
+    const bytes = await writeOdsDocument(transferred);
+    const content = await (await DocumentArchive.open(bytes)).readTextEntry("content.xml");
+    const ranges = [
+      ...(content ?? "").matchAll(/<table:database-range [^>]+>(.*?)<\/table:database-range>/gs),
+    ];
+    expect(ranges).toHaveLength(expected.length);
+    for (const [sheet, criteria] of expected.entries()) {
+      for (const document of [source, transferred]) {
+        const database = document.GetAnonymousDBData(sheet);
+        assert(database);
+        const items = database.GetQueryParam().entries.flatMap((entry) => entry.items);
+        expect(
+          items.filter(isQueryColorItem).map((item) => [item.type, item.value.toUInt32()]),
+        ).toEqual(criteria.map(([type, , packed]) => [type, packed]));
+      }
+      const filter = ranges[sheet]?.[1]?.match(/<table:filter-and>(.*?)<\/table:filter-and>/s)?.[1];
+      assert(filter);
+      expect(
+        [...filter.matchAll(/<table:filter-condition [^>]+\/>/g)].map(([condition]) => [
+          condition.match(/loext:data-type="([^"]+)"/)?.[1],
+          condition.match(/table:value="([^"]+)"/)?.[1],
+        ]),
+      ).toEqual(criteria.map(([type, value]) => [type, value]));
+    }
+  } finally {
+    source.Dispose();
+    transferred.Dispose();
+  }
+});
+
+it("testDateAutofilterODS preserves the original lexical filter values", async () => {
+  const document = await readOdsDocument(
+    new Uint8Array(
+      readFileSync("../../vendor/libreoffice-reference/sc/qa/unit/data/ods/tdf142231.ods"),
+    ),
+  );
+  try {
+    const archive = await DocumentArchive.open(await writeOdsDocument(document));
+    const content = await archive.readTextEntry("content.xml");
+    const filter = content?.match(/<table:filter-and>(.*?)<\/table:filter-and>/s)?.[1];
+    assert(filter);
+    expect(
+      [...filter.matchAll(/<table:filter-condition [^>]*table:value="([^"]+)"/g)].map(
+        ([, value]) => value,
+      ),
+    ).toEqual(["Calc", "2021-05-04"]);
+  } finally {
+    document.Dispose();
   }
 });

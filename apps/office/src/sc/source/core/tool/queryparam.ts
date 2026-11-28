@@ -6,6 +6,7 @@ import { SearchParam } from "../../../../unotools/source/i18n/textsearch";
 import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import type { ScInterpreterContext } from "./interpretercontext";
 import { ScQueryEntry, type ScQueryItem } from "./queryentry";
+import { Color } from "../../../../tools/inc/color";
 
 const operators = new Map([
   ["=", OpCode.ocEqual],
@@ -73,7 +74,18 @@ export interface ScQueryParamEntry {
 export type ScDBQueryItem =
   | { readonly type: "string" | "date"; readonly value: string }
   | { readonly type: "number"; readonly value: number; readonly lexical?: string }
-  | { readonly type: "text-color" | "background-color"; readonly value: string };
+  | ScDBQueryColorItem;
+
+/** A native filter color value, including the original automatic color. */
+export interface ScDBQueryColorItem {
+  readonly type: "text-color" | "background-color";
+  readonly value: Readonly<Color>;
+}
+
+/** Identifies the native color query item families. @param item - Query item. @returns Whether it stores a Color. */
+export function isQueryColorItem(item: ScDBQueryItem): item is ScDBQueryColorItem {
+  return item.type === "text-color" || item.type === "background-color";
+}
 
 /** Value state of the pinned ScQueryParam database filter owner. */
 export class ScQueryParam {
@@ -104,7 +116,8 @@ export class ScQueryParam {
           ...entry,
           items: entry.items.map(
             /** Copies one stored item. @param item - Native filter item. @returns Independent item. */
-            (item) => ({ ...item }),
+            (item) =>
+              isQueryColorItem(item) ? { ...item, value: new Color(item.value) } : { ...item },
           ),
         }),
       ),

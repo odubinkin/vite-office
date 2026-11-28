@@ -3,6 +3,9 @@ import { FormulaGrammar } from "../../../../formula/inc/grammar";
 import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { SV_COUNTRY_LANGUAGE_OFFSET, SvNumFormatType } from "../../../../svl/inc/zforlist";
 import { SearchParam } from "../../../../unotools/source/i18n/textsearch";
+import { stringToDouble } from "../../../../sal/inc/rtl/math";
+import { Converter } from "../../../../sax/source/tools/converter";
+import { Color, ColorTransparency, COL_AUTO } from "../../../../tools/inc/color";
 import {
   SvXMLIgnoreContext,
   type FastAttributeList,
@@ -44,6 +47,14 @@ export const queryOps: readonly QueryOpToken[] = [
   ["does-not-end-with", ScQueryOp.SC_DOES_NOT_END_WITH],
 ];
 const operators = new Map(queryOps);
+
+/** Reads the original ODF filter color and automatic sentinel. @param value - Native lexical color. @returns Native Color value. */
+export function readFilterColor(value: string): Color {
+  if (value === "transparent" || value === "window-font-color") return new Color(COL_AUTO);
+  const packed: [number] = [0];
+  Converter.convertColor(packed, value);
+  return new Color(ColorTransparency, packed[0], "ColorTransparencyTag");
+}
 
 /** Reads the first database range address through Calc's OOO converter. @param document - Native document. @param source - ODF address. @returns Parsed range or null. */
 export function readDatabaseRangeAddress(document: ScDocument, source: string): ScRange | null {
@@ -160,14 +171,22 @@ export class ScXMLFilterContext extends ScXMLImportContext {
     this.query.eSearchType = operator === "match" || operator === "!match" ? regexp : normal;
 
     const field = attributes.getAsInteger(XMLToken.TABLE_FIELD_NUMBER) ?? 0;
-    const datatype =
-      attributes.get(XMLToken.TABLE_DATA_TYPE) ?? attributes.get(XMLToken.LOEXT_DATA_TYPE);
+    let datatype = "";
+    for (const [token, value] of attributes)
+      if (token === XMLToken.TABLE_DATA_TYPE || token === XMLToken.LOEXT_DATA_TYPE)
+        datatype = value;
     const value = attributes.get(XMLToken.TABLE_VALUE) ?? "";
     let item: ScDBQueryItem;
     if (empty) item = { type: "number", value: 0x42 };
-    else if (datatype === "number") item = { type: "number", value: Number.parseFloat(value) || 0 };
-    else if (datatype === "text-color" || datatype === "background-color")
-      item = { type: datatype, value };
+    else if (datatype === "number") {
+      const source = unicode(value);
+      try {
+        item = { type: "number", value: stringToDouble(source, 46, 0) };
+      } finally {
+        source.dispose();
+      }
+    } else if (datatype === "text-color" || datatype === "background-color")
+      item = { type: datatype, value: readFilterColor(value) };
     else item = { type: "string", value };
     this.query.entries.push({
       nField: field,

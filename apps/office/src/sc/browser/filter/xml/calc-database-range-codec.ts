@@ -5,7 +5,9 @@ import { ScDBData, ScDBRangeType } from "../../../inc/dbdata";
 import type { ScDocument } from "../../../inc/document";
 import { ScQueryConnect, ScQueryOp } from "../../../inc/global";
 import {
+  isQueryColorItem,
   ScQueryParam,
+  type ScDBQueryColorItem,
   type ScDBQueryItem,
   type ScQueryParamEntry,
 } from "../../../source/core/tool/queryparam";
@@ -15,11 +17,25 @@ import {
   type CalcDatabaseDescriptors,
 } from "./calc-database-descriptor-codec";
 import { AdoptDatabaseRange } from "../../../source/filter/xml/xmldrani";
+import { readFilterColor } from "../../../source/filter/xml/xmlfilti";
+import { Color, ColorTransparency } from "../../../../tools/inc/color";
 
 /** Native database area coordinates. */
 type Area = ReturnType<ScRange["GetVars"]>;
+/** Primitive query item. Earlier records retain their authored lexical color. */
+type QueryItemRecord =
+  | Exclude<ScDBQueryItem, ScDBQueryColorItem>
+  | { readonly type: ScDBQueryColorItem["type"]; readonly value: number | string };
+
+/** Native query criteria without shared Color instances. */
+interface QueryEntryRecord extends Omit<ScQueryParamEntry, "items"> {
+  readonly items: readonly QueryItemRecord[];
+}
+
 /** Native query values without its member functions. */
-type Query = Omit<ScQueryParam, "Clone">;
+interface Query extends Omit<ScQueryParam, "Clone" | "entries"> {
+  readonly entries: readonly QueryEntryRecord[];
+}
 
 /** One detached range and its owning collection category. */
 interface DatabaseRangeRecord extends CalcDatabaseDescriptors {
@@ -45,12 +61,28 @@ export interface CalcDatabaseRangesRecord {
 /** Copies one native database range into detached version-one values. @param type - Range owner. @param data - Native data. @returns Cloneable data. */
 function encodeRange(type: ScDBRangeType, data: ScDBData): DatabaseRangeRecord {
   const advanced = data.GetAdvancedQuerySource();
+  const query = data.GetQueryParam();
   return {
     type,
     name: data.GetName(),
     area: data.GetArea().GetVars(),
     index: data.GetIndex(),
-    query: { ...data.GetQueryParam() },
+    query: {
+      ...query,
+      entries: query.entries.map(
+        /** Copies the original criteria for the Worker. @param entry - Native criterion. @returns Detached condition. */
+        (entry) => ({
+          ...entry,
+          items: entry.items.map(
+            /** Copies scalar or packed native color values. @param item - Native filter item. @returns Detached value. */
+            (item) =>
+              isQueryColorItem(item)
+                ? { type: item.type, value: item.value.toUInt32() }
+                : { ...item },
+          ),
+        }),
+      ),
+    },
     ...(advanced ? { advanced: advanced.GetVars() } : {}),
     autoFilter: data.HasAutoFilter(),
     keepFormat: data.IsKeepFmt(),
@@ -95,26 +127,30 @@ function decodeArea(document: ScDocument, area: Area): ScRange {
 }
 
 /** Validates the native query item union. @param item - Transfer item. @returns Whether valid. */
-function validItem(item: ScDBQueryItem): boolean {
+function validItem(item: QueryItemRecord): boolean {
   if (!item || typeof item !== "object") return false;
   switch (item.type) {
     case "number":
       return (
-        Number.isFinite(item.value) &&
+        typeof item.value === "number" &&
         (item.lexical === undefined || typeof item.lexical === "string")
       );
     case "string":
     case "date":
+      return typeof item.value === "string";
     case "text-color":
     case "background-color":
-      return typeof item.value === "string";
+      return (
+        typeof item.value === "string" ||
+        (typeof item.value === "number" && item.value === item.value >>> 0)
+      );
     default:
       return false;
   }
 }
 
 /** Validates one detached native condition. @param entry - Query entry. @returns Whether valid. */
-function validEntry(entry: ScQueryParamEntry): boolean {
+function validEntry(entry: QueryEntryRecord): boolean {
   return (
     Boolean(entry) &&
     Number.isInteger(entry.nField) &&
@@ -157,7 +193,26 @@ function decodeQuery(document: ScDocument, record: Query): ScQueryParam {
     !record.entries.every(validEntry)
   )
     throw new Error("Calc worker database filter is invalid.");
-  return Object.assign(new ScQueryParam(), record);
+  return Object.assign(new ScQueryParam(), record, {
+    entries: (record.entries as readonly QueryEntryRecord[]).map(
+      /** Restores the native color owners in one criterion. @param entry - Validated condition. @returns Native condition. */
+      (entry): ScQueryParamEntry => ({
+        ...entry,
+        items: entry.items.map(
+          /** Restores either an older ODF color value or a packed native color. @param item - Validated value. @returns Native item. */
+          (item): ScDBQueryItem => {
+            if (item.type === "number" || item.type === "string" || item.type === "date")
+              return { ...item };
+            const value =
+              typeof item.value === "string"
+                ? readFilterColor(item.value)
+                : new Color(ColorTransparency, item.value, "ColorTransparencyTag");
+            return { type: item.type, value };
+          },
+        ),
+      }),
+    ),
+  });
 }
 
 /** Restores original owners before formulas compile. @param document - Target workbook with sheets. @param record - Transfer extension. @returns Ranges for applying header flags after cell patterns. */

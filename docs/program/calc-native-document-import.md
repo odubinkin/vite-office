@@ -86,3 +86,11 @@ replace the background, including with transparency.
 The Worker transfers the resulting cell formatting. ODS export uses automatic
 cell styles and the existing default-cell-style resolution for columns. Calc
 preserves LibreOffice's handling of the table-family complex-color child.
+
+## ODS database filter values
+
+Calc stores text and background filter criteria as native color values. The
+original automatic color is carried as a packed value through the Worker and
+written as `window-font-color` for text or `transparent` for backgrounds.
+The filter reads and writes numeric criteria with the RTL conversions and
+keeps lexical criteria, including date strings, in their original form.
