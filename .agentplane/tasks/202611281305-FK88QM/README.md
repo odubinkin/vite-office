@@ -4,7 +4,7 @@ title: "Integrate November 28 Writer and Calc branch updates"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: integrate and verify the current Writer and Calc heads, then synchronize the published branches."
 doc_version: 3
-doc_updated_at: "2026-11-28T14:57:07.689Z"
+doc_updated_at: "2026-11-28T15:37:33.871Z"
 doc_updated_by: "CODER"
 description: "Publish current feature heads, merge both into main, resolve conflicts with targeted checks, repair failures found by full verification, document suspected upstream issues and merge verified main back into both published feature branches."
 sections:
@@ -68,6 +68,10 @@ sections:
     - Observation: Writer treated the counted outline list rebuilt on ODT import as an ordinary list. It also exposed a native mixed-range success result without a mutation.
       Impact: Tab could leave the imported heading at the same level and its undo history did not use the outline action. The first full browser run recorded 642 passing and 12 failing scenarios on the pre-fix snapshot.
       Resolution: Dispatch counted headings to the native outline-level movement and typed undo action, preserve the mixed core result, and record WRITER-792. Current focused outline checks passed in Vitest and Chromium. The strict full verification remains pending.
+
+    - Observation: The complete inventory suite reached 131/131 tests and 100% across four coverage metrics. The strict check then reached application Istanbul coverage, which exposed multiple Calc XLSX scenarios exceeding the 30-second test budget.
+      Impact: The workbook cases exercised real native resources and serialized multiple formats; isolated retries reproduced the timeout without changing the assertions.
+      Resolution: Set explicit deadlines for the affected round trips under the same 120-second budget as existing native Writer fixtures. Focused retries passed all eleven checked scenarios. Preserve the full application coverage thresholds and retain the strict verify gate before publishing main.
 id_source: "generated"
 ---
 ## Summary
@@ -116,3 +120,7 @@ Pending execution.
 - Observation: Writer treated the counted outline list rebuilt on ODT import as an ordinary list. It also exposed a native mixed-range success result without a mutation.
   Impact: Tab could leave the imported heading at the same level and its undo history did not use the outline action. The first full browser run recorded 642 passing and 12 failing scenarios on the pre-fix snapshot.
   Resolution: Dispatch counted headings to the native outline-level movement and typed undo action, preserve the mixed core result, and record WRITER-792. Current focused outline checks passed in Vitest and Chromium. The strict full verification remains pending.
+
+- Observation: The complete inventory suite reached 131/131 tests and 100% across four coverage metrics. The strict check then reached application Istanbul coverage, which exposed multiple Calc XLSX scenarios exceeding the 30-second test budget.
+  Impact: The workbook cases exercised real native resources and serialized multiple formats; isolated retries reproduced the timeout without changing the assertions.
+  Resolution: Set explicit deadlines for the affected round trips under the same 120-second budget as existing native Writer fixtures. Focused retries passed all eleven checked scenarios. Preserve the full application coverage thresholds and retain the strict verify gate before publishing main.
