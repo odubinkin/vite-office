@@ -156,6 +156,7 @@ export class ScDocShell extends SfxObjectShell {
     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
   private readonly undo = new SfxUndoManager<ScDocShell>();
   private openRequest = 0;
+  private readonly regexMatcherFactory: ScDocument["regexMatcherFactory"];
   /** Creates an untitled shell or adopts a model. @param document - Actual model. @param odsFilter - Asynchronous ODS filter. @param xlsxReferenceDevice - XLSX reference device. @returns Shell. */
   constructor(
     private document: ScDocument = new ScDocument(),
@@ -166,6 +167,7 @@ export class ScDocShell extends SfxObjectShell {
       createDocument({ id: crypto.randomUUID(), suiteId: "calc", title: "Untitled Calc Document" }),
       { kind: "untitled", name: "Untitled Calc Document" },
     );
+    this.regexMatcherFactory = document.regexMatcherFactory;
     SetDocumentShell.call(document, this);
     if (!document.GetTableCount()) {
       document.InsertTab(0, unicode("Sheet1"));
@@ -321,8 +323,10 @@ export class ScDocShell extends SfxObjectShell {
       } else if (medium?.filterId === ScDocShell.XLSX_FILTER_NAME) {
         if (!ArrayBuffer.isView(bytes)) throw new Error("XLSX input requires a byte stream.");
         candidate = await ExcelFilter.importDocument(bytes, this.xlsxReferenceDevice);
-      } else
+      } else {
+        const regexMatcherFactory = current.regexMatcherFactory ?? this.regexMatcherFactory;
         candidate = await this.odsFilter.Import(bytes, {
+          ...(regexMatcherFactory ? { regexMatcherFactory } : {}),
           ...options,
           isCancelled: /** Cancels stale source work. @returns Cancelled. */ () =>
             request !== this.openRequest ||
@@ -330,6 +334,7 @@ export class ScDocShell extends SfxObjectShell {
             current !== this.document ||
             options.isCancelled?.() === true,
         });
+      }
       this.EnsureOpen();
       if (options.isCancelled?.()) throw new Error("Document open was cancelled.");
       if (request !== this.openRequest || generation !== this.GetContentGeneration())

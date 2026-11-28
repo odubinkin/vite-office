@@ -4,9 +4,16 @@ import { LanguageTag } from "../../../../i18nlangtag/inc/languagetag";
 import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { SearchOptions2 } from "../../../../i18nutil/inc/searchopt";
 import { TransliterationModules } from "../../../../offapi/com/sun/star/i18n/TransliterationModules";
-import { WILDCARD } from "../../../../offapi/com/sun/star/util/SearchAlgorithms2";
-import { WILD_MATCH_SELECTION } from "../../../../offapi/com/sun/star/util/SearchFlags";
-import { SearchParam, TextSearch } from "../../../../unotools/source/i18n/textsearch";
+import { REGEXP, WILDCARD } from "../../../../offapi/com/sun/star/util/SearchAlgorithms2";
+import {
+  ALL_IGNORE_CASE,
+  WILD_MATCH_SELECTION,
+} from "../../../../offapi/com/sun/star/util/SearchFlags";
+import {
+  SearchParam,
+  TextSearch,
+  type RegexMatcherFactory,
+} from "../../../../unotools/source/i18n/textsearch";
 import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import type { ScDocOptionsConstReference } from "./docoptio";
 
@@ -49,26 +56,35 @@ export function DetectSearchType(item: ScQueryItem, options: ScDocOptionsConstRe
   return SearchParam.SearchType.Normal;
 }
 
-/** Original lookup query spelling and lazily prepared wildcard search. @param item - Lookup key. @param options - Document settings. */
+/** Original lookup query spelling and lazily prepared text search. */
 export class ScQueryEntry {
   readonly searchType: number;
   private readonly wholeCell: boolean;
   private search: TextSearch | undefined;
 
-  /** Initializes the query over the document's current comparison defaults. @param item - Lookup key. @param options - Document settings. @returns Entry. */
+  /** Initializes the query over the document's current comparison defaults. @param item - Lookup key. @param options - Document settings. @param regexMatcherFactory - Runtime regex service. @returns Entry. */
   constructor(
     readonly item: ScQueryItem,
     options: ScDocOptionsConstReference,
+    private readonly regexMatcherFactory?: RegexMatcherFactory,
   ) {
     this.searchType = DetectSearchType(item, options);
     this.wholeCell = options.IsMatchWholeCell();
   }
 
-  /** Performs the native exact text comparison, including wildcard and partial cell options. @param value - Candidate string. @param folded - Shared-string case mapping. @returns Whether matched. */
+  /** Reports whether the pattern service needed by this criterion is available. @returns Whether comparison can run. */
+  CanSearch(): boolean {
+    return (
+      this.searchType !== SearchParam.SearchType.Regexp || this.regexMatcherFactory !== undefined
+    );
+  }
+
+  /** Performs the native exact text comparison, including pattern and whole-cell options. @param value - Candidate string. @param folded - Shared-string case mapping. @returns Whether matched. */
   matchesText(value: OUStringConstReference, folded: string): boolean {
     const item = this.item as Exclude<ScQueryItem, number>;
-    if (this.searchType !== SearchParam.SearchType.Wildcard)
+    if (this.searchType === SearchParam.SearchType.Normal)
       return this.wholeCell ? folded === item.ignoreCase : folded.includes(item.ignoreCase);
+    if (!this.CanSearch()) return false;
     if (!this.search) {
       const options = new SearchOptions2();
       const searchValue = unicode(item.text);
@@ -76,11 +92,13 @@ export class ScQueryEntry {
       try {
         options.searchString = searchValue;
         options.Locale = locale.getLocale();
-        options.AlgorithmType2 = WILDCARD;
-        options.WildcardEscapeCharacter = 126;
+        const wildcard = this.searchType === SearchParam.SearchType.Wildcard;
+        options.AlgorithmType2 = wildcard ? WILDCARD : REGEXP;
+        if (wildcard) options.WildcardEscapeCharacter = 126;
         options.transliterateFlags = TransliterationModules.IGNORE_CASE;
-        options.searchFlag = this.wholeCell ? WILD_MATCH_SELECTION : 0;
-        this.search = new TextSearch(options);
+        options.searchFlag =
+          ALL_IGNORE_CASE | (wildcard && this.wholeCell ? WILD_MATCH_SELECTION : 0);
+        this.search = new TextSearch(options, this.regexMatcherFactory);
       } finally {
         options.searchString.clear();
         options.Locale.dispose();
@@ -88,6 +106,11 @@ export class ScQueryEntry {
         locale.dispose();
       }
     }
-    return this.search.SearchForward(value, [0], [value.getLength()]);
+    const start: [number] = [0];
+    const end: [number] = [value.getLength()];
+    return (
+      this.search.SearchForward(value, start, end) &&
+      (!this.wholeCell || (start[0] === 0 && end[0] === value.getLength()))
+    );
   }
 }

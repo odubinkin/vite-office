@@ -23,6 +23,7 @@ import { ScDocument } from "../../../inc/document";
 import { BCA_BRDCST_ALWAYS } from "../../../inc/address";
 import { ScHint } from "../../../inc/brdcst";
 import { SfxHintId } from "../../../../svl/inc/hint";
+import type { RegexMatcherFactory } from "../../../../unotools/source/i18n/textsearch";
 import { ScXMLImport, type ScXMLImportOptions } from "./xmlimprt";
 import { ScXMLExport, type ScXMLExportOptions } from "./xmlexprt";
 import { prepareDocProtection, prepareTableProtection } from "./xmlexprt.protection";
@@ -64,6 +65,7 @@ export const ODS_MIMETYPE = "application/vnd.oasis.opendocument.spreadsheet";
 /** Browser import controls preserve shared ZIP/XML limits. */
 export interface OdsImportOptions extends ScXMLImportOptions {
   readonly zipLimits?: ArchiveLimits;
+  readonly regexMatcherFactory?: RegexMatcherFactory;
 }
 /** Byte I/O replaces native medium/storage transport;the actual document and shared package contracts remain the same. */
 export class ScXMLImportWrapper {
@@ -280,7 +282,7 @@ export async function readOdsDocument(
   bytes: Uint8Array | XmlPackage,
   options: OdsImportOptions = {},
 ): Promise<ScDocument> {
-  const doc = new ScDocument();
+  const doc = new ScDocument(undefined, options.regexMatcherFactory);
   try {
     await new ScXMLImportWrapper(doc).Import(bytes, options);
     return doc;

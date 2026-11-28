@@ -2,6 +2,7 @@ import {
   isOdfFontBytes,
   type OdfFontResource,
 } from "../../../../package/source/zippackage/odf-font-resources";
+import { createBrowserRegexMatcher } from "../../../../i18npool/browser/regex-matcher";
 import {
   decodeCalcChangeTrack,
   encodeCalcChangeTrack,
@@ -934,7 +935,7 @@ function restoreCalculationSettings(options: ScDocOptions, settings: Calculation
 function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
   if (record.version !== 1 || !Array.isArray(record.sheets))
     throw new Error("Calc worker graph is invalid.");
-  const document = new ScDocument(),
+  const document = new ScDocument(undefined, createBrowserRegexMatcher),
     importer = new ScXMLImport(document);
   const transferredStyles = new Map<string, CellAttributeHolder>();
   let complete = false;

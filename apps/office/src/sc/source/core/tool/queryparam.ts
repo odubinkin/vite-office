@@ -32,21 +32,22 @@ export function FillInExcelSyntax(
   key: ScQueryItem,
 ): ExcelQueryEntry {
   const options = context.mpDoc.GetDocOptions();
+  const regex = context.mpDoc.regexMatcherFactory;
   if (typeof key === "number")
-    return { entry: new ScQueryEntry(key, options), operation: OpCode.ocEqual };
+    return { entry: new ScQueryEntry(key, options, regex), operation: OpCode.ocEqual };
   const prefix = /^(?:<>|<=|>=|[<>=])/u.exec(key.text)?.[0] ?? "";
   const body = key.text.slice(prefix.length);
   const operation = operators.get(prefix) ?? OpCode.ocEqual;
   if (!body && (prefix === "=" || prefix === "<>"))
-    return { entry: new ScQueryEntry(key, options), operation, isEmpty: prefix === "=" };
+    return { entry: new ScQueryEntry(key, options, regex), operation, isEmpty: prefix === "=" };
   const value = unicode(body);
   const folded = context.mpDoc.GetSharedStringPool().intern(value);
   try {
     const operand = { text: body, ignoreCase: text(folded.getIgnoreCaseString()) };
-    const lexical = new ScQueryEntry(operand, options);
+    const lexical = new ScQueryEntry(operand, options, regex);
     const number: [number] = [0];
     const entry = context.NFIsNumberFormat(value, [0], number)
-      ? new ScQueryEntry(number[0], options)
+      ? new ScQueryEntry(number[0], options, regex)
       : lexical;
     return {
       entry,

@@ -30,6 +30,7 @@ import { ScMatValType } from "../../../inc/types";
 import { ScMatrix, type ScMatrixValue } from "../../../inc/scmatrix";
 import { GetCollator, ScQueryEntry, type ScQueryItem } from "./queryentry";
 import { ScQueryCellIteratorDirect } from "../data/queryiter";
+import { SearchParam } from "../../../../unotools/source/i18n/textsearch";
 
 /** Searches a matrix vector with the native forward or binary MATCH mode. @param matrix - Search vector. @param columns - Column count. @param rows - Row count. @param entry - Native search criterion. @param mode - Original MATCH option. @returns One-based position or absence. */
 function SearchMatchMatrix(
@@ -56,7 +57,11 @@ function SearchMatchMatrix(
       }
       if (typeof key === "number") return 1;
       const value = item.GetString();
-      if (mode === 0 && entry.matchesText(value.getString(), text(value.getIgnoreCaseString())))
+      if (
+        mode === 0 &&
+        entry.searchType !== SearchParam.SearchType.Normal &&
+        entry.matchesText(value.getString(), text(value.getIgnoreCaseString()))
+      )
         return 0;
       return GetCollator().compare(text(value.getString()), key.text);
     } finally {
@@ -144,7 +149,11 @@ function ScMatch(this: ScInterpreter, count: number): void {
   }
   const key = this["FillLookupEntry"]();
   if (key === undefined || this.GetError() !== FormulaError.NONE) return;
-  const entry = new ScQueryEntry(key, this.mrDoc.GetDocOptions());
+  const entry = new ScQueryEntry(key, this.mrDoc.GetDocOptions(), this.mrDoc.regexMatcherFactory);
+  if (!entry.CanSearch()) {
+    this.SetError(FormulaError.NoValue);
+    return;
+  }
   if (range) {
     const horizontal = range.aStart.Row() === range.aEnd.Row();
     const iterator = new ScQueryCellIteratorDirect(this.mrDoc, range, horizontal, entry);

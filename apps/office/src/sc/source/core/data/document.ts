@@ -1,5 +1,6 @@
 /** @fileoverview Native document modes, consumed pooled resources and scalar/local-reference storage, attributes and formula tracking. Full construction, formatter and shell services remain unported. */
 import { ScDetectiveRefIter } from "./formulaiter";
+import type { RegexMatcherFactory } from "../../../../unotools/source/i18n/textsearch";
 import {
   OdfFontResources,
   type OdfFontResource,
@@ -800,8 +801,11 @@ export class ScDocument {
   }
   protected readonly locale = MsLangId.Conversion.convertLanguageToLocale(0, false);
   declare private mpCellStringPool: SharedStringPool;
-  /** Constructs native document-mode resources and an independent shared string pool. @param mode - Native construction mode. @returns Document. */
-  constructor(mode = ScDocumentMode.SCDOCMODE_DOCUMENT) {
+  /** Constructs native document-mode resources and an independent shared string pool. @param mode - Native construction mode. @param regexMatcherFactory - Text search service provided by the current runtime. @returns Document. */
+  constructor(
+    mode = ScDocumentMode.SCDOCMODE_DOCUMENT,
+    public readonly regexMatcherFactory?: RegexMatcherFactory,
+  ) {
     this.bIsClip = mode === ScDocumentMode.SCDOCMODE_CLIP;
     this.bIsUndo = mode === ScDocumentMode.SCDOCMODE_UNDO;
     this.bIsFunctionAccess = mode === ScDocumentMode.SCDOCMODE_FUNCTIONACCESS;

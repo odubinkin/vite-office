@@ -678,9 +678,19 @@ for (const sourceFile of runtimeSources) {
       relativeSource.split(path.sep).join("/") === "sc/source/filter/oox/pagesettings.ts" &&
       relativeTarget.split(path.sep).join("/").replace(/\.ts$/u, "") ===
         "filter/source/msfilter/util";
+    // Browser entry points supply the TextSearch service that native unotools resolves through UNO.
+    const calcBrowserRegexBinding =
+      relativeTarget.split(path.sep).join("/").replace(/\.ts$/u, "") ===
+        "i18npool/browser/regex-matcher" &&
+      [
+        "sc/browser/composition/calc-module.tsx",
+        "sc/browser/filter/xml/calc-document-codec.ts",
+        "sc/browser/filter/xml/ods-worker-runtime.ts",
+      ].includes(relativeSource.split(path.sep).join("/"));
     if (
       isForbiddenModuleEdge(sourceModule, targetModule) &&
       !calcPaperSizeImport &&
+      !calcBrowserRegexBinding &&
       !inlineSequence &&
       !isOriginalCharacterValueImport(relativeSource, relativeTarget) &&
       !isSidebarPresentationImport(relativeSource, relativeTarget)

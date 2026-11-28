@@ -8493,3 +8493,12 @@ volatile cells and does not use either prompt control. The browser ODS
 loader follows that noninteractive path.
 
 - [Original ODS load and preference checks](../../vendor/libreoffice-reference/sc/source/ui/docshell/docsh.cxx#L584)
+
+### CALC-884 — VLOOKUP and HLOOKUP use literal comparison for matrix strings
+
+The lookup calculates the document's search type for a string key. A
+worksheet range uses that search type, while a matrix uses its own
+literal string comparison even in exact mode. The upstream source has a
+TODO for regex on matrix strings. Calc preserves the same distinction.
+
+- [Original worksheet and matrix lookup branches](../../vendor/libreoffice-reference/sc/source/core/tool/interpr1.cxx#L7664)

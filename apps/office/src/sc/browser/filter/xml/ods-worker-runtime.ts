@@ -1,5 +1,6 @@
 /** @fileoverview Full Calc ODS/XML filtering and native row-height computation in a Dedicated Worker. */
 import type { XmlPackage } from "../../../../svl/source/misc/storage";
+import { createBrowserRegexMatcher } from "../../../../i18npool/browser/regex-matcher";
 import type { OdsImportOptions } from "../../../source/filter/xml/xmlwrap";
 import type { SecurityOptionsSnapshot } from "../../../../unotools/source/config/securityoptions";
 import { readOdsDocument, writeOdsDocument, writeOdsXml } from "../../../source/filter/xml/xmlwrap";
@@ -28,7 +29,7 @@ export async function processOdsWorkerRequest(request: OdsWorkerRequest): Promis
   if (request.operation === "import") {
     const document = await readOdsDocument(
       request.input instanceof ArrayBuffer ? new Uint8Array(request.input) : request.input,
-      request.options,
+      { ...request.options, regexMatcherFactory: createBrowserRegexMatcher },
     );
     try {
       return encodeCalcDocument(document);

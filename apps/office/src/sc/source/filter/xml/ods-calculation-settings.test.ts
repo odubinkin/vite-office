@@ -1,10 +1,13 @@
 /** @fileoverview Native ODS calculation defaults, option serialization and Worker transport. */
 import { assert, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
+import { createBrowserRegexMatcher } from "../../../../i18npool/browser/regex-matcher";
+import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import {
   encodeCalcDocument,
   decodeCalcDocument,
 } from "../../../browser/filter/xml/calc-document-codec";
+import { processOdsWorkerRequest } from "../../../browser/filter/xml/ods-worker-runtime";
 import { ScAddress } from "../../../inc/address";
 import { ScDocument } from "../../../inc/document";
 import { DetectSearchType } from "../../core/tool/queryentry";
@@ -14,11 +17,11 @@ import { DocumentArchive } from "../../../../package/source/zippackage/document-
 import { ScXMLImport } from "./xmlimprt";
 import { readOdsDocument, writeOdsDocument } from "./xmlwrap";
 
-const tableContent = `<table:table table:name="Data"><table:table-row><table:table-cell office:value-type="string" office:string-value="abc"/><table:table-cell table:formula="of:=COUNTIF([.A1:.A3];&quot;a.*&quot;)"/></table:table-row><table:table-row><table:table-cell office:value-type="string" office:string-value="abd"/></table:table-row><table:table-row><table:table-cell office:value-type="string" office:string-value="a.*"/></table:table-row></table:table>`;
+const tableContent = `<table:table table:name="Data"><table:table-row><table:table-cell office:value-type="string" office:string-value="abc"/><table:table-cell table:formula="of:=COUNTIF([.A1:.A3];&quot;a.*&quot;)"/><table:table-cell table:formula="of:=MATCH(&quot;ab[d]&quot;;[.A1:.A3];0)"/><table:table-cell table:formula="of:=VLOOKUP(&quot;ab[d]&quot;;[.A1:.A3];1;0)"/></table:table-row><table:table-row><table:table-cell office:value-type="string" office:string-value="abd"/></table:table-row><table:table-row><table:table-cell office:value-type="string" office:string-value="a.*"/></table:table-row></table:table>`;
 
 /** Opens independent ODF content and parses actual formula references. @param settings - Authored settings XML. @returns Owned document. */
 function load(settings = ""): ScDocument {
-  const document = new ScDocument();
+  const document = new ScDocument(undefined, createBrowserRegexMatcher);
   const namespaces = ODF_NAMESPACES;
   new ScXMLImport(document).importContent(
     `<office:document-content xmlns:office="${namespaces.office}" xmlns:table="${namespaces.table}" xmlns:text="${namespaces.text}" xmlns:of="${namespaces.of}"><office:body><office:spreadsheet>${settings}${tableContent}</office:spreadsheet></office:body></office:document-content>`,
@@ -50,6 +53,39 @@ it("applies the historical ODF regex default even when the settings element is a
     fresh.Dispose();
     absent.Dispose();
     empty.Dispose();
+  }
+});
+
+it("applies the imported ODS search mode to formula criteria after Worker restore", /** Recalculates native COUNTIF, MATCH and VLOOKUP against the ODF regular-expression setting. @returns Completion. */ async () => {
+  const source = load();
+  let restored: ScDocument | undefined;
+  let reopened: ScDocument | undefined;
+  try {
+    const bytes = await writeOdsDocument(source);
+    const record = await processOdsWorkerRequest({
+      id: 1,
+      operation: "import",
+      input: bytes.buffer as ArrayBuffer,
+      options: {},
+    });
+    assert("sheets" in record);
+    restored = decodeCalcDocument(structuredClone(record));
+    reopened = await readOdsDocument(await writeOdsDocument(restored), {
+      regexMatcherFactory: createBrowserRegexMatcher,
+    });
+    for (const document of [source, restored, reopened]) {
+      expect(document.GetDocOptions().IsFormulaRegexEnabled()).toBe(true);
+      document.CalcAll();
+      expect(document.GetFormulaCell(new ScAddress(1, 0, 0))?.GetValue()).toBe(3);
+      expect(document.GetFormulaCell(new ScAddress(2, 0, 0))?.GetValue()).toBe(2);
+      const lookup = document.GetFormulaCell(new ScAddress(3, 0, 0));
+      assert(lookup);
+      expect(text(lookup.GetString().getString())).toBe("abd");
+    }
+  } finally {
+    reopened?.Dispose();
+    restored?.Dispose();
+    source.Dispose();
   }
 });
 

@@ -1,6 +1,7 @@
 /** @fileoverview Lazy production Calc module with one document/controller/frame ownership chain per mounted workspace. */
 import { ScDocShell } from "../../source/ui/docshell/docsh";
 import { ScDocument } from "../../inc/document";
+import { createBrowserRegexMatcher } from "../../../i18npool/browser/regex-matcher";
 import { OdsWorkerClient } from "../filter/xml/ods-worker-client";
 /* eslint-disable react-refresh/only-export-components -- The private workspace host belongs to the exported lazy module factory. */
 import generated from "../../uiconfig/scalc/calc-ui.generated.json" with { type: "json" };
@@ -39,7 +40,7 @@ export function createCalcSession(
         };
   const controller = new CalcViewController(
       new ScDocShell(
-        new ScDocument(),
+        new ScDocument(undefined, createBrowserRegexMatcher),
         globalThis.Worker === undefined ? undefined : new OdsWorkerClient(),
         device,
       ),

@@ -57,7 +57,6 @@ import { ScColRowNameAuto } from "./interpr4.colrowname";
 import { isComparison } from "../../../../formula/inc/FormulaCompiler";
 import { ScQueryEntry, type ScQueryItem } from "./queryentry";
 import { ScQueryCellIteratorDirect } from "../data/queryiter";
-import { SearchParam } from "../../../../unotools/source/i18n/textsearch";
 const kScInterpreterMaxStrLen = Math.trunc(SAL_MAX_INT32 / 8);
 /** Actual initialized numeric interpreter state, with token references owned by JS GC. */
 export class ScInterpreter {
@@ -737,8 +736,12 @@ export class ScInterpreter {
     const key = this.FillLookupEntry();
     if (key === undefined || this.nGlobalError !== FormulaError.NONE) return;
     if (range) {
-      const entry = new ScQueryEntry(key, this.mrDoc.GetDocOptions());
-      if (entry.searchType === SearchParam.SearchType.Regexp) {
+      const entry = new ScQueryEntry(
+        key,
+        this.mrDoc.GetDocOptions(),
+        this.mrDoc.regexMatcherFactory,
+      );
+      if (!entry.CanSearch()) {
         this.SetError(FormulaError.NoValue);
         return;
       }

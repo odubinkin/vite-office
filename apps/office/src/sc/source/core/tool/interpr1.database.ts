@@ -2,7 +2,6 @@
 import { FormulaError } from "../../../../formula/inc/errorcodes";
 import { OpCode } from "../../../../formula/inc/opcode";
 import { FormulaByteToken, StackVar, type FormulaToken } from "../../../../formula/inc/token";
-import { SearchParam } from "../../../../unotools/source/i18n/textsearch";
 import { approxFloor } from "../../../../sal/inc/rtl/math";
 import { ScHorizontalCellIterator } from "../../../inc/dociter";
 import { ScRefCellValue } from "../../../inc/cellvalue";
@@ -92,8 +91,8 @@ function ScDBCount(this: ScInterpreter, count: number, countText: boolean): void
   }
   if (
     query.some(
-      /** Finds criteria that require the realm's ICU regexp service. @param condition - Prepared criterion. @returns Whether regexp is required. */
-      (condition) => condition.query.entry.searchType === SearchParam.SearchType.Regexp,
+      /** Finds criteria that require the realm's regex service. @param condition - Prepared criterion. @returns Whether regexp is required. */
+      (condition) => !condition.query.entry.CanSearch(),
     )
   ) {
     this.SetError(FormulaError.NoValue);

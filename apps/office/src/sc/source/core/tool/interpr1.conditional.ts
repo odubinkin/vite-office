@@ -11,7 +11,6 @@ import { div } from "../../../inc/math";
 import { ScQueryEvaluator } from "../data/queryevaluator";
 import type { ScInterpreter } from "./interpr4";
 import { FillInExcelSyntax, type ExcelQueryEntry } from "./queryparam";
-import { SearchParam } from "../../../../unotools/source/i18n/textsearch";
 
 /** Original worksheet query and prepared comparison. */
 interface Condition {
@@ -68,7 +67,7 @@ function popCondition(this: ScInterpreter, dimensionError: FormulaError): Condit
   if (!range || this.GetError() !== FormulaError.NONE) return undefined;
   const query = FillInExcelSyntax(this.mrContext, value);
   if (
-    query.entry.searchType === SearchParam.SearchType.Regexp &&
+    !query.entry.CanSearch() &&
     (query.operation === OpCode.ocEqual || query.operation === OpCode.ocNotEqual)
   ) {
     this.SetError(FormulaError.NoValue);
