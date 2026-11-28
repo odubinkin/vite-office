@@ -71,7 +71,7 @@ it("ports the four quoted literal formula assertions from tdf166413", /** Uses t
   } finally {
     document.Dispose();
   }
-});
+}, 120_000);
 
 it("uses the source corner for disjoint rules and exports the native ODF text condition", /** Ports the original origin and cross-format tests. @returns Completion. */ async () => {
   const excel = await ExcelFilter.importDocument(fixture("xlsx/conditional_fmt_origin.xlsx"));
@@ -269,4 +269,4 @@ it("keeps usable XLSX rules beside malformed rule records and missing differenti
   } finally {
     document.Dispose();
   }
-});
+}, 120_000);

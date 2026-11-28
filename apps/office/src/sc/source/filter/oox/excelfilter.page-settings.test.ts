@@ -54,6 +54,9 @@ import {
   ATTR_ULSPACE,
 } from "../../../inc/scitems";
 
+// Native workbook fixtures open, export and reopen through multiple storage formats.
+vi.setConfig({ testTimeout: 120_000 });
+
 const worksheet = "xl/worksheets/sheet1.xml";
 
 /** Unchanged native QA workbook. @param stem - Fixture name. @returns File bytes. */

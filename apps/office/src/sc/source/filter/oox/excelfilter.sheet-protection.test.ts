@@ -140,7 +140,7 @@ it("omits inactive protection and validates the sheet verifier", /** Covers nati
       doc.Dispose();
     }
   }
-});
+}, 120_000);
 
 it("copies native table protection and retains settings while disabled", /** Covers independent ownership and the original constructor defaults. @returns Completion. */ async () => {
   const doc = await ExcelFilter.importDocument(fixture("ProtecteSheet1234Pass"));

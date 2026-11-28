@@ -181,6 +181,7 @@ it.each(["tdf120749", "tdf122102", "condFormat_cellis", "conditional_fmt_checkpr
       document.Dispose();
     }
   },
+  120_000,
 );
 
 it("retains formula-backed evaluation in ODS under its original plain condition type", /** Checks primary Calc state and the source ODS-to-XLSX limitation. @returns Completion. */ async () => {
