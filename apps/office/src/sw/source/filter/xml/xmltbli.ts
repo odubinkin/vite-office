@@ -118,6 +118,14 @@ export class SwXMLTableImport extends SvXMLImport {
     return context;
   }
 
+  /** Resolves a referenced number style and its original language policy. @param name - Authored data style name. @returns Native key and language flag. */
+  public getNumberFormatStyle(name: string): { key: number; systemLanguage: boolean } | undefined {
+    const context = this.numberStyles.get(name);
+    const key = context?.GetKey(this.numberStyles);
+    if (key !== undefined && context) return { key, systemLanguage: context.IsSystemLanguage() };
+    return undefined;
+  }
+
   /** Retains a referenced table style until SAX body import. */
   /** Projects one canonical Writer table value. @param argument1 - Callback input. @param argument2 - Callback input. @returns Callback result. */ public registerTableStyle(
     name: string,
@@ -415,9 +423,7 @@ export class SwXMLTableImport extends SvXMLImport {
     const frameFormat = cell.GetFrameFormat(),
       box = importBoxProperties(style, RES_BOX);
     const key =
-      style.dataStyle === undefined
-        ? undefined
-        : this.numberStyles.get(style.dataStyle)?.GetKey(this.numberStyles);
+      style.dataStyle === undefined ? undefined : this.getNumberFormatStyle(style.dataStyle)?.key;
     if (key !== undefined) frameFormat.SetFormatAttr(new SwTableBoxNumFormat(key));
     importFrameVisualProperties(frameFormat, style);
     if (box !== undefined) frameFormat.SetFormatAttr(box);

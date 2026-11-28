@@ -1,6 +1,7 @@
 /** @fileoverview Native document ownership of Writer system field types. */
 import { SwDocInfoFieldType, SwPostItFieldType } from "../fields/docufld";
 import { SwGetRefFieldType } from "../fields/reffld";
+import { SwDateTimeFieldType } from "../fields/flddat";
 import type { SwDoc } from "./doc";
 
 /** Document-owned system fields for the represented Writer field families. */
@@ -8,12 +9,19 @@ export class DocumentFieldsManager {
   private readonly postIt: SwPostItFieldType;
   private readonly getRef: SwGetRefFieldType;
   private readonly docInfo: SwDocInfoFieldType;
+  private readonly dateTime: SwDateTimeFieldType;
 
   /** Creates the system field types for this document. @param document - Actual Writer model. */
   public constructor(document: SwDoc) {
     this.postIt = new SwPostItFieldType(document);
     this.getRef = new SwGetRefFieldType(document);
     this.docInfo = new SwDocInfoFieldType(document);
+    this.dateTime = new SwDateTimeFieldType(document);
+  }
+
+  /** Borrows the original date/time field type. @returns System field type. */
+  public GetDateTimeFieldType(): SwDateTimeFieldType {
+    return this.dateTime;
   }
 
   /** Borrows the original document information field type. @returns System field type. */

@@ -1,0 +1,55 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/core/fields/flddat.ts",
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/fields/flddat.cxx",
+    "localSymbols": [
+      "SwDateTimeFieldType",
+      "SwDateTimeField"
+    ],
+    "upstreamSymbols": [
+      "SwDateTimeFieldType::SwDateTimeFieldType",
+      "SwDateTimeField::ExpandImpl",
+      "SwDateTimeField::GetDateTime"
+    ],
+    "preservedResponsibilities": [
+      "Owns fixed and live date and time fields, minute adjustments, document null date conversion and native number format expansion."
+    ],
+    "omittedResponsibilities": [
+      "Date/time command dialog integration and native process test-only clock controls."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/fields/flddat.ts",
+          "marker": "SwDateTimeFieldType"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-date-time-fields.test.ts",
+          "marker": "testTdf111969"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/fields/flddat.cxx",
+          "marker": "SwDateTimeFieldType::SwDateTimeFieldType"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/fields/flddat.cxx",
+          "marker": "SwDateTimeField::ExpandImpl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/fields/flddat.cxx",
+          "marker": "SwDateTimeField::GetDateTime"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/qa/extras/uiwriter/uiwriter9.cxx",
+          "marker": "testTdf111969"
+        }
+      ]
+    }
+  }
+}

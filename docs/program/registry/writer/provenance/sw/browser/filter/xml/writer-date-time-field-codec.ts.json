@@ -1,0 +1,30 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "local-infrastructure",
+    "localPath": "apps/office/src/sw/browser/filter/xml/writer-date-time-field-codec.ts",
+    "status": "local-only",
+    "rationale": "Transfers the native date/time subtype, value, adjustment, formatter definition and paragraph offset through the Worker.",
+    "responsibilities": [
+      "Transfers the native date/time subtype, value, adjustment, formatter definition and paragraph offset through the Worker."
+    ],
+    "stackDivergence": {
+      "kind": "local-infrastructure",
+      "rationale": "Structured Worker transport of native date and time fields."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/filter/xml/writer-date-time-field-codec.ts",
+          "marker": "encodeDateTimeFields"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-date-time-fields.test.ts",
+          "marker": "testTdf111969"
+        }
+      ],
+      "upstream": []
+    }
+  }
+}

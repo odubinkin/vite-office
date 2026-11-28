@@ -20,6 +20,11 @@ import {
   type WriterDocInfoFieldRecord,
 } from "./writer-doc-info-field-codec";
 import {
+  decodeDateTimeFields,
+  encodeDateTimeFields,
+  type WriterDateTimeFieldRecord,
+} from "./writer-date-time-field-codec";
+import {
   decodeLegacyAnnotations,
   type LegacyWriterAnnotationRecord,
 } from "./writer-annotation-codec";
@@ -88,6 +93,7 @@ export interface WriterTextNodeRecord {
   readonly referenceMarks?: readonly WriterReferenceMarkRecord[];
   readonly referenceFields?: readonly WriterReferenceFieldRecord[];
   readonly docInfoFields?: readonly WriterDocInfoFieldRecord[];
+  readonly dateTimeFields?: readonly WriterDateTimeFieldRecord[];
   readonly listGeometryWins?: boolean;
   /** True only for the model's synthesized empty numbering item; absence keeps legacy explicit items distinct. */
   readonly emptyListStyle?: true;
@@ -354,11 +360,13 @@ export function encodeTextNode(document: SwDoc, node: SwTextNode): WriterTextNod
   const referenceMarks = encodeReferenceMarks(node);
   const referenceFields = encodeReferenceFields(node);
   const docInfoFields = encodeDocInfoFields(node);
+  const dateTimeFields = encodeDateTimeFields(node);
   return {
     ...(indexMarks.length ? { indexMarks } : {}),
     ...(referenceMarks.length ? { referenceMarks } : {}),
     ...(referenceFields.length ? { referenceFields } : {}),
     ...(docInfoFields.length ? { docInfoFields } : {}),
+    ...(dateTimeFields.length ? { dateTimeFields } : {}),
     autoAttributes: direct === undefined ? [] : encodeSfxItemSet(direct),
     formatCollId: node.GetTextFormatColl().id,
     ...(node.DoesListGeometryWin() ? { listGeometryWins: true } : {}),
@@ -436,6 +444,7 @@ export function decodeTextNode(
   decodeReferenceMarks(node, nodeRecord.referenceMarks);
   decodeReferenceFields(node, nodeRecord.referenceFields);
   decodeDocInfoFields(node, nodeRecord.docInfoFields);
+  decodeDateTimeFields(node, nodeRecord.dateTimeFields);
   if (nodeRecord.annotations) decodeLegacyAnnotations(node, nodeRecord.annotations);
   node.AddToList();
   for (const offset of nodeRecord.softPageBreaks ?? [])

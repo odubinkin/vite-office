@@ -91,6 +91,8 @@ const entries: readonly (readonly [string, string, XMLToken])[] = [
   [ODF_NAMESPACES.text, "fixed", XMLToken.TEXT_FIXED],
   [ODF_NAMESPACES.text, "date-value", XMLToken.TEXT_DATE_VALUE],
   [ODF_NAMESPACES.text, "time-value", XMLToken.TEXT_TIME_VALUE],
+  [ODF_NAMESPACES.text, "date-adjust", XMLToken.TEXT_DATE_ADJUST],
+  [ODF_NAMESPACES.text, "time-adjust", XMLToken.TEXT_TIME_ADJUST],
   [ODF_NAMESPACES.table, "protected", XMLToken.TABLE_PROTECTED],
   [ODF_NAMESPACES.table, "structure-protected", XMLToken.TABLE_STRUCTURE_PROTECTED],
   [ODF_NAMESPACES.table, "tracked-changes", XMLToken.TABLE_TRACKED_CHANGES],

@@ -6432,3 +6432,25 @@ preserves the native descriptor and attachment behavior.
 - [Original simple document information preparation](../../vendor/libreoffice-reference/xmloff/source/text/txtfldi.cxx#L1447)
 - [Original revision import](../../vendor/libreoffice-reference/xmloff/source/text/txtfldi.cxx#L1565)
 - [Original attachment](../../vendor/libreoffice-reference/sw/source/core/unocore/unofield.cxx#L1589)
+
+### WRITER-775 — Date field export discards a positive adjustment shorter than one day
+
+The date field importer sends its adjustment through the time field parser and
+stores whole minutes. The date exporter divides those minutes by 1,440 and
+applies approximate floor before deciding whether to write the duration.
+A date field with a positive twelve-hour adjustment can show the next day
+before save and lose the adjustment on reopen. Writer preserves this path.
+
+- [Original date import adjustment](../../vendor/libreoffice-reference/xmloff/source/text/txtfldi.cxx#L1074)
+- [Original date export adjustment](../../vendor/libreoffice-reference/xmloff/source/text/txtflde.cxx#L1310)
+- [Original duration granularity and omission](../../vendor/libreoffice-reference/xmloff/source/text/txtflde.cxx#L2653)
+
+### WRITER-776 — Date/time property export splits a negative serial at truncation
+
+The date part uses a signed integer cast and the clock uses the fractional
+part normalized as a time on an empty date. A field value between minus one
+and zero therefore reports the null date together with the normalized clock,
+without the previous-day carry. Writer preserves the conversion.
+
+- [Original date and time property expansion](../../vendor/libreoffice-reference/sw/source/core/fields/flddat.cxx#L136)
+- [Original normalization of a negative time](../../vendor/libreoffice-reference/tools/source/datetime/datetime.cxx#L75)

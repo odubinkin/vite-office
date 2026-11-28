@@ -19,6 +19,8 @@ import {
   XMLReferenceFieldImportContext,
   XMLRevisionDocInfoImportContext,
   XMLSimpleDocInfoImportContext,
+  XMLDateFieldImportContext,
+  XMLTimeFieldImportContext,
 } from "./txtfldi";
 import { docInfoFields } from "./txtflde";
 import { ReferenceFieldSource } from "../../../offapi/com/sun/star/text/ReferenceFieldSource";
@@ -129,6 +131,7 @@ export interface XMLTextImportTarget extends Partial<XMLTextFrameImportTarget> {
   getListRule(styleName: string): XMLTextListRule | undefined;
   createNumberingRule?(): XMLTextListRule;
   getRubyStyle?(name: string): XMLRubyStyle | undefined;
+  getNumberFormatStyle?(name: string): { key: number; systemLanguage: boolean } | undefined;
   getStyle(family: OdfStyleDefinition["family"], styleName: string): OdfStyleDefinition | undefined;
   getAutoStyle(
     family: OdfStyleDefinition["family"],
@@ -441,6 +444,12 @@ function createInlineContext(
         );
   if (XMLIndexMarkImportContext.IsIndexMark(element))
     return annotation || !target.insertIndexMark ? null : new XMLIndexMarkImportContext(paragraph);
+  if (element === XMLToken.TEXT_DATE || element === XMLToken.TEXT_TIME) {
+    if (annotation) return null;
+    const Context =
+      element === XMLToken.TEXT_DATE ? XMLDateFieldImportContext : XMLTimeFieldImportContext;
+    return new Context(paragraph, properties, hyperlink, namedStyles);
+  }
   const docInfo = docInfoFields.find(
     /** Matches an original element token. @param field - Service mapping. @returns Whether matched. */
     ([token]) => token === element,

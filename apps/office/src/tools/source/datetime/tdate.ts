@@ -117,6 +117,8 @@ export class Date implements DateConstReference {
   /** Original null-date fast path and normalized day conversion without changing this packed value. @returns Day number from zero. */
   GetAsNormalizedDays(): number {
     if (this.mnDate === 18991230) return 693594;
+    // The native release arithmetic admits the empty date used by time-only fields.
+    if (this.IsEmpty()) return -365;
     const fields: DateFields = [this.GetDay(), this.GetMonth(), this.GetYear()];
     normalize(fields);
     return convertDateToDays(...fields);

@@ -2,6 +2,7 @@
 import { SwTextAttr } from "../source/core/txtnode/txatbase";
 import type { SwDocInfoField, SwPostItField } from "../source/core/fields/docufld";
 import type { SwGetRefField } from "../source/core/fields/reffld";
+import type { SwDateTimeField } from "../source/core/fields/flddat";
 import type { SwTextNode } from "../source/core/txtnode/ndtxt";
 import type { SwDoc } from "../source/core/doc/doc";
 import type { SwFormatField } from "./fmtfld";
@@ -46,8 +47,11 @@ export type SwTextReferenceField = SwTextField<SwGetRefField>;
 /** Text attribute carrying the original document information field. */
 export type SwTextDocInfoField = SwTextField<SwDocInfoField>;
 
+/** Text attribute carrying the original date or time field. */
+export type SwTextDateTimeField = SwTextField<SwDateTimeField>;
+
 /** Represented native ordinary text fields. */
-export type SwTextOrdinaryField = SwTextReferenceField | SwTextDocInfoField;
+export type SwTextOrdinaryField = SwTextReferenceField | SwTextDocInfoField | SwTextDateTimeField;
 
 /** Identifies the original annotation subclass contract without treating other fields as comments. @param hint - Indexed hint. @returns Whether this is an attached annotation attribute. */
 export function isAnnotationTextField(hint: unknown): hint is SwTextField {

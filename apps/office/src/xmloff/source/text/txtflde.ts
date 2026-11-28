@@ -4,6 +4,52 @@ import type { XMLTextParagraphSource } from "./txtparae";
 import { ReferenceFieldPart } from "../../../offapi/com/sun/star/text/ReferenceFieldPart";
 import { ReferenceFieldSource } from "../../../offapi/com/sun/star/text/ReferenceFieldSource";
 import { XMLToken } from "../core/xmltoken";
+import type { DateTime } from "../../../offapi/com/sun/star/util/DateTime";
+import { OUStringBuffer } from "../../../sal/inc/rtl/ustrbuf";
+import { approxFloor } from "../../../sal/inc/rtl/math";
+import { text } from "../../../i18nlangtag/source/isolang/isolang.tables";
+import { Converter } from "../../../sax/source/tools/converter";
+import { convertDaysToDuration } from "../../../sax/source/tools/converter.duration";
+
+/** One-character native date or time field portion. */
+export interface XMLDateTimeExportMarker {
+  readonly kind: "date-time-field";
+  readonly offset: number;
+  readonly date: boolean;
+  readonly fixed: boolean;
+  readonly value: DateTime;
+  readonly adjust: number;
+  readonly styleName?: string;
+  readonly presentation: string;
+}
+
+/** Writes the date/time value and original adjustment granularity. @param field - Native field portion. @param escapeXml - XML escaping. @returns ODF text field. */
+export function exportDateTimeField(
+  field: XMLDateTimeExportMarker,
+  escapeXml: (value: string) => string,
+): string {
+  const element = field.date ? "date" : "time";
+  const buffer = new OUStringBuffer();
+  let value: string;
+  try {
+    if (field.date) Converter.convertDateTime(buffer, field.value, null);
+    else Converter.convertTimeOrDateTime(buffer, field.value);
+    const converted = buffer.makeStringAndClear();
+    try {
+      value = text(converted);
+    } finally {
+      converted.dispose();
+    }
+  } finally {
+    buffer.dispose();
+  }
+  const duration = field.adjust / (24 * 60);
+  const days = field.date ? approxFloor(duration) : duration;
+  const adjust = days ? ` text:${element}-adjust="${convertDaysToDuration(days)}"` : "";
+  const fixed = field.fixed ? ' text:fixed="true"' : "";
+  const style = field.styleName ? ` style:data-style-name="${escapeXml(field.styleName)}"` : "";
+  return `<text:${element}${style} text:${element}-value="${escapeXml(value)}"${fixed}${adjust}>${escapeXml(field.presentation)}</text:${element}>`;
+}
 
 /** Native ODF tag, UNO service suffix and fixed content property for each text DocInfo field. */
 export const docInfoFields = [

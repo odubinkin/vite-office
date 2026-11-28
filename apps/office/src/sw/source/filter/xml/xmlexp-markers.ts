@@ -94,6 +94,26 @@ export function projectParagraphMarkers(
     ...projectAnnotationMarkers(node),
     ...projectIndexMarks(node),
     ...projectReferenceMarks(node),
+    ...(node.GetpSwpHints()?.GetDateTimeFields() ?? []).map(
+      /** Projects the actual native date/time field. @param hint - Attached field hint. @returns ODF field portion. */
+      (hint): XMLTextParagraphMarker => {
+        const field = hint.GetAttr().GetField();
+        const styleName = anchored?.exportNumberStyle?.(
+          field.GetFormat(),
+          field.IsAutomaticLanguage(),
+        );
+        return {
+          kind: "date-time-field",
+          offset: hint.GetStart(),
+          date: field.IsDate(),
+          fixed: field.IsFixed(),
+          adjust: field.GetOffset(),
+          value: field.GetDateTimeValue(),
+          presentation: field.Expand(),
+          ...(styleName ? { styleName } : {}),
+        };
+      },
+    ),
     ...(node.GetpSwpHints()?.GetDocInfoFields() ?? []).map(
       /** Projects native document information at its point marker. @param hint - Actual field hint. @returns ODF field portion. */
       (hint): XMLTextParagraphMarker => {

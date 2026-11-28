@@ -14,6 +14,112 @@ import { xmlTextString } from "./txtprmap";
 import { ReferenceFieldPart } from "../../../offapi/com/sun/star/text/ReferenceFieldPart";
 import { referenceFieldFormats, type XMLDocInfoField, type XMLReferenceField } from "./txtflde";
 import { toBoolean } from "../../../sal/rtl/strtmpl";
+import { approxFloor } from "../../../sal/inc/rtl/math";
+import { convertDurationToDays } from "../../../sax/source/tools/converter.duration";
+
+/** Original time field context, also used as the base for date fields. */
+export class XMLTimeFieldImportContext extends SvXMLImportContext {
+  protected isDate = false;
+  protected readonly value = new DateTime();
+  protected valueValid = false;
+  private readonly fixed: [boolean] = [false];
+  private adjust = 0;
+  private format: { key: number; systemLanguage: boolean } | undefined;
+
+  /** Binds the date/time service to the active styled text range. @param helper - Import owner. @param properties - Direct formatting. @param hyperlink - Optional link. @param characterStyles - Applied styles. */
+  public constructor(
+    private readonly helper: XMLTextImportHelper,
+    private readonly properties: OdfCharacterProperties,
+    private readonly hyperlink: OdfHyperlink | undefined,
+    private readonly characterStyles: readonly XMLCharacterStyleLayer[],
+  ) {
+    super();
+  }
+
+  /** Collects the source field properties in authored order. @param _element - Field token. @param attributes - Source field attributes. */
+  public override startFastElement(_element: XMLToken, attributes: FastAttributeList): void {
+    for (const [token, value] of attributes) this.ProcessAttribute(token, value);
+  }
+
+  /** Processes time properties or those shared with date fields. @param token - Attribute token. @param value - Lexical value. */
+  protected ProcessAttribute(token: XMLToken, value: string): void {
+    switch (token) {
+      case XMLToken.TEXT_TIME_VALUE:
+      case XMLToken.OFFICE_TIME_VALUE:
+        if (Converter.parseTimeOrDateTime(this.value, value)) this.valueValid = true;
+        break;
+      case XMLToken.TEXT_FIXED:
+        Converter.convertBool(this.fixed, value);
+        break;
+      case XMLToken.STYLE_DATA_STYLE_NAME: {
+        const format = this.helper.GetDataStyleKey(value);
+        if (format) this.format = format;
+        break;
+      }
+      case XMLToken.TEXT_TIME_ADJUST: {
+        const days: [number] = [0];
+        if (convertDurationToDays(days, value)) this.adjust = approxFloor(days[0] * 60 * 24) | 0;
+        break;
+      }
+    }
+  }
+
+  /** Initializes the original fixed state, calendar value, adjustment and data style. @param field - Detached native descriptor. */
+  private PrepareField(field: XMLTextContent): void {
+    this.helper.SetProperty(field, "IsFixed", this.fixed[0]);
+    this.helper.SetProperty(field, "IsDate", this.isDate);
+    this.helper.SetProperty(field, "Adjust", this.adjust, "sal_Int32");
+    if (this.fixed[0] && this.valueValid) {
+      const name = xmlTextString("DateTimeValue");
+      const value = new Any(this.value, cppu_detail_getUnoType_DateTime);
+      try {
+        field.setPropertyValue(name, value);
+      } finally {
+        value.dispose();
+        name.dispose();
+      }
+    }
+    if (this.format) {
+      this.helper.SetProperty(field, "NumberFormat", this.format.key, "sal_Int32");
+      this.helper.SetProperty(field, "IsFixedLanguage", !this.format.systemLanguage);
+    }
+  }
+
+  /** Attaches the original system field, leaving source presentation to its value owner. */
+  public override endFastElement(): void {
+    this.helper.InsertTextField(
+      "DateTime",
+      this.PrepareField.bind(this),
+      this.properties,
+      this.hyperlink,
+      this.characterStyles,
+    );
+  }
+}
+
+/** Date context accepts the date-specific value and adjustment attributes. */
+export class XMLDateFieldImportContext extends XMLTimeFieldImportContext {
+  protected override isDate = true;
+
+  /** Uses the original strict date-time parser and ignores time-only attributes. @param token - Attribute token. @param value - Lexical value. */
+  protected override ProcessAttribute(token: XMLToken, value: string): void {
+    switch (token) {
+      case XMLToken.TEXT_DATE_VALUE:
+      case XMLToken.OFFICE_DATE_VALUE:
+        if (Converter.parseDateTime(this.value, value)) this.valueValid = true;
+        break;
+      case XMLToken.TEXT_DATE_ADJUST:
+        super.ProcessAttribute(XMLToken.TEXT_TIME_ADJUST, value);
+        break;
+      case XMLToken.TEXT_TIME_VALUE:
+      case XMLToken.OFFICE_TIME_VALUE:
+      case XMLToken.TEXT_TIME_ADJUST:
+        break;
+      default:
+        super.ProcessAttribute(token, value);
+    }
+  }
+}
 
 /** Original simple document information field importer. */
 export class XMLSimpleDocInfoImportContext extends SvXMLImportContext {

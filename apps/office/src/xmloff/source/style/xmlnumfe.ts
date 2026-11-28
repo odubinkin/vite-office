@@ -63,13 +63,14 @@ export function ExportNumberFormat(
   formatter: SvNumberFormatter,
   key: number,
   name: string,
+  systemLanguage = false,
 ): string | null {
   const realKey: [number] = [key];
   const entry = formatter.GetSubstitutedEntry(key, realKey);
   if (!entry) return null;
   const builtin = SvNumberFormatter.GetIndexTableOffset(realKey[0]);
   if (builtin === N.NF_BOOLEAN)
-    return `<number:boolean-style style:name="${name}"${numberStyleLocale(entry.GetLanguage())}><number:boolean/></number:boolean-style>`;
+    return `<number:boolean-style style:name="${name}"${systemLanguage ? "" : numberStyleLocale(entry.GetLanguage())}><number:boolean/></number:boolean-style>`;
   const conditions = entry.GetConditions();
   const textPart = entry.HasTextFormat();
   const sections = [
@@ -83,7 +84,7 @@ export function ExportNumberFormat(
   const result: string[] = [];
   for (let part = 0; part <= last; ++part) {
     if (!sections[part]) continue;
-    const style = exportPart(entry, builtin, part, name, part === last, maps);
+    const style = exportPart(entry, builtin, part, name, part === last, maps, systemLanguage);
     if (style === null) return null;
     result.push(style);
   }
@@ -182,6 +183,7 @@ function exportPart(
   name: string,
   defaultPart: boolean,
   maps: string,
+  systemLanguage: boolean,
 ): string | null {
   const type = entry.GetNumForInfoScannedType(part) & ~T.DEFINED;
   const tag =
@@ -359,5 +361,5 @@ function exportPart(
     type === T.TIME && entry.GetFormatSpecialInfo(part).grouped
       ? ' number:truncate-on-overflow="false"'
       : "";
-  return `<number:${tag} style:name="${styleName}"${flags}${source}${overflow}${numberStyleLocale(entry.GetLanguage())}>${properties}${parts.join("")}${defaultPart ? maps : ""}</number:${tag}>`;
+  return `<number:${tag} style:name="${styleName}"${flags}${source}${overflow}${systemLanguage ? "" : numberStyleLocale(entry.GetLanguage())}>${properties}${parts.join("")}${defaultPart ? maps : ""}</number:${tag}>`;
 }

@@ -171,6 +171,12 @@ metadata and fixed fields keep the original presentation. Print and other
 author fields follow the native Gregorian date checks. The ODT Worker restores
 the native metadata owner before adopting the document.
 
+Standalone date and time fields use the document number formatter and its
+null date. Fixed fields retain their native serial value. Live fields read
+the local clock when expanded. The Worker carries the number-format definition
+and the offset in minutes. ODT export retains the original date and time
+adjustment granularity.
+
 Images, other field types, annotations, sections, objects, scripts,
 signatures, encryption, RDF, non-decimal numbering,
 and merged or nested tables remain unsupported. Table rows are

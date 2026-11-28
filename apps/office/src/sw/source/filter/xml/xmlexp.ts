@@ -646,23 +646,26 @@ function exportWriterText(
   bitmapStyles?: XMLBitmapStyleExport,
   redlineStyles?: readonly XMLRedlineStyleSource[],
 ): OdfTextExport {
+  const dataStyles = new Map<string, { name: string; xml: string } | null>();
+  /** Registers a native automatic number style, including its system language policy. @param key - Formatter identity. @param systemLanguage - Whether locale is automatic. @returns ODF number style name. */
+  function exportNumberStyle(key: number, systemLanguage = false): string | undefined {
+    const identity = `${key}:${systemLanguage}`;
+    if (!dataStyles.has(identity)) {
+      const name = `N${dataStyles.size + 1}`;
+      const xml = ExportNumberFormat(document.GetNumberFormatter(), key, name, systemLanguage);
+      dataStyles.set(identity, xml ? { name, xml } : null);
+    }
+    return dataStyles.get(identity)?.name;
+  }
   const anchored: XMLBoundWriterFrames = {
     text: CollectTextFlyFrames(document),
+    exportNumberStyle,
     ...(bitmapStyles ? { bitmapStyles } : {}),
     ...(graphicHelper ? { graphicHelper, graphics: CollectGraphicFlyFrames(document, true) } : {}),
   };
-  const dataStyles = new Map<number, { name: string; xml: string } | null>();
   const exported = exportTextParagraphs(
     {
-      /** Registers one referenced Writer format. @param key - Formatter identity. @returns ODF number style name. */
-      exportNumberStyle(key) {
-        if (!dataStyles.has(key)) {
-          const name = `N${dataStyles.size + 1}`;
-          const xml = ExportNumberFormat(document.GetNumberFormatter(), key, name);
-          dataStyles.set(key, xml ? { name, xml } : null);
-        }
-        return dataStyles.get(key)?.name;
-      },
+      exportNumberStyle,
       commonCharacterStyleNames: document.GetCharFormats().slice(1).map(getCharacterOdfStyleName),
       ...(redlineStyles === undefined ? {} : { redlineStyles }),
       /** Iterates live Writer nodes without retaining a projection. @returns Paragraph source iterator. */

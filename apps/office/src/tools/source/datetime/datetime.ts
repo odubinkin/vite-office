@@ -63,6 +63,20 @@ export class DateTime
     if (first.GetTime() !== second.GetTime()) return new Duration(second, first).GetInDays();
     return first.GetAsNormalizedDays() - second.GetAsNormalizedDays();
   }
+  /** Adds the native rounded duration and normalizes the time remainder into the current date. @param days - Serial duration in days. */
+  AddTime(days: number): void {
+    const duration = new Duration(days);
+    this.AddDays(duration.GetDays());
+    const time = this.GetNSFromTime() + duration.GetTime().GetNSFromTime();
+    const whole = time / Time.nanoSecPerDay;
+    let remaining = time % Time.nanoSecPerDay;
+    this.AddDays(Number(whole));
+    if (time < 0n) {
+      this.AddDays(-1);
+      remaining += Time.nanoSecPerDay;
+    }
+    this.maTime.MakeTimeFromNS(remaining);
+  }
   /** Reads the actual Time base value. @returns Packed signed64 time. */
   GetTime(): bigint {
     return this.maTime.GetTime();

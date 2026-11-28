@@ -333,6 +333,7 @@ export interface XMLBoundWriterFrames {
   readonly bitmapStyles?: XMLBitmapStyleExport;
   readonly graphics?: ReadonlyMap<SwTextNode, readonly BoundGraphicFrame[]>;
   readonly graphicHelper?: SvXMLGraphicHelper;
+  readonly exportNumberStyle?: (key: number, systemLanguage?: boolean) => string | undefined;
 }
 
 /** Projects native frame portions at the original paragraph or character position. @param node - Native anchor paragraph. @param anchored - Actual bound frames. @param projectBlock - Projects direct text and table children. @returns XML frame portions. */
@@ -444,6 +445,7 @@ export function compareParagraphMarkers(
       case "reference-mark":
       case "reference-field":
       case "doc-info-field":
+      case "date-time-field":
         return 6;
     }
   }

@@ -8,10 +8,13 @@ import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { DateTime } from "../../../../tools/source/datetime/datetime";
 import {
   SwTextField,
+  type SwTextDateTimeField,
   type SwTextDocInfoField,
   type SwTextReferenceField,
 } from "../../../inc/txtfld";
 import { SwFormatField } from "../../../inc/fmtfld";
+import { SwDateTimeSubType } from "../../../inc/fldbas";
+import { SwDateTimeField } from "../fields/flddat";
 import { RES_TXTATR_FIELD } from "../../../inc/hintids";
 import { RefFieldFormat } from "../../../inc/reffld";
 import { ReferencesSubtype } from "../../../inc/reffldsubtype";
@@ -312,6 +315,80 @@ export class SwXDocInfoField {
   }
 
   /** Disposes the native field by removing its point from the document. */
+  public dispose(): void {
+    const hint = this.hint;
+    this.hint = undefined;
+    if (hint) hint.GetTextNode()?.EraseText(hint.GetStart(), 1);
+  }
+}
+
+/** Original DateTime UNO descriptor over the Writer field owner. */
+export class SwXDateTimeField {
+  private subtype = SwDateTimeSubType.Time;
+  private automaticLanguage = true;
+  private format = 0;
+  private offset = 0;
+  private value: DateTime | undefined;
+  private hint: SwTextDateTimeField | undefined;
+
+  /** Assigns original date/time properties. @param name - UNO property name. @param input - Typed property value. */
+  public setPropertyValue(name: OUStringConstReference, input: Any): void {
+    if (this.hint) invalid("Writer date/time field is attached.");
+    const property = text(name);
+    switch (property) {
+      case "IsFixed":
+        this.subtype =
+          (this.subtype & ~SwDateTimeSubType.Fixed) |
+          (scalar(input, "bool") ? SwDateTimeSubType.Fixed : SwDateTimeSubType.None);
+        break;
+      case "IsDate":
+        this.subtype =
+          (this.subtype & ~(SwDateTimeSubType.Date | SwDateTimeSubType.Time)) |
+          (scalar(input, "bool") ? SwDateTimeSubType.Date : SwDateTimeSubType.Time);
+        break;
+      case "NumberFormat":
+        this.format = (scalar(input, "sal_Int32") as number) >>> 0;
+        break;
+      case "IsFixedLanguage":
+        this.automaticLanguage = !scalar(input, "bool");
+        break;
+      case "Adjust":
+        this.offset = scalar(input, "sal_Int32") as number;
+        break;
+      case "DateTimeValue": {
+        const value = new UnoDateTime();
+        if (!input.extract(value, cppu_detail_getUnoType_DateTime)) illegal(property);
+        this.value = new DateTime(value);
+        break;
+      }
+      default:
+        unknown(property);
+    }
+  }
+
+  /** Attaches the date/time field at the original dummy position. @param range - Current range. */
+  public attach(range: SwXTextRange): void {
+    if (this.hint) invalid("Writer date/time field is already attached.");
+    const position = range.GetPaM().Start();
+    const node = position.GetNode().GetTextNode();
+    if (!node) illegal("Writer date/time field must be in text.");
+    const field = new SwDateTimeField(
+      node.GetDoc().getIDocumentFieldsAccess().GetDateTimeFieldType(),
+      this.subtype,
+      this.format,
+    );
+    if (this.value) field.SetDateTime(this.value);
+    field.SetOffset(this.offset);
+    field.SetAutomaticLanguage(this.automaticLanguage);
+    const hint = new SwTextField(
+      new SwFormatField(field, RES_TXTATR_FIELD),
+      position.GetContentIndex(),
+    );
+    if (!node.InsertHint(hint)) invalid("Writer date/time field could not be inserted.");
+    this.hint = hint;
+  }
+
+  /** Removes the attached point through the document text model. */
   public dispose(): void {
     const hint = this.hint;
     this.hint = undefined;

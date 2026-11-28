@@ -73,6 +73,11 @@ export class XMLTextImportHelper {
   private readonly lists = new XMLTextListsHelper();
   private cellParaStyleDefault = "";
 
+  /** Resolves a native data style in the current document owner. @param name - ODF data style name. @returns Formatter key and default language policy. */
+  public GetDataStyleKey(name: string): { key: number; systemLanguage: boolean } | undefined {
+    return this.target.getNumberFormatStyle?.(name);
+  }
+
   /** Gets the explicit cell paragraph default in the current SAX scope. @returns Source style name. */
   public GetCellParaStyleDefault(): string {
     return this.cellParaStyleDefault;

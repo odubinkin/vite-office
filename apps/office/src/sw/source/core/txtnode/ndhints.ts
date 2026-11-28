@@ -8,12 +8,14 @@ import { SwTextRefMark } from "./atrref";
 import { RES_TXTATR_REFMARK, RES_TXTATR_TOXMARK } from "../../../inc/hintids";
 import {
   SwTextField,
+  type SwTextDateTimeField,
   type SwTextDocInfoField,
   type SwTextOrdinaryField,
   type SwTextReferenceField,
 } from "../../../inc/txtfld";
 import { SwGetRefField } from "../fields/reffld";
 import { SwDocInfoField } from "../fields/docufld";
+import { SwDateTimeField } from "../fields/flddat";
 import { SwTextFlyCnt } from "../../../inc/txtflcnt";
 import { TryInsertTextNodeHint, DestroyTextNodeAttribute } from "./thints-insert";
 import { TryInsertNesting, type NestingAttribute } from "./thints-nesting";
@@ -424,6 +426,15 @@ export class SwpHints {
       /** Selects the actual value class. @param hint - Text attribute. @returns Whether a DocInfo field. */
       (hint): hint is SwTextDocInfoField =>
         hint instanceof SwTextField && hint.GetAttr().GetField() instanceof SwDocInfoField,
+    );
+  }
+
+  /** Returns native date and time field hints in start order. @returns Native field hints. */
+  public GetDateTimeFields(): readonly SwTextDateTimeField[] {
+    return this.hintsByStart.filter(
+      /** Selects the actual field value class. @param hint - Text attribute. @returns Whether a date/time field. */
+      (hint): hint is SwTextDateTimeField =>
+        hint instanceof SwTextField && hint.GetAttr().GetField() instanceof SwDateTimeField,
     );
   }
 

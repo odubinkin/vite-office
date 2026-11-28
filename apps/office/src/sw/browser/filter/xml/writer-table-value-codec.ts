@@ -13,11 +13,46 @@ import {
   SwTableBoxNumFormat,
   SwTableBoxValue,
 } from "../../../source/core/attr/cellatr";
+import type { SwDoc } from "../../../source/core/doc/doc";
 import type { SwTableBox } from "../../../source/core/table/swtable";
+
+/** Formatter-entry definition portable across Writer document owners. */
+export interface WriterNumberFormatRecord {
+  readonly language: number;
+  readonly code: string;
+}
+
+/** Copies the actual source formatter entry. @param document - Source owner. @param key - Number format key. @returns Portable format or absence. */
+export function encodeNumberFormat(
+  document: SwDoc,
+  key: number,
+): WriterNumberFormatRecord | undefined {
+  const entry = document.GetNumberFormatter().GetEntry(key);
+  return entry ? { language: entry.GetLanguage(), code: text(entry.GetFormatstring()) } : undefined;
+}
+
+/** Restores the actual number format in the destination formatter. @param document - Destination owner. @param source - Portable format. @returns Destination format key. */
+export function decodeNumberFormat(document: SwDoc, source: WriterNumberFormatRecord): number {
+  const { code, language } = source;
+  if (typeof code !== "string" || !Number.isInteger(language) || language < 0 || language > 65535)
+    throw new Error("Stored Writer number format is invalid.");
+  const format = unicode(code);
+  const check: [number] = [0],
+    type: [number] = [0],
+    key: [number] = [0];
+  try {
+    document.GetNumberFormatter().PutEntry(format, check, type, key, language);
+    if (check[0] || key[0] === NUMBERFORMAT_ENTRY_NOT_FOUND)
+      throw new Error("Stored Writer number format is invalid.");
+    return key[0];
+  } finally {
+    format.dispose();
+  }
+}
 
 /** Optional direct box items for current and older Writer records. */
 export interface WriterBoxValueRecord {
-  readonly numberFormat?: { readonly language: number; readonly code: string };
+  readonly numberFormat?: WriterNumberFormatRecord;
   readonly formula?: string;
   readonly value?: number;
   readonly protection?: readonly [content: boolean, size: boolean, position: boolean];
@@ -30,14 +65,12 @@ export function encodeBoxValue(cell: SwTableBox): WriterBoxValueRecord {
   const formula = frame.GetAttrSet().GetItemIfSet(RES_BOXATR_FORMULA, false);
   const value = frame.GetAttrSet().GetItemIfSet(RES_BOXATR_VALUE, false);
   const protect = frame.GetAttrSet().GetItemIfSet(RES_PROTECT, false);
-  const entry =
+  const numberFormat =
     format instanceof SwTableBoxNumFormat
-      ? frame.GetDoc().GetNumberFormatter().GetEntry(format.GetValue())
+      ? encodeNumberFormat(frame.GetDoc(), format.GetValue())
       : undefined;
   return {
-    ...(entry
-      ? { numberFormat: { language: entry.GetLanguage(), code: text(entry.GetFormatstring()) } }
-      : {}),
+    ...(numberFormat ? { numberFormat } : {}),
     ...(formula instanceof SwTableBoxFormula ? { formula: formula.GetFormula() } : {}),
     ...(value instanceof SwTableBoxValue ? { value: value.GetValue() } : {}),
     ...(protect instanceof SvxProtectItem
@@ -56,21 +89,9 @@ export function encodeBoxValue(cell: SwTableBox): WriterBoxValueRecord {
 export function decodeBoxValue(cell: SwTableBox, source: WriterBoxValueRecord): void {
   const frame = cell.GetFrameFormat();
   if (source.numberFormat !== undefined) {
-    const { code, language } = source.numberFormat;
-    if (typeof code !== "string" || !Number.isInteger(language) || language < 0 || language > 65535)
-      throw new Error("Stored Writer table cell number format is invalid.");
-    const format = unicode(code);
-    const check: [number] = [0],
-      type: [number] = [0],
-      key: [number] = [0];
-    try {
-      frame.GetDoc().GetNumberFormatter().PutEntry(format, check, type, key, language);
-      if (check[0] || key[0] === NUMBERFORMAT_ENTRY_NOT_FOUND)
-        throw new Error("Stored Writer table cell number format is invalid.");
-      frame.SetFormatAttr(new SwTableBoxNumFormat(key[0]));
-    } finally {
-      format.dispose();
-    }
+    frame.SetFormatAttr(
+      new SwTableBoxNumFormat(decodeNumberFormat(frame.GetDoc(), source.numberFormat)),
+    );
   }
   if (source.formula !== undefined) {
     if (typeof source.formula !== "string")

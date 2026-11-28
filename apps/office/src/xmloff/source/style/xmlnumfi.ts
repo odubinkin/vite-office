@@ -337,6 +337,11 @@ export class SvXMLNumFormatContext extends SvXMLImportContext {
     return this.PrivateGetKey(styles, new Set());
   }
 
+  /** Reads the original data style language flag. @returns Whether system language supplies formatting. */
+  IsSystemLanguage(): boolean {
+    return this.language === LANGUAGE_SYSTEM;
+  }
+
   /** Resolves each referenced style once and rejects a reference to an active context. @param styles - Document styles. @param stack - Current chain of references. @returns Compiled format key. */
   private PrivateGetKey(
     styles: ReadonlyMap<string, SvXMLNumFormatContext>,
