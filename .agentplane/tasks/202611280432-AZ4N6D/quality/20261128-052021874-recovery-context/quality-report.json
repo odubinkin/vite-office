@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202611280432-AZ4N6D",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-28T05:20:21.874Z",
+  "verdict": "pass",
+  "summary": "Writer retains native text document information fields through ODT import, Worker transport and ODT export.",
+  "evaluated_sha": "32865a99445272fc2d3b28be83f01d65c72af9b2",
+  "blueprint_digest": "d053b4bc871dbe823a4a8d700f3a54d5d8a45b9784d0b2b2ee154ee721434e0a",
+  "findings": [
+    "The native metadata owner drives live fields and Gregorian author handling. Original fixed presentation and revision descriptor behavior is retained and recorded as WRITER-774."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611280432-AZ4N6D/README.md",
+    "output/playwright/odf-writer-redlines/docinfo-verification.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
