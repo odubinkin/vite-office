@@ -1,10 +1,11 @@
 ---
 id: "202611280618-KMYN3V"
 title: "Port Writer ODT document information date, time and duration fields"
-status: "DOING"
+result_summary: "Writer preserves native document-property date, time and duration fields, fixed presentation and number styles through ODT and Worker."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "output/playwright/odf-next-checkpoint/writer-docinfo-time-verification.md"
   findings:
     - "Actual metadata, fixed presentation, document number-style ownership and the original absent-style fallback are covered."
-commit: null
+commit:
+  hash: "fd6bbd062ea7d17b20e3244ce539c1babae14090"
+  message: "🧩 KMYN3V writer: roundtrip native document information calendar fields"
 comments:
   -
     author: "CODER"
     body: "Start: port the pinned document-property calendar/time and duration fields."
+  -
+    author: "CODER"
+    body: "Verified: 22 focused Writer/shared tests and final six-field replay, native ODT fixture, dependency/type/format/lint/provenance checks and Writer parity."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "22 focused Writer/shared tests passed, plus a final replay of six DocInfo and DateTime tests including the pinned original ODT fixture. Typecheck, dependencies, lint, formatting, source provenance and Writer parity inventory passed. WRITER-777/778 record the intact upstream defaults."
+  -
+    type: "status"
+    at: "2026-11-28T06:33:51.401Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: 22 focused Writer/shared tests and final six-field replay, native ODT fixture, dependency/type/format/lint/provenance checks and Writer parity."
 doc_version: 3
-doc_updated_at: "2026-11-28T06:31:59.079Z"
+doc_updated_at: "2026-11-28T06:33:51.403Z"
 doc_updated_by: "CODER"
 description: "Implement the pinned SwDocInfoField calendar and edit-duration variants via document properties, native locale or number formats, UNO descriptor, shared ODF field import and export and browser Worker transport. Exercise actual upstream fixtures and existing Writer field coverage."
 sections:
