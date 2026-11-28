@@ -42,7 +42,7 @@ import {
 } from "../../../../xmloff/source/style/XMLFontStylesContext";
 import { getFontFamilyFromGeneric } from "../../../../xmloff/source/style/fonthdl";
 import type { ScTable } from "../../../inc/table";
-import { RowHeightContext } from "../../../inc/rowheightcontext";
+import { ScDocRowHeightUpdater } from "../../../inc/dociter";
 import { ScFlatBoolRowSegments } from "../../core/data/segmenttree";
 import type { Color } from "../../../../tools/inc/color";
 import { ScXMLPageStyles } from "./xmlstyle.page";
@@ -596,17 +596,24 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
   private body = false;
   private readonly rowStyles = new Map<
     string,
-    { height: number | null; optimal: boolean | null; pageBreak: boolean }
+    {
+      height: number | null;
+      optimal: boolean | null;
+      pageBreak: boolean;
+      background: SvxBrushItem | undefined;
+    }
   >();
   private readonly recalcRows = new Map<number, ScFlatBoolRowSegments>();
-  /** Registers consumed native row-style properties. @param name - Style. @param height - Twips. @param optimal - Automatic flag. @param pageBreak - Manual break before the row. @returns Nothing. */
+  /** Registers imported row-style properties. @param name - Style. @param height - Original UNO hundredths of a millimeter. @param optimal - Automatic flag. @param pageBreak - Manual break before the row. @param background - Owned original row background. */
   AddRowStyle(
     name: string,
     height: number | null,
     optimal: boolean | null,
     pageBreak: boolean,
+    background: SvxBrushItem | undefined,
   ): void {
-    this.rowStyles.set(name, { height, optimal, pageBreak });
+    this.rowStyles.get(name)?.background?.Dispose();
+    this.rowStyles.set(name, { height, optimal, pageBreak, background });
   }
   /** Applies row style directly to actual sheet storage. @param name - Style. @param tab - Sheet. @param first - First row. @param last - Last row. @returns Nothing. */
   ApplyRowStyle(name: string | null, tab: number, first: number, last: number): void {
@@ -616,9 +623,19 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
     const table = this.document.FetchTable(tab) as ScTable;
     if (style?.pageBreak)
       for (let row = Math.max(1, first); row <= last; ++row) table.SetRowBreak(row, false, true);
+    if (style?.background) {
+      const pattern = new ScPatternAttr(this.document.getCellAttributeHelper());
+      try {
+        pattern.ItemSetPut(style.background);
+        this.document.ApplyPatternAreaTab(0, first, this.document.MaxCol(), last, tab, pattern);
+      } finally {
+        pattern.Dispose();
+      }
+    }
     const height = style?.height ?? null;
     const optimal = style?.optimal ?? height === null;
-    if (height !== null) table.SetRowHeightOnly(first, last, height);
+    const twips = height === null ? null : Number(toTwips(BigInt(height), Length.mm100)) & 0xffff;
+    if (twips !== null) table.SetRowHeightOnly(first, last, twips);
     table.SetManualHeight(first, last, !optimal);
     if (!optimal) return;
     let ranges = this.recalcRows.get(tab);
@@ -628,7 +645,8 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
     }
     // The native row mapper supplies stored optimal heights directly. The row
     // context still schedules early rows and rows lacking a saved optimum.
-    if (last <= 200 || height === null || height <= 0) ranges.setTrue(first, last);
+    if (last <= 200 || height === null || height === 0) ranges.setTrue(first, last);
+    else ranges.setFalse(first, last);
   }
   /** Binds actual document and parser controls. @param document - Target. @param options - Controls. @returns Importer. */
   constructor(
@@ -971,14 +989,8 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
       this.SetStringRefSyntaxIfMissing();
       this.FinalizeConditionalFormats();
       this.FinalizeValidations();
-      for (const [tab, ranges] of this.recalcRows) {
-        const table = this.document.FetchTable(tab) as ScTable;
-        const context = new RowHeightContext(this.document.MaxRow(), 1 / 15, 1 / 15, 1, 1, null);
-        const iterator = new ScFlatBoolRowSegments.RangeIterator(ranges);
-        const range = { mnRow1: 0, mnRow2: 0, mbValue: false };
-        for (let found = iterator.getFirst(range); found; found = iterator.getNext(range))
-          if (range.mbValue) table.SetOptimalHeight(context, range.mnRow1, range.mnRow2, true);
-      }
+      if (this.recalcRows.size)
+        new ScDocRowHeightUpdater(this.document, null, 1 / 15, 1 / 15, this.recalcRows).update();
     } finally {
       this.document.SetAutoCalc(auto);
       this.DisposeStyles();
@@ -997,6 +1009,7 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
     this.autoStyles.clear();
     for (const items of this.textStyles.values()) items.Dispose();
     this.textStyles.clear();
+    for (const { background } of this.rowStyles.values()) background?.Dispose();
     this.rowStyles.clear();
     this.columnStyles.clear();
     for (const { background } of this.tableStyles.values()) background?.Dispose();

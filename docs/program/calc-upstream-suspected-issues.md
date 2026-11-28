@@ -8452,3 +8452,13 @@ blank-exponent digit count. Calc preserves the original normalization.
 - [Original scientific export](../../vendor/libreoffice-reference/xmloff/source/style/xmlnumfe.cxx#L757)
 - [Original scientific import](../../vendor/libreoffice-reference/xmloff/source/style/xmlnumfi.cxx#L807)
 - [Original regression](../../vendor/libreoffice-reference/sc/qa/unit/subsequent_export_test5.cxx#L560)
+
+### CALC-880 — A repeated row style is scheduled as one height range
+
+The XML row context decides whether to keep a saved optimal height using
+the upper index of the repeated range. A range ending after row index 200
+can keep its saved height for the whole span, including any rows at or below
+that index. Calc follows the source range-level decision.
+
+- [Original row-style mapping](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlstyli.cxx#L245)
+- [Original repeated-row scheduling](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlrowi.cxx#L215)

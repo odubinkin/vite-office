@@ -498,6 +498,7 @@ class XMLTableRowStyleContext extends ScXMLImportContext {
   private height: number | null = null;
   private optimal: boolean | null = null;
   private pageBreak = false;
+  private background: SvxBrushItem | undefined;
   /** Binds importer and style name. @param owner - Importer. @param name - Style. @returns Context. */
   constructor(
     private readonly owner: ScXMLImport,
@@ -505,7 +506,7 @@ class XMLTableRowStyleContext extends ScXMLImportContext {
   ) {
     super(owner);
   }
-  /** Converts native row-height properties in twips. @param element - Child token. @param attributes - Properties. @returns Ignored leaf. */
+  /** Parses native row geometry and imported row-level cell background. @param element - Child token. @param attributes - Row properties. @returns Property context. */
   override createFastChildContext(
     element: XMLToken,
     attributes: FastAttributeList,
@@ -515,25 +516,58 @@ class XMLTableRowStyleContext extends ScXMLImportContext {
       return new SvXMLIgnoreContext(true);
     }
     attributes.assertOnly(
-      [XMLToken.STYLE_ROW_HEIGHT, XMLToken.STYLE_USE_OPTIMAL_ROW_HEIGHT, XMLToken.FO_BREAK_BEFORE],
+      [
+        XMLToken.STYLE_ROW_HEIGHT,
+        XMLToken.STYLE_USE_OPTIMAL_ROW_HEIGHT,
+        XMLToken.FO_BREAK_BEFORE,
+        XMLToken.FO_BACKGROUND_COLOR,
+      ],
       "Calc row geometry",
     );
     const height = attributes.get(XMLToken.STYLE_ROW_HEIGHT),
       optimal = attributes.get(XMLToken.STYLE_USE_OPTIMAL_ROW_HEIGHT);
     this.pageBreak = readBreakBefore(attributes.get(XMLToken.FO_BREAK_BEFORE), this.owner);
     if (height !== null) {
-      this.height = new SvXMLUnitConverter("twip").convertMeasureToCore(height, 0, 65535);
+      this.height = new SvXMLUnitConverter("mm100").convertMeasureToCore(height, 0, 2147483647);
       if (this.height === null) this.owner.unsupported("invalid row height");
     }
     if (optimal !== null) {
       if (optimal === "true" || optimal === "false") this.optimal = optimal === "true";
       else this.owner.unsupported("invalid optimal row height");
     }
-    return new SvXMLIgnoreContext(true);
+    const background = attributes.get(XMLToken.FO_BACKGROUND_COLOR);
+    if (background !== null)
+      importCellBackgroundColor(
+        this.GetBackground(),
+        background,
+        /** Reports invalid imported background color. @param name - Diagnostic name. */
+        (name) => this.owner.unsupported(name),
+      );
+    return new XMLTableStylePropertyContext(
+      this.owner,
+      new Map([
+        [
+          XMLToken.LOEXT_BACKGROUND_COMPLEX_COLOR,
+          /** Applies the native theme-based row background. @param color - Imported complex color. */
+          (color: ComplexColor) => this.GetBackground().setComplexColor(color),
+        ],
+      ]),
+    );
   }
-  /** Transfers parsed row properties. @returns Nothing. */
+  /** Creates the owned row brush only when an actual background is declared. @returns Original cell background item. */
+  private GetBackground(): SvxBrushItem {
+    return (this.background ??= (
+      this.owner
+        .GetDocument()
+        .getCellAttributeHelper()
+        .getDefaultCellAttribute()
+        .GetItem(ATTR_BACKGROUND) as SvxBrushItem
+    ).Clone());
+  }
+
+  /** Transfers parsed row properties. */
   override endFastElement(): void {
-    this.owner.AddRowStyle(this.name, this.height, this.optimal, this.pageBreak);
+    this.owner.AddRowStyle(this.name, this.height, this.optimal, this.pageBreak, this.background);
   }
 }
 

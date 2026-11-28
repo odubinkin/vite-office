@@ -14,6 +14,8 @@ export class ScXMLTableRowContext extends ScXMLImportContext {
   col = 0;
   readonly repeat: number;
   readonly start: number;
+  private readonly visibility: string | null;
+  private readonly styleName: string | null;
   /** Binds row cursor and native repeat default. @param table - Actual sheet cursor. @param attributes - Attributes. @returns Context. */
   constructor(
     readonly table: ScXMLTableContext,
@@ -26,18 +28,8 @@ export class ScXMLTableRowContext extends ScXMLImportContext {
     );
     this.start = table.row;
     table.styles.SetRowStyle(attributes.get(XMLToken.TABLE_DEFAULT_CELL_STYLE_NAME) ?? "");
-    const visibility = attributes.get(XMLToken.TABLE_VISIBILITY),
-      doc = table.owner.GetDocument(),
-      last = Math.min(doc.MaxRow(), this.start + this.repeat - 1);
-    if (visibility === "collapse" || visibility === "filter")
-      doc.SetRowHidden(this.start, last, table.tab, true);
-    if (visibility === "filter") doc.SetRowFiltered(this.start, last, table.tab, true);
-    table.owner.ApplyRowStyle(
-      attributes.get(XMLToken.TABLE_STYLE_NAME),
-      table.tab,
-      this.start,
-      last,
-    );
+    this.visibility = attributes.get(XMLToken.TABLE_VISIBILITY);
+    this.styleName = attributes.get(XMLToken.TABLE_STYLE_NAME);
   }
   /** Creates normal/covered cells on the actual row. @param element - Token. @param attributes - Attributes. @returns Context. */
   override createFastChildContext(
@@ -52,8 +44,15 @@ export class ScXMLTableRowContext extends ScXMLImportContext {
       element === XMLToken.TABLE_COVERED_TABLE_CELL,
     );
   }
-  /** Advances a complete repeated row span without copying its contents to a second model. @returns Nothing. */
+  /** Applies row properties at native close and advances the repeated row span. */
   override endFastElement(): void {
+    const document = this.table.owner.GetDocument();
+    const tab = this.table.tab;
+    const last = Math.min(document.MaxRow(), this.start + this.repeat - 1);
+    this.table.owner.ApplyRowStyle(this.styleName, tab, this.start, last);
+    if (this.visibility === "collapse" || this.visibility === "filter")
+      document.SetRowHidden(this.start, last, tab, true);
+    if (this.visibility === "filter") document.SetRowFiltered(this.start, last, tab, true);
     this.table.row = this.start + this.repeat;
   }
 }
