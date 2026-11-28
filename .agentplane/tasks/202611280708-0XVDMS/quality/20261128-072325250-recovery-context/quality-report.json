@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202611280708-0XVDMS",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-28T07:23:25.250Z",
+  "verdict": "pass",
+  "summary": "Native Calc change tracking deletion and movement contracts verified through ODS and Worker.",
+  "evaluated_sha": "ba9e4ad586681cf9c8206d65c3f564358a8ab0fe",
+  "blueprint_digest": "d46d8126808478a341adf608a5754a6ec8c407db92ad1a2d0cd76c92cd95c83d",
+  "findings": [
+    "Original fixtures and focused package round trips passed with current cell values preserved."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611280708-0XVDMS/README.md",
+    "output/playwright/odf-next-checkpoint/calc-delete-move-verification.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
