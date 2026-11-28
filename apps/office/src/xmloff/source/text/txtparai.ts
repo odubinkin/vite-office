@@ -22,6 +22,7 @@ import {
   XMLChapterImportContext,
   XMLPlaceholderFieldImportContext,
   XMLDropDownFieldImportContext,
+  XMLHiddenTextImportContext,
   XMLReferenceFieldImportContext,
   XMLRevisionDocInfoImportContext,
   XMLDateTimeDocInfoImportContext,
@@ -490,6 +491,16 @@ function createInlineContext(
     return annotation
       ? null
       : new XMLVarFieldImportContext(element, paragraph, properties, hyperlink, namedStyles);
+  if (element === XMLToken.TEXT_CONDITIONAL_TEXT || element === XMLToken.TEXT_HIDDEN_TEXT)
+    return annotation
+      ? null
+      : new XMLHiddenTextImportContext(
+          paragraph,
+          element === XMLToken.TEXT_CONDITIONAL_TEXT,
+          properties,
+          hyperlink,
+          namedStyles,
+        );
   if (element === XMLToken.TEXT_PLACEHOLDER || element === XMLToken.TEXT_DROP_DOWN) {
     if (annotation) return null;
     const Context =

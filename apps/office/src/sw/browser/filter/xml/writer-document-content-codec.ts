@@ -35,6 +35,11 @@ import {
   type WriterChoiceFieldRecord,
 } from "./writer-choice-field-codec";
 import {
+  decodeHiddenTextFields,
+  encodeHiddenTextFields,
+  type WriterHiddenTextFieldRecord,
+} from "./writer-hidden-text-field-codec";
+import {
   decodeChapterFields,
   encodeChapterFields,
   type WriterChapterFieldRecord,
@@ -126,6 +131,7 @@ export interface WriterTextNodeRecord {
   readonly sequenceFields?: readonly WriterSequenceFieldRecord[];
   readonly variableFields?: readonly WriterVariableFieldRecord[];
   readonly choiceFields?: readonly WriterChoiceFieldRecord[];
+  readonly hiddenTextFields?: readonly WriterHiddenTextFieldRecord[];
   readonly chapterFields?: readonly WriterChapterFieldRecord[];
   readonly pageNumberFields?: readonly WriterPageNumberFieldRecord[];
   readonly docStatFields?: readonly WriterDocStatFieldRecord[];
@@ -401,6 +407,7 @@ export function encodeTextNode(document: SwDoc, node: SwTextNode): WriterTextNod
   const sequenceFields = encodeSequenceFields(node);
   const variableFields = encodeVariableFields(node);
   const choiceFields = encodeChoiceFields(node);
+  const hiddenTextFields = encodeHiddenTextFields(node);
   const chapterFields = encodeChapterFields(node);
   const pageNumberFields = encodePageNumberFields(node);
   return {
@@ -413,6 +420,7 @@ export function encodeTextNode(document: SwDoc, node: SwTextNode): WriterTextNod
     ...(sequenceFields.length ? { sequenceFields } : {}),
     ...(variableFields.length ? { variableFields } : {}),
     ...(choiceFields.length ? { choiceFields } : {}),
+    ...(hiddenTextFields.length ? { hiddenTextFields } : {}),
     ...(chapterFields.length ? { chapterFields } : {}),
     ...(pageNumberFields.length ? { pageNumberFields } : {}),
     autoAttributes: direct === undefined ? [] : encodeSfxItemSet(direct),
@@ -497,6 +505,7 @@ export function decodeTextNode(
   decodeSequenceFields(node, nodeRecord.sequenceFields);
   decodeVariableFields(node, nodeRecord.variableFields);
   decodeChoiceFields(node, nodeRecord.choiceFields);
+  decodeHiddenTextFields(node, nodeRecord.hiddenTextFields);
   decodeChapterFields(node, nodeRecord.chapterFields);
   decodePageNumberFields(node, nodeRecord.pageNumberFields);
   if (nodeRecord.annotations) decodeLegacyAnnotations(node, nodeRecord.annotations);

@@ -1,0 +1,30 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "local-infrastructure",
+    "localPath": "apps/office/src/sw/browser/filter/xml/writer-hidden-text-field-codec.ts",
+    "status": "local-only",
+    "rationale": "Transfers native conditional and hidden text field state and their point offsets between Worker documents.",
+    "responsibilities": [
+      "Transfers native conditional and hidden text field state and their point offsets between Worker documents."
+    ],
+    "stackDivergence": {
+      "kind": "local-infrastructure",
+      "rationale": "Structured Worker data reconnects the original shared inline condition field over existing point dummies."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/filter/xml/writer-hidden-text-field-codec.ts",
+          "marker": "encodeHiddenTextFields"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-hidden-text-fields.test.ts",
+          "marker": "keeps the native conditional text from %s"
+        }
+      ],
+      "upstream": []
+    }
+  }
+}

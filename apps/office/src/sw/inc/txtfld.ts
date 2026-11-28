@@ -1,6 +1,11 @@
 /** @fileoverview Native point text attribute that attaches a field to Writer model text. */
 import { SwTextAttr } from "../source/core/txtnode/txatbase";
-import type { SwDocInfoField, SwDocStatField, SwPostItField } from "../source/core/fields/docufld";
+import type {
+  SwDocInfoField,
+  SwDocStatField,
+  SwHiddenTextField,
+  SwPostItField,
+} from "../source/core/fields/docufld";
 import type { SwGetRefField } from "../source/core/fields/reffld";
 import type { SwGetExpField, SwSetExpField } from "../source/core/fields/expfld";
 import type { SwUserField } from "../source/core/fields/usrfld";
@@ -80,6 +85,9 @@ export type SwTextGetExpField = SwTextField<SwGetExpField>;
 /** Text attribute carrying an original User field. */
 export type SwTextUserField = SwTextField<SwUserField>;
 
+/** Text attribute carrying the original conditional or hidden text field. */
+export type SwTextHiddenTextField = SwTextField<SwHiddenTextField>;
+
 /** Represented native ordinary text fields. */
 export type SwTextOrdinaryField =
   | SwTextReferenceField
@@ -90,6 +98,7 @@ export type SwTextOrdinaryField =
   | SwTextChapterField
   | SwTextJumpEditField
   | SwTextDropDownField
+  | SwTextHiddenTextField
   | SwTextSequenceField
   | SwTextGetExpField
   | SwTextUserField;

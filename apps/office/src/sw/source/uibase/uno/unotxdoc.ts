@@ -19,6 +19,7 @@ import {
   SwXUserField,
   SwXUserFieldMaster,
   SwXDropDownField,
+  SwXHiddenTextField,
   SwXJumpEditField,
   SwXGetReferenceField,
   SwXTextField,
@@ -169,6 +170,7 @@ export class SwXTextDocument {
     | SwXGetExpField
     | SwXUserField
     | SwXDropDownField
+    | SwXHiddenTextField
     | SwXJumpEditField
     | SwXPageNumberField
     | SwXDateTimeField {
@@ -196,6 +198,12 @@ export class SwXTextDocument {
       case "com.sun.star.text.TextField.DropDown":
       case "com.sun.star.text.textfield.DropDown":
         return new SwXDropDownField();
+      case "com.sun.star.text.TextField.ConditionalText":
+      case "com.sun.star.text.textfield.ConditionalText":
+        return new SwXHiddenTextField(true);
+      case "com.sun.star.text.TextField.HiddenText":
+      case "com.sun.star.text.textfield.HiddenText":
+        return new SwXHiddenTextField(false);
       case "com.sun.star.text.TextField.Chapter":
       case "com.sun.star.text.textfield.Chapter":
         return new SwXChapterField();

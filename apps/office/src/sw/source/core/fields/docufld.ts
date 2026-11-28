@@ -694,3 +694,116 @@ export class SwPostItField {
     this.textObject = undefined;
   }
 }
+
+/** Native system type shared by conditional text and hidden text. */
+export class SwHiddenTextFieldType {
+  /** Initializes the document-wide hidden-text setting. @param document - Native document. @param hidden - Hide text according to its condition. */
+  public constructor(
+    private readonly document: SwDoc,
+    private readonly hidden = true,
+  ) {}
+
+  /** Borrows the document that owns this field type. @returns Native document. */
+  public GetDoc(): SwDoc {
+    return this.document;
+  }
+
+  /** Returns the native hidden-text mode. @returns Whether conditions control visibility. */
+  public GetHiddenFlag(): boolean {
+    return this.hidden;
+  }
+}
+
+/** Original conditional or hidden text field parameters and calculated state. */
+export interface SwHiddenTextFieldData {
+  readonly conditional: boolean;
+  readonly condition: string;
+  readonly trueContent: string;
+  readonly falseContent: string;
+  readonly hidden: boolean;
+  readonly currentPresentation?: string;
+}
+
+/** Original inline field behind both ConditionalText and HiddenText services. */
+export class SwHiddenTextField implements SwField<SwHiddenTextField> {
+  private hidden: boolean;
+  private currentPresentation: string | undefined;
+
+  /** Constructs a detached field from its original parameters. @param type - Document system type. @param data - Native field parameters. */
+  public constructor(
+    private readonly type: SwHiddenTextFieldType,
+    private readonly data: SwHiddenTextFieldData,
+  ) {
+    this.hidden = data.hidden;
+    this.currentPresentation = data.currentPresentation;
+  }
+
+  /** Borrows the original shared system type. @returns Document field type. */
+  public GetTyp(): SwHiddenTextFieldType {
+    return this.type;
+  }
+
+  /** Returns the condition used by the expression pass. @returns Original expression. */
+  public GetPar1(): string {
+    return this.data.condition;
+  }
+
+  /** Stores the original inverse of the calculated boolean. @param hidden - Native field flag. */
+  public SetValue(hidden: boolean): void {
+    this.hidden = hidden;
+  }
+
+  /** Refreshes the conditional presentation for quoted literal branches. */
+  public Evaluate(): void {
+    if (!this.data.conditional) return;
+    const value = this.GetBranch();
+    this.currentPresentation =
+      value.length > 1 && value.startsWith('"') && value.endsWith('"')
+        ? value.slice(1, -1)
+        : undefined;
+  }
+
+  /** Reads the original conditional branch when there is no cached presentation. @returns Selected branch. */
+  private GetBranch(): string {
+    return this.data.condition && !this.hidden ? this.data.trueContent : this.data.falseContent;
+  }
+
+  /** Expands the field for layout, text extraction and ODF. @returns Current presentation. */
+  public Expand(): string {
+    if (this.data.conditional) return this.currentPresentation ?? this.GetBranch();
+    if (!this.type.GetHiddenFlag() || (this.data.condition && this.hidden))
+      return this.data.trueContent;
+    return this.data.falseContent;
+  }
+
+  /** Snapshots the original parameters along with the live field values. @returns Independent values. */
+  public GetData(): SwHiddenTextFieldData {
+    const { conditional, condition, trueContent, falseContent } = this.data;
+    return {
+      conditional,
+      condition,
+      trueContent,
+      falseContent,
+      hidden: this.hidden,
+      ...(this.currentPresentation === undefined
+        ? {}
+        : { currentPresentation: this.currentPresentation }),
+    };
+  }
+
+  /** Copies the original field values under the current system type. @returns Independent field. */
+  public Copy(): SwHiddenTextField {
+    return new SwHiddenTextField(this.type, this.GetData());
+  }
+
+  /** Binds the copied field to its destination system type. @param doc - Destination document. @returns Independent field. */
+  public CopyToDocument(doc: SwDoc): SwHiddenTextField {
+    return new SwHiddenTextField(
+      doc.getIDocumentFieldsAccess().GetHiddenTextFieldType(),
+      this.GetData(),
+    );
+  }
+
+  /** Disposes the field, whose parameter storage is owned by JavaScript. */
+  public Dispose(): void {}
+}

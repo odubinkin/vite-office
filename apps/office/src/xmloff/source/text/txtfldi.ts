@@ -10,7 +10,7 @@ import {
 import { Converter } from "../../../sax/source/tools/converter";
 import type { XMLAnnotationTextContent, XMLTextContent, XMLTextCursor } from "../../inc/txtimp";
 import { type FastAttributeList, SvXMLImportContext } from "../core/xmlimp";
-import { XMLToken } from "../core/xmltoken";
+import { ODF_NAMESPACES, XMLToken } from "../core/xmltoken";
 import type { XMLCharacterStyleLayer, XMLTextImportHelper } from "./txtimp";
 import type { OdfCharacterProperties, OdfHyperlink } from "./txtparae";
 import { xmlTextString } from "./txtprmap";
@@ -34,6 +34,87 @@ import {
 import * as NumberingType from "../../../offapi/com/sun/star/style/NumberingType";
 import { SvXMLUnitConverter } from "../core/xmluconv";
 import type { XMLCountField } from "./txtflde";
+
+/** Imports the two native inline condition field services. */
+export class XMLHiddenTextImportContext extends SvXMLImportContext {
+  private condition: string | undefined;
+  private trueContent: string | null = null;
+  private falseContent: string | null = null;
+  private hidden: [boolean] = [false];
+  private presentation = "";
+
+  /** Binds the styled text point. @param helper - Native text importer. @param conditional - ConditionalText service selector. @param properties - Run properties. @param hyperlink - Surrounding link. @param characterStyles - Applied character styles. */
+  public constructor(
+    private readonly helper: XMLTextImportHelper,
+    private readonly conditional: boolean,
+    private readonly properties: OdfCharacterProperties,
+    private readonly hyperlink: OdfHyperlink | undefined,
+    private readonly characterStyles: readonly XMLCharacterStyleLayer[],
+  ) {
+    super();
+  }
+
+  /** Parses the original condition namespace, branch attributes and native boolean. @param _element - Field element. @param attributes - Authored values. */
+  public override startFastElement(_element: XMLToken, attributes: FastAttributeList): void {
+    const condition = attributes.get(XMLToken.TEXT_CONDITION);
+    const colon = condition?.indexOf(":") ?? -1;
+    if (
+      condition !== null &&
+      colon >= 0 &&
+      attributes.getNamespaceUri(condition.slice(0, colon)) === ODF_NAMESPACES.ooow
+    )
+      this.condition = condition.slice(colon + 1);
+    for (const [token, value] of attributes) {
+      if (this.conditional) {
+        if (token === XMLToken.TEXT_STRING_VALUE_IF_TRUE) this.trueContent = value;
+        if (token === XMLToken.TEXT_STRING_VALUE_IF_FALSE) this.falseContent = value;
+        if (token === XMLToken.TEXT_CURRENT_VALUE) Converter.convertBool(this.hidden, value);
+      } else {
+        if (token === XMLToken.TEXT_STRING_VALUE || token === XMLToken.OFFICE_STRING_VALUE)
+          this.trueContent = value;
+        if (token === XMLToken.TEXT_IS_HIDDEN) Converter.convertBool(this.hidden, value);
+      }
+    }
+  }
+
+  /** Collects the authored cached presentation. @param value - Decoded text. */
+  public override characters(value: string): void {
+    this.presentation += value;
+  }
+
+  /** Inserts the native field or the authored presentation when required attributes are absent. */
+  public override endFastElement(): void {
+    const { conditional, condition, trueContent, falseContent } = this;
+    if (condition === undefined || trueContent === null || (conditional && falseContent === null)) {
+      this.helper.InsertString(
+        this.presentation,
+        this.properties,
+        this.hyperlink,
+        this.characterStyles,
+      );
+      return;
+    }
+    this.helper.InsertTextField(
+      conditional ? "ConditionalText" : "HiddenText",
+      /** Writes the corresponding service properties. @param field - Detached UNO descriptor. */
+      (field) => {
+        this.helper.SetProperty(field, "Condition", condition);
+        if (conditional && falseContent !== null) {
+          this.helper.SetProperty(field, "TrueContent", trueContent);
+          this.helper.SetProperty(field, "FalseContent", falseContent);
+          this.helper.SetProperty(field, "IsConditionTrue", this.hidden[0]);
+          this.helper.SetProperty(field, "CurrentPresentation", this.presentation);
+        } else {
+          this.helper.SetProperty(field, "Content", trueContent);
+          this.helper.SetProperty(field, "IsHidden", this.hidden[0]);
+        }
+      },
+      this.properties,
+      this.hyperlink,
+      this.characterStyles,
+    );
+  }
+}
 
 /** Imports the original JumpEdit service and fallback text. */
 export class XMLPlaceholderFieldImportContext extends SvXMLImportContext {

@@ -6567,3 +6567,17 @@ table. A box with the same coordinates can therefore supply the value.
 Writer preserves the current-table fallback.
 
 - [Original qualified box name lookup](../../vendor/libreoffice-reference/sw/source/core/fields/cellfml.cxx#L719)
+
+### WRITER-788 — ConditionalText publishes the internal hidden flag as IsConditionTrue
+
+The `IsConditionTrue` UNO property reads and writes the same hidden flag
+as `HiddenText.IsHidden`. The expression pass stores the inverse of the
+calculated condition, and the field expands the true branch when the flag
+is false. ODF import and export use this property for
+`text:current-value`. Writer preserves the published flag and its
+relationship to the expanded text.
+
+- [Original field property map](../../vendor/libreoffice-reference/sw/source/core/unocore/unomap.cxx#L873)
+- [Original field property access](../../vendor/libreoffice-reference/sw/source/core/fields/docufld.cxx#L1534)
+- [Original expression update](../../vendor/libreoffice-reference/sw/source/core/doc/DocumentFieldsManager.cxx#L950)
+- [Original ODF field export](../../vendor/libreoffice-reference/xmloff/source/text/txtflde.cxx#L1520)

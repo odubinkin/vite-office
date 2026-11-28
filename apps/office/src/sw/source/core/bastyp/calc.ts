@@ -25,6 +25,20 @@ const termOperators = new Set([
   "min-in",
   "max-in",
 ]);
+const operatorNames = new Map([
+  ["add", "+"],
+  ["sub", "-"],
+  ["mul", "*"],
+  ["div", "/"],
+  ["eq", "=="],
+  ["neq", "!="],
+  ["l", "<"],
+  ["g", ">"],
+  ["leq", "<="],
+  ["geq", ">="],
+  ["phd", "%"],
+  ["pow", "^"],
+]);
 const listOperators = new Map([
   ["sum", "+"],
   ["mean", "+"],
@@ -48,7 +62,12 @@ const unaryFunctions: Readonly<Record<string, (value: number) => number>> = {
 
 /** Numeric portion of the original Writer field calculator. */
 export class SwCalc {
-  private readonly variables = new Map<string, number>();
+  private readonly variables = new Map<string, number>([
+    ["false", 0],
+    ["true", 1],
+    ["pi", Math.PI],
+    ["e", Math.E],
+  ]);
   private expression = "";
   private index = 0;
   private current: CalcToken = { kind: "end" };
@@ -98,9 +117,10 @@ export class SwCalc {
       this.current = { kind: "name", value: match[4].replaceAll("\\]", "]").toLowerCase() };
     } else if (match[3] !== undefined) {
       const name = match[3].toLowerCase();
+      const operator = operatorNames.get(name);
       this.current =
-        termOperators.has(name) || name === "not"
-          ? { kind: "operator", value: name }
+        operator !== undefined || termOperators.has(name) || name === "not"
+          ? { kind: "operator", value: operator ?? name }
           : { kind: "name", value: name };
     } else if (match[5] === "|" && this.list) {
       ++this.list.length;

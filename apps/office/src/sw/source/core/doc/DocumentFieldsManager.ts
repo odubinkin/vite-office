@@ -1,5 +1,11 @@
 /** @fileoverview Native document ownership of Writer system field types. */
-import { SwDocInfoFieldType, SwDocStatFieldType, SwPostItFieldType } from "../fields/docufld";
+import {
+  SwDocInfoFieldType,
+  SwDocStatFieldType,
+  SwHiddenTextField,
+  SwHiddenTextFieldType,
+  SwPostItFieldType,
+} from "../fields/docufld";
 import {
   SwGetExpField,
   SwGetExpFieldType,
@@ -31,6 +37,7 @@ export class DocumentFieldsManager {
   private readonly getExpression: SwGetExpFieldType;
   private readonly jumpEdit: SwJumpEditFieldType;
   private readonly dropDown: SwDropDownFieldType;
+  private readonly hiddenText: SwHiddenTextFieldType;
   private readonly chapter: SwChapterFieldType;
   private readonly pageNumber: SwPageNumberFieldType;
   private readonly docStat: SwDocStatFieldType;
@@ -44,6 +51,7 @@ export class DocumentFieldsManager {
     this.getExpression = new SwGetExpFieldType(document);
     this.jumpEdit = new SwJumpEditFieldType(document);
     this.dropDown = new SwDropDownFieldType(document);
+    this.hiddenText = new SwHiddenTextFieldType(document);
     this.chapter = new SwChapterFieldType(document);
     this.pageNumber = new SwPageNumberFieldType(document);
     this.docStat = new SwDocStatFieldType(document);
@@ -121,6 +129,11 @@ export class DocumentFieldsManager {
     return this.dropDown;
   }
 
+  /** Borrows the system type shared by conditional and hidden text. @returns Document field type. */
+  public GetHiddenTextFieldType(): SwHiddenTextFieldType {
+    return this.hiddenText;
+  }
+
   /** Borrows the original Chapter system type. @returns Field type. */
   public GetChapterFieldType(): SwChapterFieldType {
     return this.chapter;
@@ -174,6 +187,15 @@ export class DocumentFieldsManager {
               ? calculator.Calculate(field.formula)
               : (strings.get(field.formula) ?? calculator.GetVariable(field.formula));
           if (value !== undefined) field.SetValue(value);
+          continue;
+        }
+        if (field instanceof SwHiddenTextField) {
+          const condition = field.GetPar1();
+          const value = condition === "" ? 0 : calculator.Calculate(condition);
+          if (value !== undefined) {
+            field.SetValue(!value);
+            field.Evaluate();
+          }
           continue;
         }
         if (!(field instanceof SwSetExpField)) continue;

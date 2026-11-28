@@ -18,6 +18,7 @@ import {
   type SwTextPageNumberField,
   type SwTextChapterField,
   type SwTextDropDownField,
+  type SwTextHiddenTextField,
   type SwTextJumpEditField,
   type SwTextSequenceField,
   type SwTextGetExpField,
@@ -51,6 +52,8 @@ import { SwPaM, SwPosition } from "../crsr/pam";
 import {
   SwDocInfoField,
   SwDocStatField,
+  SwHiddenTextField,
+  type SwHiddenTextFieldData,
   type SwDocStatSubType,
   SwDocInfoSubType,
   SwPostItField,
@@ -683,6 +686,70 @@ export class SwXGetExpField {
   }
 
   /** Removes the attached native point. */
+  public dispose(): void {
+    const hint = this.hint;
+    this.hint = undefined;
+    if (hint) hint.GetTextNode()?.EraseText(hint.GetStart(), 1);
+  }
+}
+
+/** UNO descriptor for the two original inline condition field services. */
+export class SwXHiddenTextField {
+  private data: SwHiddenTextFieldData;
+  private hint: SwTextHiddenTextField | undefined;
+
+  /** Selects the native UNO service. @param conditional - Whether to use ConditionalText. */
+  public constructor(conditional: boolean) {
+    this.data = { conditional, condition: "", trueContent: "", falseContent: "", hidden: false };
+  }
+
+  /** Sets the original field properties before attaching. @param name - UNO property name. @param input - Typed UNO value. */
+  public setPropertyValue(name: OUStringConstReference, input: Any): void {
+    if (this.hint) invalid("Writer condition field is attached.");
+    const property = text(name);
+    switch (property) {
+      case "Condition":
+        this.data = { ...this.data, condition: stringValue(input) };
+        return;
+      case "TrueContent":
+      case "Content":
+        if ((property === "TrueContent") !== this.data.conditional) break;
+        this.data = { ...this.data, trueContent: stringValue(input) };
+        return;
+      case "FalseContent":
+        if (!this.data.conditional) break;
+        this.data = { ...this.data, falseContent: stringValue(input) };
+        return;
+      case "IsConditionTrue":
+      case "IsHidden":
+        if ((property === "IsConditionTrue") !== this.data.conditional) break;
+        this.data = { ...this.data, hidden: scalar(input, "bool") as boolean };
+        return;
+      case "CurrentPresentation":
+        if (!this.data.conditional) break;
+        this.data = { ...this.data, currentPresentation: stringValue(input) };
+        return;
+    }
+    unknown(property);
+  }
+
+  /** Attaches the original point field. @param range - Writer insertion range. */
+  public attach(range: SwXTextRange): void {
+    if (this.hint) invalid("Writer condition field is already attached.");
+    const position = range.GetPaM().Start();
+    const node = position.GetNode().GetTextNode();
+    if (!node) illegal("Writer condition field must be in text.");
+    const type = node.GetDoc().getIDocumentFieldsAccess().GetHiddenTextFieldType();
+    const field = new SwHiddenTextField(type, this.data);
+    const hint = new SwTextField(
+      new SwFormatField(field, RES_TXTATR_FIELD),
+      position.GetContentIndex(),
+    );
+    if (!node.InsertHint(hint)) invalid("Writer condition field could not be inserted.");
+    this.hint = hint;
+  }
+
+  /** Removes the attached point. */
   public dispose(): void {
     const hint = this.hint;
     this.hint = undefined;

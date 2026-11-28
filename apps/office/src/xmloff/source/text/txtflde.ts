@@ -145,6 +145,33 @@ export interface XMLPlaceholderExportMarker {
   readonly presentation: string;
 }
 
+/** Native conditional and hidden text field portion. */
+export interface XMLHiddenTextExportMarker {
+  readonly kind: "hidden-text-field";
+  readonly offset: number;
+  readonly conditional: boolean;
+  readonly condition: string;
+  readonly trueContent: string;
+  readonly falseContent: string;
+  readonly hidden: boolean;
+  readonly presentation: string;
+}
+
+/** Writes the original XML element and boolean default omission. @param field - Native text portion. @param escapeXml - XML encoder. @returns ODF field markup. */
+export function exportHiddenTextField(
+  field: XMLHiddenTextExportMarker,
+  escapeXml: (value: string) => string,
+): string {
+  const condition = `text:condition="ooow:${escapeXml(field.condition)}"`;
+  const presentation = escapeXml(field.presentation);
+  if (field.conditional) {
+    const current = field.hidden ? ' text:current-value="true"' : "";
+    return `<text:conditional-text ${condition} text:string-value-if-true="${escapeXml(field.trueContent)}" text:string-value-if-false="${escapeXml(field.falseContent)}"${current}>${presentation}</text:conditional-text>`;
+  }
+  const hidden = field.hidden ? ' text:is-hidden="true"' : "";
+  return `<text:hidden-text ${condition} text:string-value="${escapeXml(field.trueContent)}"${hidden}>${presentation}</text:hidden-text>`;
+}
+
 /** Native DropDown field portion. */
 export interface XMLDropDownExportMarker {
   readonly kind: "drop-down-field";
