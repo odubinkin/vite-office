@@ -1,10 +1,11 @@
-/** @fileoverview Ports bounded native table cell item defaults and ownership from pinned sw/source/core/attr/cellatr.cxx; calculation and formula conversion remain unported. */
+/** @fileoverview Native Writer table cell items and formula calculation entry point from cellatr.cxx. */
 import { SfxUInt32Item } from "../../../../svl/source/items/intitem";
 import { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { RES_BOXATR_FORMULA, RES_BOXATR_VALUE, RES_BOXATR_FORMAT } from "../../../inc/hintids";
 import type { SwTableBoxFormat } from "../../../inc/swtblfmt";
 import type { SwTableBox } from "../table/swtable";
 import type { SwTableBoxStartNode } from "../docnode/node";
+import { SW_TABLE_FORMULA_ERROR, SwTableFormula, type SwTableCalcPara } from "../fields/cellfml";
 
 /** Reads NF_STANDARD_FORMAT_TEXT from the native standard format space. @returns Text format identity. */
 export function getSwDefaultTextFormat(): number {
@@ -26,21 +27,35 @@ export class SwTableBoxNumFormat extends SfxUInt32Item {
   }
 }
 
-/** Native non-shareable formula item; represented formula ownership excludes the unported calculation engine. */
+/** Native non-shareable formula item with its separate table-expression state. */
 export class SwTableBoxFormula extends SfxPoolItem {
   private m_pDefinedIn: SwTableBoxFormat | undefined;
+  private readonly formula: SwTableFormula;
   /** Creates a detached non-shareable native formula. @param formula - Formula text. @returns Nothing. */
-  public constructor(private readonly formula: string) {
+  public constructor(formula: string) {
     super(RES_BOXATR_FORMULA);
     this.setNonShareable();
+    this.formula = new SwTableFormula(formula);
   }
   /** Reads represented native formula text. @returns Original formula. */
   public GetFormula(): string {
-    return this.formula;
+    return this.formula.source;
   }
-  /** Detects the unresolved box label written by the table formula name conversion. @returns Whether the formula has an explicit missing box. */
-  public HasInvalidBoxReference(): boolean {
-    return this.formula.includes("<?>");
+  /** Reports whether the current value may be used as a referenced box. @returns Valid state. */
+  public IsValid(): boolean {
+    return this.formula.IsValid();
+  }
+  /** Updates the native cached validity. @param valid - Whether the value is current. */
+  public ChgValid(valid: boolean): void {
+    this.formula.ChgValid(valid);
+  }
+  /** Calculates the original box formula in its containing table. @param parameter - Active calculation state. @returns Result or the native faulty-expression sentinel. */
+  public Calc(parameter: SwTableCalcPara): number {
+    const table = this.GetNodeOfFormula()?.FindTableNode()?.GetTable();
+    const expression = table && this.formula.MakeFormula(table, parameter);
+    const value = expression === undefined ? undefined : parameter.calculator.Calculate(expression);
+    this.ChgValid(true);
+    return value ?? SW_TABLE_FORMULA_ERROR;
   }
   /** Reads the native owning format. @returns Original format or absent owner. */
   public GetDefinedIn(): SwTableBoxFormat | undefined {
@@ -60,20 +75,22 @@ export class SwTableBoxFormula extends SfxPoolItem {
   }
   /** Clones represented formula state without copying its native owner. @returns Detached non-shareable formula. */
   public Clone(): SwTableBoxFormula {
-    return new SwTableBoxFormula(this.formula);
+    const result = new SwTableBoxFormula(this.formula.source);
+    result.ChgValid(this.IsValid());
+    return result;
   }
   /** Compares formula text and actual defined-in identity. @param other - Candidate. @returns Whether equal. */
   public equals(other: SfxPoolItem): boolean {
     return (
       other instanceof SwTableBoxFormula &&
       other.Which() === this.Which() &&
-      other.formula === this.formula &&
+      other.formula.source === this.formula.source &&
       other.m_pDefinedIn === this.m_pDefinedIn
     );
   }
   /** Projects formula text through the existing browser snapshot boundary. @returns Formula text. */
   public override QueryValue(): string {
-    return this.formula;
+    return this.formula.source;
   }
 }
 

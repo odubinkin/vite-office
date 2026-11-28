@@ -833,9 +833,36 @@ export class SwTable extends SwClient {
     return this.lines;
   }
 
-  /** Original layout-first content-box lookup with reverse sorted-pointer fallback. @param startIndex - Actual section index. @returns Original box or absent. */
-  public GetTableBox(startIndex: number): SwTableBox | undefined {
-    return GetTableBoxByStartIndex(this, startIndex);
+  /** Resolves the original external name or actual box section index. @param reference - Original name or section. @returns Original box or absent. */
+  public GetTableBox(reference: number | string): SwTableBox | undefined {
+    if (typeof reference === "number") return GetTableBoxByStartIndex(this, reference);
+    const first = /^([A-Za-z]*)([0-9]+)(?:\.(.*))?$/u.exec(reference);
+    if (!first) return undefined;
+    let column = 0;
+    for (const [index, letter] of [...(first[1] ?? "")].entries()) {
+      const code = letter.charCodeAt(0);
+      column = (column + Number(index > 0)) * 52 + (code >= 97 ? code - 71 : code - 65);
+      if (column > 65535) return undefined;
+    }
+    let box = this.lines[Number(first[2]) - 1]?.GetTabBoxes()[column];
+    if (first[3]) {
+      const coordinates = first[3].split(".");
+      if (
+        coordinates.length % 2 !== 0 ||
+        coordinates.some(
+          /** Rejects nonnumeric nested row or column coordinates. @param coordinate - Authored section of the name. @returns Whether invalid. */
+          (coordinate) => !/^\d+$/u.test(coordinate),
+        )
+      )
+        return undefined;
+      for (let index = 0; box && index < coordinates.length; index += 2) {
+        const subColumn = Math.max(0, Number(coordinates[index]) - 1);
+        const subRow = Number(coordinates[index + 1]) - 1;
+        box = box.GetTabLines()[subRow]?.GetTabBoxes()[subColumn];
+      }
+    }
+    while (box && !box.GetSttNd()) box = box.GetTabLines()[0]?.GetTabBoxes()[0];
+    return box;
   }
 
   /** Collects flat cells by native center and majority overlap. @param line - Original row. @param min - Left search border. @param max - Right search border. @param selected - Native identity set. @returns Nothing. */

@@ -219,6 +219,7 @@ export function importWriterXml(
     if (contentXml !== undefined) {
       xmlImport.parse(contentXml, XMLToken.OFFICE_DOCUMENT_CONTENT, options);
       xmlImport.finishContent();
+      xmlImport.document.getIDocumentFieldsAccess().UpdateTableFields();
     }
     complete = true;
     return { document: xmlImport.document, title };

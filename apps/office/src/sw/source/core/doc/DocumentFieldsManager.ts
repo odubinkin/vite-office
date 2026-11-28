@@ -15,6 +15,11 @@ import { SwPageNumberFieldType } from "../fields/docufld.pagenumber";
 import { SwGetRefFieldType } from "../fields/reffld";
 import { SwDateTimeFieldType } from "../fields/flddat";
 import { SwCalc } from "../bastyp/calc";
+import { SwTableCalcPara } from "../fields/cellfml";
+import { SwTableBoxFormula } from "../attr/cellatr";
+import { SwTableNode } from "../docnode/node";
+import type { SwTable } from "../table/swtable";
+import { RES_BOXATR_FORMULA } from "../../../inc/hintids";
 import type { SwRootFrame } from "../layout/newfrm";
 import type { SwTextNode } from "../txtnode/ndtxt";
 import type { SwDoc } from "./doc";
@@ -203,5 +208,65 @@ export class DocumentFieldsManager {
   public UpdateRefFields(): void {
     this.UpdateExpFields();
     this.getRef.UpdateGetReferences();
+  }
+
+  /** Builds the native expression environment before a table formula's section. @param index - Table section index. @returns Writer numeric calculator. */
+  private FieldsToCalc(index: number): SwCalc {
+    const calculator = new SwCalc();
+    for (const type of this.users.values())
+      if (type.expression) calculator.VarChange(type.name, type.value);
+    const outlines = new Map<SwSetExpFieldType, SwTextNode | undefined>();
+    for (const node of this.document.GetNodes().entries()) {
+      if (node.GetIndex() >= index) break;
+      for (const hint of node.GetTextNode()?.GetpSwpHints()?.GetOrdinaryFields() ?? []) {
+        const field = hint.GetAttr().GetField();
+        if (!(field instanceof SwSetExpField)) continue;
+        const type = field.GetTyp();
+        if (type.GetType() === SwGetSetExpType.String) continue;
+        if (field.IsSequenceField() && type.GetOutlineLvl() < 10) {
+          const outline = node.FindOutlineNodeOfLevel(type.GetOutlineLvl());
+          if (!outlines.has(type) || outlines.get(type) !== outline) {
+            outlines.set(type, outline);
+            calculator.VarChange(type.GetName(), 0);
+          }
+        }
+        const value = calculator.Calculate(field.GetFormula());
+        if (value !== undefined) calculator.VarChange(type.GetName(), value);
+      }
+    }
+    return calculator;
+  }
+
+  /** Invalidates and calculates the original table box items in the document. @param selected - Optional table to refresh. */
+  public UpdateTableFields(selected?: SwTable): void {
+    const tables = new Map<string, SwTable>();
+    const formulas: SwTableBoxFormula[] = [];
+    for (const node of this.document.GetNodes().entries()) {
+      if (!(node instanceof SwTableNode)) continue;
+      const table = node.GetTable();
+      if (!tables.has(table.GetName())) tables.set(table.GetName(), table);
+      for (const box of table.GetTabSortBoxes()) {
+        const formula = box.GetFrameFormat().GetAttrSet().GetItemIfSet(RES_BOXATR_FORMULA, false);
+        if (formula instanceof SwTableBoxFormula && formula.GetDefinedIn()) {
+          formula.ChgValid(false);
+          formulas.push(formula);
+        }
+      }
+    }
+    const calculations = new Map<SwTable, SwTableCalcPara>();
+    for (const formula of formulas) {
+      if (formula.IsValid()) continue;
+      const box = formula.GetTableBox();
+      const node = box?.GetSttNd()?.FindTableNode();
+      if (!node || !box) continue;
+      const table = node.GetTable();
+      if (selected && selected !== table) continue;
+      let parameter = calculations.get(table);
+      if (!parameter) {
+        parameter = new SwTableCalcPara(this.FieldsToCalc(node.GetIndex()), tables);
+        calculations.set(table, parameter);
+      }
+      parameter.GetBoxValue(box);
+    }
   }
 }

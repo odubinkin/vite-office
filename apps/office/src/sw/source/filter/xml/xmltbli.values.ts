@@ -100,8 +100,7 @@ export function applyTableCellValue(box: SwTableBox, source: SwXMLTableCellValue
   } else {
     const formula = source.formula ? new SwTableBoxFormula(source.formula) : undefined;
     if (formula) format.SetFormatAttr(formula);
-    const value = formula?.HasInvalidBoxReference() ? Number.MAX_VALUE : source.value;
-    if (value !== undefined) format.SetFormatAttr(new SwTableBoxValue(value));
+    if (source.value !== undefined) format.SetFormatAttr(new SwTableBoxValue(source.value));
     box.ActualiseValueBox();
   }
   if (source.protect) {

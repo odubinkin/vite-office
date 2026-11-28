@@ -518,6 +518,7 @@ export class SwRootFrame extends SwLayoutFrame {
       document.getIDocumentFieldsAccess().GetPageNumberFieldType().UpdateFields(this);
       document.getIDocumentFieldsAccess().GetChapterFieldType().UpdateFields(this);
       document.getIDocumentFieldsAccess().UpdateExpFields(this);
+      document.getIDocumentFieldsAccess().UpdateTableFields();
       document.getIDocumentFieldsAccess().GetReferenceFieldType().UpdateLayoutFields(this);
       return this.snapshot;
     } catch (error) {

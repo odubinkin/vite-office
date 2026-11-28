@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/core/fields/cellfml.ts",
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/fields/cellfml.cxx",
+    "localSymbols": [
+      "SwTableCalcPara",
+      "SwTableFormula"
+    ],
+    "upstreamSymbols": [
+      "SwTableCalcPara::SwTableCalcPara",
+      "SwTableFormula::ScanString",
+      "SwTableFormula::MakeFormula_",
+      "SwTableBox::GetValue"
+    ],
+    "preservedResponsibilities": [
+      "Resolves native Writer table box and range references, shares numeric calculation state while evaluating referenced boxes, and preserves original authored formulas and error values."
+    ],
+    "omittedResponsibilities": [
+      "Native formula split/merge history, relative and pointer name conversion, layout-based ranges spanning distinct nested boxes, and the deep-stack retry pass are outside this represented calculation slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/fields/cellfml.ts",
+          "marker": "SwTableCalcPara"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-table-values.test.ts",
+          "marker": "testTdf91801"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/fields/cellfml.cxx",
+          "marker": "SwTableFormula::MakeFormula_"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/qa/extras/uiwriter/uiwriter6.cxx",
+          "marker": "testTdf91801"
+        }
+      ]
+    }
+  }
+}

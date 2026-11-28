@@ -22,6 +22,31 @@ import { DocumentArchive } from "../../../../package/source/zippackage/document-
 
 const metadata = { title: "Writer values" };
 
+it("recalculates the original table formula with unreferenced user-field declarations", /** Ports testTdf91801 using the original body as an ODT content stream. @returns Completion. */ async () => {
+  const fixture = readFileSync(
+    "../../vendor/libreoffice-reference/sw/qa/extras/uiwriter/data/tdf91801.fodt",
+    "utf8",
+  );
+  const content = fixture.replace(/(<\/?office:document)(?=[\s>])/gu, "$1-content");
+  const source = importWriterXml(undefined, content, metadata).document;
+  const worker = decodeWriterDocument(encodeWriterDocument(source));
+  let reopened: SwDoc | undefined;
+  try {
+    reopened = (await readOdtDocument(await writeOdtDocument(worker, metadata), metadata)).document;
+    for (const doc of [source, worker, reopened]) {
+      const box = doc.GetTables()[0]?.GetTabLines()[0]?.GetTabBoxes()[0];
+      const value = box?.GetFrameFormat().GetAttrSet().GetItemIfSet(RES_BOXATR_VALUE, false);
+      expect(value).toBeInstanceOf(SwTableBoxValue);
+      expect((value as SwTableBoxValue).GetValue()).toBe(555);
+      expect(box?.GetParagraphs()[0]?.GetText()).toBe("555");
+    }
+  } finally {
+    reopened?.Dispose();
+    worker.Dispose();
+    source.Dispose();
+  }
+});
+
 /** Opens the original LibreOffice regression document. @param suite - Test suite. @param name - Fixture file name. @returns Native document. */
 async function open(suite: string, name: string): Promise<SwDoc> {
   const bytes = readFileSync(

@@ -68,12 +68,12 @@ it("updates named string and numeric fields in document order", /** Verifies var
   const styles = `<office:document-styles ${ns}/>`;
   const content = `<office:document-content ${ns}><office:body><office:text>
     <text:user-field-decls><text:user-field-decl text:name="base" office:value-type="float" office:value="9"/></text:user-field-decls>
-    <text:variable-decls><text:variable-decl text:name="count" office:value-type="float"/><text:variable-decl text:name="word" office:value-type="string"/></text:variable-decls>
-    <text:p><text:variable-set text:name="count" office:value-type="float" text:formula="ooow:base*2">old</text:variable-set></text:p>
+    <text:variable-decls><text:variable-decl text:name="amount" office:value-type="float"/><text:variable-decl text:name="word" office:value-type="string"/></text:variable-decls>
+    <text:p><text:variable-set text:name="amount" office:value-type="float" text:formula="ooow:base*2">old</text:variable-set></text:p>
     <text:p><text:variable-set text:name="word" office:value-type="string">green</text:variable-set></text:p>
-    <text:p><text:variable-get text:name="count">old</text:variable-get></text:p>
+    <text:p><text:variable-get text:name="amount">old</text:variable-get></text:p>
     <text:p><text:variable-get text:name="word">old</text:variable-get></text:p>
-    <text:p><text:expression text:formula="ooow:count+base">old</text:expression></text:p>
+    <text:p><text:expression text:formula="ooow:amount+base">old</text:expression></text:p>
   </office:text></office:body></office:document-content>`;
   const { document } = importWriterXml(styles, content, metadata);
   try {

@@ -20,13 +20,19 @@ import {
   RES_FRM_SIZE,
   RES_ROW_SPLIT,
   RES_BOX,
+  RES_TXTATR_FIELD,
 } from "../../../inc/hintids";
 import type { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import type { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
 import { SwContentIndex } from "../bastyp/index";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
-import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
-import { SwTableBoxNumFormat, SwTableBoxValue } from "../attr/cellatr";
+import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { SwTableBoxFormula, SwTableBoxNumFormat, SwTableBoxValue } from "../attr/cellatr";
+import type { SwTableCalcPara } from "../fields/cellfml";
+import { SwGetExpField, SwSetExpField } from "../fields/expfld";
+import { SwUserField } from "../fields/usrfld";
+import { SwDateTimeField } from "../fields/flddat";
+import { SwJumpEditField } from "../fields/docufld.jumpedit";
 import { Point } from "../../../../tools/inc/gen";
 import type { SwTable, SwTableBoxFormat, SwTableLineFormatValue } from "./swtable";
 
@@ -135,6 +141,49 @@ export class SwTableBox extends SwClient {
     }
     return format;
   }
+  /** Reads or calculates a native table box and installs its owned formula result. @param parameter - Current table calculation state. @returns Number or absence for nonnumeric text. */
+  public GetValue(parameter: SwTableCalcPara): number | undefined {
+    const frame = this.GetFrameFormat();
+    const items = frame.GetAttrSet();
+    const formula = items.GetItemIfSet(RES_BOXATR_FORMULA, false);
+    if (formula instanceof SwTableBoxFormula && !formula.IsValid()) {
+      const result = formula.Calc(parameter);
+      const owner = this.ClaimFrameFormat();
+      if (owner.GetAttrSet().GetItemState(RES_BOXATR_FORMAT, false) !== SfxItemState.SET)
+        owner.SetFormatAttr(new SwTableBoxNumFormat(0));
+      const cached = owner.GetAttrSet().GetItemIfSet(RES_BOXATR_VALUE, false);
+      if (!(cached instanceof SwTableBoxValue) || cached.GetValue() !== result)
+        owner.SetFormatAttr(new SwTableBoxValue(result));
+      this.ActualiseValueBox();
+      return result;
+    }
+    const value = items.GetItemIfSet(RES_BOXATR_VALUE, false);
+    if (value instanceof SwTableBoxValue) return value.GetValue();
+    const paragraph = this.GetContentNodes()[0]?.GetTextNode();
+    if (!paragraph) return undefined;
+    const raw = paragraph.GetText();
+    const content = raw.replace(/^[ \t]+/u, "");
+    const hint = paragraph
+      .GetpSwpHints()
+      ?.GetTextAttrForCharAt(raw.length - content.length, RES_TXTATR_FIELD);
+    const field = hint?.GetAttr().GetField();
+    if (field instanceof SwSetExpField || field instanceof SwDateTimeField) return field.GetValue();
+    if (field instanceof SwUserField) return field.type.value;
+    if (field instanceof SwGetExpField) return field.value;
+    if (field instanceof SwJumpEditField) return 0;
+    const formatter = frame.GetDoc().GetNumberFormatter();
+    const storedFormat = items.GetItemIfSet(RES_BOXATR_FORMAT, true);
+    const format = storedFormat instanceof SwTableBoxNumFormat ? storedFormat.GetValue() : 0;
+    const key: [number] = [formatter.IsTextFormat(format) ? 0 : format];
+    const output: [number] = [0];
+    const source = unicode(field?.Expand() ?? content);
+    try {
+      return formatter.IsNumberFormat(source, key, output) ? output[0] : undefined;
+    } finally {
+      source.dispose();
+    }
+  }
+
   /** Refreshes a valid numeric cell's visible text with the document formatter. @returns Nothing. */
   public ActualiseValueBox(): void {
     const frame = this.GetFrameFormat();

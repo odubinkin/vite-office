@@ -8,7 +8,7 @@ type CalcToken =
   | { kind: "end" };
 
 const tokenPattern =
-  /\s*(?:(\d+(?:\.\d*)?|\.\d+)([Ee][+-]?\d+)?|([\p{Letter}_][\p{Letter}\p{Number}_.]*)|\[((?:\\\]|[^\]])*)\]|(==|!=|<=|>=|[=+\-*/^()%<>!]))/uy;
+  /\s*(?:(\d+(?:\.\d*)?|\.\d+)([Ee][+-]?\d+)?|([\p{Letter}_][\p{Letter}\p{Number}_.]*)|\[((?:\\\]|[^\]])*)\]|(==|!=|<=|>=|[=+\-*/^()%<>!|]))/uy;
 const termOperators = new Set([
   "*",
   "/",
@@ -22,6 +22,17 @@ const termOperators = new Set([
   "or",
   "xor",
   "mod",
+  "min-in",
+  "max-in",
+]);
+const listOperators = new Map([
+  ["sum", "+"],
+  ["mean", "+"],
+  ["average", "+"],
+  ["count", "+"],
+  ["product", "*"],
+  ["min", "min-in"],
+  ["max", "max-in"],
 ]);
 const unaryFunctions: Readonly<Record<string, (value: number) => number>> = {
   abs: Math.abs,
@@ -42,6 +53,7 @@ export class SwCalc {
   private index = 0;
   private current: CalcToken = { kind: "end" };
   private error = false;
+  private list: { operator: string; length: number; hasNumber: boolean } | undefined;
 
   /** Changes the original case-insensitive numeric variable table. @param name - Writer variable name. @param value - Native numeric value. */
   public VarChange(name: string, value: number): void {
@@ -58,6 +70,7 @@ export class SwCalc {
     this.expression = formula.trim();
     this.index = 0;
     this.error = false;
+    this.list = undefined;
     this.GetToken();
     const result = this.Expr();
     return this.error || this.current.kind !== "end" || !Number.isFinite(result)
@@ -89,6 +102,9 @@ export class SwCalc {
         termOperators.has(name) || name === "not"
           ? { kind: "operator", value: name }
           : { kind: "name", value: name };
+    } else if (match[5] === "|" && this.list) {
+      ++this.list.length;
+      this.current = { kind: "operator", value: this.list.operator };
     } else {
       this.current = { kind: "operator", value: match[5] as string };
     }
@@ -129,6 +145,12 @@ export class SwCalc {
         case "mod":
           left = (a | 0) % (right | 0);
           break;
+        case "min-in":
+          left = Math.min(a, right);
+          break;
+        case "max-in":
+          left = Math.max(a, right);
+          break;
         case "==":
           left = Number(a === right);
           break;
@@ -165,10 +187,15 @@ export class SwCalc {
   /** Original right-recursive power and primary expression level. @returns Number or void. */
   private Prim(): number | undefined {
     const token = this.current;
+    if (token.kind === "name") {
+      const operator = listOperators.get(token.value);
+      if (operator) return this.ReadList(token.value, operator);
+    }
     this.GetToken();
     let value: number | undefined;
     switch (token.kind) {
       case "number":
+        if (this.list) this.list.hasNumber = true;
         if (this.At("%")) {
           this.GetToken();
           return token.value * 0.01;
@@ -187,6 +214,7 @@ export class SwCalc {
           : undefined;
         if (func) return func(this.Prim() ?? 0);
         value = this.variables.get(token.value);
+        if (value !== undefined && this.list) this.list.hasNumber = true;
         if (value === undefined && this.At("(")) this.error = true;
         break;
       }
@@ -195,6 +223,10 @@ export class SwCalc {
         if (token.value === "!" || token.value === "not") return Number(!(this.Prim() ?? 0));
         if (token.value !== "(") {
           this.error = true;
+          return undefined;
+        }
+        if (this.At(")")) {
+          this.GetToken();
           return undefined;
         }
         value = this.Expr();
@@ -211,5 +243,27 @@ export class SwCalc {
       if (!Number.isFinite(value)) this.error = true;
     }
     return value;
+  }
+
+  /** Applies the original list operation and count while parsing the nested expression. @param name - Native aggregate. @param operator - Active list separator operation. @returns Aggregated numeric result. */
+  private ReadList(name: string, operator: string): number | undefined {
+    const parent = this.list;
+    const list = { operator, length: 1, hasNumber: false };
+    this.list = list;
+    try {
+      this.GetToken();
+      const value = this.Expr();
+      if (name === "count") return list.hasNumber ? list.length : 0;
+      if (name === "average" || name === "mean") {
+        if (name === "average" && !list.hasNumber) {
+          this.error = true;
+          return undefined;
+        }
+        return (value ?? 0) / list.length;
+      }
+      return value;
+    } finally {
+      this.list = parent;
+    }
   }
 }

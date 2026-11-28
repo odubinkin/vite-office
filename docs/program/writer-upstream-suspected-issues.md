@@ -6558,3 +6558,12 @@ document's generated master names can depend on prior imports. Writer
 retains the same behavior within the current import runtime.
 
 - [Original master lookup and collision counter](../../vendor/libreoffice-reference/xmloff/source/text/txtvfldi.cxx#L779)
+
+### WRITER-787 — An unresolved table qualifier leaves the current table active
+
+When a formula names another table and lookup fails, Writer reports an
+assertion in the native diagnostic build and proceeds with the current
+table. A box with the same coordinates can therefore supply the value.
+Writer preserves the current-table fallback.
+
+- [Original qualified box name lookup](../../vendor/libreoffice-reference/sw/source/core/fields/cellfml.cxx#L719)
