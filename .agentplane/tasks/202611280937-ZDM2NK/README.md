@@ -1,10 +1,11 @@
 ---
 id: "202611280937-ZDM2NK"
 title: "Align Writer ODT caption sequence fields and references"
-status: "DOING"
+result_summary: "Aligned ODT caption sequence fields and references with the pinned Writer core contracts."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "output/playwright/odf-next-checkpoint/writer-sequence-odf-verification.md"
   findings:
     - "The two pinned input files exercise modeled caption fields and forward references. Focused checks and static gates passed."
-commit: null
+commit:
+  hash: "7a95ff882700a3dee01b4c8e2a8e207b9693884c"
+  message: "🧩 ZDM2NK writer: preserve native ODT sequence fields"
 comments:
   -
     author: "CODER"
     body: "Start: Port sequence declarations, caption numbering and native sequence references through Writer ODT and Worker."
+  -
+    author: "CODER"
+    body: "Verified: native sequence declarations, formatted captions, forward references and Worker transport. Sixteen focused Writer tests and repository static checks passed."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Sixteen focused Writer checks passed across five files, including assertions from two pinned ODT fixtures. TypeScript, scoped ESLint, module boundaries, source provenance, Writer inventory and diff checks passed."
+  -
+    type: "status"
+    at: "2026-11-28T09:57:40.916Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native sequence declarations, formatted captions, forward references and Worker transport. Sixteen focused Writer tests and repository static checks passed."
 doc_version: 3
-doc_updated_at: "2026-11-28T09:56:34.156Z"
+doc_updated_at: "2026-11-28T09:57:40.917Z"
 doc_updated_by: "CODER"
 description: "Port Writer's native sequence field masters, numbering, stable reference identifiers and ODF sequence declaration, field, and reference contexts. Preserve source expressions and formatting through Worker and ODT. Replay pinned caption document data and run affected tests."
 sections:
