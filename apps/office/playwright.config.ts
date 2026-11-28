@@ -12,6 +12,8 @@ const { initializeOfficeServices } = await import("./src/test/native-office-serv
 initializeOfficeServices();
 
 export default defineConfig({
+  // File round trips can start the native filter worker on more than one page.
+  timeout: 60_000,
   expect: {
     // A fresh production page may load an application bundle and a native filter worker.
     timeout: 15_000,
